@@ -6,5 +6,6 @@ export default {
   docsRepositoryBase: 'https://github.com/significa/foundations/tree/main',
   feedback: {
     content: null
-  }
+  },
+  footer: { component: null }
 };
