@@ -24,11 +24,19 @@
   },
   "homepage": "https://github.com/significa/foundations#readme",
   "dependencies": {
+    "@significa/svelte-ui": "^0.0.27",
     "next": "^14.2.8",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
     "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.5.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10",
+    "typescript": "5.6.2"
   }
 }
