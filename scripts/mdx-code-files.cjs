@@ -43,7 +43,7 @@ function writeMdxCodeFiles() {
     const files = fullSourceDirectories
       .flatMap((dir) => fs.readdirSync(dir, { withFileTypes: true }))
       .filter((dirent) => dirent.isFile())
-      .map(({ name, path: filepath }) => {
+      .map(({ name, parentPath: filepath }) => {
         const extension = path.extname(name);
         const basename = path.basename(name, extension);
 
