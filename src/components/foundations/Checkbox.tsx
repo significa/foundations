@@ -33,10 +33,10 @@ export const Checkbox = forwardRef(function Checkbox(
         disabled={disabled}
         {...props}
         className={cn(
-          'peer w-5 h-5 shrink-0 appearance-none rounded-md border transition duration-200 ease-out',
-          'bg-neutral-25 border-neutral-400 ring-neutral-200 hover:bg-neutral-75 hover:border-neutral-700 active:ring',
-          'checked:bg-neutral-600 checked:border-neutral-600 checked:hover:bg-neutral-700 checked:hover:border-neutral-600',
-          'indeterminate:bg-neutral-600 indeterminate:border-neutral-600 indeterminate:hover:bg-neutral-700 indeterminate:hover:border-neutral-600',
+          'peer w-5 h-5 shrink-0 appearance-none rounded-md border transition duration-200 ease-out cursor-pointer',
+          'bg-neutral-25 border-neutral-400 ring-neutral-200 hover:bg-neutral-50 hover:border-neutral-800 focus:ring',
+          'checked:bg-neutral-800 checked:border-neutral-800 checked:hover:bg-neutral-600',
+          'indeterminate:bg-neutral-800 indeterminate:border-neutral-800 indeterminate:hover:bg-neutral-600',
           'focus-visible:ring-neutral-200 focus-visible:ring-offset-neutral-200',
           'disabled:pointer-events-none disabled:opacity-60'
         )}
