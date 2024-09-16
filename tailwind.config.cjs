@@ -1,37 +1,26 @@
+const palette = {
+  white: '#fff',
+  black: '#000',
+  neutral: {
+    25: '#f9fafb',
+    50: '#f4f4f5',
+    75: '#ededee',
+    100: '#e4e4e7',
+    200: '#d4d4d8',
+    300: '#a1a1aa',
+    400: '#71717a',
+    500: '#52525b',
+    600: '#3f3f46',
+    700: '#27272a',
+    800: '#18181b',
+    900: '#121212'
+  }
+};
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './src/pages/**/*.{js,jsx,ts,tsx,md,mdx}',
-    './src/components/**/*.{js,jsx,ts,tsx,md,mdx}'
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx,md,mdx}'],
   theme: {
-    extend: {}
-  },
-  plugins: [],
-  presets: [
-    require('@significa/svelte-ui/tailwind-preset')({
-      fonts: {
-        sans: {
-          name: 'Significa Sans',
-          fontFaces: [
-            {
-              fontWeight: '400',
-              src: `url('/fonts/significa-regular.woff2') format('woff2')`,
-              ascentOverride: '95%'
-            },
-            {
-              fontWeight: '500',
-              src: `url('/fonts/significa-medium.woff2') format('woff2')`,
-              ascentOverride: '95%'
-            },
-            {
-              fontWeight: '600',
-              src: `url('/fonts/significa-semibold.woff2') format('woff2')`,
-              ascentOverride: '95%'
-            }
-          ]
-        }
-      }
-    })
-  ]
+    colors: palette
+  }
 };
