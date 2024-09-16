@@ -4,11 +4,12 @@
   "description": "Significa documentation for building applications",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
+    "dev": "npm run mdx-code-files && next",
+    "build": "npm run mdx-code-files && next build",
     "start": "next start",
     "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "mdx-code-files": "node scripts/mdx-code-files.cjs --run"
   },
   "repository": {
     "type": "git",
