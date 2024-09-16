@@ -1,0 +1,85 @@
+import { ref, useRef, useEffect } from 'react';
+import { Tabs } from 'nextra/components';
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+import { Checkbox } from 'components/foundations/Checkbox';
+import { CheckboxDisabled } from 'components/foundations/CheckboxDisabled';
+import { CheckboxWithText } from 'components/foundations/CheckboxWithText';
+import { CheckboxIndeterminate } from 'components/foundations/CheckboxIndeterminate';
+
+# Checkbox
+
+<ComponentPreview>
+  <Checkbox />
+</ComponentPreview>
+
+## Install
+
+<FileCode path="components/foundations/Checkbox" />
+
+## API Reference
+
+| Prop             |   Type    | Default Value |
+| :--------------- | :-------: | ------------: |
+| `required`       | `boolean` |             - |
+| `defaultChecked` | `boolean` |             - |
+| `checked`        | `boolean` |             - |
+| `disabled`       | `boolean` |             - |
+| `intermediate`   | `boolean` |             - |
+| `name`           | `string`  |             - |
+| `value`          | `string`  |             - |
+
+| Data attribute    |        Values         |
+| :---------------- | :-------------------: |
+| `[data-disabled]` | Present when disabled |
+
+## Usage
+
+```tsx copy
+import { Checkbox } from '[path]/Checkbox';
+```
+
+```tsx copy
+<Checkbox />
+```
+
+## Examples
+
+### With Text
+
+<Tabs items={['Preview', 'Code']}>
+  <Tabs.Tab>
+    <ComponentPreview>
+      <CheckboxWithText />
+    </ComponentPreview>
+  </Tabs.Tab>
+  <Tabs.Tab>
+    <FileCode path="components/foundations/CheckboxWithText" />
+  </Tabs.Tab>
+</Tabs>
+
+### Disabled
+
+<Tabs items={['Preview', 'Code']}>
+  <Tabs.Tab>
+    <ComponentPreview>
+      <CheckboxDisabled />
+    </ComponentPreview>
+  </Tabs.Tab>
+  <Tabs.Tab>
+    <FileCode path="components/foundations/CheckboxDisabled" />
+  </Tabs.Tab>
+</Tabs>
+
+### Indeterminate
+
+<Tabs items={['Preview', 'Code']}>
+  <Tabs.Tab>
+    <ComponentPreview>
+      <CheckboxIndeterminate />
+    </ComponentPreview>
+  </Tabs.Tab>
+  <Tabs.Tab>
+    <FileCode path="components/foundations/CheckboxIndeterminate" />
+  </Tabs.Tab>
+</Tabs>
