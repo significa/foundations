@@ -7,8 +7,8 @@ const SOURCE_DIRECTORIES = ['components/foundations'];
 
 function toPascalCase(str) {
   return str
-    .toLowerCase()
-    .replace(/(?:^|\s|-|_|\.)\w/g, (match) => match.toUpperCase()) // capitalize first letter after space, dash, underscore, or dot
+    .replace(/(?:^|\s|-|_|\.)[a-zA-Z]/g, (match) => match.toUpperCase()) // capitalize first letter after space, dash, underscore, or dot
+    .replace(/(?:\s|-|_|\.)/g, '') // remove spaces, dashes, underscores, and dots
     .replace(/[^a-zA-Z]/g, ''); // remove numbers and special characters
 }
 
