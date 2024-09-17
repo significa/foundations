@@ -5,29 +5,6 @@ const ROOT_DIRECTORY = 'src/';
 const TARGET_DIRECTORY = '.registry';
 const SOURCE_DIRECTORIES = ['components/foundations'];
 
-// recursively get all files in directory
-function getAllFiles(dir, depth = 0) {
-  const MAX_RECURSIVE_DEPTH = 12;
-  if (depth >= MAX_RECURSIVE_DEPTH) {
-    console.warn(`Reached max recursive depth`);
-    return [];
-  }
-
-  let files = [];
-  const items = fs.readdirSync(dir, { withFileTypes: true });
-
-  for (const item of items) {
-    if (item.isDirectory()) {
-      const children = getAllFiles(path.join(item.path, item.name), depth + 1);
-      files = [...files, ...children];
-    } else {
-      files.push(item);
-    }
-  }
-
-  return files;
-}
-
 function toPascalCase(str) {
   return str
     .replace(/(?:^|\s|-|_|\.)[a-zA-Z]/g, (match) => match.toUpperCase()) // capitalize first letter after space, dash, underscore, or dot
@@ -40,34 +17,45 @@ async function buildRegistry() {
     const startTime = performance.now();
     console.log('Building registry...');
 
-    // clear/create target directory
-    if (fs.existsSync(TARGET_DIRECTORY)) {
-      fs.readdirSync(TARGET_DIRECTORY).forEach((filename) =>
-        fs.rmSync(path.join(TARGET_DIRECTORY, filename))
-      );
-    } else {
-      fs.mkdirSync(TARGET_DIRECTORY);
-    }
+    // validate source directories
+    const fullSourceDirectories = SOURCE_DIRECTORIES.map((dir) =>
+      path.join(ROOT_DIRECTORY, dir)
+    ).filter((dir) => {
+      const exists = fs.existsSync(dir);
 
-    let files = [];
-    const index = { filename: 'index.tsx', imports: [], entries: [] };
-
-    // get all files (at any depth) inside the source directories
-    for (const dir of SOURCE_DIRECTORIES) {
-      const fullDir = path.join(ROOT_DIRECTORY, dir);
-
-      if (fs.existsSync(fullDir)) {
-        const children = getAllFiles(fullDir);
-        files = [...files, ...children];
-      } else {
+      if (!exists) {
         console.warn(`└ Skipping invalid source directory: '${dir}'`);
       }
+
+      return exists;
+    });
+
+    // clear target directory
+    if (fs.existsSync(TARGET_DIRECTORY)) {
+      fs.rmSync(TARGET_DIRECTORY, { recursive: true });
     }
 
+    // create target directory
+    fs.mkdirSync(TARGET_DIRECTORY);
+
+    // read all files (at any depth) inside the source directories
+    const files = fullSourceDirectories
+      .flatMap((dir) => fs.readdirSync(dir, { recursive: true, withFileTypes: true }))
+      .filter((dirent) => dirent.isFile());
+
+    // prepare index file
+    const index = {
+      filename: 'index.tsx',
+      imports: [],
+      entries: []
+    };
+
     for (const file of files) {
-      const fullPath = path.join(file.path, file.name);
-      const extension = path.extname(file.name).replace(/^\.+/, ''); // remove leading dot
-      const basename = path.basename(file.name, `.${extension}`);
+      let extension = path.extname(file.name);
+      const basename = path.basename(file.name, extension);
+      const fullPath = path.join(file.parentPath, file.name);
+
+      extension = extension.replace(/^\.+/, ''); // remove leading dot;
       const isComponent = extension === 'tsx';
 
       // skip index files
@@ -88,32 +76,35 @@ async function buildRegistry() {
       fs.writeFileSync(mdxPath, mdxContentString, 'utf8');
 
       // generate entry key based on import path
-      let key = file.path.replace(ROOT_DIRECTORY, '');
-      // append basename only if the last fragment of the import path is different from the basename
+      let key = path.relative(ROOT_DIRECTORY, file.parentPath);
+      // append basename only when path basename !== component basename
       // this way we avoid having keys like 'components/Sample/Sample'
-      if (key.split('/').reverse()[0] !== basename) {
-        key += `/${basename}`;
+      if (path.basename(key) !== basename) {
+        key = path.join(key, basename);
       }
 
-      index.entries.push({ key, code: mdxBasename, component: isComponent && basename });
+      index.entries.push({ key, code: mdxBasename, component: isComponent ? basename : null });
       index.imports.push({ module: mdxBasename, named: false, path: `./${mdxFilename}` });
 
       if (isComponent) {
-        index.imports.push({ module: basename, named: true, path: `../${file.path}/${basename}` });
+        index.imports.push({
+          module: basename,
+          named: true,
+          path: `../${file.parentPath}/${basename}`
+        });
       }
     }
 
     const formattedImports = index.imports
-      .map(
-        ({ module, path, named }) => `import ${named ? `{ ${module} }` : module} from '${path}';`
-      )
+      .map(({ module, path, named }) => {
+        return `import ${named ? `{ ${module} }` : module} from '${path}';`;
+      })
       .join('\n');
 
     const formattedEntries = index.entries
-      .map(
-        ({ key, code, component }) =>
-          `  '${key}': {\n    code: ${code},\n    component: ${component}\n  }`
-      )
+      .map(({ key, code, component }) => {
+        return `  '${key}': {\n    code: ${code},\n    component: ${component}\n  }`;
+      })
       .join(',\n');
 
     const formattedEntryTypes = index.entries.map(({ key }) => `  | '${key}'`).join('\n');
