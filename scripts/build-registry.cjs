@@ -5,10 +5,11 @@ const ROOT_DIRECTORY = 'src/';
 const TARGET_DIRECTORY = '.registry';
 const SOURCE_DIRECTORIES = ['components/foundations'];
 
-// recursively get all files in dir
+// recursively get all files in directory
 function getAllFiles(dir, depth = 0) {
   const MAX_RECURSIVE_DEPTH = 12;
   if (depth >= MAX_RECURSIVE_DEPTH) {
+    console.warn(`Reached max recursive depth`);
     return [];
   }
 
@@ -75,6 +76,7 @@ async function buildRegistry() {
 
       let rawFileContent = fs.readFileSync(fullPath, 'utf8');
       rawFileContent = rawFileContent.replace(/\n$/, ''); // remove trailing line break
+
       const mdxContentString = `\`\`\`${extension} copy\n${rawFileContent}\n\`\`\`\n`;
 
       const mdxBasename = `${toPascalCase(basename)}Code`;
@@ -84,12 +86,18 @@ async function buildRegistry() {
       // write mdx code file
       fs.writeFileSync(mdxPath, mdxContentString, 'utf8');
 
-      index.imports.push(`import ${mdxBasename} from './${mdxFilename}';`);
       index.imports.push(`import { ${basename} } from '../${file.path}/${basename}';`);
+      index.imports.push(`import ${mdxBasename} from './${mdxFilename}';`);
 
-      index.entries.push(
-        `'${file.path.replace(ROOT_DIRECTORY, '')}/${basename}': {\n    source: ${basename},\n    code: ${mdxBasename}\n  }`
-      );
+      // generate entry key based on import path
+      let key = file.path.replace(ROOT_DIRECTORY, '');
+      // append basename only if the last fragment of the import path is different from the basename
+      // this way we avoid having keys like 'components/Sample/Sample'
+      if (key.split('/').reverse()[0] !== basename) {
+        key += `/${basename}`;
+      }
+
+      index.entries.push(`'${key}': {\n    source: ${basename},\n    code: ${mdxBasename}\n  }`);
     }
 
     const indexContentString = [
