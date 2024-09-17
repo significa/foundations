@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT_DIRECTORY = 'src/';
-const TARGET_DIRECTORY = '.registry';
+const TARGET_DIRECTORY = '__registry__';
 const SOURCE_DIRECTORIES = ['components/foundations'];
 const ALLOWED_EXTENSIONS = ['ts', 'tsx'];
 
@@ -104,7 +104,7 @@ async function buildRegistry() {
 
     const formattedEntries = index.entries
       .map(({ key, code, component }) => {
-        return `  '${key}': {\n    code: ${code},\n    component: ${component}\n  }`;
+        return `'${key}': { code: ${code}, component: ${component} }`;
       })
       .join(',\n');
 

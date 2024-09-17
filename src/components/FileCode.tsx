@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { INDEX, RegistryEntry } from '../../.registry';
+import { INDEX, RegistryEntry } from '../../__registry__';
 import { PreviewBox } from 'components/PreviewBox';
 
 interface FileCodeProps {

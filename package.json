@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "prettier --check .",
     "format": "prettier --write .",
-    "build-registry": "node scripts/build-registry.cjs --run"
+    "build-registry": "node scripts/build-registry.cjs --run && prettier --write ./__registry__"
   },
   "repository": {
     "type": "git",
