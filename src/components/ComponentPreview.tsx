@@ -1,11 +1,32 @@
+import { useMemo, Suspense } from 'react';
+import { Tabs } from 'nextra/components';
+import { FileCode } from 'components/FileCode';
+import { PreviewBox } from 'components/PreviewBox';
+import { INDEX } from '../../.registry';
+
 interface ComponentPreviewProps {
-  children: React.ReactNode;
+  path: string;
 }
 
-export function ComponentPreview({ children }: ComponentPreviewProps) {
+export function ComponentPreview({ path }: ComponentPreviewProps) {
+  const Source = useMemo(() => {
+    if (Object.hasOwn(INDEX, path)) {
+      const Component = INDEX[path].source;
+
+      return <Component />;
+    } else {
+      return <div className="opacity-60">Unable to load component</div>;
+    }
+  }, [path]);
+
   return (
-    <div className="w-full h-[24rem] mt-6 first:mt-0 nx-rounded-xl flex justify-center items-center nx-bg-primary-700/5 dark:nx-bg-primary-300/10">
-      {children}
-    </div>
+    <Tabs items={['Preview', 'Code']}>
+      <Tabs.Tab>
+        <PreviewBox>{Source}</PreviewBox>
+      </Tabs.Tab>
+      <Tabs.Tab>
+        <FileCode path={path} />
+      </Tabs.Tab>
+    </Tabs>
   );
 }
