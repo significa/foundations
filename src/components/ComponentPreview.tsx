@@ -2,10 +2,10 @@ import { useMemo, Suspense } from 'react';
 import { Tabs } from 'nextra/components';
 import { FileCode } from 'components/FileCode';
 import { PreviewBox } from 'components/PreviewBox';
-import { INDEX } from '../../.registry';
+import { INDEX, RegistryEntry } from '../../.registry';
 
 interface ComponentPreviewProps {
-  path: string;
+  path: RegistryEntry;
 }
 
 export function ComponentPreview({ path }: ComponentPreviewProps) {

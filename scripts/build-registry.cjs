@@ -50,7 +50,7 @@ async function buildRegistry() {
     }
 
     let files = [];
-    const index = { filename: 'index.tsx', imports: [], entries: [] };
+    const index = { filename: 'index.tsx', imports: [], entries: [], entryKeys: [] };
 
     // get all files (at any depth) inside the source directories
     for (const dir of SOURCE_DIRECTORIES) {
@@ -97,6 +97,7 @@ async function buildRegistry() {
         key += `/${basename}`;
       }
 
+      index.entryKeys.push(key);
       index.entries.push(`'${key}': {\n    source: ${basename},\n    code: ${mdxBasename}\n  }`);
     }
 
@@ -109,6 +110,9 @@ async function buildRegistry() {
       `export const INDEX = {`,
       `  ${index.entries.join(',\n  ')}`,
       `};`,
+      ``,
+      `export type RegistryEntry =`,
+      `  | ${index.entryKeys.map((key) => `'${key}'`).join('\n  | ')};`,
       ``
     ].join('\n');
 

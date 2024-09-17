@@ -1,10 +1,10 @@
 import { useMemo, Suspense } from 'react';
 import { Callout } from 'nextra/components';
-import { INDEX } from '../../.registry';
+import { INDEX, RegistryEntry } from '../../.registry';
 import { PreviewBox } from 'components/PreviewBox';
 
 interface FileCodeProps {
-  path: string;
+  path: RegistryEntry;
 }
 
 export function FileCode({ path }: FileCodeProps) {
