@@ -1,4 +1,4 @@
-import { useMemo, Suspense } from 'react';
+import { useMemo } from 'react';
 import { Tabs } from 'nextra/components';
 import { FileCode } from 'components/FileCode';
 import { PreviewBox } from 'components/PreviewBox';

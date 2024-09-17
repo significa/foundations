@@ -1,5 +1,4 @@
-import { useMemo, Suspense } from 'react';
-import { Callout } from 'nextra/components';
+import { useMemo } from 'react';
 import { INDEX, RegistryEntry } from '../../.registry';
 import { PreviewBox } from 'components/PreviewBox';
 
