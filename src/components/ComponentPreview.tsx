@@ -10,8 +10,8 @@ interface ComponentPreviewProps {
 
 export function ComponentPreview({ path }: ComponentPreviewProps) {
   const Source = useMemo(() => {
-    if (Object.hasOwn(INDEX, path)) {
-      const Component = INDEX[path].source;
+    if (Object.hasOwn(INDEX, path) && INDEX[path].component) {
+      const Component = INDEX[path].component;
 
       return <Component />;
     } else {
