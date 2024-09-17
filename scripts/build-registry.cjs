@@ -4,6 +4,7 @@ const path = require('path');
 const ROOT_DIRECTORY = 'src/';
 const TARGET_DIRECTORY = '.registry';
 const SOURCE_DIRECTORIES = ['components/foundations'];
+const ALLOWED_EXTENSIONS = ['ts', 'tsx'];
 
 function toPascalCase(str) {
   return str
@@ -58,8 +59,8 @@ async function buildRegistry() {
       extension = extension.replace(/^\.+/, ''); // remove leading dot;
       const isComponent = extension === 'tsx';
 
-      // skip index files
-      if (basename === 'index') {
+      // skip index files and disallowed extensions
+      if (basename === 'index' || !ALLOWED_EXTENSIONS.includes(extension)) {
         continue;
       }
 
@@ -128,7 +129,7 @@ async function buildRegistry() {
     fs.writeFileSync(path.join(TARGET_DIRECTORY, index.filename), indexContentString, 'utf8');
 
     const duration = performance.now() - startTime;
-    console.log(`└ Wrote (${files.length + 1} files in ${duration.toFixed(3)}ms)`);
+    console.log(`└ Wrote (${index.entries.length + 1} files in ${duration.toFixed(3)}ms)`);
   } catch (err) {
     console.error(err);
   }
