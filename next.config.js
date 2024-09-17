@@ -20,7 +20,7 @@ module.exports = withNextra({
         const watchDirectory = path.resolve(__dirname, 'src', sourceDirectory);
 
         if (fs.existsSync(watchDirectory)) {
-          fs.watch(watchDirectory, (eventType, filename) => {
+          fs.watch(watchDirectory, { recursive: true }, (eventType, filename) => {
             if (filename) {
               buildRegistry();
             }
