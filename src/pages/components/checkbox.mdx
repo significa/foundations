@@ -1,17 +1,13 @@
-import { ref, useRef, useEffect } from 'react';
-import { Tabs } from 'nextra/components';
 import { ComponentPreview } from 'components/ComponentPreview';
 import { FileCode } from 'components/FileCode';
+import { PreviewBox } from 'components/PreviewBox';
 import { Checkbox } from 'components/foundations/Checkbox';
-import { CheckboxDisabled } from 'components/foundations/CheckboxDisabled';
-import { CheckboxWithText } from 'components/foundations/CheckboxWithText';
-import { CheckboxIndeterminate } from 'components/foundations/CheckboxIndeterminate';
 
 # Checkbox
 
-<ComponentPreview>
+<PreviewBox>
   <Checkbox />
-</ComponentPreview>
+</PreviewBox>
 
 ## Install
 
@@ -47,39 +43,12 @@ import { Checkbox } from '[path]/Checkbox';
 
 ### With Text
 
-<Tabs items={['Preview', 'Code']}>
-  <Tabs.Tab>
-    <ComponentPreview>
-      <CheckboxWithText />
-    </ComponentPreview>
-  </Tabs.Tab>
-  <Tabs.Tab>
-    <FileCode path="components/foundations/CheckboxWithText" />
-  </Tabs.Tab>
-</Tabs>
+<ComponentPreview path="components/foundations/Checkbox/examples/CheckboxWithText" />
 
 ### Disabled
 
-<Tabs items={['Preview', 'Code']}>
-  <Tabs.Tab>
-    <ComponentPreview>
-      <CheckboxDisabled />
-    </ComponentPreview>
-  </Tabs.Tab>
-  <Tabs.Tab>
-    <FileCode path="components/foundations/CheckboxDisabled" />
-  </Tabs.Tab>
-</Tabs>
+<ComponentPreview path="components/foundations/Checkbox/examples/CheckboxDisabled" />
 
 ### Indeterminate
 
-<Tabs items={['Preview', 'Code']}>
-  <Tabs.Tab>
-    <ComponentPreview>
-      <CheckboxIndeterminate />
-    </ComponentPreview>
-  </Tabs.Tab>
-  <Tabs.Tab>
-    <FileCode path="components/foundations/CheckboxIndeterminate" />
-  </Tabs.Tab>
-</Tabs>
+<ComponentPreview path="components/foundations/Checkbox/examples/CheckboxIndeterminate" />

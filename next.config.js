@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { writeMdxCodeFiles, SOURCE_DIRECTORIES } = require('./scripts/mdx-code-files.cjs');
+const { buildRegistry, SOURCE_DIRECTORIES } = require('./scripts/build-registry.cjs');
 
 const withNextra = require('nextra')({
   theme: 'nextra-theme-docs',
@@ -20,9 +20,9 @@ module.exports = withNextra({
         const watchDirectory = path.resolve(__dirname, 'src', sourceDirectory);
 
         if (fs.existsSync(watchDirectory)) {
-          fs.watch(watchDirectory, (eventType, filename) => {
+          fs.watch(watchDirectory, { recursive: true }, (eventType, filename) => {
             if (filename) {
-              writeMdxCodeFiles();
+              buildRegistry();
             }
           });
         }

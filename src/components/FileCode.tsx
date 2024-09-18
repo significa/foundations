@@ -1,25 +1,25 @@
-import { useMemo, Suspense } from 'react';
-import { Callout } from 'nextra/components';
-import { INDEX } from '../../.mdx-code-files';
+import { useMemo } from 'react';
+import { INDEX, RegistryEntry } from '../../__registry__';
+import { PreviewBox } from 'components/PreviewBox';
 
 interface FileCodeProps {
-  path: string;
+  path: RegistryEntry;
 }
 
 export function FileCode({ path }: FileCodeProps) {
   const Code = useMemo(() => {
     if (Object.hasOwn(INDEX, path)) {
-      const Component = INDEX[path];
+      const Component = INDEX[path].code;
 
       return <Component />;
     } else {
       return (
-        <Callout type="error" emoji="">
-          Component code not found in MDX code files
-        </Callout>
+        <PreviewBox>
+          <div className="opacity-60">Unable to load Component code</div>
+        </PreviewBox>
       );
     }
   }, [path]);
 
-  return <Suspense>{Code}</Suspense>;
+  return Code;
 }

@@ -8,4 +8,4 @@ node_modules/
 next-env.d.ts
 
 # lib
-.mdx-code-files
+__registry__
