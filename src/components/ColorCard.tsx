@@ -18,7 +18,7 @@ export function ColorCard({ token, className, children }: ColorCardProps) {
         className
       )}
     >
-      <div className="absolute top-0 left-0 text-md font-medium leading-none p-4">{children}</div>
+      <span className="absolute top-0 left-0 text-md font-medium leading-none p-5">{children}</span>
     </div>
   );
 }
