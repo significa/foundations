@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Tabs } from 'nextra/components';
 import { FileCode } from 'components/FileCode';
 import { PreviewBox } from 'components/PreviewBox';
-import { INDEX, RegistryEntry } from '../../__registry__';
+import { INDEX, type RegistryEntry } from '../../__registry__/index';
 
 interface ComponentPreviewProps {
   path: RegistryEntry;

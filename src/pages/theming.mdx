@@ -1,0 +1,57 @@
+import { ColorCard } from 'components/ColorCard';
+import { FileCode } from 'components/FileCode';
+
+# Theming
+
+We opted to use [Tailwind CSS](https://tailwindcss.com/) because of its flexibility and utility-first design. Given that this project is focused on providing foundational code, we've kept the configuration minimal and straightforward.
+
+<FileCode path="tailwind.config.cjs" filename="tailwind.config.cjs" />
+
+## Colors
+
+For the color system, we've defined three key color tokens: _background_, _primary_, and _accent_. These colors, combined case-specific alpha values, are used consistently and exclusively across the components.
+
+<div className="mt-6 grid grid-cols-3 gap-4">
+  <ColorCard token="background" className="border border-primary/20">
+    {'Background'}
+  </ColorCard>
+  <ColorCard token="primary" className="text-background">
+    {'Primary'}
+  </ColorCard>
+  <ColorCard token="accent"> {'Accent'}</ColorCard>
+</div>
+
+Please be aware that, theme-wise, copying a component into your project will rarely be a plug-and-play solution: you will often need to adapt the component to match the theme and design of your existing project.
+
+## Utilities
+
+We use two libraries, [`clsx`](https://github.com/lukeed/clsx#readme) and [`tailwind-merge`](https://github.com/dcastil/tailwind-merge#readme), to make working with Tailwind classes easier and more efficient:
+
+- `clsx` helps conditionally apply class names. It lets you easily add or remove Tailwind classes based on component props or state.
+- `tailwind-merge` works with `clsx` to automatically resolve any conflicting Tailwind classes, like when you apply different padding or margin values. It ensures that the right styles are applied without conflicts.
+
+We combine both `clsx` and `tailwind-merge` in a custom `cn` utility, which we import from `lib/tailwind`, to handle class management in one simple function.
+
+### Install
+
+```bash copy
+npm install clsx tailwind-merge
+```
+
+<FileCode path="lib/tailwind.ts" filename="lib/tailwind.ts" />
+
+### Example
+
+```tsx copy /cn/
+export function Component({ disabled, className }) {
+  return (
+    <div
+      className={cn(
+        'relative p-12',
+        disabled ? 'cursor-not-allowed' : 'cursor-auto',
+        className
+      )}
+    >
+  );
+}
+```

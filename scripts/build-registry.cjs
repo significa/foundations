@@ -1,10 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const { globSync } = require('glob');
 
 const ROOT_DIRECTORY = 'src/';
 const TARGET_DIRECTORY = '__registry__';
-const SOURCE_DIRECTORIES = ['components/foundations'];
-const ALLOWED_EXTENSIONS = ['ts', 'tsx'];
+const SOURCE_GLOB_PATTERNS = [
+  'src/components/foundations/**/*.{js,ts,tsx}',
+  'src/lib/tailwind.ts',
+  'tailwind.config.cjs'
+];
 
 function toPascalCase(str) {
   return str
@@ -13,23 +17,16 @@ function toPascalCase(str) {
     .replace(/[^a-zA-Z]/g, ''); // remove numbers and special characters
 }
 
+// the nextra code highlighter doesn't support certain extension variants
+const EXTENSION_ALTERNATES = {
+  cjs: 'js',
+  mjs: 'js'
+};
+
 async function buildRegistry() {
   try {
     const startTime = performance.now();
     console.log('Building registry...');
-
-    // validate source directories
-    const fullSourceDirectories = SOURCE_DIRECTORIES.map((dir) =>
-      path.join(ROOT_DIRECTORY, dir)
-    ).filter((dir) => {
-      const exists = fs.existsSync(dir);
-
-      if (!exists) {
-        console.warn(`└ Skipping invalid source directory: '${dir}'`);
-      }
-
-      return exists;
-    });
 
     // clear target directory
     if (fs.existsSync(TARGET_DIRECTORY)) {
@@ -39,37 +36,39 @@ async function buildRegistry() {
     // create target directory
     fs.mkdirSync(TARGET_DIRECTORY);
 
-    // read all files (at any depth) inside the source directories
-    const files = fullSourceDirectories
-      .flatMap((dir) => fs.readdirSync(dir, { recursive: true, withFileTypes: true }))
-      .filter((dirent) => dirent.isFile());
+    // read all files
+    const files = SOURCE_GLOB_PATTERNS.flatMap((pattern) =>
+      globSync(pattern, {
+        withFileTypes: true,
+        ignore: {
+          ignored: (p) => /^index\.(js|ts)$/.test(p.name) // ignore index files
+        }
+      })
+    );
 
-    // prepare index file
+    // prepare registry index
     const index = {
       filename: 'index.tsx',
       imports: [],
       entries: []
     };
 
-    for (const file of files) {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
       let extension = path.extname(file.name);
       const basename = path.basename(file.name, extension);
-      const fullPath = path.join(file.parentPath, file.name);
+      const fullPath = path.relative(process.cwd(), path.join(file.parentPath, file.name));
 
       extension = extension.replace(/^\.+/, ''); // remove leading dot;
       const isComponent = extension === 'tsx';
 
-      // skip index files and disallowed extensions
-      if (basename === 'index' || !ALLOWED_EXTENSIONS.includes(extension)) {
-        continue;
-      }
-
       let rawFileContent = fs.readFileSync(fullPath, 'utf8');
       rawFileContent = rawFileContent.replace(/\n$/, ''); // remove trailing line break
 
-      const mdxContentString = `\`\`\`${extension} copy\n${rawFileContent}\n\`\`\`\n`;
+      const mdxContentString = `\`\`\`${EXTENSION_ALTERNATES[extension] || extension} copy\n${rawFileContent}\n\`\`\`\n`;
 
-      const mdxBasename = `${toPascalCase(basename)}Code`;
+      const mdxBasename = `${toPascalCase(basename)}Code${i}`; // append loop index to prevent files with same basename being overwritten
       const mdxFilename = `${mdxBasename}.mdx`;
       const mdxPath = path.join(TARGET_DIRECTORY, mdxFilename);
 
@@ -78,10 +77,20 @@ async function buildRegistry() {
 
       // generate entry key based on import path
       let key = path.relative(ROOT_DIRECTORY, file.parentPath);
-      // append basename only when path basename !== component basename
-      // this way we avoid having keys like 'components/Sample/Sample'
-      if (path.basename(key) !== basename) {
+
+      if (!isComponent) {
+        // for non-component files the key is the full name
+        // sample.js -> sample.js
+        key = path.join(key, file.name);
+      } else if (path.basename(key) !== basename) {
+        // for components, we append the basename only when it's not the same as the path basename
+        // components/Sample/Sample.tsx -> components/Sample
         key = path.join(key, basename);
+      }
+
+      // remove leading '../' that gets added to root files
+      if (key.indexOf('../') === 0) {
+        key = key.substring(3);
       }
 
       index.entries.push({ key, code: mdxBasename, component: isComponent ? basename : null });
@@ -91,7 +100,7 @@ async function buildRegistry() {
         index.imports.push({
           module: basename,
           named: true,
-          path: `../${file.parentPath}/${basename}`
+          path: `../${fullPath}`
         });
       }
     }
@@ -141,6 +150,5 @@ if (args.indexOf('--run') !== -1) {
 }
 
 module.exports = {
-  SOURCE_DIRECTORIES,
   buildRegistry
 };

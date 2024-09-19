@@ -1,7 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.nextra-code-block > pre {
-  max-height: 36rem;
-}

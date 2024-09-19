@@ -35,15 +35,15 @@ export const Checkbox = forwardRef(function Checkbox(
         {...props}
         className={cn(
           'peer w-5 h-5 shrink-0 appearance-none rounded-md border transition duration-200 ease-out cursor-pointer',
-          'bg-neutral-25 border-neutral-400 ring-neutral-200 enabled:hover:bg-neutral-50 enabled:hover:border-neutral-800 focus:ring',
-          'checked:bg-neutral-800 checked:border-neutral-800 checked:enabled:hover:bg-neutral-600',
-          'indeterminate:bg-neutral-800 indeterminate:border-neutral-800 indeterminate:enabled:hover:bg-neutral-600',
-          'focus-visible:ring-neutral-200 focus-visible:ring-offset-neutral-200',
-          'disabled:pointer-events-none disabled:opacity-60'
+          'bg-transparent border-primary ring-accent focus:ring enabled:hover:bg-primary/5',
+          'checked:bg-primary checked:border-primary enabled:checked:hover:bg-primary/90',
+          'indeterminate:bg-primary indeterminate:border-primary enabled:indeterminate:hover:bg-primary/90',
+          'focus-visible:ring-accent/60 focus-visible:ring-offset-accent',
+          'disabled:pointer-events-none disabled:opacity-40'
         )}
       />
       <svg
-        className="absolute pointer-events-none opacity-0 peer-checked:opacity-100 text-neutral-25"
+        className="absolute pointer-events-none opacity-0 peer-checked:opacity-100 text-background"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
         fill="none"
@@ -57,7 +57,7 @@ export const Checkbox = forwardRef(function Checkbox(
         />
       </svg>
       <svg
-        className="absolute pointer-events-none opacity-0 peer-indeterminate:opacity-100 text-neutral-25"
+        className="absolute pointer-events-none opacity-0 peer-indeterminate:opacity-100 text-background"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
         fill="none"
