@@ -1,0 +1,77 @@
+import { PreviewBox } from 'components/PreviewBox';
+import { FileCode } from 'components/FileCode';
+import { ComponentPreview } from 'components/ComponentPreview';
+import { Button, ButtonIcon } from 'components/foundations/Button';
+import { ArrowRight } from 'components/foundations/Icons';
+
+# Button
+
+<PreviewBox>
+  <div className="flex gap-4">
+    <Button>
+      {'Button'}
+      <ButtonIcon>
+        <ArrowRight />
+      </ButtonIcon>
+    </Button>
+    <Button>{'Button'}</Button>
+    <Button>
+      <ButtonIcon>
+        <ArrowRight />
+      </ButtonIcon>
+    </Button>
+  </div>
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Button" />
+
+### Dependencies
+
+```bash copy
+npm i @radix-ui/react-slot
+```
+
+## API Reference
+
+| Prop       |   Type    | Default Value |
+| :--------- | :-------: | ------------: |
+| `variant`  | `string`  |     `primary` |
+| `size`     | `string`  |          `md` |
+| `disabled` | `boolean` |             - |
+| `loading`  | `boolean` |             - |
+| `asChild`  | `boolean` |             - |
+
+## Usage
+
+```tsx copy
+import { Button, ButtonIcon } from '[path]/Button';
+```
+
+```tsx copy
+<Button>
+  <!-- Label -->
+  <ButtonIcon>
+    <!-- Icon -->
+  </ButtonIcon>
+</Button>
+```
+
+## Examples
+
+### Variants
+
+<ComponentPreview path="components/foundations/Button/examples/ButtonVariants" />
+
+### As Child
+
+<ComponentPreview path="components/foundations/Button/examples/ButtonAsChild" />
+
+### Loading
+
+<ComponentPreview path="components/foundations/Button/examples/ButtonLoading" />
+
+### Disabled
+
+<ComponentPreview path="components/foundations/Button/examples/ButtonDisabled" />
