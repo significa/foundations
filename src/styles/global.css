@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.nextra-code-block > *:first-child:is(div) {
+  backdrop-filter: blur(6px);
+}
+
 .nextra-code-block > pre {
-  max-height: 36rem;
+  max-height: 48rem;
 }
