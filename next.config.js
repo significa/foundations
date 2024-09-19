@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const { buildRegistry, SOURCE_DIRECTORIES } = require('./scripts/build-registry.cjs');
+const { buildRegistry } = require('./scripts/build-registry.cjs');
+
+const REGISTRY_WATCH_DIRECTORIES = ['src/components/foundations'];
 
 const withNextra = require('nextra')({
   theme: 'nextra-theme-docs',
@@ -16,8 +18,8 @@ module.exports = withNextra({
     if (dev && !isServer) {
       config.watchOptions = { aggregateTimeout: 600, poll: 1000 };
 
-      for (const sourceDirectory of SOURCE_DIRECTORIES) {
-        const watchDirectory = path.resolve(__dirname, 'src', sourceDirectory);
+      for (const dir of REGISTRY_WATCH_DIRECTORIES) {
+        const watchDirectory = path.resolve(__dirname, dir);
 
         if (fs.existsSync(watchDirectory)) {
           fs.watch(watchDirectory, { recursive: true }, (eventType, filename) => {

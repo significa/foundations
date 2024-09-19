@@ -1,38 +1,11 @@
 import { ColorCard } from 'components/ColorCard';
+import { FileCode } from 'components/FileCode';
 
 # Theming
 
 We opted to use [Tailwind CSS](https://tailwindcss.com/) because of its flexibility and utility-first design. Given that this project is focused on providing foundational code, we've kept the configuration minimal and straightforward.
 
-```js filename="tailwind.config.cjs" copy
-const plugin = require('tailwindcss/plugin');
-
-const colors = {
-  // in oklch color space
-  '--color-background': '97.72% 0 0',
-  '--color-primary': '25% 0 0',
-  '--color-accent': '87.99% 0.17372425704675545 92.92368848780228'
-};
-
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx,md,mdx}'],
-  theme: {
-    colors: {
-      white: '#fff',
-      black: '#000',
-      background: 'oklch(var(--color-background) / <alpha-value>)',
-      primary: 'oklch(var(--color-primary) / <alpha-value>)',
-      accent: 'oklch(var(--color-accent) / <alpha-value>)'
-    }
-  },
-  plugins: [
-    plugin(function ({ addBase }) {
-      addBase({ ':root': colors });
-    })
-  ]
-};
-```
+<FileCode path="tailwind.config.cjs" />
 
 ## Colors
 
@@ -65,14 +38,7 @@ We combine both `clsx` and `tailwind-merge` in a custom `cn` utility, which we i
 npm install clsx tailwind-merge
 ```
 
-```ts copy filename="lib/tailwind.ts"
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs)) || undefined;
-}
-```
+<FileCode path="lib/tailwind.ts" />
 
 ### Example
 
