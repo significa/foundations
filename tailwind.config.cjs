@@ -7,8 +7,6 @@ const colors = {
   '--color-accent': '87.99% 0.17372425704675545 92.92368848780228'
 };
 
-const palette = {};
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx,md,mdx}'],
