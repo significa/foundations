@@ -9,7 +9,15 @@ type ColorCardProps = {
 
 export function ColorCard({ token, className, children }: ColorCardProps) {
   return (
-    <div className={cn('relative w-full pb-[75%] nx-rounded-xl', `bg-${token}`, className)}>
+    <div
+      className={cn(
+        'relative w-full pb-[75%] nx-rounded-xl',
+        token === 'background' && 'bg-background',
+        token === 'primary' && 'bg-primary',
+        token === 'accent' && 'bg-accent',
+        className
+      )}
+    >
       <div className="absolute top-0 left-0 text-md font-medium leading-none p-4">{children}</div>
     </div>
   );
