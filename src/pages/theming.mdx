@@ -25,17 +25,18 @@ Please be aware that, theme-wise, copying a component into your project will rar
 
 ## Utilities
 
-We use two libraries, [`clsx`](https://github.com/lukeed/clsx#readme) and [`tailwind-merge`](https://github.com/dcastil/tailwind-merge#readme), to make working with Tailwind classes easier and more efficient:
+We use two libraries, [`clsx`](https://github.com/lukeed/clsx#readme), [`tailwind-merge`](https://github.com/dcastil/tailwind-merge#readme) and [`class-variance-authority`](https://cva.style/docs), to make working with Tailwind classes easier and more efficient:
 
 - `clsx` helps conditionally apply class names. It lets you easily add or remove Tailwind classes based on component props or state.
 - `tailwind-merge` works with `clsx` to automatically resolve any conflicting Tailwind classes, like when you apply different padding or margin values. It ensures that the right styles are applied without conflicts.
+- `class-variance-authority` is useful for managing variant-based class combinations, making it easier to handle dynamic styles by defining reusable variants for components.
 
-We combine both `clsx` and `tailwind-merge` in a custom `cn` utility, which we import from `lib/tailwind`, to handle class management in one simple function.
+We combine both `clsx` and `tailwind-merge` in a custom `cn` utility, imported from `lib/tailwind`, to simplify class management into a single function. Additionally, we have a `cnva` utility that brings together all three tools — including `class-variance-authority` — for handling class variants when needed.
 
 ### Install
 
 ```bash copy
-npm install clsx tailwind-merge
+npm install clsx tailwind-merge class-variance-authority
 ```
 
 <FileCode path="lib/tailwind.ts" filename="lib/tailwind.ts" />
@@ -43,15 +44,34 @@ npm install clsx tailwind-merge
 ### Example
 
 ```tsx copy /cn/
+import { cn } from 'lib/tailwind';
+
 export function Component({ disabled, className }) {
   return (
     <div
       className={cn(
-        'relative p-12',
+        'relative text-primary p-12',
         disabled ? 'cursor-not-allowed' : 'cursor-auto',
         className
       )}
-    >
+    />
   );
+}
+```
+
+```tsx copy /cnva/
+import { cnva } from 'lib/tailwind';
+
+const componentStyles = cnva('relative text-primary', {
+  variants: {
+    size: {
+      md: 'h-12 px-4 text-md',
+      sm: 'h-8 px-2 text-sm'
+    }
+  }
+});
+
+export function Component({ size, className }) {
+  return <div className={componentStyles({ size, className })} />;
 }
 ```

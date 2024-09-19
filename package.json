@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/significa/foundations#readme",
   "dependencies": {
+    "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "next": "^14.2.8",
     "nextra": "^2.13.4",
