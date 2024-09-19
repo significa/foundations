@@ -7,5 +7,6 @@ export default {
   feedback: {
     content: null
   },
-  footer: { component: null }
+  footer: { component: null },
+  darkMode: false
 };
