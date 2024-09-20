@@ -1,0 +1,36 @@
+import { PreviewBox } from 'components/PreviewBox';
+import { FileCode } from 'components/FileCode';
+import { ComponentPreview } from 'components/ComponentPreview';
+import { Spinner } from 'components/foundations/Spinner';
+
+# Spinner
+
+<PreviewBox>
+  <Spinner size="lg" />
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Spinner" />
+
+## API Reference
+
+| Prop   |         Type         | Default Value |
+| :----- | :------------------: | ------------: |
+| `size` | `lg` \| `md` \| `sm` |          `md` |
+
+## Usage
+
+```tsx copy
+import { Spinner } from '[path]/Spinner';
+```
+
+```tsx copy
+<Spinner />
+```
+
+## Examples
+
+### With Color
+
+<ComponentPreview path="components/foundations/Spinner/examples/SpinnerWithColor" />

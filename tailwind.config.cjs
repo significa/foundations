@@ -15,6 +15,8 @@ module.exports = {
     colors: {
       white: '#fff',
       black: '#000',
+      current: 'currentColor',
+      transparent: 'transparent',
       background: 'oklch(var(--color-background) / <alpha-value>)',
       primary: 'oklch(var(--color-primary) / <alpha-value>)',
       accent: 'oklch(var(--color-accent) / <alpha-value>)'
