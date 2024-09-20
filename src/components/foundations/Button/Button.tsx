@@ -86,7 +86,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function (
 
   const [hasIcon, hasOnlyIcon] = useMemo(() => {
     const containsIcon = Children.toArray(children).some((child) => {
-      return isValidElement(child) && child.type === ButtonIcon;
+      return (
+        isValidElement(child) &&
+        (child.type === ButtonIcon || (child.type as React.FC).displayName === 'ButtonIcon')
+      );
     });
 
     return [containsIcon, containsIcon && Children.toArray(children).length === 1];
@@ -105,6 +108,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function (
             loading && !hasIcon && '[&>*:not([data-button-icon]]:opacity-0 !text-transparent'
           ]
         })}
+        data-only-icon={hasOnlyIcon}
         {...props}
       >
         <Slottable>{children}</Slottable>
@@ -139,3 +143,5 @@ export const ButtonIcon = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanEle
     </span>
   );
 });
+
+ButtonIcon.displayName = 'ButtonIcon';
