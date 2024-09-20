@@ -27,11 +27,11 @@ const buttonStyle = cnva(
     variants: {
       variant: {
         primary:
-          'bg-primary border border-transparent text-background enabled:hover:bg-primary/95 enabled:active:bg-primary/90',
+          'bg-primary border border-transparent text-background [&>[data-button-icon]]:text-background enabled:hover:bg-primary/95 enabled:active:bg-primary/90',
         secondary:
-          'bg-transparent border border-primary/50 text-primary enabled:hover:bg-primary/5 enabled:active:bg-primary/10',
+          'bg-transparent border border-primary/50 [&>[data-button-icon]]:text-primary enabled:hover:bg-primary/5 enabled:active:bg-primary/10',
         ghost:
-          'bg-transparent border border-transparent text-primary enabled:hover:bg-primary/5 enabled:hover:opacity-90 enabled:active:bg-primary/10'
+          'bg-transparent border border-transparent text-primary [&>[data-button-icon]]:text-primary enabled:hover:bg-primary/5 enabled:hover:opacity-90 enabled:active:bg-primary/10'
       },
       size: {
         md: 'h-10 rounded-xl px-4 text-md',
@@ -85,14 +85,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function (
   const Component = asChild ? Slot : 'button';
 
   const [hasIcon, hasOnlyIcon] = useMemo(() => {
-    const containsIcon = Children.toArray(children).some((child) => {
+    const childrenArray = Children.toArray(children);
+
+    const componentChildren =
+      asChild && childrenArray.length === 1
+        ? (childrenArray[0] as any).props.children
+        : childrenArray;
+
+    const _hasIcon = componentChildren.some((child) => {
       return (
         isValidElement(child) &&
         (child.type === ButtonIcon || (child.type as React.FC).displayName === 'ButtonIcon')
       );
     });
 
-    return [containsIcon, containsIcon && Children.toArray(children).length === 1];
+    return [_hasIcon, _hasIcon && componentChildren.length === 1];
   }, [children]);
 
   return (
@@ -117,7 +124,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function (
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             data-button-icon
           >
-            <Spinner className="text-white size-[1em]" />
+            <Spinner className="text-current size-[1em]" />
           </span>
         )}
       </Component>
