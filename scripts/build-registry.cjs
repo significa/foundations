@@ -93,12 +93,21 @@ async function buildRegistry() {
         key = key.substring(3);
       }
 
-      index.entries.push({ key, code: mdxBasename, component: isComponent ? basename : null });
-      index.imports.push({ module: mdxBasename, named: false, path: `./${mdxFilename}` });
+      index.entries.push({
+        key,
+        code: mdxBasename,
+        component: isComponent ? toPascalCase(basename) : null
+      });
+
+      index.imports.push({
+        module: mdxBasename,
+        named: false,
+        path: `./${mdxFilename}`
+      });
 
       if (isComponent) {
         index.imports.push({
-          module: basename,
+          module: toPascalCase(basename),
           named: true,
           path: `../${fullPath}`
         });
