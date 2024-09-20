@@ -1,0 +1,59 @@
+import { PreviewBox } from 'components/PreviewBox';
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+import { Input } from 'components/foundations/Input';
+
+# Input
+
+A flexible type-agnostic input field supporting labels and custom icons.
+
+<PreviewBox>
+  <Input placeholder="Type away" />
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Input" />
+
+## Usage
+
+```tsx copy
+import { Input } from '[path]/Input';
+```
+
+```tsx copy
+<Input type="..." />
+```
+
+## API Reference
+
+| Prop          |    Type     | Default Value |
+| :------------ | :---------: | ------------: |
+| `type`        |  `string`   |             - |
+| `label`       |  `string`   |             - |
+| `placeholder` |  `string`   |             - |
+| `icon`        | `ReactNode` |             - |
+| `error`       |  `boolean`  |             - |
+| `disabled`    |  `boolean`  |             - |
+
+## Examples
+
+### With Label
+
+<ComponentPreview path="components/foundations/Input/examples/InputWithLabel" />
+
+### With Icon
+
+<ComponentPreview path="components/foundations/Input/examples/InputWithIcon" />
+
+### File
+
+<ComponentPreview path="components/foundations/Input/examples/InputFile" />
+
+### Error
+
+<ComponentPreview path="components/foundations/Input/examples/InputError" />
+
+### Disabled
+
+<ComponentPreview path="components/foundations/Input/examples/InputDisabled" />
