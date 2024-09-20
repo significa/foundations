@@ -17,7 +17,7 @@ const buttonStyle = cnva(
   transition
   
   disabled:opacity-60
-  disabled:cursor-not-allowed
+  disabled:pointer-events-none
 
   focus-visible:ring 
   focus-visible:ring-accent/50
@@ -27,11 +27,11 @@ const buttonStyle = cnva(
     variants: {
       variant: {
         primary:
-          'bg-primary border border-transparent text-background [&>[data-button-icon]]:text-background enabled:hover:bg-primary/95 enabled:active:bg-primary/90',
+          'bg-primary border border-primary text-background [&>[data-button-icon]]:text-background hover:bg-primary/[0.91] active:bg-primary/95',
         secondary:
-          'bg-transparent border border-primary/50 [&>[data-button-icon]]:text-primary enabled:hover:bg-primary/5 enabled:active:bg-primary/10',
+          'bg-transparent border border-primary/50 [&>[data-button-icon]]:text-primary hover:bg-primary/5 active:bg-primary/[.075]',
         ghost:
-          'bg-transparent border border-transparent text-primary [&>[data-button-icon]]:text-primary enabled:hover:bg-primary/5 enabled:hover:opacity-90 enabled:active:bg-primary/10'
+          'bg-transparent border border-transparent text-primary [&>[data-button-icon]]:text-primary hover:bg-primary/5 hover:opacity-90 active:bg-primary/[0.075]'
       },
       size: {
         md: 'h-10 rounded-xl px-4 text-md',

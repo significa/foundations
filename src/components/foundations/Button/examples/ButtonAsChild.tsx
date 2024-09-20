@@ -1,9 +1,15 @@
-import { Button } from 'components/foundations/Button';
+import { Button, ButtonIcon } from 'components/foundations/Button';
+import { Hashtag } from 'components/foundations/Icons';
 
 export function ButtonAsChild() {
   return (
-    <Button asChild>
-      <a href="#as-child">Anchor</a>
+    <Button asChild variant="secondary">
+      <a href="#as-child">
+        <ButtonIcon>
+          <Hashtag />
+        </ButtonIcon>
+        Anchor
+      </a>
     </Button>
   );
 }

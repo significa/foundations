@@ -7,7 +7,7 @@ const spinnerStyle = cnva(
   relative
   
   animate-spin
-
+  
   before:absolute
   before:left-0
   before:top-0
@@ -25,6 +25,7 @@ const spinnerStyle = cnva(
   after:border-transparent
   after:border-r-current
   after:border-t-current
+  after:animate-[spin_2s_ease-in-out_infinite]
   `,
   {
     variants: {
