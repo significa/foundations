@@ -3,6 +3,8 @@ import { FileCode } from 'components/FileCode';
 import { ComponentPreview } from 'components/ComponentPreview';
 import { Button, ButtonIcon } from 'components/foundations/Button';
 import { ArrowRight } from 'components/foundations/Icons';
+import { Cards, Card } from 'nextra/components';
+import { Link } from 'components/foundations/Icons';
 
 # Button
 
@@ -28,6 +30,10 @@ import { ArrowRight } from 'components/foundations/Icons';
 <FileCode path="components/foundations/Button" />
 
 ### Dependencies
+
+<Cards>
+  <Card icon={<Link />} href="/components/spinner" title="Spinner" />
+</Cards>
 
 ```bash copy
 npm i @radix-ui/react-slot
