@@ -2,10 +2,11 @@ import { PreviewBox } from 'components/PreviewBox';
 import { ComponentPreview } from 'components/ComponentPreview';
 import { FileCode } from 'components/FileCode';
 import { Input } from 'components/foundations/Input';
+import { Hashtag } from 'components/foundations/Icons';
 
 # Input
 
-A flexible type-agnostic input field supporting labels and custom icons.
+A flexible input field that supports labels and icons.
 
 <PreviewBox>
   <Input placeholder="Type away" />
@@ -14,6 +15,20 @@ A flexible type-agnostic input field supporting labels and custom icons.
 ## Install
 
 <FileCode path="components/foundations/Input" />
+
+## API Reference
+
+| Prop          |    Type     | Default Value |
+| :------------ | :---------: | ------------: |
+| `type`        |  `string`   |             - |
+| `label`       |  `string`   |             - |
+| `placeholder` |  `string`   |             - |
+| `name`        |  `string`   |             - |
+| `value`       |  `string`   |             - |
+| `error`       |  `boolean`  |             - |
+| `disabled`    |  `boolean`  |             - |
+| `required`    |  `boolean`  |             - |
+| `icon`        | `ReactNode` |             - |
 
 ## Usage
 
@@ -24,17 +39,6 @@ import { Input } from '[path]/Input';
 ```tsx copy
 <Input type="..." />
 ```
-
-## API Reference
-
-| Prop          |    Type     | Default Value |
-| :------------ | :---------: | ------------: |
-| `type`        |  `string`   |             - |
-| `label`       |  `string`   |             - |
-| `placeholder` |  `string`   |             - |
-| `icon`        | `ReactNode` |             - |
-| `error`       |  `boolean`  |             - |
-| `disabled`    |  `boolean`  |             - |
 
 ## Examples
 
