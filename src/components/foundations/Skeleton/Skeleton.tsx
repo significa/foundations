@@ -5,5 +5,5 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className }: SkeletonProps) {
-  return <div className={cn('bg-primary/15 cursor-wait animate-pulse', className)} />;
+  return <div className={cn('bg-primary/15 animate-pulse', className)} />;
 }
