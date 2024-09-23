@@ -7,8 +7,8 @@ export function TextareaError() {
       placeholder="Type away"
       defaultValue="I think I cracked one too many eggs"
       error
-      rows="7"
-      resizable="false"
+      rows={7}
+      resizable={false}
     />
   );
 }
