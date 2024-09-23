@@ -1,0 +1,59 @@
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+import { PreviewBox } from 'components/PreviewBox';
+import { Textarea } from 'components/foundations/Textarea';
+
+# Textarea
+
+A multiline text input field for user entry that supports labels.
+
+<PreviewBox>
+  <Textarea rows={12} placeholder="Tell us something." />
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Textarea" />
+
+## API Reference
+
+| Prop           |         Type          | Default Value |
+| :------------- | :-------------------: | ------------: |
+| `label`        |       `string`        |             - |
+| `placeholder`  |       `string`        |             - |
+| `name`         |       `string`        |             - |
+| `value`        |       `string`        |             - |
+| `defaultValue` |       `string`        |             - |
+| `error`        |       `boolean`       |             - |
+| `disabled`     |       `boolean`       |             - |
+| `required`     |       `boolean`       |             - |
+| `rows`         |       `number`        |             - |
+| `resizable`    | `boolean` \| `string` |             - |
+
+## Usage
+
+```tsx copy
+import { Textarea } from '[path]/Textarea';
+```
+
+```tsx copy
+<Textarea />
+```
+
+## Examples
+
+### With Label
+
+<ComponentPreview path="components/foundations/Textarea/examples/TextareaWithLabel" />
+
+### Non-resizable
+
+<ComponentPreview path="components/foundations/Textarea/examples/TextareaNonResizable" />
+
+### Error
+
+<ComponentPreview path="components/foundations/Textarea/examples/TextareaError" />
+
+### Disabled
+
+<ComponentPreview path="components/foundations/Textarea/examples/TextareaDisabled" />

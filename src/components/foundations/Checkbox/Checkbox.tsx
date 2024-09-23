@@ -38,7 +38,7 @@ export const Checkbox = forwardRef(function Checkbox(
           'bg-transparent border-primary ring-accent focus:ring enabled:hover:bg-primary/5',
           'checked:bg-primary checked:border-primary enabled:checked:hover:bg-primary/90',
           'indeterminate:bg-primary indeterminate:border-primary enabled:indeterminate:hover:bg-primary/90',
-          'focus-visible:ring-accent/60 focus-visible:ring-offset-accent',
+          'focus-visible:ring-accent/50 focus-visible:ring-offset-accent',
           'disabled:pointer-events-none disabled:opacity-40'
         )}
       />

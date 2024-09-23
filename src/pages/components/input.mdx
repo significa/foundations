@@ -1,0 +1,64 @@
+import { PreviewBox } from 'components/PreviewBox';
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+import { Input } from 'components/foundations/Input';
+import { Hashtag } from 'components/foundations/Icons';
+
+# Input
+
+A flexible input field that supports labels and icons.
+
+<PreviewBox>
+  <Input placeholder="Type away" />
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Input" />
+
+## API Reference
+
+| Prop           |    Type     | Default Value |
+| :------------- | :---------: | ------------: |
+| `type`         |  `string`   |             - |
+| `label`        |  `string`   |             - |
+| `placeholder`  |  `string`   |             - |
+| `name`         |  `string`   |             - |
+| `value`        |  `string`   |             - |
+| `defaultValue` |  `string`   |             - |
+| `error`        |  `boolean`  |             - |
+| `disabled`     |  `boolean`  |             - |
+| `required`     |  `boolean`  |             - |
+| `icon`         | `ReactNode` |             - |
+
+## Usage
+
+```tsx copy
+import { Input } from '[path]/Input';
+```
+
+```tsx copy
+<Input type="..." />
+```
+
+## Examples
+
+### With Label
+
+<ComponentPreview path="components/foundations/Input/examples/InputWithLabel" />
+
+### With Icon
+
+<ComponentPreview path="components/foundations/Input/examples/InputWithIcon" />
+
+### File
+
+<ComponentPreview path="components/foundations/Input/examples/InputFile" />
+
+### Error
+
+<ComponentPreview path="components/foundations/Input/examples/InputError" />
+
+### Disabled
+
+<ComponentPreview path="components/foundations/Input/examples/InputDisabled" />
