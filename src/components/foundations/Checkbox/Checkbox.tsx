@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useEffect, useImperativeHandle } from 'react';
+import { forwardRef } from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { cn } from 'lib/tailwind';
 
