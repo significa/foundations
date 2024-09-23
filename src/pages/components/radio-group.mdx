@@ -1,0 +1,59 @@
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+import { PreviewBox } from 'components/PreviewBox';
+import { RadioGroup, RadioGroupItem } from 'components/foundations/RadioGroup';
+
+# RadioGroup
+
+A group of checkable buttons allowing only one option to be selected at a time.
+
+<PreviewBox>
+  <RadioGroup defaultValue="rg2" className="text-sm text-primary">
+    <div className="flex gap-2 items-center">
+      <RadioGroupItem id="rg1" value="rg1" />
+      <label htmlFor="rg1">Boiled</label>
+    </div>
+    <div className="flex gap-2 items-center">
+      <RadioGroupItem id="rg2" value="rg2" />
+      <label htmlFor="rg2">Fried</label>
+    </div>
+    <div className="flex gap-2 items-center">
+      <RadioGroupItem id="rg3" value="rg3" />
+      <label htmlFor="rg3">Scrambled</label>
+    </div>
+  </RadioGroup>
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/RadioGroup" />
+
+### Dependencies
+
+```bash copy
+npm install @radix-ui/react-radio-group
+```
+
+## API Reference
+
+This component uses `@radix-ui/react-radio-group` under the hood. Check the API reference in [their documentation](https://www.radix-ui.com/primitives/docs/components/radio-group#api-reference).
+
+## Usage
+
+```tsx copy
+import { RadioGroup, RadioGroupItem } from '[path]/RadioGroup';
+```
+
+```tsx copy
+<RadioGroup defaultValue="...">
+  <RadioGroupItem value="..." />
+  <RadioGroupItem value="..." />
+  <RadioGroupItem value="..." />
+</RadioGroup>
+```
+
+## Examples
+
+### Disabled
+
+<ComponentPreview path="components/foundations/RadioGroup/examples/RadioGroupDisabled" />
