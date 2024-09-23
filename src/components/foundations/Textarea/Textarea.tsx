@@ -3,7 +3,7 @@ import { cn } from 'lib/tailwind';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
-  resizable?: boolean | string;
+  resizable?: boolean;
   error?: boolean;
 }
 
@@ -30,7 +30,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
           'disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-primary/5',
           error &&
             'placeholder:text-error/50 border-error/50 bg-error/[0.025] hover:bg-error/5 hover:border-error/60 focus:ring-error/50 focus:ring-offset-error',
-          (resizable === false || resizable === 'false') && 'resize-none'
+          resizable === false && 'resize-none'
         )}
         ref={forwardedRef}
         {...props}
