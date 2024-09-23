@@ -35,7 +35,7 @@ const buttonStyle = cnva(
       },
       size: {
         md: 'h-10 rounded-xl px-4 text-md',
-        sm: 'h-8 rounded-lg px-2 text-sm'
+        sm: 'h-8 rounded-lg px-3 text-sm'
       },
       square: {
         true: '',
