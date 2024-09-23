@@ -22,12 +22,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function (
         className
       )}
     >
-      {label && <span className="font-medium">{label}</span>}
+      {label && <span className="text-primary font-medium">{label}</span>}
       <input
         className={cn(
-          'h-10 pb-[1px] leading-10 px-3 transition-colors',
-          'font-medium leading-none placeholder:text-primary/50 rounded-xl',
-          'bg-transparent border border-primary/50 hover:bg-primary/[0.02] hover:border-primary/60',
+          'h-10 pb-[1px] px-3 font-medium leading-none placeholder:text-primary/50 transition-colors',
+          'bg-transparent border border-primary/50 rounded-xl hover:bg-primary/[0.02] hover:border-primary/60',
           'focus:ring-accent/50 focus:ring-offset-accent',
           'disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-primary/5',
           'file:border-0 file:bg-transparent file:text-primary file:font-semibold file:leading-9',
