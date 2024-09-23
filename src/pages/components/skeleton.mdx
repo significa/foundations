@@ -1,0 +1,35 @@
+import { PreviewBox } from 'components/PreviewBox';
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+import { Skeleton } from 'components/foundations/Skeleton';
+
+# Skeleton
+
+A placeholder block to preview generic content layout while the actual data is loading.
+
+<PreviewBox>
+  <div class="flex flex-col gap-2 justify-center">
+    <Skeleton className="w-[128px] h-[24px] rounded-xs" />
+    <Skeleton className="w-[96px] h-[16px] rounded-xs" />
+  </div>
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Skeleton" />
+
+## Usage
+
+```tsx copy
+import { Skeleton } from '[path]/Skeleton';
+```
+
+```tsx copy
+<Skeleton className="w-[...] h-[...] rounded-[...]" />
+```
+
+## Examples
+
+### Article
+
+<ComponentPreview path="components/foundations/Skeleton/examples/SkeletonArticle" />
