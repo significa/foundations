@@ -22,9 +22,18 @@ module.exports = {
       primary: 'oklch(var(--color-primary) / <alpha-value>)',
       accent: 'oklch(var(--color-accent) / <alpha-value>)',
       error: 'oklch(var(--color-error) / <alpha-value>)'
+    },
+    extend: {
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' }
+        }
+      }
     }
   },
   plugins: [
+    require('tailwindcss-animate'),
     plugin(function ({ addBase }) {
       addBase({ ':root': colors });
     })
