@@ -1,4 +1,5 @@
 import { cloneElement, useCallback, useEffect, useState, useRef } from 'react';
+import debounce from 'debounce';
 import { cn, cnva } from 'lib/tailwind';
 
 interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -64,7 +65,7 @@ export function Marquee({
       }
     }
 
-    const resizeObserver = new ResizeObserver(onResize);
+    const resizeObserver = new ResizeObserver(debounce(onResize, 256));
     resizeObserver.observe(containerRef.current);
 
     onResize();
