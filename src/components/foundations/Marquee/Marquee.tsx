@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { cloneElement, useCallback, useEffect, useState, useRef } from 'react';
 import { cn, cnva } from 'lib/tailwind';
 
 interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -17,7 +17,7 @@ const marqueeContentStyles = cnva(
         rtl: 'direction-reverse'
       },
       play: {
-        play: 'running',
+        true: 'running',
         false: 'paused'
       }
     }
@@ -105,5 +105,11 @@ export function Marquee({
 }
 
 function CloneFactory({ num, children }: { num: number; children: React.ReactElement }) {
-  return <>{new Array(Math.max(num, 0)).fill(children)}</>;
+  return (
+    <>
+      {new Array(Math.max(num, 0))
+        .fill(null)
+        .map((_, index) => cloneElement(children, { key: index }))}
+    </>
+  );
 }
