@@ -28,7 +28,7 @@ const marqueeContentStyles = cnva(
 export function Marquee({
   dir = 'ltr',
   play = true,
-  speedMultiplier,
+  speedMultiplier = 1,
   autofill,
   className,
   children
@@ -81,7 +81,7 @@ export function Marquee({
       className={cn('w-full overflow-hidden whitespace-nowrap flex', className)}
       style={
         {
-          '--marquee-duration': `${duration * (1 / (speedMultiplier ?? 1))}s`
+          '--marquee-duration': `${duration * (1 / speedMultiplier)}s`
         } as React.CSSProperties
       }
     >
