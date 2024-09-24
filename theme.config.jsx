@@ -8,5 +8,11 @@ export default {
     content: null
   },
   footer: { component: null },
-  darkMode: false
+  darkMode: false,
+  nextThemes: {
+    defaultTheme: 'light',
+    forcedTheme: 'light',
+    enableSystem: false,
+    enableColorScheme: false
+  }
 };
