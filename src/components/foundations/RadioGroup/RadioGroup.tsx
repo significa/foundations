@@ -1,24 +1,28 @@
 import { forwardRef } from 'react';
-import { Root, Item, Indicator } from '@radix-ui/react-radio-group';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { cn } from 'lib/tailwind';
 
 export const RadioGroup = forwardRef<
-  React.ElementRef<typeof Root>,
-  React.ComponentPropsWithoutRef<typeof Root>
+  React.ElementRef<typeof RadioGroupPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(function ({ className, children, ...props }, forwardedRef) {
   return (
-    <Root ref={forwardedRef} className={cn('flex flex-col gap-2', className)} {...props}>
+    <RadioGroupPrimitive.Root
+      ref={forwardedRef}
+      className={cn('flex flex-col gap-2', className)}
+      {...props}
+    >
       {children}
-    </Root>
+    </RadioGroupPrimitive.Root>
   );
 });
 
 export const RadioGroupItem = forwardRef<
-  React.ElementRef<typeof Item>,
-  React.ComponentPropsWithoutRef<typeof Item>
+  React.ElementRef<typeof RadioGroupPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
 >(({ className, ...props }, forwardedRef) => {
   return (
-    <Item
+    <RadioGroupPrimitive.Item
       ref={forwardedRef}
       className={cn(
         'relative size-5 border rounded-full transition',
@@ -29,7 +33,7 @@ export const RadioGroupItem = forwardRef<
       )}
       {...props}
     >
-      <Indicator
+      <RadioGroupPrimitive.Indicator
         className="absolute inset-0 rounded-full bg-primary opacity-0 data-[state=checked]:opacity-100"
         forceMount
       >
@@ -47,7 +51,7 @@ export const RadioGroupItem = forwardRef<
             d="m11 6-3.6 4L5 7.778"
           />
         </svg>
-      </Indicator>
-    </Item>
+      </RadioGroupPrimitive.Indicator>
+    </RadioGroupPrimitive.Item>
   );
 });
