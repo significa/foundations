@@ -10,9 +10,6 @@ export default {
   footer: { component: null },
   darkMode: false,
   nextThemes: {
-    defaultTheme: 'light',
-    forcedTheme: 'light',
-    enableSystem: false,
-    enableColorScheme: false
+    forcedTheme: 'light'
   }
 };
