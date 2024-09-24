@@ -49,15 +49,18 @@ export function Marquee({
       if (!isReady()) return;
 
       const { width: containerWidth } = containerRef.current.getBoundingClientRect();
+      const { width: childrenWidth } = childrenRef.current.getBoundingClientRect();
+
+      // calculate the number of child clones required to fill the marquee
+      // limited to 32 clones
+      const requiredClones = Math.min(32, Math.ceil(containerWidth / childrenWidth));
 
       // calculate marquee loop duration
-      setDuration(~~(containerWidth / 50)); // 1 second per each 50px
+      const contentSumWidth = childrenWidth * (autofill ? requiredClones : 1);
+      setDuration(~~(contentSumWidth / 50)); // 1 second per each 50px
 
       if (autofill) {
-        // calculate the number of child clones required to fill the marquee
-        // limited to 32 clones
-        const { width: childrenWidth } = childrenRef.current.getBoundingClientRect();
-        setNumClones(Math.min(32, Math.ceil(containerWidth / childrenWidth)));
+        setNumClones(requiredClones);
       }
     }
 
