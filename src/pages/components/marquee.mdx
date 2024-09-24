@@ -1,0 +1,81 @@
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+import { PreviewBox } from 'components/PreviewBox';
+import { Marquee } from 'components/foundations/Marquee';
+
+# Marquee
+
+A component that scrolls its children horizontally in a seamless loop.
+
+<PreviewBox>
+  <Marquee autofill className="rounded-md">
+    <div className="flex gap-2 mr-2">
+      <div className="size-20 rounded-md bg-primary/20"></div>
+      <div className="size-20 rounded-md bg-primary/30"></div>
+      <div className="size-20 rounded-md bg-primary/40"></div>
+    </div>
+  </Marquee>
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Marquee" />
+
+Add the keyframes and css animation plugin to your `tailwind.config.cjs`.
+
+```js copy filename="tailwind.config.cjs"
+module.exports = {
+  theme: {
+    extend: {
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' }
+        }
+      }
+    }
+  },
+  plugins: [require('tailwindcss-animate')]
+};
+```
+
+### Dependencies
+
+```bash copy
+npm install debounce tailwindcss-animate --save-dev
+```
+
+## API Reference
+
+| Prop              |        Type        | Default Value |
+| :---------------- | :----------------: | ------------: |
+| `dir`             | `'ltr'` \| `'rtl'` |         `ltr` |
+| `play`            |     `boolean`      |        `true` |
+| `speedMultiplier` |      `number`      |           `1` |
+| `autofill`        |     `boolean`      |             - |
+
+## Usage
+
+```tsx copy
+import { Marquee } from '[path]/Marquee';
+```
+
+```tsx copy
+<Marquee>
+  <!-- Content --->
+</Marque>
+```
+
+## Examples
+
+### Autofill
+
+<ComponentPreview path="components/foundations/Marquee/examples/MarqueeAutofill" />
+
+### Direction
+
+<ComponentPreview path="components/foundations/Marquee/examples/MarqueeDirection" />
+
+### Speed Control
+
+<ComponentPreview path="components/foundations/Marquee/examples/MarqueeSpeedControl" />
