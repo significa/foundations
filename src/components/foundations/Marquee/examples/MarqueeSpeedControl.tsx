@@ -21,7 +21,7 @@ export function MarqueeSpeedControl() {
         />
       </label>
       <Marquee autofill speedMultiplier={speed}>
-        <span className="whitespace-pre text-md"> 🐜 </span>
+        <span className="whitespace-pre text-md">🐜 </span>
       </Marquee>
     </>
   );

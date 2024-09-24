@@ -4,10 +4,10 @@ export function MarqueeDirection() {
   return (
     <div className="w-full flex flex-col gap-1 text-lg">
       <Marquee dir="ltr" autofill>
-        <span className="whitespace-pre text-md"> Hello </span>
+        <span className="whitespace-pre text-md"> ← </span>
       </Marquee>
       <Marquee dir="rtl" autofill>
-        <span className="whitespace-pre text-md"> World </span>
+        <span className="whitespace-pre text-md"> → </span>
       </Marquee>
     </div>
   );
