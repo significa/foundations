@@ -3,7 +3,9 @@ import throttle from 'throttleit';
 
 type ScrollDirection = 'up' | 'down';
 
-export function useScrollDirection(scope: React.RefObject<HTMLElement> | undefined) {
+type Scope = React.RefObject<HTMLElement> | undefined;
+
+export function useScrollDirection(scope?: Scope): ScrollDirection | undefined {
   const [scrollDirection, setScrollDirection] = useState<ScrollDirection>(null);
 
   useEffect(() => {
@@ -17,7 +19,9 @@ export function useScrollDirection(scope: React.RefObject<HTMLElement> | undefin
   return scrollDirection;
 }
 
-export function useScrollDirectionRef(scope: React.RefObject<HTMLElement> | undefined) {
+export function useScrollDirectionRef(
+  scope?: Scope
+): React.MutableRefObject<ScrollDirection | undefined> {
   const scrollDirection = useRef<ScrollDirection>(null);
 
   useEffect(() => {
