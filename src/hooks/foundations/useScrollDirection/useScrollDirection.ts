@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import throttle from 'throttleit';
+import { throttle } from 'lib/utils/throttle';
 
 type ScrollDirection = 'up' | 'down';
 
@@ -45,6 +45,7 @@ function createScrollDirectionObserver(
   let previousScrollY = Infinity;
 
   function onScroll() {
+    console.log('on-scroll!');
     const currentScrollY =
       scroller instanceof Window
         ? window.scrollY || document.documentElement.scrollTop

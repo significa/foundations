@@ -1,8 +1,11 @@
 import { FileCode } from 'components/FileCode';
+import DebouncingVsThrottleing from 'mdx/debouncing-vs-throtteling.mdx';
 
 # Debounce
 
 A utility which ensures that a given function is only executed after a specified delay period has passed since the last time it was invoked. This is useful for limiting the frequency of function calls in scenarios such as handling user input, resizing events, or other high-frequency actions.
+
+<DebouncingVsThrottleing />
 
 ## Install
 
@@ -33,7 +36,7 @@ const debouncedFunction = debounce(() => {
 
 ## Examples
 
-### Debounced API Call
+### API Call
 
 ```ts copy
 import { debounce } from 'lib/utils/debounce';
