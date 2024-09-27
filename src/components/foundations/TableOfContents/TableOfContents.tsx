@@ -1,7 +1,7 @@
 import { useLayoutEffect, useEffect, useState, useMemo } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import matchesSelector from 'matches-selector';
 import { cn } from 'lib/tailwind';
+import { matchesQuerySelector } from 'lib/utils/matchesQuerySelector';
 import { useScrollDirectionRef } from 'hooks/foundations/useScrollDirection';
 
 interface TableOfContentsProps extends React.HTMLAttributes<HTMLElement> {
@@ -43,7 +43,7 @@ export function TableOfContents({
       element,
       depth: getDepthFromHeading(
         Object.entries(headingSelectors).find(([, selector]) =>
-          matchesSelector(element, selector)
+          matchesQuerySelector(element, selector)
         )?.[0]
       ),
       content: element.innerText
