@@ -2,5 +2,6 @@
   "index": "Home",
   "theming": "Theming",
   "components": "Components",
-  "hooks": "Hooks"
+  "hooks": "Hooks",
+  "utils": "Utils"
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import throttle from 'throttleit';
+import { throttle } from 'lib/utils/throttle';
 
 type ScrollDirection = 'up' | 'down';
 

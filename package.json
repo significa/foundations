@@ -31,8 +31,6 @@
     "@radix-ui/react-switch": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "debounce": "^2.1.1",
-    "matches-selector": "^1.2.0",
     "next": "^14.2.8",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
@@ -40,8 +38,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "scroll-into-view-if-needed": "^3.1.0",
-    "tailwind-merge": "^2.5.2",
-    "throttleit": "^2.1.0"
+    "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
     "@types/node": "22.5.4",
