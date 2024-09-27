@@ -7,6 +7,7 @@ const TARGET_DIRECTORY = '__registry__';
 const SOURCE_GLOB_PATTERNS = [
   'src/components/foundations/**/*.{ts,tsx}',
   'src/hooks/foundations/**/*.{ts,tsx}',
+  'src/lib/utils/**.ts',
   'src/lib/tailwind.ts',
   'tailwind.config.cjs'
 ];

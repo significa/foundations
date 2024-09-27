@@ -1,6 +1,6 @@
 import { cloneElement, useCallback, useEffect, useState, useRef } from 'react';
-import debounce from 'debounce';
 import { cn, cnva } from 'lib/tailwind';
+import { debounce } from 'lib/utils/debounce';
 
 interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
   dir?: 'ltr' | 'rtl';
