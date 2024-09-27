@@ -45,7 +45,6 @@ function createScrollDirectionObserver(
   let previousScrollY = Infinity;
 
   function onScroll() {
-    console.log('on-scroll!');
     const currentScrollY =
       scroller instanceof Window
         ? window.scrollY || document.documentElement.scrollTop
