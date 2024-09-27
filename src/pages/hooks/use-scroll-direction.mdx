@@ -1,0 +1,59 @@
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+
+# useScrollDirection
+
+Custom hook that tracks the direction of the scroll.
+
+## Install
+
+<FileCode path="hooks/foundations/useScrollDirection" />
+
+### Dependencies
+
+```bash copy
+npm i throttleit
+```
+
+## API Reference
+
+### useScrollDirection
+
+- **Parameters:**
+  - `scope` (optional): A React ref object pointing to DOM element that is, or is a descendent from, the scroll context that should be tracked. Useful to mesure the scroll direction of nested scrollable containers.
+- **Returns:**
+  - Returns a string that indicates the scroll direction, either `'up'` or `'down'`. Returns `undefined` if the direction has not been determined yet.
+
+---
+
+### useScrollDirectionRef
+
+- **Parameters:**
+
+  - `scope` (optional): A React ref object pointing to DOM element that is, or is a descendent from, the scroll context that should be tracked. Useful to mesure the scroll direction of nested scrollable containers.
+
+- **Returns:**
+  - Returns a mutable ref object that holds the latest scroll direction, either `'up'` or `'down'`. Returns `undefined` if the direction has not been determined yet.
+
+---
+
+## Usage
+
+```tsx copy
+import { useScrollDirection, useScrollDirectionRef } from '[path]/useScrollDirection';
+```
+
+```tsx copy
+function Component() {
+  const scrollDirection = useScrollDirection();
+  const scrollDirectionRef = useScrollDirectionRef();
+
+  // ...
+}
+```
+
+## Examples
+
+### With Scope
+
+<ComponentPreview path="hooks/foundations/useScrollDirection/examples/UseScrollDirectionScope" />
