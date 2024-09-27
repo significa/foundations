@@ -1,5 +1,6 @@
 {
   "index": "Home",
   "theming": "Theming",
-  "components": "Components"
+  "components": "Components",
+  "hooks": "Hooks"
 }
