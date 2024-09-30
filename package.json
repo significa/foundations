@@ -7,7 +7,7 @@
     "dev": "npm run build-registry && next",
     "build": "npm run build-registry && next build",
     "start": "next start",
-    "lint": "prettier --check .",
+    "lint": "next lint && prettier --check .",
     "format": "prettier --write .",
     "build-registry": "node scripts/build-registry.cjs --run && prettier --write ./__registry__"
   },
