@@ -1,0 +1,71 @@
+import { PreviewBox } from 'components/PreviewBox';
+import { FileCode } from 'components/FileCode';
+import { ComponentPreview } from 'components/ComponentPreview';
+import { Button, ButtonIcon } from 'components/foundations/Button';
+import { AccordionContent, AccordionTrigger, AccordionItem, Accordion } from 'components/foundations/Accordion';
+import { ArrowRight } from 'components/foundations/Icons';
+import { Cards, Card } from 'nextra/components';
+import { Link } from 'components/foundations/Icons';
+
+# Accordion
+
+<PreviewBox>
+         <Accordion type="multiple">
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Is it accessible?</AccordionTrigger>
+              <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-2">
+              <AccordionTrigger>Is it unstyled?</AccordionTrigger>
+              <AccordionContent>
+                  Yes. It's unstyled by default, giving you freedom over the look and feel.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-3">
+              <AccordionTrigger>Can it be animated?</AccordionTrigger>
+              <AccordionContent>
+                  Yes! You can animate the Accordion with CSS or JavaScript.
+              </AccordionContent>
+            </AccordionItem>
+        </Accordion>
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Accordion" />
+
+### Dependencies
+
+```bash copy
+npm i @radix-ui/react-accordion
+```
+
+## API Reference
+
+This component is built on top of `@radix-ui/react-accordion`. For more information and API reference, check [their documentation](https://www.radix-ui.com/primitives/docs/components/checkbox#root).
+
+## Usage
+
+```tsx copy
+import { Accordion, AccordionItem } from '../Accordion';
+```
+
+```tsx copy
+
+
+  <Accordion type="multiple">
+    {items && items.map((items) => (
+      <AccordionItem id={itesm[i].id} value={items[i].value} title={items[i].title}>
+        {items[i].content}
+      </AccordionItem>
+    ))}
+  </Accordion>
+```
+
+## Examples
+
+### Accordion with multiple items
+
+<ComponentPreview path="components/foundations/Accordion/examples/AccordionWithMultipleItems" />
