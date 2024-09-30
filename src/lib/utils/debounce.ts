@@ -1,6 +1,6 @@
 export function debounce<T extends (...args: unknown[]) => void>(
   func: T,
-  delay = 64
+  intervalMs = 64
 ): (...args: Parameters<T>) => void {
   let id: ReturnType<typeof setTimeout> | null;
 
@@ -11,6 +11,6 @@ export function debounce<T extends (...args: unknown[]) => void>(
 
     id = setTimeout(() => {
       func(...args);
-    }, delay);
+    }, intervalMs);
   };
 }
