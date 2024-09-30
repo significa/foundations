@@ -1,6 +1,7 @@
-import { cloneElement, useCallback, useEffect, useState, useRef } from 'react';
+import { cloneElement, useEffect, useState, useRef } from 'react';
 import { cn, cnva } from 'lib/tailwind';
 import { debounce } from 'lib/utils/debounce';
+import React from 'react';
 
 interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
   dir?: 'ltr' | 'rtl';
@@ -39,18 +40,14 @@ export function Marquee({
   const containerRef = useRef<HTMLDivElement>(null);
   const childrenRef = useRef<HTMLSpanElement>(null);
 
-  const isReady = useCallback(() => {
-    return containerRef.current && childrenRef.current;
-  }, [children, containerRef, childrenRef]);
-
   useEffect(() => {
-    if (!isReady()) return;
+    if (containerRef.current !== null || childrenRef.current !== null) return;
 
     function onResize() {
-      if (!isReady()) return;
+      if (containerRef.current !== null || childrenRef.current !== null) return;
 
-      const { width: containerWidth } = containerRef.current.getBoundingClientRect();
-      const { width: childrenWidth } = childrenRef.current.getBoundingClientRect();
+      const { width: containerWidth } = containerRef.current!.getBoundingClientRect();
+      const { width: childrenWidth } = childrenRef.current!.getBoundingClientRect();
 
       // calculate the number of child clones required to fill the marquee
       // limited to 32 clones
@@ -66,24 +63,20 @@ export function Marquee({
     }
 
     const resizeObserver = new ResizeObserver(debounce(onResize, 256));
-    resizeObserver.observe(containerRef.current);
+    resizeObserver.observe(containerRef.current!);
 
     onResize();
 
     return () => {
       resizeObserver.disconnect();
     };
-  }, [autofill, containerRef, childrenRef]);
+  }, [autofill]);
 
   return (
     <div
       ref={containerRef}
       className={cn('w-full overflow-hidden whitespace-nowrap flex', className)}
-      style={
-        {
-          '--marquee-duration': `${duration * (1 / speedMultiplier)}s`
-        } as React.CSSProperties
-      }
+      style={{ '--marquee-duration': `${duration * (1 / speedMultiplier)}s` }}
     >
       <span className={marqueeContentStyles({ dir, play })}>
         <span ref={childrenRef}>{children}</span>
