@@ -1,17 +1,17 @@
 const proto = typeof Element !== 'undefined' ? Element.prototype : {};
 
 const nativeMethod =
-  // @ts-ignore
+  // @ts-expect-error
   proto.matches ||
-  // @ts-ignore
+  // @ts-expect-error
   proto.matchesSelector ||
-  // @ts-ignore
+  // @ts-expect-error
   proto.webkitMatchesSelector ||
-  // @ts-ignore
+  // @ts-expect-error
   proto.mozMatchesSelector ||
-  // @ts-ignore
+  // @ts-expect-error
   proto.msMatchesSelector ||
-  // @ts-ignore
+  // @ts-expect-error
   proto.oMatchesSelector;
 
 export function matchesQuerySelector(element: HTMLElement, selector: string): boolean {
@@ -21,7 +21,7 @@ export function matchesQuerySelector(element: HTMLElement, selector: string): bo
 
   const nodes = element.parentNode.querySelectorAll(selector);
 
-  for (var i = 0; i < nodes.length; i++) {
+  for (let i = 0; i < nodes.length; i++) {
     if (nodes[i] === element) {
       return true;
     }
