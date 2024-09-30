@@ -2,7 +2,12 @@ import { PreviewBox } from 'components/PreviewBox';
 import { FileCode } from 'components/FileCode';
 import { ComponentPreview } from 'components/ComponentPreview';
 import { Button, ButtonIcon } from 'components/foundations/Button';
-import { AccordionContent, AccordionTrigger, AccordionItem, Accordion } from 'components/foundations/Accordion';
+import {
+  AccordionContent,
+  AccordionTrigger,
+  AccordionItem,
+  Accordion
+} from 'components/foundations/Accordion';
 import { ArrowRight } from 'components/foundations/Icons';
 import { Cards, Card } from 'nextra/components';
 import { Link } from 'components/foundations/Icons';
@@ -30,6 +35,7 @@ import { Link } from 'components/foundations/Icons';
               </AccordionContent>
             </AccordionItem>
         </Accordion>
+
 </PreviewBox>
 
 ## Install
@@ -53,15 +59,14 @@ import { Accordion, AccordionItem } from '../Accordion';
 ```
 
 ```tsx copy
-
-
-  <Accordion type="multiple">
-    {items && items.map((items) => (
+<Accordion type="multiple">
+  {items &&
+    items.map((items) => (
       <AccordionItem id={itesm[i].id} value={items[i].value} title={items[i].title}>
         {items[i].content}
       </AccordionItem>
     ))}
-  </Accordion>
+</Accordion>
 ```
 
 ## Examples
