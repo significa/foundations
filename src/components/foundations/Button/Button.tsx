@@ -89,7 +89,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function (
 
     const componentChildren =
       asChild && childrenArray.length === 1
-        ? (childrenArray[0] as any).props.children
+        ? (childrenArray[0] as React.ReactElement).props.children
         : childrenArray;
 
     const _hasIcon = componentChildren.some((child) => {
@@ -100,7 +100,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function (
     });
 
     return [_hasIcon, _hasIcon && componentChildren.length === 1];
-  }, [children]);
+  }, [asChild, children]);
 
   return (
     <ButtonContext.Provider value={{ loading }}>

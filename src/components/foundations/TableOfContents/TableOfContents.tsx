@@ -61,7 +61,7 @@ export function TableOfContents({
       threshold: 0
     };
 
-    function onIntersection(entries: any[]) {
+    function onIntersection(entries: IntersectionObserverEntry[]) {
       for (let i = 0; i < entries.length; i++) {
         const { isIntersecting, target } = entries[i];
         const itemIndex = headings.findIndex(({ element }) => element === target);
@@ -85,7 +85,7 @@ export function TableOfContents({
       headings.forEach(({ element }) => observer.unobserve(element));
       observer.disconnect();
     };
-  }, [headings]);
+  }, [headings, mounted, scrollDirection]);
 
   return (
     <nav className={cn('relative text-sm', className)}>

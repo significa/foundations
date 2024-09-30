@@ -7,7 +7,7 @@
     "dev": "npm run build-registry && next",
     "build": "npm run build-registry && next build",
     "start": "next start",
-    "lint": "prettier --check .",
+    "lint": "next lint && prettier --check .",
     "format": "prettier --write .",
     "build-registry": "node scripts/build-registry.cjs --run && prettier --write ./__registry__"
   },
@@ -44,6 +44,9 @@
   "devDependencies": {
     "@types/node": "22.5.4",
     "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.13",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.10",
     "tailwindcss-animate": "^1.0.7",
