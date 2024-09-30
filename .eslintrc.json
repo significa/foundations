@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "next/typescript",
-    "plugin:react-hooks/recommended"
-  ],
+  "extends": ["next/typescript", "plugin:react-hooks/recommended"],
   "plugins": ["react-hooks"],
   "rules": {
     "no-eval": "error",
