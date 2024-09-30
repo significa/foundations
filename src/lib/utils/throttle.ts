@@ -1,6 +1,6 @@
 export function throttle<T extends (...args: unknown[]) => void>(
   func: T,
-  delay = 64
+  intervalMs = 64
 ): (...args: Parameters<T>) => void {
   let id: ReturnType<typeof setTimeout> | null;
   let lastCallTime = 0;
@@ -10,7 +10,7 @@ export function throttle<T extends (...args: unknown[]) => void>(
 
     const now = Date.now();
     const timeSinceLast = now - lastCallTime;
-    const timeUntilNext = delay - timeSinceLast;
+    const timeUntilNext = intervalMs - timeSinceLast;
 
     if (timeUntilNext <= 0) {
       lastCallTime = now;
