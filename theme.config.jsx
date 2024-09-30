@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 export default {
   logo: <strong>Significa foundations</strong>,
   project: {
@@ -8,5 +10,23 @@ export default {
     content: null
   },
   footer: { component: null },
-  darkMode: false
+  darkMode: false,
+  nextThemes: {
+    forcedTheme: 'light'
+  },
+  useNextSeoProps() {
+    const { asPath } = useRouter();
+    if (asPath !== '/') {
+      return {
+        titleTemplate: '%s – Foundations'
+      };
+    }
+  },
+  head: (
+    <>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta property="og:title" content="Significa Foundations" />
+      <meta property="og:description" content="Significa Foundations" />
+    </>
+  )
 };

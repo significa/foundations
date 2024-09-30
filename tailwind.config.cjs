@@ -36,11 +36,16 @@ module.exports = {
       },
       animation: {
         slideDown: 'slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)',
-        slideUp: 'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)'
+        slideUp: 'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)',
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' }
+        }
       }
     }
   },
   plugins: [
+    require('tailwindcss-animate'),
     plugin(function ({ addBase }) {
       addBase({ ':root': colors });
     })

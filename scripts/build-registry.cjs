@@ -5,7 +5,9 @@ const { globSync } = require('glob');
 const ROOT_DIRECTORY = 'src/';
 const TARGET_DIRECTORY = '__registry__';
 const SOURCE_GLOB_PATTERNS = [
-  'src/components/foundations/**/*.{js,ts,tsx}',
+  'src/components/foundations/**/*.{ts,tsx}',
+  'src/hooks/foundations/**/*.{ts,tsx}',
+  'src/lib/utils/**.ts',
   'src/lib/tailwind.ts',
   'tailwind.config.cjs'
 ];
@@ -78,14 +80,16 @@ async function buildRegistry() {
       // generate entry key based on import path
       let key = path.relative(ROOT_DIRECTORY, file.parentPath);
 
-      if (!isComponent) {
-        // for non-component files the key is the full name
-        // sample.js -> sample.js
-        key = path.join(key, file.name);
-      } else if (path.basename(key) !== basename) {
-        // for components, we append the basename only when it's not the same as the path basename
-        // components/Sample/Sample.tsx -> components/Sample
-        key = path.join(key, basename);
+      // we append the basename only when it's not the same as the path basename
+      // [path]/File/File.tsx -> [path]/File
+      if (path.basename(key) !== basename) {
+        if (isComponent) {
+          key = path.join(key, basename);
+        } else {
+          // for non-component files the key is the full name with the extension
+          // sample.js -> sample.js
+          key = path.join(key, file.name);
+        }
       }
 
       // remove leading '../' that gets added to root files

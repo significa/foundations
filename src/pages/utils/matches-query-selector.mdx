@@ -1,0 +1,30 @@
+import { FileCode } from 'components/FileCode';
+
+# matchesQuerySelector
+
+A utility function that checks if a given HTML element matches a specified query selector.
+
+## Install
+
+<FileCode path="lib/utils/matchesQuerySelector.ts" />
+
+## API Reference
+
+**Parameters:**
+
+- `element` (HTMLElement): The HTML element to be checked against the selector.
+- `selector` (string): The CSS selector string to match the element against.
+
+**Returns:**
+
+- Returns a boolean indicating whether the element matches the specified selector.
+
+## Usage
+
+```ts copy
+import { matchesQuerySelector } from '[path]/matchesQuerySelector';
+```
+
+```ts copy
+const isMatched = matchesQuerySelector(element, '.example');
+```
