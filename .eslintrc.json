@@ -1,5 +1,5 @@
 {
-  "extends": ["next/typescript", "plugin:react-hooks/recommended"],
+  "extends": ["next", "next/typescript", "plugin:react-hooks/recommended"],
   "plugins": ["react-hooks"],
   "rules": {
     "no-eval": "error",
@@ -7,6 +7,8 @@
     "react/display-name": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "@typescript-eslint/no-var-requires": 0
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-require-imports": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
   }
 }

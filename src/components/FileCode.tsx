@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { INDEX, type RegistryEntry } from '../../__registry__/index';
 import { PreviewBox } from 'components/PreviewBox';
 

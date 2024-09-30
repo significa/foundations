@@ -1,6 +1,6 @@
 import { cn } from 'lib/tailwind';
 
-interface PreviewBoxProps extends React.HTMLAttributes<HTMLDivElement> {}
+type PreviewBoxProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function PreviewBox({ className, children }: PreviewBoxProps) {
   return (
