@@ -41,10 +41,10 @@ export function Marquee({
   const childrenRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (containerRef.current !== null || childrenRef.current !== null) return;
+    if (!containerRef.current || !childrenRef.current) return;
 
     function onResize() {
-      if (containerRef.current !== null || childrenRef.current !== null) return;
+      if (!containerRef.current || !childrenRef.current) return;
 
       const { width: containerWidth } = containerRef.current!.getBoundingClientRect();
       const { width: childrenWidth } = childrenRef.current!.getBoundingClientRect();
