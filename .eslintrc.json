@@ -1,0 +1,12 @@
+{
+  "extends": ["next/typescript", "plugin:react-hooks/recommended"],
+  "plugins": ["react-hooks"],
+  "rules": {
+    "no-eval": "error",
+    "@next/next/no-img-element": "off",
+    "react/display-name": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "@typescript-eslint/no-var-requires": 0
+  }
+}
