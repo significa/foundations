@@ -1,7 +1,6 @@
-import { cloneElement, useEffect, useState, useRef } from 'react';
+import { Fragment, cloneElement, useEffect, useState, useRef } from 'react';
 import { cn, cnva } from 'lib/tailwind';
 import { debounce } from 'lib/utils/debounce';
-import React from 'react';
 
 interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
   dir?: 'ltr' | 'rtl';
@@ -100,10 +99,10 @@ export function Marquee({
 
 function CloneFactory({ num, children }: { num: number; children: React.ReactElement }) {
   return (
-    <>
+    <Fragment>
       {new Array(Math.max(num, 0))
         .fill(null)
         .map((_, index) => cloneElement(children, { key: index }))}
-    </>
+    </Fragment>
   );
 }
