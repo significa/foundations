@@ -1,0 +1,102 @@
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+  BreadcrumbList
+} from 'components/foundations/Breadcrumb';
+import { PreviewBox } from 'components/PreviewBox';
+import { FileCode } from 'components/FileCode';
+import { ComponentPreview } from 'components/ComponentPreview';
+
+# Breadcrumb
+
+A breadcrumb navigation component that helps users understand their current location within a hierarchical structure.
+
+<PreviewBox>
+  <Breadcrumb>
+    <BreadcrumbList>
+      <BreadcrumbItem>
+        <BreadcrumbLink href="/">Home</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbLink href="/contacts">Contacts</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbPage>Laptops</BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </Breadcrumb>
+</PreviewBox>
+
+## Install
+
+Install the Breadcrumb component and its dependencies in your project.
+
+<FileCode path="components/foundations/Breadcrumb" />
+
+### Dependencies
+
+The Breadcrumb component requires the following dependency:
+
+```bash copy
+npm install lucide-react
+```
+
+## API Reference
+
+### BreadcrumbLink
+
+The BreadcrumbLink component is used for clickable navigation items in the breadcrumb.
+
+| Prop   |   Type   | Default Value |
+| :----- | :------: | ------------: |
+| `href` | `string` |             - |
+
+## Usage
+
+Import all necessary components to build your breadcrumb navigation:
+
+```tsx copy
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+  BreadcrumbList
+} from '[path]/Breadcrumb';
+```
+
+Basic example of a breadcrumb navigation:
+
+```tsx copy
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/products">Products</BreadcrumbLink>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## Examples
+
+### Breadcrumb with Ellipsis
+
+Use this pattern when you need to display long navigation paths. The ellipsis helps maintain a compact layout while showing the full path context.
+
+<ComponentPreview path="components/foundations/Breadcrumb/examples/WithEllipsis" />
+
+### Breadcrumb with Badge
+
+Enhance your breadcrumb navigation with badges to display additional information or status indicators.
+
+<ComponentPreview path="components/foundations/Breadcrumb/examples/WithBadge" />
