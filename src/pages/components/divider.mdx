@@ -1,0 +1,60 @@
+import { Divider } from 'components/foundations/Divider';
+import { PreviewBox } from 'components/PreviewBox';
+import { FileCode } from 'components/FileCode';
+import { ComponentPreview } from 'components/ComponentPreview';
+
+# Divider
+
+A primitive component used to visually separate content.
+
+<PreviewBox>
+  <div className="max-w-md">
+    <div>Content above</div>
+    <Divider />
+    <div>Content below</div>
+  </div>
+</PreviewBox>
+
+## Install
+
+<FileCode path="components/foundations/Divider" />
+
+## API Reference
+
+| Prop          |              Type              |  Default Value |
+| :------------ | :----------------------------: | -------------: |
+| `orientation` | `'horizontal'` \| `'vertical'` | `'horizontal'` |
+| `decorative`  |           `boolean`            |      undefined |
+| `className`   |            `string`            |      undefined |
+
+### Important Notes
+
+- **decorative**: This prop should be set to `true` only when the divider is purely visual and doesn't represent a meaningful break in content.
+  - When `true`: The divider will be hidden from screen readers (`role="none"`) and not included in the accessibility tree
+  - When `false` or undefined: The divider will be announced as a separator to screen readers (`role="separator"`)
+- **orientation**: Determines the direction of the divider. When set to 'vertical', this information is also conveyed to screen readers
+- **className**: Allows for custom styling through CSS classes
+
+## Usage
+
+```tsx copy
+import { Divider } from '[path]/Divider';
+```
+
+```tsx copy
+<Divider />
+```
+
+## Examples
+
+### Horizontal
+
+<ComponentPreview path="components/foundations/Divider/examples/DividerHorizontal" />
+
+### Vertical
+
+<ComponentPreview path="components/foundations/Divider/examples/DividerVertical" />
+
+### Custom Style
+
+<ComponentPreview path="components/foundations/Divider/examples/DividerCustomStyle" />
