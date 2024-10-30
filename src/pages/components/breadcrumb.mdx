@@ -3,8 +3,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbSeparator,
-  BreadcrumbPage,
-  BreadcrumbList
+  BreadcrumbPage
 } from 'components/foundations/Breadcrumb';
 import { PreviewBox } from 'components/PreviewBox';
 import { FileCode } from 'components/FileCode';
@@ -16,19 +15,17 @@ A breadcrumb navigation component that helps users understand their current loca
 
 <PreviewBox>
   <Breadcrumb>
-    <BreadcrumbList>
-      <BreadcrumbItem>
-        <BreadcrumbLink href="/">Home</BreadcrumbLink>
-      </BreadcrumbItem>
-      <BreadcrumbSeparator />
-      <BreadcrumbItem>
-        <BreadcrumbLink href="/contacts">Contacts</BreadcrumbLink>
-      </BreadcrumbItem>
-      <BreadcrumbSeparator />
-      <BreadcrumbItem>
-        <BreadcrumbPage>Laptops</BreadcrumbPage>
-      </BreadcrumbItem>
-    </BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/contacts">Contacts</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Laptops</BreadcrumbPage>
+    </BreadcrumbItem>
   </Breadcrumb>
 </PreviewBox>
 
@@ -66,8 +63,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbSeparator,
-  BreadcrumbPage,
-  BreadcrumbList
+  BreadcrumbPage
 } from '[path]/Breadcrumb';
 ```
 
@@ -75,15 +71,13 @@ Basic example of a breadcrumb navigation:
 
 ```tsx copy
 <Breadcrumb>
-  <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink href="/">Home</BreadcrumbLink>
-    </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbItem>
-      <BreadcrumbLink href="/products">Products</BreadcrumbLink>
-    </BreadcrumbItem>
-  </BreadcrumbList>
+  <BreadcrumbItem>
+    <BreadcrumbLink href="/">Home</BreadcrumbLink>
+  </BreadcrumbItem>
+  <BreadcrumbSeparator />
+  <BreadcrumbItem>
+    <BreadcrumbLink href="/products">Products</BreadcrumbLink>
+  </BreadcrumbItem>
 </Breadcrumb>
 ```
 
