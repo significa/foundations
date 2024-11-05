@@ -2,17 +2,17 @@ import { HorizontalScrollSection } from 'components/foundations/HorizontalScroll
 
 # Horizontal Scroll Section
 
-A horizontal scroll section allows the user to scroll vertically down the page, while the scroll interaction is temporarily mapped to horizontal movement along the x-axis. This setup creates a smooth horizontal animation experience without requiring the user to scroll sideways manually.
+A horizontal scroll section enables users to scroll down the page as usual, while the scrolling interaction is temporarily mapped to horizontal movement across the x-axis. This design creates a smooth horizontal animation experience without requiring the user to scroll sideways manually.
 
 <HorizontalScrollSection />
 
 ## Layout
 
-A horizontal scroll section requires three key DOM elements. First, **content that overflows horizontally**, which will be the element we apply a `translate` to, simulating the horizontal scroll movement. Second, a **view container** that sets the dimensions of our “window” into this content. This element’s dimensions should be `width: 100vw` and `height: 100vh` to cover the full viewport and have `overflow: hidden` to prevent the content from overflowing onto the page.
+A horizontal scroll section requires three key DOM elements. First is the **content element**, which overflows horizontally and will receive a translate transformation to simulate horizontal scrolling. Second is the **view container**, which defines the dimensions of the 'window' onto this content. To ensure the content covers the full viewport, set the container’s width to `100vw` and height to `100vh`, with overflow set to `hidden` to prevent unwanted page overflow.
 
-Third, we’ll add a **root element** to define the vertical scroll height of the section. Although the content scrolls horizontally, the user is still scrolling vertically, so we need a DOM element that “reserves” space for this interaction. For now, we can set the height of this element to `height: 300vh` as a placeholder, but we’ll come back to this value later.
+Third, we’ll add a **root element** to define the vertical scroll height of the section. Although the content itself scrolls horizontally, the user scrolls vertically, so we need a DOM element that allocates vertical scrollable space for this interaction. For now, we’ll set the height of this element to `300vh` as a placeholder, which we may adjust later based on content length and scroll behavior.
 
-Finally, to ensure the **view container** remains in place while scrolling through the section, set `position: sticky` and `top: 0` on the view container so it stays fixed as the root element is scrolled by.
+Finally, to keep the **view container** fixed within the viewport while scrolling through the section, set `position: sticky` and `top: 0` on the **view container**. This ensures that it stays in place as the root element scrolls vertically.
 
 In summary, your template should be structured as follows:
 
@@ -26,9 +26,9 @@ In summary, your template should be structured as follows:
 
 ## Animation
 
-The next step is to apply a horizontal transform to our content, moving it from its starting position to where its right edge aligns with the right edge of the viewport. We can calculate this total translation directly in CSS with `calc(-100% + 100vw)`. Then, we multiply this by a normalized scroll value that indicates how far we’ve scrolled through our **root** element. Let's define it as `calc((-100% + 100vw) * var(--scroll-progress))`.
+The next step is to apply a horizontal transform to our **content**, translating it from its starting position until its right edge aligns with the right edge of the viewport. We can calculate this translation in CSS using `calc(-100% + 100vw)`. Then, to gradually translate the element, we multiply this translation by a normalized scroll value, `var(--scroll-progress)`, which will indicate how far we’ve scrolled through the **root** element. This gives us `calc((-100% + 100vw) * var(--scroll-progress))`.
 
-All we need now is to measure our scroll progress value, which starts at `0` when the top of the section meets the top of the viewport and reaches `1` when the bottom of the section aligns with the bottom of the viewport. This progress value will then be passed directly into our CSS.
+Now, we just need to compute the scroll progress value, which should start at `0` when the top of the section reaches the top of the viewport and progress to `1` when the bottom of the section matches the bottom of the viewport. This progress value can then be passed directly into our CSS to control the horizontal transformation.
 
 For simplicity, we’ll use [Framer Motion](https://www.framer.com/motion/use-scroll/)’s `useScroll` hook to obtain this scroll progress value directly. Since `framer-motion` already uses an internal `requestAnimationFrame` ticker to perform style updates, we don’t need to worry about it here. However, if you write your own scroll progress implementation be sure to use a `requestAnimationFrame` to update your scroll progress value in CSS for the best performance ([read more about it here](https://significa.co/blog/master-javascript-web-animations)).
 
@@ -85,7 +85,7 @@ export const HorizontalScrollSection = () => {
   });
 
   return (
-    <section ref={root} className="h-[300vh]" style={{ width: `${contentWidth}px` }}>
+    <section ref={root} className="h-[300vh]" style={{ height: `${contentWidth}px` }}>
       <div className="w-screen h-screen sticky top-0 overflow-hidden">
         <div
           ref={content}
@@ -132,7 +132,7 @@ const HorizontalScrollSectionPointer = () => {
   });
 
   return (
-    <section ref={root} className="h-[300vh]" style={{ width: `${contentWidth}px` }}>
+    <section ref={root} className="h-[300vh]" style={{ height: `${contentWidth}px` }}>
       <div className="w-screen h-screen sticky top-0 overflow-hidden">
         <div
           ref={content}
