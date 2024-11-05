@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { buildRegistry } = require('./scripts/build-registry.cjs');
 
+const CustomResolver = require('./custom-resolver');
+
 const REGISTRY_WATCH_DIRECTORIES = [
   'src/components/foundations',
   'src/hooks/foundations',
@@ -35,9 +37,9 @@ module.exports = withNextra({
       }
     }
 
+    config.resolve.plugins = config.resolve.plugins || [];
+    config.resolve.plugins.push(new CustomResolver());
+
     return config;
   }
 });
-
-// If you have other Next.js configurations, you can pass them as the parameter:
-// module.exports = withNextra({ /* other next.js config */ })
