@@ -64,7 +64,7 @@ export const HorizontalScrollSection = () => {
 };
 ```
 
-For a smoother scroll experience, the content should translate at the same pixel rate it would with native vertical scrolling. To achieve this, we need to adjust the height of the root element to match the total width of our content. Since this can’t be done directly in CSS, we’ll calculate it in JavaScript using a `ResizeObserver`, or using our own `useElementRect` hook as shown below:
+For a smoother scroll experience, the content should translate at the same pixel rate it would with native vertical scrolling. To achieve this, we need to adjust the height of the root element to match the total width of our content. Since this can’t be done directly in CSS, we’ll calculate it in JavaScript using a `ResizeObserver`, or using our own [`useElementRect`](/hooks/use-element-rect) hook as shown below:
 
 ```tsx copy
 import { useRef } from 'react';
@@ -106,7 +106,7 @@ While the setup above is responsive, it’s best to disable this effect on mobil
 
 Furthermore, from a performance standpoint, implementing horizontal scroll effects on mobile, especially on lower-end devices, can result in janky scrolling experiences because the scroll and main threads are typically not shared, causing synchronization between the user’s vertical scroll and the horizontal translation to be lost.
 
-Based on this, we recommend checking if the current device is touch-only (check our useIsTouchscreen hook) and, if so, disabling the horizontal scroll behavior. You can achieve this by either swapping out the styles that cause overflow and not running the scroll progress callback or, alternatively, rendering a different variation of the section. The latter approach is often preferable when the horizontal scroll layout differs significantly from the touchscreen variation. Below is an example of how to implement this.
+Based on this, we recommend checking if the current device is touch-only (check our [`useIsTouchscreen`](/hooks/use-is-touchscreen) hook) and, if so, disabling the horizontal scroll behavior. You can achieve this by either swapping out the styles that cause overflow and not running the scroll progress callback or, alternatively, rendering a different variation of the section. The latter approach is often preferable when the horizontal scroll layout differs significantly from the touchscreen variation. Below is an example of how to implement this.
 
 ```tsx copy
 import { useRef } from 'react';
