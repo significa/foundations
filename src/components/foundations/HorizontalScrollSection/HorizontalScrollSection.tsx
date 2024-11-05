@@ -9,8 +9,8 @@ export function HorizontalScrollSection() {
   const root = useRef(null);
   const content = useRef(null);
   const parentRef = useParentRef(root);
-  const { width } = useElementRect({ ref: parentRef });
-  const { width: contentWidth } = useElementRect({ ref: content });
+  const { width } = useElementRect(parentRef);
+  const { width: contentWidth } = useElementRect(content);
 
   const { scrollYProgress } = useScroll({
     target: root,

@@ -1,7 +1,5 @@
-import type { RefObject } from 'react';
-import { useEffect, useState } from 'react';
-
-import { debounce as debounceFn } from 'lib/utils/debounce';
+import { useEffect, useState, type RefObject } from 'react';
+import { debounce } from 'lib/utils/debounce';
 
 type ElementRect = {
   width: number;
@@ -10,17 +8,15 @@ type ElementRect = {
   y: number;
 };
 
-type UseElementRectOptions<T extends HTMLElement = HTMLElement> = {
-  ref: RefObject<T>;
+type UseElementRectOptions = {
   debounce?: boolean | number;
   onResize?: (rect: ElementRect) => void;
 };
 
-export const useElementRect = ({
-  ref,
-  debounce = 32,
-  onResize
-}: UseElementRectOptions): ElementRect => {
+export function useElementRect<T extends HTMLElement = HTMLElement>(
+  ref: RefObject<T>,
+  options: UseElementRectOptions = {}
+): ElementRect {
   const [rect, setRect] = useState<ElementRect>({ width: 0, height: 0, x: 0, y: 0 });
 
   useEffect(() => {
@@ -39,17 +35,17 @@ export const useElementRect = ({
 
       const currentRect = { width, height, x, y };
 
-      if (onResize) {
-        onResize(currentRect);
+      if (options.onResize) {
+        options.onResize(currentRect);
       } else {
         setRect(currentRect);
       }
     };
 
     if (debounce) {
-      onResizeObserver = debounceFn(
+      onResizeObserver = debounce(
         onResizeObserver,
-        typeof debounce === 'boolean' ? 32 : debounce
+        typeof options.debounce === 'boolean' ? 32 : options.debounce
       );
     }
 
@@ -59,7 +55,7 @@ export const useElementRect = ({
     return () => {
       observer.disconnect();
     };
-  }, [debounce, onResize, ref]);
+  }, [options, ref]);
 
   return rect;
-};
+}

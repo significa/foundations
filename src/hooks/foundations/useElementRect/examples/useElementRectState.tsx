@@ -3,7 +3,7 @@ import { useElementRect } from 'hooks/foundations/useElementRect';
 
 export function UseElementRectState() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const { width, height, x, y } = useElementRect({ ref });
+  const { width, height, x, y } = useElementRect(ref);
 
   return (
     <div ref={ref} className="absolute inset-0 flex items-center justify-center">

@@ -4,8 +4,7 @@ import { useElementRect } from 'hooks/foundations/useElementRect';
 export function UseElementRectCallback() {
   const ref = useRef<HTMLDivElement | null>(null);
 
-  useElementRect({
-    ref,
+  useElementRect(ref, {
     onResize: (rect) => {
       console.log('Element dimensions:', rect);
 
