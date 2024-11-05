@@ -3,5 +3,6 @@
   "theming": "Theming",
   "components": "Components",
   "hooks": "Hooks",
-  "utils": "Utils"
+  "utils": "Utils",
+  "recipes": "Recipes"
 }

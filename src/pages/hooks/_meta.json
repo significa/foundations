@@ -1,3 +1,6 @@
 {
-  "use-scroll-direction": "useScrollDirection"
+  "use-element-rect": "useElementRect",
+  "use-is-touchscreen": "useIsTouchscreen",
+  "use-scroll-direction": "useScrollDirection",
+  "use-parent-ref": "useParentRef"
 }

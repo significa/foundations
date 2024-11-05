@@ -1,0 +1,33 @@
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+
+# useIsTouchscreen
+
+Custom hook that detects whether the user's device has a touchscreen.
+
+## Install
+
+<FileCode path="hooks/foundations/useIsTouchscreen" />
+
+## API Reference
+
+- **Returns:**
+  - Returns a boolean indicating whether the device is a touchscreen. It returns `true` if a touchscreen is detected, otherwise it returns `false`.
+
+## Usage
+
+```tsx copy
+import { useIsTouchscreen } from '[path]/useIsTouchscreen';
+
+function Component() {
+  const isTouchscreen = useIsTouchscreen();
+
+  // ...
+}
+```
+
+## Examples
+
+### Basic Usage
+
+<ComponentPreview path="hooks/foundations/useIsTouchscreen/examples/useIsTouchscreenBasicUsage" />

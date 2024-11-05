@@ -1,0 +1,52 @@
+import { ComponentPreview } from 'components/ComponentPreview';
+import { FileCode } from 'components/FileCode';
+
+# useElementRect
+
+Custom hook that provides the dimensions and position of a DOM element, updating on resize events.
+
+## Install
+
+<FileCode path="hooks/foundations/useElementRect" />
+
+### Dependencies
+
+- [utils/debounce](/utils/debounce)
+
+## API Reference
+
+- **Parameters:**
+
+  - `ref`: A `RefObject` pointing to the DOM element for which dimensions are to be tracked.
+  - `options`:
+    - `debounce` (optional): A boolean or number that determines whether to debounce the resize events. If a number is provided, it specifies the debounce delay in milliseconds. Defaults to `32`.
+    - `onResize` (optional): A callback function that receives the current rectangle dimensions and position when the element resizes. **If set, the hook will not update the returned state.**
+
+- **Returns:**
+  - Returns an object containing the `width`, `height`, `x`, and `y` properties of the tracked element.
+
+---
+
+## Usage
+
+````tsx copy
+import { useRef } from 'react';
+import { useElementRect } from '[path]/useElementRect';
+
+function Component() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const rect = useElementRect(ref);
+
+  // ...
+}```
+````
+
+## Examples
+
+### As React State
+
+<ComponentPreview path="hooks/foundations/useElementRect/examples/useElementRectState" />
+
+### As Callback
+
+<ComponentPreview path="hooks/foundations/useElementRect/examples/useElementRectCallback" />

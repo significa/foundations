@@ -1,0 +1,154 @@
+import { HorizontalScrollSection } from 'components/foundations/HorizontalScrollSection';
+
+# Horizontal Scroll Section
+
+A horizontal scroll section enables users to scroll down the page as usual, while the scrolling interaction is temporarily mapped to horizontal movement across the x-axis. This design creates a smooth horizontal animation experience without requiring the user to scroll sideways manually.
+
+<HorizontalScrollSection />
+
+## Layout
+
+A horizontal scroll section requires three key DOM elements. First is the **content element**, which overflows horizontally and will receive a translate transformation to simulate horizontal scrolling. Second is the **view container**, which defines the dimensions of the 'window' onto this content. To ensure the content covers the full viewport, set the container’s width to `100vw` and height to `100vh`, with overflow set to `hidden` to prevent unwanted page overflow.
+
+Third, we’ll add a **root element** to define the vertical scroll height of the section. Although the content itself scrolls horizontally, the user scrolls vertically, so we need a DOM element that allocates vertical scrollable space for this interaction. For now, we’ll set the height of this element to `300vh` as a placeholder, which we may adjust later based on content length and scroll behavior.
+
+Finally, to keep the **view container** fixed within the viewport while scrolling through the section, set `position: sticky` and `top: 0` on the **view container**. This ensures that it stays in place as the root element scrolls vertically.
+
+In summary, your template should be structured as follows:
+
+```tsx copy
+<section className="h-[300vh]">
+  <div className="w-screen h-screen sticky top-0 overflow-hidden">
+    <div className="w-max h-full flex">{/* YOUR CONTENT HERE */}</div>
+  </div>
+</section>
+```
+
+## Animation
+
+The next step is to apply a horizontal transform to our **content**, translating it from its starting position until its right edge aligns with the right edge of the viewport. We can calculate this translation in CSS using `calc(-100% + 100vw)`. Then, to gradually translate the element, we multiply this translation by a normalized scroll value, `var(--scroll-progress)`, which will indicate how far we’ve scrolled through the **root** element. This gives us `calc((-100% + 100vw) * var(--scroll-progress))`.
+
+Now, we just need to compute the scroll progress value, which should start at `0` when the top of the section reaches the top of the viewport and progress to `1` when the bottom of the section matches the bottom of the viewport. This progress value can then be passed directly into our CSS to control the horizontal transformation.
+
+For simplicity, we’ll use [Framer Motion](https://www.framer.com/motion/use-scroll/)’s `useScroll` hook to obtain this scroll progress value directly. Since `framer-motion` already uses an internal `requestAnimationFrame` ticker to perform style updates, we don’t need to worry about it here. However, if you write your own scroll progress implementation be sure to use a `requestAnimationFrame` to update your scroll progress value in CSS for the best performance ([read more about it here](https://significa.co/blog/master-javascript-web-animations)).
+
+```tsx copy
+import { useRef } from 'react';
+import { useScroll, useMotionValueEvent } from 'framer-motion';
+
+export const HorizontalScrollSection = () => {
+  const root = useRef(null);
+  const content = useRef(null);
+
+  const { scrollYProgress } = useScroll({ target: root });
+
+  useMotionValueEvent(scrollYProgress, 'change', (value) => {
+    if (content.current) {
+      content.current.style.setProperty('--scroll-progress', value);
+    }
+  });
+
+  return (
+    <section ref={root} className="h-[300vh]">
+      <div className="w-screen h-screen sticky top-0 overflow-hidden">
+        <div
+          ref={content}
+          style={{ transform: 'translateX(calc((-100% + 100vw) * var(--scroll-progress)))' }}
+          className="w-max h-full flex"
+        >
+          {/* YOUR CONTENT HERE */}
+        </div>
+      </div>
+    </section>
+  );
+};
+```
+
+For a smoother scroll experience, the content should translate at the same pixel rate it would with native vertical scrolling. To achieve this, we need to adjust the height of the root element to match the total width of our content. Since this can’t be done directly in CSS, we’ll calculate it in JavaScript using a `ResizeObserver`, or using our own [`useElementRect`](/hooks/use-element-rect) hook as shown below:
+
+```tsx copy
+import { useRef } from 'react';
+import { useScroll, useMotionValueEvent } from 'framer-motion';
+import { useElementRect } from 'hooks/foundations/useElementRect';
+
+export const HorizontalScrollSection = () => {
+  const root = useRef(null);
+  const content = useRef(null);
+
+  const { width: contentWidth } = useElementRect(content);
+  const { scrollYProgress } = useScroll({ target: root });
+
+  useMotionValueEvent(scrollYProgress, 'change', (value) => {
+    if (content.current) {
+      content.current.style.setProperty('--scroll-progress', value);
+    }
+  });
+
+  return (
+    <section ref={root} className="h-[300vh]" style={{ height: `${contentWidth}px` }}>
+      <div className="w-screen h-screen sticky top-0 overflow-hidden">
+        <div
+          ref={content}
+          style={{ transform: 'translateX(calc((-100% + 100vw) * var(--scroll-progress)))' }}
+          className="w-max h-full flex"
+        >
+          {/* YOUR CONTENT HERE */}
+        </div>
+      </div>
+    </section>
+  );
+};
+```
+
+## Responsiveness
+
+While the setup above is responsive, it’s best to disable this effect on mobile devices. With limited horizontal space, horizontally scrolling sections can feel unnatural and disrupt user flow. Additionally, since mobile users can naturally swipe horizontally, having a section that scrolls horizontally as they scroll vertically may feel confusing or counterintuitive.
+
+Furthermore, from a performance standpoint, implementing horizontal scroll effects on mobile, especially on lower-end devices, can result in janky scrolling experiences because the scroll and main threads are typically not shared, causing synchronization between the user’s vertical scroll and the horizontal translation to be lost.
+
+Based on this, we recommend checking if the current device is touch-only (check our [`useIsTouchscreen`](/hooks/use-is-touchscreen) hook) and, if so, disabling the horizontal scroll behavior. You can achieve this by either swapping out the styles that cause overflow and not running the scroll progress callback or, alternatively, rendering a different variation of the section. The latter approach is often preferable when the horizontal scroll layout differs significantly from the touchscreen variation. Below is an example of how to implement this.
+
+```tsx copy
+import { useRef } from 'react';
+import { useScroll, useMotionValueEvent } from 'framer-motion';
+import { useElementRect } from 'hooks/foundations/useElementRect';
+import { useIsTouchscreen } from 'hooks/foundations/useIsTouchscreen';
+
+const HorizontalScrollSectionTouchscreen = () => {
+  return <section>{/* TOUCHSCREEN VARIATION */}</section>;
+};
+
+const HorizontalScrollSectionPointer = () => {
+  const root = useRef(null);
+  const content = useRef(null);
+
+  const { width: contentWidth } = useElementRect(content);
+  const { scrollYProgress } = useScroll({ target: root });
+
+  useMotionValueEvent(scrollYProgress, 'change', (value) => {
+    if (content.current) {
+      content.current.style.setProperty('--scroll-progress', value);
+    }
+  });
+
+  return (
+    <section ref={root} className="h-[300vh]" style={{ height: `${contentWidth}px` }}>
+      <div className="w-screen h-screen sticky top-0 overflow-hidden">
+        <div
+          ref={content}
+          style={{ transform: 'translateX(calc((-100% + 100vw) * var(--scroll-progress)))' }}
+          className="w-max h-full flex"
+        >
+          {/* YOUR CONTENT HERE */}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export const HorizontalScrollSection = (props) => {
+  const isTouchscreen = useIsTouchscreen();
+
+  return isTouchscreen ? HorizontalScrollSectionTouchscreen : HorizontalScrollSectionTouchPointer;
+};
+```
