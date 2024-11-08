@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useElementRect } from '@/foundations/hooks/useElementRect';
 
-export function UseElementRectCallback() {
+export function useElementRectCallback() {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useElementRect(ref, {

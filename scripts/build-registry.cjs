@@ -5,8 +5,7 @@ const { globSync } = require('glob');
 const ROOT_DIRECTORY = 'src/';
 const TARGET_DIRECTORY = '__registry__';
 const SOURCE_GLOB_PATTERNS = [
-  'src/components/foundations/**/*.{ts,tsx}',
-  'src/hooks/foundations/**/*.{ts,tsx}',
+  'src/foundations/**/*.{ts,tsx}',
   'src/lib/utils/**.ts',
   'src/lib/tailwind.ts',
   'tailwind.config.cjs'
@@ -62,23 +61,24 @@ async function buildRegistry() {
       const basename = path.basename(file.name, extension);
       const fullPath = path.relative(process.cwd(), path.join(file.parentPath, file.name));
 
-      extension = extension.replace(/^\.+/, ''); // remove leading dot;
+      extension = extension.replace(/^\.+/, ''); // remove leading extension dot;
+
       const isComponent = extension === 'tsx';
 
-      let rawFileContent = fs.readFileSync(fullPath, 'utf8');
-      rawFileContent = rawFileContent.replace(/\n$/, ''); // remove trailing line break
+      let source = fs.readFileSync(fullPath, 'utf8');
+      source = source.replace(/\n$/, ''); // remove trailing line break
 
-      const mdxContentString = `\`\`\`${EXTENSION_ALTERNATES[extension] || extension} copy\n${rawFileContent}\n\`\`\`\n`;
+      const mdxSourceString = `\`\`\`${EXTENSION_ALTERNATES[extension] || extension} copy\n${source}\n\`\`\`\n`;
 
       const mdxBasename = `${toPascalCase(basename)}Code${i}`; // append loop index to prevent files with same basename being overwritten
       const mdxFilename = `${mdxBasename}.mdx`;
       const mdxPath = path.join(TARGET_DIRECTORY, mdxFilename);
 
       // write mdx code file
-      fs.writeFileSync(mdxPath, mdxContentString, 'utf8');
+      fs.writeFileSync(mdxPath, mdxSourceString, 'utf8');
 
       // generate entry key based on import path
-      let key = path.relative(ROOT_DIRECTORY, file.parentPath);
+      let key = `@/${path.relative(ROOT_DIRECTORY, file.parentPath)}`;
 
       // we append the basename only when it's not the same as the path basename
       // [path]/File/File.tsx -> [path]/File
@@ -97,40 +97,16 @@ async function buildRegistry() {
         key = key.substring(3);
       }
 
-      index.entries.push({
-        key,
-        code: mdxBasename,
-        component: isComponent ? toPascalCase(basename) : null
-      });
-
-      index.imports.push({
-        module: mdxBasename,
-        named: false,
-        path: `./${mdxFilename}`
-      });
-
-      if (isComponent) {
-        index.imports.push({
-          module: toPascalCase(basename),
-          named: true,
-          path: `../${fullPath}`
-        });
-      }
+      index.entries.push([key, mdxBasename]);
+      index.imports.push([mdxBasename, `./${mdxFilename}`]);
     }
 
     const formattedImports = index.imports
-      .map(({ module, path, named }) => {
-        return `import ${named ? `{ ${module} }` : module} from '${path}';`;
-      })
+      .map(([module, path]) => `import ${module} from '${path}';`)
       .join('\n');
 
-    const formattedEntries = index.entries
-      .map(({ key, code, component }) => {
-        return `'${key}': { code: ${code}, component: ${component} }`;
-      })
-      .join(',\n');
-
-    const formattedEntryTypes = index.entries.map(({ key }) => `  | '${key}'`).join('\n');
+    const formattedEntries = index.entries.map(([key, code]) => `'${key}': ${code}`).join(',\n');
+    const formattedEntryTypes = index.entries.map(([key]) => `  | '${key}'`).join('\n');
 
     const indexContentString = [
       `// @ts-nocheck`,

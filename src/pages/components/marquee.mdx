@@ -1,13 +1,13 @@
 import { ComponentPreview } from '@/components/ComponentPreview';
-import { FileCode } from '@/components/FileCode';
-import { PreviewBox } from '@/components/PreviewBox';
+import { FileSource } from '@/components/FileSource';
+import { Box } from '@/components/Box';
 import { Marquee } from '@/foundations/components/Marquee';
 
 # Marquee
 
 A component that scrolls its children horizontally in a seamless loop.
 
-<PreviewBox>
+<Box>
   <Marquee autofill className="rounded-md">
     <div className="flex gap-2 mr-2">
       <div className="size-20 rounded-md bg-primary/20"></div>
@@ -15,11 +15,11 @@ A component that scrolls its children horizontally in a seamless loop.
       <div className="size-20 rounded-md bg-primary/40"></div>
     </div>
   </Marquee>
-</PreviewBox>
+</Box>
 
 ## Install
 
-<FileCode path="components/foundations/Marquee" />
+<FileSource path="@/foundations/components" />
 
 Add the keyframes and css animation plugin to your `tailwind.config.cjs`.
 
@@ -72,12 +72,12 @@ import { Marquee } from '[path]/Marquee';
 
 ### Autofill
 
-<ComponentPreview path="components/foundations/Marquee/examples/MarqueeAutofill" />
+<ComponentPreview path="@/foundations/components/Marquee/examples/MarqueeAutofill" />
 
 ### Direction
 
-<ComponentPreview path="components/foundations/Marquee/examples/MarqueeDirection" />
+<ComponentPreview path="@/foundations/components/Marquee/examples/MarqueeDirection" />
 
 ### Speed Control
 
-<ComponentPreview path="components/foundations/Marquee/examples/MarqueeSpeedControl" />
+<ComponentPreview path="@/foundations/components/Marquee/examples/MarqueeSpeedControl" />

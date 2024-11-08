@@ -55,7 +55,8 @@ export function useElementRect<T extends HTMLElement = HTMLElement>(
     return () => {
       observer.disconnect();
     };
-  }, [options, ref]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options.debounce, options.onResize, ref]);
 
   return rect;
 }

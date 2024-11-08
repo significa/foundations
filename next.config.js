@@ -2,11 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { buildRegistry } = require('./scripts/build-registry.cjs');
 
-const REGISTRY_WATCH_DIRECTORIES = [
-  'src/components/foundations',
-  'src/hooks/foundations',
-  'src/lib/utils'
-];
+const REGISTRY_WATCH_DIRECTORIES = ['src/foundations', 'src/lib/utils'];
 
 const withNextra = require('nextra')({
   theme: 'nextra-theme-docs',
@@ -19,6 +15,11 @@ module.exports = withNextra({
     unoptimized: true
   },
   webpack: (config, { dev, isServer }) => {
+    config.resolveLoader.alias = {
+      ...config.resolveLoader.alias,
+      'source-loader': path.resolve(__dirname, 'webpack/source-loader.js')
+    };
+
     if (dev && !isServer) {
       config.watchOptions = { aggregateTimeout: 600, poll: 1000 };
 

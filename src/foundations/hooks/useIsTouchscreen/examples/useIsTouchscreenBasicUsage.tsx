@@ -1,6 +1,6 @@
 import { useIsTouchscreen } from '@/foundations/hooks/useIsTouchscreen';
 
-export function UseIsTouchscreenBasicUsage() {
+export function useIsTouchscreenBasicUsage() {
   const isTouchscreen = useIsTouchscreen();
 
   return (
