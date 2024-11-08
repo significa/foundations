@@ -1,5 +1,5 @@
-import { ColorCard } from 'components/ColorCard';
-import { FileCode } from 'components/FileCode';
+import { ColorCard } from '@/components/ColorCard';
+import { FileCode } from '@/components/FileCode';
 
 # Theming
 
@@ -44,7 +44,7 @@ npm install clsx tailwind-merge class-variance-authority
 ### Example
 
 ```tsx copy /cn/
-import { cn } from 'lib/tailwind';
+import { cn } from '@/lib/tailwind';
 
 export function Component({ disabled, className }) {
   return (
@@ -60,7 +60,7 @@ export function Component({ disabled, className }) {
 ```
 
 ```tsx copy /cnva/
-import { cnva } from 'lib/tailwind';
+import { cnva } from '@/lib/tailwind';
 
 const componentStyles = cnva('relative text-primary', {
   variants: {

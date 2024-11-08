@@ -1,5 +1,5 @@
-import { FileCode } from 'components/FileCode';
-import DebouncingVsThrottleing from 'mdx/debouncing-vs-throtteling.mdx';
+import { FileCode } from '@/components/FileCode';
+import DebouncingVsThrottleing from '@/foundations/docs/debouncing-vs-throtteling.mdx';
 
 # Throttle
 
@@ -39,7 +39,7 @@ const throttledFunction = throttle(() => {
 ### Scroll Measurement
 
 ```ts copy
-import { throttle } from 'lib/utils/throttle';
+import { throttle } from '@/lib/utils/throttle';
 
 const scrollToTopButton = document.querySelector('#scroll-to-top');
 

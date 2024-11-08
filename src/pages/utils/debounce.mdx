@@ -1,5 +1,5 @@
-import { FileCode } from 'components/FileCode';
-import DebouncingVsThrottleing from 'mdx/debouncing-vs-throtteling.mdx';
+import { FileCode } from '@/components/FileCode';
+import DebouncingVsThrottleing from '@/foundations/docs/debouncing-vs-throtteling.mdx';
 
 # Debounce
 
@@ -39,7 +39,7 @@ const debouncedFunction = debounce(() => {
 ### API Call
 
 ```ts copy
-import { debounce } from 'lib/utils/debounce';
+import { debounce } from '@/lib/utils/debounce';
 
 function dummyApiCall(query: string) {
   console.log(`Searching for: ${query}`);

@@ -1,4 +1,4 @@
-import { HorizontalScrollSection } from 'components/foundations/HorizontalScrollSection';
+import { HorizontalScrollSection } from '@/foundations/components/HorizontalScrollSection';
 
 # Horizontal Scroll Section
 
@@ -69,7 +69,7 @@ For a smoother scroll experience, the content should translate at the same pixel
 ```tsx copy
 import { useRef } from 'react';
 import { useScroll, useMotionValueEvent } from 'framer-motion';
-import { useElementRect } from 'hooks/foundations/useElementRect';
+import { useElementRect } from '@/foundations/hooks/useElementRect';
 
 export const HorizontalScrollSection = () => {
   const root = useRef(null);
@@ -111,8 +111,8 @@ Based on this, we recommend checking if the current device is touch-only (check 
 ```tsx copy
 import { useRef } from 'react';
 import { useScroll, useMotionValueEvent } from 'framer-motion';
-import { useElementRect } from 'hooks/foundations/useElementRect';
-import { useIsTouchscreen } from 'hooks/foundations/useIsTouchscreen';
+import { useElementRect } from '@/foundations/hooks/useElementRect';
+import { useIsTouchscreen } from '@/foundations/hooks/useIsTouchscreen';
 
 const HorizontalScrollSectionTouchscreen = () => {
   return <section>{/* TOUCHSCREEN VARIATION */}</section>;

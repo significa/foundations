@@ -1,5 +1,5 @@
 import { INDEX, type RegistryEntry } from '../../__registry__/index';
-import { PreviewBox } from 'components/PreviewBox';
+import { PreviewBox } from '@/components/PreviewBox';
 
 interface FileCodeProps {
   path: RegistryEntry;
