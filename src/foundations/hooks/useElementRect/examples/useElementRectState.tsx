@@ -5,8 +5,6 @@ export function useElementRectState() {
   const ref = useRef<HTMLDivElement | null>(null);
   const { width, height, x, y } = useElementRect(ref);
 
-  console.log(width);
-
   return (
     <div ref={ref} className="absolute inset-0 flex items-center justify-center">
       <div>
