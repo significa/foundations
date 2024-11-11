@@ -8,16 +8,14 @@ function isReactComponent(Component: unknown): boolean {
 // Webpack doesn't support fully dynamic paths,
 // we have to give it some sort of root path to "hook onto to"
 // https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import
-//
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function pseudoDynamicImport(path: string): Promise<any> {
+export function pseudoDynamicImport(path: string): Promise<Record<string, ComponentType>> {
   if (path.startsWith('@/foundations/')) {
     const transformedPath = path.replace('@/foundations/', '');
 
     return import(`@/foundations/${transformedPath}`);
   }
 
-  return new Promise<void>((resolve) => resolve());
+  return import(`${path}`);
 }
 
 const NotFound = () => <div className="opacity-60 text-sm">Unable to load dynamic component</div>;
