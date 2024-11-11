@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/significa/foundations#readme",
   "dependencies": {
-    "@radix-ui/react-checkbox": "^1.1.1",
+    "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-radio-group": "^1.2.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
