@@ -1,6 +1,5 @@
 {
-  "extends": ["next", "next/typescript"],
-  "plugins": ["react-hooks"],
+  "extends": ["next", "next/typescript", "plugin:react-hooks/recommended"],
   "rules": {
     "no-eval": "error",
     "@next/next/no-img-element": "off",
