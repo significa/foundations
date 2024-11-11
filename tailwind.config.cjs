@@ -4,7 +4,7 @@ const colors = {
   // in oklch color space
   // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch
   '--color-background': '97.72% 0 0',
-  '--color-primary': '25% 0 0',
+  '--color-foreground': '25% 0 0',
   '--color-accent': '87.99% 0.17372425704675545 92.92368848780228',
   '--color-error': '59.28% 0.227 23.31'
 };
@@ -19,7 +19,7 @@ module.exports = {
       current: 'currentColor',
       transparent: 'transparent',
       background: 'oklch(var(--color-background) / <alpha-value>)',
-      primary: 'oklch(var(--color-primary) / <alpha-value>)',
+      foreground: 'oklch(var(--color-foreground) / <alpha-value>)',
       accent: 'oklch(var(--color-accent) / <alpha-value>)',
       error: 'oklch(var(--color-error) / <alpha-value>)'
     },

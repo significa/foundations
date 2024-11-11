@@ -26,7 +26,7 @@ export const RadioGroupItem = forwardRef<
       ref={forwardedRef}
       className={cn(
         'relative size-5 border rounded-full transition',
-        'bg-transparent border-primary data-[state=checked]:border-primary data-[state=unchecked]:hover:bg-primary/5',
+        'bg-transparent border-foreground data-[state=checked]:border-foreground data-[state=unchecked]:hover:bg-foreground/5',
         'focus:ring focus:ring-accent focus-visible:ring focus-visible:!ring-accent/50 focus-visible:!ring-offset-accent',
         'disabled:pointer-events-none disabled:opacity-60',
         className
@@ -34,7 +34,7 @@ export const RadioGroupItem = forwardRef<
       {...props}
     >
       <RadioGroupPrimitive.Indicator
-        className="absolute inset-0 rounded-full bg-primary opacity-0 data-[state=checked]:opacity-100"
+        className="absolute inset-0 rounded-full bg-foreground opacity-0 data-[state=checked]:opacity-100"
         forceMount
       >
         <svg

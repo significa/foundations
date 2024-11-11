@@ -7,11 +7,11 @@ export function SkeletonArticle() {
 
   return (
     <>
-      <div className="flex flex-col gap-2 text-primary">
+      <div className="flex flex-col gap-2 text-foreground">
         {loaded && (
           <>
             <div className="text-xl font-semibold">Eggs, Eggs, Eggs!</div>
-            <div className="text-xs text-primary/70 font-medium max-w-[320px]">
+            <div className="text-xs text-foreground/70 font-medium max-w-[320px]">
               Eggs: nature’s prepackaged protein pod, versatile enough for everything from breakfast
               to, well, more breakfast. Crack one open, and you’ve got a perfectly balanced combo of
               yolk and white—one part golden goodness, one part suspiciously tasteless goo.
