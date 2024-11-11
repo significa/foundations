@@ -6,7 +6,6 @@ const ROOT_DIRECTORY = 'src/';
 const TARGET_DIRECTORY = '__registry__';
 const SOURCE_GLOB_PATTERNS = [
   'src/foundations/**/*.{ts,tsx}',
-  'src/lib/utils/**.ts',
   'src/lib/tailwind.ts',
   'tailwind.config.cjs'
 ];

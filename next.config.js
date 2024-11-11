@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { buildRegistry } = require('./scripts/build-registry.cjs');
 
-const REGISTRY_WATCH_DIRECTORIES = ['src/foundations', 'src/lib/utils'];
+const REGISTRY_WATCH_DIRECTORIES = ['src/foundations'];
 
 const withNextra = require('nextra')({
   theme: 'nextra-theme-docs',
