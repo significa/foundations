@@ -20,13 +20,13 @@ export function FileSource({ path, filename }: FileSourceProps) {
         <Component />
       </div>
     );
-  } else {
-    return (
-      <Box>
-        <div className="opacity-60 text-sm">Unable to load file code</div>
-      </Box>
-    );
   }
+
+  return (
+    <Box>
+      <div className="opacity-60 text-sm">Unable to load file code</div>
+    </Box>
+  );
 }
 
 // ———————————————————————————————————————————————————————————————————

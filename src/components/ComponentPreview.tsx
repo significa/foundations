@@ -6,20 +6,20 @@ import type { RegistryEntry } from '../../__registry__/index';
 
 interface ComponentPreviewProps {
   path: string;
-  withSource?: boolean;
   inline?: boolean;
+  withSource?: boolean;
 }
 
-const PreviewCanvas = ({ path, inline }: Omit<ComponentPreviewProps, 'withSource'>) => {
-  const Component = usePseudoDynamicComponent(path ?? '');
+function PreviewCanvas({ path, inline }: Omit<ComponentPreviewProps, 'withSource'>) {
+  const Component = usePseudoDynamicComponent(path);
 
   return (
-    <Box>
+    <Box className={inline ? '' : 'p-0'}>
       {inline && <Component />}
       {!inline && <iframe className="w-full h-full" src={`/app/preview?path=${path}`}></iframe>}
     </Box>
   );
-};
+}
 
 export function ComponentPreview({
   path,
