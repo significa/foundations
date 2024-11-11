@@ -30,7 +30,7 @@ export const HorizontalScrollSection = () => {
                 key={i}
                 className={cn(
                   'w-64 h-full p-4 font-semibold',
-                  i % 2 === 0 ? 'bg-primary/20' : 'bg-primary/30'
+                  i % 2 === 0 ? 'bg-foreground/20' : 'bg-foreground/30'
                 )}
               >
                 {i}

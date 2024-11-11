@@ -11,9 +11,9 @@ export const Checkbox = forwardRef<
       ref={forwardedRef}
       className={cn(
         'relative w-5 h-5 shrink-0 appearance-none rounded-md border transition duration-200 ease-out cursor-pointer',
-        'bg-transparent border-primary ring-accent focus:ring enabled:hover:bg-primary/5',
-        'data-[state=checked]:bg-primary data-[state=checked]:border-primary enabled:data-[state=checked]:hover:bg-primary/90',
-        'data-[state=indeterminate]:bg-primary data-[state=indeterminate]:border-primary enabled:data-[state=indeterminate]:hover:bg-primary/90',
+        'bg-transparent border-foreground ring-accent focus:ring enabled:hover:bg-foreground/5',
+        'data-[state=checked]:bg-foreground data-[state=checked]:border-foreground enabled:data-[state=checked]:hover:bg-foreground/90',
+        'data-[state=indeterminate]:bg-foreground data-[state=indeterminate]:border-foreground enabled:data-[state=indeterminate]:hover:bg-foreground/90',
         'focus-visible:ring-accent/50 focus-visible:ring-offset-accent',
         'disabled:pointer-events-none disabled:opacity-40',
         className

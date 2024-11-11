@@ -12,13 +12,9 @@ We opted to use [Tailwind CSS](https://tailwindcss.com/) because of its flexibil
 For the color system, we've defined three key color tokens: _background_, _primary_, and _accent_. These colors, combined case-specific alpha values, are used consistently and exclusively across the components.
 
 <div className="mt-6 grid grid-cols-3 gap-4">
-  <ColorCard token="background" className="border border-primary/20">
-    {'Background'}
-  </ColorCard>
-  <ColorCard token="primary" className="text-background">
-    {'Primary'}
-  </ColorCard>
-  <ColorCard token="accent"> {'Accent'}</ColorCard>
+  <ColorCard className="bg-background border border-foreground/20">{'Background'}</ColorCard>
+  <ColorCard className="bg-foreground text-background">{'Foreground'}</ColorCard>
+  <ColorCard className="bg-accent"> {'Accent'}</ColorCard>
 </div>
 
 Please be aware that, theme-wise, copying a component into your project will rarely be a plug-and-play solution: you will often need to adapt the component to match the theme and design of your existing project.
@@ -50,7 +46,7 @@ export function Component({ disabled, className }) {
   return (
     <div
       className={cn(
-        'relative text-primary p-12',
+        'relative text-foreground p-12',
         disabled ? 'cursor-not-allowed' : 'cursor-auto',
         className
       )}
@@ -62,7 +58,7 @@ export function Component({ disabled, className }) {
 ```tsx copy /cnva/
 import { cnva } from '@/lib/tailwind';
 
-const componentStyles = cnva('relative text-primary', {
+const componentStyles = cnva('relative text-foreground', {
   variants: {
     size: {
       md: 'h-12 px-4 text-md',

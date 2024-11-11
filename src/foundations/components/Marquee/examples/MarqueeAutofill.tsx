@@ -6,7 +6,7 @@ export function MarqueeAutofill() {
       <Marquee autofill>
         <div className="text-md whitespace-pre">Short word. </div>
       </Marquee>
-      <div className="text-sm text-primary/40">
+      <div className="text-sm text-foreground/40">
         Autofill clones your children to fit the width of the container and create a seamless loop
       </div>
     </div>

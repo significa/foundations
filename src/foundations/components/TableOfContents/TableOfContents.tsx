@@ -95,8 +95,8 @@ export function TableOfContents({
             <button
               aria-current={index === activeItemIndex}
               className={cn(
-                'max-w-[20em] truncate text-left text-primary/50 pr-4 aria-[current=false]:hover:text-primary/80 transition-colors',
-                index === activeItemIndex && 'text-primary',
+                'max-w-[20em] truncate text-left text-foreground/50 pr-4 aria-[current=false]:hover:text-foreground/80 transition-colors',
+                index === activeItemIndex && 'text-foreground',
                 depth === 1 && 'pl-4',
                 depth === 2 && 'pl-8',
                 depth === 3 && 'pl-12'

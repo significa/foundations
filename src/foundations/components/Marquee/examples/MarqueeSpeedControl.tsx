@@ -7,7 +7,7 @@ export function MarqueeSpeedControl() {
   return (
     <>
       <label className="absolute top-0 left-0 m-4">
-        <div className="text-sm text-primary font-medium mb-1">Speed Multiplier ({speed})</div>
+        <div className="text-sm text-foreground font-medium mb-1">Speed Multiplier ({speed})</div>
         <input
           type="range"
           className="w-[12rem]"

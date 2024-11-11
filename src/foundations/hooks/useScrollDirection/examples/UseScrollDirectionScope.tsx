@@ -27,7 +27,7 @@ export function UseScrollDirectionScope() {
       </div>
       <div
         ref={box}
-        className="overflow-scroll m-2 p-2 rounded-md border border-dashed border-primary/50 bg-primary/5"
+        className="overflow-scroll m-2 p-2 rounded-md border border-dashed border-foreground/50 bg-foreground/5"
       >
         <div className="sticky top-1/2 text-center translate-y-[-50%]">
           <div className="text-md">Scrollable Box</div>

@@ -27,11 +27,11 @@ const buttonStyle = cnva(
     variants: {
       variant: {
         primary:
-          'bg-primary border border-primary text-background [&>[data-button-icon]]:text-background hover:bg-primary/[0.91] active:bg-primary/95',
+          'bg-foreground border border-foreground text-background [&>[data-button-icon]]:text-background hover:bg-foreground/[0.91] active:bg-foreground/95',
         secondary:
-          'bg-transparent border border-primary/50 [&>[data-button-icon]]:text-primary hover:bg-primary/5 active:bg-primary/[.075]',
+          'bg-transparent border border-foreground/50 [&>[data-button-icon]]:text-foreground hover:bg-foreground/5 active:bg-foreground/[.075]',
         ghost:
-          'bg-transparent border border-transparent text-primary [&>[data-button-icon]]:text-primary hover:bg-primary/5 hover:opacity-90 active:bg-primary/[0.075]'
+          'bg-transparent border border-transparent text-foreground [&>[data-button-icon]]:text-foreground hover:bg-foreground/5 hover:opacity-90 active:bg-foreground/[0.075]'
       },
       size: {
         md: 'h-10 rounded-xl px-4 text-md',
