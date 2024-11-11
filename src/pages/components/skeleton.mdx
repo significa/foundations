@@ -1,22 +1,22 @@
-import { PreviewBox } from 'components/PreviewBox';
-import { ComponentPreview } from 'components/ComponentPreview';
-import { FileCode } from 'components/FileCode';
-import { Skeleton } from 'components/foundations/Skeleton';
+import { Box } from '@/components/Box';
+import { ComponentPreview } from '@/components/ComponentPreview';
+import { FileSource } from '@/components/FileSource';
+import { Skeleton } from '@/foundations/components/Skeleton';
 
 # Skeleton
 
 A placeholder block to preview generic content layout while the actual data is loading.
 
-<PreviewBox>
+<Box>
   <div className="flex flex-col gap-2 justify-center">
     <Skeleton className="w-[128px] h-[24px] rounded-xs" />
     <Skeleton className="w-[96px] h-[16px] rounded-xs" />
   </div>
-</PreviewBox>
+</Box>
 
 ## Install
 
-<FileCode path="components/foundations/Skeleton" />
+<FileSource path="@/foundations/components/Skeleton" />
 
 ## Usage
 
@@ -32,4 +32,4 @@ import { Skeleton } from '[path]/Skeleton';
 
 ### Article
 
-<ComponentPreview path="components/foundations/Skeleton/examples/SkeletonArticle" />
+<ComponentPreview path="@/foundations/components/Skeleton/examples/SkeletonArticle" />

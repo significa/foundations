@@ -1,5 +1,5 @@
-import { ComponentPreview } from 'components/ComponentPreview';
-import { FileCode } from 'components/FileCode';
+import { ComponentPreview } from '@/components/ComponentPreview';
+import { FileSource } from '@/components/FileSource';
 
 # useElementRect
 
@@ -7,7 +7,7 @@ Custom hook that provides the dimensions and position of a DOM element, updating
 
 ## Install
 
-<FileCode path="hooks/foundations/useElementRect" />
+<FileSource path="@/foundations/hooks/useElementRect" />
 
 ### Dependencies
 
@@ -29,7 +29,7 @@ Custom hook that provides the dimensions and position of a DOM element, updating
 
 ## Usage
 
-````tsx copy
+```tsx copy
 import { useRef } from 'react';
 import { useElementRect } from '[path]/useElementRect';
 
@@ -38,15 +38,15 @@ function Component() {
   const rect = useElementRect(ref);
 
   // ...
-}```
-````
+}
+```
 
 ## Examples
 
 ### As React State
 
-<ComponentPreview path="hooks/foundations/useElementRect/examples/useElementRectState" />
+<ComponentPreview path="@/foundations/hooks/useElementRect/examples/useElementRectState" />
 
 ### As Callback
 
-<ComponentPreview path="hooks/foundations/useElementRect/examples/useElementRectCallback" />
+<ComponentPreview path="@/foundations/hooks/useElementRect/examples/useElementRectCallback" />

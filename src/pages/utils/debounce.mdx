@@ -1,5 +1,5 @@
-import { FileCode } from 'components/FileCode';
-import DebouncingVsThrottleing from 'mdx/debouncing-vs-throtteling.mdx';
+import { FileSource } from '@/components/FileSource';
+import DebouncingVsThrottleing from '@/foundations/docs/debouncing-vs-throtteling.mdx';
 
 # Debounce
 
@@ -9,7 +9,7 @@ A utility which ensures that a given function is only executed after a specified
 
 ## Install
 
-<FileCode path="lib/utils/debounce.ts" />
+<FileSource path="@/foundations/utils/debounce.ts" />
 
 ## API Reference
 
@@ -39,7 +39,7 @@ const debouncedFunction = debounce(() => {
 ### API Call
 
 ```ts copy
-import { debounce } from 'lib/utils/debounce';
+import { debounce } from '@/lib/utils/debounce';
 
 function dummyApiCall(query: string) {
   console.log(`Searching for: ${query}`);

@@ -1,5 +1,5 @@
-import { FileCode } from 'components/FileCode';
-import DebouncingVsThrottleing from 'mdx/debouncing-vs-throtteling.mdx';
+import { FileSource } from '@/components/FileSource';
+import DebouncingVsThrottleing from '@/foundations/docs/debouncing-vs-throtteling.mdx';
 
 # Throttle
 
@@ -9,7 +9,7 @@ A utility which ensures that a given function is only executed at most once duri
 
 ## Install
 
-<FileCode path="lib/utils/throttle.ts" />
+<FileSource path="@/foundations/utils/throttle.ts" />
 
 ## API Reference
 
@@ -39,7 +39,7 @@ const throttledFunction = throttle(() => {
 ### Scroll Measurement
 
 ```ts copy
-import { throttle } from 'lib/utils/throttle';
+import { throttle } from '@/lib/utils/throttle';
 
 const scrollToTopButton = document.querySelector('#scroll-to-top');
 

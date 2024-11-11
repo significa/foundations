@@ -1,11 +1,11 @@
-import { ColorCard } from 'components/ColorCard';
-import { FileCode } from 'components/FileCode';
+import { ColorCard } from '@/components/ColorCard';
+import { FileSource } from '@/components/FileSource';
 
 # Theming
 
 We opted to use [Tailwind CSS](https://tailwindcss.com/) because of its flexibility and utility-first design. Given that this project is focused on providing foundational code, we've kept the configuration minimal and straightforward.
 
-<FileCode path="tailwind.config.cjs" filename="tailwind.config.cjs" />
+<FileSource path="tailwind.config.cjs" filename="tailwind.config.cjs" />
 
 ## Colors
 
@@ -39,12 +39,12 @@ We combine both `clsx` and `tailwind-merge` in a custom `cn` utility, imported f
 npm install clsx tailwind-merge class-variance-authority
 ```
 
-<FileCode path="lib/tailwind.ts" filename="lib/tailwind.ts" />
+<FileSource path="@/lib/tailwind.ts" filename="lib/tailwind.ts" />
 
 ### Example
 
 ```tsx copy /cn/
-import { cn } from 'lib/tailwind';
+import { cn } from '@/lib/tailwind';
 
 export function Component({ disabled, className }) {
   return (
@@ -60,7 +60,7 @@ export function Component({ disabled, className }) {
 ```
 
 ```tsx copy /cnva/
-import { cnva } from 'lib/tailwind';
+import { cnva } from '@/lib/tailwind';
 
 const componentStyles = cnva('relative text-primary', {
   variants: {

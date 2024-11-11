@@ -1,13 +1,13 @@
-import { ComponentPreview } from 'components/ComponentPreview';
-import { FileCode } from 'components/FileCode';
-import { PreviewBox } from 'components/PreviewBox';
-import { RadioGroup, RadioGroupItem } from 'components/foundations/RadioGroup';
+import { ComponentPreview } from '@/components/ComponentPreview';
+import { FileSource } from '@/components/FileSource';
+import { Box } from '@/components/Box';
+import { RadioGroup, RadioGroupItem } from '@/foundations/components/RadioGroup';
 
 # RadioGroup
 
 A group of checkable buttons allowing only one option to be selected at a time.
 
-<PreviewBox>
+<Box>
   <RadioGroup defaultValue="rg2" className="text-sm text-primary">
     <div className="flex gap-2 items-center">
       <RadioGroupItem id="rg1" value="rg1" />
@@ -22,11 +22,11 @@ A group of checkable buttons allowing only one option to be selected at a time.
       <label htmlFor="rg3">Scrambled</label>
     </div>
   </RadioGroup>
-</PreviewBox>
+</Box>
 
 ## Install
 
-<FileCode path="components/foundations/RadioGroup" />
+<FileSource path="@/foundations/components/RadioGroup" />
 
 ### Dependencies
 
@@ -56,4 +56,4 @@ import { RadioGroup, RadioGroupItem } from '[path]/RadioGroup';
 
 ### Disabled
 
-<ComponentPreview path="components/foundations/RadioGroup/examples/RadioGroupDisabled" />
+<ComponentPreview path="@/foundations/components/RadioGroup/examples/RadioGroupDisabled" />

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cn } from 'lib/tailwind';
+import { cn } from '@/lib/tailwind';
 
 type ColorCardProps = {
   token: 'background' | 'primary' | 'accent';

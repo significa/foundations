@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import { Callout } from 'nextra/components';
-import { ComponentPreview } from 'components/ComponentPreview';
-import { FileCode } from 'components/FileCode';
-import { PreviewBox } from 'components/PreviewBox';
-import { TableOfContents } from 'components/foundations/TableOfContents';
+import { ComponentPreview } from '@/components/ComponentPreview';
+import { FileSource } from '@/components/FileSource';
+import { Box } from '@/components/Box';
+import { TableOfContents } from '@/foundations/components/TableOfContents';
 
 # TableOfContents
 
@@ -48,15 +48,15 @@ return (
 </div>
 ); }
 
-<PreviewBox>
+<Box>
   <div className="absolute inset-0 overflow-scroll p-10 grid grid-cols-2">
     <PreviewContent />
   </div>
-</PreviewBox>
+</Box>
 
 ## Install
 
-<FileCode path="components/foundations/TableOfContents" />
+<FileSource path="@/foundations/components/TableOfContents" />
 
 ### Dependencies
 
@@ -90,8 +90,8 @@ import { TableOfContents } from '[path]/TableOfContents';
 
 ### Nesting
 
-<ComponentPreview path="components/foundations/TableOfContents/examples/TableOfContentsNesting" />
+<ComponentPreview path="@/foundations/components/TableOfContents/examples/TableOfContentsNesting" />
 
 ### Custom Selectors
 
-<ComponentPreview path="components/foundations/TableOfContents/examples/TableOfContentsCustomSelectors" />
+<ComponentPreview path="@/foundations/components/TableOfContents/examples/TableOfContentsCustomSelectors" />
