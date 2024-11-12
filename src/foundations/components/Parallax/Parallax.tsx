@@ -10,7 +10,7 @@ type ParallaxProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 export function ParallaxDesktop({ speed, className, children, ...rest }: ParallaxProps) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLDivElement>();
   const windowHeight = useRef(0);
   const normScreenOffset = useMemo(() => 1 - 1 / speed, [speed]);
 
