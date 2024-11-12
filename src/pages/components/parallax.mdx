@@ -5,8 +5,8 @@ import { Parallax } from '@/foundations/components/Parallax';
 
 # Parallax
 
-A component that creates an scroll-based parallax effect. The parallax translation is applied in such a way that the element always hits its original (non-translated) position when its reaches the center of the viewport.
-On touch devices and when there is a reduce motion preference, the translation is automatically removed.
+A component that adds an on-scroll vertical offset to simulate a parallax.
+The transform is automatically disabled on touch devices and for users with a reduced motion preference.
 
 <ComponentPreview
   path="@/foundations/components/Parallax/examples/ParallaxExample"
