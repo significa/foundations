@@ -9,7 +9,7 @@ type ParallaxProps = React.HTMLAttributes<HTMLDivElement> & {
   speed: number;
 };
 
-export function ParallaxDesktop({ speed = 1, className, children, ...rest }: ParallaxProps) {
+export function ParallaxDesktop({ speed, className, children, ...rest }: ParallaxProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const windowHeight = useRef(0);
   const normScreenOffset = useMemo(() => 1 - 1 / speed, [speed]);
@@ -58,7 +58,7 @@ export function Parallax({ speed, ...rest }: ParallaxProps) {
   const shouldReduceMotion = useReducedMotion();
   const isMounted = useIsMounted();
 
-  if (isTouchscreen || shouldReduceMotion || !isMounted) {
+  if (speed === 1 || isTouchscreen || shouldReduceMotion || !isMounted) {
     return <div {...rest} />;
   }
 

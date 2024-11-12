@@ -20,7 +20,7 @@ export function ParallaxSpeeds() {
           <Parallax
             key={index}
             speed={Number(speed)}
-            className="size-20 bg-accent text-center text-sm flex flex-col items-center justify-center rounded-lg"
+            className="relative size-20 bg-accent text-center text-sm flex flex-col items-center justify-center rounded-lg"
           >
             <div>{label}</div>
             <div>({speed})</div>
