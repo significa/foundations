@@ -9,7 +9,7 @@ type ParallaxProps = React.HTMLAttributes<HTMLDivElement> & {
   speed: number;
 };
 
-export function ParallaxDesktop({ speed, className, children, ...rest }: ParallaxProps) {
+export function ParallaxTransform({ speed, className, children, ...rest }: ParallaxProps) {
   const ref = useRef<HTMLDivElement>();
   const windowHeight = useRef(0);
   const normScreenOffset = useMemo(() => 1 - 1 / speed, [speed]);
@@ -62,5 +62,5 @@ export function Parallax({ speed, ...rest }: ParallaxProps) {
     return <div {...rest} />;
   }
 
-  return <ParallaxDesktop {...rest} speed={speed} />;
+  return <ParallaxTransform {...rest} speed={speed} />;
 }
