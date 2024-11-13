@@ -14,7 +14,7 @@ type UseElementRectOptions = {
 };
 
 export function useElementRect<T extends HTMLElement = HTMLElement>(
-  ref: RefObject<T>,
+  ref?: RefObject<T>,
   options: UseElementRectOptions = {}
 ): ElementRect {
   const [rect, setRect] = useState<ElementRect>({ width: 0, height: 0, x: 0, y: 0 });
