@@ -4,8 +4,6 @@ import { useTicker } from '@/foundations/hooks/useTicker';
 import { useIntersectionObserver } from '@/foundations/hooks/useIntersectionObserver';
 import { clamp } from '@/foundations/utils/clamp';
 
-// TODO: Why am I getting 4 re-renders every time the value changes?
-
 const SequenceContext = createContext<{
   id: string;
   value: string;

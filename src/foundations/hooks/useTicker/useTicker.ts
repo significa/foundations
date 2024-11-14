@@ -27,7 +27,12 @@ export function useTicker(callback: TickerCallback): Ticker {
   }, []);
 
   const tick = useCallback((timestamp: number) => {
-    const canContinue = callbackRef.current(timestamp, previousTimestamp.current);
+    const canContinue = callbackRef.current(
+      timestamp,
+      // make sure previousTimestamp is never greater than the current timestamp
+      // which can happen, because performance.now() isn't precisely equal to RAF's timestamp
+      Math.min(timestamp, previousTimestamp.current)
+    );
     previousTimestamp.current = timestamp;
 
     if (rafId.current && canContinue !== false) {
