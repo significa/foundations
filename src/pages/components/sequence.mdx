@@ -1,0 +1,68 @@
+import { FileSource } from '@/components/FileSource';
+import { ComponentPreview } from '@/components/ComponentPreview';
+
+# Sequence
+
+A Sequence component that cycles through content based on a set interval.
+Users can manually navigate through sections, or it will progress automatically when in view.
+
+<ComponentPreview
+  path="@/foundations/components/Sequence/examples/SequenceExample"
+  withSource={false}
+/>
+
+## Install
+
+<FileSource path="@/foundations/components/Sequence" />
+
+### Dependencies
+
+- [hooks/useTicker](/hooks/use-ticker)
+- [hooks/useIntersectionObserver](/hooks/use-intersection-observer)
+
+## API Refernece
+
+### Sequence.Root
+
+| Prop           |    Type    | Default Value |
+| :------------- | :--------: | ------------: |
+| `values`       | `string[]` |             - |
+| `stepDuration` |  `number`  |             - |
+
+### Sequence.Trigger
+
+| Prop    |   Type   | Default Value |
+| :------ | :------: | ------------: |
+| `value` | `string` |             - |
+
+### Sequence.Content
+
+| Prop             |   Type    | Default Value |
+| :--------------- | :-------: | ------------: |
+| `value`          | `string`  |             - |
+| `hideOnInactive` | `boolean` |        `true` |
+
+## Usage
+
+```tsx copy
+import { Sequence } from '[path]/Sequence';
+```
+
+```tsx copy
+<Sequence.Root values={['Slide 1', 'Slide 2', 'Slide 3']} stepDuration={3000}>
+  <div>
+    <Sequence.Trigger value="Slide 1">Slide 1</Sequence.Trigger>
+    <Sequence.Trigger value="Slide 2">Slide 2</Sequence.Trigger>
+    <Sequence.Trigger value="Slide 3">Slide 3</Sequence.Trigger>
+  </div>
+  <div>
+    <Sequence.Content value="Slide 1">Content for Slide 1</Sequence.Content>
+    <Sequence.Content value="Slide 2">Content for Slide 2</Sequence.Content>
+    <Sequence.Content value="Slide 3">Content for Slide 3</Sequence.Content>
+  </div>
+</Sequence.Root>
+```
+
+## Examples
+
+TODO:

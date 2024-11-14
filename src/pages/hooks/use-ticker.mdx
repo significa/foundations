@@ -1,0 +1,42 @@
+import { FileSource } from '@/components/FileSource';
+
+# useTicker
+
+Custom hook to manage a recurring animation frame-based ticker, allowing precise control over frame-by-frame execution with start and stop functionality.
+
+## Install
+
+<FileSource path="@/foundations/hooks/useTicker" />
+
+## API Reference
+
+- **Parameters:**
+
+  - `callback` _(required)_: A function invoked on each animation frame. Receives `timestamp` (the current time) and `previousTimestamp` (the time of the previous tick). This function should return `false` to stop the ticker, otherwise it will continue.
+
+- **Returns:**
+  - An object with two functions:
+    - `start`: Begins the ticker, invoking the `callback` function on each frame.
+    - `stop`: Halts the ticker, stopping the `callback` from being called further.
+
+---
+
+## Usage
+
+```tsx copy
+import { useTicker } from '[path]/useTicker';
+
+function TickerComponent() {
+  const { start, stop } = useTicker((timestamp, previousTimestamp) => {
+    // ...
+  });
+
+  // ...
+}
+```
+
+## Examples
+
+### Animation
+
+TODO:

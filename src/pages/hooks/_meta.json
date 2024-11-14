@@ -1,8 +1,10 @@
 {
   "use-element-rect": "useElementRect",
+  "use-intersection-observer": "useIntersectionObserver",
   "use-is-mounted": "useIsMounted",
   "use-is-touchscreen": "useIsTouchscreen",
   "use-scroll-direction": "useScrollDirection",
   "use-parent-ref": "useParentRef",
+  "use-ticker": "useTicker",
   "use-viewport": "useViewport"
 }

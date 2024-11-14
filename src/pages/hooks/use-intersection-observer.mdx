@@ -1,0 +1,46 @@
+import { FileSource } from '@/components/FileSource';
+
+# useIntersectionObserver
+
+Custom hook to monitor an element's visibility within the viewport or a specified container using the [`IntersectionObserver`](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) API.
+
+## Install
+
+<FileSource path="@/foundations/hooks/useIntersectionObserver" />
+
+## API Reference
+
+- **Parameters:**
+
+  - `ref` _(optional)_: A React ref pointing to the target DOM element to observe. This should be a mutable ref created with `useRef`.
+
+  - `options` _(optional)_: An object with configuration parameters for the observer:
+    - `threshold` _(number | number[])_: Defines the percentage of the target's visibility needed to trigger the observer. Defaults to `0`, meaning any visibility will trigger it.
+    - `root` _(Element | Document | null)_: The element that serves as the viewport for checking visibility. Defaults to `null`, which uses the browser viewport.
+    - `rootMargin` _(string)_: The margin around the root to adjust the intersection area. Accepts values like `'10px 20px'` or `'0%'`. Defaults to `'0%'`.
+    - `onIntersection` _(function)_: Callback triggered whenever the target element's visibility changes. Receives `isIntersecting` (boolean) and `entry` (the `IntersectionObserverEntry`). **If set, the hook will not update the returned state.**
+
+- **Returns:**
+  - An object containing:
+    - `isIntersecting`: A boolean indicating whether the observed element is in the viewport or the specified container.
+    - `entry`: The `IntersectionObserverEntry` object associated with the observed element, providing additional details on the visibility state.
+
+---
+
+## Usage
+
+```tsx copy
+import { useRef } from 'react';
+import { useIntersectionObserver } from '[path]/useIntersectionObserver';
+
+function Component() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { isIntersecting } = useIntersectionObserver(ref);
+
+  // ...
+}
+```
+
+## Examples
+
+TODO:
