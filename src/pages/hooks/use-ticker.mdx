@@ -12,7 +12,7 @@ Custom hook to manage a recurring animation frame-based ticker, allowing precise
 
 - **Parameters:**
 
-  - `callback` _(required)_: A function invoked on each animation frame. Receives `timestamp` (the current time) and `previousTimestamp` (the time of the previous tick). This function should return `false` to stop the ticker, otherwise it will continue.
+  - `callback` _(required)_: A function invoked on each animation frame. Receives `timestamp` (the current time) and `delta` (the time between the current and previous tick). This function should return `false` to stop the ticker, otherwise it will continue.
 
 - **Returns:**
   - An object with two functions:
@@ -27,7 +27,7 @@ Custom hook to manage a recurring animation frame-based ticker, allowing precise
 import { useTicker } from '[path]/useTicker';
 
 function TickerComponent() {
-  const { start, stop } = useTicker((timestamp, previousTimestamp) => {
+  const { start, stop } = useTicker((timestamp, delta) => {
     // ...
   });
 

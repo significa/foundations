@@ -5,7 +5,7 @@ type Ticker = {
   stop: () => void;
 };
 
-type TickerCallback = (timestamp: number, previousTimestamp: number) => void | boolean;
+type TickerCallback = (timestamp: number, delta: number) => void | boolean;
 
 export function useTicker(callback: TickerCallback): Ticker {
   const rafId = useRef<number | null>();
@@ -29,10 +29,11 @@ export function useTicker(callback: TickerCallback): Ticker {
   const tick = useCallback((timestamp: number) => {
     const canContinue = callbackRef.current(
       timestamp,
-      // make sure previousTimestamp is never greater than the current timestamp
-      // which can happen, because performance.now() isn't precisely equal to RAF's timestamp
-      Math.min(timestamp, previousTimestamp.current)
+      // ensure delta is never negative which can happen because performance.now(),
+      // used at the start on the tick cycle, isn't precisely equal to RAF's timestamp
+      Math.max(0, timestamp - previousTimestamp.current)
     );
+
     previousTimestamp.current = timestamp;
 
     if (rafId.current && canContinue !== false) {
