@@ -18,7 +18,7 @@ type IntersectionReturn = {
 };
 
 export function useIntersectionObserver<T extends HTMLElement = HTMLElement>(
-  ref?: React.RefObject<T>,
+  ref: React.RefObject<T>,
   {
     threshold = 0,
     root = null,
@@ -38,7 +38,7 @@ export function useIntersectionObserver<T extends HTMLElement = HTMLElement>(
         entries.forEach((entry) => {
           const isIntersecting = entry.isIntersecting;
 
-          if (onIntersection) {
+          if (onIntersection && onIntersectionRef.current) {
             onIntersectionRef.current(isIntersecting, entry);
           } else {
             setState({ isIntersecting, entry });
