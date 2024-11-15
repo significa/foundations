@@ -63,6 +63,7 @@ function SequenceRoot({ stepDuration, values, className, children, ...rest }: Se
     if (ref.current && isValueRendered) {
       const itemProgress = (progress.current - activeIndex / numValues) / (1 / numValues);
       ref.current.style.setProperty('--progress', clamp(0, itemProgress, 1).toString());
+      ref.current.style.setProperty('--active-index', activeIndex.toString());
     }
 
     return progress.current < 1;
@@ -87,12 +88,12 @@ function SequenceRoot({ stepDuration, values, className, children, ...rest }: Se
   }
 
   function getValueState(itemValue: string) {
-    const valueIndex = values.indexOf(itemValue);
+    const itemIndex = values.indexOf(itemValue);
     const activeIndex = values.indexOf(value);
 
     return {
-      isActive: valueIndex === activeIndex,
-      hasPlayed: valueIndex < activeIndex
+      isActive: itemIndex === activeIndex,
+      hasPlayed: itemIndex < activeIndex
     };
   }
 
@@ -125,6 +126,7 @@ function SequenceTrigger({ value, children, ...rest }: SequenceTriggerProps) {
       aria-selected={isActive}
       aria-controls={getComponentId('content', context.id, value)}
       data-state={isActive ? 'active' : 'inactive'}
+      data-has-played={hasPlayed}
       onClick={() => context.setValue(value)}
       style={!isActive ? { '--progress': +hasPlayed } : {}}
     >
@@ -146,10 +148,11 @@ function SequenceContent({
   value,
   hideOnInactive = true,
   children,
+  style = {},
   ...rest
 }: SequenceContentProps) {
   const context = useContext(SequenceContext);
-  const { isActive } = context.getValueState(value);
+  const { isActive, hasPlayed } = context.getValueState(value);
 
   return (
     <div
@@ -159,8 +162,9 @@ function SequenceContent({
       aria-labelledby={getComponentId('trigger', context.id, value)}
       data-state={isActive ? 'active' : 'inactive'}
       tabIndex={0}
-      hidden={!isActive}
-      style={hideOnInactive && { visibility: isActive ? 'visible' : 'hidden' }}
+      data-has-played={hasPlayed}
+      style={hideOnInactive ? { visibility: isActive ? 'visible' : 'hidden', ...style } : style}
+      hidden={hideOnInactive && !isActive}
       // @ts-ignore
       inert={isActive ? undefined : ''}
     >
