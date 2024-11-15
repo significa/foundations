@@ -1,5 +1,4 @@
-import { useId, useRef, useState, useContext, createContext } from 'react';
-import type { HTMLAttributes } from 'react';
+import { useId, useRef, useState, useContext, createContext, type HTMLAttributes } from 'react';
 import { useTicker } from '@/foundations/hooks/useTicker';
 import { useIntersectionObserver } from '@/foundations/hooks/useIntersectionObserver';
 import { clamp } from '@/foundations/utils/clamp';
@@ -37,10 +36,10 @@ function SequenceRoot({ stepDuration, values, className, children, ...rest }: Se
 
   const duration = stepDuration * values.length;
 
-  const ticker = useTicker((timestamp, previousTimestamp) => {
+  const ticker = useTicker((_, delta) => {
     const numValues = values.length;
 
-    progress.current = clamp(0, progress.current + (timestamp - previousTimestamp) / duration, 1);
+    progress.current = clamp(0, progress.current + delta / duration, 1);
 
     const activeIndex = clamp(0, ~~(progress.current * numValues), numValues - 1);
     setValue(values[activeIndex]);
@@ -145,7 +144,9 @@ function SequenceContent({
       data-state={isActive ? 'active' : 'inactive'}
       tabIndex={0}
       hidden={!isActive}
-      style={hideOnInactive && { opacity: +isActive }}
+      style={hideOnInactive && { visibility: isActive ? 'visible' : 'hidden' }}
+      // @ts-ignore
+      inert={isActive ? undefined : ''}
     >
       {children}
     </div>
