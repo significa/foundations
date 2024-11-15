@@ -1,4 +1,12 @@
-import { useId, useRef, useState, useContext, createContext, type HTMLAttributes } from 'react';
+import {
+  useLayoutEffect,
+  useId,
+  useRef,
+  useState,
+  useContext,
+  createContext,
+  type HTMLAttributes
+} from 'react';
 import { useTicker } from '@/foundations/hooks/useTicker';
 import { useIntersectionObserver } from '@/foundations/hooks/useIntersectionObserver';
 import { clamp } from '@/foundations/utils/clamp';
@@ -32,10 +40,14 @@ function SequenceRoot({ stepDuration, values, className, children, ...rest }: Se
   const id = useId();
   const ref = useRef<HTMLDivElement>();
   const [value, setValue] = useState(values[0]);
+  const valueRef = useRef(value);
   const progress = useRef(0);
 
-  const duration = stepDuration * values.length;
+  useLayoutEffect(() => {
+    valueRef.current = value;
+  }, [value]);
 
+  const duration = stepDuration * values.length;
   const ticker = useTicker((_, delta) => {
     const numValues = values.length;
 
@@ -44,7 +56,11 @@ function SequenceRoot({ stepDuration, values, className, children, ...rest }: Se
     const activeIndex = clamp(0, ~~(progress.current * numValues), numValues - 1);
     setValue(values[activeIndex]);
 
-    if (ref.current) {
+    // checks if the current state value has been rendered to the DOM, if not, we skip the --progress update
+    // prevents --progress from jumping back to 0 before the triggers render the inactive attributes (which can cause layout flickers)
+    const isValueRendered = valueRef.current === values[activeIndex];
+
+    if (ref.current && isValueRendered) {
       const itemProgress = (progress.current - activeIndex / numValues) / (1 / numValues);
       ref.current.style.setProperty('--progress', clamp(0, itemProgress, 1).toString());
     }
