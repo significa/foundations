@@ -29,7 +29,10 @@ Users can manually navigate through sections, or it will progress automatically 
 | `values`       | `string[]` |             - |
 | `stepDuration` |  `number`  |             - |
 
-TODO: attributes
+| CSS Variable     |                                     Description |
+| :--------------- | ----------------------------------------------: |
+| `--progress`     | Normalized progress value of the active trigger |
+| `--active-index` |             Index of the current active trigger |
 
 ### Sequence.Trigger
 
@@ -37,7 +40,10 @@ TODO: attributes
 | :------ | :------: | ------------: |
 | `value` | `string` |             - |
 
-TODO: attributes
+| Data Attribute      |           Values           | Default Value |
+| :------------------ | :------------------------: | ------------: |
+| `[data-state]`      | `"active" \|   "inactive"` |  `"inactive"` |
+| `[data-was-active]` |    `"true" \| "false"`     |     `"false"` |
 
 ### Sequence.Content
 
@@ -46,7 +52,10 @@ TODO: attributes
 | `value`          | `string`  |             - |
 | `hideOnInactive` | `boolean` |        `true` |
 
-TODO: attributes
+| Data Attribute      |           Values           | Default Value |
+| :------------------ | :------------------------: | ------------: |
+| `[data-state]`      | `"active" \|   "inactive"` |  `"inactive"` |
+| `[data-was-active]` |    `"true" \| "false"`     |     `"false"` |
 
 ## Usage
 

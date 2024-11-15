@@ -21,7 +21,7 @@ export function SequenceAnimatedContent() {
             className="group relative w-full py-3 text-left data-[state=inactive]:opacity-40 transition-opacity"
           >
             {label}
-            <div className="absolute left-0 bottom-0 w-full h-[1px] bg-foreground origin-left scale-x-[--progress] group-data-[state=inactive]:group-data-[has-played=true]:transition-transform group-data-[state=inactive]:group-data-[has-played=true]:duration-300" />
+            <div className="absolute left-0 bottom-0 w-full h-[1px] bg-foreground origin-left scale-x-[--progress] group-data-[state=inactive]:group-data-[was-active=true]:transition-transform group-data-[state=inactive]:group-data-[was-active=true]:duration-300" />
             <div className="absolute left-0 bottom-0 w-full h-[1px] bg-foreground/10 origin-left" />
           </Sequence.Trigger>
         ))}

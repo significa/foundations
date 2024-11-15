@@ -15,13 +15,8 @@ const SequenceContext = createContext<{
   id: string;
   value: string;
   setValue: (value: string) => void;
-  getValueState: (value: string) => { isActive: boolean; hasPlayed: boolean };
-}>({
-  id: null,
-  value: null,
-  setValue: () => {},
-  getValueState: () => ({ isActive: false, hasPlayed: false })
-});
+  getValueState: (value: string) => { isActive: boolean; wasActive: boolean };
+} | null>(null);
 
 function getComponentId(componentName: string, rootId: string, value: string) {
   return `${rootId}-${componentName}-${value.replace(/[^a-zA-Z ]/g, '')}`;
@@ -93,7 +88,7 @@ function SequenceRoot({ stepDuration, values, className, children, ...rest }: Se
 
     return {
       isActive: itemIndex === activeIndex,
-      hasPlayed: itemIndex < activeIndex
+      wasActive: itemIndex < activeIndex
     };
   }
 
@@ -116,7 +111,7 @@ type SequenceTriggerProps = HTMLAttributes<HTMLButtonElement> & {
 
 function SequenceTrigger({ value, children, ...rest }: SequenceTriggerProps) {
   const context = useContext(SequenceContext);
-  const { isActive, hasPlayed } = context.getValueState(value);
+  const { isActive, wasActive } = context.getValueState(value);
 
   return (
     <button
@@ -126,9 +121,9 @@ function SequenceTrigger({ value, children, ...rest }: SequenceTriggerProps) {
       aria-selected={isActive}
       aria-controls={getComponentId('content', context.id, value)}
       data-state={isActive ? 'active' : 'inactive'}
-      data-has-played={hasPlayed}
+      data-was-active={wasActive}
       onClick={() => context.setValue(value)}
-      style={!isActive ? { '--progress': +hasPlayed } : {}}
+      style={!isActive ? { '--progress': +wasActive } : {}}
     >
       {children}
     </button>
@@ -152,7 +147,7 @@ function SequenceContent({
   ...rest
 }: SequenceContentProps) {
   const context = useContext(SequenceContext);
-  const { isActive, hasPlayed } = context.getValueState(value);
+  const { isActive, wasActive } = context.getValueState(value);
 
   return (
     <div
@@ -162,7 +157,7 @@ function SequenceContent({
       aria-labelledby={getComponentId('trigger', context.id, value)}
       data-state={isActive ? 'active' : 'inactive'}
       tabIndex={0}
-      data-has-played={hasPlayed}
+      data-was-active={wasActive}
       style={hideOnInactive ? { visibility: isActive ? 'visible' : 'hidden', ...style } : style}
       hidden={hideOnInactive && !isActive}
       // @ts-ignore
