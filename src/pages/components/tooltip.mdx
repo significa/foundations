@@ -1,0 +1,93 @@
+import { Box } from '@/components/Box';
+import { FileSource } from '@/components/FileSource';
+import { ComponentPreview } from '@/components/ComponentPreview';
+import { Tooltip } from '@/foundations/components/Tooltip';
+
+# Tooltip
+
+<Box>
+  <Tooltip content="Hello world">
+    <p>Hover me</p>
+  </Tooltip>
+</Box>
+
+## Install
+
+<FileSource path="@/foundations/components/Tooltip" />
+
+### Dependencies
+
+```bash copy
+npm install @floating-ui/react
+```
+
+## API Reference
+
+| Prop             |                                                                                Type                                                                                | Default Value |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: | ------------: |
+| `placement`      | `top` \| `right` \| `bottom` \| `left` \| `top-start` \| `top-end` \| `bottom-start` \| `bottom-end` \| `left-start` \| `left-end` \| `right-start` \| `right-end` |         `top` |
+| `persistOnClick` |                                                                             `boolean`                                                                              |       `false` |
+| `delayIn`        |                                                                              `number`                                                                              |           `0` |
+| `delayOut`       |                                                                              `number`                                                                              |           `0` |
+
+## Usage
+
+```tsx copy
+import { Tooltip } from '[path]/Tooltip';
+```
+
+```tsx copy
+<Tooltip content="Hello world">
+  <p>Hover me</p>
+</Tooltip>
+```
+
+## Examples
+
+### Bottom placement
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/TooltipBottom" />
+
+### Left placement
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/TooltipLeft" />
+
+### Right placement
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/TooltipRight" />
+
+### Disabled Trigger
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/DisabledTrigger" />
+
+### Disabled Tooltip
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/DisabledTooltip" />
+
+### Tooltip group
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/GroupTooltip" />
+
+### Group delay priority
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/GroupDelayPriority" />
+
+### Persist on click
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/PersistOnClick" />
+
+### Custom delay in
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/CustomDelayIn" />
+
+### Custom delay out
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/CustomDelayOut" />
+
+### Using primitive
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/Primitive" />
+
+### No arrow primitive
+
+<ComponentPreview path="@/foundations/components/Tooltip/examples/NoArrowPrimitive" />
