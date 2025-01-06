@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import { Spinner } from "@/foundations/ui/spinner";
+import { Spinner } from "@/foundations/ui/spinner/spinner";
 
 import { imports } from "./imports";
 

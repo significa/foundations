@@ -1,4 +1,4 @@
-import { Button } from "@/foundations/ui/button";
+import { Button } from "@/foundations/ui/button/button";
 
 import { Egg } from "@/components/icons/egg";
 import { Octocat } from "@/components/icons/octocat";

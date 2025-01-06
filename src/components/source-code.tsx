@@ -2,7 +2,13 @@ import { promises as fs } from "fs";
 import path from "path";
 
 const fixImports = (code: string) => {
-  return code.replace(/@\/foundations\/ui/g, "@/components");
+  return (
+    code
+      // Replace @/foundations/ui with @/components
+      .replace(/@\/foundations\/ui/g, "@/components")
+      // Remove duplicate folder names (e.g. @/components/button/button to @/components/button)
+      .replace(/\/([^/]+)\/\1/g, "/$1")
+  );
 };
 
 export const SourceCode = async ({ path: p }: { path: string }) => {

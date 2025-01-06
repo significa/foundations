@@ -5,7 +5,7 @@ import { Slot, Slottable } from "@radix-ui/react-slot";
 
 import { cn, cva } from "@/lib/utils";
 
-import { Spinner } from "@/foundations/ui/spinner";
+import { Spinner } from "@/foundations/ui/spinner/spinner";
 
 const buttonStyle = cva({
   base: "shrink-0 relative whitespace-nowrap inline-flex items-center justify-center gap-1.5 font-medium shadow-xs transition focus-visible:outline-none focus-visible:ring-4 disabled:opacity-40 enabled:cursor-pointer h-(--button-height) ring-ring active:scale-98",
