@@ -1,9 +1,0 @@
-.DS_Store
-node_modules
-/build
-.env
-.next
-.env.*
-pnpm-lock.yaml
-package-lock.json
-/out

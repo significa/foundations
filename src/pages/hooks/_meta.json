@@ -1,8 +1,0 @@
-{
-  "use-element-rect": "useElementRect",
-  "use-is-mounted": "useIsMounted",
-  "use-is-touchscreen": "useIsTouchscreen",
-  "use-scroll-direction": "useScrollDirection",
-  "use-parent-ref": "useParentRef",
-  "use-viewport": "useViewport"
-}
