@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/button";
+import { Button } from "@/foundations/ui/button";
 
 import { Moon, Sun } from "@phosphor-icons/react";
 import { useTheme } from "next-themes";

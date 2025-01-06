@@ -2,7 +2,6 @@ import "../globals.css";
 
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Header } from "./components/header";
 
 export const metadata: Metadata = {
   title: "Foundations",
@@ -17,10 +16,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>
-          <Header />
-          <main>{children}</main>
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
