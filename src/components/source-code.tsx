@@ -11,5 +11,9 @@ export const SourceCode = async ({ path: p }: { path: string }) => {
     "utf-8"
   );
 
-  return <pre>{fixImports(code)}</pre>;
+  return (
+    <pre className="border border-border rounded-xl p-4 overflow-scroll">
+      {fixImports(code)}
+    </pre>
+  );
 };

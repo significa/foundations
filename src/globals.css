@@ -67,6 +67,10 @@
   --color-ring: oklch(100% 0 0 / 0.12);
 }
 
+html {
+  scroll-padding-top: calc(var(--spacing) * 14);
+}
+
 body {
   font-family: var(--font-sans);
 
