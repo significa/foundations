@@ -7,6 +7,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { Button } from "@/foundations/ui/button";
 
 import { SourceCode } from "./source-code";
+import { ComponentPreview } from "./component-preview";
 
 export const MdxPage = async ({ code }: { code: string }) => {
   const { default: MDXContent } = await evaluate(code, {
@@ -16,7 +17,7 @@ export const MdxPage = async ({ code }: { code: string }) => {
 
   return (
     <>
-      <MDXContent components={{ Button, SourceCode }} />
+      <MDXContent components={{ Button, SourceCode, ComponentPreview }} />
     </>
   );
 };
