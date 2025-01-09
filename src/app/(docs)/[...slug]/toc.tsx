@@ -36,17 +36,21 @@ export const TableOfContents = ({
     };
   }, [headings]);
 
-  return headings.map(({ id, level, text }) => (
-    <a
-      className={cn(
-        "block ml-[max(0px,calc(var(--spacing)*4*var(--level)))] py-0.5 opacity-60 transition",
-        activeSlug === id && "opacity-100"
-      )}
-      key={id}
-      href={`#${id}`}
-      style={{ "--level": level - 2 }}
-    >
-      {text}
-    </a>
-  ));
+  return (
+    <div className="flex flex-col items-start">
+      {headings.map(({ id, level, text }) => (
+        <a
+          className={cn(
+            "inline-block ml-[max(0px,calc(var(--spacing)*4*var(--level)))] py-0.5 opacity-60 transition",
+            activeSlug === id && "opacity-100"
+          )}
+          key={id}
+          href={`#${id}`}
+          style={{ "--level": level - 2 }}
+        >
+          {text}
+        </a>
+      ))}
+    </div>
+  );
 };
