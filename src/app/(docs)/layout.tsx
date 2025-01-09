@@ -11,7 +11,7 @@ export default function DocsLayout({
       <Header />
       <main className="grid grid-cols-[250px_1fr]">
         <Sidebar />
-        <main>
+        <main className="py-12">
           <div className="max-w-4xl mx-auto">{children}</div>
           <div className="sticky top-14">Table of contents</div>
         </main>

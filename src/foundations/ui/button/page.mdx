@@ -1,5 +1,104 @@
+export const metadata = {
+  title: "Button",
+  description:
+    "The Button component provides a consistent way to trigger actions across the application.",
+};
+
 <ComponentPreview slug="button" />
+
+<SourceCode path="foundations/ui/button/button.tsx" />
 
 # Install
 
-<SourceCode path="foundations/ui/button/button.tsx" />
+A bit of text with `inline code`
+
+```js showLineNumbers
+module.exports = {
+  theme: {
+    extend: {
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+};
+```
+
+The name of the function is `getStringLength`.
+
+## API Reference
+
+| Prop       | Type      | Default Value |
+| :--------- | :-------- | ------------: |
+| `variant`  | `string`  |     `primary` |
+| `size`     | `string`  |          `md` |
+| `disabled` | `boolean` |             - |
+| `loading`  | `boolean` |             - |
+| `asChild`  | `boolean` |             - |
+
+## Usage
+
+The Button component provides a consistent way to trigger actions across the application. It supports various styles and states to match your UI needs.
+
+The Button component is built with customization in mind, allowing you to adapt its appearance and behavior to match your application's design system. It leverages CSS variables for theming and supports custom class names through the className prop.
+
+![Closeup of various colorful buttons arranged in a pattern](https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&q=80)
+
+### Basic Example
+
+A simple button can be created with minimal props:
+
+<ComponentPreview slug="button" />
+
+### Variants
+
+The button comes with several pre-defined variants:
+
+- Default - The standard button style
+- Secondary - Used for secondary actions
+- Outline - A bordered button style
+- Ghost - A minimal button style
+
+---
+
+### Sizes
+
+Available size options include:
+
+1. Small - Compact buttons
+2. Medium (default) - Standard size
+3. Large - More prominent buttons
+4. Icon - Square aspect ratio for icon-only buttons
+
+## Accessibility
+
+Buttons are built with accessibility in mind, following [WAI-ARIA Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/). They support:
+
+- Keyboard navigation
+- ARIA states
+- Screen reader announcements
+
+> **Important**: When using icons in buttons, always provide an aria-label for screen readers.
+
+### Best Practices
+
+Here are some guidelines for using buttons effectively:
+
+- Use clear, action-oriented text
+- Maintain consistent styling within context
+- Consider visual hierarchy
+- Ensure adequate touch targets
+
+---
+
+## API Reference
+
+The Button component accepts all standard HTML button attributes plus additional props for customization. See the [button interface](#button-interface) for details.
+
+### Custom Styling
+
+You can extend the button styles using the `className` prop:

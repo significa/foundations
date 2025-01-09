@@ -1,7 +1,6 @@
 import { Menu } from "./menu";
-import { MenuItem } from "./types";
 
-const menu: MenuItem[] = [
+export const menu: React.ComponentProps<typeof Menu>["items"] = [
   {
     title: "Introduction",
     children: [

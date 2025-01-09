@@ -1,6 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
 
+import { Markdown } from "./markdown";
+
 const fixImports = (code: string) => {
   return (
     code
@@ -17,9 +19,7 @@ export const SourceCode = async ({ path: p }: { path: string }) => {
     "utf-8"
   );
 
-  return (
-    <pre className="border border-border rounded-xl p-4 overflow-scroll">
-      {fixImports(code)}
-    </pre>
-  );
+  const lang = p.split(".").reverse()[0];
+
+  return <Markdown>{`\`\`\`${lang}\n${fixImports(code)}\n\`\`\``}</Markdown>;
 };
