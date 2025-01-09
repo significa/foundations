@@ -15,7 +15,7 @@ const buttonStyle = cva({
       destructive: "bg-red-600 text-white ring-red-600/50 hover:bg-red-700",
       outline: "border border-border",
       ghost:
-        "border-none bg-background ring-0 shadow-none hover:bg-foreground/5",
+        "border-none bg-transparent ring-0 shadow-none hover:bg-foreground/5",
     },
     size: {
       xs: "rounded-lg px-2 text-sm [--button-height:theme(spacing.6)]",

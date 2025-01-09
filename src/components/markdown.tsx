@@ -16,6 +16,7 @@ import rehypePrettyCode, {
 import { Button } from "@/foundations/ui/button/button";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
+import { CopyButton } from "./copy-button";
 
 const rehypeRawCode = () => (tree: Node) => {
   visit(
@@ -73,6 +74,21 @@ export const Markdown = async ({ children }: { children: string }) => {
 };
 
 export const components: ReturnType<UseMdxComponents> = {
+  figure: ({ ["data-raw-code"]: rawCode, ...props }) => {
+    if (rawCode) {
+      return (
+        <div className="relative group">
+          <CopyButton
+            content={rawCode}
+            className="opacity-80 absolute top-2 right-2"
+          />
+          <figure {...props} />
+        </div>
+      );
+    }
+
+    return <figure {...props} />;
+  },
   Button,
   SourceCode,
   ComponentPreview: (props) => (
