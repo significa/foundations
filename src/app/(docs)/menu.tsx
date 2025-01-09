@@ -5,12 +5,14 @@ import Link from "next/link";
 
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/foundations/ui/badge/badge";
 
 export type MenuItem = {
   title: string;
   children: {
     title: string;
     href: string;
+    tag?: string;
   }[];
 };
 
@@ -29,11 +31,19 @@ export const Menu = ({ items }: { items: MenuItem[] }) => {
               key={child.href}
               href={child.href}
               className={cn(
-                "rounded-lg hover:bg-foreground/5 py-2 px-3 text-sm",
+                "rounded-lg hover:bg-foreground/5 py-2 px-3 text-sm flex items-center gap-1 leading-none",
                 pathname === child.href && "bg-foreground/5"
               )}
             >
-              {child.title}
+              <span>{child.title}</span>
+              {child.tag && (
+                <Badge
+                  size="xs"
+                  variant={child.tag === "new" ? "success" : "info"}
+                >
+                  {child.tag.toUpperCase()}
+                </Badge>
+              )}
             </Link>
           ))}
         </Fragment>

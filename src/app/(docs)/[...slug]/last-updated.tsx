@@ -1,7 +1,7 @@
 import path from "path";
 import { format } from "date-fns";
 
-import { getLastModifiedDate } from "@/lib/last-updated";
+import { getLastModifiedDate } from "@/lib/fs";
 import { Calendar } from "@phosphor-icons/react/dist/ssr";
 
 export const LastUpdated = async ({ filePath }: { filePath: string }) => {
