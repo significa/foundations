@@ -11,17 +11,20 @@ import { ComponentPreview } from "@/components/component-preview";
 import { TableOfContents } from "./toc";
 import { GITHUB_REPO_URL } from "@/lib/constants";
 import { Pencil } from "@phosphor-icons/react/dist/ssr";
+import { LastUpdated } from "./last-updated";
+import { Navigation } from "./navigation";
 
 const isNotFoundError = (error: unknown): error is { code: "ENOENT" } => {
   return error instanceof Error && "code" in error && error.code === "ENOENT";
 };
 
-const getPageContent = async (slug: string[]) => {
+const getFilePath = (slug: string[]) => {
+  return path.join("src", "foundations", ...slug, "page.mdx");
+};
+
+const getPageContent = async (filePath: string) => {
   try {
-    return await fs.readFile(
-      path.join(process.cwd(), "src", "foundations", ...slug, "page.mdx"),
-      "utf-8"
-    );
+    return await fs.readFile(path.join(process.cwd(), filePath), "utf-8");
   } catch (error) {
     if (isNotFoundError(error)) {
       notFound();
@@ -38,7 +41,8 @@ export default async function Page({
 }) {
   const { slug } = await params;
 
-  const content = await getPageContent(slug);
+  const filePath = getFilePath(slug);
+  const content = await getPageContent(filePath);
   const toc = await getMarkdownToc(content);
   const metadata = await getMetadata(content);
 
@@ -56,33 +60,33 @@ export default async function Page({
         )}
         <div className="text-xs text-foreground-secondary">
           <a
-            className="inline-flex items-center gap-1 font-medium"
-            href={`${GITHUB_REPO_URL}/edit/next/${path.join(
-              "src",
-              "foundations",
-              ...slug,
-              "page.mdx"
-            )}`}
+            className="inline-flex items-center gap-1 font-medium mb-2 hover:text-foreground transition"
+            href={`${GITHUB_REPO_URL}/edit/next/${filePath}`}
             target="_blank"
             rel="noopener noreferrer"
           >
             <Pencil /> Edit this page
           </a>
+          <LastUpdated filePath={filePath} />
         </div>
       </nav>
 
       <div className="flex-1 max-w-3xl mx-auto py-8">
-        <h1 className="text-3xl font-bold">{metadata.title}</h1>
-        {metadata.description && (
-          <p className="mt-2 text-foreground-secondary">
-            {metadata.description}
-          </p>
-        )}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold">{metadata.title}</h1>
+          {metadata.description && (
+            <p className="mt-2 text-foreground-secondary">
+              {metadata.description}
+            </p>
+          )}
+        </div>
         {metadata.preview && (
-          <ComponentPreview className="mt-8" slug={metadata.preview} />
+          <ComponentPreview className="mb-8" slug={metadata.preview} />
         )}
 
-        <Markdown>{content}</Markdown>
+        <Markdown className="pb-40">{content}</Markdown>
+
+        <Navigation slug={slug} />
       </div>
     </main>
   );
@@ -141,7 +145,7 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  const content = await getPageContent(slug);
+  const content = await getPageContent(getFilePath(slug));
   const metadata = await getMetadata(content);
 
   return {

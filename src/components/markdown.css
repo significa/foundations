@@ -133,7 +133,7 @@ span[data-rehype-pretty-code-figure] code {
   padding-inline: calc(var(--spacing) * 1);
   padding-block: calc(var(--spacing) * 0.5);
 
-  font-size: 0.9em;
+  font-size: 0.95em;
   font-weight: 550;
 
   border-radius: var(--radius-sm);
@@ -146,7 +146,7 @@ span[data-rehype-pretty-code-figure] code {
   box-shadow: 0 0 0 1px var(--color-border);
 
   &[data-language="text"] span {
-    color: color-mix(in oklab, var(--color-foreground) 50%, transparent);
+    color: color-mix(in oklab, var(--color-foreground) 60%, transparent);
   }
 }
 
