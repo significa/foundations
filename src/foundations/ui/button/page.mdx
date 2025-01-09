@@ -10,9 +10,11 @@ export const metadata = {
 
 # Install
 
-A bit of text with `inline code`
+A bit of text with `inline code`.
 
-```js showLineNumbers
+Another text with javascript inline `const a = 1;{:js}` and `console.log('hello');{:js}`.
+
+```js {6,7} showLineNumbers /extend/ title="tailwind.config.js" caption="footer here"
 module.exports = {
   theme: {
     extend: {
@@ -28,7 +30,7 @@ module.exports = {
 };
 ```
 
-The name of the function is `getStringLength`.
+The name of the function is `getStringLength{:.entity.name.function}`.
 
 ## API Reference
 

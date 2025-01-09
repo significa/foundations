@@ -21,7 +21,7 @@ export const Menu = ({ items }: { items: MenuItem[] }) => {
     <div className="flex flex-col gap-0.5">
       {items.map((item) => (
         <Fragment key={item.title}>
-          <h3 className="text-sm font-medium not-first-of-type:mt-4 text-secondary-foreground py-2 px-3">
+          <h3 className="text-sm font-medium not-first-of-type:mt-4 text-foreground-secondary py-2 px-3">
             {item.title}
           </h3>
           {item.children.map((child) => (

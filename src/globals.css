@@ -11,12 +11,13 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: var(--font-geist-mono);
 
   --color-background: oklch(100% 0 0);
-  --color-foreground: oklch(0% 0 0);
+  --color-background-secondary: oklch(96% 0 0);
 
-  --color-secondary: oklch(96% 0 0);
-  --color-secondary-foreground: oklch(65% 0 0);
+  --color-foreground: oklch(0% 0 0);
+  --color-foreground-secondary: oklch(65% 0 0);
 
   --color-border: oklch(94% 0 0);
   --color-border-hard: oklch(92% 0 0);

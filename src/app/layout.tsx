@@ -1,3 +1,5 @@
+import { GeistMono } from "geist/font/mono";
+
 import "../globals.css";
 
 import type { Metadata } from "next";
@@ -14,7 +16,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${GeistMono.variable}`}
+    >
       <body>
         <ThemeProvider>{children}</ThemeProvider>
       </body>

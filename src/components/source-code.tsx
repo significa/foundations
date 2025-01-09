@@ -21,5 +21,5 @@ export const SourceCode = async ({ path: p }: { path: string }) => {
 
   const lang = p.split(".").reverse()[0];
 
-  return <Markdown>{`\`\`\`${lang}\n${fixImports(code)}\n\`\`\``}</Markdown>;
+  return <Markdown>{`\`\`\`${lang}\n${fixImports(code)}\`\`\``}</Markdown>;
 };
