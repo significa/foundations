@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 
 import { Markdown } from "./markdown";
+import { ExpandableCode } from "./expandable-code";
 
 const rewriteImports = (code: string) => {
   return (
@@ -21,5 +22,9 @@ export const SourceCode = async ({ path: p }: { path: string }) => {
 
   const lang = path.extname(p).slice(1);
 
-  return <Markdown>{`\`\`\`${lang}\n${rewriteImports(code)}\`\`\``}</Markdown>;
+  return (
+    <ExpandableCode>
+      <Markdown>{`\`\`\`${lang}\n${rewriteImports(code)}\`\`\``}</Markdown>
+    </ExpandableCode>
+  );
 };
