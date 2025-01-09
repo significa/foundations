@@ -13,9 +13,12 @@ import rehypePrettyCode, {
   Options as RehypePrettyCodeOptions,
 } from "rehype-pretty-code";
 
+import { cn } from "@/lib/utils";
+
 import { Button } from "@/foundations/ui/button/button";
 import { SourceCode } from "@/components/source-code";
 import { ComponentPreview } from "@/components/component-preview";
+
 import { CopyButton } from "./copy-button";
 
 const rehypeRawCode = () => (tree: Node) => {
@@ -54,20 +57,26 @@ const rehypePrettyCodeOptions: RehypePrettyCodeOptions = {
   },
 };
 
-export const Markdown = async ({ children }: { children: string }) => {
+export const Markdown = async ({
+  children,
+  className,
+}: {
+  children: string;
+  className?: string;
+}) => {
   const { default: MDXContent } = await evaluate(children, {
     ...runtime,
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [
       rehypeSlug,
       [rehypeAutolinkHeadings, { behavior: "wrap" }],
       rehypeRawCode,
       [rehypePrettyCode, rehypePrettyCodeOptions],
     ],
-    remarkPlugins: [remarkGfm],
   });
 
   return (
-    <div className="markdown">
+    <div className={cn("markdown", className)}>
       <MDXContent components={components} />
     </div>
   );
@@ -92,7 +101,7 @@ export const components: ReturnType<UseMdxComponents> = {
   Button,
   SourceCode,
   ComponentPreview: (props) => (
-    <div className="mt-4">
+    <div className="not-first:mt-4">
       <ComponentPreview {...props} />
     </div>
   ),

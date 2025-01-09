@@ -3,7 +3,7 @@ import path from "path";
 
 import { Markdown } from "./markdown";
 
-const fixImports = (code: string) => {
+const rewriteImports = (code: string) => {
   return (
     code
       // Replace @/foundations/ui with @/components
@@ -19,7 +19,7 @@ export const SourceCode = async ({ path: p }: { path: string }) => {
     "utf-8"
   );
 
-  const lang = p.split(".").reverse()[0];
+  const lang = path.extname(p).slice(1);
 
-  return <Markdown>{`\`\`\`${lang}\n${fixImports(code)}\`\`\``}</Markdown>;
+  return <Markdown>{`\`\`\`${lang}\n${rewriteImports(code)}\`\`\``}</Markdown>;
 };

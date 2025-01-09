@@ -14,7 +14,6 @@
   --font-mono: var(--font-geist-mono);
 
   --color-background: oklch(100% 0 0);
-  --color-background-secondary: oklch(96% 0 0);
 
   --color-foreground: oklch(0% 0 0);
   --color-foreground-secondary: oklch(65% 0 0);
@@ -35,14 +34,13 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --color-background: oklch(15% 0 0);
-  --color-background-secondary: oklch(40% 0 0);
+  --color-background: oklch(10% 0 0);
 
   --color-foreground: oklch(95% 0 0);
   --color-foreground-secondary: oklch(53% 0 0);
 
-  --color-border: oklch(24% 0 0);
-  --color-border-hard: oklch(26% 0 0);
+  --color-border: oklch(20% 0 0);
+  --color-border-hard: oklch(22% 0 0);
 
   --color-ring: oklch(100% 0 0 / 0.12);
 }

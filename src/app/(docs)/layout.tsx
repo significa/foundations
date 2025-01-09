@@ -9,12 +9,9 @@ export default function DocsLayout({
   return (
     <div>
       <Header />
-      <main className="grid grid-cols-[250px_1fr]">
+      <main className="flex max-w-screen-2xl mx-auto">
         <Sidebar />
-        <main className="py-12">
-          <div className="max-w-4xl mx-auto">{children}</div>
-          <div className="sticky top-14">Table of contents</div>
-        </main>
+        {children}
       </main>
       <footer className="border-t border-border">Footer here</footer>
     </div>

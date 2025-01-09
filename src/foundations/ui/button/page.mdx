@@ -2,19 +2,23 @@ export const metadata = {
   title: "Button",
   description:
     "The Button component provides a consistent way to trigger actions across the application.",
+  preview: "button",
 };
 
-<ComponentPreview slug="button" />
+## Dependencies
+
+- [Spinner](/ui/spinner)
+- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot)
+
+## Source Code
 
 <SourceCode path="foundations/ui/button/button.tsx" />
-
-# Install
 
 A bit of text with `inline code`.
 
 Another text with javascript inline `const a = 1;{:js}` and `console.log('hello');{:js}`.
 
-```js {6,7} showLineNumbers /extend/ title="tailwind.config.js" caption="footer here"
+```js {6,7} showLineNumbers "exports" title="tailwind.config.js" caption="footer here"
 module.exports = {
   theme: {
     extend: {
@@ -32,7 +36,7 @@ module.exports = {
 
 The name of the function is `getStringLength{:.entity.name.function}`.
 
-## API Reference
+## API Reference for `<Button />`
 
 | Prop       | Type      | Default Value |
 | :--------- | :-------- | ------------: |

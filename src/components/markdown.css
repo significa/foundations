@@ -5,10 +5,13 @@
   h4,
   h5,
   h6 {
-    scroll-margin-top: calc(var(--spacing) * 4);
+    scroll-margin: calc(var(--spacing) * 20);
 
     font-weight: var(--font-weight-semibold);
     letter-spacing: var(--tracking-tight);
+
+    margin-top: 2em;
+    margin-bottom: 1em;
 
     & a {
       text-decoration: none;
@@ -16,38 +19,26 @@
   }
 
   h1 {
-    margin-top: calc(var(--spacing) * 8);
-
     font-size: var(--text-3xl);
   }
 
   h2 {
-    margin-top: calc(var(--spacing) * 10);
-
     font-size: var(--text-2xl);
   }
 
   h3 {
-    margin-top: calc(var(--spacing) * 10);
-
     font-size: var(--text-xl);
   }
 
   h4 {
-    margin-top: calc(var(--spacing) * 8);
-
     font-size: var(--text-lg);
   }
 
   h5 {
-    margin-top: calc(var(--spacing) * 8);
-
     font-size: var(--text-md);
   }
 
   h6 {
-    margin-top: calc(var(--spacing) * 8);
-
     font-size: var(--text-sm);
   }
 
@@ -99,6 +90,9 @@
   }
 
   img {
+    max-width: 100%;
+    height: auto;
+
     margin-block: calc(var(--spacing) * 4);
     border-radius: var(--radius-xl);
   }
@@ -139,16 +133,17 @@ span[data-rehype-pretty-code-figure] code {
   padding-inline: calc(var(--spacing) * 1);
   padding-block: calc(var(--spacing) * 0.5);
 
-  font-size: var(--text-sm);
+  font-size: 0.9em;
   font-weight: 550;
 
   border-radius: var(--radius-sm);
 
   background-color: color-mix(
     in oklab,
-    var(--color-foreground) 8%,
+    var(--color-foreground) 4%,
     transparent
   );
+  box-shadow: 0 0 0 1px var(--color-border);
 
   &[data-language="text"] span {
     color: color-mix(in oklab, var(--color-foreground) 50%, transparent);
@@ -167,6 +162,7 @@ pre[data-language] {
   line-height: var(--leading-normal);
 
   overflow-x: auto;
+  max-width: 100%;
   padding: calc(var(--spacing) * 4) 0;
 
   border: 1px solid var(--color-border);
@@ -246,7 +242,7 @@ code[data-line-numbers] > [data-line]::before {
 
     background-color: color-mix(
       in oklab,
-      var(--color-foreground) 5%,
+      var(--color-foreground) 4%,
       transparent
     );
 

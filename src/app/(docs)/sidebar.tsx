@@ -27,8 +27,8 @@ export const menu: React.ComponentProps<typeof Menu>["items"] = [
 
 export const Sidebar = () => {
   return (
-    <div className="overflow-y-auto h-[calc(100dvh-var(--spacing)*14)] border-r border-border sticky top-14 md:p-2 p-1">
+    <aside className="overflow-y-auto h-[calc(100dvh-var(--spacing)*14)] sticky top-14 border-r md:px-2 px-1 w-[250px] shrink-0 pt-6">
       <Menu items={menu} />
-    </div>
+    </aside>
   );
 };
