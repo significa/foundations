@@ -20,7 +20,7 @@ ARG APP_VERSION="0.1.0-untagged"
 ENV APP_VERSION=$APP_VERSION
 
 COPY --from=builder /app/node_modules/ /app/node_modules/
-COPY --from=builder /app/package.json /app/package-lock.json /app/.npmrc /app/
+COPY --from=builder /app/package.json /app/package-lock.json /app/
 COPY --from=builder /app/public/ /app/public/
 COPY --from=builder /app/.next/ /app/.next/
 
