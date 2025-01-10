@@ -3,72 +3,31 @@ import "./markdown.css";
 import * as runtime from "react/jsx-runtime";
 import { evaluate, UseMdxComponents } from "@mdx-js/mdx";
 
-import { Node } from "unist";
-import { visit } from "unist-util-visit";
-
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import remarkGfm from "remark-gfm";
-import rehypePrettyCode, {
-  Options as RehypePrettyCodeOptions,
-} from "rehype-pretty-code";
+import rehypePrettyCode from "rehype-pretty-code";
 
 import { cn } from "@/lib/utils";
+import { rehypeRewriteImports } from "@/lib/rehype-rewrite-imports";
+import { rehypePrettyCodeOptions } from "@/lib/rehype-pretty-code";
+import { rehypeRawCode } from "@/lib/rehype-raw-code";
 
 import { Button } from "@/foundations/ui/button/button";
+import {
+  Tabs,
+  TabsItems,
+  TabsItem,
+  TabsPanels,
+  TabsPanel,
+} from "@/foundations/ui/tabs/tabs";
+
 import { SourceCode } from "@/components/source-code";
 import { SourceCodeTree } from "@/components/source-code-tree";
 import { ComponentPreview } from "@/components/component-preview";
 import { DependenciesList } from "@/components/dependencies-list";
 
 import { CopyButton } from "./copy-button";
-
-// replace any text from any node that matches the regex with the new text
-const rehypeRewriteImports = () => (tree: Node) => {
-  visit(tree, "text", (node: { value: string }) => {
-    node.value = node.value
-      // Replace @/foundations/ui with @/components
-      .replace(/@\/foundations\/ui/g, "@/components")
-      // Remove duplicate folder names (e.g. @/components/button/button to @/components/button)
-      .replace(/\/([^/]+)\/\1/g, "/$1");
-  });
-};
-
-const rehypeRawCode = () => (tree: Node) => {
-  visit(
-    tree,
-    "element",
-    function (node: Element & { properties: { ["data-raw-code"]?: string } }) {
-      if (node.tagName === "pre" && node.children) {
-        const [codeEl] = node.children;
-
-        if (codeEl.tagName !== "code") return;
-
-        const firstChild = codeEl.children?.[0];
-
-        if (
-          firstChild &&
-          "value" in firstChild &&
-          typeof firstChild.value === "string"
-        ) {
-          node.properties["data-raw-code"] = firstChild.value;
-        }
-      }
-    }
-  );
-};
-
-const rehypePrettyCodeOptions: RehypePrettyCodeOptions = {
-  theme: {
-    dark: "github-dark-default",
-    light: "kanagawa-lotus",
-  },
-  keepBackground: false,
-  defaultLang: {
-    block: "js",
-    inline: "text",
-  },
-};
 
 export const Markdown = async ({ children }: { children: string }) => {
   const { default: MDXContent } = await evaluate(children, {
@@ -161,4 +120,13 @@ export const components: ReturnType<UseMdxComponents> = {
     </div>
   ),
   DependenciesList,
+  Tabs,
+  TabsItems,
+  TabsItem,
+  TabsPanels: (props) => (
+    <div className="mt-4">
+      <TabsPanels {...props} />
+    </div>
+  ),
+  TabsPanel,
 };
