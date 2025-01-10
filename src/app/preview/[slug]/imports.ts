@@ -4,13 +4,13 @@ import dynamic from "next/dynamic";
 import { ComponentType } from "react";
 
 export const imports: Record<string, ComponentType> = {
-  ['spinner']: dynamic(
-    () => import("@/foundations/ui/spinner/preview/spinner.preview")
-  ),
   ['button-loading']: dynamic(
     () => import("@/foundations/ui/button/preview/button-loading.preview")
   ),
   ['button']: dynamic(
     () => import("@/foundations/ui/button/preview/button.preview")
+  ),
+  ['spinner']: dynamic(
+    () => import("@/foundations/ui/spinner/preview/spinner.preview")
   )
 };

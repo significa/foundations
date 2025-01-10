@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "generate-imports": "bun scripts/create-preview-imports.ts",
-    "dev": "concurrently \"bun run generate-imports --watch\" \"next dev\"",
-    "prebuild": "bun run generate-imports",
+    "generate-imports": "tsx scripts/create-preview-imports.ts",
+    "dev": "concurrently \"npm run generate-imports --watch\" \"next dev\"",
+    "prebuild": "npm run generate-imports",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -42,6 +42,7 @@
     "eslint-config-next": "15.1.3",
     "postcss": "^8",
     "tailwindcss": "^4.0.0-beta.8",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }
