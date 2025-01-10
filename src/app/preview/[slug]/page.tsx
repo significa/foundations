@@ -5,6 +5,10 @@ import { Spinner } from "@/foundations/ui/spinner/spinner";
 
 import { imports } from "./imports";
 
+export async function generateStaticParams() {
+  return Object.keys(imports).map((slug) => ({ slug }));
+}
+
 export default async function Preview({
   params,
 }: {

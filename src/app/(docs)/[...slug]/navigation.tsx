@@ -1,11 +1,10 @@
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-
-import { menu } from "../sidebar";
+import { navigation } from "@/lib/navigation";
 
 export const Navigation = ({ slug }: { slug: string[] }) => {
-  const flatMenu = menu.reduce<(typeof menu)[number]["children"]>(
+  const flatMenu = navigation.reduce<(typeof navigation)[number]["children"]>(
     (acc, item) => {
       return [...acc, ...item.children];
     },

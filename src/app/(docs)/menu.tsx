@@ -6,17 +6,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/foundations/ui/badge/badge";
+import { navigation } from "@/lib/navigation";
 
-export type MenuItem = {
-  title: string;
-  children: {
-    title: string;
-    href: string;
-    tag?: string;
-  }[];
-};
-
-export const Menu = ({ items }: { items: MenuItem[] }) => {
+export const Menu = ({ items }: { items: typeof navigation }) => {
   const pathname = usePathname();
 
   return (

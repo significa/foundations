@@ -1,25 +1,23 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { z } from "zod";
+
 import { notFound } from "next/navigation";
-import * as runtime from "react/jsx-runtime";
-import { evaluate } from "@mdx-js/mdx";
-import { Markdown } from "@/components/markdown";
-import { menu } from "../sidebar";
-import { getMarkdownToc } from "@/lib/markdown-toc";
-import { ComponentPreview } from "@/components/component-preview";
-import { TableOfContents } from "./toc";
-import { GITHUB_REPO_URL } from "@/lib/constants";
 import { Pencil } from "@phosphor-icons/react/dist/ssr";
+import { Markdown } from "@/components/markdown";
+
+import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
+import { getMetadata } from "@/lib/markdown-metadata";
+import { getMarkdownToc } from "@/lib/markdown-toc";
+import { navigation } from "@/lib/navigation";
+
+import { ComponentPreview } from "@/components/component-preview";
+
+import { TableOfContents } from "./toc";
 import { LastUpdated } from "./last-updated";
 import { Navigation } from "./navigation";
 
 const isNotFoundError = (error: unknown): error is { code: "ENOENT" } => {
   return error instanceof Error && "code" in error && error.code === "ENOENT";
-};
-
-const getFilePath = (slug: string[]) => {
-  return path.join("src", "foundations", ...slug, "page.mdx");
 };
 
 const getPageContent = async (filePath: string) => {
@@ -41,7 +39,7 @@ export default async function Page({
 }) {
   const { slug } = await params;
 
-  const filePath = getFilePath(slug);
+  const filePath = getFoundationsPagePath(slug);
   const content = await getPageContent(filePath);
   const toc = await getMarkdownToc(content);
   const metadata = await getMetadata(content);
@@ -94,49 +92,12 @@ export default async function Page({
 
 // Generate a page per menu item in the sidebar
 export async function generateStaticParams() {
-  const items = menu.flatMap((item) =>
+  const items = navigation.flatMap((item) =>
     item.children.map((child) => ({ slug: child.href.split("/").slice(1) }))
   );
 
   return items;
 }
-
-// Metadata
-const metadataSchema = z.object({
-  title: z.string({ required_error: "Title is required" }),
-  description: z.string().optional(),
-  preview: z.string().optional(),
-  dependencies: z
-    .array(
-      z.object({
-        title: z.string({ required_error: "Dependency title is required" }),
-        href: z.string({ required_error: "Dependency href is required" }),
-      })
-    )
-    .optional(),
-});
-
-const getMetadata = async (content: string) => {
-  const { metadata } = await evaluate(content, runtime);
-
-  if (!metadata) {
-    throw new Error("Metadata is required in docs pages");
-  }
-
-  try {
-    return metadataSchema.parse(metadata);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      throw new Error(
-        `Page metadata malformed: ${error.errors
-          .map((e) => e.message)
-          .join(", ")}`
-      );
-    }
-
-    throw error;
-  }
-};
 
 export async function generateMetadata({
   params,
@@ -145,7 +106,7 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  const content = await getPageContent(getFilePath(slug));
+  const content = await getPageContent(getFoundationsPagePath(slug));
   const metadata = await getMetadata(content);
 
   return {

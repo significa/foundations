@@ -1,61 +1,28 @@
-import { getCreatedDate, getLastModifiedDate } from "@/lib/fs";
-import { Menu } from "./menu";
 import path from "path";
 import { differenceInDays } from "date-fns";
 
-export const menu: React.ComponentProps<typeof Menu>["items"] = [
-  {
-    title: "Introduction",
-    children: [
-      {
-        title: "Setup",
-        href: "/setup",
-      },
-    ],
-  },
-  {
-    title: "UI",
-    children: [
-      {
-        title: "Button",
-        href: "/ui/button",
-      },
-      {
-        title: "Spinner",
-        href: "/ui/spinner",
-      },
-    ],
-  },
-];
+import { navigation } from "@/lib/navigation";
+import { getCreatedDate, getLastModifiedDate } from "@/lib/fs";
+
+import { Menu } from "./menu";
+import { getFoundationsPagePath } from "@/lib/constants";
 
 export const Sidebar = async () => {
   const enhancedMenu = await Promise.all(
-    menu.map(async (item) => ({
+    navigation.map(async (item) => ({
       ...item,
       children: await Promise.all(
         item.children.map(async (child) => {
-          // TODO: this path.join needs to be centralized
-          const lastUpdated = await getLastModifiedDate(
-            path.join(
-              process.cwd(),
-              "src",
-              "foundations",
-              child.href,
-              "page.mdx"
-            )
-          );
-          const created = await getCreatedDate(
-            path.join(
-              process.cwd(),
-              "src",
-              "foundations",
-              child.href,
-              "page.mdx"
-            )
+          const filePath = path.join(
+            process.cwd(),
+            getFoundationsPagePath(child.href.split("/"))
           );
 
+          const created = await getCreatedDate(filePath);
           const isNew = differenceInDays(new Date(), created) < 30;
-          const isUpdated = differenceInDays(new Date(), lastUpdated) < 30;
+
+          const updated = await getLastModifiedDate(filePath);
+          const isUpdated = differenceInDays(new Date(), updated) < 30;
 
           return {
             ...child,
