@@ -8,10 +8,16 @@
   font-weight: 100 900;
 }
 
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/GeistMonoVariable.woff2") format("woff2");
+  font-weight: 100 900;
+}
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: var(--font-geist-mono);
+  --font-mono: "Geist Mono", ui-monospace, monospace;
 
   --color-background: oklch(100% 0 0);
 
