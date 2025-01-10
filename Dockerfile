@@ -1,25 +1,27 @@
-FROM node:lts-alpine AS base
-
-# Stage 1: Install dependencies
-FROM base AS deps
+FROM node:20.18.1-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN corepack enable npm && npm install --frozen-lockfile && npm install --save-dev @tailwindcss/oxide-linux-x64-musl
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Stage 2: Build the application
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+COPY ./package.json ./package-lock.json ./
+RUN npm ci
+
 COPY . .
-RUN corepack enable npm && npm run build
+RUN npm run build
 
-# Stage 3: Production server
-FROM base AS runner
+ARG APP_VERSION="0.1.0-untagged"
+ENV APP_VERSION=$APP_VERSION
+RUN npm version --no-git-tag-version "$APP_VERSION"
+
+FROM node:20.18.1-alpine AS runner
 WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-RUN if [ -d "/app/public" ]; then cp -r /app/public ./public; fi # Copy public folder if it exists
+ENV NEXT_TELEMETRY_DISABLED=1
 
-EXPOSE 3000
-CMD ["node", "server.js"]
+ARG APP_VERSION="0.1.0-untagged"
+ENV APP_VERSION=$APP_VERSION
+
+COPY --from=builder /app/node_modules/ /app/node_modules/
+COPY --from=builder /app/package.json /app/package-lock.json /app/.npmrc /app/
+COPY --from=builder /app/public/ /app/public/
+COPY --from=builder /app/.next/ /app/.next/
+
+CMD ["npm", "run", "start"]
