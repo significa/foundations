@@ -1,10 +1,10 @@
-import { promises as fs } from "fs";
 import path from "path";
 
 import { notFound } from "next/navigation";
 import { Pencil } from "@phosphor-icons/react/dist/ssr";
 import { Markdown } from "@/components/markdown";
 
+import { readFile } from "@/lib/fs";
 import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
 import { getMetadata } from "@/lib/markdown-metadata";
 import { getMarkdownToc } from "@/lib/markdown-toc";
@@ -22,7 +22,7 @@ const isNotFoundError = (error: unknown): error is { code: "ENOENT" } => {
 
 const getPageContent = async (filePath: string) => {
   try {
-    return await fs.readFile(path.join(process.cwd(), filePath), "utf-8");
+    return await readFile(path.join(process.cwd(), filePath));
   } catch (error) {
     if (isNotFoundError(error)) {
       notFound();

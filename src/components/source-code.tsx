@@ -1,5 +1,6 @@
-import { promises as fs } from "fs";
 import path from "path";
+
+import { readFile } from "@/lib/fs";
 
 import { Markdown } from "./markdown";
 import { ExpandableCode } from "./expandable-code";
@@ -15,10 +16,7 @@ const rewriteImports = (code: string) => {
 };
 
 export const SourceCode = async ({ path: p }: { path: string }) => {
-  const code = await fs.readFile(
-    path.join(process.cwd(), "src", ...p.split("/")),
-    "utf-8"
-  );
+  const code = await readFile(path.join(process.cwd(), "src", ...p.split("/")));
 
   const lang = path.extname(p).slice(1);
 
