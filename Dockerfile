@@ -4,7 +4,7 @@ FROM node:lts-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN corepack enable npm && npm install --frozen-lockfile
+RUN corepack enable npm && npm install --frozen-lockfile && npm install --save-dev @tailwindcss/oxide-linux-x64-musl
 
 # Stage 2: Build the application
 FROM base AS builder
