@@ -4,4 +4,25 @@ export const metadata = {
   preview: "spinner",
 };
 
-Hello from spinner
+<SourceCodeTree
+  items={[
+    {
+      name: "components",
+      children: [
+        { path: "foundations/ui/accordion/accordion.tsx" },
+        {
+          name: "ui",
+          children: [
+            { path: "foundations/ui/spinner/spinner.tsx" },
+            { path: "foundations/ui/button/button.tsx" },
+            { path: "foundations/ui/badge/badge.tsx" },
+          ],
+        },
+      ],
+    },
+    {
+      name: "other",
+      children: [{ path: "foundations/ui/skeleton/skeleton.tsx" }],
+    },
+  ]}
+/>

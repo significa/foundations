@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 
 import { Button } from "@/foundations/ui/button/button";
 import { SourceCode } from "@/components/source-code";
+import { SourceCodeTree } from "@/components/source-code-tree";
 import { ComponentPreview } from "@/components/component-preview";
 import { DependenciesList } from "@/components/dependencies-list";
 
@@ -131,7 +132,7 @@ export const components: ReturnType<UseMdxComponents> = {
     <th className="py-2 text-left text-sm font-semibold" {...props} />
   ),
   td: (props) => <td className="py-2 text-left text-sm" {...props} />,
-  figure: ({ ["data-raw-code"]: rawCode, ...props }) => {
+  figure: ({ ["data-raw-code"]: rawCode, className, ...props }) => {
     if (rawCode) {
       return (
         <div className="relative group">
@@ -139,15 +140,21 @@ export const components: ReturnType<UseMdxComponents> = {
             content={rawCode}
             className="opacity-80 absolute top-2 right-2"
           />
-          <figure {...props} />
+          <figure className={cn("my-4", className)} {...props} />
         </div>
       );
     }
 
     return <figure {...props} />;
   },
+  Markdown,
   Button,
   SourceCode,
+  SourceCodeTree: (props) => (
+    <div className="not-first:mt-4">
+      <SourceCodeTree {...props} />
+    </div>
+  ),
   ComponentPreview: (props) => (
     <div className="not-first:mt-4">
       <ComponentPreview {...props} />
