@@ -14,7 +14,7 @@ export default function DocsLayout({
         <Sidebar />
         {children}
       </main>
-      <footer className="border-t border-border">
+      <footer className="border-t border-border md:px-4 px-2">
         <div className="max-w-screen-2xl mx-auto py-8 text-foreground-secondary">
           <Egg className="text-foreground" />
           <p className="text-sm mt-4">

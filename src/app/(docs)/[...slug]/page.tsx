@@ -82,7 +82,9 @@ export default async function Page({
           <ComponentPreview className="mb-8" slug={metadata.preview} />
         )}
 
-        <Markdown className="pb-40">{content}</Markdown>
+        <div className="pb-40">
+          <Markdown>{content}</Markdown>
+        </div>
 
         <Navigation slug={slug} />
       </div>
