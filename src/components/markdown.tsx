@@ -23,9 +23,15 @@ import {
 } from "@/foundations/ui/tabs/tabs";
 
 import { SourceCode } from "@/components/source-code";
-import { SourceCodeTree } from "@/components/source-code-tree";
 import { ComponentPreview } from "@/components/component-preview";
 import { DependenciesList } from "@/components/dependencies-list";
+import {
+  FileTree,
+  FileTreeNavigation,
+  FileTreeFolder,
+  FileTreeFile,
+  FileTreeContent,
+} from "@/components/file-tree";
 
 import { CopyButton } from "./copy-button";
 
@@ -91,15 +97,15 @@ export const components: ReturnType<UseMdxComponents> = {
     <th className="py-2 text-left text-sm font-semibold" {...props} />
   ),
   td: (props) => <td className="py-2 text-left text-sm" {...props} />,
-  figure: ({ ["data-raw-code"]: rawCode, className, ...props }) => {
+  figure: ({ ["data-raw-code"]: rawCode, ...props }) => {
     if (rawCode) {
       return (
-        <div className="relative group">
+        <div data-code-block className="relative">
           <CopyButton
             content={rawCode}
             className="opacity-80 absolute top-2 right-2"
           />
-          <figure className={cn("my-4", className)} {...props} />
+          <figure {...props} />
         </div>
       );
     }
@@ -109,11 +115,6 @@ export const components: ReturnType<UseMdxComponents> = {
   Markdown,
   Button,
   SourceCode,
-  SourceCodeTree: (props) => (
-    <div className="not-first:mt-4">
-      <SourceCodeTree {...props} />
-    </div>
-  ),
   ComponentPreview: (props) => (
     <div className="not-first:mt-4">
       <ComponentPreview {...props} />
@@ -123,10 +124,11 @@ export const components: ReturnType<UseMdxComponents> = {
   Tabs,
   TabsItems,
   TabsItem,
-  TabsPanels: (props) => (
-    <div className="mt-4">
-      <TabsPanels {...props} />
-    </div>
-  ),
+  TabsPanels,
   TabsPanel,
+  FileTree,
+  FileTreeNavigation,
+  FileTreeFolder,
+  FileTreeFile,
+  FileTreeContent,
 };

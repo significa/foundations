@@ -33,25 +33,18 @@ Some text here
 
 # Source code tree
 
-<SourceCodeTree
-  items={[
-    {
-      name: "components",
-      children: [
-        { path: "foundations/ui/accordion/accordion.tsx" },
-        {
-          name: "ui",
-          children: [
-            { path: "foundations/ui/spinner/spinner.tsx" },
-            { path: "foundations/ui/button/button.tsx" },
-            { path: "foundations/ui/badge/badge.tsx" },
-          ],
-        },
-      ],
-    },
-    {
-      name: "other",
-      children: [{ path: "foundations/ui/skeleton/skeleton.tsx" }],
-    },
-  ]}
-/>
+<FileTree initialPath="components/spinner.tsx">
+  <FileTreeNavigation>
+    <FileTreeFile name="top.tsx" />
+    <FileTreeFolder name="components">
+      <FileTreeFile name="button.tsx" />
+      <FileTreeFile name="spinner.tsx" />
+      <FileTreeFolder name="ui">
+        <FileTreeFile name="spinner.tsx" />
+      </FileTreeFolder>
+    </FileTreeFolder>
+  </FileTreeNavigation>
+  <FileTreeContent path="components/spinner.tsx">
+    <SourceCode file="foundations/ui/spinner/spinner.tsx" />
+  </FileTreeContent>
+</FileTree>

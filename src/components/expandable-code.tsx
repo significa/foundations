@@ -9,7 +9,7 @@ export const ExpandableCode = ({ children }: { children: React.ReactNode }) => {
   if (isExpanded) return children;
 
   return (
-    <div className="relative -mt-4 mb-4">
+    <div className="relative">
       {!isExpanded && (
         <>
           <Button
