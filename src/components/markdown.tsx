@@ -23,7 +23,7 @@ import {
 } from "@/foundations/ui/tabs/tabs";
 
 import { SourceCode } from "@/components/source-code";
-import { ComponentPreview } from "@/components/component-preview";
+import { Preview } from "@/components/preview";
 import { DependenciesList } from "@/components/dependencies-list";
 import {
   FileTree,
@@ -115,11 +115,7 @@ export const components: ReturnType<UseMdxComponents> = {
   Markdown,
   Button,
   SourceCode,
-  ComponentPreview: (props) => (
-    <div className="not-first:mt-4">
-      <ComponentPreview {...props} />
-    </div>
-  ),
+  Preview,
   DependenciesList,
   Tabs,
   TabsItems,

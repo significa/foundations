@@ -73,7 +73,7 @@ const FileTreeFolder = ({
   );
 };
 
-const FileTreeFile = ({ name }: { name: string; path?: string[] }) => {
+const FileTreeFile = ({ name }: { name: string }) => {
   const { path } = use(FolderLevelContext);
   const fullPath = `${path.join("/")}/${name}`;
 

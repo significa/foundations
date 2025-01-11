@@ -2,7 +2,6 @@ import path from "path";
 
 import { notFound } from "next/navigation";
 import { Pencil } from "@phosphor-icons/react/dist/ssr";
-import { Markdown } from "@/components/markdown";
 
 import { readFile } from "@/lib/fs";
 import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
@@ -10,7 +9,8 @@ import { getMetadata } from "@/lib/markdown-metadata";
 import { getMarkdownToc } from "@/lib/markdown-toc";
 import { navigation } from "@/lib/navigation";
 
-import { ComponentPreview } from "@/components/component-preview";
+import { Preview } from "@/components/preview";
+import { Markdown } from "@/components/markdown";
 
 import { TableOfContents } from "./toc";
 import { LastUpdated } from "./last-updated";
@@ -79,7 +79,11 @@ export default async function Page({
           )}
         </div>
         {metadata.preview && (
-          <ComponentPreview className="mb-8" slug={metadata.preview} />
+          <Preview
+            className="mb-8"
+            slug={metadata.preview}
+            withSource={false}
+          />
         )}
 
         <div className="pb-40">

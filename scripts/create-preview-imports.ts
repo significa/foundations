@@ -2,13 +2,10 @@ import fs from "fs";
 import path from "path";
 
 const srcDir = path.join(process.cwd(), "src");
-const importsFile = path.join(
-  process.cwd(),
-  "src/app/preview/[slug]/imports.ts"
-);
+const importsFile = path.join(process.cwd(), "src/lib/examples-registry.ts");
 
 function main() {
-  const components: Record<string, string> = {}; // Dictionary to hold component paths
+  const components: Record<string, { component: string; source: string }> = {}; // Dictionary to hold component paths
 
   // Recursively read through the src directory
   function readDir(dir: string) {
@@ -33,9 +30,12 @@ function main() {
           .replace("/src/", "@/")
           .replace(".tsx", "");
 
-        components[slug] = `dynamic(
-    () => import("${importPath}")
-  )`;
+        components[slug] = {
+          component: `dynamic(
+      () => import("${importPath}")
+    )`,
+          source: fs.readFileSync(fullPath, "utf-8"),
+        };
       }
     });
   }
@@ -48,9 +48,19 @@ function main() {
 import dynamic from "next/dynamic";
 import { ComponentType } from "react";
 
-export const imports: Record<string, ComponentType> = {
+type Import = {
+  component: ComponentType;
+  source: string;
+};
+
+export const imports: Record<string, Import> = {
   ${Object.entries(components)
-    .map(([key, value]) => `['${key}']: ${value}`)
+    .map(
+      ([key, value]) =>
+        `['${key}']: {
+    component: ${value.component},
+    source: \`${value.source}\`}`
+    )
     .join(",\n  ")}
 };
 `;

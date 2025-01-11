@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { Spinner } from "@/foundations/ui/spinner/spinner";
 
-import { imports } from "./imports";
+import { imports } from "@/lib/examples-registry";
 
 export async function generateStaticParams() {
   return Object.keys(imports).map((slug) => ({ slug }));
@@ -16,7 +16,7 @@ export default async function Preview({
 }) {
   const { slug } = await params;
 
-  const Component = imports[slug];
+  const Component = imports[slug].component;
 
   if (!Component) notFound();
 
