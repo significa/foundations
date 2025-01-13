@@ -5,6 +5,7 @@ import { createContext, use, useId, useState } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
 import { cn } from "@/lib/utils";
+import { CaretDown } from "@phosphor-icons/react";
 
 interface AccordionGroupContext {
   open: string | null;
@@ -152,4 +153,26 @@ const AccordionContent = ({
   );
 };
 
-export { Accordion, AccordionTrigger, AccordionContent, AccordionGroup };
+const AccordionChevron = () => {
+  const { open } = useAccordionContext();
+
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "ease-out-cubic p-1 transition-transform duration-100",
+        open && "rotate-180"
+      )}
+    >
+      <CaretDown />
+    </span>
+  );
+};
+
+export {
+  Accordion,
+  AccordionTrigger,
+  AccordionContent,
+  AccordionGroup,
+  AccordionChevron,
+};

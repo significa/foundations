@@ -1,5 +1,4 @@
 import { Header } from "./header";
-import { Sidebar } from "./sidebar";
 import { Footer } from "./footer";
 
 export default function DocsLayout({
@@ -10,10 +9,7 @@ export default function DocsLayout({
   return (
     <div>
       <Header />
-      <main className="mx-auto flex max-w-screen-2xl">
-        <Sidebar />
-        {children}
-      </main>
+      {children}
       <Footer />
     </div>
   );

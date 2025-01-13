@@ -4,7 +4,7 @@ import { differenceInDays } from "date-fns";
 import { navigation } from "@/lib/navigation";
 import { getCreatedDate, getLastModifiedDate } from "@/lib/fs";
 
-import { Menu } from "./menu";
+import { SidebarClient } from "./sidebar-client";
 import { getFoundationsPagePath } from "@/lib/constants";
 
 export const Sidebar = async () => {
@@ -33,9 +33,5 @@ export const Sidebar = async () => {
     }))
   );
 
-  return (
-    <aside className="sticky top-14 hidden h-[calc(100dvh-var(--spacing)*14)] w-[250px] shrink-0 overflow-y-auto border-r px-1 pt-6 md:px-2 xl:block">
-      <Menu items={enhancedMenu} />
-    </aside>
-  );
+  return <SidebarClient items={enhancedMenu} />;
 };
