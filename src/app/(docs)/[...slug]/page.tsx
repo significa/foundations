@@ -45,8 +45,8 @@ export default async function Page({
   const metadata = await getMetadata(content);
 
   return (
-    <main className="flex gap-8 md:px-4 px-2 w-full">
-      <nav className="overflow-y-auto h-[calc(100dvh-var(--spacing)*14)] sticky top-16 text-sm order-last w-[200px] shrink-0 pt-6">
+    <main className="gap-8 md:px-4 px-2 w-full lg:flex">
+      <nav className="overflow-y-auto h-[calc(100dvh-var(--spacing)*14)] sticky top-16 text-sm order-last w-[200px] shrink-0 pt-6 hidden lg:block">
         {toc.length > 0 && (
           <>
             <h3 className="font-medium text-foreground-secondary mb-3">
