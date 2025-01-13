@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path";
+import { exec } from "child_process";
 
 const srcDir = path.join(process.cwd(), "src");
-const importsFile = path.join(process.cwd(), "src/lib/examples-registry.ts");
+const targetFile = path.join(process.cwd(), "src/lib/examples-registry.ts");
 
 function main() {
   const components: Record<string, { component: string; source: string }> = {}; // Dictionary to hold component paths
@@ -31,9 +32,7 @@ function main() {
           .replace(".tsx", "");
 
         components[slug] = {
-          component: `dynamic(
-      () => import("${importPath}")
-    )`,
+          component: `dynamic(() => import("${importPath}"))`,
           source: fs.readFileSync(fullPath, "utf-8"),
         };
       }
@@ -57,17 +56,28 @@ export const imports: Record<string, Import> = {
   ${Object.entries(components)
     .map(
       ([key, value]) =>
-        `['${key}']: {
-    component: ${value.component},
-    source: \`${value.source}\`}`
+        `['${key}']: { component: ${value.component}, source: \`${value.source}\`}`
     )
     .join(",\n  ")}
 };
 `;
 
   // Write to imports.ts
-  fs.writeFileSync(importsFile, importsContent);
+  fs.writeFileSync(targetFile, importsContent);
   console.log("imports.ts has been generated.");
+
+  // Run Prettier on the generated file
+  exec(`npx prettier --write ${targetFile}`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error running Prettier: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`Prettier stderr: ${stderr}`);
+      return;
+    }
+    console.log(`Prettier output: ${stdout}`);
+  });
 }
 
 const shouldWatch = process.argv.includes("--watch");
