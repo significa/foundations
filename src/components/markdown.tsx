@@ -49,7 +49,7 @@ export const Markdown = async ({ children }: { children: string }) => {
   });
 
   return (
-    <div className="[&_&>div]:my-0 [&>div]:my-4">
+    <div className="[&_&>div]:my-0 [&>div]:my-6">
       <MDXContent components={components} />
     </div>
   );
@@ -95,12 +95,16 @@ export const components: ReturnType<UseMdxComponents> = {
     />
   ),
   hr: () => <hr className="my-8" />,
-  table: (props) => <table className="w-full overflow-y-auto" {...props} />,
-  tr: (props) => <tr className="border-border border-b" {...props} />,
-  th: (props) => (
-    <th className="py-2 text-left text-sm font-semibold" {...props} />
+  table: (props) => (
+    <div className="my-6 overflow-x-auto">
+      <table className="w-full" {...props} />
+    </div>
   ),
-  td: (props) => <td className="py-2 text-left text-sm" {...props} />,
+  tr: (props) => <tr className="border-border m-0 border-b" {...props} />,
+  th: (props) => (
+    <th className="px-4 py-2 text-left font-semibold" {...props} />
+  ),
+  td: (props) => <td className="px-4 py-2 text-left" {...props} />,
   figure: ({ ["data-raw-code"]: rawCode, ...props }) => {
     if (rawCode) {
       return (

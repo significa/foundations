@@ -30,7 +30,7 @@ const FileTree = ({
 
   return (
     <FileTreeContext value={{ selectedFile, setSelectedFile }}>
-      <div className="border-border relative flex h-[400px] rounded-xl border">
+      <div className="border-border relative flex h-[300px] rounded-xl border lg:h-[400px]">
         {children}
       </div>
     </FileTreeContext>

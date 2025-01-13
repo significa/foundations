@@ -24,7 +24,7 @@ export const PreviewSwitch = ({
   return (
     <div
       className={cn(
-        "border-border relative h-[400px] w-full overflow-hidden rounded-xl border",
+        "border-border relative h-[300px] w-full overflow-hidden rounded-xl border md:h-[400px]",
         className
       )}
     >

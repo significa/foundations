@@ -69,7 +69,7 @@ export default async function Page({
         </div>
       </nav>
 
-      <div className="mx-auto max-w-3xl flex-1 py-8">
+      <div className="mx-auto max-w-3xl flex-1 py-6 md:py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">{metadata.title}</h1>
           {metadata.description && (

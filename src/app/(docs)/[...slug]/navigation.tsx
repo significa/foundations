@@ -24,7 +24,7 @@ export const Navigation = ({ slug }: { slug: string[] }) => {
   if (!prev && !next) return null;
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col gap-4 sm:flex-row">
       {prev && (
         <NavigationCard href={prev.href} label="Previous" title={prev.title} />
       )}

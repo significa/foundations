@@ -23,7 +23,7 @@ export function Preview({
         <iframe className="h-full w-full" src={`/preview/${slug}`} />
       </PreviewSwitchFrame>
       <PreviewSwitchCode>
-        <div className="h-[400px] w-full overflow-auto">
+        <div className="h-[300px] w-full overflow-auto md:h-[400px]">
           <Markdown>{`\`\`\`tsx\n${imports[slug].source}\n\`\`\``}</Markdown>
         </div>
       </PreviewSwitchCode>
