@@ -1,0 +1,159 @@
+export const metadata = {
+  title: "Markdown example",
+  description: "An example page to see how to author content in markdown",
+  files: ["path-to-source-file.tsx"],
+  dependencies: [
+    {
+      name: "@significa/foundations",
+      href: "https://significa.co",
+    },
+  ],
+  preview: "preview-slug",
+};
+
+## Content authoring
+
+Here's a guide on how to write markdown content using GitHub Flavored Markdown (GFM).
+
+# Heading 1
+
+## Heading 2
+
+### Heading 3
+
+#### Heading 4
+
+Regular paragraph text with **bold text**, _italic text_, and **_bold italic text_**.
+
+You can also use ~~strikethrough~~ and <u>underlined text</u>.
+
+Here's a [link to GitHub](https://github.com) and another link with a [title](https://github.com "GitHub's Homepage").
+
+## Lists
+
+Unordered list:
+
+- First item
+- Second item
+  - Nested item
+  - Another nested item
+- Third item
+
+Ordered list:
+
+1. First item
+2. Second item
+   1. Nested item
+   2. Another nested item
+3. Third item
+
+## Blockquotes
+
+> This is a blockquote
+> It can span multiple lines
+>
+> And can contain **formatted text** and [links](https://example.com)
+
+## Images
+
+Here's an example image with alt text:
+
+![A beautiful landscape](https://images.unsplash.com/photo-1506744038136-46273834b3fb "Landscape")
+
+## Mixed content example
+
+Here's a paragraph that combines multiple elements:
+This is a regular paragraph with a [link](https://example.com), some **bold text**, and ~~strikethrough~~. You can also add `inline code` or _emphasize_ certain words.
+
+> **Note:** Blockquotes can contain lists too:
+>
+> - Item one
+> - Item two
+
+## Tables
+
+| Prop       | Type      | Default   | Description                                                                                |
+| :--------- | :-------- | :-------- | :----------------------------------------------------------------------------------------- |
+| `variant`  | `string`  | `primary` | The visual style variant of the button - can be 'primary', 'secondary', 'outline', 'ghost' |
+| `size`     | `string`  | `md`      | The size of the button - can be 'sm', 'md', 'lg'                                           |
+| `disabled` | `boolean` | -         | Whether the button is disabled and cannot be interacted with                               |
+| `loading`  | `boolean` | -         | Whether to show a loading spinner inside the button                                        |
+| `asChild`  | `boolean` | -         | Whether to merge props onto a child element instead of creating a button element           |
+
+## Code
+
+A bit of text with `inline code`.
+
+Another text with javascript inline `const a = 1;{:js}` and `console.log('hello');{:js}`.
+
+### Code blocks
+
+You can:
+
+- Choose language
+- Highlight lines
+- Highlight words
+- Show line numbers (and choose starting line with `showLineNumbers{100}`)
+- Add a title
+- Add a caption
+
+```js {6,7} showLineNumbers "exports" title="tailwind.config.js" caption="footer here"
+module.exports = {
+  theme: {
+    extend: {
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+};
+```
+
+The name of the function is `getStringLength{:.entity.name.function}`.
+
+See [rehype-pretty](https://rehype-pretty.pages.dev/) for more information.
+
+## Some components
+
+### Button
+
+A simple button component.
+
+<Button>Click me</Button>
+
+### Preview
+
+Renders a preview file.
+Will include a button to see the source code.
+
+<Preview file="preview-slug" />
+
+### SourceCode
+
+Renders a code block with the source code of any file.
+Can be expandable:
+
+- `expandable` - if true, the code block will be expandable
+- `withTitle` - if true, the filename will be displayed as the title of the code block
+
+<SourceCode file="path/to/source/file.tsx" expandable withTitle />
+
+### FileTree
+
+<FileTree initialPath="components/foo.tsx">
+  <FileTreeFile name="top.tsx">
+    <SourceCode file="path-to-file.tsx" />
+  </FileTreeFile>
+  <FileTreeFolder name="components">
+    <FileTreeFile name="foo.tsx">
+      <SourceCode file="path-to-file.tsx" />
+    </FileTreeFile>
+    <FileTreeFile name="bar.tsx">
+      <SourceCode file="path-to-file.tsx" />
+    </FileTreeFile>
+  </FileTreeFolder>
+</FileTree>

@@ -41,6 +41,8 @@ To get the project running locally, follow these steps:
 
 ## Authoring
 
+Documentation pages are written in `.mdx` format. For a complete example, check out [markdown-example](./markdown-example.mdx).
+
 ### Folder Structure
 
 The `src/foundations` folder contains all the foundational content and follows a specific convention:
