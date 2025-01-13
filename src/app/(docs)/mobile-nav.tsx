@@ -5,10 +5,17 @@ import { Button } from "@/foundations/ui/button/button";
 import { Portal } from "@/foundations/ui/portal/portal";
 import { navigation } from "@/lib/navigation";
 import { List, X } from "@phosphor-icons/react";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const MobileNav = ({ items }: { items: typeof navigation }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Close the menu on pathname change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
     <>
