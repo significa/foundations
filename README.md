@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Foundations
+
+Foundations is an opinionated collection of components, patterns, and guidelines for building consistent and accessible user interfaces. Inspired by projects like [shadcn](https://ui.shadcn.com/), the goal is to allow developers to copy components into their projects and customize them as needed, or simply take inspiration to build their own versions.
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Authoring](#authoring)
+  - [Folder Structure](#folder-structure)
+  - [Code Previews](#code-previews)
+  - [Metadata](#metadata)
+  - [Markdown](#markdown)
+- [License](#license)
+- [Contributing](#contributing)
+- [Acknowledgments](#acknowledgments)
 
 ## Getting Started
 
-First, run the development server:
+To get the project running locally, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the repository:**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   ```bash
+   git clone https://github.com/significa/foundations.git
+   cd foundations
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. **Install dependencies:**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. **Run the development server:**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   This will start the server and watch for changes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Authoring
 
-## Deploy on Vercel
+### Folder Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The `src/foundations` folder contains all the foundational content and follows a specific convention:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `page.mdx`: Used to create the documentation page.
+- Source files are added to the root of the folder.
+- Any file ending in `.preview.tsx` will be made available as a preview (see "Code Previews" below).
+
+### Code Previews
+
+While developing, you can visit `/preview/[slug]` to open a `[slug].preview.tsx` file. This makes it easier to develop in isolation.
+
+### Metadata
+
+Each `page.mdx` file should include the following metadata structure:
+
+| Field          | Type   | Description                                         | Required |
+| -------------- | ------ | --------------------------------------------------- | -------- |
+| `title`        | String | The title of the docs page.                         | Yes      |
+| `description`  | String | A brief description of the docs page.               | No       |
+| `preview`      | String | The slug of a "Code Preview" to be used as a cover. | No       |
+| `files`        | Array  | List of source files.                               | No       |
+| `dependencies` | Array  | List of dependencies, each with a name and href.    | No       |
+
+#### Dependencies Structure
+
+Each dependency in the `dependencies` array should have the following structure:
+
+| Field  | Type   | Description                 | Required |
+| ------ | ------ | --------------------------- | -------- |
+| `name` | String | The name of the dependency. | Yes      |
+| `href` | String | URL to the dependency.      | Yes      |
+
+This metadata is crucial for ensuring that each documentation page is properly structured and provides all necessary information.
+
+### Markdown
+
+We use [GitHub Flavored Markdown Spec](https://github.github.com/gfm/). Additionally, several components are available for use without importing them. For a complete list of these components, refer to the `markdown.tsx` file.
+
+## License
+
+This project is licensed under the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html).
+
+## Acknowledgments
+
+[Shadcn](https://ui.shadcn.com/) and [Lucia Auth](https://lucia-auth.com/) serve as excellent examples of robust foundational platforms that people can use to build upon. This project aspires to combine the strengths of both by offering ready-to-use components alongside detailed guides and recipes, simplifying the process of kickstarting any project.
+
+---
+
+For more details, refer to the codebase and explore the components and patterns provided.
+
+Built by [Significa](https://significa.co).
