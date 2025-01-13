@@ -13,11 +13,11 @@ import {
   AccordionTrigger,
 } from "@/foundations/ui/accordion/accordion";
 
-export const SidebarClient = ({ items }: { items: typeof navigation }) => {
+export const Menu = ({ items }: { items: typeof navigation }) => {
   const pathname = usePathname();
 
   return (
-    <aside className="sticky top-14 hidden h-[calc(100dvh-var(--spacing)*14)] w-[250px] shrink-0 overflow-y-auto border-r px-1 pt-6 md:px-2 xl:block">
+    <>
       {items.map((item) => (
         <Accordion className="mb-4" key={item.title} defaultOpen>
           <AccordionTrigger className="text-foreground-secondary flex w-full cursor-pointer items-center justify-between px-3 pb-1 text-sm font-medium">
@@ -48,6 +48,6 @@ export const SidebarClient = ({ items }: { items: typeof navigation }) => {
           </AccordionContent>
         </Accordion>
       ))}
-    </aside>
+    </>
   );
 };

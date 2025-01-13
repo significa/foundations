@@ -7,12 +7,12 @@ import { readFile } from "@/lib/fs";
 import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
 import { getMetadata } from "@/lib/markdown-metadata";
 import { getMarkdownToc } from "@/lib/markdown-toc";
-import { navigation } from "@/lib/navigation";
+import { getNavigationWithTags, navigation } from "@/lib/navigation";
 
+import { Menu } from "@/components/menu";
 import { Preview } from "@/components/preview";
 import { Markdown } from "@/components/markdown";
 
-import { Sidebar } from "./sidebar";
 import { TableOfContents } from "./toc";
 import { LastUpdated } from "./last-updated";
 import { Navigation } from "./navigation";
@@ -47,7 +47,9 @@ export default async function Page({
 
   return (
     <div className="mx-auto flex max-w-screen-2xl">
-      <Sidebar />
+      <aside className="sticky top-14 hidden h-[calc(100dvh-var(--spacing)*14)] w-[250px] shrink-0 overflow-y-auto border-r px-1 pt-6 md:px-2 xl:block">
+        <Menu items={await getNavigationWithTags()} />
+      </aside>
       <main className="w-full gap-8 px-2 md:px-4 lg:flex">
         <nav className="sticky top-16 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-[200px] shrink-0 overflow-y-auto pt-6 text-sm lg:block">
           {toc.length > 0 && (
