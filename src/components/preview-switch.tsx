@@ -24,14 +24,14 @@ export const PreviewSwitch = ({
   return (
     <div
       className={cn(
-        "relative w-full h-[400px] rounded-xl overflow-hidden border border-border",
+        "border-border relative h-[400px] w-full overflow-hidden rounded-xl border",
         className
       )}
     >
       <PreviewSwitchContext value={{ view }}>{children}</PreviewSwitchContext>
       {!disabled && (
         <Button
-          className="absolute z-10 bottom-2 right-2"
+          className="absolute right-2 bottom-2 z-10"
           size="sm"
           variant="outline"
           onClick={() => setView(view === "preview" ? "code" : "preview")}

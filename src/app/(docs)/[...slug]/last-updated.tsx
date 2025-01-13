@@ -10,7 +10,7 @@ export const LastUpdated = async ({ filePath }: { filePath: string }) => {
   );
 
   return (
-    <p className="flex items-center gap-1 text-xs text-foreground-secondary">
+    <p className="text-foreground-secondary flex items-center gap-1 text-xs">
       <Calendar />
       Edited {format(lastModified, "PPP")}
     </p>

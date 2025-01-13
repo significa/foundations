@@ -2,10 +2,10 @@ import { Egg } from "@/components/icons/egg";
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-border md:px-4 px-2">
-      <div className="max-w-screen-2xl mx-auto py-8 text-foreground-secondary">
+    <footer className="border-border border-t px-2 md:px-4">
+      <div className="text-foreground-secondary mx-auto max-w-screen-2xl py-8">
         <Egg className="text-foreground" />
-        <p className="text-sm mt-4">
+        <p className="mt-4 text-sm">
           Foundations is an opinionated collection of components, patterns and
           guidelines for building consistent and accessible user interfaces.
         </p>

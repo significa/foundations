@@ -45,20 +45,20 @@ export default async function Page({
   const metadata = await getMetadata(content);
 
   return (
-    <main className="gap-8 md:px-4 px-2 w-full lg:flex">
-      <nav className="overflow-y-auto h-[calc(100dvh-var(--spacing)*14)] sticky top-16 text-sm order-last w-[200px] shrink-0 pt-6 hidden lg:block">
+    <main className="w-full gap-8 px-2 md:px-4 lg:flex">
+      <nav className="sticky top-16 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-[200px] shrink-0 overflow-y-auto pt-6 text-sm lg:block">
         {toc.length > 0 && (
           <>
-            <h3 className="font-medium text-foreground-secondary mb-3">
+            <h3 className="text-foreground-secondary mb-3 font-medium">
               On this page
             </h3>
             <TableOfContents headings={toc} />
             <hr className="my-6" />
           </>
         )}
-        <div className="text-xs text-foreground-secondary">
+        <div className="text-foreground-secondary text-xs">
           <a
-            className="inline-flex items-center gap-1 font-medium mb-2 hover:text-foreground transition"
+            className="hover:text-foreground mb-2 inline-flex items-center gap-1 font-medium transition"
             href={`${GITHUB_REPO_URL}/edit/next/${filePath}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -69,11 +69,11 @@ export default async function Page({
         </div>
       </nav>
 
-      <div className="flex-1 max-w-3xl mx-auto py-8">
+      <div className="mx-auto max-w-3xl flex-1 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">{metadata.title}</h1>
           {metadata.description && (
-            <p className="mt-2 text-foreground-secondary">
+            <p className="text-foreground-secondary mt-2">
               {metadata.description}
             </p>
           )}

@@ -10,7 +10,7 @@ export default function DocsLayout({
   return (
     <div>
       <Header />
-      <main className="flex max-w-screen-2xl mx-auto">
+      <main className="mx-auto flex max-w-screen-2xl">
         <Sidebar />
         {children}
       </main>

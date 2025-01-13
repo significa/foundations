@@ -16,14 +16,14 @@ export const ExpandableCode = ({ children }: { children: React.ReactNode }) => {
             size="sm"
             variant="outline"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="absolute z-20 left-1/2 bottom-4 -translate-x-1/2"
+            className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2"
           >
             Expand
           </Button>
-          <div className="absolute z-10 inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+          <div className="from-background pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t to-transparent" />
         </>
       )}
-      <div className="overflow-hidden max-h-[250px] rounded-xl">{children}</div>
+      <div className="max-h-[250px] overflow-hidden rounded-xl">{children}</div>
     </div>
   );
 };

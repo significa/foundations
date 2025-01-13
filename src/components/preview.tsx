@@ -20,10 +20,10 @@ export function Preview({
   return (
     <PreviewSwitch className={className} disabled={!withSource}>
       <PreviewSwitchFrame>
-        <iframe className="w-full h-full" src={`/preview/${slug}`} />
+        <iframe className="h-full w-full" src={`/preview/${slug}`} />
       </PreviewSwitchFrame>
       <PreviewSwitchCode>
-        <div className="w-full h-[400px] overflow-auto">
+        <div className="h-[400px] w-full overflow-auto">
           <Markdown>{`\`\`\`tsx\n${imports[slug].source}\n\`\`\``}</Markdown>
         </div>
       </PreviewSwitchCode>

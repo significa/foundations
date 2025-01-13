@@ -54,12 +54,12 @@ const NavigationCard = ({
   return (
     <Link
       className={cn(
-        "p-4 rounded-lg border border-border flex-1 transition hover:bg-foreground/3 focus-visible:bg-foreground/3 outline-none",
+        "border-border hover:bg-foreground/3 focus-visible:bg-foreground/3 flex-1 rounded-lg border p-4 transition outline-none",
         className
       )}
       href={href}
     >
-      <p className="text-xs text-foreground-secondary mb-1">{label}</p>
+      <p className="text-foreground-secondary mb-1 text-xs">{label}</p>
       <p className="text-sm font-medium">{title}</p>
     </Link>
   );

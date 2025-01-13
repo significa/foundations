@@ -34,7 +34,7 @@ export const Sidebar = async () => {
   );
 
   return (
-    <aside className="overflow-y-auto h-[calc(100dvh-var(--spacing)*14)] sticky top-14 border-r md:px-2 px-1 w-[250px] shrink-0 pt-6 hidden xl:block">
+    <aside className="sticky top-14 hidden h-[calc(100dvh-var(--spacing)*14)] w-[250px] shrink-0 overflow-y-auto border-r px-1 pt-6 md:px-2 xl:block">
       <Menu items={enhancedMenu} />
     </aside>
   );

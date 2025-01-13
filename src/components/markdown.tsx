@@ -49,7 +49,7 @@ export const Markdown = async ({ children }: { children: string }) => {
   });
 
   return (
-    <div className="[&>div]:my-4 [&_&>div]:my-0">
+    <div className="[&_&>div]:my-0 [&>div]:my-4">
       <MDXContent components={components} />
     </div>
   );
@@ -61,7 +61,7 @@ const Heading = ({
 }: React.HTMLAttributes<HTMLHeadingElement>) => (
   <h1
     className={cn(
-      "scroll-margin-top-20 font-semibold tracking-tight mt-[2em] mb-[1em] [&_a]:no-underline",
+      "scroll-margin-top-20 mt-[2em] mb-[1em] font-semibold tracking-tight [&_a]:no-underline",
       className
     )}
     {...props}
@@ -82,21 +82,21 @@ export const components: ReturnType<UseMdxComponents> = {
   li: (props) => <li className="mt-2" {...props} />,
   blockquote: (props) => (
     <blockquote
-      className="my-6 px-4 py-2 bg-foreground/4 border-l-4 border-foreground/8"
+      className="bg-foreground/4 border-foreground/8 my-6 border-l-4 px-4 py-2"
       {...props}
     />
   ),
   img: (props) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      className="max-w-full h-auto my-4 rounded-xl"
+      className="my-4 h-auto max-w-full rounded-xl"
       alt={props.alt}
       {...props}
     />
   ),
   hr: () => <hr className="my-8" />,
   table: (props) => <table className="w-full overflow-y-auto" {...props} />,
-  tr: (props) => <tr className="border-b border-border" {...props} />,
+  tr: (props) => <tr className="border-border border-b" {...props} />,
   th: (props) => (
     <th className="py-2 text-left text-sm font-semibold" {...props} />
   ),
@@ -107,7 +107,7 @@ export const components: ReturnType<UseMdxComponents> = {
         <div data-code-block className="relative">
           <CopyButton
             content={rawCode}
-            className="opacity-80 absolute top-2 right-2"
+            className="absolute top-2 right-2 opacity-80"
           />
           <figure {...props} />
         </div>

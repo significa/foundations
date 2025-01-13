@@ -30,7 +30,7 @@ const FileTree = ({
 
   return (
     <FileTreeContext value={{ selectedFile, setSelectedFile }}>
-      <div className="flex h-[400px] border border-border rounded-xl relative">
+      <div className="border-border relative flex h-[400px] rounded-xl border">
         {children}
       </div>
     </FileTreeContext>
@@ -39,7 +39,7 @@ const FileTree = ({
 
 const FileTreeNavigation = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="w-[180px] h-full overflow-y-auto border-r p-2">
+    <div className="h-full w-[180px] overflow-y-auto border-r p-2">
       {children}
     </div>
   );
@@ -104,9 +104,9 @@ const FileTreeContent = ({
   return (
     <div
       className={cn(
-        "flex-1 h-full overflow-auto text-sm",
-        "rounded-r-xl bg-foreground/2",
-        "[&_pre[data-language]]:border-transparent [&_pre[data-language]]:rounded-none [&_pre[data-language]]:bg-transparent [&_pre[data-language]]:overflow-visible",
+        "h-full flex-1 overflow-auto text-sm",
+        "bg-foreground/2 rounded-r-xl",
+        "[&_pre[data-language]]:overflow-visible [&_pre[data-language]]:rounded-none [&_pre[data-language]]:border-transparent [&_pre[data-language]]:bg-transparent",
         "[&_div[data-code-block]]:static"
       )}
     >
@@ -128,7 +128,7 @@ const Item = ({ children, ref, className, isActive, ...props }: ItemProps) => {
       ref={ref}
       className={cn(
         "font-mono text-sm",
-        "flex items-center gap-1 w-full rounded-md px-2 py-1 hover:bg-foreground/5 pl-[calc(var(--level)*var(--spacing)*2)] cursor-pointer outline-none focus-visible:bg-foreground/10 focus-visible:ring-transparent mt-0.5",
+        "hover:bg-foreground/5 focus-visible:bg-foreground/10 mt-0.5 flex w-full cursor-pointer items-center gap-1 rounded-md px-2 py-1 pl-[calc(var(--level)*var(--spacing)*2)] outline-none focus-visible:ring-transparent",
         isActive && "bg-foreground/5",
         className
       )}

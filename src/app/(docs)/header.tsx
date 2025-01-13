@@ -8,8 +8,8 @@ import { GITHUB_REPO_URL } from "@/lib/constants";
 
 export const Header = () => {
   return (
-    <div className="border-b border-border bg-background/95 backdrop-blur-sm sticky top-0 z-50">
-      <div className="flex items-center justify-between gap-2 md:px-4 px-2 h-14 max-w-screen-2xl mx-auto">
+    <div className="border-border bg-background/95 sticky top-0 z-50 border-b backdrop-blur-sm">
+      <div className="mx-auto flex h-14 max-w-screen-2xl items-center justify-between gap-2 px-2 md:px-4">
         <div className="flex items-center gap-1.5">
           <Egg />
           <div className="font-medium">Foundations</div>
