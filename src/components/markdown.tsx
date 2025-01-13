@@ -24,7 +24,6 @@ import {
 
 import { SourceCode } from "@/components/source-code";
 import { Preview } from "@/components/preview";
-import { DependenciesList } from "@/components/dependencies-list";
 import { FileTree, FileTreeFolder, FileTreeFile } from "@/components/file-tree";
 
 import { CopyButton } from "./copy-button";
@@ -101,7 +100,7 @@ export const components: ReturnType<UseMdxComponents> = {
   ),
   hr: () => <hr className="my-8" />,
   table: (props) => (
-    <div className="my-6 overflow-x-auto">
+    <div className="my-6 overflow-x-auto rounded-xl border border-b-0">
       <table className="w-full" {...props} />
     </div>
   ),
@@ -129,7 +128,6 @@ export const components: ReturnType<UseMdxComponents> = {
   Button,
   SourceCode,
   Preview,
-  DependenciesList,
   Tabs,
   TabsItems,
   TabsItem,
