@@ -56,10 +56,13 @@ export const Markdown = async ({ children }: { children: string }) => {
 };
 
 const Heading = ({
+  heading: Component = "h1",
   className,
   ...props
-}: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h1
+}: React.HTMLAttributes<HTMLHeadingElement> & {
+  heading?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+}) => (
+  <Component
     className={cn(
       "scroll-margin-top-20 mt-[2em] mb-[1em] font-semibold tracking-tight [&_a]:no-underline",
       className
@@ -69,12 +72,12 @@ const Heading = ({
 );
 
 export const components: ReturnType<UseMdxComponents> = {
-  h1: (props) => <Heading className="text-3xl" {...props} />,
-  h2: (props) => <Heading className="text-2xl" {...props} />,
-  h3: (props) => <Heading className="text-xl" {...props} />,
-  h4: (props) => <Heading className="text-lg" {...props} />,
-  h5: (props) => <Heading className="text-md" {...props} />,
-  h6: (props) => <Heading className="text-sm" {...props} />,
+  h1: (props) => <Heading heading="h1" className="text-3xl" {...props} />,
+  h2: (props) => <Heading heading="h2" className="text-2xl" {...props} />,
+  h3: (props) => <Heading heading="h3" className="text-xl" {...props} />,
+  h4: (props) => <Heading heading="h4" className="text-lg" {...props} />,
+  h5: (props) => <Heading heading="h5" className="text-md" {...props} />,
+  h6: (props) => <Heading heading="h6" className="text-sm" {...props} />,
   p: (props) => <p className="leading-relaxed not-first:mt-2" {...props} />,
   a: (props) => <a className="underline" {...props} />,
   ul: (props) => <ul className="my-4 ml-6 list-disc" {...props} />,
