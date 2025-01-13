@@ -35,7 +35,13 @@ import {
 
 import { CopyButton } from "./copy-button";
 
-export const Markdown = async ({ children }: { children: string }) => {
+export const Markdown = async ({
+  children,
+  className,
+}: {
+  children: string;
+  className?: string;
+}) => {
   const { default: MDXContent } = await evaluate(children, {
     ...runtime,
     remarkPlugins: [remarkGfm],
@@ -49,7 +55,9 @@ export const Markdown = async ({ children }: { children: string }) => {
   });
 
   return (
-    <div className="[&_&>div]:my-0 [&>div]:my-6">
+    <div
+      className={cn("[&_&>div]:my-0 [&>div:not(:first-child)]:my-6", className)}
+    >
       <MDXContent components={components} />
     </div>
   );
@@ -92,7 +100,7 @@ export const components: ReturnType<UseMdxComponents> = {
   img: (props) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      className="my-4 h-auto max-w-full rounded-xl"
+      className="my-6 h-auto max-w-full rounded-xl"
       alt={props.alt}
       {...props}
     />

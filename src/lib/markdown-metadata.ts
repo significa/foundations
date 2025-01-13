@@ -7,10 +7,11 @@ const metadataSchema = z.object({
   title: z.string({ required_error: "Title is required" }),
   description: z.string().optional(),
   preview: z.string().optional(),
+  files: z.array(z.string()).optional(),
   dependencies: z
     .array(
       z.object({
-        title: z.string({ required_error: "Dependency title is required" }),
+        name: z.string({ required_error: "Dependency name is required" }),
         href: z.string({ required_error: "Dependency href is required" }),
       })
     )

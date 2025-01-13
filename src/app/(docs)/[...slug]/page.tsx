@@ -1,9 +1,14 @@
 import path from "path";
+import { format } from "date-fns";
 
 import { notFound } from "next/navigation";
-import { Pencil } from "@phosphor-icons/react/dist/ssr";
+import { Calendar, Pencil } from "@phosphor-icons/react/dist/ssr";
 
-import { readFile } from "@/lib/fs";
+import {
+  getMostRecentModifiedDate,
+  getDirectoryFiles,
+  readFile,
+} from "@/lib/fs";
 import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
 import { getMetadata } from "@/lib/markdown-metadata";
 import { getMarkdownToc } from "@/lib/markdown-toc";
@@ -14,8 +19,9 @@ import { Preview } from "@/components/preview";
 import { Markdown } from "@/components/markdown";
 
 import { TableOfContents } from "./toc";
-import { LastUpdated } from "./last-updated";
 import { Navigation } from "./navigation";
+import { DependenciesList } from "@/components/dependencies-list";
+import { SourceCode } from "@/components/source-code";
 
 const isNotFoundError = (error: unknown): error is { code: "ENOENT" } => {
   return error instanceof Error && "code" in error && error.code === "ENOENT";
@@ -57,7 +63,29 @@ export default async function Page({
               <h3 className="text-foreground-secondary mb-3 font-medium">
                 On this page
               </h3>
-              <TableOfContents headings={toc} />
+              <TableOfContents
+                headings={[
+                  ...(metadata.dependencies
+                    ? [
+                        {
+                          text: "Dependencies",
+                          id: "dependencies",
+                          level: 1,
+                        },
+                      ]
+                    : []),
+                  ...(metadata.files
+                    ? [
+                        {
+                          text: "Source Code",
+                          id: "source-code",
+                          level: 1,
+                        },
+                      ]
+                    : []),
+                  ...toc,
+                ]}
+              />
               <hr className="my-6" />
             </>
           )}
@@ -70,7 +98,16 @@ export default async function Page({
             >
               <Pencil /> Edit this page
             </a>
-            <LastUpdated filePath={filePath} />
+            <p className="text-foreground-secondary flex items-center gap-1 text-xs">
+              <Calendar />
+              Edited{" "}
+              {format(
+                await getMostRecentModifiedDate(
+                  await getDirectoryFiles(path.dirname(filePath))
+                ),
+                "PPP"
+              )}
+            </p>
           </div>
         </nav>
 
@@ -89,6 +126,28 @@ export default async function Page({
               slug={metadata.preview}
               withSource={false}
             />
+          )}
+
+          {metadata.dependencies && metadata.dependencies.length > 0 && (
+            <>
+              <Markdown>{`## Dependencies`}</Markdown>
+              <DependenciesList dependencies={metadata.dependencies} />
+            </>
+          )}
+
+          {metadata.files && metadata.files.length > 0 && (
+            <>
+              <Markdown className="[&>h2]:mb-0">{`## Source Code`}</Markdown>
+              {metadata.files.map((file) => (
+                <SourceCode
+                  key={file}
+                  className="mt-6"
+                  file={file}
+                  withTitle={metadata.files && metadata.files.length > 1}
+                  expandable
+                />
+              ))}
+            </>
           )}
 
           <div className="pb-40">

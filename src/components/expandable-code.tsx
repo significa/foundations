@@ -2,14 +2,19 @@
 
 import { useState } from "react";
 import { Button } from "@/foundations/ui/button/button";
+import { cn } from "@/lib/utils";
 
-export const ExpandableCode = ({ children }: { children: React.ReactNode }) => {
+export const ExpandableCode = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  if (isExpanded) return children;
-
   return (
-    <div className="relative">
+    <div className={cn("relative", className)}>
       {!isExpanded && (
         <>
           <Button
@@ -23,7 +28,13 @@ export const ExpandableCode = ({ children }: { children: React.ReactNode }) => {
           <div className="from-background pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t to-transparent" />
         </>
       )}
-      <div className="max-h-[250px] overflow-hidden rounded-xl">{children}</div>
+      {isExpanded ? (
+        children
+      ) : (
+        <div className="max-h-[250px] overflow-hidden rounded-xl">
+          {children}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,7 +1,11 @@
 import path from "path";
 import { differenceInDays } from "date-fns";
 import { getFoundationsPagePath } from "./constants";
-import { getCreatedDate, getLastModifiedDate } from "./fs";
+import {
+  getDirectoryFiles,
+  getMostRecentCreatedDate,
+  getMostRecentModifiedDate,
+} from "./fs";
 
 type NavigationItem = {
   title: string;
@@ -47,11 +51,14 @@ export const getNavigationWithTags = async () => {
             process.cwd(),
             getFoundationsPagePath(child.href.split("/"))
           );
-
-          const created = await getCreatedDate(filePath);
+          const created = await getMostRecentCreatedDate(
+            await getDirectoryFiles(path.dirname(filePath))
+          );
           const isNew = differenceInDays(new Date(), created) < 30;
 
-          const updated = await getLastModifiedDate(filePath);
+          const updated = await getMostRecentModifiedDate(
+            await getDirectoryFiles(path.dirname(filePath))
+          );
           const isUpdated = differenceInDays(new Date(), updated) < 30;
 
           return {
