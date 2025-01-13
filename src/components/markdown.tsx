@@ -48,7 +48,11 @@ export const Markdown = async ({ children }: { children: string }) => {
     ],
   });
 
-  return <MDXContent components={components} />;
+  return (
+    <div className="[&>div]:my-4 [&_&>div]:my-0">
+      <MDXContent components={components} />
+    </div>
+  );
 };
 
 const Heading = ({

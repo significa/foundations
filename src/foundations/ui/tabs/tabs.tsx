@@ -137,7 +137,9 @@ const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
       aria-orientation={orientation}
       className={cn(
         "flex gap-1.5",
-        orientation === "horizontal" ? "items-center" : "flex-col items-start",
+        orientation === "horizontal"
+          ? "items-center pb-4"
+          : "flex-col items-start pr-4",
         className
       )}
       {...props}

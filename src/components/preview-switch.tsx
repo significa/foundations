@@ -31,7 +31,7 @@ export const PreviewSwitch = ({
       <PreviewSwitchContext value={{ view }}>{children}</PreviewSwitchContext>
       {!disabled && (
         <Button
-          className="absolute z-10 bottom-2 right-2 bg-background"
+          className="absolute z-10 bottom-2 right-2"
           size="sm"
           variant="outline"
           onClick={() => setView(view === "preview" ? "code" : "preview")}

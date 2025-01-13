@@ -13,7 +13,7 @@ const buttonStyle = cva({
     variant: {
       primary: "bg-foreground text-background",
       destructive: "bg-red-600 text-white ring-red-600/50 hover:bg-red-700",
-      outline: "border border-border",
+      outline: "border border-border bg-background",
       ghost:
         "border-none bg-transparent ring-0 shadow-none hover:bg-foreground/5",
     },
