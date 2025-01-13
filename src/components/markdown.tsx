@@ -25,13 +25,7 @@ import {
 import { SourceCode } from "@/components/source-code";
 import { Preview } from "@/components/preview";
 import { DependenciesList } from "@/components/dependencies-list";
-import {
-  FileTree,
-  FileTreeNavigation,
-  FileTreeFolder,
-  FileTreeFile,
-  FileTreeContent,
-} from "@/components/file-tree";
+import { FileTree, FileTreeFolder, FileTreeFile } from "@/components/file-tree";
 
 import { CopyButton } from "./copy-button";
 
@@ -142,8 +136,6 @@ export const components: ReturnType<UseMdxComponents> = {
   TabsPanels,
   TabsPanel,
   FileTree,
-  FileTreeNavigation,
   FileTreeFolder,
   FileTreeFile,
-  FileTreeContent,
 };

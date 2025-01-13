@@ -24,7 +24,7 @@ Some text here
   </TabsItems>
   <TabsPanels>
     <TabsPanel>
-      <SourceCode file="foundations/ui/spinner/spinner.tsx" expandable />
+      <SourceCode file="src/foundations/ui/spinner/spinner.tsx" expandable />
     </TabsPanel>
     <TabsPanel>Panel 2</TabsPanel>
     <TabsPanel>Panel 3</TabsPanel>
@@ -34,17 +34,20 @@ Some text here
 # Source code tree
 
 <FileTree initialPath="components/spinner.tsx">
-  <FileTreeNavigation>
-    <FileTreeFile name="top.tsx" />
-    <FileTreeFolder name="components">
-      <FileTreeFile name="button.tsx" />
-      <FileTreeFile name="spinner.tsx" />
-      <FileTreeFolder name="ui">
-        <FileTreeFile name="spinner.tsx" />
-      </FileTreeFolder>
+  <FileTreeFile name="top.tsx">
+    <SourceCode file="src/foundations/ui/button/button.tsx" />
+  </FileTreeFile>
+  <FileTreeFolder name="components">
+    <FileTreeFile name="button.tsx">
+      <SourceCode file="src/foundations/ui/spinner/spinner.tsx" />
+    </FileTreeFile>
+    <FileTreeFile name="spinner.tsx">
+      <SourceCode file="src/foundations/ui/spinner/spinner.tsx" />
+    </FileTreeFile>
+    <FileTreeFolder name="ui">
+      <FileTreeFile name="spinner.tsx">
+        <SourceCode file="src/foundations/ui/spinner/spinner.tsx" />
+      </FileTreeFile>
     </FileTreeFolder>
-  </FileTreeNavigation>
-  <FileTreeContent path="components/spinner.tsx">
-    <SourceCode file="foundations/ui/spinner/spinner.tsx" />
-  </FileTreeContent>
+  </FileTreeFolder>
 </FileTree>

@@ -7,14 +7,16 @@ import {
 } from "@/foundations/ui/accordion/accordion";
 import { cn } from "@/lib/utils";
 import { FileText, Folder } from "@phosphor-icons/react";
-import { useState, createContext, use } from "react";
+import { useState, createContext, use, useCallback, useEffect } from "react";
 
 const FileTreeContext = createContext<{
   selectedFile: string | null;
   setSelectedFile: (file: string | null) => void;
+  registerFile: (path: string) => () => void;
 }>({
   selectedFile: null,
   setSelectedFile: () => {},
+  registerFile: () => () => {},
 });
 
 const FileTree = ({
@@ -24,24 +26,33 @@ const FileTree = ({
   children: React.ReactNode;
   initialPath?: string;
 }) => {
+  const [files, setFiles] = useState<string[]>([]);
   const [selectedFile, setSelectedFile] = useState<string | null>(
     initialPath || null
   );
 
+  const registerFile = useCallback((path: string) => {
+    setFiles((prev) => {
+      if (prev.includes(path)) throw new Error("File already registered");
+
+      return [...prev, path];
+    });
+
+    // Unregister
+    return () => {
+      setFiles((prev) => prev.filter((p) => p !== path));
+    };
+  }, []);
+
   return (
-    <FileTreeContext value={{ selectedFile, setSelectedFile }}>
+    <FileTreeContext value={{ selectedFile, setSelectedFile, registerFile }}>
       <div className="border-border relative flex h-[300px] rounded-xl border lg:h-[400px]">
+        <div className="h-full w-[180px] overflow-y-auto border-r p-2">
+          <FileNavigation files={files} />
+        </div>
         {children}
       </div>
     </FileTreeContext>
-  );
-};
-
-const FileTreeNavigation = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="h-full w-[180px] overflow-y-auto border-r p-2">
-      {children}
-    </div>
   );
 };
 
@@ -57,49 +68,31 @@ const FileTreeFolder = ({
   const { path } = use(FolderLevelContext);
 
   return (
-    <Accordion defaultOpen>
-      <AccordionTrigger asChild>
-        <Item>
-          <Folder className="text-foreground-secondary" />
-          <span>{name}</span>
-        </Item>
-      </AccordionTrigger>
-      <AccordionContent>
-        <FolderLevelContext value={{ path: [...path, name] }}>
-          {children}
-        </FolderLevelContext>
-      </AccordionContent>
-    </Accordion>
+    <FolderLevelContext value={{ path: [...path, name] }}>
+      {children}
+    </FolderLevelContext>
   );
 };
 
-const FileTreeFile = ({ name }: { name: string }) => {
-  const { path } = use(FolderLevelContext);
-  const fullPath = `${path.join("/")}/${name}`;
-
-  const { selectedFile, setSelectedFile } = use(FileTreeContext);
-
-  return (
-    <Item
-      isActive={selectedFile === fullPath}
-      onClick={() => setSelectedFile(fullPath)}
-    >
-      <FileText className="text-foreground-secondary" />
-      <span>{name}</span>
-    </Item>
-  );
-};
-
-const FileTreeContent = ({
-  path,
+const FileTreeFile = ({
+  name,
   children,
 }: {
-  path: string;
+  name: string;
   children: React.ReactNode;
 }) => {
-  const { selectedFile } = use(FileTreeContext);
+  const { path } = use(FolderLevelContext);
+  const fullPath = [...path, name].join("/");
 
-  if (path !== selectedFile) return null;
+  const { selectedFile, registerFile } = use(FileTreeContext);
+
+  useEffect(() => {
+    const unregister = registerFile(fullPath);
+
+    return unregister;
+  }, [registerFile, fullPath]);
+
+  if (selectedFile !== fullPath) return null;
 
   return (
     <div
@@ -115,14 +108,107 @@ const FileTreeContent = ({
   );
 };
 
+type FileTreeNode = {
+  [key: string]: FileTreeNode | null;
+};
+
+// Helper function to build a tree from file paths
+const buildTree = (paths: string[]): FileTreeNode => {
+  const root: FileTreeNode = {};
+
+  paths.forEach((path) => {
+    const parts = path.split("/");
+    let current = root;
+
+    parts.forEach((part, index) => {
+      if (!current[part]) {
+        current[part] = index === parts.length - 1 ? null : {};
+      }
+      current = current[part] as FileTreeNode;
+    });
+  });
+
+  return root;
+};
+
+interface FileNavigationProps {
+  files: string[];
+}
+
+const FileNavigation = ({ files }: FileNavigationProps) => {
+  const fileTree = buildTree(files);
+
+  return (
+    <div>
+      {Object.entries(fileTree).map(([key, value]) => (
+        <FileNavigationItem key={key} name={key} node={value} path={[]} />
+      ))}
+    </div>
+  );
+};
+
+interface FileNavigationItemProps {
+  name: string;
+  node: FileTreeNode | null;
+  path: string[];
+}
+
+const FileNavigationItem = ({ name, node, path }: FileNavigationItemProps) => {
+  const { selectedFile, setSelectedFile } = use(FileTreeContext);
+  const currentPath = [...path, name];
+  const fullPath = currentPath.join("/");
+
+  // File item
+  if (node === null) {
+    return (
+      <Item
+        key={fullPath}
+        level={path.length + 1}
+        isActive={selectedFile === fullPath}
+        onClick={() => setSelectedFile(fullPath)}
+      >
+        <FileText className="text-foreground-secondary" />
+        <span>{name}</span>
+      </Item>
+    );
+  }
+
+  return (
+    <Accordion key={fullPath} defaultOpen>
+      <AccordionTrigger asChild>
+        <Item level={path.length + 1}>
+          <Folder className="text-foreground-secondary" />
+          <span>{name}</span>
+        </Item>
+      </AccordionTrigger>
+      <AccordionContent>
+        {Object.entries(node).map(([childKey, childNode]) => (
+          <FileNavigationItem
+            key={childKey}
+            name={childKey}
+            node={childNode}
+            path={currentPath}
+          />
+        ))}
+      </AccordionContent>
+    </Accordion>
+  );
+};
+
 interface ItemProps extends React.ComponentPropsWithRef<"button"> {
   children: React.ReactNode;
   isActive?: boolean;
+  level?: number;
 }
 
-const Item = ({ children, ref, className, isActive, ...props }: ItemProps) => {
-  const { path } = use(FolderLevelContext);
-
+const Item = ({
+  children,
+  ref,
+  className,
+  isActive,
+  level = 0,
+  ...props
+}: ItemProps) => {
   return (
     <button
       ref={ref}
@@ -132,7 +218,7 @@ const Item = ({ children, ref, className, isActive, ...props }: ItemProps) => {
         isActive && "bg-foreground/5",
         className
       )}
-      style={{ "--level": path.length + 1 }}
+      style={{ "--level": level }}
       {...props}
     >
       {children}
@@ -140,10 +226,4 @@ const Item = ({ children, ref, className, isActive, ...props }: ItemProps) => {
   );
 };
 
-export {
-  FileTree,
-  FileTreeNavigation,
-  FileTreeFolder,
-  FileTreeFile,
-  FileTreeContent,
-};
+export { FileTree, FileTreeFolder, FileTreeFile };
