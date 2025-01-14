@@ -47,7 +47,7 @@ type Item = {
 
 type Items = Record<string, Item>;
 
-interface MenuContextType {
+interface DropdownContextType {
   elementsRef: React.RefObject<(HTMLElement | null)[]>;
   labelsRef: React.RefObject<string[]>;
   highlightedIndex: number | null;
@@ -59,19 +59,19 @@ interface MenuContextType {
   registerItem: (item: Item) => () => void;
 }
 
-const MenuContext = createContext<MenuContextType | null>(null);
+const DropdownContext = createContext<DropdownContextType | null>(null);
 
-const useMenuContext = () => {
-  const context = use(MenuContext);
+const useDropdownContext = () => {
+  const context = use(DropdownContext);
 
   if (context == null) {
-    throw new Error("Menu components must be wrapped in <Menu />");
+    throw new Error("Dropdown components must be wrapped in <Dropdown />");
   }
 
   return context;
 };
 
-const Menu = ({
+const Dropdown = ({
   children,
   modal = true,
   placement = "bottom-start",
@@ -163,19 +163,19 @@ const Menu = ({
 
   return (
     <PopoverContext value={popoverContextValue}>
-      <MenuContext value={menuContextValue}>{children}</MenuContext>
+      <DropdownContext value={menuContextValue}>{children}</DropdownContext>
     </PopoverContext>
   );
 };
 
-const MenuTrigger = PopoverTrigger;
+const DropdownTrigger = PopoverTrigger;
 
-const MenuItems = ({
+const DropdownItems = ({
   children,
   className,
   ...props
 }: React.ComponentProps<typeof PopoverContent>) => {
-  const { elementsRef } = useMenuContext();
+  const { elementsRef } = useDropdownContext();
 
   return (
     <PopoverContent
@@ -187,12 +187,12 @@ const MenuItems = ({
   );
 };
 
-interface MenuItemProps extends React.ComponentPropsWithRef<"button"> {
+interface DropdownItemProps extends React.ComponentPropsWithRef<"button"> {
   onSelect?: Item["onSelect"];
   asChild?: boolean;
 }
 
-const MenuItem = ({
+const DropdownItem = ({
   ref: refProp,
   children,
   className,
@@ -202,7 +202,7 @@ const MenuItem = ({
   onKeyDown,
   asChild,
   ...props
-}: MenuItemProps) => {
+}: DropdownItemProps) => {
   const itemId = useId();
   const innerRef = useRef<HTMLButtonElement | null>(null);
   const {
@@ -212,7 +212,7 @@ const MenuItem = ({
     items,
     searchInputRef,
     elementsRef,
-  } = useMenuContext();
+  } = useDropdownContext();
   const popoverCtx = usePopoverContext();
   const stableOnSelect = useStableCallback(onSelect);
 
@@ -284,13 +284,15 @@ const MenuItem = ({
   );
 };
 
-interface MenuSectionContextType {
+interface DropdownSectionContextType {
   setTitleId: (id: string) => void;
 }
 
-const MenuSectionContext = createContext<MenuSectionContextType | null>(null);
+const DropdownSectionContext = createContext<DropdownSectionContextType | null>(
+  null
+);
 
-const MenuSection = ({
+const DropdownSection = ({
   children,
   className,
   ...props
@@ -298,7 +300,7 @@ const MenuSection = ({
   const [titleId, setTitleId] = useState<string | undefined>(undefined);
 
   return (
-    <MenuSectionContext value={{ setTitleId }}>
+    <DropdownSectionContext value={{ setTitleId }}>
       <div
         role="group"
         aria-labelledby={titleId}
@@ -310,11 +312,11 @@ const MenuSection = ({
       >
         {children}
       </div>
-    </MenuSectionContext>
+    </DropdownSectionContext>
   );
 };
 
-const MenuHeading = ({
+const DropdownHeading = ({
   children,
   id: propsId,
   className,
@@ -322,7 +324,7 @@ const MenuHeading = ({
 }: React.ComponentPropsWithRef<"div">) => {
   const generatedId = useId();
   const id = propsId ?? generatedId;
-  const ctx = use(MenuSectionContext);
+  const ctx = use(DropdownSectionContext);
 
   useLayoutEffect(() => {
     if (ctx) ctx.setTitleId(id);
@@ -341,14 +343,14 @@ const MenuHeading = ({
   );
 };
 
-const MenuDivider = ({
+const DropdownDivider = ({
   className,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
   return <Divider className={cn("my-1", className)} {...props} />;
 };
 
-const MenuSearchInput = ({
+const DropdownSearchInput = ({
   ref: refProp,
   onChange,
   onKeyDown,
@@ -361,7 +363,7 @@ const MenuSearchInput = ({
     items,
     setSearchInputRef,
     elementsRef,
-  } = useMenuContext();
+  } = useDropdownContext();
 
   const ref = useMergeRefs([refProp, internalRef]);
 
@@ -396,16 +398,16 @@ const MenuSearchInput = ({
   );
 };
 
-const MenuEmpty = PopoverEmpty;
+const DropdownEmpty = PopoverEmpty;
 
 export {
-  Menu,
-  MenuTrigger,
-  MenuItems,
-  MenuItem,
-  MenuDivider,
-  MenuSection,
-  MenuHeading,
-  MenuSearchInput,
-  MenuEmpty,
+  Dropdown,
+  DropdownTrigger,
+  DropdownItems,
+  DropdownItem,
+  DropdownDivider,
+  DropdownSection,
+  DropdownHeading,
+  DropdownSearchInput,
+  DropdownEmpty,
 };

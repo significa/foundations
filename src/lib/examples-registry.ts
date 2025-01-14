@@ -594,7 +594,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 
 import { DatePicker, DatePickerTrigger, DatePickerPanel } from "../date-picker";
-import { MenuDivider, MenuItem } from "../../menu/menu";
+import { DropdownDivider, DropdownItem } from "../../dropdown/dropdown";
 
 export default function DatePickerShortcutsPreview() {
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
@@ -616,15 +616,15 @@ export default function DatePickerShortcutsPreview() {
           setDateRange(dates);
         }}
       >
-        <MenuDivider />
-        <MenuItem
+        <DropdownDivider />
+        <DropdownItem
           onSelect={() => {
             setDateRange([new Date(), new Date()]);
           }}
         >
           Today
-        </MenuItem>
-        <MenuItem
+        </DropdownItem>
+        <DropdownItem
           onSelect={() => {
             setDateRange([
               new Date(new Date().setDate(new Date().getDate() - 1)),
@@ -633,8 +633,8 @@ export default function DatePickerShortcutsPreview() {
           }}
         >
           Yesterday
-        </MenuItem>
-        <MenuItem
+        </DropdownItem>
+        <DropdownItem
           onSelect={() => {
             setDateRange([
               new Date(new Date().setDate(new Date().getDate() - 7)),
@@ -643,16 +643,16 @@ export default function DatePickerShortcutsPreview() {
           }}
         >
           Last 7 days
-        </MenuItem>
-        <MenuDivider />
-        <MenuItem
+        </DropdownItem>
+        <DropdownDivider />
+        <DropdownItem
           className="text-red-500"
           onSelect={() => {
             setDateRange(null);
           }}
         >
           Clear
-        </MenuItem>
+        </DropdownItem>
       </DatePickerPanel>
     </DatePicker>
   );

@@ -66,6 +66,10 @@ export const navigation: NavigationItem[] = [
         href: "/ui/divider",
       },
       {
+        title: "Dropdown",
+        href: "/ui/dropdown",
+      },
+      {
         title: "Field",
         href: "/ui/field",
       },
@@ -76,10 +80,6 @@ export const navigation: NavigationItem[] = [
       {
         title: "Label",
         href: "/ui/label",
-      },
-      {
-        title: "Menu",
-        href: "/ui/menu",
       },
       {
         title: "Popover",

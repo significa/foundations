@@ -7,19 +7,23 @@ import {
   Calendar,
   type CalendarProps,
 } from "@/foundations/ui/calendar/calendar";
-import { Menu, MenuItems, MenuTrigger } from "@/foundations/ui/menu/menu";
+import {
+  Dropdown,
+  DropdownItems,
+  DropdownTrigger,
+} from "@/foundations/ui/dropdown/dropdown";
 import { SelectButton } from "@/foundations/ui/select/select";
 import { usePopoverContext } from "@/foundations/ui/popover/popover";
 
 const DatePicker = ({
   children,
   ...props
-}: React.ComponentProps<typeof Menu>) => {
-  return <Menu {...props}>{children}</Menu>;
+}: React.ComponentProps<typeof Dropdown>) => {
+  return <Dropdown {...props}>{children}</Dropdown>;
 };
 
 interface DatePickerTriggerProps
-  extends React.ComponentProps<typeof MenuTrigger> {
+  extends React.ComponentProps<typeof DropdownTrigger> {
   className?: string;
   children: React.ReactNode;
   variant?: React.ComponentProps<typeof SelectButton>["variant"];
@@ -34,14 +38,14 @@ const DatePickerTrigger = ({
   ...props
 }: DatePickerTriggerProps) => {
   return (
-    <MenuTrigger asChild {...props}>
+    <DropdownTrigger asChild {...props}>
       <SelectButton variant={variant} className={className}>
         <CalendarIcon className="text-foreground-secondary shrink-0" />
         {children ?? (
           <span className="text-foreground-secondary">{placeholder}</span>
         )}
       </SelectButton>
-    </MenuTrigger>
+    </DropdownTrigger>
   );
 };
 
@@ -78,7 +82,7 @@ const DatePickerPanel = ({
   const { setOpen } = usePopoverContext();
 
   return (
-    <MenuItems className={cn(className)}>
+    <DropdownItems className={cn(className)}>
       <Calendar
         {...props}
         mode={mode}
@@ -91,7 +95,7 @@ const DatePickerPanel = ({
         }}
       />
       {children}
-    </MenuItems>
+    </DropdownItems>
   );
 };
 
