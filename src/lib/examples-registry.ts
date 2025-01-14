@@ -9,6 +9,149 @@ type Import = {
 };
 
 export const imports: Record<string, Import> = {
+  ["avatar-broken-image"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/avatar/preview/avatar-broken-image.preview")
+    ),
+    source: `import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
+
+export default function AvatarBrokenImagePreview() {
+  return (
+    <Avatar>
+      <AvatarImage src="broken-image-url" />
+      <AvatarFallback>Pedro Brandão</AvatarFallback>
+    </Avatar>
+  );
+}
+`,
+  },
+  ["avatar-custom-color"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/avatar/preview/avatar-custom-color.preview")
+    ),
+    source: `import { Avatar, AvatarFallback } from "../avatar";
+
+export default function AvatarCustomColorPreview() {
+  return (
+    <Avatar className="bg-emerald-500/20">
+      <AvatarFallback>Pedro Brandão</AvatarFallback>
+    </Avatar>
+  );
+}
+`,
+  },
+  ["avatar-fallback"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/avatar/preview/avatar-fallback.preview")
+    ),
+    source: `import { Avatar, AvatarFallback } from "../avatar";
+
+export default function AvatarFallbackPreview() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {/* Full name */}
+      <Avatar>
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+      {/* One word */}
+      <Avatar>
+        <AvatarFallback>Significa</AvatarFallback>
+      </Avatar>
+      {/* Initials */}
+      <Avatar>
+        <AvatarFallback>PB</AvatarFallback>
+      </Avatar>
+      {/* No fallback */}
+      <Avatar>
+        <AvatarFallback />
+      </Avatar>
+    </div>
+  );
+}
+`,
+  },
+  ["avatar-on-top-of-media"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/avatar/preview/avatar-on-top-of-media.preview")
+    ),
+    source: `import { Avatar, AvatarFallback } from "../avatar";
+
+export default function AvatarOnTopOfMediaPreview() {
+  return (
+    <div
+      className="relative size-32 overflow-hidden rounded-lg bg-cover bg-center"
+      style={{
+        backgroundImage:
+          "url(https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80)",
+      }}
+    >
+      <div className="flex h-full items-center justify-center">
+        <Avatar>
+          <AvatarFallback>Pedro Brandão</AvatarFallback>
+        </Avatar>
+      </div>
+    </div>
+  );
+}
+`,
+  },
+  ["avatar-sizes"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/avatar/preview/avatar-sizes.preview")
+    ),
+    source: `import { Avatar, AvatarFallback } from "../avatar";
+
+export default function AvatarSizesPreview() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Avatar size="2xs">
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+      <Avatar size="xs">
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+      <Avatar size="sm">
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+      <Avatar size="md">
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+      <Avatar size="lg">
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+      <Avatar size="xl">
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+      <Avatar size="2xl">
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+      <Avatar size="3xl">
+        <AvatarFallback>Pedro Brandão</AvatarFallback>
+      </Avatar>
+    </div>
+  );
+}
+`,
+  },
+  ["avatar"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/avatar/preview/avatar.preview")
+    ),
+    source: `import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
+
+export default function AvatarPreview() {
+  return (
+    <Avatar>
+      <AvatarImage src="https://github.com/pdrbrnd.png" />
+      <AvatarFallback>Pedro Brandão</AvatarFallback>
+    </Avatar>
+  );
+}
+`,
+  },
   ["button-loading"]: {
     component: dynamic(
       () => import("@/foundations/ui/button/preview/button-loading.preview")
@@ -28,6 +171,52 @@ export default function ButtonExample() {
 
 export default function ButtonExample() {
   return <Button>Click me</Button>;
+}
+`,
+  },
+  ["checkbox"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/checkbox/preview/checkbox.preview")
+    ),
+    source: `"use client";
+
+import { Label } from "@/foundations/ui/label/label";
+import { Checkbox } from "../checkbox";
+
+export default function CheckboxPreview() {
+  return (
+    <div className="flex flex-col space-y-4">
+      <div className="flex items-center space-x-2">
+        <Checkbox id="unchecked" />
+        <Label htmlFor="unchecked">Unchecked</Label>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox id="checked" checked onChange={() => {}} />
+        <Label htmlFor="checked">Checked</Label>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox id="indeterminate" indeterminate />
+        <Label htmlFor="indeterminate">Indeterminate</Label>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox id="disabled" disabled />
+        <Label htmlFor="disabled">Disabled</Label>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox id="disabled-checked" checked disabled />
+        <Label htmlFor="disabled-checked">Checked Disabled</Label>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox id="disabled-indeterminate" indeterminate disabled />
+        <Label htmlFor="disabled-indeterminate">Indeterminate Disabled</Label>
+      </div>
+    </div>
+  );
 }
 `,
   },

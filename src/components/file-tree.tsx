@@ -98,7 +98,7 @@ const FileTreeFile = ({
     <div
       className={cn(
         "h-full flex-1 overflow-auto text-sm",
-        "bg-foreground/2 rounded-r-xl",
+        "rounded-r-xl",
         "[&_pre[data-language]]:overflow-visible [&_pre[data-language]]:rounded-none [&_pre[data-language]]:border-transparent [&_pre[data-language]]:bg-transparent",
         "[&_div[data-code-block]]:static"
       )}
@@ -214,8 +214,8 @@ const Item = ({
       ref={ref}
       className={cn(
         "font-mono text-sm",
-        "hover:bg-foreground/5 focus-visible:bg-foreground/10 mt-0.5 flex w-full cursor-pointer items-center gap-1 rounded-md px-2 py-1 pl-[calc(var(--level)*var(--spacing)*2)] outline-none focus-visible:ring-transparent",
-        isActive && "bg-foreground/5",
+        "hover:bg-background-secondary focus-visible:bg-foreground/10 mt-0.5 flex w-full cursor-pointer items-center gap-1 rounded-md px-2 py-1 pl-[calc(var(--level)*var(--spacing)*2)] outline-none focus-visible:ring-transparent",
+        isActive && "bg-background-secondary",
         className
       )}
       style={{ "--level": level }}

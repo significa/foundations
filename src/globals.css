@@ -19,6 +19,8 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono: "Geist Mono", ui-monospace, monospace;
 
+  --text-2xs: 0.625rem;
+
   --color-background: oklch(100% 0 0);
   --color-background-secondary: oklch(95% 0 0);
 
@@ -47,8 +49,8 @@
   --color-foreground: oklch(95% 0 0);
   --color-foreground-secondary: oklch(53% 0 0);
 
-  --color-border: oklch(24% 0 0);
-  --color-border-hard: oklch(26% 0 0);
+  --color-border: oklch(26% 0 0);
+  --color-border-hard: oklch(28% 0 0);
 
   --color-ring: oklch(100% 0 0 / 0.12);
 }

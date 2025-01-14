@@ -5,6 +5,7 @@ import {
   PreviewSwitchCode,
   PreviewSwitchFrame,
 } from "./preview-switch";
+import { cn } from "@/lib/utils";
 
 export function Preview({
   slug,
@@ -23,8 +24,13 @@ export function Preview({
         <iframe className="h-full w-full" src={`/preview/${slug}`} />
       </PreviewSwitchFrame>
       <PreviewSwitchCode>
-        <div className="h-[300px] w-full overflow-auto md:h-[400px]">
-          <Markdown>{`\`\`\`tsx\n${imports[slug].source}\n\`\`\``}</Markdown>
+        <div
+          className={cn(
+            "h-[300px] w-full overflow-auto md:h-[400px]",
+            "[&_pre[data-language]]:overflow-visible [&_pre[data-language]]:rounded-none [&_pre[data-language]]:border-transparent [&_pre[data-language]]:bg-transparent"
+          )}
+        >
+          <Markdown>{`\`\`\`tsx\n${imports[slug].source}\`\`\``}</Markdown>
         </div>
       </PreviewSwitchCode>
     </PreviewSwitch>

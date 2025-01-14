@@ -20,7 +20,7 @@ export const TableOfContents = ({
           }
         });
       },
-      { rootMargin: "-56px 0px -80%" }
+      { rootMargin: "-56px 0px -80%" } // header height 56px
     );
 
     const headingElements = headings.map(({ id }) =>

@@ -36,8 +36,8 @@ export const Menu = ({ items }: { items: typeof navigation }) => {
                 key={child.href}
                 href={child.href}
                 className={cn(
-                  "hover:bg-foreground/5 flex items-center gap-1 rounded-lg px-3 py-2 text-sm leading-none",
-                  pathname === child.href && "bg-foreground/5"
+                  "hover:bg-background-secondary flex items-center gap-1 rounded-lg px-3 py-2 text-sm leading-none",
+                  pathname === child.href && "bg-background-secondary"
                 )}
               >
                 <span>{child.title}</span>

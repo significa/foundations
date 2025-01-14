@@ -25,6 +25,7 @@ import {
 import { SourceCode } from "@/components/source-code";
 import { Preview } from "@/components/preview";
 import { FileTree, FileTreeFolder, FileTreeFile } from "@/components/file-tree";
+import { PropsTable } from "@/components/props-table";
 
 import { CopyButton } from "./copy-button";
 
@@ -74,7 +75,9 @@ const Heading = ({
 
 export const components: ReturnType<UseMdxComponents> = {
   h1: (props) => <Heading heading="h1" className="text-3xl" {...props} />,
-  h2: (props) => <Heading heading="h2" className="text-2xl" {...props} />,
+  h2: (props) => (
+    <Heading heading="h2" className="border-b pb-4 text-2xl" {...props} />
+  ),
   h3: (props) => <Heading heading="h3" className="text-xl" {...props} />,
   h4: (props) => <Heading heading="h4" className="text-lg" {...props} />,
   h5: (props) => <Heading heading="h5" className="text-md" {...props} />,
@@ -136,4 +139,5 @@ export const components: ReturnType<UseMdxComponents> = {
   FileTree,
   FileTreeFolder,
   FileTreeFile,
+  PropsTable,
 };
