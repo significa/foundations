@@ -1,12 +1,11 @@
-# fly.toml app configuration file generated for foundations-next on 2025-01-10T09:21:27Z
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'foundations-next'
-primary_region = 'fra'
+app = 'significa-foundations'
+primary_region = 'mad'
 
 [build]
+
+[deploy]
+  strategy = "canary"
+  wait_timeout = "1m"
 
 [http_service]
   internal_port = 3000
@@ -16,7 +15,17 @@ primary_region = 'fra'
   min_machines_running = 0
   processes = ['app']
 
+  [http_service.http_options.response]
+    pristine = true
+
+  [[http_service.checks]]
+    grace_period = '10s'
+    interval = '5s'
+    timeout = '5s'
+    method = 'GET'
+    path = '/healthz'
+
 [[vm]]
-  memory = '1gb'
+  memory = '256mb'
   cpu_kind = 'shared'
   cpus = 1
