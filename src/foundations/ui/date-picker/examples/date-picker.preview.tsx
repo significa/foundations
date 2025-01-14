@@ -11,7 +11,7 @@ export default function DatePickerPreview() {
   return (
     <DatePicker placement="bottom-start">
       <DatePickerTrigger className="w-60" placeholder="Select date">
-        {selectedDate ? format(selectedDate, "MM/dd/yyyy") : undefined}
+        {selectedDate ? format(selectedDate, "PPP") : undefined}
       </DatePickerTrigger>
       <DatePickerPanel
         className="w-72"

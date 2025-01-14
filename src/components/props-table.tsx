@@ -67,7 +67,9 @@ export const PropsTable = ({ definitions }: PropsTableProps) => {
                     ))}
                   </td>
                   {hasDescription && (
-                    <td className={tdClasses}>{description || "-"}</td>
+                    <td className={tdClasses}>
+                      {description ? <Markdown>{description}</Markdown> : "-"}
+                    </td>
                   )}
                 </tr>
               );

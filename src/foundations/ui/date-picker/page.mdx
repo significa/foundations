@@ -3,4 +3,64 @@ export const metadata = {
   description: "A simple date picker component",
   files: ["src/foundations/ui/date-picker/date-picker.tsx"],
   preview: "date-picker",
+  dependencies: [
+    {
+      name: "Calendar",
+      href: "/ui/calendar",
+    },
+    {
+      name: "Menu",
+      href: "/ui/menu",
+    },
+    {
+      name: "Popover",
+      href: "/ui/popover",
+    },
+    {
+      name: "Select (SelectButton)",
+      href: "/ui/select",
+    },
+  ],
 };
+
+## API Reference
+
+### DatePicker
+
+Extends the [`Menu`](/ui/menu) component.
+
+### DatePickerTrigger
+
+Extends the [`MenuTrigger`](/ui/menu) component.
+
+<PropsTable
+  definitions={{
+    placeholder: {
+      type: "string",
+      description:
+        "The placeholder text to display when the date picker is empty.",
+    },
+    variant: {
+      type: 'InputProps["variant"]',
+      description: "Check [Input](/ui/input) for more information.",
+    },
+  }}
+/>
+
+### DatePickerPanel
+
+Extends the [`Calendar`](/ui/calendar) component.
+
+## Examples
+
+### Simple Date Picker
+
+<Preview slug="date-picker" />
+
+### Date Picker with Time
+
+<Preview slug="date-picker-date-time" />
+
+### Shortcuts
+
+<Preview slug="date-picker-shortcuts" />

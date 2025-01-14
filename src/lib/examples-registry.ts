@@ -543,6 +543,122 @@ export default function CheckboxPreview() {
 }
 `,
   },
+  ["date-picker-date-time"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/ui/date-picker/examples/date-picker-date-time.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+import { format } from "date-fns";
+
+import { DatePicker, DatePickerPanel, DatePickerTrigger } from "../date-picker";
+import { Input } from "../../input/input";
+
+export default function DatePickerDateTimePreview() {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  return (
+    <div className="flex items-center gap-2">
+      <DatePicker placement="bottom-start">
+        <DatePickerTrigger className="w-60" placeholder="Select date">
+          {format(selectedDate, "PPP")}
+        </DatePickerTrigger>
+        <DatePickerPanel
+          className="w-72"
+          value={selectedDate || new Date()}
+          onDateChange={(date: Date) => {
+            setSelectedDate(date);
+          }}
+        />
+      </DatePicker>
+      <Input className="w-40" type="time" />
+    </div>
+  );
+}
+`,
+  },
+  ["date-picker-shortcuts"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/ui/date-picker/examples/date-picker-shortcuts.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+import { format } from "date-fns";
+
+import { DatePicker, DatePickerTrigger, DatePickerPanel } from "../date-picker";
+import { MenuDivider, MenuItem } from "../../menu/menu";
+
+export default function DatePickerShortcutsPreview() {
+  const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
+
+  return (
+    <DatePicker placement="bottom-start">
+      <DatePickerTrigger className="w-80" placeholder="Select date range">
+        {dateRange
+          ? format(dateRange[0], "MM/dd/yyyy") +
+            " - " +
+            format(dateRange[1], "MM/dd/yyyy")
+          : undefined}
+      </DatePickerTrigger>
+      <DatePickerPanel
+        className="w-80"
+        mode="range"
+        value={dateRange}
+        onDateChange={(dates: [Date, Date]) => {
+          setDateRange(dates);
+        }}
+      >
+        <MenuDivider />
+        <MenuItem
+          onSelect={() => {
+            setDateRange([new Date(), new Date()]);
+          }}
+        >
+          Today
+        </MenuItem>
+        <MenuItem
+          onSelect={() => {
+            setDateRange([
+              new Date(new Date().setDate(new Date().getDate() - 1)),
+              new Date(new Date().setDate(new Date().getDate() - 1)),
+            ]);
+          }}
+        >
+          Yesterday
+        </MenuItem>
+        <MenuItem
+          onSelect={() => {
+            setDateRange([
+              new Date(new Date().setDate(new Date().getDate() - 7)),
+              new Date(),
+            ]);
+          }}
+        >
+          Last 7 days
+        </MenuItem>
+        <MenuDivider />
+        <MenuItem
+          className="text-red-500"
+          onSelect={() => {
+            setDateRange(null);
+          }}
+        >
+          Clear
+        </MenuItem>
+      </DatePickerPanel>
+    </DatePicker>
+  );
+}
+`,
+  },
   ["date-picker"]: {
     component: dynamic(
       () => import("@/foundations/ui/date-picker/examples/date-picker.preview")
@@ -560,7 +676,7 @@ export default function DatePickerPreview() {
   return (
     <DatePicker placement="bottom-start">
       <DatePickerTrigger className="w-60" placeholder="Select date">
-        {selectedDate ? format(selectedDate, "MM/dd/yyyy") : undefined}
+        {selectedDate ? format(selectedDate, "PPP") : undefined}
       </DatePickerTrigger>
       <DatePickerPanel
         className="w-72"
