@@ -31,46 +31,6 @@ export default function ButtonExample() {
 }
 `,
   },
-  ["disclosure"]: {
-    component: dynamic(
-      () => import("@/foundations/ui/disclosure/preview/disclosure.preview")
-    ),
-    source: `import {
-  Disclosure,
-  DisclosureTrigger,
-  DisclosureChevron,
-  DisclosureContent,
-} from "@/foundations/ui/disclosure/disclosure";
-
-export default function DisclosureExample() {
-  return (
-    <div className="flex h-60 w-60 flex-col gap-4">
-      <Disclosure>
-        <DisclosureTrigger>
-          What is an Disclosure?
-          <DisclosureChevron />
-        </DisclosureTrigger>
-        <DisclosureContent>
-          An Disclosure is a vertically stacked set of interactive headings that
-          each reveal a section of content.
-        </DisclosureContent>
-      </Disclosure>
-      <Disclosure>
-        <DisclosureTrigger>
-          When should I use an Disclosure?
-          <DisclosureChevron />
-        </DisclosureTrigger>
-        <DisclosureContent>
-          Use Disclosures to organize related information into collapsible
-          sections, making it easier for users to scan and find specific content
-          without being overwhelmed by too much information at once.
-        </DisclosureContent>
-      </Disclosure>
-    </div>
-  );
-}
-`,
-  },
   ["spinner"]: {
     component: dynamic(
       () => import("@/foundations/ui/spinner/preview/spinner.preview")
