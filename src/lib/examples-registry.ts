@@ -468,16 +468,17 @@ export default function CalendarPreview() {
 }
 `,
   },
-  ["checkbox"]: {
+  ["checkbox-all-states"]: {
     component: dynamic(
-      () => import("@/foundations/ui/checkbox/examples/checkbox.preview")
+      () =>
+        import("@/foundations/ui/checkbox/examples/checkbox-all-states.preview")
     ),
     source: `"use client";
 
 import { Label } from "@/foundations/ui/label/label";
 import { Checkbox } from "../checkbox";
 
-export default function CheckboxPreview() {
+export default function CheckboxAllStatesPreview() {
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex items-center space-x-2">
@@ -511,6 +512,34 @@ export default function CheckboxPreview() {
       </div>
     </div>
   );
+}
+`,
+  },
+  ["checkbox-disabled"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/checkbox/examples/checkbox-disabled.preview")
+    ),
+    source: `import { Checkbox } from "../checkbox";
+
+export default function CheckboxDisabledPreview() {
+  return (
+    <div className="flex flex-col space-y-4">
+      <Checkbox disabled />
+      <Checkbox checked disabled />
+    </div>
+  );
+}
+`,
+  },
+  ["checkbox"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/checkbox/examples/checkbox.preview")
+    ),
+    source: `import { Checkbox } from "../checkbox";
+
+export default function CheckboxPreview() {
+  return <Checkbox />;
 }
 `,
   },
