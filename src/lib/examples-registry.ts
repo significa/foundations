@@ -152,6 +152,62 @@ export default function AvatarPreview() {
 }
 `,
   },
+  ["badge-sizes"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/badge/preview/badge-sizes.preview")
+    ),
+    source: `import { Badge } from "../badge";
+
+export default function BadgeSizesPreview() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Badge size="xs">Extra small</Badge>
+      <Badge size="sm">Small</Badge>
+      <Badge size="md">Medium</Badge>
+    </div>
+  );
+}
+`,
+  },
+  ["badge-variants"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/badge/preview/badge-variants.preview")
+    ),
+    source: `import { Badge } from "../badge";
+
+export default function BadgeVariantsPreview() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Badge variant="neutral">Neutral</Badge>
+      <Badge variant="success">Success</Badge>
+      <Badge variant="error">Error</Badge>
+      <Badge variant="warning">Warning</Badge>
+      <Badge variant="info">Info</Badge>
+    </div>
+  );
+}
+`,
+  },
+  ["badge"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/badge/preview/badge.preview")
+    ),
+    source: `import { Package } from "@phosphor-icons/react/dist/ssr";
+import { Badge, BadgeIcon, BadgeStatus } from "../badge";
+
+export default function BadgePreview() {
+  return (
+    <Badge>
+      <BadgeIcon>
+        <Package />
+      </BadgeIcon>
+      <span>Up to date</span>
+      <BadgeStatus className="bg-emerald-500" />
+    </Badge>
+  );
+}
+`,
+  },
   ["button-loading"]: {
     component: dynamic(
       () => import("@/foundations/ui/button/preview/button-loading.preview")

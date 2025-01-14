@@ -1,6 +1,7 @@
 export const metadata = {
   title: "Avatar",
-  description: "Avatar component with a fallback with initials",
+  description:
+    "A visual representation of a user that displays initials when an image is unavailable",
   files: ["src/foundations/ui/avatar/avatar.tsx"],
   preview: "avatar",
 };
@@ -8,6 +9,8 @@ export const metadata = {
 ## API Reference
 
 ### Avatar
+
+Extends the `div` component.
 
 <PropsTable
   definitions={{
@@ -24,6 +27,8 @@ export const metadata = {
 
 ### AvatarImage
 
+Extends the `img` component.
+
 <PropsTable
   definitions={{
     src: {
@@ -33,6 +38,8 @@ export const metadata = {
 />
 
 ### AvatarFallback
+
+Extends the `div` component.
 
 <PropsTable
   definitions={{

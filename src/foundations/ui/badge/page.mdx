@@ -1,0 +1,51 @@
+export const metadata = {
+  title: "Badge",
+  description:
+    "A Badge component with the possibility of adding an icon and a status",
+  files: ["src/foundations/ui/badge/badge.tsx"],
+  preview: "badge",
+};
+
+## API Reference
+
+### Badge
+
+Extends the `div` component.
+
+<PropsTable
+  definitions={{
+    variant: {
+      default: "neutral",
+      type: '"neutral" | "success" | "error" | "warning" | "info"',
+    },
+    size: {
+      default: "md",
+      type: '"xs" | "sm" | "md"',
+    },
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### BadgeIcon
+
+Extends the `div` component.
+
+### BadgeStatus
+
+Extends the `div` component.
+
+## Examples
+
+### Variants
+
+<Preview slug="badge-variants" />
+
+### Sizes
+
+<Preview slug="badge-sizes" />
+
+### With icon and status
+
+<Preview slug="badge" />
