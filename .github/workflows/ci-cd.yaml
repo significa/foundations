@@ -1,0 +1,45 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint and build
+    runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run build
+
+  deploy-container-on-fly:
+    name: Container on Fly
+    permissions:
+      contents: read
+      packages: read
+      deployments: write
+    needs:
+      - lint
+    uses: significa/actions/.github/workflows/container-on-fly.yaml@main
+    with:
+      staging_branch: main
+    secrets:
+      FLY_API_TOKEN_STAGING: ${{ secrets.FLY_API_TOKEN }}
