@@ -12,7 +12,7 @@ export const imports: Record<string, Import> = {
   ["avatar-broken-image"]: {
     component: dynamic(
       () =>
-        import("@/foundations/ui/avatar/preview/avatar-broken-image.preview")
+        import("@/foundations/ui/avatar/examples/avatar-broken-image.preview")
     ),
     source: `import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 
@@ -29,7 +29,7 @@ export default function AvatarBrokenImagePreview() {
   ["avatar-custom-color"]: {
     component: dynamic(
       () =>
-        import("@/foundations/ui/avatar/preview/avatar-custom-color.preview")
+        import("@/foundations/ui/avatar/examples/avatar-custom-color.preview")
     ),
     source: `import { Avatar, AvatarFallback } from "../avatar";
 
@@ -44,7 +44,7 @@ export default function AvatarCustomColorPreview() {
   },
   ["avatar-fallback"]: {
     component: dynamic(
-      () => import("@/foundations/ui/avatar/preview/avatar-fallback.preview")
+      () => import("@/foundations/ui/avatar/examples/avatar-fallback.preview")
     ),
     source: `import { Avatar, AvatarFallback } from "../avatar";
 
@@ -75,7 +75,9 @@ export default function AvatarFallbackPreview() {
   ["avatar-on-top-of-media"]: {
     component: dynamic(
       () =>
-        import("@/foundations/ui/avatar/preview/avatar-on-top-of-media.preview")
+        import(
+          "@/foundations/ui/avatar/examples/avatar-on-top-of-media.preview"
+        )
     ),
     source: `import { Avatar, AvatarFallback } from "../avatar";
 
@@ -100,7 +102,7 @@ export default function AvatarOnTopOfMediaPreview() {
   },
   ["avatar-sizes"]: {
     component: dynamic(
-      () => import("@/foundations/ui/avatar/preview/avatar-sizes.preview")
+      () => import("@/foundations/ui/avatar/examples/avatar-sizes.preview")
     ),
     source: `import { Avatar, AvatarFallback } from "../avatar";
 
@@ -138,7 +140,7 @@ export default function AvatarSizesPreview() {
   },
   ["avatar"]: {
     component: dynamic(
-      () => import("@/foundations/ui/avatar/preview/avatar.preview")
+      () => import("@/foundations/ui/avatar/examples/avatar.preview")
     ),
     source: `import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 
@@ -154,7 +156,7 @@ export default function AvatarPreview() {
   },
   ["badge-sizes"]: {
     component: dynamic(
-      () => import("@/foundations/ui/badge/preview/badge-sizes.preview")
+      () => import("@/foundations/ui/badge/examples/badge-sizes.preview")
     ),
     source: `import { Badge } from "../badge";
 
@@ -171,7 +173,7 @@ export default function BadgeSizesPreview() {
   },
   ["badge-variants"]: {
     component: dynamic(
-      () => import("@/foundations/ui/badge/preview/badge-variants.preview")
+      () => import("@/foundations/ui/badge/examples/badge-variants.preview")
     ),
     source: `import { Badge } from "../badge";
 
@@ -190,7 +192,7 @@ export default function BadgeVariantsPreview() {
   },
   ["badge"]: {
     component: dynamic(
-      () => import("@/foundations/ui/badge/preview/badge.preview")
+      () => import("@/foundations/ui/badge/examples/badge.preview")
     ),
     source: `import { Package } from "@phosphor-icons/react/dist/ssr";
 import { Badge, BadgeIcon, BadgeStatus } from "../badge";
@@ -210,7 +212,7 @@ export default function BadgePreview() {
   },
   ["button-as-link"]: {
     component: dynamic(
-      () => import("@/foundations/ui/button/preview/button-as-link.preview")
+      () => import("@/foundations/ui/button/examples/button-as-link.preview")
     ),
     source: `import { Button } from "@/foundations/ui/button/button";
 import { ArrowSquareOut, Package } from "@phosphor-icons/react/dist/ssr";
@@ -230,7 +232,7 @@ export default function ButtonLinkPreview() {
   },
   ["button-disabled"]: {
     component: dynamic(
-      () => import("@/foundations/ui/button/preview/button-disabled.preview")
+      () => import("@/foundations/ui/button/examples/button-disabled.preview")
     ),
     source: `import { Button } from "@/foundations/ui/button/button";
 
@@ -256,7 +258,7 @@ export default function ButtonDisabledPreview() {
   },
   ["button-icons"]: {
     component: dynamic(
-      () => import("@/foundations/ui/button/preview/button-icons.preview")
+      () => import("@/foundations/ui/button/examples/button-icons.preview")
     ),
     source: `import {
   ArrowSquareOut,
@@ -288,7 +290,7 @@ export default function ButtonIconsPreview() {
   },
   ["button-loading"]: {
     component: dynamic(
-      () => import("@/foundations/ui/button/preview/button-loading.preview")
+      () => import("@/foundations/ui/button/examples/button-loading.preview")
     ),
     source: `"use client";
 
@@ -308,7 +310,7 @@ export default function ButtonExample() {
   },
   ["button-sizes"]: {
     component: dynamic(
-      () => import("@/foundations/ui/button/preview/button-sizes.preview")
+      () => import("@/foundations/ui/button/examples/button-sizes.preview")
     ),
     source: `import { Button } from "@/foundations/ui/button/button";
 
@@ -325,7 +327,7 @@ export default function ButtonSizesPreview() {
   },
   ["button-variants"]: {
     component: dynamic(
-      () => import("@/foundations/ui/button/preview/button-variants.preview")
+      () => import("@/foundations/ui/button/examples/button-variants.preview")
     ),
     source: `import { Button } from "@/foundations/ui/button/button";
 
@@ -343,7 +345,7 @@ export default function ButtonVariantsPreview() {
   },
   ["button"]: {
     component: dynamic(
-      () => import("@/foundations/ui/button/preview/button.preview")
+      () => import("@/foundations/ui/button/examples/button.preview")
     ),
     source: `import { Button } from "@/foundations/ui/button/button";
 import { HandPointing } from "@phosphor-icons/react/dist/ssr";
@@ -360,7 +362,7 @@ export default function ButtonExample() {
   },
   ["checkbox"]: {
     component: dynamic(
-      () => import("@/foundations/ui/checkbox/preview/checkbox.preview")
+      () => import("@/foundations/ui/checkbox/examples/checkbox.preview")
     ),
     source: `"use client";
 
@@ -406,7 +408,7 @@ export default function CheckboxPreview() {
   },
   ["spinner"]: {
     component: dynamic(
-      () => import("@/foundations/ui/spinner/preview/spinner.preview")
+      () => import("@/foundations/ui/spinner/examples/spinner.preview")
     ),
     source: `import { Spinner } from "@/foundations/ui/spinner/spinner";
 
