@@ -9,19 +9,41 @@ import { cn } from "@/lib/utils";
 
 export function Preview({
   slug,
+  mode = "inline",
+  layout = "centered",
   className,
   withSource = true,
 }: {
   slug: string;
+  mode?: "inline" | "iframe";
+  layout?: "padded" | "centered" | "fullscreen";
   className?: string;
   withSource?: boolean;
 }) {
   if (!imports[slug]) return null;
 
+  const Component = imports[slug].component;
+
   return (
     <PreviewSwitch className={className} disabled={!withSource}>
       <PreviewSwitchFrame>
-        <iframe className="h-full w-full" src={`/preview/${slug}`} />
+        {mode === "iframe" ? (
+          <iframe
+            className="h-full w-full"
+            src={`/preview/${slug}?layout=${layout}`}
+          />
+        ) : (
+          <div
+            className={cn(
+              "h-full w-full",
+              layout === "centered" &&
+                "flex flex-col items-center justify-center",
+              layout === "padded" && "p-4"
+            )}
+          >
+            <Component />
+          </div>
+        )}
       </PreviewSwitchFrame>
       <PreviewSwitchCode>
         <div

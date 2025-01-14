@@ -123,7 +123,24 @@ export default async function Page({
             )}
           </div>
           {metadata.preview && (
-            <Preview className="mb-8" slug={metadata.preview} />
+            <Preview
+              className="mb-8"
+              slug={
+                typeof metadata.preview === "string"
+                  ? metadata.preview
+                  : metadata.preview.slug
+              }
+              mode={
+                typeof metadata.preview === "string"
+                  ? undefined
+                  : metadata.preview.mode
+              }
+              layout={
+                typeof metadata.preview === "string"
+                  ? undefined
+                  : metadata.preview.layout
+              }
+            />
           )}
 
           {metadata.dependencies && metadata.dependencies.length > 0 && (

@@ -6,7 +6,16 @@ import { evaluate } from "@mdx-js/mdx";
 const metadataSchema = z.object({
   title: z.string({ required_error: "Title is required" }),
   description: z.string().optional(),
-  preview: z.string().optional(),
+  preview: z
+    .union([
+      z.string(),
+      z.object({
+        slug: z.string(),
+        mode: z.enum(["inline", "iframe"]).optional(),
+        layout: z.enum(["centered", "padded", "fullscreen"]).optional(),
+      }),
+    ])
+    .optional(),
   files: z.array(z.string()).optional(),
   dependencies: z
     .array(
