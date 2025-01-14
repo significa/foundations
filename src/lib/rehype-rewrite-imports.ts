@@ -7,6 +7,8 @@ export const rehypeRewriteImports = () => (tree: Node) => {
     node.value = node.value
       // Replace @/foundations/ui with @/components
       .replace(/@\/foundations\/ui/g, "@/components")
+      // Replace @/foundations/utils with @/lib
+      .replace(/@\/foundations\/utils/g, "@/lib")
       // Remove duplicate folder names (e.g. @/components/button/button to @/components/button)
       .replace(/\/([^/]+)\/\1/g, "/$1");
   });

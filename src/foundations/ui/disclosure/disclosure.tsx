@@ -7,7 +7,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";
 
-interface AccordionGroupContext {
+interface DisclosureGroupContext {
   open: string | null;
   setOpen: (id: string | null) => void;
 }
@@ -16,57 +16,59 @@ interface AccordionGroupContext {
 // https://developer.mozilla.org/en-US/docs/Web/CSS/calc-size
 // when it's generally available, we can avoid the use of `motion` in this component
 
-const AccordionGroupContext = createContext<AccordionGroupContext | null>(null);
+const DisclosureGroupContext = createContext<DisclosureGroupContext | null>(
+  null
+);
 
-const useAccordionGroupContext = () => use(AccordionGroupContext);
+const useDisclosureGroupContext = () => use(DisclosureGroupContext);
 
-const AccordionGroup = ({ children }: { children: React.ReactNode }) => {
+const DisclosureGroup = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState<string | null>(null);
 
   return (
-    <AccordionGroupContext value={{ open, setOpen }}>
+    <DisclosureGroupContext value={{ open, setOpen }}>
       {children}
-    </AccordionGroupContext>
+    </DisclosureGroupContext>
   );
 };
 
-interface AccordionContext {
+interface DisclosureContext {
   id: string;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-const AccordionContext = createContext<AccordionContext | null>(null);
+const DisclosureContext = createContext<DisclosureContext | null>(null);
 
-const useAccordionContext = () => {
-  const context = use(AccordionContext);
+const useDisclosureContext = () => {
+  const context = use(DisclosureContext);
 
   if (!context)
-    throw new Error("Accordion components must be used within an Accordion");
+    throw new Error("Disclosure components must be used within an Disclosure");
 
   return context;
 };
 
-interface AccordionProps extends React.ComponentPropsWithRef<"div"> {
+interface DisclosureProps extends React.ComponentPropsWithRef<"div"> {
   defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
 }
 
-const Accordion = ({
+const Disclosure = ({
   defaultOpen,
   open: propsOpen,
   onOpenChange,
   children,
   ...props
-}: AccordionProps) => {
+}: DisclosureProps) => {
   const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
 
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
-  const group = useAccordionGroupContext();
+  const group = useDisclosureGroupContext();
 
   let open = propsOpen ?? internalOpen;
 
@@ -84,24 +86,24 @@ const Accordion = ({
   }
 
   return (
-    <AccordionContext value={{ open, setOpen, id }}>
+    <DisclosureContext value={{ open, setOpen, id }}>
       <div {...props}>{children}</div>
-    </AccordionContext>
+    </DisclosureContext>
   );
 };
 
-interface AccordionTriggerProps extends React.ComponentPropsWithRef<"button"> {
+interface DisclosureTriggerProps extends React.ComponentPropsWithRef<"button"> {
   asChild?: boolean;
 }
 
-const AccordionTrigger = ({
+const DisclosureTrigger = ({
   children,
   onClick,
   asChild,
   className,
   ...props
-}: AccordionTriggerProps) => {
-  const { open, setOpen, id } = useAccordionContext();
+}: DisclosureTriggerProps) => {
+  const { open, setOpen, id } = useDisclosureContext();
 
   const Comp = asChild ? Slot : "button";
 
@@ -116,7 +118,10 @@ const AccordionTrigger = ({
       aria-expanded={open}
       aria-controls={open ? getContentId(id) : undefined}
       data-open={open}
-      className={cn("ring-ring outline-none focus-visible:ring-4", className)}
+      className={cn(
+        "ring-ring flex w-full items-center justify-between text-left outline-none focus-visible:ring-4",
+        className
+      )}
       {...props}
     >
       {children}
@@ -124,14 +129,14 @@ const AccordionTrigger = ({
   );
 };
 
-const getContentId = (id: string) => `${id}-accordion-content`;
+const getContentId = (id: string) => `${id}-Disclosure-content`;
 
-const AccordionContent = ({
+const DisclosureContent = ({
   children,
   className,
   ...props
 }: Omit<HTMLMotionProps<"div">, "id"> & { className?: string }) => {
-  const { open, id } = useAccordionContext();
+  const { open, id } = useDisclosureContext();
 
   return (
     <AnimatePresence initial={false}>
@@ -153,8 +158,8 @@ const AccordionContent = ({
   );
 };
 
-const AccordionChevron = () => {
-  const { open } = useAccordionContext();
+const DisclosureChevron = () => {
+  const { open } = useDisclosureContext();
 
   return (
     <span
@@ -170,9 +175,9 @@ const AccordionChevron = () => {
 };
 
 export {
-  Accordion,
-  AccordionTrigger,
-  AccordionContent,
-  AccordionGroup,
-  AccordionChevron,
+  Disclosure,
+  DisclosureTrigger,
+  DisclosureContent,
+  DisclosureGroup,
+  DisclosureChevron,
 };

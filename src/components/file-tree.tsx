@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  Accordion,
-  AccordionContent,
-  AccordionTrigger,
-} from "@/foundations/ui/accordion/accordion";
+  Disclosure,
+  DisclosureContent,
+  DisclosureTrigger,
+} from "@/foundations/ui/disclosure/disclosure";
 import { cn } from "@/lib/utils";
 import { FileText, Folder } from "@phosphor-icons/react";
 import { useState, createContext, use, useCallback, useEffect } from "react";
@@ -174,14 +174,14 @@ const FileNavigationItem = ({ name, node, path }: FileNavigationItemProps) => {
   }
 
   return (
-    <Accordion key={fullPath} defaultOpen>
-      <AccordionTrigger asChild>
+    <Disclosure key={fullPath} defaultOpen>
+      <DisclosureTrigger asChild className="justify-start">
         <Item level={path.length + 1}>
           <Folder className="text-foreground-secondary" />
           <span>{name}</span>
         </Item>
-      </AccordionTrigger>
-      <AccordionContent>
+      </DisclosureTrigger>
+      <DisclosureContent>
         {Object.entries(node).map(([childKey, childNode]) => (
           <FileNavigationItem
             key={childKey}
@@ -190,8 +190,8 @@ const FileNavigationItem = ({ name, node, path }: FileNavigationItemProps) => {
             path={currentPath}
           />
         ))}
-      </AccordionContent>
-    </Accordion>
+      </DisclosureContent>
+    </Disclosure>
   );
 };
 

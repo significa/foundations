@@ -59,7 +59,7 @@ export const getNavigationWithTags = async () => {
           const updated = await getMostRecentModifiedDate(
             await getDirectoryFiles(path.dirname(filePath))
           );
-          const isUpdated = differenceInDays(new Date(), updated) < 30;
+          const isUpdated = differenceInDays(new Date(), updated) < 15;
 
           return {
             ...child,

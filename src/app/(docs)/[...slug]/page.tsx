@@ -58,7 +58,9 @@ export default async function Page({
       </aside>
       <main className="w-full gap-8 px-2 md:px-4 lg:flex">
         <nav className="sticky top-16 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-[200px] shrink-0 overflow-y-auto pt-6 text-sm lg:block">
-          {toc.length > 0 && (
+          {(toc.length > 0 ||
+            (metadata.dependencies && metadata.dependencies.length > 0) ||
+            (metadata.files && metadata.files.length > 0)) && (
             <>
               <h3 className="text-foreground-secondary mb-3 font-medium">
                 On this page
@@ -121,11 +123,7 @@ export default async function Page({
             )}
           </div>
           {metadata.preview && (
-            <Preview
-              className="mb-8"
-              slug={metadata.preview}
-              withSource={false}
-            />
+            <Preview className="mb-8" slug={metadata.preview} />
           )}
 
           {metadata.dependencies && metadata.dependencies.length > 0 && (
