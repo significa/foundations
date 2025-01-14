@@ -1,0 +1,105 @@
+export const metadata = {
+  title: "Calendar",
+  description:
+    "A component for selecting a date or date range with month and year navigation controls",
+  files: ["src/foundations/ui/calendar/calendar.tsx"],
+  preview: "calendar",
+  dependencies: [
+    {
+      name: "Button",
+      href: "/ui/button",
+    },
+    {
+      name: "date-fns",
+      href: "https://date-fns.org/",
+    },
+  ],
+};
+
+## API Reference
+
+Extends the `div` component.
+
+### Single
+
+When `mode="range"{:tsx}` (or when ommited).
+
+<PropsTable
+  definitions={{
+    mode: {
+      type: '"single"',
+      default: '"single"',
+    },
+    value: {
+      type: "Date",
+      required: true,
+    },
+    onDateChange: {
+      type: "(date: Date) => void",
+      required: true,
+    },
+  }}
+/>
+
+### Range
+
+When `mode="range"{:tsx}`.
+
+<PropsTable
+  definitions={{
+    mode: {
+      type: '"range"',
+      required: true,
+    },
+    value: {
+      type: "[Date, Date]",
+      required: true,
+    },
+    onDateChange: {
+      type: "(dates: [Date, Date]) => void",
+      required: true,
+    },
+  }}
+/>
+
+### Common
+
+Applies to both `mode="single"{:tsx}` and `mode="range"{:tsx}`.
+
+<PropsTable
+  definitions={{
+    startWeekOn: {
+      type: ["0", "1", "2", "3", "4", "5", "6"],
+      default: "0",
+    },
+    locale: {
+      type: "Intl.LocalesArgument",
+      default: '"en"',
+    },
+    getIsDisabled: {
+      type: "(date: Date) => boolean",
+    },
+  }}
+/>
+
+## Examples
+
+### Single Date
+
+<Preview slug="calendar" />
+
+### Date range
+
+<Preview slug="calendar-range" />
+
+### Start week on Monday
+
+<Preview slug="calendar-start-day" />
+
+### Disable future dates
+
+<Preview slug="calendar-disable-future" />
+
+### Locale
+
+<Preview slug="calendar-locale" />

@@ -360,6 +360,114 @@ export default function ButtonExample() {
 }
 `,
   },
+  ["calendar-disable-future"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/ui/calendar/examples/calendar-disable-future.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+
+import { Calendar } from "../calendar";
+
+export default function CalendarDisableFuturePreview() {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  return (
+    <Calendar
+      value={selectedDate}
+      onDateChange={setSelectedDate}
+      getIsDisabled={(date: Date) => date > new Date()}
+    />
+  );
+}
+`,
+  },
+  ["calendar-locale"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/calendar/examples/calendar-locale.preview")
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+
+import { Calendar } from "../calendar";
+
+export default function CalendarLocalePreview() {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  return (
+    <Calendar value={selectedDate} onDateChange={setSelectedDate} locale="pt" />
+  );
+}
+`,
+  },
+  ["calendar-range"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/calendar/examples/calendar-range.preview")
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+
+import { Calendar } from "../calendar";
+
+export default function CalendarRangePreview() {
+  const [dateRange, setDateRange] = useState<[Date, Date]>([
+    new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    new Date(),
+  ]);
+
+  return (
+    <Calendar mode="range" value={dateRange} onDateChange={setDateRange} />
+  );
+}
+`,
+  },
+  ["calendar-start-day"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/calendar/examples/calendar-start-day.preview")
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+
+import { Calendar } from "../calendar";
+
+export default function CalendarStartDayPreview() {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  return (
+    <Calendar
+      value={selectedDate}
+      onDateChange={setSelectedDate}
+      startWeekOn={1} // Start on Monday
+    />
+  );
+}
+`,
+  },
+  ["calendar"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/calendar/examples/calendar.preview")
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+
+import { Calendar } from "../calendar";
+
+export default function CalendarPreview() {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  return <Calendar value={selectedDate} onDateChange={setSelectedDate} />;
+}
+`,
+  },
   ["checkbox"]: {
     component: dynamic(
       () => import("@/foundations/ui/checkbox/examples/checkbox.preview")

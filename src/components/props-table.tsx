@@ -1,10 +1,12 @@
 import { cn } from "@/lib/utils";
+import { Markdown } from "./markdown";
 
 interface PropsTableProps {
   definitions: Record<
     string,
     {
       default?: string;
+      required?: boolean;
       type: string | string[];
       description?: string;
     }
@@ -17,10 +19,7 @@ export const PropsTable = ({ definitions }: PropsTableProps) => {
   );
 
   const thClasses = cn("p-2 text-left font-semibold");
-  const tdClasses = cn("p-2 py-3 text-left text-sm");
-  const codeClasses = cn(
-    "font-mono text-sm font-medium rounded-sm px-1 py-0.5 bg-foreground/4 border text-foreground-secondary whitespace-nowrap"
-  );
+  const tdClasses = cn("p-2 py-3 text-left text-sm align-top");
 
   return (
     <div className="my-6 overflow-x-auto rounded-xl border border-b-0">
@@ -43,22 +42,28 @@ export const PropsTable = ({ definitions }: PropsTableProps) => {
         </thead>
         <tbody>
           {Object.entries(definitions).map(
-            ([prop, { default: defaultValue, type, description }]) => {
+            ([
+              prop,
+              { default: defaultValue, type, description, required },
+            ]) => {
               const types = Array.isArray(type) ? type : [type];
 
               return (
                 <tr key={prop} className="border-border m-0 border-b">
-                  <td className={tdClasses}>
-                    <span className={codeClasses}>{prop}</span>
+                  <td className={cn(tdClasses, "flex items-center gap-1")}>
+                    <Markdown>{`\`${prop}\``}</Markdown>
+                    {required && <span className="text-red-500"> *</span>}
                   </td>
                   <td className={tdClasses}>
-                    <span className={codeClasses}>{defaultValue || "-"}</span>
+                    {defaultValue ? (
+                      <Markdown>{`\`${defaultValue}{:ts}\``}</Markdown>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                   <td className={cn(tdClasses, "flex flex-wrap gap-1")}>
                     {types.map((t, index) => (
-                      <span key={index} className={codeClasses}>
-                        {t}
-                      </span>
+                      <Markdown key={index}>{`\`${t}{:ts}\``}</Markdown>
                     ))}
                   </td>
                   {hasDescription && (
