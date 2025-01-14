@@ -5,7 +5,7 @@ interface PropsTableProps {
     string,
     {
       default?: string;
-      type: string;
+      type: string | string[];
       description?: string;
     }
   >;
@@ -43,20 +43,30 @@ export const PropsTable = ({ definitions }: PropsTableProps) => {
         </thead>
         <tbody>
           {Object.entries(definitions).map(
-            ([prop, { default: defaultValue, type, description }]) => (
-              <tr key={prop} className="border-border m-0 border-b">
-                <td className={tdClasses}>
-                  <span className={codeClasses}>{prop}</span>
-                </td>
-                <td className={tdClasses}>
-                  <span className={codeClasses}>{defaultValue || "-"}</span>
-                </td>
-                <td className={tdClasses}>
-                  <span className={codeClasses}>{type}</span>
-                </td>
-                {description && <td className={tdClasses}>{description}</td>}
-              </tr>
-            )
+            ([prop, { default: defaultValue, type, description }]) => {
+              const types = Array.isArray(type) ? type : [type];
+
+              return (
+                <tr key={prop} className="border-border m-0 border-b">
+                  <td className={tdClasses}>
+                    <span className={codeClasses}>{prop}</span>
+                  </td>
+                  <td className={tdClasses}>
+                    <span className={codeClasses}>{defaultValue || "-"}</span>
+                  </td>
+                  <td className={cn(tdClasses, "flex flex-wrap gap-1")}>
+                    {types.map((t, index) => (
+                      <span key={index} className={codeClasses}>
+                        {t}
+                      </span>
+                    ))}
+                  </td>
+                  {hasDescription && (
+                    <td className={tdClasses}>{description || "-"}</td>
+                  )}
+                </tr>
+              );
+            }
           )}
         </tbody>
       </table>

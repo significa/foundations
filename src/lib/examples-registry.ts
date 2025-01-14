@@ -208,14 +208,136 @@ export default function BadgePreview() {
 }
 `,
   },
+  ["button-as-link"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/button/preview/button-as-link.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+import { ArrowSquareOut, Package } from "@phosphor-icons/react/dist/ssr";
+
+export default function ButtonLinkPreview() {
+  return (
+    <Button variant="outline" asChild>
+      <a href="https://significa.co" target="_blank">
+        <Package />
+        <span>Significa website</span>
+        <ArrowSquareOut />
+      </a>
+    </Button>
+  );
+}
+`,
+  },
+  ["button-disabled"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/button/preview/button-disabled.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+
+export default function ButtonDisabledPreview() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button disabled variant="primary">
+        Primary
+      </Button>
+      <Button disabled variant="outline">
+        Outline
+      </Button>
+      <Button disabled variant="ghost">
+        Ghost
+      </Button>
+      <Button disabled variant="destructive">
+        Destructive
+      </Button>
+    </div>
+  );
+}
+`,
+  },
+  ["button-icons"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/button/preview/button-icons.preview")
+    ),
+    source: `import {
+  ArrowSquareOut,
+  Package,
+  Pencil,
+  Sun,
+} from "@phosphor-icons/react/dist/ssr";
+import { Button } from "../button";
+
+export default function ButtonIconsPreview() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button variant="outline" square aria-label="Switch theme">
+        <Sun />
+      </Button>
+      <Button variant="outline">
+        <Pencil />
+        <span>Edit</span>
+      </Button>
+      <Button variant="outline">
+        <Package />
+        <span>External link</span>
+        <ArrowSquareOut />
+      </Button>
+    </div>
+  );
+}
+`,
+  },
   ["button-loading"]: {
     component: dynamic(
       () => import("@/foundations/ui/button/preview/button-loading.preview")
     ),
-    source: `import { Button } from "@/foundations/ui/button/button";
+    source: `"use client";
+
+import { Button } from "@/foundations/ui/button/button";
+import { useState } from "react";
 
 export default function ButtonExample() {
-  return <Button>Hello from dev meeting</Button>;
+  const [isLoading, setIsLoading] = useState(false);
+
+  return (
+    <Button onClick={() => setIsLoading(!isLoading)} isLoading={isLoading}>
+      Click to toggle
+    </Button>
+  );
+}
+`,
+  },
+  ["button-sizes"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/button/preview/button-sizes.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+
+export default function ButtonSizesPreview() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+    </div>
+  );
+}
+`,
+  },
+  ["button-variants"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/button/preview/button-variants.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+
+export default function ButtonVariantsPreview() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button variant="primary">Primary</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="destructive">Destructive</Button>
+    </div>
+  );
 }
 `,
   },
@@ -224,9 +346,15 @@ export default function ButtonExample() {
       () => import("@/foundations/ui/button/preview/button.preview")
     ),
     source: `import { Button } from "@/foundations/ui/button/button";
+import { HandPointing } from "@phosphor-icons/react/dist/ssr";
 
 export default function ButtonExample() {
-  return <Button>Click me</Button>;
+  return (
+    <Button>
+      <HandPointing />
+      <span>Click me</span>
+    </Button>
+  );
 }
 `,
   },

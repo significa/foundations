@@ -21,12 +21,12 @@ Extends the `div` component.
 <PropsTable
   definitions={{
     variant: {
-      default: "neutral",
-      type: '"neutral" | "success" | "error" | "warning" | "info"',
+      default: '"neutral"',
+      type: ['"neutral"', '"success"', '"error"', '"warning"', '"info"'],
     },
     size: {
-      default: "md",
-      type: '"xs" | "sm" | "md"',
+      default: '"md"',
+      type: ['"xs"', '"sm"', '"md"'],
     },
     asChild: {
       type: "boolean",

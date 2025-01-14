@@ -1,5 +1,14 @@
+"use client";
+
 import { Button } from "@/foundations/ui/button/button";
+import { useState } from "react";
 
 export default function ButtonExample() {
-  return <Button>Hello from dev meeting</Button>;
+  const [isLoading, setIsLoading] = useState(false);
+
+  return (
+    <Button onClick={() => setIsLoading(!isLoading)} isLoading={isLoading}>
+      Click to toggle
+    </Button>
+  );
 }

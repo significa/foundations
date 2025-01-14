@@ -12,10 +12,10 @@ const buttonStyle = cva({
   variants: {
     variant: {
       primary: "bg-foreground text-background",
-      destructive: "bg-red-600 text-white ring-red-600/50 hover:bg-red-700",
       outline: "border border-border bg-background",
       ghost:
         "border-none bg-transparent ring-0 shadow-none hover:bg-foreground/5",
+      destructive: "bg-red-600 text-white ring-red-600/50 hover:bg-red-700",
     },
     size: {
       xs: "rounded-lg px-2 text-sm [--button-height:theme(spacing.6)]",

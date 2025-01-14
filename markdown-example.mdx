@@ -126,7 +126,7 @@ Renders a table of props for a component.
 <PropsTable
   definitions={{
     variant: {
-      type: '"neutral" | "success" | "error" | "warning" | "info"',
+      type: ["neutral", "success", "error", "warning", "info"], // can be just a string
       default: "neutral", // optional
       description: "The visual style variant of the badge", // optional
     },
