@@ -1401,6 +1401,54 @@ export default function SpinnerExample() {
 }
 `,
   },
+  ["switch-custom-style"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/switch/examples/switch-custom-style.preview")
+    ),
+    source: `import { Switch } from "../switch";
+
+export default function SwitchCustomStyle() {
+  return <Switch className="bg-blue-400/20 checked:bg-blue-500" />;
+}
+`,
+  },
+  ["switch-disabled-checked"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/ui/switch/examples/switch-disabled-checked.preview"
+        )
+    ),
+    source: `import { Switch } from "../switch";
+
+export default function SwitchDisabledChecked() {
+  return <Switch disabled checked />;
+}
+`,
+  },
+  ["switch-disabled"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/switch/examples/switch-disabled.preview")
+    ),
+    source: `import { Switch } from "../switch";
+
+export default function SwitchDisabled() {
+  return <Switch disabled />;
+}
+`,
+  },
+  ["switch"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/switch/examples/switch.preview")
+    ),
+    source: `import { Switch } from "../switch";
+
+export default function SwitchPreview() {
+  return <Switch />;
+}
+`,
+  },
   ["tooltip-group"]: {
     component: dynamic(
       () => import("@/foundations/ui/tooltip/examples/tooltip-group.preview")
