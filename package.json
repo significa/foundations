@@ -7,6 +7,7 @@
     "dev": "concurrently \"npm run generate-imports -- --watch\" \"next dev\"",
     "prebuild": "npm run generate-imports",
     "build": "next build",
+    "postbuild": "pagefind --site .next --output-path public/pagefind",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write ."
@@ -42,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "eslint-config-prettier": "^9.1.0",
+    "pagefind": "^1.3.0",
     "postcss": "^8",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
