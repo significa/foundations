@@ -73,10 +73,10 @@ export const navigation: NavigationItem[] = [
       //   title: "Field",
       //   href: "/ui/field",
       // },
-      // {
-      //   title: "Input",
-      //   href: "/ui/input",
-      // },
+      {
+        title: "Input",
+        href: "/ui/input",
+      },
       // {
       //   title: "Label",
       //   href: "/ui/label",

@@ -16,8 +16,6 @@ import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 
 import { useField } from "@/foundations/ui/field/field";
 
-const dateTypes = ["date", "datetime-local", "month", "time", "week"];
-
 const inputStyle = cva({
   base: [
     "transition",
@@ -29,9 +27,6 @@ const inputStyle = cva({
       default: "border-border bg-background hover:border-border-hard shadow-xs",
       minimal:
         "border-transparent bg-transparent hover:bg-background-secondary focus-visible:bg-background",
-      // TODO: Remove 'ultra-minimal' for foundations
-      "ultra-minimal":
-        "ring-0 border-0 p-0 h-auto data-invalid:text-red-500 data-invalid:placeholder:text-red-500/50 rounded-none outline-none focus-visible:ring-0",
     },
   },
   defaultVariants: {
@@ -72,22 +67,6 @@ const Input = ({
           "pl-[calc(var(--prefix-width)+theme(spacing.4)+theme(spacing[1.5]))]",
         suffixWidth > 0 &&
           "pr-[calc(var(--suffix-width)+theme(spacing.4)+theme(spacing[1.5]))]",
-        props.type &&
-          dateTypes.includes(props.type) && [
-            "[&::-webkit-datetime-edit-fields-wrapper]:p-0",
-            "[&::-webkit-date-and-time-value]:min-h-[1.5em]",
-            "[&::-webkit-datetime-edit]:inline-flex",
-            "[&::-webkit-datetime-edit]:p-0",
-            "[&::-webkit-datetime-edit-year-field]:p-0",
-            "[&::-webkit-datetime-edit-month-field]:p-0",
-            "[&::-webkit-datetime-edit-day-field]:p-0",
-            "[&::-webkit-datetime-edit-hour-field]:p-0",
-            "[&::-webkit-datetime-edit-minute-field]:p-0",
-            "[&::-webkit-datetime-edit-second-field]:p-0",
-            "[&::-webkit-datetime-edit-millisecond-field]:p-0",
-            "[&::-webkit-datetime-edit-meridiem-field]:p-0",
-            "[&::-webkit-calendar-picker-indicator]:hidden",
-          ],
         props.type === "number" && [
           "[&::-webkit-inner-spin-button]:hidden",
           "[&::-webkit-outer-spin-button]:hidden",

@@ -6,6 +6,8 @@ import {
   PreviewSwitchFrame,
 } from "./preview-switch";
 import { cn } from "@/lib/utils";
+import { PreviewLayout } from "./preview-layout";
+import { Suspense } from "react";
 
 export function Preview({
   slug,
@@ -16,7 +18,7 @@ export function Preview({
 }: {
   slug: string;
   mode?: "inline" | "iframe";
-  layout?: "padded" | "centered" | "fullscreen";
+  layout?: React.ComponentProps<typeof PreviewLayout>["layout"];
   className?: string;
   withSource?: boolean;
 }) {
@@ -38,16 +40,11 @@ export function Preview({
             src={`/preview/${slug}?layout=${layout}`}
           />
         ) : (
-          <div
-            className={cn(
-              "h-full w-full",
-              layout === "centered" &&
-                "flex flex-col items-center justify-center",
-              layout === "padded" && "p-4"
-            )}
-          >
-            <Component />
-          </div>
+          <Suspense>
+            <PreviewLayout layout={layout}>
+              <Component />
+            </PreviewLayout>
+          </Suspense>
         )}
       </PreviewSwitchFrame>
       <PreviewSwitchCode>

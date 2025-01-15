@@ -1171,6 +1171,177 @@ export default function DividerPreview() {
 }
 `,
   },
+  ["input-disabled"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/input/examples/input-disabled.preview")
+    ),
+    source: `import { Input } from "../input";
+
+export default function InputDisabled() {
+  return (
+    <div className="w-90">
+      <Input placeholder="Type something..." disabled />
+    </div>
+  );
+}
+`,
+  },
+  ["input-icon-action"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/input/examples/input-icon-action.preview")
+    ),
+    source: `"use client";
+
+import { Eye, EyeClosed, Lock } from "@phosphor-icons/react";
+import { useState } from "react";
+
+import { Input, InputGroup, InputPrefix, InputSuffix } from "../input";
+
+export default function InputIconAction() {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="w-90">
+      <InputGroup>
+        <InputPrefix>
+          <Lock />
+        </InputPrefix>
+        <Input
+          type={showPassword ? "text" : "password"}
+          placeholder="Your password here"
+        />
+        <InputSuffix interactive>
+          <button onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <Eye /> : <EyeClosed />}
+          </button>
+        </InputSuffix>
+      </InputGroup>
+    </div>
+  );
+}
+`,
+  },
+  ["input-icon"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/input/examples/input-icon.preview")
+    ),
+    source: `import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
+import { Input, InputGroup, InputPrefix } from "../input";
+
+export default function InputIcon() {
+  return (
+    <div className="w-90">
+      <InputGroup>
+        <InputPrefix>
+          <MagnifyingGlass />
+        </InputPrefix>
+        <Input placeholder="Search something" />
+      </InputGroup>
+    </div>
+  );
+}
+`,
+  },
+  ["input-interactive-addon"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/ui/input/examples/input-interactive-addon.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useRef } from "react";
+import { Info } from "@phosphor-icons/react";
+
+import { Input, InputGroup, InputPrefix, InputSuffix } from "../input";
+import { Tooltip } from "../../tooltip/tooltip";
+
+export default function InputInteractiveAddon() {
+  const input = useRef<HTMLInputElement>(null);
+
+  return (
+    <div className="w-90">
+      <InputGroup>
+        <InputPrefix className="flex items-center gap-2" interactive>
+          <button onClick={() => alert("interactive")}>+351</button>
+        </InputPrefix>
+        <Input ref={input} placeholder="000 000 000" />
+        <InputSuffix interactive>
+          <Tooltip content="Your phone number will be visible">
+            <Info />
+          </Tooltip>
+        </InputSuffix>
+      </InputGroup>
+    </div>
+  );
+}
+`,
+  },
+  ["input-invalid"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/input/examples/input-invalid.preview")
+    ),
+    source: `import { Input } from "../input";
+
+export default function InputInvalid() {
+  return (
+    <div className="w-90">
+      <Input placeholder="Type something..." defaultValue="Pedro" invalid />
+    </div>
+  );
+}
+`,
+  },
+  ["input-minimal"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/input/examples/input-minimal.preview")
+    ),
+    source: `import { Input } from "../input";
+
+export default function InputMinimal() {
+  return (
+    <div className="w-90">
+      <Input variant="minimal" placeholder="Type something..." />
+    </div>
+  );
+}
+`,
+  },
+  ["input-text-addons"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/input/examples/input-text-addons.preview")
+    ),
+    source: `import { Input, InputGroup, InputPrefix, InputSuffix } from "../input";
+
+export default function InputTextAddons() {
+  return (
+    <div className="w-90">
+      <InputGroup>
+        <InputPrefix>https://</InputPrefix>
+        <Input placeholder="subdomain" />
+        <InputSuffix>.significa.co</InputSuffix>
+      </InputGroup>
+    </div>
+  );
+}
+`,
+  },
+  ["input"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/input/examples/input.preview")
+    ),
+    source: `import { Input } from "../input";
+
+export default function InputExample() {
+  return (
+    <div className="w-90">
+      <Input placeholder="Type something..." />
+    </div>
+  );
+}
+`,
+  },
   ["skeleton"]: {
     component: dynamic(
       () => import("@/foundations/ui/skeleton/examples/skeleton.preview")

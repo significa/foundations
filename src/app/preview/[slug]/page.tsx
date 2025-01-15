@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { imports } from "@/lib/examples-registry";
 import { Suspense } from "react";
-import { PreviewWrapper } from "./preview-wrapper";
+import { PreviewLayout } from "@/components/preview-layout";
 
 export async function generateStaticParams() {
   return Object.keys(imports).map((slug) => ({ slug }));
@@ -21,9 +21,9 @@ export default async function Preview({
 
   return (
     <Suspense>
-      <PreviewWrapper>
+      <PreviewLayout>
         <Component />
-      </PreviewWrapper>
+      </PreviewLayout>
     </Suspense>
   );
 }

@@ -1,0 +1,100 @@
+export const metadata = {
+  title: "Input",
+  description: "A simple text input component.",
+  files: ["src/foundations/ui/input/input.tsx"],
+  preview: "input",
+};
+
+## Anatomy
+
+```tsx
+<InputGroup>
+  <InputPrefix />
+  <Input />
+  <InputSuffix />
+</InputGroup>
+```
+
+## API Reference
+
+### Input
+
+Extends the `input` element.
+
+<PropsTable
+  definition={{
+    variant: {
+      type: ['"default"', '"minimal"'],
+      default: '"default"',
+    },
+    invalid: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### InputGroup
+
+Extends the `div` element.
+
+This component is used to wrap the input when you want to add a prefix or suffix (e.g.: search icon, currency symbol, etc.)
+
+### InputPrefix
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    interactive: {
+      type: "boolean",
+      description: "Activates pointer events in the element",
+    },
+  }}
+/>
+
+### InputSuffix
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    interactive: {
+      type: "boolean",
+      description: "Activates pointer events in the element",
+    },
+  }}
+/>
+
+## Examples
+
+### Simple
+
+<Preview slug="input" />
+
+### Minimal
+
+<Preview slug="input-minimal" />
+
+### Disabled
+
+<Preview slug="input-disabled" />
+
+### Invalid
+
+<Preview slug="input-invalid" />
+
+### Icon
+
+<Preview slug="input-icon" />
+
+### Text Addons
+
+<Preview slug="input-text-addons" />
+
+### Icon and Action
+
+<Preview slug="input-icon-action" />
+
+### Interactive Addon
+
+<Preview slug="input-interactive-addon" />

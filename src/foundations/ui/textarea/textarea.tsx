@@ -36,7 +36,6 @@ const Textarea = ({
       className={cn(
         inputStyle({ variant }),
         "h-auto resize-none py-2 leading-snug",
-        variant === "ultra-minimal" && "py-0", // TODO: Remove for foundations
         className
       )}
       {...props}
