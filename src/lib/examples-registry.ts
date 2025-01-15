@@ -1137,6 +1137,40 @@ export default function DisclosurePreview() {
 }
 `,
   },
+  ["divider-vertical"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/divider/examples/divider-vertical.preview")
+    ),
+    source: `import { Divider } from "../divider";
+
+export default function DividerVerticalPreview() {
+  return (
+    <nav className="flex items-center gap-2">
+      <p>Home</p>
+      <Divider orientation="vertical" />
+      <p>About</p>
+    </nav>
+  );
+}
+`,
+  },
+  ["divider"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/divider/examples/divider.preview")
+    ),
+    source: `import { Divider } from "../divider";
+
+export default function DividerPreview() {
+  return (
+    <div>
+      <p>Something</p>
+      <Divider />
+      <p>Something else</p>
+    </div>
+  );
+}
+`,
+  },
   ["spinner"]: {
     component: dynamic(
       () => import("@/foundations/ui/spinner/examples/spinner.preview")

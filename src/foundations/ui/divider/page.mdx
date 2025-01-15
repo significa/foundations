@@ -1,0 +1,32 @@
+export const metadata = {
+  title: "Divider",
+  description: "Dividers are used to visually separate content in a UI.",
+  files: ["src/foundations/ui/divider/divider.tsx"],
+  preview: "divider",
+};
+
+## API Reference
+
+<PropsTable
+  definition={{
+    orientation: {
+      type: ['"horizontal"', '"vertical"'],
+      description: "The orientation of the divider.",
+    },
+    decorative: {
+      type: "boolean",
+      description:
+        "Whether the divider is decorative. Doesn't add aria-orientation or role.",
+    },
+  }}
+/>
+
+## Examples
+
+### Horizontal
+
+<Preview slug="divider" />
+
+### Vertical
+
+<Preview slug="divider-vertical" />
