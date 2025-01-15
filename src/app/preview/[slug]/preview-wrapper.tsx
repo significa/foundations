@@ -3,11 +3,11 @@
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 
-export default function PreviewLayout({
+export const PreviewWrapper = ({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}) => {
   const params = useSearchParams();
   const layout = params.get("layout") || "fullscreen";
 
