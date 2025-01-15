@@ -25,7 +25,12 @@ export function Preview({
   const Component = imports[slug].component;
 
   return (
-    <PreviewSwitch className={className} disabled={!withSource}>
+    <PreviewSwitch
+      className={className}
+      withSource={withSource}
+      slug={slug}
+      layout={layout}
+    >
       <PreviewSwitchFrame>
         {mode === "iframe" ? (
           <iframe
