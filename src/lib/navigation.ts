@@ -101,10 +101,10 @@ export const navigation: NavigationItem[] = [
       //   title: "Skeleton",
       //   href: "/ui/skeleton",
       // },
-      // {
-      //   title: "Spinner",
-      //   href: "/ui/spinner",
-      // },
+      {
+        title: "Spinner",
+        href: "/ui/spinner",
+      },
       // {
       //   title: "Switch",
       //   href: "/ui/switch",

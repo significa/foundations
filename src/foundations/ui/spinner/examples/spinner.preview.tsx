@@ -1,4 +1,4 @@
-import { Spinner } from "@/foundations/ui/spinner/spinner";
+import { Spinner } from "../spinner";
 
 export default function SpinnerExample() {
   return <Spinner />;

@@ -1171,11 +1171,40 @@ export default function DividerPreview() {
 }
 `,
   },
+  ["spinner-color"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/spinner/examples/spinner-color.preview")
+    ),
+    source: `import { Spinner } from "../spinner";
+
+export default function SpinnerColorExample() {
+  return <Spinner className="text-emerald-500" />;
+}
+`,
+  },
+  ["spinner-sizes"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/spinner/examples/spinner-sizes.preview")
+    ),
+    source: `import { Spinner } from "../spinner";
+
+export default function SpinnerSizesExample() {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Spinner size="xs" />
+      <Spinner size="sm" />
+      <Spinner size="md" />
+      <Spinner size="lg" />
+    </div>
+  );
+}
+`,
+  },
   ["spinner"]: {
     component: dynamic(
       () => import("@/foundations/ui/spinner/examples/spinner.preview")
     ),
-    source: `import { Spinner } from "@/foundations/ui/spinner/spinner";
+    source: `import { Spinner } from "../spinner";
 
 export default function SpinnerExample() {
   return <Spinner />;
