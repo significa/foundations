@@ -18,14 +18,8 @@ export const Menu = ({ items }: { items: typeof navigation }) => {
 
   return (
     <>
-      {items.map((item, i) => (
-        <Disclosure
-          className="mb-4"
-          key={item.title}
-          defaultOpen={
-            i === 0 || item.children.some((item) => item.href === pathname)
-          }
-        >
+      {items.map((item) => (
+        <Disclosure className="mb-4" key={item.title} defaultOpen>
           <DisclosureTrigger className="text-foreground-secondary flex w-full cursor-pointer items-center justify-between px-3 pb-1 text-sm font-medium">
             <h3>{item.title}</h3>
             <DisclosureChevron />
