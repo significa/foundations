@@ -55,7 +55,7 @@ export const PropsTable = ({ definition }: PropsTableProps) => {
                     {required && <span className="text-red-500"> *</span>}
                   </td>
                   <td className={tdClasses}>
-                    {defaultValue ? (
+                    {defaultValue !== undefined ? (
                       <Markdown>{`\`${defaultValue}{:ts}\``}</Markdown>
                     ) : (
                       "-"

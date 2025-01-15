@@ -1182,4 +1182,242 @@ export default function SpinnerExample() {
 }
 `,
   },
+  ["tooltip-group"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/tooltip/examples/tooltip-group.preview")
+    ),
+    source: `import { Clipboard, Scissors } from "@phosphor-icons/react/dist/ssr";
+import { Button } from "../../button/button";
+import { TooltipGroup, Tooltip } from "../tooltip";
+
+export default function TooltipGroupPreview() {
+  return (
+    <div className="flex items-center gap-2">
+      <TooltipGroup>
+        <Tooltip content="Copy">
+          <Button variant="outline" size="sm" square>
+            <Clipboard />
+          </Button>
+        </Tooltip>
+        <Tooltip content="Cut">
+          <Button variant="outline" size="sm" square>
+            <Scissors />
+          </Button>
+        </Tooltip>
+      </TooltipGroup>
+    </div>
+  );
+}
+`,
+  },
+  ["tooltip-long-content"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/tooltip/examples/tooltip-long-content.preview")
+    ),
+    source: `import { Tooltip } from "../tooltip";
+
+export default function TooltipLongContentPreview() {
+  return (
+    <Tooltip content="This is a very long tooltip content that demonstrates how tooltips handle lengthy text. The tooltip will automatically wrap the text to ensure it remains readable while maintaining a reasonable width.">
+      <span>Hover me to see long content</span>
+    </Tooltip>
+  );
+}
+`,
+  },
+  ["tooltip-persist-click"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/ui/tooltip/examples/tooltip-persist-click.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useEffect, useState } from "react";
+import { Tooltip } from "../tooltip";
+import { Button } from "../../button/button";
+import { Clipboard } from "@phosphor-icons/react";
+
+export default function TooltipPersistClickPreview() {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    if (copied) {
+      timeout = setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [copied]);
+
+  return (
+    <Tooltip
+      persistOnClick
+      delayIn={0}
+      content={copied ? "Copied!" : "Copy"}
+      onOpenChange={(open) => {
+        if (!open) setCopied(false);
+      }}
+    >
+      <Button
+        variant="outline"
+        square
+        size="sm"
+        onClick={() => setCopied(true)}
+        aria-label="Copy"
+      >
+        <Clipboard />
+      </Button>
+    </Tooltip>
+  );
+}
+`,
+  },
+  ["tooltip-placement"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/tooltip/examples/tooltip-placement.preview")
+    ),
+    source: `import { Button } from "../../button/button";
+
+import { Tooltip, TooltipGroup } from "../tooltip";
+
+export default function TooltipPlacementPreview() {
+  return (
+    <div className="flex w-full flex-col gap-2 overflow-auto p-2">
+      <TooltipGroup>
+        <Tooltip content="Top" placement="top">
+          <Button variant="outline" size="sm">
+            Top
+          </Button>
+        </Tooltip>
+        <Tooltip content="Right" placement="right">
+          <Button variant="outline" size="sm">
+            Right
+          </Button>
+        </Tooltip>
+        <Tooltip content="Bottom" placement="bottom">
+          <Button variant="outline" size="sm">
+            Bottom
+          </Button>
+        </Tooltip>
+        <Tooltip content="Left" placement="left">
+          <Button variant="outline" size="sm">
+            Left
+          </Button>
+        </Tooltip>
+        <Tooltip content="Top Start" placement="top-start">
+          <Button variant="outline" size="sm">
+            Top Start
+          </Button>
+        </Tooltip>
+        <Tooltip content="Top End" placement="top-end">
+          <Button variant="outline" size="sm">
+            Top End
+          </Button>
+        </Tooltip>
+        <Tooltip content="Right Start" placement="right-start">
+          <Button variant="outline" size="sm">
+            Right Start
+          </Button>
+        </Tooltip>
+        <Tooltip content="Right End" placement="right-end">
+          <Button variant="outline" size="sm">
+            Right End
+          </Button>
+        </Tooltip>
+        <Tooltip content="Bottom Start" placement="bottom-start">
+          <Button variant="outline" size="sm">
+            Bottom Start
+          </Button>
+        </Tooltip>
+        <Tooltip content="Bottom End" placement="bottom-end">
+          <Button variant="outline" size="sm">
+            Bottom End
+          </Button>
+        </Tooltip>
+        <Tooltip content="Left Start" placement="left-start">
+          <Button variant="outline" size="sm">
+            Left Start
+          </Button>
+        </Tooltip>
+        <Tooltip content="Left End" placement="left-end">
+          <Button variant="outline" size="sm">
+            Left End
+          </Button>
+        </Tooltip>
+      </TooltipGroup>
+    </div>
+  );
+}
+`,
+  },
+  ["tooltip-rich-content"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/tooltip/examples/tooltip-rich-content.preview")
+    ),
+    source: `import { Avatar, AvatarFallback, AvatarImage } from "../../avatar/avatar";
+import { Tooltip } from "../tooltip";
+
+export default function TooltipRichContentPreview() {
+  return (
+    <Tooltip
+      content={
+        <div className="flex items-center gap-1.5">
+          <Avatar
+            variant="square"
+            size="sm"
+            className="-ml-1.5 backdrop-blur-none"
+          >
+            <AvatarImage src="https://github.com/pdrbrnd.png" />
+            <AvatarFallback>Pedro Brandão</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <span>Pedro Brandão</span>
+            <span className="text-foreground-secondary">Significa</span>
+          </div>
+        </div>
+      }
+    >
+      <span>Hover to see rich content</span>
+    </Tooltip>
+  );
+}
+`,
+  },
+  ["tooltip-scroll"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/tooltip/examples/tooltip-scroll.preview")
+    ),
+    source: `import { Tooltip } from "../tooltip";
+
+export default function TooltipScrollPreview() {
+  return (
+    <div className="h-full w-full overflow-y-auto">
+      <div className="flex h-[200vh] items-center justify-center">
+        <Tooltip content="Tooltip content" open>
+          Scroll to see the tooltip reposition itself
+        </Tooltip>
+      </div>
+    </div>
+  );
+}
+`,
+  },
+  ["tooltip"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/tooltip/examples/tooltip.preview")
+    ),
+    source: `import { Tooltip } from "../tooltip";
+
+export default function TooltipPreview() {
+  return <Tooltip content="Or is there?">Nothing to see here</Tooltip>;
+}
+`,
+  },
 };

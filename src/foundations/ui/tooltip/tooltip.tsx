@@ -27,14 +27,15 @@ import {
   FloatingArrow,
   FloatingPortal,
   useTransitionStatus,
+  hide,
 } from "@floating-ui/react";
 
 import { cn } from "@/lib/utils";
 
 const DEFAULT_DELAY_IN = 600;
 const DEFAULT_DELAY_OUT = 0;
-const ARROW_HEIGHT = 6;
-const ARROW_WIDTH = 12;
+const ARROW_HEIGHT = 4;
+const ARROW_WIDTH = 8;
 const DEFAULT_GROUP_TIMEOUT_MS = 150;
 
 interface TooltipProps
@@ -99,7 +100,8 @@ const Tooltip = ({
     middleware: [
       flip({ fallbackAxisSideDirection: "start", padding: offset * 2 }),
       offsetMiddleware(offset + ARROW_HEIGHT),
-      arrow({ element: arrowRef, padding: 4 }),
+      arrow({ element: arrowRef, padding: 8 }),
+      hide(),
     ],
   });
 
@@ -157,6 +159,7 @@ const Tooltip = ({
               "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
               "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
               "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
+              floating.middlewareData.hide?.referenceHidden && "hidden",
               className
             )}
             data-state={status === "open" ? "open" : "closed"}

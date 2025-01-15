@@ -41,7 +41,8 @@ export const getMetadata = async (content: string) => {
       throw new Error(
         `Page metadata malformed: ${error.errors
           .map((e) => e.message)
-          .join(", ")}`
+          .join(", ")}`,
+        { cause: error }
       );
     }
 
