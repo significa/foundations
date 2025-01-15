@@ -1,6 +1,173 @@
 export const metadata = {
   title: "Disclosure",
   description:
-    "A vertically stacked set of interactive elements that each reveal a section of content when clicked",
+    "A mostly unstyled vertical set of interactive elements that each reveal a section of content when clicked",
   files: ["src/foundations/ui/disclosure/disclosure.tsx"],
+  preview: "disclosure",
+  dependencies: [
+    {
+      name: "@radix-ui/react-slot",
+      href: "https://www.radix-ui.com/primitives/docs/utilities/slot",
+    },
+    {
+      name: "motion",
+      href: "https://motion.dev",
+    },
+  ],
 };
+
+## Anatomy
+
+```tsx
+<DisclosureGroup>
+  <Disclosure>
+    <DisclosureTrigger>
+      <DisclosureChevron />
+    </DisclosureTrigger>
+    <DisclosureContent />
+  </Disclosure>
+</DisclosureGroup>
+```
+
+## API Reference
+
+### Disclosure
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    defaultOpen: {
+      type: "boolean",
+      description:
+        "Whether the element is open by default. Useful when used as an uncontrolled component.",
+    },
+    open: {
+      type: "boolean",
+      description: "You can control the `open` state directly",
+    },
+    onOpenChange: {
+      type: "(open: boolean) => void",
+    },
+  }}
+/>
+
+### DisclosureTrigger
+
+Extends the `button` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### DisclosureContent
+
+Extends the `div` element.
+
+### DisclosureChevron
+
+Extends the `span` element.
+
+Will render a caret that rotates when the disclosure is open.
+
+### DisclosureGroup
+
+If you want to only allow one disclosure to be open at a time, you can wrap your disclosures in a `DisclosureGroup`.
+
+## Examples
+
+### Simple
+
+<Preview slug="disclosure" />
+
+### Exclusive
+
+Wraps your disclosures in a `DisclosureGroup` to ensure only one disclosure is open at a time.
+
+<Preview slug="disclosure-exclusive" />
+
+### With chevron
+
+<Preview slug="disclosure-chevron" />
+
+### Styled
+
+<Preview slug="disclosure-styled" layout="padded" />
+
+## Building an `Accordion` component
+
+The `Disclosure` component serves as a low-level building block that enables progressive disclosure functionality in any UI element that requires it.
+
+You can easily use it to build a more opinionated `Accordion` component, like the example above.
+
+```tsx
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureTrigger,
+  DisclosureChevron,
+  DisclosureGroup,
+} from "../disclosure";
+
+const AccordionGroup = ({
+  children,
+  className,
+}: React.ComponentProps<"div">) => {
+  return (
+    <DisclosureGroup>
+      <div className={cn("rounded-lg border", className)}>{children}</div>
+    </DisclosureGroup>
+  );
+};
+
+const Accordion = ({
+  children,
+  className,
+}: React.ComponentProps<typeof Disclosure>) => {
+  return (
+    <Disclosure className={cn("border-b last:border-b-0", className)}>
+      {children}
+    </Disclosure>
+  );
+};
+
+const AccordionTrigger = ({
+  children,
+  className,
+}: React.ComponentProps<typeof DisclosureTrigger>) => {
+  return (
+    <DisclosureTrigger
+      className={cn(
+        "hover:bg-foreground/5 flex cursor-pointer items-center justify-between gap-4 px-3 py-2 transition-colors",
+        className
+      )}
+    >
+      {children}
+      <DisclosureChevron />
+    </DisclosureTrigger>
+  );
+};
+
+const AccordionContent = ({
+  children,
+  className,
+}: React.ComponentProps<typeof DisclosureContent>) => {
+  return (
+    <DisclosureContent>
+      <div className={cn("border-t px-3 py-2", className)}>{children}</div>
+    </DisclosureContent>
+  );
+};
+```
+
+## About the use of `motion`
+
+The usage of `motion` in this component is temporary as it's not worth it to develop a custom solution when [calc-size](https://developer.mozilla.org/en-US/docs/Web/CSS/calc-size) is almost available.
+
+As most projects we do already include `motion`, using it here is pretty much inconsequential.
+
+If you need a leaner approach, feel free to remove it.

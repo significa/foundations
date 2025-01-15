@@ -899,6 +899,244 @@ export default function DialogPreview() {
 }
 `,
   },
+  ["disclosure-chevron"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/ui/disclosure/examples/disclosure-chevron.preview"
+        )
+    ),
+    source: `import {
+  Disclosure,
+  DisclosureChevron,
+  DisclosureContent,
+  DisclosureTrigger,
+} from "../disclosure";
+
+export default function DisclosureChevronPreview() {
+  return (
+    <div className="w-90 text-sm">
+      <Disclosure>
+        <DisclosureTrigger>
+          Sloths can hold their breath for 40 minutes?
+          <DisclosureChevron />
+        </DisclosureTrigger>
+        <DisclosureContent className="text-foreground-secondary">
+          While most mammals can only hold their breath for a few minutes,
+          sloths can slow their heart rates to one-third of its normal rate,
+          allowing them to stay underwater for up to 40 minutes! This helps them
+          escape predators and swim between islands.
+        </DisclosureContent>
+      </Disclosure>
+      <Disclosure>
+        <DisclosureTrigger>
+          Want to learn about platypus superpowers?
+          <DisclosureChevron />
+        </DisclosureTrigger>
+        <DisclosureContent className="text-foreground-secondary">
+          Platypuses have electroreceptors in their bills that detect electrical
+          signals from prey! They can sense the electrical fields produced by
+          the muscular contractions of small aquatic animals. They&apos;re also
+          one of the few mammals that produce venom.
+        </DisclosureContent>
+      </Disclosure>
+    </div>
+  );
+}
+`,
+  },
+  ["disclosure-exclusive"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/ui/disclosure/examples/disclosure-exclusive.preview"
+        )
+    ),
+    source: `import {
+  DisclosureGroup,
+  Disclosure,
+  DisclosureContent,
+  DisclosureTrigger,
+} from "../disclosure";
+
+export default function DisclosurePreview() {
+  return (
+    <div className="w-90 text-sm">
+      <DisclosureGroup>
+        <Disclosure>
+          <DisclosureTrigger>
+            Did you know that honey never spoils?
+          </DisclosureTrigger>
+          <DisclosureContent className="text-foreground-secondary">
+            Archaeologists have found pots of honey in ancient Egyptian tombs
+            that are over 3,000 years old and still perfectly edible! The unique
+            chemical composition and low moisture content make it impossible for
+            bacteria to grow in honey.
+          </DisclosureContent>
+        </Disclosure>
+        <Disclosure>
+          <DisclosureTrigger>
+            Want to learn about hummingbird metabolism?
+          </DisclosureTrigger>
+          <DisclosureContent className="text-foreground-secondary">
+            A hummingbird&apos;s heart beats up to 1,260 times per minute during
+            flight! They have such a fast metabolism that they need to eat every
+            10-15 minutes and visit up to 2,000 flowers per day. At night, they
+            enter a state called torpor where their metabolism slows down by 95%
+            to survive.
+          </DisclosureContent>
+        </Disclosure>
+      </DisclosureGroup>
+    </div>
+  );
+}
+`,
+  },
+  ["disclosure-styled"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/disclosure/examples/disclosure-styled.preview")
+    ),
+    source: `import { cn } from "@/lib/utils";
+
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureTrigger,
+  DisclosureChevron,
+  DisclosureGroup,
+} from "../disclosure";
+
+const AccordionGroup = ({
+  children,
+  className,
+}: React.ComponentProps<"div">) => {
+  return (
+    <DisclosureGroup>
+      <div className={cn("rounded-lg border", className)}>{children}</div>
+    </DisclosureGroup>
+  );
+};
+
+const Accordion = ({
+  children,
+  className,
+}: React.ComponentProps<typeof Disclosure>) => {
+  return (
+    <Disclosure className={cn("border-b last:border-b-0", className)}>
+      {children}
+    </Disclosure>
+  );
+};
+
+const AccordionTrigger = ({
+  children,
+  className,
+}: React.ComponentProps<typeof DisclosureTrigger>) => {
+  return (
+    <DisclosureTrigger
+      className={cn(
+        "hover:bg-foreground/5 flex cursor-pointer items-center justify-between gap-4 px-3 py-2 transition-colors",
+        className
+      )}
+    >
+      {children}
+      <DisclosureChevron />
+    </DisclosureTrigger>
+  );
+};
+
+const AccordionContent = ({
+  children,
+  className,
+}: React.ComponentProps<typeof DisclosureContent>) => {
+  return (
+    <DisclosureContent>
+      <div className={cn("border-t px-3 py-2", className)}>{children}</div>
+    </DisclosureContent>
+  );
+};
+
+export default function DisclosureStyledPreview() {
+  return (
+    <AccordionGroup>
+      <Accordion>
+        <AccordionTrigger>
+          Did you know that butterflies taste with their feet?
+        </AccordionTrigger>
+        <AccordionContent>
+          Butterflies have taste receptors on their feet that help them identify
+          which plants to lay their eggs on. When they land on a plant, they can
+          taste it to determine if it&apos;s suitable food for their
+          caterpillars.
+        </AccordionContent>
+      </Accordion>
+      <Accordion>
+        <AccordionTrigger>
+          Want to learn about tardigrade superpowers?
+        </AccordionTrigger>
+        <AccordionContent>
+          Tardigrades, also known as water bears, can survive in space! They can
+          withstand extreme temperatures, pressure, radiation, and can even
+          survive being completely dehydrated for years by entering a state of
+          cryptobiosis.
+        </AccordionContent>
+      </Accordion>
+      <Accordion>
+        <AccordionTrigger>
+          Have you heard about the immortal jellyfish?
+        </AccordionTrigger>
+        <AccordionContent>
+          The Turritopsis dohrnii jellyfish can technically live forever! When
+          stressed or injured, it can transform back into its juvenile stage
+          instead of dying, making it the only known animal capable of
+          biological immortality.
+        </AccordionContent>
+      </Accordion>
+    </AccordionGroup>
+  );
+}
+`,
+  },
+  ["disclosure"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/disclosure/examples/disclosure.preview")
+    ),
+    source: `import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureTrigger,
+} from "../disclosure";
+
+export default function DisclosurePreview() {
+  return (
+    <div className="w-90 text-sm">
+      <Disclosure>
+        <DisclosureTrigger>
+          Did you know that octopuses have three hearts?
+        </DisclosureTrigger>
+        <DisclosureContent className="text-foreground-secondary">
+          Two hearts pump blood to the gills, while the third one circulates it
+          to the rest of the body. When they swim, their third heart actually
+          stops beating - which is why they tend to crawl more than swim!
+        </DisclosureContent>
+      </Disclosure>
+      <Disclosure>
+        <DisclosureTrigger>
+          Want to hear about immortal jellyfish?
+        </DisclosureTrigger>
+        <DisclosureContent className="text-foreground-secondary">
+          The Turritopsis dohrnii jellyfish can technically live forever! When
+          stressed, it can transform back into a juvenile form by turning its
+          existing cells into different cell types. It&apos;s like having a
+          reset button for aging!
+        </DisclosureContent>
+      </Disclosure>
+    </div>
+  );
+}
+`,
+  },
   ["spinner"]: {
     component: dynamic(
       () => import("@/foundations/ui/spinner/examples/spinner.preview")
