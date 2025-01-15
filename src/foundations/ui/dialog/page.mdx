@@ -1,0 +1,108 @@
+export const metadata = {
+  title: "Dialog",
+  description:
+    "Dialog allows you to create modal elements that overlay the main content.",
+  files: ["src/foundations/ui/dialog/dialog.tsx"],
+  preview: "dialog",
+};
+
+## Anatomy
+
+```tsx
+<Dialog>
+  <DialogTrigger />
+  <DialogContent>
+    <DialogTitle />
+    <DialogClose />
+    <DialogDescription />
+    <DialogActions />
+  </DialogContent>
+</Dialog>
+```
+
+## API Reference
+
+### Dialog
+
+<PropsTable
+  definition={{
+    open: {
+      type: "boolean",
+    },
+    setOpen: {
+      type: "(open: boolean) => void",
+    },
+  }}
+/>
+
+### DialogTrigger
+
+Extends the `button` element.
+
+<PropsTable definition={{ asChild: { type: "boolean" } }} />
+
+### DialogContent
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    align: {
+      type: ['"center"', '"top"'],
+      default: '"center"',
+    },
+    wrapperClassName: { type: "string" },
+  }}
+/>
+
+### DialogTitle
+
+Extends the `h2` element.
+
+This component automatically sets the `aria-labelledby` attribute on the dialog element, ensuring proper accessibility by connecting the title to the dialog content.
+
+<PropsTable definition={{ asChild: { type: "boolean" } }} />
+
+### DialogDescription
+
+Extends the `p` element.
+
+This component automatically sets the `aria-describedby` attribute on the dialog element, ensuring proper accessibility by connecting the description to the dialog content.
+
+<PropsTable definition={{ asChild: { type: "boolean" } }} />
+
+### DialogActions
+
+Extends the `div` element.
+
+This component is designed to be placed at the bottom of the dialog content, providing a consistent layout for action buttons such as "Cancel" and "Confirm".
+
+### DialogClose
+
+Extends the `button` element.
+
+Meant to be used within a `Dialog`, it will dismiss the dialog when clicked.
+
+<PropsTable definition={{ asChild: { type: "boolean" } }} />
+
+## Examples
+
+### Simple
+
+<Preview slug="dialog" />
+
+### Align to the top
+
+<Preview slug="dialog-top" />
+
+### Destructive
+
+<Preview slug="dialog-destructive" />
+
+### Tall content
+
+<Preview slug="dialog-tall" />
+
+### Arbitrary content
+
+<Preview slug="dialog-arbitrary" />

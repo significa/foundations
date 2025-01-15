@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Markdown } from "./markdown";
 
 interface PropsTableProps {
-  definitions: Record<
+  definition: Record<
     string,
     {
       default?: string;
@@ -13,8 +13,8 @@ interface PropsTableProps {
   >;
 }
 
-export const PropsTable = ({ definitions }: PropsTableProps) => {
-  const hasDescription = Object.values(definitions).some(
+export const PropsTable = ({ definition }: PropsTableProps) => {
+  const hasDescription = Object.values(definition).some(
     ({ description }) => description
   );
 
@@ -41,7 +41,7 @@ export const PropsTable = ({ definitions }: PropsTableProps) => {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(definitions).map(
+          {Object.entries(definition).map(
             ([
               prop,
               { default: defaultValue, type, description, required },

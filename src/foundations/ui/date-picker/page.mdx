@@ -1,6 +1,7 @@
 export const metadata = {
   title: "Date Picker",
-  description: "A simple date picker component",
+  description:
+    "A date picker component built with the Calendar and Dropdown components.",
   files: ["src/foundations/ui/date-picker/date-picker.tsx"],
   preview: "date-picker",
   dependencies: [
@@ -23,6 +24,15 @@ export const metadata = {
   ],
 };
 
+## Anatomy
+
+```tsx
+<DatePicker>
+  <DatePickerTrigger />
+  <DatePickerPanel />
+</DatePicker>
+```
+
 ## API Reference
 
 ### DatePicker
@@ -34,7 +44,7 @@ Extends the [`Dropdown`](/ui/dropdown) component.
 Extends the [`DropdownTrigger`](/ui/dropdown) component.
 
 <PropsTable
-  definitions={{
+  definition={{
     placeholder: {
       type: "string",
       description:

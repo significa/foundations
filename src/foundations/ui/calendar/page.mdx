@@ -18,14 +18,14 @@ export const metadata = {
 
 ## API Reference
 
-Extends the `div` component.
+Extends the `div` element.
 
 ### Single
 
 When `mode="single"{:tsx}` (or when ommited).
 
 <PropsTable
-  definitions={{
+  definition={{
     mode: {
       type: '"single"',
       default: '"single"',
@@ -46,7 +46,7 @@ When `mode="single"{:tsx}` (or when ommited).
 When `mode="range"{:tsx}`.
 
 <PropsTable
-  definitions={{
+  definition={{
     mode: {
       type: '"range"',
       required: true,
@@ -67,7 +67,7 @@ When `mode="range"{:tsx}`.
 Applies to both `mode="single"{:tsx}` and `mode="range"{:tsx}`.
 
 <PropsTable
-  definitions={{
+  definition={{
     startWeekOn: {
       type: ["0", "1", "2", "3", "4", "5", "6"],
       default: "0",

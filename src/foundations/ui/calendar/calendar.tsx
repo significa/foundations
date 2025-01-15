@@ -292,7 +292,7 @@ const Calendar = ({
                   data-today={isToday || undefined}
                   disabled={getIsDisabled(day)}
                   className={cn(
-                    "group text-foreground relative isolate flex h-9 w-full min-w-9 items-center justify-center outline-none disabled:pointer-events-none disabled:opacity-30"
+                    "group text-foreground relative isolate flex h-9 w-full min-w-9 cursor-pointer items-center justify-center outline-none disabled:pointer-events-none disabled:opacity-30"
                   )}
                   onClick={() => handleDaySelect(day)}
                   onMouseEnter={() => handleDayHover(day)}
@@ -302,7 +302,7 @@ const Calendar = ({
                   <div
                     className={cn(
                       // base
-                      "ring-ring text-foreground/80 z-10 flex size-8 cursor-pointer items-center justify-center rounded-lg border border-transparent text-sm font-medium tabular-nums transition-shadow",
+                      "ring-ring text-foreground/80 z-10 flex size-8 items-center justify-center rounded-lg border border-transparent text-sm font-medium tabular-nums transition-shadow",
                       // hover
                       "group-hover:bg-background-secondary group-hover:text-foreground",
                       // selected

@@ -6,14 +6,23 @@ export const metadata = {
   preview: "avatar",
 };
 
+## Anatomy
+
+```tsx
+<Avatar>
+  <AvatarImage />
+  <AvatarFallback />
+</Avatar>
+```
+
 ## API Reference
 
 ### Avatar
 
-Extends the `div` component.
+Extends the `div` element.
 
 <PropsTable
-  definitions={{
+  definition={{
     size: {
       default: '"md"',
       type: ['"2xs"', '"xs"', '"sm"', '"md"', '"lg"', '"xl"', '"2xl"', '"3xl"'],
@@ -27,10 +36,10 @@ Extends the `div` component.
 
 ### AvatarImage
 
-Extends the `img` component.
+Extends the `img` element.
 
 <PropsTable
-  definitions={{
+  definition={{
     src: {
       type: "string",
     },
@@ -39,10 +48,10 @@ Extends the `img` component.
 
 ### AvatarFallback
 
-Extends the `div` component.
+Extends the `div` element.
 
 <PropsTable
-  definitions={{
+  definition={{
     children: {
       type: "string",
     },

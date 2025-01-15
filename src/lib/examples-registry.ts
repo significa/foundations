@@ -690,6 +690,215 @@ export default function DatePickerPreview() {
 }
 `,
   },
+  ["dialog-arbitrary"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/dialog/examples/dialog-arbitrary.preview")
+    ),
+    source: `import { X } from "@phosphor-icons/react/dist/ssr";
+
+import { Button } from "../../button/button";
+import { Dialog, DialogClose, DialogContent, DialogTrigger } from "../dialog";
+
+export default function DialogArbitraryPreview() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Open Dialog</Button>
+      </DialogTrigger>
+      <DialogContent className="p-0">
+        <DialogClose className="absolute top-3 right-3" asChild>
+          <Button variant="outline" size="sm" square>
+            <X className="size-4" />
+          </Button>
+        </DialogClose>
+        <div className="flex flex-col items-center rounded-2xl p-6">
+          <div className="border-border bg-background-secondary mb-4 size-24 rounded-full border" />
+          <h2 className="text-xl font-semibold">John Doe</h2>
+          <p className="text-foreground-secondary mb-4 text-sm">
+            Software Engineer
+          </p>
+          <div className="mb-6 flex space-x-4">
+            <div className="text-center">
+              <p className="font-semibold">1.2k</p>
+              <p className="text-foreground-secondary text-xs">Followers</p>
+            </div>
+            <div className="text-center">
+              <p className="font-semibold">3.4k</p>
+              <p className="text-foreground-secondary text-xs">Following</p>
+            </div>
+            <div className="text-center">
+              <p className="font-semibold">567</p>
+              <p className="text-foreground-secondary text-xs">Posts</p>
+            </div>
+          </div>
+          <Button>Follow</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+`,
+  },
+  ["dialog-destructive"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/dialog/examples/dialog-destructive.preview")
+    ),
+    source: `import { Button } from "../../button/button";
+import {
+  Dialog,
+  DialogActions,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "../dialog";
+
+export default function DialogDestructivePreview() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="destructive">Delete</Button>
+      </DialogTrigger>
+      <DialogContent className="w-80">
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogDescription>
+          This action cannot be undone. This will permanently delete your
+          account and remove your data from our servers.
+        </DialogDescription>
+        <DialogActions>
+          <Button variant="destructive">Delete everything</Button>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
+  );
+}
+`,
+  },
+  ["dialog-tall"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/dialog/examples/dialog-tall.preview")
+    ),
+    source: `import { Button } from "../../button/button";
+import {
+  Dialog,
+  DialogActions,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "../dialog";
+
+export default function DialogTallPreview() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Open Tall Dialog</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogTitle>Very Tall Dialog</DialogTitle>
+        <div>
+          {Array(20)
+            .fill(null)
+            .map((_, index) => (
+              <p key={index} className="mb-4">
+                This is paragraph {index + 1}. Lorem ipsum dolor sit amet,
+                consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                labore et dolore magna aliqua.
+              </p>
+            ))}
+        </div>
+        <DialogActions>
+          <DialogClose asChild>
+            <Button variant="outline">Close</Button>
+          </DialogClose>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
+  );
+}
+`,
+  },
+  ["dialog-top"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/dialog/examples/dialog-top.preview")
+    ),
+    source: `import { Button } from "../../button/button";
+import {
+  Dialog,
+  DialogActions,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "../dialog";
+
+export default function DialogTopPreview() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Open at the top</Button>
+      </DialogTrigger>
+      <DialogContent align="top">
+        <DialogTitle>Unsaved changes</DialogTitle>
+        <DialogDescription>
+          Are you sure you want to leave this page?
+        </DialogDescription>
+        <DialogActions>
+          <Button>Confirm</Button>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
+  );
+}
+`,
+  },
+  ["dialog"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/dialog/examples/dialog.preview")
+    ),
+    source: `import { Button } from "../../button/button";
+import {
+  Dialog,
+  DialogActions,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "../dialog";
+
+export default function DialogPreview() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Open</Button>
+      </DialogTrigger>
+      <DialogContent className="w-80">
+        <DialogTitle>Unsaved changes</DialogTitle>
+        <DialogDescription>
+          Are you sure you want to leave this page?
+        </DialogDescription>
+        <DialogActions>
+          <Button>Confirm</Button>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
+  );
+}
+`,
+  },
   ["spinner"]: {
     component: dynamic(
       () => import("@/foundations/ui/spinner/examples/spinner.preview")
