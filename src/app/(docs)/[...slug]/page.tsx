@@ -12,7 +12,7 @@ import {
 import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
 import { getMetadata } from "@/lib/markdown-metadata";
 import { getMarkdownToc } from "@/lib/markdown-toc";
-import { getNavigationWithTags, navigation } from "@/lib/navigation";
+import { getNavigationWithDates, navigation } from "@/lib/navigation";
 
 import { Menu } from "@/components/menu";
 import { Preview } from "@/components/preview";
@@ -54,7 +54,7 @@ export default async function Page({
   return (
     <div className="mx-auto flex max-w-screen-2xl">
       <aside className="sticky top-14 hidden h-[calc(100dvh-var(--spacing)*14)] w-[250px] shrink-0 overflow-y-auto border-r px-1 pt-6 md:px-2 xl:block">
-        <Menu items={await getNavigationWithTags()} />
+        <Menu items={await getNavigationWithDates()} />
       </aside>
       <main className="w-full gap-8 px-2 md:px-4 lg:flex">
         <nav className="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-[200px] shrink-0 overflow-y-auto pt-6 text-sm lg:block">

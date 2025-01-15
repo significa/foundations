@@ -12,10 +12,10 @@ import {
   DisclosureContent,
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
+import { useEffect, useState } from "react";
+import { differenceInDays } from "date-fns";
 
 export const Menu = ({ items }: { items: typeof navigation }) => {
-  const pathname = usePathname();
-
   return (
     <>
       {items.map((item) => (
@@ -25,29 +25,49 @@ export const Menu = ({ items }: { items: typeof navigation }) => {
             <DisclosureChevron />
           </DisclosureTrigger>
           <DisclosureContent className="flex flex-col gap-0.5">
-            {item.children.map((child) => (
-              <Link
-                key={child.href}
-                href={child.href}
-                className={cn(
-                  "hover:bg-background-secondary flex items-center gap-1 rounded-lg px-3 py-2 text-sm leading-none",
-                  pathname === child.href && "bg-background-secondary"
-                )}
-              >
-                <span>{child.title}</span>
-                {child.tag && (
-                  <Badge
-                    size="xs"
-                    variant={child.tag === "new" ? "success" : "info"}
-                  >
-                    {child.tag.toUpperCase()}
-                  </Badge>
-                )}
-              </Link>
+            {item.children.map((child, i) => (
+              <MenuItem key={i} item={child} />
             ))}
           </DisclosureContent>
         </Disclosure>
       ))}
     </>
+  );
+};
+
+const MenuItem = ({
+  item,
+}: {
+  item: (typeof navigation)[number]["children"][number];
+}) => {
+  const pathname = usePathname();
+  const [tag, setTag] = useState<"new" | "updated" | undefined>(undefined);
+
+  // Compare `createdAt` and `updatedAt` with the current user's date at runtime.
+  useEffect(() => {
+    const isNew =
+      item.createdAt && differenceInDays(new Date(), item.createdAt) < 1; // TODO: increase days to 30;
+    if (isNew) return setTag("new");
+
+    const isUpdated =
+      item.updatedAt && differenceInDays(new Date(), item.updatedAt) < 1; // TODO: increase days to 15;
+    if (isUpdated) return setTag("updated");
+  }, [item]);
+
+  return (
+    <Link
+      href={item.href}
+      className={cn(
+        "hover:bg-background-secondary flex h-8 items-center gap-1 rounded-lg px-3 text-sm leading-none",
+        pathname === item.href && "bg-background-secondary"
+      )}
+    >
+      <span>{item.title}</span>
+      {tag && (
+        <Badge size="xs" variant={tag === "new" ? "success" : "info"}>
+          {tag.toUpperCase()}
+        </Badge>
+      )}
+    </Link>
   );
 };

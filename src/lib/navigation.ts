@@ -1,18 +1,18 @@
-// import path from "path";
-// import { differenceInDays } from "date-fns";
-// import { getFoundationsPagePath } from "./constants";
-// import {
-//   getDirectoryFiles,
-//   getMostRecentCreatedDate,
-//   getMostRecentModifiedDate,
-// } from "./fs";
+import path from "path";
+import { getFoundationsPagePath } from "./constants";
+import {
+  getDirectoryFiles,
+  getMostRecentCreatedDate,
+  getMostRecentModifiedDate,
+} from "./fs";
 
 type NavigationItem = {
   title: string;
   children: {
     title: string;
     href: string;
-    tag?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
   }[];
 };
 
@@ -134,33 +134,32 @@ export const navigation: NavigationItem[] = [
   },
 ];
 
-export const getNavigationWithTags = async () => {
+export const getNavigationWithDates = async () => {
   return await Promise.all(
     navigation.map(async (item) => ({
       ...item,
       children: await Promise.all(
-        item.children.sort((a, b) => a.title.localeCompare(b.title))
-        // TODO: uncomment in 30 days when not everything is "new"
-        // .map(async (child) => {
-        //   const filePath = path.join(
-        //     process.cwd(),
-        //     getFoundationsPagePath(child.href.split("/"))
-        //   );
-        //   const created = await getMostRecentCreatedDate(
-        //     await getDirectoryFiles(path.dirname(filePath))
-        //   );
-        //   const isNew = differenceInDays(new Date(), created) < 30;
+        item.children
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map(async (child) => {
+            const filePath = path.join(
+              process.cwd(),
+              getFoundationsPagePath(child.href.split("/"))
+            );
+            const createdAt = await getMostRecentCreatedDate(
+              await getDirectoryFiles(path.dirname(filePath))
+            );
 
-        //   const updated = await getMostRecentModifiedDate(
-        //     await getDirectoryFiles(path.dirname(filePath))
-        //   );
-        //   const isUpdated = differenceInDays(new Date(), updated) < 15;
+            const updatedAt = await getMostRecentModifiedDate(
+              await getDirectoryFiles(path.dirname(filePath))
+            );
 
-        //   return {
-        //     ...child,
-        //     tag: isNew ? "new" : isUpdated ? "updated" : undefined,
-        //   };
-        // })
+            return {
+              ...child,
+              createdAt,
+              updatedAt,
+            };
+          })
       ),
     }))
   );
