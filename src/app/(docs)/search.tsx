@@ -20,7 +20,7 @@ export const SearchPage = () => {
         try {
           const instance = await import(
             // @ts-expect-error pagefind.js generated after build
-            "/pagefind/pagefind.js"
+            /* webpackIgnore: true */ "/pagefind/pagefind.js"
           );
           setPagefindInstance(instance);
         } catch (e) {
