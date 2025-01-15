@@ -65,58 +65,58 @@ export const navigation: NavigationItem[] = [
         title: "Divider",
         href: "/ui/divider",
       },
-      {
-        title: "Dropdown",
-        href: "/ui/dropdown",
-      },
-      {
-        title: "Field",
-        href: "/ui/field",
-      },
-      {
-        title: "Input",
-        href: "/ui/input",
-      },
-      {
-        title: "Label",
-        href: "/ui/label",
-      },
-      {
-        title: "Popover",
-        href: "/ui/popover",
-      },
-      {
-        title: "Portal",
-        href: "/ui/portal",
-      },
-      {
-        title: "Radio",
-        href: "/ui/radio",
-      },
-      {
-        title: "Select",
-        href: "/ui/select",
-      },
-      {
-        title: "Skeleton",
-        href: "/ui/skeleton",
-      },
-      {
-        title: "Spinner",
-        href: "/ui/spinner",
-      },
-      {
-        title: "Switch",
-        href: "/ui/switch",
-      },
-      {
-        title: "Tabs",
-        href: "/ui/tabs",
-      },
-      {
-        title: "Textarea",
-        href: "/ui/textarea",
-      },
+      // {
+      //   title: "Dropdown",
+      //   href: "/ui/dropdown",
+      // },
+      // {
+      //   title: "Field",
+      //   href: "/ui/field",
+      // },
+      // {
+      //   title: "Input",
+      //   href: "/ui/input",
+      // },
+      // {
+      //   title: "Label",
+      //   href: "/ui/label",
+      // },
+      // {
+      //   title: "Popover",
+      //   href: "/ui/popover",
+      // },
+      // {
+      //   title: "Portal",
+      //   href: "/ui/portal",
+      // },
+      // {
+      //   title: "Radio",
+      //   href: "/ui/radio",
+      // },
+      // {
+      //   title: "Select",
+      //   href: "/ui/select",
+      // },
+      // {
+      //   title: "Skeleton",
+      //   href: "/ui/skeleton",
+      // },
+      // {
+      //   title: "Spinner",
+      //   href: "/ui/spinner",
+      // },
+      // {
+      //   title: "Switch",
+      //   href: "/ui/switch",
+      // },
+      // {
+      //   title: "Tabs",
+      //   href: "/ui/tabs",
+      // },
+      // {
+      //   title: "Textarea",
+      //   href: "/ui/textarea",
+      // },
       {
         title: "Tooltip",
         href: "/ui/tooltip",
