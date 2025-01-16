@@ -14,16 +14,10 @@ import {
 import { useEffect, useMemo, useRef } from "react";
 
 export const Menu = ({ items }: { items: typeof navigation }) => {
-  const pathname = usePathname();
-
   return (
     <>
       {items.map((item) => (
-        <Disclosure
-          className="mb-4"
-          key={item.title}
-          defaultOpen={item.children.some((child) => pathname === child.href)}
-        >
+        <Disclosure className="mb-4" key={item.title} defaultOpen>
           <DisclosureTrigger className="text-foreground-secondary flex w-full cursor-pointer items-center justify-between px-3 pb-1 text-sm font-medium">
             <h3>{item.title}</h3>
             <DisclosureChevron />
@@ -78,7 +72,7 @@ const MenuItem = ({
       data-updated-at={item.updatedAt}
       href={item.href}
       className={cn(
-        "hover:bg-background-secondary flex h-8 items-center gap-1 rounded-lg px-3 text-sm leading-none",
+        "hover:bg-background-secondary flex h-8 shrink-0 items-center gap-1 rounded-lg px-3 text-sm leading-none",
         isActive && "bg-background-secondary"
       )}
     >
