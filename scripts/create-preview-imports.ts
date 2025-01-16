@@ -5,6 +5,13 @@ import { exec } from "child_process";
 const srcDir = path.join(process.cwd(), "src");
 const targetFile = path.join(process.cwd(), "src/lib/examples-registry.ts");
 
+function escapeTemplateString(str: string) {
+  return str
+    .replace(/\\/g, "\\\\") // escape backslashes first
+    .replace(/`/g, "\\`") // escape backticks
+    .replace(/\$\{/g, "\\${"); // escape template literal interpolations
+}
+
 function main() {
   const components: Record<string, { component: string; source: string }> = {}; // Dictionary to hold component paths
 
@@ -31,9 +38,11 @@ function main() {
           .replace("/src/", "@/")
           .replace(".tsx", "");
 
+        const source = fs.readFileSync(fullPath, "utf-8");
+
         components[slug] = {
           component: `dynamic(() => import("${importPath}"))`,
-          source: fs.readFileSync(fullPath, "utf-8"),
+          source: escapeTemplateString(source),
         };
       }
     });

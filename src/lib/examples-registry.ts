@@ -1946,6 +1946,381 @@ export default function LabelPreview() {
 }
 `,
   },
+  ["listbox-custom"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/listbox/examples/listbox-custom.preview")
+    ),
+    source: `"use client";
+
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/foundations/ui/avatar/avatar";
+import {
+  Listbox,
+  ListboxOption,
+  ListboxOptions,
+  ListboxTrigger,
+} from "@/foundations/ui/listbox/listbox";
+import { useState } from "react";
+
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
+];
+
+export default function ListboxCustomPreview() {
+  const [selectedPerson, setSelectedPerson] = useState<
+    (typeof people)[number] | null
+  >(null);
+
+  return (
+    <div className="w-80">
+      <Listbox value={selectedPerson} onChange={setSelectedPerson}>
+        <ListboxTrigger
+          placeholder="Select person"
+          className={selectedPerson ? "pl-3" : ""}
+        >
+          {selectedPerson && (
+            <span className="flex items-center gap-2">
+              <Avatar size="xs">
+                <AvatarImage
+                  src={\`https://api.dicebear.com/6.x/thumbs/svg?seed=\${selectedPerson.name}\`}
+                />
+                <AvatarFallback>{selectedPerson.name[0]}</AvatarFallback>
+              </Avatar>
+              <span>{selectedPerson.name}</span>
+            </span>
+          )}
+        </ListboxTrigger>
+        <ListboxOptions>
+          {people.map((person) => (
+            <ListboxOption
+              key={person.id}
+              value={person}
+              className="flex items-center gap-2 px-3"
+            >
+              <Avatar size="xs">
+                <AvatarImage
+                  src={\`https://api.dicebear.com/6.x/thumbs/svg?seed=\${person.name}\`}
+                />
+                <AvatarFallback>{person.name[0]}</AvatarFallback>
+              </Avatar>
+              <span>{person.name}</span>
+            </ListboxOption>
+          ))}
+        </ListboxOptions>
+      </Listbox>
+    </div>
+  );
+}
+`,
+  },
+  ["listbox-divider"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/listbox/examples/listbox-divider.preview")
+    ),
+    source: `"use client";
+
+import {
+  Listbox,
+  ListboxDivider,
+  ListboxOption,
+  ListboxOptions,
+  ListboxTrigger,
+} from "@/foundations/ui/listbox/listbox";
+import { Fragment, useState } from "react";
+
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
+];
+
+export default function ListboxDividerPreview() {
+  const [selectedPerson, setSelectedPerson] = useState(people[0]);
+
+  return (
+    <div className="w-80">
+      <Listbox value={selectedPerson} onChange={setSelectedPerson}>
+        <ListboxTrigger>{selectedPerson?.name}</ListboxTrigger>
+        <ListboxOptions>
+          {people.map((person, i) => (
+            <Fragment key={person.id}>
+              <ListboxOption value={person}>{person.name}</ListboxOption>
+              {i === 2 && <ListboxDivider />}
+            </Fragment>
+          ))}
+        </ListboxOptions>
+      </Listbox>
+    </div>
+  );
+}
+`,
+  },
+  ["listbox-minimal"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/listbox/examples/listbox-minimal.preview")
+    ),
+    source: `"use client";
+
+import {
+  Listbox,
+  ListboxOption,
+  ListboxOptions,
+  ListboxTrigger,
+} from "@/foundations/ui/listbox/listbox";
+import { useState } from "react";
+
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
+];
+
+export default function ListboxMinimalPreview() {
+  const [selectedPerson, setSelectedPerson] = useState(people[0]);
+
+  return (
+    <div className="w-80">
+      <Listbox value={selectedPerson} onChange={setSelectedPerson}>
+        <ListboxTrigger variant="minimal">
+          {selectedPerson?.name}
+        </ListboxTrigger>
+        <ListboxOptions>
+          {people.map((person) => (
+            <ListboxOption key={person.id} value={person}>
+              {person.name}
+            </ListboxOption>
+          ))}
+        </ListboxOptions>
+      </Listbox>
+    </div>
+  );
+}
+`,
+  },
+  ["listbox-multiple"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/listbox/examples/listbox-multiple.preview")
+    ),
+    source: `"use client";
+
+import {
+  Listbox,
+  ListboxEmpty,
+  ListboxOption,
+  ListboxOptions,
+  ListboxSearchInput,
+  ListboxTrigger,
+} from "@/foundations/ui/listbox/listbox";
+import { useMemo, useState } from "react";
+
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
+];
+
+export default function ListboxMultiplePreview() {
+  const [selectedPeople, setSelectedPeople] = useState<
+    (typeof people)[number][]
+  >([]);
+  const [search, setSearch] = useState("");
+
+  const filteredPeople = useMemo(() => {
+    return people.filter((person) =>
+      person.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search]);
+
+  return (
+    <div className="w-80">
+      <Listbox value={selectedPeople} onChange={setSelectedPeople}>
+        <ListboxTrigger placeholder="Select people">
+          {selectedPeople.length > 1
+            ? \`\${selectedPeople.length} people selected\`
+            : selectedPeople[0]?.name}
+        </ListboxTrigger>
+        <ListboxOptions>
+          <ListboxSearchInput
+            placeholder="Search people"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {filteredPeople.map((person) => (
+            <ListboxOption key={person.id} value={person}>
+              {person.name}
+            </ListboxOption>
+          ))}
+          {filteredPeople.length === 0 && (
+            <ListboxEmpty>No results</ListboxEmpty>
+          )}
+        </ListboxOptions>
+      </Listbox>
+    </div>
+  );
+}
+`,
+  },
+  ["listbox-placeholder"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/listbox/examples/listbox-placeholder.preview")
+    ),
+    source: `"use client";
+
+import {
+  Listbox,
+  ListboxOption,
+  ListboxOptions,
+  ListboxTrigger,
+} from "@/foundations/ui/listbox/listbox";
+import { useState } from "react";
+
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
+];
+
+export default function ListboxPlaceholderPreview() {
+  const [selectedPerson, setSelectedPerson] = useState<
+    (typeof people)[number] | null
+  >(null);
+
+  return (
+    <div className="w-80">
+      <Listbox value={selectedPerson} onChange={setSelectedPerson}>
+        <ListboxTrigger placeholder="Select person">
+          {selectedPerson?.name}
+        </ListboxTrigger>
+        <ListboxOptions>
+          {people.map((person) => (
+            <ListboxOption key={person.id} value={person}>
+              {person.name}
+            </ListboxOption>
+          ))}
+        </ListboxOptions>
+      </Listbox>
+    </div>
+  );
+}
+`,
+  },
+  ["listbox-search"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/listbox/examples/listbox-search.preview")
+    ),
+    source: `"use client";
+
+import {
+  Listbox,
+  ListboxEmpty,
+  ListboxOption,
+  ListboxOptions,
+  ListboxSearchInput,
+  ListboxTrigger,
+} from "@/foundations/ui/listbox/listbox";
+import { useMemo, useState } from "react";
+
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
+];
+
+export default function ListboxSearchPreview() {
+  const [search, setSearch] = useState("");
+  const [selectedPerson, setSelectedPerson] = useState(people[0]);
+
+  const filteredPeople = useMemo(() => {
+    return people.filter((person) =>
+      person.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search]);
+
+  return (
+    <div className="w-80">
+      <Listbox value={selectedPerson} onChange={setSelectedPerson}>
+        <ListboxTrigger>{selectedPerson?.name}</ListboxTrigger>
+        <ListboxOptions>
+          <ListboxSearchInput
+            placeholder="Search people"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {filteredPeople.map((person) => (
+            <ListboxOption key={person.id} value={person}>
+              {person.name}
+            </ListboxOption>
+          ))}
+          {filteredPeople.length === 0 && (
+            <ListboxEmpty>No results</ListboxEmpty>
+          )}
+        </ListboxOptions>
+      </Listbox>
+    </div>
+  );
+}
+`,
+  },
+  ["listbox"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/listbox/examples/listbox.preview")
+    ),
+    source: `"use client";
+
+import {
+  Listbox,
+  ListboxOption,
+  ListboxOptions,
+  ListboxTrigger,
+} from "@/foundations/ui/listbox/listbox";
+import { useState } from "react";
+
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
+];
+
+export default function ListboxPreview() {
+  const [selectedPerson, setSelectedPerson] = useState(people[0]);
+
+  return (
+    <div className="w-80">
+      <Listbox value={selectedPerson} onChange={setSelectedPerson}>
+        <ListboxTrigger>{selectedPerson?.name}</ListboxTrigger>
+        <ListboxOptions>
+          {people.map((person) => (
+            <ListboxOption key={person.id} value={person}>
+              {person.name}
+            </ListboxOption>
+          ))}
+        </ListboxOptions>
+      </Listbox>
+    </div>
+  );
+}
+`,
+  },
   ["popover-custom-width"]: {
     component: dynamic(
       () =>

@@ -77,10 +77,10 @@ export const navigation: NavigationItem[] = [
         title: "Label",
         href: "/ui/label",
       },
-      // {
-      //   title: "Listbox",
-      //   href: "/ui/listbox",
-      // },
+      {
+        title: "Listbox",
+        href: "/ui/listbox",
+      },
       {
         title: "Popover",
         href: "/ui/popover",

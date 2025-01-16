@@ -1,0 +1,177 @@
+export const metadata = {
+  title: "Listbox",
+  description: "A control for selecting a value from a list of options.",
+  files: ["src/foundations/ui/listbox/listbox.tsx"],
+  preview: "listbox",
+  dependencies: [
+    {
+      name: "@radix-ui/react-slot",
+      href: "https://www.radix-ui.com/primitives/docs/utilities/slot",
+    },
+    {
+      name: "@floating-ui/react",
+      href: "https://floating-ui.com/docs/react",
+    },
+  ],
+};
+
+## Anatomy
+
+```tsx
+<Listbox value={value} onChange={onChange}>
+  <ListboxTrigger />
+  <ListboxOptions>
+    <ListboxSearchInput />
+    <ListboxOption />
+    <ListboxDivider />
+    <ListboxOption />
+    <ListboxEmpty />
+  </ListboxOptions>
+</Listbox>
+```
+
+## API Reference
+
+### Listbox
+
+<PropsTable
+  definition={{
+    value: {
+      type: "T | T[]",
+      description:
+        "The controlled value of the listbox. Can be a single value or an array for multiple selection.",
+    },
+    onChange: {
+      type: "(value: T | T[]) => void",
+      description: "Callback fired when the value changes.",
+    },
+    disabled: {
+      type: "boolean",
+      description: "Whether the listbox is disabled.",
+    },
+    invalid: {
+      type: "boolean",
+      description: "Whether the listbox is in an invalid state.",
+    },
+    placement: {
+      type: '"selection" | Placement',
+      description:
+        "The placement of the options relative to the trigger. Use 'selection' to align with the selected option.",
+      default: '"selection"',
+    },
+    getIsSelected: {
+      type: "(a: T, b: T) => boolean",
+      description:
+        "Custom comparison function to determine if two values are equal.",
+    },
+    matchReferenceWidth: {
+      type: "boolean",
+      description: "Whether the options width should match the trigger width.",
+      default: "true",
+    },
+  }}
+/>
+
+### ListboxTrigger
+
+Extends the `button` element.
+
+<PropsTable
+  definition={{
+    variant: {
+      type: "InputProps['variant']",
+      description: "The visual style variant to use.",
+    },
+    placeholder: {
+      type: "string",
+      description: "The placeholder text to show when no value is selected.",
+    },
+  }}
+/>
+
+### ListboxOptions
+
+Extends the `div` element.
+
+The options will be rendered in a portal and will be positioned relative to the trigger.
+
+### ListboxOption
+
+Extends the `button` element.
+
+<PropsTable
+  definition={{
+    value: {
+      type: "T",
+      description: "The value associated with this option.",
+      required: true,
+    },
+    disabled: {
+      type: "boolean",
+      description: "Whether the option is disabled.",
+    },
+    withCheckmark: {
+      type: "boolean",
+      description: "Whether to show a checkmark when the option is selected.",
+      default: "true",
+    },
+  }}
+/>
+
+### ListboxDivider
+
+A horizontal line to separate groups of options.
+
+### ListboxSearchInput
+
+Extends the `input` element.
+
+A styled input with a search icon, useful for filtering options.
+
+### ListboxEmpty
+
+A styled container for empty state messages.
+
+## Examples
+
+### Simple
+
+Basic usage with single selection.
+
+<Preview slug="listbox" />
+
+### Minimal
+
+Using the minimal variant without borders.
+
+<Preview slug="listbox-minimal" />
+
+### With Placeholder
+
+Showing placeholder text when no value is selected.
+
+<Preview slug="listbox-placeholder" />
+
+### With Search
+
+Filtering options with a search input.
+
+<Preview slug="listbox-search" />
+
+### Multiple Selection
+
+Selecting multiple values with checkmarks.
+
+<Preview slug="listbox-multiple" />
+
+### With Divider
+
+Using dividers to group options.
+
+<Preview slug="listbox-divider" />
+
+### Custom Rendering
+
+Complex example with avatars and custom option layout.
+
+<Preview slug="listbox-custom" />{" "}
