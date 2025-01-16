@@ -81,10 +81,10 @@ export const navigation: NavigationItem[] = [
       //   title: "Listbox",
       //   href: "/ui/listbox",
       // },
-      // {
-      //   title: "Popover",
-      //   href: "/ui/popover",
-      // },
+      {
+        title: "Popover",
+        href: "/ui/popover",
+      },
       {
         title: "Portal",
         href: "/ui/portal",

@@ -1,0 +1,133 @@
+export const metadata = {
+  title: "Popover",
+  description: "A floating panel that is attached to a trigger element.",
+  files: ["src/foundations/ui/popover/popover.tsx"],
+  preview: "popover",
+  dependencies: [
+    {
+      name: "@floating-ui/react",
+      href: "https://floating-ui.com/docs/react",
+    },
+    {
+      name: "@radix-ui/react-slot",
+      href: "https://www.radix-ui.com/primitives/docs/utilities/slot",
+    },
+  ],
+};
+
+## Anatomy
+
+```tsx
+<Popover>
+  <PopoverTrigger />
+  <PopoverContent>
+    <PopoverClose />
+    <PopoverSearchInput />
+    <PopoverEmpty />
+  </PopoverContent>
+</Popover>
+```
+
+## API Reference
+
+### Popover
+
+<PropsTable
+  definition={{
+    open: {
+      type: "boolean",
+      description: "Whether the popover is open.",
+    },
+    onOpenChange: {
+      type: "(open: boolean) => void",
+      description: "Callback fired when the open state changes.",
+    },
+    placement: {
+      type: "Placement",
+      description: "The placement of the popover relative to its trigger.",
+      default: '"bottom"',
+    },
+    offset: {
+      type: "number",
+      description: "The distance between the popover and its trigger.",
+      default: "4",
+    },
+    modal: {
+      type: "boolean",
+      description: "Whether to trap focus inside the popover.",
+      default: "false",
+    },
+  }}
+/>
+
+### PopoverTrigger
+
+Extends the `button` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to render the trigger as its child element.",
+    },
+  }}
+/>
+
+### PopoverContent
+
+Extends the `div` element.
+
+The content will be rendered in a portal and will be positioned relative to the trigger.
+
+### PopoverClose
+
+Extends the `button` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to render the close button as its child element.",
+    },
+  }}
+/>
+
+### PopoverSearchInput
+
+Extends the `input` element.
+
+A styled input with a search icon, useful for filtering content inside the popover.
+
+### PopoverEmpty
+
+Extends the `div` element.
+
+A styled container for empty state messages.
+
+## Examples
+
+### Simple
+
+<Preview slug="popover" />
+
+### Placement
+
+<Preview slug="popover-placement" />
+
+### Modal
+
+A modal popover will trap focus inside, making it ideal for forms and other interactive content.
+
+<Preview slug="popover-modal" />
+
+### Custom Width
+
+<Preview slug="popover-custom-width" />
+
+### Search Input
+
+<Preview slug="popover-search" />
+
+### Empty State
+
+<Preview slug="popover-empty" />{" "}

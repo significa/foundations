@@ -1531,6 +1531,219 @@ export default function LabelPreview() {
 }
 `,
   },
+  ["popover-custom-width"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/popover/examples/popover-custom-width.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/foundations/ui/popover/popover";
+
+export default function PopoverCustomWidthPreview() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Custom Width</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-96">
+        <p>This popover has a custom width of 24rem (w-96).</p>
+        <p className="text-foreground-secondary mt-2 text-sm">
+          You can customize the width of the popover by adding a width utility
+          class to the PopoverContent component.
+        </p>
+      </PopoverContent>
+    </Popover>
+  );
+}
+`,
+  },
+  ["popover-empty"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/popover/examples/popover-empty.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverEmpty,
+  PopoverSearchInput,
+  PopoverTrigger,
+} from "@/foundations/ui/popover/popover";
+
+export default function PopoverEmptyPreview() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Empty State</Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-0">
+        <PopoverSearchInput placeholder="Search items..." />
+        <PopoverEmpty>No items found.</PopoverEmpty>
+      </PopoverContent>
+    </Popover>
+  );
+}
+`,
+  },
+  ["popover-modal"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/popover/examples/popover-modal.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/foundations/ui/popover/popover";
+
+export default function PopoverModalPreview() {
+  return (
+    <Popover modal>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Open Modal Popover</Button>
+      </PopoverTrigger>
+      <PopoverContent className="flex flex-col gap-4">
+        <h3 className="text-sm font-medium">This is a modal popover</h3>
+        <p className="text-foreground-secondary text-sm">
+          It will trap focus inside. Very useful for popovers with advanced
+          interactions inside (like forms)
+        </p>
+        <div className="flex items-center gap-2">
+          <PopoverClose asChild>
+            <Button variant="outline" type="button">
+              Cancel
+            </Button>
+          </PopoverClose>
+          <Button type="submit">Submit</Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+`,
+  },
+  ["popover-placement"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/popover/examples/popover-placement.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/foundations/ui/popover/popover";
+
+export default function PopoverPlacementPreview() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-4">
+      <Popover placement="top">
+        <PopoverTrigger asChild>
+          <Button variant="outline">Top</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <p>This popover appears on top.</p>
+        </PopoverContent>
+      </Popover>
+
+      <Popover placement="bottom">
+        <PopoverTrigger asChild>
+          <Button variant="outline">Bottom</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <p>This popover appears at the bottom.</p>
+        </PopoverContent>
+      </Popover>
+
+      <Popover placement="left">
+        <PopoverTrigger asChild>
+          <Button variant="outline">Left</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <p>This popover appears on the left.</p>
+        </PopoverContent>
+      </Popover>
+
+      <Popover placement="right">
+        <PopoverTrigger asChild>
+          <Button variant="outline">Right</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <p>This popover appears on the right.</p>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+`,
+  },
+  ["popover-search"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/popover/examples/popover-search.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverSearchInput,
+  PopoverTrigger,
+} from "@/foundations/ui/popover/popover";
+
+export default function PopoverSearchPreview() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Search</Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-0">
+        <PopoverSearchInput placeholder="Search items..." />
+        <div className="mt-2 space-y-1 p-1">
+          <div className="hover:bg-foreground/5 rounded-lg px-2 py-1.5">
+            Item 1
+          </div>
+          <div className="hover:bg-foreground/5 rounded-lg px-2 py-1.5">
+            Item 2
+          </div>
+          <div className="hover:bg-foreground/5 rounded-lg px-2 py-1.5">
+            Item 3
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+`,
+  },
+  ["popover"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/popover/examples/popover.preview")
+    ),
+    source: `import { Button } from "@/foundations/ui/button/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/foundations/ui/popover/popover";
+
+export default function PopoverPreview() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Open Popover</Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <p>This is the content of the popover.</p>
+      </PopoverContent>
+    </Popover>
+  );
+}
+`,
+  },
   ["radio"]: {
     component: dynamic(
       () => import("@/foundations/ui/radio/examples/radio.preview")
