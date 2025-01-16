@@ -4,7 +4,11 @@ import { VariantProps } from "cva";
 
 import { cn } from "@/lib/utils";
 
-import { inputStyle } from "@/foundations/ui/input/input";
+import {
+  InputGroup,
+  InputPrefix,
+  inputStyle,
+} from "@/foundations/ui/input/input";
 
 interface SelectProps extends React.ComponentPropsWithRef<"select"> {
   invalid?: boolean;
@@ -27,4 +31,8 @@ const Select = ({ className, invalid, variant, ...props }: SelectProps) => {
   );
 };
 
-export { Select };
+const SelectGroup = InputGroup;
+
+const SelectPrefix = InputPrefix;
+
+export { Select, SelectGroup, SelectPrefix };

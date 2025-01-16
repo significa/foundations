@@ -93,10 +93,10 @@ export const navigation: NavigationItem[] = [
         title: "Radio",
         href: "/ui/radio",
       },
-      // {
-      //   title: "Select",
-      //   href: "/ui/select",
-      // },
+      {
+        title: "Select",
+        href: "/ui/select",
+      },
       {
         title: "Skeleton",
         href: "/ui/skeleton",

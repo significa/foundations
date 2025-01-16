@@ -1571,6 +1571,107 @@ export default function RadioPreview() {
 }
 `,
   },
+  ["select-disabled"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/select/examples/select-disabled.preview")
+    ),
+    source: `import { Select } from "../select";
+
+export default function SelectDisabledPreview() {
+  return (
+    <div className="w-90">
+      <Select disabled>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+      </Select>
+    </div>
+  );
+}
+`,
+  },
+  ["select-invalid"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/select/examples/select-invalid.preview")
+    ),
+    source: `import { Select } from "../select";
+
+export default function SelectInvalidPreview() {
+  return (
+    <div className="w-90">
+      <Select invalid>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+      </Select>
+    </div>
+  );
+}
+`,
+  },
+  ["select-minimal"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/select/examples/select-minimal.preview")
+    ),
+    source: `import { Select } from "../select";
+
+export default function SelectMinimalPreview() {
+  return (
+    <div className="w-90">
+      <Select variant="minimal">
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+      </Select>
+    </div>
+  );
+}
+`,
+  },
+  ["select-prefix"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/select/examples/select-prefix.preview")
+    ),
+    source: `import { User } from "@phosphor-icons/react/dist/ssr";
+import { Select, SelectGroup, SelectPrefix } from "../select";
+
+export default function SelectPrefixPreview() {
+  return (
+    <div className="w-90">
+      <SelectGroup>
+        <SelectPrefix>
+          <User />
+        </SelectPrefix>
+        <Select>
+          <option value="1">Option 1</option>
+          <option value="2">Option 2</option>
+          <option value="3">Option 3</option>
+        </Select>
+      </SelectGroup>
+    </div>
+  );
+}
+`,
+  },
+  ["select"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/select/examples/select.preview")
+    ),
+    source: `import { Select } from "../select";
+
+export default function SelectPreview() {
+  return (
+    <div className="w-90">
+      <Select>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+      </Select>
+    </div>
+  );
+}
+`,
+  },
   ["skeleton"]: {
     component: dynamic(
       () => import("@/foundations/ui/skeleton/examples/skeleton.preview")

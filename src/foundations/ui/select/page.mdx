@@ -1,0 +1,74 @@
+export const metadata = {
+  title: "Select",
+  description: "Select component",
+  files: ["src/foundations/ui/select/select.tsx"],
+  preview: "select",
+};
+
+## Anatomy
+
+```tsx
+<SelectGroup>
+  <SelectPrefix />
+  <Select>
+    <option>
+  </Select>
+</SelectGroup>
+```
+
+## API Reference
+
+### Select
+
+Extends the `select` element.
+
+<PropsTable
+  definition={{
+    variant: {
+      type: ['"default"', '"minimal"'],
+      default: '"default"',
+    },
+    invalid: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### SelectGroup
+
+Extends the `div` element.
+
+### SelectPrefix
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    interactive: {
+      type: "boolean",
+      description: "Activates pointer events in the element",
+    },
+  }}
+/>
+
+## Examples
+
+### Simple
+
+<Preview slug="select" />
+
+### Minimal
+
+<Preview slug="select-minimal" />
+
+### Disabled
+
+<Preview slug="select-disabled" />
+
+### Invalid
+
+<Preview slug="select-invalid" />
+
+### Prefix
+
+<Preview slug="select-prefix" />

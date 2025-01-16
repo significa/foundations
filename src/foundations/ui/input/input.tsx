@@ -19,6 +19,8 @@ const inputStyle = cva({
     "transition",
     "w-full border h-10 rounded-xl px-4 py-1 text-base font-medium",
     "focus:outline-none focus-visible:border-foreground/20 focus-visible:ring-4 focus-visible:ring-ring focus-visible:text-foreground disabled:cursor-not-allowed disabled:opacity-50 text-foreground/80 placeholder:text-foreground-secondary data-[invalid]:border-red-500 data-[invalid]:hover:border-red-600 data-[invalid]:focus-visible:border-red-500 data-[invalid]:focus-visible:ring-red-500/20",
+    "pl-[var(--prefix-width,calc(var(--spacing)*4))]",
+    "pr-[var(--suffix-width,calc(var(--spacing)*4))]",
   ],
   variants: {
     variant: {
@@ -39,25 +41,11 @@ interface InputProps
 }
 
 const Input = ({ className, invalid, variant, ...props }: InputProps) => {
-  const { prefixWidth, suffixWidth } = use(InputGroupContext);
-
   return (
     <input
       data-invalid={invalid}
       aria-invalid={invalid}
-      className={cn(
-        inputStyle({ variant }),
-        prefixWidth > 0 &&
-          "pl-[calc(var(--prefix-width)+theme(spacing.4)+theme(spacing[1.5]))]",
-        suffixWidth > 0 &&
-          "pr-[calc(var(--suffix-width)+theme(spacing.4)+theme(spacing[1.5]))]",
-        props.type === "number" && [
-          "[&::-webkit-inner-spin-button]:hidden",
-          "[&::-webkit-outer-spin-button]:hidden",
-          "[appearance:textfield]",
-        ],
-        className
-      )}
+      className={cn(inputStyle({ variant }), className)}
       {...props}
     />
   );
@@ -119,8 +107,12 @@ const InputGroup = ({
       <div
         className={cn("relative", className)}
         style={{
-          "--prefix-width": `${prefixWidth}px`,
-          "--suffix-width": `${suffixWidth}px`,
+          ...(prefixWidth > 0 && {
+            "--prefix-width": `calc(${prefixWidth}px + var(--spacing)*5.5)`,
+          }),
+          ...(suffixWidth > 0 && {
+            "--suffix-width": `calc(${suffixWidth}px + var(--spacing)*5.5)`,
+          }),
           ...style,
         }}
         {...props}
