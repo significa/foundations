@@ -61,7 +61,7 @@ interface DropdownContextType {
 
 const DropdownContext = createContext<DropdownContextType | null>(null);
 
-const useDropdownContext = () => {
+const useInternalDropdownContext = () => {
   const context = use(DropdownContext);
 
   if (context == null) {
@@ -175,7 +175,7 @@ const DropdownItems = ({
   className,
   ...props
 }: React.ComponentProps<typeof PopoverContent>) => {
-  const { elementsRef } = useDropdownContext();
+  const { elementsRef } = useInternalDropdownContext();
 
   return (
     <PopoverContent
@@ -212,7 +212,7 @@ const DropdownItem = ({
     items,
     searchInputRef,
     elementsRef,
-  } = useDropdownContext();
+  } = useInternalDropdownContext();
   const popoverCtx = usePopoverContext();
   const stableOnSelect = useStableCallback(onSelect);
 
@@ -363,7 +363,7 @@ const DropdownSearchInput = ({
     items,
     setSearchInputRef,
     elementsRef,
-  } = useDropdownContext();
+  } = useInternalDropdownContext();
 
   const ref = useMergeRefs([refProp, internalRef]);
 
@@ -400,6 +400,8 @@ const DropdownSearchInput = ({
 
 const DropdownEmpty = PopoverEmpty;
 
+const useDropdownContext = usePopoverContext;
+
 export {
   Dropdown,
   DropdownTrigger,
@@ -410,4 +412,5 @@ export {
   DropdownHeading,
   DropdownSearchInput,
   DropdownEmpty,
+  useDropdownContext,
 };

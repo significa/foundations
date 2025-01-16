@@ -1,6 +1,7 @@
 "use client";
 
-import { Calendar as CalendarIcon } from "@phosphor-icons/react";
+import { Calendar as CalendarIcon, CaretUpDown } from "@phosphor-icons/react";
+import { VariantProps } from "cva";
 
 import { cn } from "@/lib/utils";
 import {
@@ -11,9 +12,9 @@ import {
   Dropdown,
   DropdownItems,
   DropdownTrigger,
+  useDropdownContext,
 } from "@/foundations/ui/dropdown/dropdown";
-import { SelectButton } from "@/foundations/ui/select/select";
-import { usePopoverContext } from "@/foundations/ui/popover/popover";
+import { inputStyle } from "@/foundations/ui/input/input";
 
 const DatePicker = ({
   children,
@@ -26,7 +27,7 @@ interface DatePickerTriggerProps
   extends React.ComponentProps<typeof DropdownTrigger> {
   className?: string;
   children: React.ReactNode;
-  variant?: React.ComponentProps<typeof SelectButton>["variant"];
+  variant?: VariantProps<typeof inputStyle>["variant"];
   placeholder?: string;
 }
 
@@ -39,12 +40,24 @@ const DatePickerTrigger = ({
 }: DatePickerTriggerProps) => {
   return (
     <DropdownTrigger asChild {...props}>
-      <SelectButton variant={variant} className={className}>
+      <button
+        type="button"
+        className={cn(
+          inputStyle({ variant }),
+          "flex items-center gap-1.5 enabled:cursor-pointer",
+          "relative w-full pr-10 pl-4",
+          className
+        )}
+      >
         <CalendarIcon className="text-foreground-secondary shrink-0" />
         {children ?? (
           <span className="text-foreground-secondary">{placeholder}</span>
         )}
-      </SelectButton>
+        <CaretUpDown
+          weight="bold"
+          className="text-foreground/80 absolute top-1/2 right-3 -translate-y-1/2 text-base"
+        />
+      </button>
     </DropdownTrigger>
   );
 };
@@ -79,7 +92,7 @@ const DatePickerPanel = ({
   onDateChange,
   ...props
 }: DatePickerContentProps) => {
-  const { setOpen } = usePopoverContext();
+  const { setOpen } = useDropdownContext();
 
   return (
     <DropdownItems className={cn(className)}>
