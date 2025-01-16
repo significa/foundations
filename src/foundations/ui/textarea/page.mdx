@@ -1,0 +1,53 @@
+export const metadata = {
+  title: "Textarea",
+  description: "A taller input.",
+  files: ["src/foundations/ui/textarea/textarea.tsx"],
+  preview: "textarea",
+  dependencies: [
+    {
+      name: "inputStyle",
+      href: "/ui/input",
+    },
+    {
+      name: "composeRefs",
+      href: "/utils/compose-refs",
+    },
+  ],
+};
+
+## API Reference
+
+Extends the `textarea` element.
+
+<PropsTable
+  definition={{
+    variant: {
+      type: ['"default"', '"minimal"'],
+      default: '"default"',
+    },
+    invalid: {
+      type: "boolean",
+    },
+  }}
+/>
+
+## Examples
+
+### Default
+
+<Preview slug="textarea" />
+
+### Minimal
+
+<Preview slug="textarea-minimal" />
+
+### Disabled
+
+<Preview slug="textarea-disabled" />
+
+### Resizable
+
+This is a cross-browser solution for resizing the textarea.
+When `field-sizing: content` is supported, we can remove this component and just use the Textarea.
+
+<Preview slug="textarea-resize" />

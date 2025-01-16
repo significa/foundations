@@ -1638,6 +1638,74 @@ export default function SwitchPreview() {
 }
 `,
   },
+  ["textarea-disabled"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/textarea/examples/textarea-disabled.preview")
+    ),
+    source: `import { Textarea } from "../textarea";
+
+export default function TextareaDisabledPreview() {
+  return (
+    <Textarea
+      className="w-80"
+      rows={5}
+      disabled
+      value="Once upon a time, in a distant galaxy, there lived a lonely star. Each day it would shine brightly, hoping to catch the attention of passing comets. One day, a beautiful comet noticed its radiant glow and decided to orbit nearby. From that day forward, the star was never lonely again."
+    />
+  );
+}
+`,
+  },
+  ["textarea-minimal"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/ui/textarea/examples/textarea-minimal.preview")
+    ),
+    source: `import { Textarea } from "../textarea";
+
+export default function TextareaMinimalPreview() {
+  return (
+    <Textarea
+      className="w-80"
+      variant="minimal"
+      rows={5}
+      placeholder="Write your next novel here"
+    />
+  );
+}
+`,
+  },
+  ["textarea-resize"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/textarea/examples/textarea-resize.preview")
+    ),
+    source: `import { TextareaResize } from "../textarea";
+
+export default function TextareaResizePreview() {
+  return (
+    <TextareaResize className="w-80" placeholder="Write your next novel here" />
+  );
+}
+`,
+  },
+  ["textarea"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/textarea/examples/textarea.preview")
+    ),
+    source: `import { Textarea } from "../textarea";
+
+export default function TextareaPreview() {
+  return (
+    <Textarea
+      className="w-80"
+      rows={5}
+      placeholder="Write your next novel here"
+    />
+  );
+}
+`,
+  },
   ["tooltip-group"]: {
     component: dynamic(
       () => import("@/foundations/ui/tooltip/examples/tooltip-group.preview")
