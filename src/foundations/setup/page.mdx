@@ -3,11 +3,22 @@ export const metadata = {
   description: "How to setup your project to use Foundations.",
 };
 
-## Tailwind
+## Prerequisites
 
-Install and configure [Tailwind](https://tailwindcss.com/).
+- A React project (preferably Next.js)
+- [Tailwind CSS](https://tailwindcss.com/) installed and configured
 
-Make sure you have the following tokens:
+> We are using Tailwind 4 (beta). If you are using an older version, adapt as needed.
+
+## Installation
+
+Install the core dependencies:
+
+```bash
+npm install cva@beta tailwind-merge
+```
+
+## CSS Setup
 
 <Tabs>
   <TabsItems>
@@ -24,37 +35,16 @@ Make sure you have the following tokens:
   </TabsPanels>
 </Tabs>
 
-## Icons
+## Utilities Setup
 
-We are using [Phosphor Icons](https://phosphoricons.com/) for the icons. Feel free to use any other icon library and make the necessary changes in the codebase.
+Create a `lib/utils.ts` file with our utility functions:
+
+<SourceCode file="src/lib/utils/index.ts" />
+
+## Icons Setup
+
+We use [Phosphor Icons](https://phosphoricons.com/) by default, but you can use any icon library of your choice:
 
 ```bash
 npm install @phosphor-icons/react
-```
-
-## Other dependencies
-
-There are a few dependencies you need to install:
-
-```bash
-npm install cva@beta tailwind-merge
-```
-
-## Class utility
-
-Create a `lib/utils.ts` file with the following code:
-
-```tsx title="lib/utils.ts"
-import { defineConfig } from "cva";
-import { twMerge } from "tailwind-merge";
-
-export const {
-  cva,
-  cx: cn,
-  compose,
-} = defineConfig({
-  hooks: {
-    onComplete: (className) => twMerge(className),
-  },
-});
 ```
