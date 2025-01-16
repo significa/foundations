@@ -11,13 +11,19 @@ import {
   DisclosureContent,
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
-import { useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 export const Menu = ({ items }: { items: typeof navigation }) => {
+  const pathname = usePathname();
+
   return (
     <>
       {items.map((item) => (
-        <Disclosure className="mb-4" key={item.title} defaultOpen>
+        <Disclosure
+          className="mb-4"
+          key={item.title}
+          defaultOpen={item.children.some((child) => pathname === child.href)}
+        >
           <DisclosureTrigger className="text-foreground-secondary flex w-full cursor-pointer items-center justify-between px-3 pb-1 text-sm font-medium">
             <h3>{item.title}</h3>
             <DisclosureChevron />
@@ -40,6 +46,8 @@ const MenuItem = ({
 }) => {
   const pathname = usePathname();
 
+  const isActive = useMemo(() => pathname === item.href, [pathname, item.href]);
+
   const ref = useRef<HTMLAnchorElement>(null);
   // const [tag, setTag] = useState<"new" | "updated" | undefined>(undefined);
 
@@ -57,6 +65,12 @@ const MenuItem = ({
   //   if (isUpdated) return setTag("updated");
   // }, []);
 
+  useEffect(() => {
+    if (isActive && ref.current) {
+      ref.current.scrollIntoView({ block: "center" });
+    }
+  }, [isActive]);
+
   return (
     <Link
       ref={ref}
@@ -65,7 +79,7 @@ const MenuItem = ({
       href={item.href}
       className={cn(
         "hover:bg-background-secondary flex h-8 items-center gap-1 rounded-lg px-3 text-sm leading-none",
-        pathname === item.href && "bg-background-secondary"
+        isActive && "bg-background-secondary"
       )}
     >
       <span>{item.title}</span>
