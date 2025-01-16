@@ -65,10 +65,10 @@ export const navigation: NavigationItem[] = [
         title: "Divider",
         href: "/ui/divider",
       },
-      // {
-      //   title: "Dropdown",
-      //   href: "/ui/dropdown",
-      // },
+      {
+        title: "Dropdown",
+        href: "/ui/dropdown",
+      },
       {
         title: "Input",
         href: "/ui/input",
