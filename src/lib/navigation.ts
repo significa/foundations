@@ -21,6 +21,10 @@ export const navigation: NavigationItem[] = [
     title: "Introduction",
     children: [
       {
+        title: "About",
+        href: "/about",
+      },
+      {
         title: "Setup",
         href: "/setup",
       },
