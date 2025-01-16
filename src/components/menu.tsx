@@ -12,7 +12,7 @@ import {
   DisclosureContent,
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { differenceInDays } from "date-fns";
 
 export const Menu = ({ items }: { items: typeof navigation }) => {
@@ -41,21 +41,29 @@ const MenuItem = ({
   item: (typeof navigation)[number]["children"][number];
 }) => {
   const pathname = usePathname();
+
+  const ref = useRef<HTMLAnchorElement>(null);
   const [tag, setTag] = useState<"new" | "updated" | undefined>(undefined);
 
   // Compare `createdAt` and `updatedAt` with the current user's date at runtime.
   useEffect(() => {
+    const createdAt = ref.current?.dataset.createdAt;
+    const updatedAt = ref.current?.dataset.updatedAt;
+
     const isNew =
-      item.createdAt && differenceInDays(new Date(), item.createdAt) < 1; // TODO: increase days to 30;
+      createdAt && differenceInDays(new Date(), new Date(createdAt)) < 1; // TODO: increase days to 30;
     if (isNew) return setTag("new");
 
     const isUpdated =
-      item.updatedAt && differenceInDays(new Date(), item.updatedAt) < 1; // TODO: increase days to 15;
+      updatedAt && differenceInDays(new Date(), new Date(updatedAt)) < 1; // TODO: increase days to 15;
     if (isUpdated) return setTag("updated");
-  }, [item]);
+  }, []);
 
   return (
     <Link
+      ref={ref}
+      data-created-at={item.createdAt}
+      data-updated-at={item.updatedAt}
       href={item.href}
       className={cn(
         "hover:bg-background-secondary flex h-8 items-center gap-1 rounded-lg px-3 text-sm leading-none",
