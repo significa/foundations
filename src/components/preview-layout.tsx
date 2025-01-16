@@ -19,9 +19,9 @@ export const PreviewLayout = ({
     <div
       className={cn(
         layout === "centered"
-          ? "flex h-full w-full flex-col items-center justify-center p-4"
+          ? "flex h-full w-full flex-col items-center justify-center overflow-auto p-4"
           : layout === "padded"
-            ? "h-full w-full p-4"
+            ? "h-full w-full overflow-auto p-4"
             : "contents"
       )}
     >

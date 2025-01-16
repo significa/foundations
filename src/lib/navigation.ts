@@ -69,18 +69,14 @@ export const navigation: NavigationItem[] = [
       //   title: "Dropdown",
       //   href: "/ui/dropdown",
       // },
-      // {
-      //   title: "Field",
-      //   href: "/ui/field",
-      // },
       {
         title: "Input",
         href: "/ui/input",
       },
-      // {
-      //   title: "Label",
-      //   href: "/ui/label",
-      // },
+      {
+        title: "Label",
+        href: "/ui/label",
+      },
       // {
       //   title: "Popover",
       //   href: "/ui/popover",
@@ -129,6 +125,15 @@ export const navigation: NavigationItem[] = [
       {
         title: "Compose Refs",
         href: "/utils/compose-refs",
+      },
+    ],
+  },
+  {
+    title: "Guides",
+    children: [
+      {
+        title: "Accessible Forms",
+        href: "/guides/accessible-forms",
       },
     ],
   },

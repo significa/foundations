@@ -14,8 +14,6 @@ import { VariantProps } from "cva";
 import { cva, cn } from "@/lib/utils";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 
-import { useField } from "@/foundations/ui/field/field";
-
 const inputStyle = cva({
   base: [
     "transition",
@@ -40,25 +38,11 @@ interface InputProps
   variant?: VariantProps<typeof inputStyle>["variant"];
 }
 
-const Input = ({
-  className,
-  invalid: propsInvalid,
-  variant,
-  id,
-  ...props
-}: InputProps) => {
+const Input = ({ className, invalid, variant, ...props }: InputProps) => {
   const { prefixWidth, suffixWidth } = use(InputGroupContext);
-  const fieldCtx = useField();
-
-  const invalid =
-    propsInvalid || !!fieldCtx?.["aria-errormessage"] || undefined;
 
   return (
     <input
-      id={id ?? fieldCtx?.id}
-      aria-errormessage={fieldCtx?.["aria-errormessage"]}
-      aria-describedby={fieldCtx?.["aria-describedby"]}
-      aria-labelledby={fieldCtx?.["aria-labelledby"]}
       data-invalid={invalid}
       aria-invalid={invalid}
       className={cn(

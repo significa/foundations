@@ -43,7 +43,6 @@ import { VariantProps } from "cva";
 import { cn } from "@/lib/utils";
 import { Divider } from "@/foundations/ui/divider/divider";
 import { inputStyle } from "@/foundations/ui/input/input";
-import { useField } from "@/foundations/ui/field/field";
 import {
   PopoverEmpty,
   PopoverSearchInput,
@@ -371,13 +370,9 @@ const SelectTrigger = ({
   className,
   variant,
   placeholder,
-  id,
   ...props
 }: SelectTriggerProps) => {
   const ctx = useSelectContext();
-  const fieldCtx = useField();
-
-  const invalid = ctx.invalid || fieldCtx?.["aria-errormessage"] || undefined;
 
   const ref = useMergeRefs([ctx.refs.setReference, refProp]);
 
@@ -387,12 +382,9 @@ const SelectTrigger = ({
       placeholder={placeholder}
       variant={variant}
       className={className}
-      id={id ?? fieldCtx?.id}
-      aria-describedby={fieldCtx?.["aria-describedby"]}
-      aria-labelledby={fieldCtx?.["aria-labelledby"]}
       disabled={ctx.disabled}
       data-state={ctx.context.open ? "open" : "closed"}
-      data-invalid={invalid}
+      data-invalid={ctx.invalid}
       {...ctx.getReferenceProps(props)}
     >
       {children}

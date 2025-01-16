@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 import { cva } from "@/lib/utils";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 
+import { useField } from "../field";
+
 interface CheckboxProps
   extends Omit<React.ComponentPropsWithRef<"input">, "type"> {
   indeterminate?: boolean;
@@ -30,6 +32,7 @@ const Checkbox = ({
   ref,
   indeterminate,
   className,
+  id,
   ...props
 }: CheckboxProps) => {
   const internalRef = useRef<HTMLInputElement>(null);
@@ -40,10 +43,16 @@ const Checkbox = ({
     }
   }, [indeterminate]);
 
+  const fieldCtx = useField();
+
   return (
     <input
       type="checkbox"
       ref={composeRefs(ref, internalRef)}
+      id={id ?? fieldCtx?.id}
+      aria-errormessage={fieldCtx?.["aria-errormessage"]}
+      aria-describedby={fieldCtx?.["aria-describedby"]}
+      aria-labelledby={fieldCtx?.["aria-labelledby"]}
       className={checkboxStyle({ className })}
       {...props}
     />

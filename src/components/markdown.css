@@ -84,8 +84,16 @@
     counter-reset: line;
   }
 
-  code[data-line-numbers] {
-    --max-digits: attr(data-line-numbers-max-digits, 2);
+  code[data-line-numbers][data-line-numbers-max-digits="1"] {
+    --max-digits: 1;
+  }
+
+  code[data-line-numbers][data-line-numbers-max-digits="2"] {
+    --max-digits: 2;
+  }
+
+  code[data-line-numbers][data-line-numbers-max-digits="3"] {
+    --max-digits: 3;
   }
 
   code[data-line-numbers] > [data-line]::before {

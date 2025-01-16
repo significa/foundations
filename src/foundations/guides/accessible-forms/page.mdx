@@ -1,0 +1,307 @@
+export const metadata = {
+  title: "Accessible Forms",
+  description: "How to make it easy to create accessible forms",
+};
+
+## Overview
+
+For form-heavy products, creating accessible forms can be a bit of a challenge.
+Even if it's easy enough to connect labels to fields, suddenly you're asked to add descriptions and error messages and the code gets too verbose with ids and attributes everywhere.
+
+This guide offers an alternative approach where most of the usual connections between form elements, labels, descriptions and error messages are handled automatically.
+
+### Why a guide?
+
+- Simple products can get by with a simpler approach
+- It's not a one-size-fits-all solution
+- It's best if you understand what's going on instead of having this functionality baked in the components by default
+
+## Source Code
+
+The idea is to create a Field component that will act basically as a Provider and exposes attributes and methods to register elements.
+
+### Field
+
+This is the main component for creating accessible forms. It will automatically connect labels, descriptions and error messages to their appropriate fields.
+It will also allow you to easily improve your form components by adding the appropriate attributes.
+
+<SourceCode
+  file="src/foundations/guides/accessible-forms/field.tsx"
+  expandable
+/>
+
+### FieldError
+
+Field errors hooks up to the Field's context and will automatically register itself as an error message.
+
+<SourceCode
+  file="src/foundations/guides/accessible-forms/field-error.tsx"
+  expandable
+/>
+
+### FieldDescription
+
+Field descriptions hooks up to the Field's context and will automatically register itself as a description.
+
+<SourceCode
+  file="src/foundations/guides/accessible-forms/field-description.tsx"
+  expandable
+/>
+
+## Preparing your components
+
+### Form elements
+
+Add the following code yo your `input.tsx`, `textarea.tsx`, `checkbox.tsx`, `switch.tsx`, and similar components.
+
+> Warning: If you have custom components that use buttons instead of the native elements, you should ommit the `aria-errormessage` and `aria-invalid` attributes. See [Custom Selects](#custom-selects) below.
+
+```tsx {2,4,5,9-13} showLineNumbers title="input.tsx"
+const Input = ({ invalid: propsInvalid, id, ...props }: InputProps) => {
+  const fieldCtx = useField();
+
+  const invalid =
+    propsInvalid || !!fieldCtx?.["aria-errormessage"] || undefined;
+
+  return (
+    <input
+      id={id ?? fieldCtx?.id}
+      aria-errormessage={fieldCtx?.["aria-errormessage"]}
+      aria-describedby={fieldCtx?.["aria-describedby"]}
+      aria-labelledby={fieldCtx?.["aria-labelledby"]}
+      aria-invalid={invalid}
+      {...props}
+    />
+  );
+};
+```
+
+### Custom Selects
+
+If you are using a custom `Select` component that uses a button instead of a native select element, you should ommit the `aria-errormessage` and `aria-invalid` attributes as they're reserved for form elements that can have validation errors (such as `input`, `textarea` and `select`):
+
+```tsx {2,4,8-10} showLineNumbers title="select.tsx"
+const SelectTrigger = ({ children, id, ...props }: SelectTriggerProps) => {
+  const fieldCtx = useField();
+
+  const invalid = ctx.invalid || fieldCtx?.["aria-errormessage"] || undefined;
+
+  return (
+    <SelectButton
+      id={id ?? fieldCtx?.id}
+      aria-describedby={fieldCtx?.["aria-describedby"]}
+      aria-labelledby={fieldCtx?.["aria-labelledby"]}
+      {...props}
+    >
+      {children}
+    </SelectButton>
+  );
+};
+```
+
+### Radio and Radio Groups
+
+Radio buttons are a bit special as they need to be grouped together, so the aria attributes should be set on the `RadioGroup` component instead:
+
+```tsx showLineNumbers title="radio-group.tsx"
+interface RadioGroupProps extends React.ComponentPropsWithRef<"div"> {
+  required?: boolean;
+}
+
+const RadioGroup = ({
+  children,
+  className,
+  required,
+  ...props
+}: RadioGroupProps) => {
+  const fieldCtx = useField();
+
+  return (
+    <div
+      role="radiogroup"
+      aria-describedby={fieldCtx?.["aria-describedby"]}
+      aria-errormessage={fieldCtx?.["aria-errormessage"]}
+      aria-labelledby={fieldCtx?.["aria-labelledby"]}
+      aria-required={required}
+      className={cn("group", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+```
+
+Given that we'll have a nested structure, we'll also need some attributes on the `Radio` itself.
+
+```tsx
+<Field>
+  <Label>Communication preferences</Label>
+  <RadioGroup>
+    <Field>
+      <Radio />
+      <Label>Email</Label>
+    </Field>
+    <Field>
+      <Radio />
+      <Label>Phone</Label>
+    </Field>
+  </RadioGroup>
+</Field>
+```
+
+We'll just add the `id` and `aria-describedby` attribute:
+
+```tsx {6,11,12} showLineNumbers
+const Radio = ({
+  className,
+  id,
+  ...props
+}: Omit<React.ComponentPropsWithRef<"input">, "type">) => {
+  const fieldCtx = useField();
+
+  return (
+    <input
+      type="radio"
+      id={id ?? fieldCtx?.id}
+      aria-describedby={fieldCtx?.["aria-describedby"]}
+      className={radioStyle({ className })}
+      {...props}
+    />
+  );
+};
+```
+
+### Label
+
+Your `Label` component needs a bit more work to get associated with a field.
+Let's use the Field's `registerElement` function:
+
+```tsx {3,6,16,18-24,29} showLineNumbers title="label.tsx"
+"use client";
+
+import { useEffect, useId } from "react";
+
+import { cn } from "@/lib/utils";
+import { useField } from "@/foundations/ui/field/field";
+
+const Label = ({
+  children,
+  className,
+  ...props
+}: React.ComponentPropsWithRef<"label">) => {
+  const generatedId = useId();
+  const id = props.id ?? generatedId;
+
+  const fieldCtx = useField();
+
+  useEffect(() => {
+    if (!fieldCtx) return;
+
+    const unregister = fieldCtx.registerElement("label", id);
+
+    return unregister;
+  }, [fieldCtx, id]);
+
+  return (
+    <label
+      className={cn("text-foreground text-base font-medium", className)}
+      htmlFor={fieldCtx?.id}
+      id={id}
+      {...props}
+    >
+      {children}
+    </label>
+  );
+};
+
+export { Label };
+```
+
+## Fieldset and Legend
+
+A `fieldset` is an HTML element used to group related elements within a form, providing a semantic way to organize form controls. It is often used in conjunction with the `<legend>` element, which provides a caption for the group.
+
+This grouping not only helps with visual organization but also improves accessibility by allowing screen readers to understand the relationship between grouped elements.
+
+Here we create a `Fieldset` component that will automatically register the `Legend` elements and expose them to the `Field` context.
+
+<SourceCode
+  file="src/foundations/guides/accessible-forms/fieldset.tsx"
+  expandable
+/>
+
+## Usage
+
+> These examples are using the [`react-hook-form`](https://react-hook-form.com/) library for the sake of familiarity.
+
+Just wrap your form elements in a `Field` component:
+
+```tsx
+<Field>
+  <Label>Company</Label>
+  <Input {...register("company")} />
+</Field>
+```
+
+You can add a `FieldDescription` and `FieldError` to the `Field` component:
+
+```tsx
+<Field>
+  <div>
+    <Label>Name</Label>
+    <FieldDescription>
+      This is a description very very long description
+    </FieldDescription>
+  </div>
+  <Input {...register("name", { required: true })} />
+  <FieldError>{errors.name?.message}</FieldError>
+</Field>
+```
+
+Using `Fieldset`, `Legend`, and `RadioGroup`:
+
+```tsx
+<Fieldset>
+  <Legend>Communication</Legend>
+
+  <Field>
+    <Label>Contact preference</Label>
+
+    <RadioGroup required>
+      <Field>
+        <Radio {...register("preference", { required: true })} value="email" />
+        <Label>Email</Label>
+      </Field>
+      <Field>
+        <Radio {...register("preference", { required: true })} value="phone" />
+        <Label>Phone</Label>
+      </Field>
+    </RadioGroup>
+
+    <FieldError />
+  </Field>
+
+  <div>
+    <Field>
+      <div>
+        <Checkbox {...register("terms", { required: true })} />
+        <Label>Accept terms and conditions</Label>
+      </div>
+      <FieldError>{errors.terms?.message}</FieldError>
+    </Field>
+
+    <Field>
+      <div>
+        <Checkbox {...register("newsletter")} />
+        <Label>Subscribe to newsletter</Label>
+      </div>
+      <FieldError>{errors.newsletter?.message}</FieldError>
+    </Field>
+  </div>
+</Fieldset>
+```
+
+And, finally, a more complete example with everything working together:
+
+<Preview slug="accessible-forms" layout="padded" />

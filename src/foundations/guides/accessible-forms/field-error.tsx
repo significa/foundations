@@ -3,7 +3,7 @@
 import { useEffect, useId } from "react";
 
 import { cn } from "@/lib/utils";
-import { useField } from "@/foundations/ui/field/field";
+import { useField } from "./field";
 
 const FieldError = ({
   children,

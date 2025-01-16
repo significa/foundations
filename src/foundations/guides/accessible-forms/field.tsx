@@ -104,6 +104,10 @@ const Field = ({ children, className, ...props }: FieldProps) => {
     [registerElement, id, ariaErrormessage, ariaDescribedby, ariaLabelledby]
   );
 
+  /**
+   * If it's being used just as a wrapper around components, treat it as a fragment (kind of like a provider) to avoid changing the layout of the DOM structure.
+   * On the other hand, if it has props like `className`, treat it as a div.
+   */
   const hasOnlyChildren =
     Object.keys(props).length === 1 && "children" in props;
   const Comp = hasOnlyChildren ? Fragment : "div";

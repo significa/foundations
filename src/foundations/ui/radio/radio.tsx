@@ -1,8 +1,4 @@
-"use client";
-
-import { cn, cva } from "@/lib/utils";
-
-import { useField } from "@/foundations/ui/field/field";
+import { cva } from "@/lib/utils";
 
 const radioStyle = cva({
   base: [
@@ -18,85 +14,11 @@ const radioStyle = cva({
 
 const Radio = ({
   className,
-  id,
   ...props
 }: Omit<React.ComponentPropsWithRef<"input">, "type">) => {
-  const fieldCtx = useField();
-
   return (
-    <input
-      type="radio"
-      id={id ?? fieldCtx?.id}
-      aria-describedby={fieldCtx?.["aria-describedby"]}
-      className={radioStyle({ className })}
-      {...props}
-    />
+    <input type="radio" className={radioStyle({ className })} {...props} />
   );
 };
 
-interface RadioGroupProps extends React.ComponentPropsWithRef<"div"> {
-  required?: boolean;
-}
-
-const RadioGroup = ({
-  children,
-  className,
-  required,
-  ...props
-}: RadioGroupProps) => {
-  const fieldCtx = useField();
-
-  return (
-    <div
-      role="radiogroup"
-      aria-describedby={fieldCtx?.["aria-describedby"]}
-      aria-errormessage={fieldCtx?.["aria-errormessage"]}
-      aria-labelledby={fieldCtx?.["aria-labelledby"]}
-      aria-required={required}
-      className={cn("group", className)}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
-
-interface CustomRadioProps
-  extends Omit<React.ComponentPropsWithRef<"div">, "value" | "onChange"> {
-  checked: boolean;
-  value: string;
-  onChange: (value: string) => void;
-}
-
-const CustomRadio = ({
-  className,
-  children,
-  checked,
-  value,
-  onChange,
-  ...props
-}: CustomRadioProps) => {
-  return (
-    <div
-      role="radio"
-      aria-checked={checked}
-      data-checked={checked}
-      onClick={() => onChange(value)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          onChange(value);
-        }
-      }}
-      tabIndex={0}
-      className={cn(
-        "ring-blue-500/20 transition outline-none focus-visible:ring-4",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
-
-export { Radio, RadioGroup, CustomRadio };
+export { Radio };

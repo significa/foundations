@@ -3,13 +3,13 @@
 import { useEffect, useId } from "react";
 
 import { cn } from "@/lib/utils";
-import { useField } from "@/foundations/ui/field/field";
+import { useField } from "../field";
 
-const FieldDescription = ({
+const Label = ({
   children,
   className,
   ...props
-}: React.ComponentPropsWithRef<"p">) => {
+}: React.ComponentPropsWithRef<"label">) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
@@ -18,23 +18,21 @@ const FieldDescription = ({
   useEffect(() => {
     if (!fieldCtx) return;
 
-    const unregister = fieldCtx.registerElement("description", id);
+    const unregister = fieldCtx.registerElement("label", id);
 
     return unregister;
   }, [fieldCtx, id]);
 
   return (
-    <p
-      className={cn(
-        "text-foreground-secondary text-base font-medium",
-        className
-      )}
+    <label
+      className={cn("text-foreground text-base font-medium", className)}
+      htmlFor={fieldCtx?.id}
       id={id}
       {...props}
     >
       {children}
-    </p>
+    </label>
   );
 };
 
-export { FieldDescription };
+export { Label };
