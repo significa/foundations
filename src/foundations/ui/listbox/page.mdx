@@ -30,6 +30,16 @@ export const metadata = {
 </Listbox>
 ```
 
+## Features
+
+- **Keyboard Navigation**: Use arrow keys to navigate between options, Enter to select, and Escape to close
+- **Search Functionality**: Built-in search input for filtering options
+- **Multiple Selection**: Support for selecting multiple options with checkboxes
+- **Custom Rendering**: Flexible API for custom option rendering
+- **Form Integration**: Works seamlessly with form libraries
+- **Accessibility**: Full ARIA support and keyboard navigation
+- **Floating UI**: Smart positioning that adapts to available space
+
 ## API Reference
 
 ### Listbox
@@ -40,18 +50,22 @@ export const metadata = {
       type: "T | T[]",
       description:
         "The controlled value of the listbox. Can be a single value or an array for multiple selection.",
+      required: true,
     },
     onChange: {
       type: "(value: T | T[]) => void",
       description: "Callback fired when the value changes.",
+      required: true,
     },
     disabled: {
       type: "boolean",
       description: "Whether the listbox is disabled.",
+      default: "false",
     },
     invalid: {
       type: "boolean",
       description: "Whether the listbox is in an invalid state.",
+      default: "false",
     },
     placement: {
       type: '"selection" | Placement',
@@ -81,6 +95,7 @@ Extends the `button` element.
     variant: {
       type: "InputProps['variant']",
       description: "The visual style variant to use.",
+      default: '"default"',
     },
     placeholder: {
       type: "string",
@@ -109,6 +124,7 @@ Extends the `button` element.
     disabled: {
       type: "boolean",
       description: "Whether the option is disabled.",
+      default: "false",
     },
     withCheckmark: {
       type: "boolean",
@@ -131,6 +147,19 @@ A styled input with a search icon, useful for filtering options.
 ### ListboxEmpty
 
 A styled container for empty state messages.
+
+## Accessibility
+
+The Listbox component follows the [WAI-ARIA Listbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/). It includes proper ARIA attributes and keyboard navigation support.
+
+### Keyboard Interactions
+
+- `Space` or `Enter`: Select the focused option
+- `ArrowUp` / `ArrowDown`: Navigate between options
+- `Home` / `End`: Jump to first/last option
+- `Escape`: Close the listbox
+- `Tab`: Move focus to the next focusable element
+- `Type`: Jump to options starting with the typed characters
 
 ## Examples
 
@@ -160,7 +189,7 @@ Filtering options with a search input.
 
 ### Multiple Selection
 
-Selecting multiple values with checkmarks.
+Selecting multiple values with checkboxes.
 
 <Preview slug="listbox-multiple" />
 
@@ -174,4 +203,10 @@ Using dividers to group options.
 
 Complex example with avatars and custom option layout.
 
-<Preview slug="listbox-custom" />{" "}
+<Preview slug="listbox-custom" />
+
+### Form Field
+
+Using the Listbox in a form with validation.
+
+<Preview slug="listbox-form" />

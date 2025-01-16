@@ -16,6 +16,14 @@ export const metadata = {
   ],
 };
 
+## Features
+
+- **Unstyled Core**: Minimal styling for maximum flexibility
+- **Smooth Animations**: Height transitions using Motion
+- **Group Support**: Optional grouping to create exclusive sections
+- **Controlled & Uncontrolled**: Supports both modes of operation
+- **Customizable Triggers**: Flexible trigger elements with optional chevron
+
 ## Anatomy
 
 ```tsx
@@ -44,10 +52,11 @@ Extends the `div` element.
     },
     open: {
       type: "boolean",
-      description: "You can control the `open` state directly",
+      description: "Controls the open state directly in controlled mode.",
     },
     onOpenChange: {
       type: "(open: boolean) => void",
+      description: "Callback fired when the open state changes.",
     },
   }}
 />
@@ -60,6 +69,7 @@ Extends the `button` element.
   definition={{
     asChild: {
       type: "boolean",
+      description: "Whether to merge props onto the child element.",
     },
   }}
 />
@@ -67,6 +77,8 @@ Extends the `button` element.
 ### DisclosureContent
 
 Extends the `div` element.
+
+The content that will be shown or hidden. Uses Motion for smooth height transitions.
 
 ### DisclosureChevron
 
@@ -82,6 +94,8 @@ If you want to only allow one disclosure to be open at a time, you can wrap your
 
 ### Simple
 
+Basic usage with default styling.
+
 <Preview slug="disclosure" />
 
 ### Exclusive
@@ -92,9 +106,13 @@ Wraps your disclosures in a `DisclosureGroup` to ensure only one disclosure is o
 
 ### With chevron
 
+Using the built-in chevron component.
+
 <Preview slug="disclosure-chevron" />
 
 ### Styled
+
+A more styled example showing how to build an Accordion.
 
 <Preview slug="disclosure-styled" layout="padded" />
 
@@ -166,8 +184,27 @@ const AccordionContent = ({
 
 ## About the use of `motion`
 
-The usage of `motion` in this component is temporary as it's not worth it to develop a custom solution when [calc-size](https://developer.mozilla.org/en-US/docs/Web/CSS/calc-size) is almost available.
+The usage of Motion in this component is temporary as it's not worth it to develop a custom solution when [calc-size](https://developer.mozilla.org/en-US/docs/Web/CSS/calc-size) is almost available.
 
-As most projects we do already include `motion`, using it here is pretty much inconsequential.
+As most projects we do already include Motion, using it here is pretty much inconsequential.
 
 If you need a leaner approach, feel free to remove it.
+
+## Best Practices
+
+1. **Content Organization**:
+
+   - Use clear, descriptive trigger labels
+   - Keep content concise and focused
+   - Consider the order of disclosures
+
+2. **Mobile Considerations**:
+
+   - Ensure touch targets are large enough
+   - Test animations on lower-end devices
+   - Consider using DisclosureGroup on mobile
+
+3. **Performance**:
+   - Lazy load content if needed
+   - Consider disabling animations on slower devices
+   - Clean up resources when unmounting

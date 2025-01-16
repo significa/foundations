@@ -1,12 +1,86 @@
 export const metadata = {
   title: "Portal",
   description:
-    "A portal is a component that renders its children into a new DOM node.",
+    "A component that renders its children into a new DOM node outside the parent hierarchy.",
   files: ["src/foundations/ui/portal/portal.tsx"],
 };
 
+## Features
+
+- **DOM Rendering**: Renders content at the end of document.body by default
+- **Custom Container**: Supports rendering into any DOM element
+- **SSR Compatible**: Works seamlessly with server-side rendering
+- **Type Safe**: Full TypeScript support for props and children
+- **Lightweight**: Uses React's built-in createPortal API
+
 ## API Reference
 
+### Portal
+
 <PropsTable
-  definition={{ container: { type: "Element", default: "document.body" } }}
+  definition={{
+    container: {
+      type: "Element",
+      description: "The DOM element to render the portal into.",
+      default: "document.body",
+    },
+  }}
 />
+
+## Examples
+
+### Basic Usage
+
+A simple example showing how to render content in a portal.
+
+```tsx
+import { Portal } from "@/foundations/ui/portal/portal";
+
+export default function PortalExample() {
+  return (
+    <Portal>
+      <div className="fixed inset-0 bg-black/50">
+        This content is rendered at the end of document.body
+      </div>
+    </Portal>
+  );
+}
+```
+
+### Custom Container
+
+Rendering content into a specific DOM element.
+
+```tsx
+import { Portal } from "@/foundations/ui/portal/portal";
+import { useRef } from "react";
+
+export default function CustomContainerExample() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div>
+      <div ref={containerRef} className="relative min-h-[100px]" />
+      <Portal container={containerRef.current}>
+        <div className="absolute inset-0 flex items-center justify-center">
+          This content is rendered inside the container div
+        </div>
+      </Portal>
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+1. **Accessibility**: When using portals, ensure that:
+
+   - The portal content is properly labeled with ARIA attributes
+   - Focus management is handled correctly
+   - The content is properly announced to screen readers
+
+2. **Event Bubbling**: Remember that events still bubble up through React's virtual DOM hierarchy, not the actual DOM hierarchy.
+
+3. **SSR Considerations**: The portal only renders on the client side. Make sure your code handles the server-side case appropriately.
+
+4. **Z-Index Management**: When using multiple portals, carefully manage z-index values to ensure proper stacking order.
