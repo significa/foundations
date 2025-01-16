@@ -123,7 +123,7 @@ export const navigation: NavigationItem[] = [
     title: "Utils",
     children: [
       {
-        title: "Compose Refs",
+        title: "composeRefs",
         href: "/utils/compose-refs",
       },
     ],
