@@ -109,10 +109,10 @@ export const navigation: NavigationItem[] = [
         title: "Switch",
         href: "/ui/switch",
       },
-      // {
-      //   title: "Tabs",
-      //   href: "/ui/tabs",
-      // },
+      {
+        title: "Tabs",
+        href: "/ui/tabs",
+      },
       {
         title: "Textarea",
         href: "/ui/textarea",

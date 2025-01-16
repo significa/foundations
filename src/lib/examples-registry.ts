@@ -1678,6 +1678,129 @@ export default function SwitchPreview() {
 }
 `,
   },
+  ["tabs-controlled"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/tabs/examples/tabs-controlled.preview")
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "../tabs";
+
+export default function TabsControlledPreview() {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <span className="text-muted-foreground text-sm">Current tab:</span>
+        <span className="font-medium">{selectedIndex}</span>
+        <button
+          onClick={() => setSelectedIndex((prev) => (prev + 1) % 3)}
+          className="rounded-lg border px-3 py-1 text-sm"
+        >
+          Next tab
+        </button>
+      </div>
+
+      <Tabs selectedIndex={selectedIndex} onChange={setSelectedIndex}>
+        <TabsItems>
+          <TabsItem>Tab 1</TabsItem>
+          <TabsItem>Tab 2</TabsItem>
+          <TabsItem>Tab 3</TabsItem>
+        </TabsItems>
+        <TabsPanels>
+          <TabsPanel>Panel 1</TabsPanel>
+          <TabsPanel>Panel 2</TabsPanel>
+          <TabsPanel>Panel 3</TabsPanel>
+        </TabsPanels>
+      </Tabs>
+    </div>
+  );
+}
+`,
+  },
+  ["tabs-vertical"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/tabs/examples/tabs-vertical.preview")
+    ),
+    source: `import { CreditCard, Gear, Users } from "@phosphor-icons/react/dist/ssr";
+import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "../tabs";
+
+export default function TabsVerticalPreview() {
+  return (
+    <Tabs orientation="vertical" className="flex gap-4">
+      <TabsItems className="w-60">
+        <TabsItem className="w-full justify-start">
+          <Users />
+          <span>Users</span>
+        </TabsItem>
+        <TabsItem className="w-full justify-start">
+          <CreditCard />
+          <span>Billing</span>
+        </TabsItem>
+        <TabsItem className="w-full justify-start">
+          <Gear />
+          <span>Settings</span>
+        </TabsItem>
+      </TabsItems>
+      <TabsPanels className="w-90">
+        <TabsPanel>
+          <h3 className="text-lg font-medium">Users Panel</h3>
+          <p className="text-muted-foreground">Manage your users here.</p>
+        </TabsPanel>
+        <TabsPanel>
+          <h3 className="text-lg font-medium">Billing Panel</h3>
+          <p className="text-muted-foreground">
+            Manage your billing information.
+          </p>
+        </TabsPanel>
+        <TabsPanel>
+          <h3 className="text-lg font-medium">Settings Panel</h3>
+          <p className="text-muted-foreground">
+            Configure your application settings.
+          </p>
+        </TabsPanel>
+      </TabsPanels>
+    </Tabs>
+  );
+}
+`,
+  },
+  ["tabs"]: {
+    component: dynamic(
+      () => import("@/foundations/ui/tabs/examples/tabs.preview")
+    ),
+    source: `import { CreditCard, Gear, Users } from "@phosphor-icons/react/dist/ssr";
+import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "../tabs";
+
+export default function TabsPreview() {
+  return (
+    <Tabs>
+      <TabsItems>
+        <TabsItem>
+          <Users />
+          <span>Users</span>
+        </TabsItem>
+        <TabsItem>
+          <CreditCard />
+          <span>Billing</span>
+        </TabsItem>
+        <TabsItem>
+          <Gear />
+          <span>Settings</span>
+        </TabsItem>
+      </TabsItems>
+      <TabsPanels>
+        <TabsPanel>Panel 1</TabsPanel>
+        <TabsPanel>Panel 2</TabsPanel>
+        <TabsPanel>Panel 3</TabsPanel>
+      </TabsPanels>
+    </Tabs>
+  );
+}
+`,
+  },
   ["textarea-disabled"]: {
     component: dynamic(
       () =>

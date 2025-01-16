@@ -1,0 +1,129 @@
+export const metadata = {
+  title: "Tabs",
+  description: "A tab navigation component.",
+  files: ["src/foundations/ui/tabs/tabs.tsx"],
+  preview: "tabs",
+  dependencies: [
+    {
+      name: "@radix-ui/react-slot",
+      href: "https://www.radix-ui.com/primitives/docs/utilities/slot",
+    },
+    {
+      name: "motion",
+      href: "https://motion.dev",
+    },
+  ],
+};
+
+## Anatomy
+
+```tsx
+<Tabs>
+  <TabsItems>
+    <TabsItem />
+  </TabsItems>
+  <TabsPanels>
+    <TabsPanel />
+  </TabsPanels>
+</Tabs>
+```
+
+## API Reference
+
+### Tabs
+
+The root container component that manages the state and behavior of the tabs.
+
+<PropsTable
+  definition={{
+    defaultIndex: {
+      type: "number",
+    },
+    selectedIndex: {
+      type: "number",
+    },
+    onChange: {
+      type: "(index: number) => void",
+    },
+    orientation: {
+      type: '"horizontal" | "vertical"',
+      default: "horizontal",
+    },
+  }}
+/>
+
+### TabsItems
+
+The container for tab buttons. Provides proper ARIA attributes and keyboard navigation.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### TabsItem
+
+The individual tab button component.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### TabsPanels
+
+The container for tab panels. Manages the visibility of panels based on the selected tab.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### TabsPanel
+
+The individual tab panel component.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+## Features
+
+- **Keyboard Navigation**: Use arrow keys to navigate between tabs.
+- **Automatic Activation**: Tabs are automatically activated when selected.
+- **ARIA Support**: Includes proper ARIA attributes for accessibility.
+- **Orientation Support**: Supports both horizontal and vertical layouts.
+- **Controlled & Uncontrolled**: Can be used in both controlled and uncontrolled modes.
+
+## Examples
+
+### Basic Usage
+
+A basic example of tabs with icons and labels.
+
+<Preview slug="tabs" />
+
+### Vertical Orientation
+
+Tabs can be oriented vertically using the `orientation` prop.
+
+<Preview slug="tabs-vertical" />
+
+### Controlled Tabs
+
+Example of controlled tabs with external state management.
+
+<Preview slug="tabs-controlled" />
