@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  /* Typography */
+  --text-2xs: 0.625rem;
+
+  /* Colors */
+  --color-background: oklch(100% 0 0);
+  --color-background-secondary: oklch(95% 0 0);
+
+  --color-foreground: oklch(0% 0 0);
+  --color-foreground-secondary: oklch(65% 0 0);
+
+  --color-border: oklch(94% 0 0);
+  --color-border-hard: oklch(92% 0 0);
+
+  --color-ring: oklch(0% 0 0 / 0.1);
+
+  /* Shadows */
+  --shadow-*: initial;
+  --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.02), 0 2px 4px oklch(0 0 0 / 0.02);
+  --shadow-md: 0 2px 3px oklch(0 0 0 / 0.02), 0 3px 6px oklch(0 0 0 / 0.02);
+  --shadow-lg: 0 2px 4px oklch(0 0 0 / 0.02), 0 4px 8px oklch(0 0 0 / 0.02),
+    0 8px 16px oklch(0 0 0 / 0.02);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: oklch(12% 0 0);
+    --color-background-secondary: oklch(22% 0 0);
+
+    --color-foreground: oklch(95% 0 0);
+    --color-foreground-secondary: oklch(53% 0 0);
+
+    --color-border: oklch(26% 0 0);
+    --color-border-hard: oklch(28% 0 0);
+
+    --color-ring: oklch(100% 0 0 / 0.12);
+  }
+
+  body {
+    color-scheme: dark;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -9,32 +9,20 @@ Install and configure [Tailwind](https://tailwindcss.com/).
 
 Make sure you have the following tokens:
 
-```css title="globals.css"
-@theme {
-  /* Typography */
-  --text-2xs: 0.625rem;
-
-  /* Colors */
-  --color-background: oklch(100% 0 0);
-  --color-background-secondary: oklch(95% 0 0);
-
-  --color-foreground: oklch(0% 0 0);
-  --color-foreground-secondary: oklch(65% 0 0);
-
-  --color-border: oklch(94% 0 0);
-  --color-border-hard: oklch(92% 0 0);
-
-  --color-ring: oklch(0% 0 0 / 0.1);
-
-  /* Shadows */
-  --shadow-*: initial;
-  --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);
-  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.02), 0 2px 4px oklch(0 0 0 / 0.02);
-  --shadow-md: 0 2px 3px oklch(0 0 0 / 0.02), 0 3px 6px oklch(0 0 0 / 0.02);
-  --shadow-lg: 0 2px 4px oklch(0 0 0 / 0.02), 0 4px 8px oklch(0 0 0 / 0.02),
-    0 8px 16px oklch(0 0 0 / 0.02);
-}
-```
+<Tabs>
+  <TabsItems>
+    <TabsItem>Automatic color scheme</TabsItem>
+    <TabsItem>With theme switcher</TabsItem>
+  </TabsItems>
+  <TabsPanels>
+    <TabsPanel>
+      <SourceCode file="src/foundations/setup/globals-prefers-schema.css" />
+    </TabsPanel>
+    <TabsPanel>
+      <SourceCode file="src/foundations/setup/globals-data-attr.css" />
+    </TabsPanel>
+  </TabsPanels>
+</Tabs>
 
 ## Icons
 
