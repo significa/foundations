@@ -11,7 +11,7 @@ import {
   DisclosureContent,
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 
 export const Menu = ({ items }: { items: typeof navigation }) => {
   return (
@@ -58,12 +58,6 @@ const MenuItem = ({
   //     updatedAt && differenceInDays(new Date(), new Date(updatedAt)) < 1; // TODO: increase days to 15;
   //   if (isUpdated) return setTag("updated");
   // }, []);
-
-  useEffect(() => {
-    if (isActive && ref.current) {
-      ref.current.scrollIntoView({ block: "center" });
-    }
-  }, [isActive]);
 
   return (
     <Link
