@@ -11,6 +11,14 @@ export const metadata = {
   ],
 };
 
+## Features
+
+- **Smart Positioning**: Automatically adjusts position to stay in view
+- **Configurable Delays**: Customizable show/hide delays to prevent flicker
+- **Group Support**: Coordinated behavior when multiple tooltips are nearby
+- **Rich Content**: Supports any React node as content
+- **Controlled Mode**: Optional controlled state management
+
 ## API Reference
 
 Extends the `div` element.
@@ -74,26 +82,59 @@ Extends the `div` element.
 
 ### Group
 
-Tooltips placed within a `TooltipGroup` won't have delay between them.
+Tooltips placed within a `TooltipGroup` won't have delay between them, creating a smooth experience when moving between multiple tooltips.
 
 <Preview slug="tooltip-group" />
 
 ### Placement
 
+Controlling the position of the tooltip relative to its trigger.
+
 <Preview slug="tooltip-placement" />
 
 ### Persist on Click
+
+Keeping the tooltip visible when the trigger is clicked.
 
 <Preview slug="tooltip-persist-click" />
 
 ### Long Content
 
+Handling tooltips with longer text content.
+
 <Preview slug="tooltip-long-content" />
 
 ### Rich Content
+
+Using complex content inside tooltips.
 
 <Preview slug="tooltip-rich-content" mode="iframe" />
 
 ### Automatic reposition
 
+The tooltip automatically repositions to stay in view when scrolling.
+
 <Preview slug="tooltip-scroll" mode="iframe" />
+
+## Best Practices
+
+1. **Content Guidelines**:
+
+   - Keep tooltip content concise and focused
+   - Use for supplementary information only
+   - Avoid using for essential information
+   - Consider using other components for complex interactions
+
+2. **Timing**:
+
+   - Use appropriate delays to prevent accidental triggers
+   - Adjust delays based on user behavior patterns
+
+3. **Positioning**:
+
+   - Choose sensible default placements
+   - Ensure tooltips don't obscure important content
+   - Test behavior with different screen sizes
+
+4. **Performance**:
+   - Avoid heavy content in tooltips

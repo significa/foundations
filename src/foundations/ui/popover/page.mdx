@@ -15,6 +15,14 @@ export const metadata = {
   ],
 };
 
+## Features
+
+- **Smart Positioning**: Automatically adjusts position to stay in view
+- **Focus Management**: Optional modal mode with focus trapping
+- **Search Support**: Built-in search input component
+- **Empty States**: Dedicated component for empty state messages
+- **Flexible Triggers**: Support for custom trigger elements
+
 ## Anatomy
 
 ```tsx
@@ -108,9 +116,13 @@ A styled container for empty state messages.
 
 ### Simple
 
+Basic usage of the popover component.
+
 <Preview slug="popover" />
 
 ### Placement
+
+Controlling the position of the popover relative to its trigger.
 
 <Preview slug="popover-placement" />
 
@@ -122,12 +134,37 @@ A modal popover will trap focus inside, making it ideal for forms and other inte
 
 ### Custom Width
 
+Example showing how to customize the popover width.
+
 <Preview slug="popover-custom-width" />
 
 ### Search Input
+
+Using the built-in search input for filtering content.
 
 <Preview slug="popover-search" />
 
 ### Empty State
 
-<Preview slug="popover-empty" />{" "}
+Displaying a message when no content is available.
+
+<Preview slug="popover-empty" />
+
+## Best Practices
+
+1. **Positioning**:
+
+   - Consider available screen space
+   - Adjust offset based on content
+   - Test on different screen sizes
+
+2. **Focus Management**:
+
+   - Use modal mode for complex interactions
+   - Ensure keyboard navigation works
+   - Provide clear focus indicators
+
+3. **Content**:
+   - Keep content concise
+   - Use appropriate width for content
+   - Consider mobile interactions

@@ -19,6 +19,15 @@ export const metadata = {
   ],
 };
 
+## Features
+
+- **Smart Positioning**: Automatically adjusts position to stay in view
+- **Focus Management**: Traps focus within the menu when opened
+- **Section Support**: Group related items with optional headings
+- **Search**: Built-in search input for filtering items
+- **Multiple Selection**: Support for selecting multiple items
+- **Custom Items**: Flexible API for custom item rendering
+
 ## Anatomy
 
 ```tsx
@@ -122,13 +131,19 @@ A styled container for empty state messages.
 
 ### Simple
 
+Basic usage with a list of items.
+
 <Preview slug="dropdown" />
 
 ### With Sections
 
+Using sections to group related items.
+
 <Preview slug="dropdown-sections" />
 
 ### With Icons
+
+Adding icons to dropdown items.
 
 <Preview slug="dropdown-icons" />
 
@@ -146,4 +161,27 @@ A complex example showing search functionality with the ability to create new it
 
 ### Custom Items
 
+Using custom item rendering for complex layouts.
+
 <Preview slug="dropdown-custom-items" />
+
+## Best Practices
+
+1. **Content Organization**:
+
+   - Group related items into sections
+   - Use clear, descriptive labels
+   - Keep item text concise
+   - Consider using icons for visual clarity
+
+2. **Interaction Design**:
+
+   - Use multiple selection when appropriate
+   - Add search for long lists
+   - Show empty states for filtered results
+   - Consider keyboard users
+
+3. **Mobile Considerations**:
+   - Ensure touch targets are large enough
+   - Test on different screen sizes
+   - Consider native alternatives for complex cases

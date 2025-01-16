@@ -11,6 +11,13 @@ export const metadata = {
   ],
 };
 
+## Features
+
+- **Multiple Variants**: Supports default and minimal styles
+- **Validation States**: Built-in support for invalid state
+- **Flexible Addons**: Support for prefix and suffix elements
+- **Interactive Elements**: Optional interactive addons for enhanced functionality
+
 ## Anatomy
 
 ```tsx
@@ -32,9 +39,11 @@ Extends the `input` element.
     variant: {
       type: ['"default"', '"minimal"'],
       default: '"default"',
+      description: "The visual style variant of the input.",
     },
     invalid: {
       type: "boolean",
+      description: "Whether the input is in an invalid state.",
     },
   }}
 />
@@ -75,32 +84,60 @@ Extends the `div` element.
 
 ### Simple
 
+Basic usage of the input component.
+
 <Preview slug="input" />
 
 ### Minimal
+
+A more subtle variant with minimal styling.
 
 <Preview slug="input-minimal" />
 
 ### Disabled
 
+Example of a disabled input state.
+
 <Preview slug="input-disabled" />
 
 ### Invalid
+
+Showing validation state with an invalid input.
 
 <Preview slug="input-invalid" />
 
 ### Icon
 
+Input with an icon prefix.
+
 <Preview slug="input-icon" />
 
 ### Text Addons
+
+Using text prefixes and suffixes.
 
 <Preview slug="input-text-addons" />
 
 ### Icon and Action
 
+Combining an icon prefix with an interactive suffix.
+
 <Preview slug="input-icon-action" />
 
 ### Interactive Addon
 
+Example with clickable addon elements.
+
 <Preview slug="input-interactive-addon" />
+
+## Best Practices
+
+1. **Validation**:
+
+   - Provide clear error messages
+   - Use appropriate input types
+
+2. **Addons**:
+   - Keep icons and text addons relevant
+   - Ensure interactive elements are clearly clickable
+   - Maintain consistent spacing

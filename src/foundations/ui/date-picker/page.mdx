@@ -13,8 +13,19 @@ export const metadata = {
       name: "Dropdown",
       href: "/ui/dropdown",
     },
+    {
+      name: "inputStyle",
+      href: "/ui/input",
+    },
   ],
 };
+
+## Features
+
+- **Flexible Input**: Supports different input variants and placeholders
+- **Shortcuts**: Predefined date shortcuts for quick selection
+- **Smart Positioning**: Automatically adjusts panel position
+- **Keyboard Navigation**: Full keyboard support inherited from Calendar
 
 ## Anatomy
 
@@ -57,12 +68,37 @@ Extends the [`Calendar`](/ui/calendar) component.
 
 ### Simple Date Picker
 
+Basic usage for selecting a date.
+
 <Preview slug="date-picker" />
 
 ### Date Picker with Time
+
+Adding time selection capability to the date picker.
 
 <Preview slug="date-picker-date-time" />
 
 ### Shortcuts
 
+Using predefined shortcuts for quick date selection.
+
 <Preview slug="date-picker-shortcuts" />
+
+## Best Practices
+
+1. **Input Format**:
+
+   - Use clear date format patterns
+   - Consider adding format hints in placeholder
+   - Handle invalid date inputs gracefully
+
+2. **Shortcuts**:
+
+   - Keep shortcuts relevant to use case
+   - Use clear, descriptive labels
+   - Consider common date ranges
+
+3. **Mobile Considerations**:
+   - Test touch interactions
+   - Consider using native pickers on mobile
+   - Ensure sufficient touch targets
