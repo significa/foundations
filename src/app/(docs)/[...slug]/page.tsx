@@ -89,7 +89,7 @@ export default async function Page({
         <div className="text-foreground-secondary text-xs">
           <a
             className="hover:text-foreground mb-2 inline-flex items-center gap-1 font-medium transition"
-            href={`${GITHUB_REPO_URL}/edit/next/${filePath}`}
+            href={`${GITHUB_REPO_URL}/edit/${filePath}`}
             target="_blank"
             rel="noopener noreferrer"
           >
