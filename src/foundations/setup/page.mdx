@@ -5,10 +5,20 @@ export const metadata = {
 
 ## Prerequisites
 
-- A React project (preferably Next.js)
+- A React 19 project (preferably Next.js)
 - [Tailwind CSS](https://tailwindcss.com/) installed and configured
 
-> We are using Tailwind 4 (beta). If you are using an older version, adapt as needed.
+> We are using Tailwind 4 (beta). If you are using an older version, adapt as needed, but it should be compatible.
+
+> We are using React 19. If you still on 18, please check the [React 19 migration guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide).  
+> A few common changes are:
+>
+> - `ref` is now a prop like the others, so we don't need to use `forwardRef`.
+> - `<Context>` as a provider: You can now render `<Context>` as a provider instead of `<Context.Provider>`.
+> - `use` can be used instead of `useContext`.
+> - `MutableRefObject` is now `RefObject`.
+>
+> It's possible to use these components in React 18, but you will have to adapt the code as needed.
 
 ## Installation
 
@@ -17,6 +27,8 @@ Install the core dependencies:
 ```bash
 npm install cva@beta tailwind-merge
 ```
+
+> We are using CVA 1.0.0 (beta). Check what's new in [their docs](https://beta.cva.style/getting-started/whats-new).
 
 ## CSS Setup
 
