@@ -137,6 +137,15 @@ export const navigation: NavigationItem[] = [
     ],
   },
   {
+    title: "Hooks",
+    children: [
+      {
+        title: "useStableCallback",
+        href: "/hooks/use-stable-callback",
+      },
+    ],
+  },
+  {
     title: "Guides",
     children: [
       {
