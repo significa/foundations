@@ -128,11 +128,24 @@ export const navigation: NavigationItem[] = [
     ],
   },
   {
+    title: "Components",
+    children: [
+      {
+        title: "Stack",
+        href: "/components/stack",
+      },
+    ],
+  },
+  {
     title: "Utils",
     children: [
       {
         title: "composeRefs",
         href: "/utils/compose-refs",
+      },
+      {
+        title: "debounce",
+        href: "/utils/debounce",
       },
     ],
   },

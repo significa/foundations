@@ -9,6 +9,234 @@ type Import = {
 };
 
 export const imports: Record<string, Import> = {
+  ["stack-stick-position"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/stack/examples/stack-stick-position.preview"
+        )
+    ),
+    source: `"use client";
+
+import { Divider } from "@/foundations/ui/divider/divider";
+import { MouseScroll } from "@phosphor-icons/react";
+import {
+  Stack,
+  StackHeader,
+  StackItem,
+} from "@/foundations/components/stack/stack";
+
+const StackStickPositionPreview = () => {
+  return (
+    <div className="relative grid grid-cols-2 gap-8 py-[100vh]">
+      <div className="text-foreground-secondary absolute top-[50vh] flex w-full items-center justify-center gap-1">
+        <MouseScroll />
+        Scroll down
+      </div>
+      <div className="text-foreground-secondary absolute bottom-[50vh] flex w-full items-center justify-center gap-1">
+        <MouseScroll />
+        Scroll up
+      </div>
+      <div>
+        <Stack stick="top">
+          {[1, 2, 3].map((num) => (
+            <StackItem key={num} className="bg-background px-4">
+              <StackHeader>
+                <div className="py-2 font-medium">Section {num}</div>
+                <Divider />
+              </StackHeader>
+              <div className="text-foreground-secondary py-2">
+                This section demonstrates the default top sticky behavior where
+                headers stick to the top of the viewport as you scroll down.
+              </div>
+            </StackItem>
+          ))}
+        </Stack>
+      </div>
+
+      <div>
+        <Stack stick="bottom">
+          {[1, 2, 3].map((num) => (
+            <StackItem key={num} className="bg-background px-4">
+              <StackHeader>
+                <div className="py-2 font-medium">Section {num}</div>
+                <Divider />
+              </StackHeader>
+              <div className="text-foreground-secondary py-2">
+                This section shows how headers can stick to the bottom of the
+                viewport when using stick=bottom. This is useful for bottom-up
+                navigation patterns.
+              </div>
+            </StackItem>
+          ))}
+        </Stack>
+      </div>
+    </div>
+  );
+};
+
+export default StackStickPositionPreview;
+`,
+  },
+  ["stack-vs-sticky"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/stack/examples/stack-vs-sticky.preview"
+        )
+    ),
+    source: `"use client";
+
+import { Divider } from "@/foundations/ui/divider/divider";
+import {
+  Stack,
+  StackHeader,
+  StackItem,
+} from "@/foundations/components/stack/stack";
+import { Pizza, Leaf, Fire } from "@phosphor-icons/react";
+
+import { cn } from "@/lib/utils";
+
+const items = [
+  {
+    title: "Pizza Toppings",
+    icon: Pizza,
+    content:
+      "The perfect pizza starts with quality ingredients. From fresh mozzarella to hand-crushed tomatoes, every topping should be carefully selected and balanced.",
+  },
+  {
+    title: "Dough Secrets",
+    icon: Leaf,
+    content:
+      "The key to great pizza dough is patience. Let it ferment slowly in the fridge for 24-72 hours to develop complex flavors and the perfect texture.",
+  },
+  {
+    title: "Baking Tips",
+    icon: Fire,
+    content:
+      "A blazing hot oven is crucial for pizza perfection. Preheat your oven to its highest setting with a pizza stone inside for at least an hour before baking.",
+  },
+];
+
+const StackVsStickyPreview = () => {
+  return (
+    <div className="grid grid-cols-2 gap-8 pt-[50vh] pb-[100vh]">
+      <div>
+        <h2 className="mb-8 px-4 text-lg font-medium">Stack Implementation</h2>
+        <Stack stick="top">
+          {items.map((item, index) => (
+            <StackItem key={index} className="bg-background px-4">
+              <StackHeader className="text-xl">
+                <div className="flex items-center gap-3">
+                  <item.icon className="size-6" />
+                  <h3 className="py-2">{item.title}</h3>
+                </div>
+                <Divider />
+              </StackHeader>
+              <div className="text-foreground-secondary text-md pt-4 pb-12">
+                {item.content}
+              </div>
+            </StackItem>
+          ))}
+        </Stack>
+      </div>
+
+      <div>
+        <h2 className="mb-8 px-4 text-lg font-medium">Position: Sticky</h2>
+        <div>
+          {items.map((item, index) => (
+            <div
+              key={index}
+              className={cn(
+                "bg-background sticky top-0",
+                index === 0 && "top-0",
+                index === 1 && "top-12",
+                index === 2 && "top-24"
+              )}
+            >
+              <div className="bg-background h-12 px-4">
+                <div className="flex h-12 items-center gap-3 text-xl">
+                  <item.icon className="size-6" />
+                  <h3 className="py-2">{item.title}</h3>
+                </div>
+                <Divider />
+              </div>
+              <div className="text-foreground-secondary text-md pt-4 pb-12">
+                {item.content}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default StackVsStickyPreview;
+`,
+  },
+  ["stack"]: {
+    component: dynamic(
+      () => import("@/foundations/components/stack/examples/stack.preview")
+    ),
+    source: `"use client";
+
+import { Divider } from "@/foundations/ui/divider/divider";
+import { BookOpen, Lightbulb, Wrench } from "@phosphor-icons/react";
+import {
+  Stack,
+  StackHeader,
+  StackItem,
+} from "@/foundations/components/stack/stack";
+
+const items = [
+  {
+    title: "Getting Started",
+    icon: BookOpen,
+    content:
+      "The Stack component helps create scrollable sections with sticky headers. It's particularly useful for long-form content or documentation where you want to maintain context while scrolling.",
+  },
+  {
+    title: "Key Features",
+    icon: Lightbulb,
+    content:
+      "Smooth sticky header transitions, configurable alignment (top/bottom), and automatic content height calculations make this component highly versatile.",
+  },
+  {
+    title: "Implementation",
+    icon: Wrench,
+    content:
+      "To use the Stack component, wrap your content sections in StackItem components and include StackHeader components for the sticky headers. The Stack parent component manages all the positioning and scroll behavior automatically. You can customize the appearance using standard CSS classes and configure the stick behavior using the 'stick' prop.",
+  },
+];
+
+const StackPreview = () => {
+  return (
+    <div className="pt-[70vh] pb-[70vh]">
+      <Stack stick="top">
+        {items.map((item, index) => (
+          <StackItem key={index} className="bg-background px-4">
+            <StackHeader className="text-xl">
+              <div className="flex items-center gap-3">
+                <item.icon className="size-6" />
+                <h3 className="py-2">{item.title}</h3>
+              </div>
+              <Divider />
+            </StackHeader>
+
+            <div className="text-foreground-secondary text-md w-2/3 pt-4 pb-12">
+              {item.content}
+            </div>
+          </StackItem>
+        ))}
+      </Stack>
+    </div>
+  );
+};
+
+export default StackPreview;
+`,
+  },
   ["accessible-forms"]: {
     component: dynamic(
       () =>
