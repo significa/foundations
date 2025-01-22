@@ -52,7 +52,11 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build
+      - name: Build site
+        run: npm run build
+        env:
+          NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+          NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
