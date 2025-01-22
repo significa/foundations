@@ -2,6 +2,7 @@ import "../globals.css";
 
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import PostHogClient from './providers/PostHogClient'
 
 export const metadata: Metadata = {
   title: "Foundations",
@@ -16,7 +17,9 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <PostHogClient>
+          <ThemeProvider>{children}</ThemeProvider>
+        </PostHogClient>
       </body>
     </html>
   );
