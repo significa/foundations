@@ -236,7 +236,7 @@ const PopoverContent = ({
             ref,
             className: cn(
               "z-50 w-72 overflow-auto rounded-xl border border-border bg-background p-3 text-foreground shadow-lg outline-none",
-              "origin-[--popover-transform-origin] transition duration-300 ease-out-expo",
+              "origin-(--popover-transform-origin) transition duration-300 ease-out-expo",
               "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
               "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
               "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",

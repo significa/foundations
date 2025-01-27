@@ -22,9 +22,11 @@
 
 @layer base {
   *,
+  ::after,
   ::before,
-  ::after {
-    border-color: var(--color-border);
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
   }
 }
 

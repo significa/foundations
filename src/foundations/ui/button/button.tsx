@@ -18,10 +18,10 @@ const buttonStyle = cva({
       destructive: "bg-red-600 text-white ring-red-600/50 hover:bg-red-700",
     },
     size: {
-      xs: "rounded-lg px-2 text-sm [--button-height:theme(spacing.6)]",
-      sm: "rounded-lg px-3 text-sm [--button-height:theme(spacing.8)]",
-      md: "rounded-xl px-4 text-base [--button-height:theme(spacing.10)]",
-      lg: "rounded-2xl px-5 text-base [--button-height:theme(spacing.12)]",
+      xs: "rounded-lg px-2 text-sm [--button-height:calc(var(--spacing)*6)]",
+      sm: "rounded-lg px-3 text-sm [--button-height:calc(var(--spacing)*8)]",
+      md: "rounded-xl px-4 text-base [--button-height:calc(var(--spacing)*10)]",
+      lg: "rounded-2xl px-5 text-base [--button-height:calc(var(--spacing)*12)]",
     },
     square: {
       true: "w-(--button-height) px-0",
