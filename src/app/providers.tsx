@@ -13,8 +13,16 @@ export const PostHogProvider = ({
   useEffect(() => {
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
       api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST!,
-      ui_host: "https://eu.posthog.com",
       capture_pageview: false, // Disable automatic pageview capture, as we capture manually
+      autocapture: true,
+      persistence: "localStorage",
+      mask_all_text: true,
+      enable_heatmaps: true,
+      capture_pageleave: true,
+      person_profiles: "always",
+      loaded: (posthog) => {
+        if (process.env.NODE_ENV === "development") posthog.debug();
+      },
     });
   }, []);
 
