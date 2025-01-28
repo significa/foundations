@@ -21,6 +21,7 @@ export const PostHogProvider = ({
       enable_heatmaps: true,
       capture_pageleave: true,
       person_profiles: "always",
+      disable_compression: true,
       loaded: (posthog) => {
         if (process.env.NODE_ENV === "development") posthog.debug();
       },
