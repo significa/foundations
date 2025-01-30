@@ -26,6 +26,11 @@ const getGitCreatedTime = async (filePath: string): Promise<Date> => {
         if (error) {
           reject(error);
         } else {
+          // Return current date if file hasn't been committed yet
+          if (!stdout) {
+            resolve(new Date());
+          }
+
           resolve(new Date(parseInt(stdout.trim(), 10) * 1000));
         }
       }
@@ -41,6 +46,11 @@ const getGitLastModifiedTime = async (filePath: string): Promise<Date> => {
       if (error) {
         reject(error);
       } else {
+        // Return current date if file hasn't been committed yet
+        if (!stdout) {
+          resolve(new Date());
+        }
+
         resolve(new Date(parseInt(stdout.trim(), 10) * 1000));
       }
     });
