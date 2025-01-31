@@ -1,14 +1,23 @@
-import { glob } from "glob";
 import path from "path";
+import { walkDirectory } from "./fs";
 
 export const getPreviewSourcePath = async (slug: string) => {
-  const [filepath] = await glob(`./src/foundations/**/${slug}.preview.tsx`);
-
-  return filepath;
+  for await (const filepath of walkDirectory("./src/foundations")) {
+    if (filepath.endsWith(`${slug}.preview.tsx`)) {
+      return filepath;
+    }
+  }
+  return undefined;
 };
 
 export const getPreviewSlugs = async () => {
-  const filepaths = await glob(`./src/foundations/**/*.preview.tsx`);
+  const filepaths = [];
+
+  for await (const filepath of walkDirectory("./src/foundations")) {
+    if (filepath.endsWith(".preview.tsx")) {
+      filepaths.push(filepath);
+    }
+  }
 
   return filepaths.map((filepath) => path.basename(filepath, ".preview.tsx"));
 };

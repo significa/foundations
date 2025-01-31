@@ -43,7 +43,7 @@ export async function Preview({
         ) : (
           <Suspense>
             <PreviewLayout layout={layout}>
-              <FoundationsComponent file={filepath} />
+              {filepath && <FoundationsComponent file={filepath} />}
             </PreviewLayout>
           </Suspense>
         )}
@@ -55,7 +55,7 @@ export async function Preview({
             "[&_pre[data-language]]:overflow-visible [&_pre[data-language]]:rounded-none [&_pre[data-language]]:border-transparent [&_pre[data-language]]:bg-transparent"
           )}
         >
-          <SourceCode file={filepath} />
+          {filepath && <SourceCode file={filepath} />}
         </div>
       </PreviewSwitchCode>
     </PreviewSwitch>
