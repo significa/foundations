@@ -1,6 +1,4 @@
 import { z } from "zod";
-import * as runtime from "react/jsx-runtime";
-import { evaluate } from "@mdx-js/mdx";
 
 // Metadata
 const metadataSchema = z.object({
@@ -28,10 +26,34 @@ const metadataSchema = z.object({
 });
 
 export const getMetadata = async (content: string) => {
-  const { metadata } = await evaluate(content, runtime);
+  const fragment = content.match(
+    /export\s+const\s+metadata\s*=\s*{[\s\S]*?}\s*;/
+  )?.[0];
 
-  if (!metadata) {
-    throw new Error("Metadata is required in docs pages");
+  if (!fragment) {
+    throw new Error(
+      "Could not find metadata export in docs page. Expected 'export const metadata = {...};'"
+    );
+  }
+
+  let metadata;
+  try {
+    metadata = Function(
+      `"use strict"; ${fragment.replace("export", "")}; return metadata`
+    )();
+  } catch (error) {
+    throw new Error(
+      `Failed to evaluate metadata: ${error instanceof Error ? error.message : "Unknown error"}`,
+      { cause: error }
+    );
+  }
+
+  if (!metadata || typeof metadata !== "object") {
+    const type = metadata === null ? "null" : typeof metadata;
+
+    throw new Error(
+      `Invalid metadata format. Expected metadata to be an object, got: ${type}`
+    );
   }
 
   try {
