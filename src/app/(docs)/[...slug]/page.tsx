@@ -15,7 +15,7 @@ import { getMarkdownToc } from "@/lib/markdown-toc";
 import { navigation } from "@/lib/navigation";
 
 import { Preview } from "@/components/preview";
-import { Markdown } from "@/components/markdown";
+import { Markdown, Heading } from "@/components/markdown";
 
 import { TableOfContents } from "./toc";
 import { Navigation } from "./navigation";
@@ -140,14 +140,16 @@ export default async function Page({
 
         {metadata.dependencies && metadata.dependencies.length > 0 && (
           <>
-            <Markdown>{`## Dependencies`}</Markdown>
+            <Heading heading="h2">Dependencies</Heading>
             <DependenciesList dependencies={metadata.dependencies} />
           </>
         )}
 
         {metadata.files && metadata.files.length > 0 && (
           <>
-            <Markdown className="[&>h2]:mb-0">{`## Source Code`}</Markdown>
+            <Heading heading="h2" className="[&>h2]:mb-0">
+              Source Code
+            </Heading>
             {metadata.files.map((file) => (
               <SourceCode
                 key={file}
