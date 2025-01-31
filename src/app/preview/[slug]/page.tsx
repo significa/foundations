@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation";
-
-import { imports } from "@/lib/examples-registry";
 import { Suspense } from "react";
+
+import { FoundationsComponent } from "@/components/foundations-component";
 import { PreviewLayout } from "@/components/preview-layout";
+import { getPreviewSourcePath, getPreviewSlugs } from "@/lib/preview";
 
 export async function generateStaticParams() {
-  return Object.keys(imports).map((slug) => ({ slug }));
+  const slugs = await getPreviewSlugs();
+
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function Preview({
@@ -14,15 +17,14 @@ export default async function Preview({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const filepath = await getPreviewSourcePath(slug);
 
-  const Component = imports[slug].component;
-
-  if (!Component) notFound();
+  if (!filepath) notFound();
 
   return (
     <Suspense>
       <PreviewLayout>
-        <Component />
+        <FoundationsComponent file={filepath} />
       </PreviewLayout>
     </Suspense>
   );

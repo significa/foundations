@@ -1,17 +1,17 @@
 import "./markdown.css";
 
+import dynamic from "next/dynamic";
 import * as runtime from "react/jsx-runtime";
+
 import { evaluate, UseMdxComponents } from "@mdx-js/mdx";
-
-import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
 
-import { cn } from "@/lib/utils";
-import { rehypeRewriteImports } from "@/lib/rehype-rewrite-imports";
-import { rehypePrettyCodeOptions } from "@/lib/rehype-pretty-code";
-import { rehypeRawCode } from "@/lib/rehype-raw-code";
+import { FileTree, FileTreeFolder, FileTreeFile } from "@/components/file-tree";
+import { Preview } from "@/components/preview";
+import { PropsTable } from "@/components/props-table";
 
 import { Button } from "@/foundations/ui/button/button";
 import {
@@ -22,10 +22,10 @@ import {
   TabsPanel,
 } from "@/foundations/ui/tabs/tabs";
 
-import { SourceCode } from "@/components/source-code";
-import { Preview } from "@/components/preview";
-import { FileTree, FileTreeFolder, FileTreeFile } from "@/components/file-tree";
-import { PropsTable } from "@/components/props-table";
+import { rehypePrettyCodeOptions } from "@/lib/rehype-pretty-code";
+import { rehypeRawCode } from "@/lib/rehype-raw-code";
+import { rehypeRewriteImports } from "@/lib/rehype-rewrite-imports";
+import { cn } from "@/lib/utils";
 
 import { CopyButton } from "./copy-button";
 
@@ -129,7 +129,6 @@ export const components: ReturnType<UseMdxComponents> = {
   },
   Markdown,
   Button,
-  SourceCode,
   Preview,
   Tabs,
   TabsItems,
@@ -140,4 +139,7 @@ export const components: ReturnType<UseMdxComponents> = {
   FileTreeFolder,
   FileTreeFile,
   PropsTable,
+  SourceCode: dynamic(() =>
+    import("@/components/source-code").then((mod) => mod.SourceCode)
+  ),
 };

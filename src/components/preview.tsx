@@ -1,15 +1,18 @@
-import { imports } from "@/lib/examples-registry";
-import { Markdown } from "./markdown";
+import { Suspense } from "react";
+
+import { getPreviewSourcePath } from "@/lib/preview";
+import { cn } from "@/lib/utils";
+
+import { FoundationsComponent } from "./foundations-component";
+import { PreviewLayout } from "./preview-layout";
 import {
   PreviewSwitch,
   PreviewSwitchCode,
   PreviewSwitchFrame,
 } from "./preview-switch";
-import { cn } from "@/lib/utils";
-import { PreviewLayout } from "./preview-layout";
-import { Suspense } from "react";
+import { SourceCode } from "./source-code";
 
-export function Preview({
+export async function Preview({
   slug,
   mode = "inline",
   layout = "centered",
@@ -22,9 +25,7 @@ export function Preview({
   className?: string;
   withSource?: boolean;
 }) {
-  if (!imports[slug]) return null;
-
-  const Component = imports[slug].component;
+  const filepath = await getPreviewSourcePath(slug);
 
   return (
     <PreviewSwitch
@@ -42,7 +43,7 @@ export function Preview({
         ) : (
           <Suspense>
             <PreviewLayout layout={layout}>
-              <Component />
+              <FoundationsComponent file={filepath} />
             </PreviewLayout>
           </Suspense>
         )}
@@ -54,7 +55,7 @@ export function Preview({
             "[&_pre[data-language]]:overflow-visible [&_pre[data-language]]:rounded-none [&_pre[data-language]]:border-transparent [&_pre[data-language]]:bg-transparent"
           )}
         >
-          <Markdown>{`\`\`\`tsx\n${imports[slug].source}\`\`\``}</Markdown>
+          <SourceCode file={filepath} />
         </div>
       </PreviewSwitchCode>
     </PreviewSwitch>

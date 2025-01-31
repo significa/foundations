@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "generate-imports": "tsx scripts/create-preview-imports.ts",
-    "dev": "concurrently \"npm run generate-imports -- --watch\" \"next dev\"",
-    "prebuild": "npm run generate-imports",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -19,6 +18,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "cva": "^1.0.0-beta.2",
     "date-fns": "^4.1.0",
+    "glob": "^11.0.1",
     "motion": "^12.0.5",
     "next": "15.1.6",
     "next-themes": "^0.4.4",
