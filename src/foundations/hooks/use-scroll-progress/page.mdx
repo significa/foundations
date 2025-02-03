@@ -58,7 +58,7 @@ useScrollProgress(
   carouselRef,
   (scrollLeft, width, scrollWidth, progress) => {
     if (progressLineRef.current) {
-      progressLineRef.current.style.width = `${(scrollLeft / (scrollWidth - width)) * 100}%`;
+      progressLineRef.current.style.width = `${(width / scrollWidth + scrollLeft / scrollWidth) * 100}%`;
     }
   }
 );
