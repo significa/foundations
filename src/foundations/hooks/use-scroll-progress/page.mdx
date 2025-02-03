@@ -1,0 +1,93 @@
+export const metadata = {
+  title: "useCarouselProgress",
+  description:
+    "A hook that provides the carousel progress value.",
+  files: ["src/foundations/hooks/use-carousel-progress/use-carousel-progress.ts"],
+};
+
+## API Reference
+
+<PropsTable
+  definition={{
+    type: {
+      default: 'normal',
+      type: "normal | proportional",
+      description: "The type of progress that we want.",
+    },
+    carouselRef: {
+      type: 'React.RefObject<HTMLDivElement>',
+      description: 'The reference of the carousel element to calculate the values.'
+    }
+  }}
+/>
+
+The hook returns a stable function that will always call the latest version of the provided callback.
+
+## Examples
+
+###
+
+When receiving function props from a parent component, you often can't guarantee that the function is stable (wrapped in useCallback). This can lead to unnecessary re-renders or effects being triggered:
+
+```tsx
+// This effect will re-run on every render because someFunc is unstable
+const MyComponent = ({ someFunc }) => {
+  useEffect(() => {
+    // something that requires the func
+  }, [someFunc]);
+
+  return <button onClick={someFunc}>Click me</button>;
+};
+
+// Parent component passing an unstable function
+const Parent = () => {
+  return <MyComponent someFunc={() => console.log("hello")} />;
+};
+```
+
+Using `useStableCallback`, you can stabilize the function prop:
+
+```tsx
+const MyComponent = ({ someFunc }) => {
+  // Create a stable version of someFunc
+  const stableFunc = useStableCallback(someFunc);
+
+  useEffect(() => {
+    // This effect will only run once
+  }, [stableFunc]); // stableFunc is now stable
+
+  return <button onClick={stableFunc}>Click me</button>;
+  
+};
+```
+
+### Event Handlers
+
+Perfect for event handlers that need access to the latest state but should maintain a stable reference:
+
+```tsx
+const SearchInput = ({ onSearch }) => {
+  const [query, setQuery] = useState("");
+
+  // Creates a stable callback that always has access to latest query
+  const handleSearch = useStableCallback(() => {
+    onSearch(query);
+  });
+
+  // The effect only runs once since handleSearch is stable
+  useEffect(() => {
+    const handler = debounce(handleSearch, 500);
+    return () => handler.cancel();
+  }, [handleSearch]);
+
+  return (
+    <input
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") handleSearch();
+      }}
+    />
+  );
+};
+```
