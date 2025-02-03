@@ -157,8 +157,8 @@ export const navigation: NavigationItem[] = [
         href: "/hooks/use-stable-callback",
       },
       {
-        title: "useCarouselProgress",
-        href: "/hooks/use-carousel-progress",
+        title: "useScrollProgress",
+        href: "/hooks/use-scroll-progress",
       },
     ],
   },

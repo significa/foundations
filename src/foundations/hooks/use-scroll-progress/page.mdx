@@ -1,93 +1,65 @@
 export const metadata = {
-  title: "useCarouselProgress",
-  description:
-    "A hook that provides the carousel progress value.",
-  files: ["src/foundations/hooks/use-carousel-progress/use-carousel-progress.ts"],
+  title: "useScrollProgress",
+  description: "A React hook that provides the scroll progress value of an element.",
+  files: ["src/foundations/hooks/use-scroll-progress/use-scroll-progress.ts"],
 };
 
 ## API Reference
 
 <PropsTable
   definition={{
-    type: {
-      default: 'normal',
-      type: "normal | proportional",
-      description: "The type of progress that we want.",
+    ref: {
+      type: "React.RefObject<HTMLDivElement>",
+      description: "A reference to the element being tracked for scroll progress.",
     },
-    carouselRef: {
-      type: 'React.RefObject<HTMLDivElement>',
-      description: 'The reference of the carousel element to calculate the values.'
-    }
+    callback: {
+      type: "(scrollLeft: number, width: number, scrollWidth: number, progress: number) => void",
+      description: "A function that is called when the element is scrolled, receiving relevant scroll metrics.",
+    },
   }}
 />
 
-The hook returns a stable function that will always call the latest version of the provided callback.
+### Return Value
 
-## Examples
+When **no callback is provided**, the hook returns a reactive object with the following properties:
 
-###
+- `scrollLeft` (`number`): The horizontal scroll position of the element.
+- `width` (`number`): The visible width of the element.
+- `scrollWidth` (`number`): The total scrollable width of the element.
+- `progress` (`number`): A value between `0` and `1`, representing the scroll progress.
 
-When receiving function props from a parent component, you often can't guarantee that the function is stable (wrapped in useCallback). This can lead to unnecessary re-renders or effects being triggered:
+This allows you to handle scrolling declaratively with state updates or imperatively using the callback for optimized performance.
+
+### Progress Calculation
+
+The `progress` value represents how far the element has been scrolled as a proportion of its total scrollable width. If you need a different progress calculation (e.g., proportional to a custom range), you can derive it using `scrollLeft`, `width`, and `scrollWidth`.
+
+---
+
+## Usage Examples
+
+### Basic Usage
 
 ```tsx
-// This effect will re-run on every render because someFunc is unstable
-const MyComponent = ({ someFunc }) => {
-  useEffect(() => {
-    // something that requires the func
-  }, [someFunc]);
-
-  return <button onClick={someFunc}>Click me</button>;
-};
-
-// Parent component passing an unstable function
-const Parent = () => {
-  return <MyComponent someFunc={() => console.log("hello")} />;
-};
+useScrollProgress(
+  carouselRef,
+  (scrollLeft, width, scrollWidth, progress) => {
+    if (progressLineRef.current) {
+      progressLineRef.current.style.width = `${progress * 100}%`;
+    }
+  }
+);
 ```
 
-Using `useStableCallback`, you can stabilize the function prop:
+### Custom Proportional Scroll Behavior
 
 ```tsx
-const MyComponent = ({ someFunc }) => {
-  // Create a stable version of someFunc
-  const stableFunc = useStableCallback(someFunc);
-
-  useEffect(() => {
-    // This effect will only run once
-  }, [stableFunc]); // stableFunc is now stable
-
-  return <button onClick={stableFunc}>Click me</button>;
-  
-};
-```
-
-### Event Handlers
-
-Perfect for event handlers that need access to the latest state but should maintain a stable reference:
-
-```tsx
-const SearchInput = ({ onSearch }) => {
-  const [query, setQuery] = useState("");
-
-  // Creates a stable callback that always has access to latest query
-  const handleSearch = useStableCallback(() => {
-    onSearch(query);
-  });
-
-  // The effect only runs once since handleSearch is stable
-  useEffect(() => {
-    const handler = debounce(handleSearch, 500);
-    return () => handler.cancel();
-  }, [handleSearch]);
-
-  return (
-    <input
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") handleSearch();
-      }}
-    />
-  );
-};
+useScrollProgress(
+  carouselRef,
+  (scrollLeft, width, scrollWidth, progress) => {
+    if (progressLineRef.current) {
+      progressLineRef.current.style.width = `${(scrollLeft / (scrollWidth - width)) * 100}%`;
+    }
+  }
+);
 ```

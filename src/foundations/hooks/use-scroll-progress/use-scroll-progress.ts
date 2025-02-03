@@ -30,20 +30,16 @@ export const useScrollProgress = (
       const scrollLeft = scrollRef.scrollLeft;
       const width = scrollRef.clientWidth;
       const scrollWidth = scrollRef.scrollWidth;
-      const progress = scrollRef.scrollLeft / scrollRef.scrollWidth; // normalized value between 0-1
+      const progress = scrollLeft / (scrollWidth - width);
 
       if (callbackRef.current) {
         callbackRef.current(scrollLeft, width, scrollWidth, progress);
       } else {
-        setState({
-          scrollLeft,
-          width,
-          scrollWidth,
-          progress,
-        });
+        setState({ scrollLeft, width, scrollWidth, progress });
       }
     };
 
+    updateScrollProgress();
     scrollRef.addEventListener("scroll", updateScrollProgress);
     window.addEventListener("resize", updateScrollProgress);
 
@@ -55,10 +51,3 @@ export const useScrollProgress = (
 
   return state;
 };
-
-// const state = useScrollProgress(ref);
-// console.log("rerender");
-
-// useScrollProgress(ref, (state) => {
-//    lineRef.width = state.progress
-// });
