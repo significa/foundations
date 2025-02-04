@@ -1,5 +1,4 @@
-import { useEffect, useState, RefObject } from "react";
-import { useStableCallback } from "@/foundations/hooks/use-stable-callback/use-stable-callback";
+import { useEffect, useState, RefObject, useRef } from "react";
 
 type IntersectionCallback = (
   isIntersecting: boolean,
@@ -29,7 +28,9 @@ export const useIntersectionObserver = (
     entry: undefined,
   });
 
-  const stableCallback = useStableCallback(callback);
+
+  const callbackRef = useRef<IntersectionCallback | undefined>(callback);
+  callbackRef.current = callback;
 
   useEffect(() => {
     const elements = [ref]
@@ -44,8 +45,8 @@ export const useIntersectionObserver = (
         entries.forEach((entry) => {
           const isIntersecting = entry.isIntersecting;
 
-          if (stableCallback) {
-            stableCallback(isIntersecting, entry);
+          if (callbackRef.current) {
+            callbackRef.current(isIntersecting, entry);
           } else {
             setState({ isIntersecting, entry });
           }
@@ -57,7 +58,7 @@ export const useIntersectionObserver = (
     elements.forEach((element) => observer.observe(element));
 
     return () => observer.disconnect();
-  }, [ref, root, rootMargin, stableCallback, threshold]);
+  }, [ref, root, rootMargin, threshold]);
 
   return state;
 };
