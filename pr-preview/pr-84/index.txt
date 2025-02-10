@@ -1,0 +1,16 @@
+1:"$Sreact.fragment"
+4:I[6213,[],"OutletBoundary"]
+6:I[6213,[],"MetadataBoundary"]
+8:I[6213,[],"ViewportBoundary"]
+a:I[4835,[],""]
+:HL["/_next/static/css/04ab73bb0b7f5c67.css","style"]
+0:{"P":null,"b":"5D8I5XwdfYdxMH1UbhZRx","p":"","c":["",""],"i":false,"f":[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/04ab73bb0b7f5c67.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L2"]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L3",null,["$","$L4",null,{"children":"$L5"}]]}],{},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","G0cHj4LpKscmnWlNyG2tt",{"children":[["$","$L6",null,{"children":"$L7"}],["$","$L8",null,{"children":"$L9"}],null]}]]}],false]],"m":"$undefined","G":["$a","$undefined"],"s":false,"S":true}
+3:E{"digest":"NEXT_REDIRECT;replace;/about;307;"}
+b:I[7868,["229","static/chunks/9da6db1e-38b2543de7ae74a7.js","177","static/chunks/app/layout-825652810ff31dad.js"],"PostHogProvider"]
+c:I[7113,["229","static/chunks/9da6db1e-38b2543de7ae74a7.js","177","static/chunks/app/layout-825652810ff31dad.js"],"ThemeProvider"]
+d:I[5244,[],""]
+e:I[3866,[],""]
+2:["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"children":["$","$Lb",null,{"children":["$","$Lc",null,{"children":["$","$Ld",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$Le",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[],["$","div",null,{"children":"Not Found"}]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]}]}]
+9:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+7:[["$","meta","0",{"charSet":"utf-8"}],["$","title","1",{"children":"Foundations"}],["$","meta","2",{"name":"description","content":"Significa documentation for building applications"}],["$","link","3",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}]]
+5:null
