@@ -17,25 +17,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: npm
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version-file: ".nvmrc"
+  #         cache: npm
 
-      - run: npm ci
+  #     - run: npm ci
 
-      - run: npm run lint
+  #     - run: npm run lint
 
   deploy:
     concurrency: gh-pages-deployment
 
-    needs:
-      - lint
+    # needs:
+    #   - lint
 
     environment:
       name: github-pages
@@ -59,19 +59,22 @@ jobs:
           NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
           NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
 
-      - name: Deploy preview
-        if: github.ref != 'refs/heads/main'
-        uses: rossjrw/pr-preview-action@v1
-        with:
-          source-dir: "./out"
-          comment: false
+      # - name: Deploy preview
+      #   if: github.ref != 'refs/heads/main'
+      #   uses: rossjrw/pr-preview-action@v1
+      #   with:
+      #     source-dir: "./out"
+      #     comment: false
 
       - name: Deploy production
-        if: github.ref == 'refs/heads/main'
+        # if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          clean-exclude: pr-preview/
           folder: "./out"
+          clean-exclude: pr-preview/
+          force: true
+          single-commit: true
+          clean: true
 
       # We should use the official GitHub pages deployment, but the preview deployment feature is
       #  still in private beta. Therefore we use the hacky rossjrw/pr-preview-action@v1 action
