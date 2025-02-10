@@ -32,7 +32,8 @@ jobs:
       - run: npm run lint
 
   deploy:
-    if: github.ref == 'refs/heads/main'
+    concurrency: gh-pages-deployment
+
     needs:
       - lint
 
@@ -58,14 +59,30 @@ jobs:
           NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
           NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy preview
+        if: github.ref != 'refs/heads/main'
+        uses: rossjrw/pr-preview-action@v1
         with:
-          path: "./out"
+          source-dir: "./out"
+          comment: false
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy production
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          clean-exclude: pr-preview/
+          folder: "./out"
+
+      # We should use the official GitHub pages deployment, but the preview deployment feature is
+      #  still in private beta. Therefore we use the hacky rossjrw/pr-preview-action@v1 action
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v5
+      #
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: "./out"
+      #
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4
