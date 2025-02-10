@@ -17,29 +17,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version-file: ".nvmrc"
-  #         cache: npm
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
 
-  #     - run: npm ci
+      - run: npm ci
 
-  #     - run: npm run lint
+      - run: npm run lint
 
   deploy:
     concurrency: gh-pages-deployment
 
-    # needs:
-    #   - lint
+    needs:
+      - lint
 
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
 
     runs-on: ubuntu-latest
 
@@ -53,21 +56,28 @@ jobs:
 
       - run: npm ci
 
-      - name: Build site
+      - name: Build site (preview)
+        if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
+        run: npm run build
+        env:
+          BASE_PATH: /pr-previews/pr-${{ github.event.pull_request.number }}
+
+      - name: Build site (production)
+        if: github.ref == 'refs/heads/main'
         run: npm run build
         env:
           NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
           NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
 
-      # - name: Deploy preview
-      #   if: github.ref != 'refs/heads/main'
-      #   uses: rossjrw/pr-preview-action@v1
-      #   with:
-      #     source-dir: "./out"
-      #     comment: false
+      - name: Deploy (preview)
+        if: github.ref != 'refs/heads/main'
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: "./out"
+          comment: false
 
-      - name: Deploy production
-        # if: github.ref == 'refs/heads/main'
+      - name: Deploy (production)
+        if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: "./out"
