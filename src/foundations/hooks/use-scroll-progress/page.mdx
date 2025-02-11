@@ -1,0 +1,65 @@
+export const metadata = {
+  title: "useScrollProgress",
+  description: "A React hook that provides the scroll progress value of an element.",
+  files: ["src/foundations/hooks/use-scroll-progress/use-scroll-progress.ts"],
+};
+
+## API Reference
+
+<PropsTable
+  definition={{
+    ref: {
+      type: "React.RefObject<HTMLDivElement>",
+      description: "A reference to the element being tracked for scroll progress.",
+    },
+    callback: {
+      type: "(scrollLeft: number, width: number, scrollWidth: number, progress: number) => void",
+      description: "A function that is called when the element is scrolled, receiving relevant scroll metrics.",
+    },
+  }}
+/>
+
+### Return Value
+
+When **no callback is provided**, the hook returns a reactive object with the following properties:
+
+- `scrollLeft` (`number`): The horizontal scroll position of the element.
+- `width` (`number`): The visible width of the element.
+- `scrollWidth` (`number`): The total scrollable width of the element.
+- `progress` (`number`): A value between `0` and `1`, representing the scroll progress.
+
+This allows you to handle scrolling declaratively with state updates or imperatively using the callback for optimized performance.
+
+### Progress Calculation
+
+The `progress` value represents how far the element has been scrolled as a proportion of its total scrollable width. If you need a different progress calculation (e.g., proportional to a custom range), you can derive it using `scrollLeft`, `width`, and `scrollWidth`.
+
+---
+
+## Usage Examples
+
+### Basic Usage
+
+```tsx
+useScrollProgress(
+  carouselRef,
+  (scrollLeft, width, scrollWidth, progress) => {
+    if (progressLineRef.current) {
+      progressLineRef.current.style.width = `${progress * 100}%`;
+    }
+  }
+);
+```
+
+### Custom Proportional Scroll Behavior
+
+```tsx
+useScrollProgress(
+  carouselRef,
+  (scrollLeft, width, scrollWidth, progress) => {
+    if (progressLineRef.current) {
+      progressLineRef.current.style.width = `${(width / scrollWidth + scrollLeft / scrollWidth) * 100}%`;
+    }
+  }
+);
+```
