@@ -1,0 +1,179 @@
+export const metadata = {
+  title: "Sequence",
+  description:
+    "A component for creating timed sequences of content with automatic progression.",
+  files: ["src/foundations/components/sequence/sequence.tsx"],
+  preview: "sequence",
+  dependencies: [
+    {
+      name: "InstanceIndex",
+      href: "/components/instance-index",
+    },
+    {
+      name: "useTicker",
+      href: "/hooks/use-ticker",
+    },
+    {
+      name: "useIntersectionObserver",
+      href: "/hooks/use-intersection-observer",
+    },
+    {
+      name: "@radix-ui/react-slot",
+      href: "https://www.radix-ui.com/primitives/docs/utilities/slot",
+    },
+  ],
+};
+
+## Features
+
+- **Automatic Progression**: Items advance automatically based on configurable durations
+- **Progress Indication**: Exposes a `--progress` css variable to show progression through each item, and a `--index` css variable to show the current index
+- **Keyboard Navigation**: Full keyboard support for manual navigation
+- **ARIA Support**: Full accessibility implementation with proper ARIA attributes
+- **Unstyled**: No default styles, just the sequence behavior
+- **Intersection Observer**: Pauses progression when not in viewport
+
+## Anatomy
+
+```tsx
+<Sequence>
+  <SequenceItems>
+    <SequenceItem />
+  </SequenceItems>
+  <SequencePanels>
+    <SequencePanel />
+  </SequencePanels>
+</Sequence>
+```
+
+## API Reference
+
+### Sequence
+
+The root container component that manages the state and behavior of the sequence.
+
+<PropsTable
+  definition={{
+    duration: {
+      type: "number | number[]",
+      description:
+        "The duration of the sequence in milliseconds. If an array is provided, it will be used to set the duration of each item individually.",
+      required: true,
+    },
+    orientation: {
+      type: '"horizontal" | "vertical"',
+      description: "The orientation of the sequence.",
+      default: '"horizontal"',
+    },
+    loop: {
+      type: "boolean",
+      description: "Whether the sequence should loop.",
+      default: "false",
+    },
+    paused: {
+      type: "boolean",
+      description: "Whether the sequence should be paused.",
+      default: "false",
+    },
+    currentIndex: {
+      type: "number",
+      description: "The controlled index of the active item.",
+    },
+    onChange: {
+      type: "(index: string) => void",
+      description: "Callback triggered when the active item changes.",
+    },
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### SequenceItems
+
+The container for sequence items.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### SequenceItem
+
+The individual sequence item button component.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### SequencePanels
+
+The container for sequence panels.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### SequencePanel
+
+The individual sequence panel component.
+
+<PropsTable
+  definition={{
+    forceMount: {
+      type: "boolean",
+      description:
+        "Whether to always mount the panel, regardless of whether it is active.",
+      default: "false",
+    },
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+## Examples
+
+### Vertical Orientation
+
+<Preview slug="sequence-vertical" />
+
+### As Child
+
+<Preview slug="sequence-as-child" />
+
+### Animate Presence
+
+To make `AnimatePresence` work with `SequencePanel` and maintain accessibility, you need to jump through a few hoops. Because `SequencePanel`'s conditional rendering is only applied to its children, you need to force the panel to mount and unmount with a different key to trigger `AnimatePresence`'s `exit` animation. This example demonstrates how you would do it.
+
+<Preview slug="sequence-motion" />
+
+### Controlled
+
+<Preview slug="sequence-controlled" />
+
+### Pause on Hover
+
+<Preview slug="sequence-pause-hover" />
+
+### Scroll Into View
+
+The root `Sequence` component exposes an `elements` argument in its `onChange` prop that allows you to manipulate the active items. This example demonstrates how to scroll the active item into view.
+
+<Preview slug="sequence-scroll-into-view" />

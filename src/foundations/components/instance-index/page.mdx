@@ -1,0 +1,29 @@
+export const metadata = {
+  title: "Instance Index",
+  description:
+    "A utility component that provides a unique index for each instance of a component where its hook (useInstanceIndex) is called.",
+  files: ["src/foundations/components/instance-index/instance-index.tsx"],
+};
+
+## API Reference
+
+### InstanceIndexProvider
+
+<PropsTable
+  definition={{
+    onChange: {
+      type: "(length: number) => void",
+      description: "The callback to call when the number of instances changes.",
+    },
+  }}
+/>
+
+### useInstanceIndex
+
+Returns a `number` that represents the current index of the component within the `InstanceIndexProvider`.
+
+## Examples
+
+### Basic Usage
+
+<Preview slug="instance-index" />

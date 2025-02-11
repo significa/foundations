@@ -9,6 +9,616 @@ type Import = {
 };
 
 export const imports: Record<string, Import> = {
+  ["instance-index"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/instance-index/examples/instance-index.preview"
+        )
+    ),
+    source: `"use client";
+
+import {
+  InstanceIndexProvider,
+  useInstanceIndex,
+} from "@/foundations/components/instance-index/instance-index";
+import { useState } from "react";
+import { Button } from "@/foundations/ui/button/button";
+
+const Item = () => {
+  const index = useInstanceIndex();
+
+  return (
+    <div className="bg-background-secondary my-2 w-fit rounded-md px-2 py-1 text-xs">
+      Instance Index: {index}
+    </div>
+  );
+};
+
+const InstanceIndexPreview = () => {
+  const [mount, setMount] = useState(false);
+  const [length, setLength] = useState(0);
+
+  return (
+    <InstanceIndexProvider onChange={setLength}>
+      <div className="flex min-h-88 flex-col gap-4">
+        <div className="text-foreground-secondary text-sm">
+          Number of Instances: {length}
+        </div>
+        <Button size="sm" onClick={() => setMount(!mount)}>
+          Trigger Tree Change
+        </Button>
+        <div className="border-border rounded-lg border px-4 py-2 [&_*_*]:ml-4">
+          <Item />
+          <div>
+            <Item />
+            {mount && <Item />}
+            <div>
+              <div>
+                <Item />
+                <div>
+                  <Item />
+                  <div>
+                    <div>
+                      <div>
+                        <Item />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Item />
+        </div>
+      </div>
+    </InstanceIndexProvider>
+  );
+};
+
+export default InstanceIndexPreview;
+`,
+  },
+  ["sequence-as-child"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/sequence/examples/sequence-as-child.preview"
+        )
+    ),
+    source: `"use client";
+
+import { Button } from "@/foundations/ui/button/button";
+import { useState } from "react";
+import {
+  Sequence,
+  SequenceItem,
+  SequenceItems,
+  SequencePanel,
+  SequencePanels,
+} from "../sequence";
+import { eras as CONTENT } from "./content";
+
+const SequencePreview = () => {
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  return (
+    <Sequence
+      className="relative w-160"
+      loop
+      onChange={(index) => setSelectedIndex(index)}
+      duration={3000}
+    >
+      <SequenceItems className="flex gap-2 overflow-y-auto py-2">
+        {CONTENT.map((item, index) => (
+          <SequenceItem key={index} asChild>
+            <Button
+              size="sm"
+              variant={selectedIndex === index ? "primary" : "outline"}
+            >
+              <item.icon size={16} className="-ml-1 shrink-0" />
+              {item.title}
+            </Button>
+          </SequenceItem>
+        ))}
+      </SequenceItems>
+      <SequencePanels className="relative h-64 w-full">
+        {CONTENT.map((item, index) => (
+          <SequencePanel key={index}>
+            <div className="border-border absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
+              <div className="text-foreground-secondary font-mono text-sm uppercase">
+                {item.title}
+              </div>
+              <div className="pr-8 text-xl font-medium text-pretty">
+                {item.description}
+              </div>
+            </div>
+          </SequencePanel>
+        ))}
+      </SequencePanels>
+    </Sequence>
+  );
+};
+
+export default SequencePreview;
+`,
+  },
+  ["sequence-controlled"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/sequence/examples/sequence-controlled.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/foundations/ui/button/button";
+import {
+  Sequence,
+  SequenceItem,
+  SequenceItems,
+  SequencePanel,
+  SequencePanels,
+} from "../sequence";
+import { eras as CONTENT } from "./content";
+
+const SequenceControlled = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  return (
+    <div>
+      <div className="py-2">
+        <Button
+          size="sm"
+          onClick={() => setCurrentIndex((prev) => (prev + 1) % CONTENT.length)}
+        >
+          Next
+        </Button>
+      </div>
+      <Sequence
+        className="relative w-160"
+        loop
+        duration={3000}
+        currentIndex={currentIndex}
+        onChange={setCurrentIndex}
+      >
+        <SequenceItems className="flex gap-2 overflow-y-auto py-2">
+          {CONTENT.map((item, index) => (
+            <SequenceItem
+              key={index}
+              className={cn(
+                "border-background-secondary relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
+                "flex items-center gap-1.5 whitespace-nowrap",
+                "hover:bg-background-secondary/30 transition-colors",
+                'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
+                "before:origin-left before:scale-x-[var(--progress)]"
+              )}
+            >
+              <item.icon size={16} className="-ml-1 shrink-0" />
+              {item.title}
+            </SequenceItem>
+          ))}
+        </SequenceItems>
+        <SequencePanels className="relative h-64 w-full">
+          {CONTENT.map((item, index) => (
+            <SequencePanel key={index}>
+              <div className="border-border absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
+                <div className="text-foreground-secondary font-mono text-sm uppercase">
+                  {item.title}
+                </div>
+                <div className="pr-8 text-xl font-medium text-pretty">
+                  {item.description}
+                </div>
+              </div>
+            </SequencePanel>
+          ))}
+        </SequencePanels>
+      </Sequence>
+    </div>
+  );
+};
+
+export default SequenceControlled;
+`,
+  },
+  ["sequence-motion"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/sequence/examples/sequence-motion.preview"
+        )
+    ),
+    source: `"use client";
+
+import { cn } from "@/lib/utils";
+import {
+  Sequence,
+  SequenceItem,
+  SequenceItems,
+  SequencePanel,
+  SequencePanels,
+} from "@/foundations/components/sequence/sequence";
+import { motion, AnimatePresence } from "motion/react";
+import { useState } from "react";
+
+import { eras as CONTENT } from "./content";
+
+const SequenceMotion = () => {
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  return (
+    <Sequence
+      loop
+      className="w-160"
+      onChange={(index) => setSelectedIndex(index)}
+      duration={3000}
+    >
+      <SequenceItems className="flex w-full gap-2">
+        {CONTENT.map((item, index) => (
+          <SequenceItem
+            key={index}
+            className={cn(
+              "border-background-secondary relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
+              "flex items-center gap-1.5 whitespace-nowrap",
+              "hover:bg-background-secondary/30 transition-colors",
+              'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
+              "before:origin-left before:scale-x-[var(--progress)]"
+            )}
+          >
+            <item.icon size={16} className="-ml-1 shrink-0" />
+            {item.title}
+          </SequenceItem>
+        ))}
+      </SequenceItems>
+
+      <SequencePanels className="mt-4 grid overflow-hidden">
+        <AnimatePresence mode="wait" initial={false}>
+          {CONTENT.map((item, index) =>
+            index === selectedIndex ? (
+              <motion.div
+                key={index}
+                className="col-start-1 row-start-1"
+                initial={{ scale: 0.95 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.95 }}
+                transition={{ duration: 0.125 }}
+              >
+                <SequencePanel forceMount>
+                  <div className="border-border flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
+                    <motion.div
+                      className="text-foreground-secondary font-mono text-sm uppercase"
+                      initial={{ opacity: 0, y: "50%" }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 1.5,
+                        delay: 0.15,
+                        ease: [0.19, 1.0, 0.22, 1.0],
+                      }}
+                    >
+                      {item.title}
+                    </motion.div>
+                    <motion.div
+                      className="pr-8 text-xl font-medium text-pretty"
+                      initial={{ opacity: 0, y: "50%" }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 1.5,
+                        delay: 0.15,
+                        ease: [0.19, 1.0, 0.22, 1.0],
+                      }}
+                    >
+                      {item.description}
+                    </motion.div>
+                  </div>
+                </SequencePanel>
+              </motion.div>
+            ) : (
+              <SequencePanel key={index + "placeholder"} />
+            )
+          )}
+        </AnimatePresence>
+      </SequencePanels>
+    </Sequence>
+  );
+};
+
+export default SequenceMotion;
+`,
+  },
+  ["sequence-pause-hover"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/sequence/examples/sequence-pause-hover.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useState } from "react";
+
+import { cn } from "@/lib/utils";
+import {
+  Sequence,
+  SequenceItem,
+  SequenceItems,
+  SequencePanel,
+  SequencePanels,
+} from "../sequence";
+import { eras as CONTENT } from "./content";
+
+const SequencePauseHover = () => {
+  const [paused, setPaused] = useState(false);
+
+  return (
+    <Sequence className="relative w-160" loop paused={paused} duration={3000}>
+      <SequenceItems
+        className="flex gap-2 overflow-y-auto py-2"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        {CONTENT.map((item, index) => (
+          <SequenceItem
+            key={index}
+            className={cn(
+              "border-background-secondary relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
+              "flex items-center gap-1.5 whitespace-nowrap",
+              "hover:bg-background-secondary/30 transition-colors",
+              'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
+              "before:origin-left before:scale-x-[var(--progress)]"
+            )}
+          >
+            <item.icon size={16} className="-ml-1 shrink-0" />
+            {item.title}
+          </SequenceItem>
+        ))}
+      </SequenceItems>
+      <SequencePanels className="relative h-64 w-full">
+        {CONTENT.map((item, index) => (
+          <SequencePanel key={index}>
+            <div className="border-border absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
+              <div className="text-foreground-secondary font-mono text-sm uppercase">
+                {item.title}
+              </div>
+              <div className="pr-8 text-xl font-medium text-pretty">
+                {item.description}
+              </div>
+            </div>
+          </SequencePanel>
+        ))}
+      </SequencePanels>
+    </Sequence>
+  );
+};
+
+export default SequencePauseHover;
+`,
+  },
+  ["sequence-scroll-into-view"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/sequence/examples/sequence-scroll-into-view.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useRef } from "react";
+
+import { cn } from "@/lib/utils";
+import { scrollIntoViewIfNeeded } from "@/foundations/utils/dom/scroll-into-view-if-needed";
+import {
+  Sequence,
+  SequenceItem,
+  SequencePanel,
+  SequencePanels,
+  SequenceItems,
+} from "../sequence";
+import { erasExtended as CONTENT } from "./content";
+
+const SequenceScrollIntoView = () => {
+  const itemsScrollContainerRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <Sequence
+      className="relative max-w-[min(90vw,640px)]"
+      loop
+      duration={3000}
+      onChange={(index) => {
+        if (itemsScrollContainerRef.current) {
+          const item = itemsScrollContainerRef.current.children[index];
+
+          if (item) {
+            scrollIntoViewIfNeeded(
+              itemsScrollContainerRef.current,
+              item as HTMLElement,
+              {
+                behavior: "smooth",
+              }
+            );
+          }
+        }
+      }}
+    >
+      <SequenceItems asChild>
+        <div
+          ref={itemsScrollContainerRef}
+          className="flex gap-2 overflow-y-auto py-2"
+        >
+          {CONTENT.map((item, index) => (
+            <SequenceItem
+              key={index}
+              className={cn(
+                "border-background-secondary relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
+                "flex items-center gap-1.5 whitespace-nowrap",
+                "hover:bg-background-secondary/30 transition-colors",
+                'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
+                "before:origin-left before:scale-x-[var(--progress)]"
+              )}
+            >
+              <item.icon size={16} className="-ml-1 shrink-0" />
+              {item.title}
+            </SequenceItem>
+          ))}
+        </div>
+      </SequenceItems>
+      <SequencePanels className="relative h-64 w-full">
+        {CONTENT.map((item, index) => (
+          <SequencePanel key={index}>
+            <div className="border-border absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
+              <div className="text-foreground-secondary font-mono text-sm uppercase">
+                {item.title}
+              </div>
+              <div className="pr-8 text-xl font-medium text-pretty">
+                {item.description}
+              </div>
+            </div>
+          </SequencePanel>
+        ))}
+      </SequencePanels>
+    </Sequence>
+  );
+};
+
+export default SequenceScrollIntoView;
+`,
+  },
+  ["sequence-vertical"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/sequence/examples/sequence-vertical.preview"
+        )
+    ),
+    source: `"use client";
+
+import { cn } from "@/lib/utils";
+import {
+  Sequence,
+  SequenceItem,
+  SequenceItems,
+  SequencePanel,
+  SequencePanels,
+} from "@/foundations/components/sequence/sequence";
+import { eras as CONTENT } from "./content";
+
+const SequenceVertical = () => {
+  return (
+    <Sequence
+      orientation="vertical"
+      loop
+      className="flex max-w-128 gap-10"
+      duration={3000}
+    >
+      <div className="flex gap-2">
+        <div
+          className={cn(
+            "flex h-8 items-center transition-transform duration-300 ease-out",
+            "translate-y-[calc(var(--index)*100%)]"
+          )}
+        >
+          <div
+            className={cn(
+              "text-foreground relative h-3 w-3 rounded-full",
+              "before:bg-foreground/10 before:absolute before:inset-0",
+              "before:rounded-full before:content-['']"
+            )}
+            style={{
+              "--fill": "calc(var(--progress) * 100%)",
+              background: \`conic-gradient(from 0deg at 50% 50%, currentColor var(--fill), transparent var(--fill))\`,
+            }}
+          />
+        </div>
+        <SequenceItems>
+          {CONTENT.map((item, index) => (
+            <SequenceItem
+              key={index}
+              value={index.toString()}
+              className={cn(
+                "block h-8 text-left text-base font-medium",
+                "text-foreground-secondary data-[selected=true]:text-foreground",
+                "hover:text-foreground/60 active:text-foreground/80 cursor-pointer"
+              )}
+            >
+              {item.title}
+            </SequenceItem>
+          ))}
+        </SequenceItems>
+      </div>
+      <SequencePanels className="min-h-64">
+        {CONTENT.map((item, index) => (
+          <SequencePanel key={index} className="text-xl font-medium">
+            {item.description}
+          </SequencePanel>
+        ))}
+      </SequencePanels>
+    </Sequence>
+  );
+};
+
+export default SequenceVertical;
+`,
+  },
+  ["sequence"]: {
+    component: dynamic(
+      () =>
+        import("@/foundations/components/sequence/examples/sequence.preview")
+    ),
+    source: `"use client";
+
+import { cn } from "@/lib/utils";
+import {
+  Sequence,
+  SequenceItem,
+  SequenceItems,
+  SequencePanel,
+  SequencePanels,
+} from "../sequence";
+import { eras as CONTENT } from "./content";
+
+const SequencePreview = () => {
+  return (
+    <Sequence className="relative w-160" loop duration={3000}>
+      <SequenceItems className="flex gap-2 overflow-y-auto py-2">
+        {CONTENT.map((item, index) => (
+          <SequenceItem
+            key={index}
+            className={cn(
+              "border-background-secondary relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
+              "flex items-center gap-1.5 whitespace-nowrap",
+              "hover:bg-background-secondary/30 transition-colors",
+              'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
+              "before:origin-left before:scale-x-[var(--progress)]"
+            )}
+          >
+            <item.icon size={16} className="-ml-1 shrink-0" />
+            {item.title}
+          </SequenceItem>
+        ))}
+      </SequenceItems>
+      <SequencePanels className="relative h-64 w-full">
+        {CONTENT.map((item, index) => (
+          <SequencePanel key={index}>
+            <div className="border-border absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
+              <div className="text-foreground-secondary font-mono text-sm uppercase">
+                {item.title}
+              </div>
+              <div className="pr-8 text-xl font-medium text-pretty">
+                {item.description}
+              </div>
+            </div>
+          </SequencePanel>
+        ))}
+      </SequencePanels>
+    </Sequence>
+  );
+};
+
+export default SequencePreview;
+`,
+  },
   ["stack-stick-position"]: {
     component: dynamic(
       () =>
@@ -413,6 +1023,111 @@ export default function FieldPreview() {
     </div>
   );
 }
+`,
+  },
+  ["use-ticker-canvas-animation"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/hooks/use-ticker/examples/use-ticker-canvas-animation.preview"
+        )
+    ),
+    source: `"use client";
+
+import { useCallback, useEffect, useRef } from "react";
+import { Play, Square, ArrowCounterClockwise } from "@phosphor-icons/react";
+
+import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
+import { Button } from "@/foundations/ui/button/button";
+
+const UseTickerCanvasAnimation = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const timeElapsed = useRef(0);
+
+  const ticker = useTicker((timestamp, delta) => {
+    timeElapsed.current += delta;
+
+    if (canvasRef.current) {
+      renderFrame(canvasRef.current, timeElapsed.current);
+    }
+  });
+
+  const reset = useCallback(() => {
+    timeElapsed.current = 0;
+
+    if (canvasRef.current) {
+      renderFrame(canvasRef.current, timeElapsed.current, true);
+    }
+  }, []);
+
+  useEffect(() => {
+    reset();
+  }, [reset]);
+
+  return (
+    <div className="absolute inset-0 grid place-items-center">
+      <div className="absolute top-2 left-2 flex gap-2 z-10 justify-start">
+        <Button onClick={ticker.start} size="sm">
+          <Play size={16} />
+          Start
+        </Button>
+        <Button variant="outline" onClick={ticker.stop} size="sm">
+          <Square size={16} />
+          Stop
+        </Button>
+        <Button variant="outline" onClick={reset} size="sm">
+          <ArrowCounterClockwise size={16} />
+          Reset
+        </Button>
+      </div>
+      <canvas
+        ref={canvasRef}
+        width={640}
+        height={480}
+        className="absolute h-full mix-blend-multiply"
+      />
+    </div>
+  );
+};
+
+function renderFrame(
+  canvas: HTMLCanvasElement,
+  progress: number,
+  clearCanvas?: boolean
+) {
+  const context = canvas.getContext("2d");
+  if (!context) return;
+
+  const angle = (progress * 0.002) % Math.PI;
+
+  const { width, height } = canvas;
+  const radius = 24;
+  const y = 1 - Math.sin(angle) * 0.8;
+
+  if (clearCanvas) {
+    context.clearRect(0, 0, width, height);
+  }
+
+  // cover canvas with white at 0.33 alpha to get the trailing effect
+  context.beginPath();
+  context.rect(0, 0, width, height);
+  context.fillStyle = "rgba(255, 255, 255, 0.33)";
+  context.fill();
+
+  // draw circle
+  context.beginPath();
+  context.arc(
+    0.5 * width,
+    radius + y * (height - 2 * radius),
+    radius,
+    0,
+    Math.PI * 2
+  );
+  context.fillStyle = "#222";
+  context.fill();
+}
+
+export default UseTickerCanvasAnimation;
 `,
   },
   ["avatar-broken-image"]: {
