@@ -21,7 +21,7 @@ jobs:
       staging_branch: null
       staging_domain: null
       production_branch: main
-      # production_domain: ${{ vars.PRODUCTION_DOMAIN }}
+      production_domain: ${{ vars.PRODUCTION_DOMAIN }}
     secrets:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
