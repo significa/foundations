@@ -16,6 +16,10 @@ jobs:
       deployments: write
     uses: significa/actions/.github/workflows/vercel-app.yaml@vercel-app-simple-strategy
     with:
+      lint_command: npm run lint
+      test_command: null
+      staging_branch: null
+      staging_domain: null
       production_branch: main
       # production_domain: ${{ vars.PRODUCTION_DOMAIN }}
     secrets:
