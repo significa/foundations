@@ -14,7 +14,7 @@ jobs:
       contents: read
       packages: read
       deployments: write
-    uses: significa/actions/.github/workflows/vercel-app.yaml@main
+    uses: significa/actions/.github/workflows/vercel-app.yaml@vercel-app-simple-strategy
     with:
       production_branch: main
       # production_domain: ${{ vars.PRODUCTION_DOMAIN }}
