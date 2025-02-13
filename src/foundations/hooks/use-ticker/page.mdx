@@ -1,0 +1,36 @@
+export const metadata = {
+  title: "useTicker",
+  description:
+    "A hook for creating performant paint-dependent loops using requestAnimationFrame with precise timing and delta calculations",
+  files: ["src/foundations/hooks/use-ticker/use-ticker.ts"],
+};
+
+## API Reference
+
+<PropsTable
+  definition={{
+    callback: {
+      type: "(timestamp: number, delta: number) => void | boolean",
+      description: "The callback to call on each tick.",
+      required: true,
+    },
+  }}
+/>
+
+The hook returns an object with the following properties:
+
+- `start`: A function to start the ticker.
+- `stop`: A function to stop the ticker.
+- `paused`: A boolean indicating if the ticker is paused.
+
+## Examples
+
+### Looping Animation
+
+<Preview slug="use-ticker-canvas-animation" layout="fullscreen" />
+
+## About `requestAnimationFrame`
+
+`requestAnimationFrame` is a browser API that schedules a callback to be executed before the next browser repaint. It's the recommended way to create animations and game loops as it automatically synchronizes with the browser's refresh rate.
+
+You can read a more in-depth overview of `requestAnimationFrame` on our blog: **[Mastering JavaScript Web Animations](https://significa.co/blog/master-javascript-web-animations)**.

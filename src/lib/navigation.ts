@@ -131,6 +131,14 @@ export const navigation: NavigationItem[] = [
     title: "Components",
     children: [
       {
+        title: "InstanceCounter",
+        href: "/components/instance-counter",
+      },
+      {
+        title: "Sequence",
+        href: "/components/sequence",
+      },
+      {
         title: "Stack",
         href: "/components/stack",
       },
@@ -153,8 +161,16 @@ export const navigation: NavigationItem[] = [
     title: "Hooks",
     children: [
       {
+        title: "useIntersectionObserver",
+        href: "/hooks/use-intersection-observer",
+      },
+      {
         title: "useStableCallback",
         href: "/hooks/use-stable-callback",
+      },
+      {
+        title: "useTicker",
+        href: "/hooks/use-ticker",
       },
     ],
   },
