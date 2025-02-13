@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { getPreviewSourcePath } from "@/lib/preview";
 import { cn } from "@/lib/utils";
 
-import { FoundationsComponent } from "./foundations-component";
+import { DynamicComponent } from "./dynamic-component";
 import { PreviewLayout } from "./preview-layout";
 import {
   PreviewSwitch,
@@ -43,7 +43,7 @@ export async function Preview({
         ) : (
           <Suspense>
             <PreviewLayout layout={layout}>
-              {filepath && <FoundationsComponent file={filepath} />}
+              {filepath && <DynamicComponent file={filepath} />}
             </PreviewLayout>
           </Suspense>
         )}
