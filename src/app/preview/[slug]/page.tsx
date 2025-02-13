@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import { FoundationsComponent } from "@/components/foundations-component";
+import { DynamicComponent } from "@/components/dynamic-component";
 import { PreviewLayout } from "@/components/preview-layout";
 import { getPreviewSourcePath, getPreviewSlugs } from "@/lib/preview";
 
@@ -24,7 +24,7 @@ export default async function Preview({
   return (
     <Suspense>
       <PreviewLayout>
-        <FoundationsComponent file={filepath} />
+        <DynamicComponent file={filepath} />
       </PreviewLayout>
     </Suspense>
   );
