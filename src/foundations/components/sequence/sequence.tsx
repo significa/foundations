@@ -15,9 +15,9 @@ import {
 } from "react";
 
 import {
-  InstanceIndexProvider,
-  useInstanceIndex,
-} from "@/foundations/components/instance-index/instance-index";
+  InstanceCounterProvider,
+  useInstanceCounter,
+} from "@/foundations/components/instance-counter/instance-counter";
 import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
 import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
 import { clamp } from "@/foundations/utils/math";
@@ -176,7 +176,7 @@ const Sequence = ({
         setIsIntersecting,
       }}
     >
-      <InstanceIndexProvider onChange={setNumItems}>
+      <InstanceCounterProvider onChange={setNumItems}>
         <Comp
           {...rest}
           ref={ref}
@@ -184,7 +184,7 @@ const Sequence = ({
         >
           {children}
         </Comp>
-      </InstanceIndexProvider>
+      </InstanceCounterProvider>
     </SequenceContext.Provider>
   );
 };
@@ -229,7 +229,7 @@ const SequenceItem = ({
   const { orientation, set, next, previous, getItemState, getItemId } =
     useSequenceContext();
 
-  const index = useInstanceIndex();
+  const index = useInstanceCounter();
   const state = getItemState(index);
 
   const handleKeyboardNavigation = (e: KeyboardEvent<HTMLButtonElement>) => {
@@ -295,7 +295,7 @@ const SequencePanels = ({
   const Comp = asChild ? Slot : "div";
   return (
     <Comp {...rest}>
-      <InstanceIndexProvider>{children}</InstanceIndexProvider>
+      <InstanceCounterProvider>{children}</InstanceCounterProvider>
     </Comp>
   );
 };
@@ -314,7 +314,7 @@ const SequencePanel = ({
 }: SequencePanelProps) => {
   const { getItemState, getItemId } = useSequenceContext();
 
-  const index = useInstanceIndex();
+  const index = useInstanceCounter();
   const state = getItemState(index);
 
   const Comp = asChild ? Slot : "div";

@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  InstanceIndexProvider,
-  useInstanceIndex,
-} from "@/foundations/components/instance-index/instance-index";
+  InstanceCounterProvider,
+  useInstanceCounter,
+} from "@/foundations/components/instance-counter/instance-counter";
 import { useState } from "react";
 import { Button } from "@/foundations/ui/button/button";
 
 const Item = () => {
-  const index = useInstanceIndex();
+  const index = useInstanceCounter();
 
   return (
     <div className="bg-background-secondary my-2 w-fit rounded-md px-2 py-1 text-xs">
@@ -17,12 +17,12 @@ const Item = () => {
   );
 };
 
-const InstanceIndexPreview = () => {
+const InstanceCounterPreview = () => {
   const [mount, setMount] = useState(false);
   const [length, setLength] = useState(0);
 
   return (
-    <InstanceIndexProvider onChange={setLength}>
+    <InstanceCounterProvider onChange={setLength}>
       <div className="flex min-h-88 flex-col gap-4">
         <div className="text-foreground-secondary text-sm">
           Number of Instances: {length}
@@ -54,8 +54,8 @@ const InstanceIndexPreview = () => {
           <Item />
         </div>
       </div>
-    </InstanceIndexProvider>
+    </InstanceCounterProvider>
   );
 };
 
-export default InstanceIndexPreview;
+export default InstanceCounterPreview;

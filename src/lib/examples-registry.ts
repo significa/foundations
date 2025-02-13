@@ -9,24 +9,100 @@ type Import = {
 };
 
 export const imports: Record<string, Import> = {
-  ["instance-index"]: {
+  ["instance-counter-stepper"]: {
     component: dynamic(
       () =>
         import(
-          "@/foundations/components/instance-index/examples/instance-index.preview"
+          "@/foundations/components/instance-counter/examples/instance-counter-stepper.preview"
+        )
+    ),
+    source: `"use client";
+
+import { createContext, ReactNode, use, useState } from "react";
+import { Button } from "@/foundations/ui/button/button";
+import {
+  InstanceCounterProvider,
+  useInstanceCounter,
+} from "@/foundations/components/instance-counter/instance-counter";
+
+const ITEMS = ["🥚", "🐣", "🐥", "🐓"];
+
+const StepperContext = createContext(0);
+
+const Stepper = ({ children }: { children: ReactNode }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [length, setLength] = useState(0);
+
+  return (
+    <InstanceCounterProvider onChange={setLength}>
+      <StepperContext value={currentIndex}>
+        <div className="border-border flex flex-col gap-4 rounded-lg border p-4">
+          <div className="flex gap-2">
+            <Button
+              className="grow"
+              size="sm"
+              onClick={() => setCurrentIndex((c) => (c - 1 + length) % length)}
+            >
+              ←
+            </Button>
+            <Button
+              className="grow"
+              size="sm"
+              onClick={() => setCurrentIndex((c) => (c + 1) % length)}
+            >
+              →
+            </Button>
+          </div>
+          <div className="bg-background-secondary border-border rounded-lg border p-8 text-center min-w-48">
+            {children}
+          </div>
+        </div>
+      </StepperContext>
+    </InstanceCounterProvider>
+  );
+};
+
+const StepperItem = ({ children }: { children: ReactNode }) => {
+  const currentIndex = use(StepperContext);
+  const index = useInstanceCounter();
+  const isActive = index === currentIndex;
+
+  return <>{isActive && children}</>;
+};
+
+const InstanceCounterStepper = () => {
+  return (
+    <Stepper>
+      {ITEMS.map((item, index) => (
+        <StepperItem key={index}>
+          <div className="text-[32px]">{item}</div>
+        </StepperItem>
+      ))}
+    </Stepper>
+  );
+};
+
+export default InstanceCounterStepper;
+`,
+  },
+  ["instance-counter"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/instance-counter/examples/instance-counter.preview"
         )
     ),
     source: `"use client";
 
 import {
-  InstanceIndexProvider,
-  useInstanceIndex,
-} from "@/foundations/components/instance-index/instance-index";
+  InstanceCounterProvider,
+  useInstanceCounter,
+} from "@/foundations/components/instance-counter/instance-counter";
 import { useState } from "react";
 import { Button } from "@/foundations/ui/button/button";
 
 const Item = () => {
-  const index = useInstanceIndex();
+  const index = useInstanceCounter();
 
   return (
     <div className="bg-background-secondary my-2 w-fit rounded-md px-2 py-1 text-xs">
@@ -35,12 +111,12 @@ const Item = () => {
   );
 };
 
-const InstanceIndexPreview = () => {
+const InstanceCounterPreview = () => {
   const [mount, setMount] = useState(false);
   const [length, setLength] = useState(0);
 
   return (
-    <InstanceIndexProvider onChange={setLength}>
+    <InstanceCounterProvider onChange={setLength}>
       <div className="flex min-h-88 flex-col gap-4">
         <div className="text-foreground-secondary text-sm">
           Number of Instances: {length}
@@ -72,11 +148,11 @@ const InstanceIndexPreview = () => {
           <Item />
         </div>
       </div>
-    </InstanceIndexProvider>
+    </InstanceCounterProvider>
   );
 };
 
-export default InstanceIndexPreview;
+export default InstanceCounterPreview;
 `,
   },
   ["sequence-as-child"]: {

@@ -131,8 +131,8 @@ export const navigation: NavigationItem[] = [
     title: "Components",
     children: [
       {
-        title: "InstanceIndex",
-        href: "/components/instance-index",
+        title: "InstanceCounter",
+        href: "/components/instance-counter",
       },
       {
         title: "Sequence",

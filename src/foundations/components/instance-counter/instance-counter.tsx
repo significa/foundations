@@ -1,3 +1,5 @@
+"use client";
+
 import {
   useState,
   createContext,
@@ -10,27 +12,29 @@ import {
   useRef,
 } from "react";
 
-interface InstanceIndexContextType {
+interface InstanceCounterContextType {
   getIndex: (key: string) => number;
   invalidate: () => void;
 }
 
-const InstanceIndexContext = createContext<InstanceIndexContextType>({
+const InstanceCounterContext = createContext<InstanceCounterContextType>({
   getIndex: () => 0,
   invalidate: () => {},
 });
 
-interface InstanceIndexProviderProps {
+interface InstanceCounterProviderProps {
   children: ReactNode;
   onChange?: (length: number) => void;
 }
 
-const InstanceIndexProvider = ({
+const InstanceCounterProvider = ({
   children,
   onChange,
-}: InstanceIndexProviderProps) => {
-  const keys = useRef<string[]>([]);
+}: InstanceCounterProviderProps) => {
   const [seed, setSeed] = useState(0);
+
+  const keys = useRef<string[]>([]);
+  const isMounted = useRef(false);
 
   const getIndex = useCallback(
     (key: string) => {
@@ -47,8 +51,18 @@ const InstanceIndexProvider = ({
   );
 
   const invalidate = useCallback(() => {
-    keys.current = [];
-    setSeed((prev) => prev + 1);
+    if (isMounted.current) {
+      keys.current = [];
+      setSeed((prev) => prev + 1);
+    }
+  }, []);
+
+  useEffect(() => {
+    isMounted.current = true;
+
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -56,21 +70,30 @@ const InstanceIndexProvider = ({
   }, [seed, onChange]);
 
   return (
-    <InstanceIndexContext.Provider value={{ getIndex, invalidate }}>
+    <InstanceCounterContext value={{ getIndex, invalidate }}>
       {children}
-    </InstanceIndexContext.Provider>
+    </InstanceCounterContext>
   );
 };
 
-const useInstanceIndex = () => {
+const useInstanceCounter = () => {
   const id = useId();
-  const { getIndex, invalidate } = use(InstanceIndexContext);
+  const context = use(InstanceCounterContext);
+
+  if (!context) {
+    throw new Error(
+      "useInstanceCounter must be used within an InstanceCounterProvider"
+    );
+  }
+
+  const { getIndex, invalidate } = context;
 
   useEffect(() => {
+    invalidate();
     return () => invalidate();
   }, [invalidate, id]);
 
   return useMemo(() => getIndex(id), [getIndex, id]);
 };
 
-export { InstanceIndexProvider, useInstanceIndex };
+export { InstanceCounterProvider, useInstanceCounter };
