@@ -8,20 +8,21 @@ import { cn, cva } from "@/lib/utils";
 import { Spinner } from "@/foundations/ui/spinner/spinner";
 
 const buttonStyle = cva({
-  base: "shrink-0 relative whitespace-nowrap inline-flex items-center justify-center gap-1.5 font-medium shadow-xs transition focus-visible:outline-none focus-visible:ring-4 disabled:opacity-40 enabled:cursor-pointer h-(--button-height) ring-ring active:scale-98",
+  base: "shrink-0 relative whitespace-nowrap inline-flex items-center justify-center gap-1.5 font-medium shadow-xs transition focus-visible:outline-none focus-visible:ring-4 disabled:opacity-40 enabled:cursor-pointer h-(--button-height) ring-ring active:scale-98 text-(--button-text-color) [--button-text-color:var(--color-foreground)]",
   variants: {
     variant: {
-      primary: "bg-foreground text-background",
+      primary: "bg-foreground [--button-text-color:var(--color-background)]",
       outline: "border border-border bg-background",
       ghost:
         "border-none bg-transparent ring-0 shadow-none hover:bg-foreground/5",
-      destructive: "bg-red-600 text-white ring-red-600/50 hover:bg-red-700",
+      destructive:
+        "bg-red-600 [--button-text-color:var(--color-white)] ring-red-600/50 hover:bg-red-700",
     },
     size: {
-      xs: "rounded-lg px-2 text-sm [--button-height:calc(var(--spacing)*6)]",
-      sm: "rounded-lg px-3 text-sm [--button-height:calc(var(--spacing)*8)]",
-      md: "rounded-xl px-4 text-base [--button-height:calc(var(--spacing)*10)]",
-      lg: "rounded-2xl px-5 text-base [--button-height:calc(var(--spacing)*12)]",
+      xs: "rounded-lg px-2 text-sm [--button-height:--spacing(6)]",
+      sm: "rounded-lg px-3 text-sm [--button-height:--spacing(8)]",
+      md: "rounded-xl px-4 text-base [--button-height:--spacing(10)]",
+      lg: "rounded-2xl px-5 text-base [--button-height:--spacing(12)]",
     },
     square: {
       true: "w-(--button-height) px-0",
@@ -64,7 +65,7 @@ const Button = ({
           size,
           square,
         }),
-        isLoading && "text-transparent"
+        isLoading && "text-transparent transition-none"
       )}
       ref={ref}
       type={type}
@@ -76,9 +77,7 @@ const Button = ({
           data-button-spinner
           className={cn(
             "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-            buttonStyle({ className, variant })
-              .split(" ")
-              .filter((cl) => cl.startsWith("text-")) ?? "text-current"
+            "text-(--button-text-color)"
           )}
         >
           <Spinner size={size} />
