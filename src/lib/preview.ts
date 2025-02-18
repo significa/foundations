@@ -10,6 +10,12 @@ export const getPreviewSourcePath = async (slug: string) => {
   return undefined;
 };
 
+// FUTURE: We could use the webpack require.context API to get all the preview files,
+// but at the moment, it's not 1-1 compatible with turbopack
+// https://webpack.js.org/api/module-methods/#requirecontext
+//
+// example:
+// require.context("../foundations/", true, /\.preview\.tsx$/).keys();
 export const getPreviewSlugs = async () => {
   const filepaths = [];
 
