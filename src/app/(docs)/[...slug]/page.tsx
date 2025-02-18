@@ -52,7 +52,7 @@ export default async function Page({
 
   return (
     <>
-      <nav className="sticky top-14 order-last hidden h-[calc(100dvh_-_--spacing(14))] w-[200px] shrink-0 overflow-y-auto pt-6 text-sm lg:block">
+      <nav className="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-[200px] shrink-0 overflow-y-auto pt-6 text-sm lg:block">
         {(toc.length > 0 ||
           (metadata.dependencies && metadata.dependencies.length > 0) ||
           (metadata.files && metadata.files.length > 0)) && (
