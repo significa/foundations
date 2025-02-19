@@ -34,7 +34,7 @@ export const Marquee = ({
   direction: propDirection = "left",
   children,
   paused = false,
-  duration: propDuration = (l) => l * 0.05,
+  duration = (l) => l * 0.05,
   style,
   className,
   ...props
@@ -43,13 +43,9 @@ export const Marquee = ({
   const [numClones, setNumClones] = useState<number>(1);
   const { isIntersecting } = useIntersectionObserver(rootRef);
 
-  const duration = useRef<number>(getDurationValue(propDuration, 0));
   const progress = useRef(0);
   const deferredResizeHandler = useRef<() => void | null>(null);
-
-  useEffect(() => {
-    duration.current = getDurationValue(propDuration, 0);
-  }, [propDuration]);
+  const contentLength = useRef(0);
 
   const [axis, direction] = useMemo(() => {
     return [
@@ -66,11 +62,11 @@ export const Marquee = ({
 
     const root = rootRef.current;
     if (!root) return;
-    if (duration.current === 0) return;
 
-    progress.current =
-      (progress.current + delta / (duration.current * 1000)) % 1;
+    const durationValue = getDurationValue(duration, contentLength.current);
+    if (durationValue === 0) return;
 
+    progress.current = (progress.current + delta / (durationValue * 1000)) % 1;
     root.style.setProperty("--p", progress.current.toString());
   });
 
@@ -96,43 +92,41 @@ export const Marquee = ({
 
     const onResize = () => {
       const rootLength = getLength(root);
-
       const gapStyle = getComputedStyle(root).gap;
       const gapLength = getCssValueLength(gapStyle);
 
-      const contentLength = content.reduce(
+      contentLength.current = content.reduce(
         (acc, item) => acc + getLength(item as HTMLElement),
         0
       );
 
-      duration.current = getDurationValue(propDuration, contentLength);
-
-      const numClones = Math.ceil(rootLength / contentLength);
+      const numClones = Math.ceil(rootLength / contentLength.current);
       setNumClones(numClones);
 
       root.style.setProperty(
         "--l",
-        `${contentLength + gapLength * content.length}px`
+        `${contentLength.current + gapLength * content.length}px`
       );
     };
 
-    onResize();
-
     const resizeObserver = new ResizeObserver(() => {
+      // if ticker is running, defer the resize handler to the next tick
+      // otherwise, call the handler immediately
       if (ticker.paused) {
         onResize();
       } else {
-        // if ticker is running, defer the resize handler to the next tick
         deferredResizeHandler.current = () => onResize();
       }
     });
+
+    onResize();
     content.forEach((item) => resizeObserver.observe(item));
 
     return () => {
       resizeObserver.disconnect();
       deferredResizeHandler.current = null;
     };
-  }, [children, axis, propDuration, ticker]);
+  }, [children, axis, duration, ticker]);
 
   const transformedChildren = useMemo(() => {
     return Children.map(children, (child) => {
