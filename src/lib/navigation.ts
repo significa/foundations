@@ -135,6 +135,10 @@ export const navigation: NavigationItem[] = [
         href: "/components/instance-counter",
       },
       {
+        title: "Marquee",
+        href: "/components/marquee",
+      },
+      {
         title: "Sequence",
         href: "/components/sequence",
       },

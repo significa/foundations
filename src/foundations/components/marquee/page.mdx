@@ -1,0 +1,79 @@
+export const metadata = {
+  title: "Marquee",
+  description: "A component that displays a continuous stream of content.",
+  files: ["src/foundations/components/marquee/marquee.tsx"],
+  preview: "marquee",
+  dependencies: [
+    {
+      name: "useTicker",
+      href: "/hooks/use-ticker",
+    },
+    {
+      name: "useIntersectionObserver",
+      href: "/hooks/use-intersection-observer",
+    },
+  ],
+};
+
+## Features
+
+- **Native-Like Implementation**: Closely mirrors the behavior of the native (now deprecated) marquee element, including maintaining a single-element structure
+- **Dynamic Content Cloning**: Automatically creates the optimal number of content clones based on element size and content length
+- **Automatic Text Wrapping**: Text content is automatically wrapped in `<span>` elements to ensure proper rendering with CSS transforms
+- **Customizable Gap**: Supports flexible spacing between items using CSS gap property, allowing for consistent and adjustable spacing between content elements
+- **Flexible Duration Control**: Duration can be specified as:
+  - A fixed number
+  - A function that receives content length for fine-grained and responsive speed control
+
+## Anatomy
+
+```tsx
+<Marquee>{/* Content */}</Marquee>
+```
+
+## API Reference
+
+<PropsTable
+  definition={{
+    direction: {
+      type: '"left" | "right" | "up" | "down"',
+      description: "The direction of the marquee.",
+      default: '"left"',
+    },
+    duration: {
+      type: "number | ((contentLength: number) => number)",
+      description: "The duration of the marquee in milliseconds.",
+      default: 1,
+    },
+    gap: {
+      type: "number | string",
+      description: "The gap between the items in the marquee.",
+      default: 0,
+    },
+
+    paused: {
+      type: "boolean",
+      description: "Whether the marquee is paused.",
+      default: false,
+    },
+
+}}
+/>
+
+## Examples
+
+### Direction
+
+<Preview slug="marquee-direction" />
+
+### Speed Control
+
+<Preview slug="marquee-speed" />
+
+### Pause on Hover
+
+<Preview slug="marquee-pause-hover" />
+
+### Dynamic Content
+
+<Preview slug="marquee-dynamic-content" />
