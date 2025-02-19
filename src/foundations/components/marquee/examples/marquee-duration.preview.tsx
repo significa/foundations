@@ -4,7 +4,7 @@ import { Marquee } from "@/foundations/components/marquee/marquee";
 import { useState } from "react";
 import { Egg } from "@/components/icons/egg";
 
-const MarqueeSpeedExample = () => {
+const MarqueeDurationExample = () => {
   const [duration, setDuration] = useState(1);
 
   return (
@@ -24,7 +24,7 @@ const MarqueeSpeedExample = () => {
           className="w-48"
         />
         <span className="text-foreground-secondary w-12">
-          {duration.toFixed(1)}
+          {duration.toFixed(2)}
         </span>
       </div>
       <Marquee
@@ -38,4 +38,4 @@ const MarqueeSpeedExample = () => {
   );
 };
 
-export default MarqueeSpeedExample;
+export default MarqueeDurationExample;

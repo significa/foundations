@@ -21,6 +21,7 @@ export const metadata = {
 - **Dynamic Content Cloning**: Automatically creates the optimal number of content clones based on element size and content length
 - **Automatic Text Wrapping**: Text content is automatically wrapped in `<span>` elements to ensure proper rendering with CSS transforms
 - **Customizable Gap**: Supports flexible spacing between items using CSS gap property, allowing for consistent and adjustable spacing between content elements
+- **Intersection Observer**: Pauses animation when not in viewport
 - **Flexible Duration Control**: Duration can be specified as:
   - A fixed number
   - A function that receives content length for fine-grained and responsive speed control
@@ -60,9 +61,9 @@ export const metadata = {
 
 <Preview slug="marquee-direction" />
 
-### Speed Control
+### Duration Control
 
-<Preview slug="marquee-speed" />
+<Preview slug="marquee-duration" />
 
 ### Pause on Hover
 
@@ -71,3 +72,7 @@ export const metadata = {
 ### Dynamic Content
 
 <Preview slug="marquee-dynamic-content" />
+
+## Best Practices
+
+**Avoid Media Without Dimensions**: when using images or videos in a marquee, always specify explicit `width` and `height` attributes. Without proper dimensions, the content may cause layout shifts as it loads, disrupting the smooth scrolling behavior. This is especially important since the marquee needs to calculate the total content length to determine scrolling speed and clone count.

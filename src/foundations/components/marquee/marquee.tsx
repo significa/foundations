@@ -18,12 +18,6 @@ import { cn } from "@/lib/utils";
 
 type DurationProp = number | ((contentLength: number) => number);
 
-const getDurationValue = (duration: DurationProp, length: number): number => {
-  if (typeof duration === "number") return duration;
-  if (typeof duration === "function") return duration(length);
-  return 1;
-};
-
 interface MarqueeProps extends ComponentPropsWithoutRef<"div"> {
   direction?: "left" | "right" | "up" | "down";
   paused?: boolean;
@@ -40,12 +34,13 @@ export const Marquee = ({
   ...props
 }: MarqueeProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
+
   const [numClones, setNumClones] = useState<number>(1);
   const { isIntersecting } = useIntersectionObserver(rootRef);
 
   const progress = useRef(0);
-  const deferredResizeHandler = useRef<() => void | null>(null);
   const contentLength = useRef(0);
+  const deferredResizeHandler = useRef<() => void | null>(null);
 
   const [axis, direction] = useMemo(() => {
     return [
@@ -63,10 +58,12 @@ export const Marquee = ({
     const root = rootRef.current;
     if (!root) return;
 
-    const durationValue = getDurationValue(duration, contentLength.current);
-    if (durationValue === 0) return;
+    const durationValue =
+      typeof duration === "number" ? duration : duration(contentLength.current);
 
-    progress.current = (progress.current + delta / (durationValue * 1000)) % 1;
+    progress.current =
+      (progress.current + delta / (durationValue * 1000)) % 1 || 0;
+
     root.style.setProperty("--p", progress.current.toString());
   });
 
