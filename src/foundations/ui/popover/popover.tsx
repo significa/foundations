@@ -68,9 +68,10 @@ const usePopoverFloating = ({
       offsetMiddleware(offset),
       size({
         apply({ elements, availableHeight }) {
-          Object.assign(elements.floating.style, {
-            maxHeight: `${availableHeight}px`,
-          });
+          elements.floating.style.setProperty(
+            "--max-height",
+            `${availableHeight}px`
+          );
         },
         padding: 4,
       }),
@@ -235,7 +236,7 @@ const PopoverContent = ({
           {...getFloatingProps({
             ref,
             className: cn(
-              "z-50 w-72 overflow-auto rounded-xl border border-border bg-background p-3 text-foreground shadow-lg outline-none",
+              "z-50 w-72 overflow-auto rounded-xl border border-border bg-background p-3 text-foreground shadow-lg outline-none max-h-(--max-height)",
               "origin-(--popover-transform-origin) transition duration-300 ease-out-expo",
               "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
               "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
