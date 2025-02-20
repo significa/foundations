@@ -20,7 +20,7 @@ import {
 } from "@/foundations/components/instance-counter/instance-counter";
 import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
 import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
-import { clamp } from "@/foundations/utils/math";
+import { clamp } from "@/foundations/utils/math/clamp";
 
 // @types
 type ItemState = "upcoming" | "current" | "past";
