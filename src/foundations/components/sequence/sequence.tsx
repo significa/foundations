@@ -195,10 +195,11 @@ interface SequenceItemsProps extends ComponentPropsWithRef<"div"> {
 }
 
 const SequenceItems = ({ children, asChild, ...rest }: SequenceItemsProps) => {
-  const ref = useRef<HTMLDivElement>(null);
   const { orientation, setIsIntersecting } = useSequenceContext();
-
-  useIntersectionObserver(ref, {}, setIsIntersecting);
+  const { ref } = useIntersectionObserver<HTMLDivElement>(
+    {},
+    setIsIntersecting
+  );
 
   const Comp = asChild ? Slot : "div";
   return (
