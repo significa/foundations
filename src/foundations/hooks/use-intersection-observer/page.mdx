@@ -22,11 +22,12 @@ export const metadata = {
   }}
 />
 
-The hook returns an object with three properties:
+The hook returns a tuple containing:
 
 - `ref` (`RefObject<HTMLElement>`): A ref object to attach to the element(s) you want to observe
-- `isIntersecting` (`boolean`): Whether the element is currently intersecting with the viewport
-- `entry` (`IntersectionObserverEntry`): The full intersection observer entry with additional details
+- An object containing:
+  - `isIntersecting` (`boolean`): Whether the element is currently intersecting with the viewport
+  - `entry` (`IntersectionObserverEntry`): The full intersection observer entry with additional details
 
 **When a callback is provided**, the states (`isIntersecting` and `entry`) are never updated. This provides flexibility in handling intersection events - you can either react to changes declaratively using the returned state, or use the callback for more performant, render-independent updates.
 
@@ -36,7 +37,7 @@ The hook returns an object with three properties:
 
 ```tsx
 const Example = () => {
-  const { ref, isIntersecting } = useIntersectionObserver<HTMLDivElement>();
+  const [ref, { isIntersecting }] = useIntersectionObserver<HTMLDivElement>();
 
   return (
     <div ref={ref}>
@@ -50,7 +51,7 @@ const Example = () => {
 
 ```tsx
 const Example = () => {
-  const { ref } = useIntersectionObserver<HTMLDivElement>(
+  const [ref] = useIntersectionObserver<HTMLDivElement>(
     { threshold: 0.5 },
     (isIntersecting) => {
       if (isIntersecting) {

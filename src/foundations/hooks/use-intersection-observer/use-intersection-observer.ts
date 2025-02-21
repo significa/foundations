@@ -20,7 +20,6 @@ export const useIntersectionObserver = <T extends HTMLElement>(
   callback?: IntersectionCallback
 ) => {
   const ref = useRef<T>(null);
-
   const [state, setState] = useState<{
     isIntersecting: boolean;
     entry: IntersectionObserverEntry | undefined;
@@ -56,5 +55,5 @@ export const useIntersectionObserver = <T extends HTMLElement>(
     return () => observer.disconnect();
   }, [ref, root, rootMargin, threshold]);
 
-  return { ...state, ref };
+  return [ref, state] as const;
 };
