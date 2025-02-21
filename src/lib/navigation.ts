@@ -164,6 +164,10 @@ export const navigation: NavigationItem[] = [
         href: "/utils/debounce",
       },
       {
+        title: "dom",
+        href: "/utils/dom",
+      },
+      {
         title: "math",
         href: "/utils/math",
       },
