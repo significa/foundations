@@ -33,10 +33,9 @@ export const Marquee = ({
   className,
   ...props
 }: MarqueeProps) => {
-  const rootRef = useRef<HTMLDivElement>(null);
-
   const [numClones, setNumClones] = useState<number>(1);
-  const { isIntersecting } = useIntersectionObserver(rootRef);
+  const { ref: rootRef, isIntersecting } =
+    useIntersectionObserver<HTMLDivElement>();
 
   const progress = useRef(0);
   const contentLength = useRef(0);
@@ -123,7 +122,7 @@ export const Marquee = ({
       resizeObserver.disconnect();
       deferredResizeHandler.current = null;
     };
-  }, [children, axis, duration, ticker]);
+  }, [children, axis, duration, ticker, rootRef]);
 
   const transformedChildren = useMemo(() => {
     return Children.map(children, (child) => {

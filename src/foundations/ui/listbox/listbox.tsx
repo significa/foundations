@@ -198,11 +198,12 @@ const useListboxFloating = <T,>({
           }),
           size({
             apply({ rects, elements }) {
-              Object.assign(elements.floating.style, {
-                width: matchReferenceWidth
-                  ? `${rects.reference.width + 2 * 2}px`
-                  : undefined,
-              });
+              if (matchReferenceWidth) {
+                elements.floating.style.setProperty(
+                  "--width",
+                  `${rects.reference.width}px`
+                );
+              }
             },
           }),
         ]
@@ -212,12 +213,17 @@ const useListboxFloating = <T,>({
           offset(4),
           size({
             apply({ rects, elements, availableHeight }) {
-              Object.assign(elements.floating.style, {
-                maxHeight: `${availableHeight}px`,
-                width: matchReferenceWidth
-                  ? `${rects.reference.width}px`
-                  : undefined,
-              });
+              elements.floating.style.setProperty(
+                "--max-height",
+                `${availableHeight}px`
+              );
+
+              if (matchReferenceWidth) {
+                elements.floating.style.setProperty(
+                  "--width",
+                  `${rects.reference.width}px`
+                );
+              }
             },
             padding: 4,
           }),
@@ -506,6 +512,7 @@ const ListboxOptions = <T,>({
           className={cn(
             "border-border bg-background text-foreground z-50 flex flex-col items-stretch rounded-xl border p-0 shadow-xl focus:outline-none",
             "overflow-y-auto overscroll-contain",
+            "max-h-(--max-height) w-(--width)",
             className
           )}
           style={{
