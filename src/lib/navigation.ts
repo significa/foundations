@@ -58,6 +58,10 @@ export const navigation: NavigationItem[] = [
         href: "/ui/date-picker",
       },
       {
+        title: "Color Picker",
+        href: "/ui/color-picker",
+      },
+      {
         title: "Dialog",
         href: "/ui/dialog",
       },
