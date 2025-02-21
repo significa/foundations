@@ -155,6 +155,198 @@ const InstanceCounterPreview = () => {
 export default InstanceCounterPreview;
 `,
   },
+  ["marquee-direction"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/marquee/examples/marquee-direction.preview"
+        )
+    ),
+    source: `"use client";
+
+import { Egg } from "@/components/icons/egg";
+import { Marquee } from "@/foundations/components/marquee/marquee";
+
+const MarqueeDirectionExample = () => {
+  return (
+    <div className="grid grid-cols-2 gap-8 whitespace-pre">
+      {["left", "up", "right", "down"].map((direction) => (
+        <div key={direction}>
+          <div className="mb-2 font-medium capitalize">{direction}</div>
+          <Marquee
+            direction={direction as "left" | "right" | "up" | "down"}
+            className="border-border text-foreground-secondary h-[2.5em] w-48 items-center gap-2 rounded border px-2"
+          >
+            Foundations
+            <Egg />
+          </Marquee>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default MarqueeDirectionExample;
+`,
+  },
+  ["marquee-duration"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/marquee/examples/marquee-duration.preview"
+        )
+    ),
+    source: `"use client";
+
+import { Marquee } from "@/foundations/components/marquee/marquee";
+import { useState } from "react";
+import { Egg } from "@/components/icons/egg";
+
+const MarqueeDurationExample = () => {
+  const [duration, setDuration] = useState(1000);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-4">
+        <label
+          htmlFor="speed"
+          className="text-base font-medium whitespace-nowrap"
+        >
+          Duration <span className="text-foreground-secondary">(ms)</span>
+        </label>
+        <input
+          id="speed"
+          type="range"
+          min={100}
+          max={2000}
+          step={100}
+          value={duration}
+          onChange={(e) => setDuration(Number(e.target.value))}
+          className="w-48"
+        />
+        <span className="text-foreground-secondary w-12">{duration}</span>
+      </div>
+      <Marquee
+        duration={duration}
+        className="border-border text-foreground-secondary h-[2.5em] w-96 items-center gap-2 rounded border px-2"
+      >
+        Foundations
+        <Egg />
+      </Marquee>
+    </div>
+  );
+};
+
+export default MarqueeDurationExample;
+`,
+  },
+  ["marquee-dynamic-content"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/marquee/examples/marquee-dynamic-content.preview"
+        )
+    ),
+    source: `"use client";
+
+import { Marquee } from "@/foundations/components/marquee/marquee";
+import { useState } from "react";
+import { Button } from "@/foundations/ui/button/button";
+import { Plus, Minus } from "@phosphor-icons/react";
+
+const MarqueeDynamicContentExample = () => {
+  const [items, setItems] = useState(["0"]);
+
+  const addItem = () => {
+    setItems((prevItems) => [...prevItems, \`\${prevItems.length}\`]);
+  };
+
+  const removeItem = () => {
+    if (items.length > 1) {
+      setItems(items.slice(0, -1));
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-4">
+        <Button onClick={addItem} variant="outline" size="sm">
+          <Plus size={16} />
+          Add
+        </Button>
+        <Button onClick={removeItem} variant="outline" size="sm">
+          <Minus size={16} />
+          Remove
+        </Button>
+      </div>
+      <Marquee className="border-border text-foreground-secondary h-[2.5em] w-96 items-center gap-2 rounded border px-2">
+        {items}
+      </Marquee>
+    </div>
+  );
+};
+
+export default MarqueeDynamicContentExample;
+`,
+  },
+  ["marquee-pause-hover"]: {
+    component: dynamic(
+      () =>
+        import(
+          "@/foundations/components/marquee/examples/marquee-pause-hover.preview"
+        )
+    ),
+    source: `"use client";
+
+import { Marquee } from "@/foundations/components/marquee/marquee";
+import { useState } from "react";
+import { Egg } from "@/components/icons/egg";
+
+const MarqueePauseHoverExample = () => {
+  const [isPaused, setIsPaused] = useState(false);
+
+  return (
+    <div className="space-y-4">
+      <div className="text-base font-medium">
+        Hover to pause
+      </div>
+      <Marquee
+        paused={isPaused}
+        className="border-border text-foreground-secondary h-[2.5em] w-96 items-center gap-2 rounded border px-2"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        Foundations
+        <Egg />
+      </Marquee>
+    </div>
+  );
+};
+
+export default MarqueePauseHoverExample;
+`,
+  },
+  ["marquee"]: {
+    component: dynamic(
+      () => import("@/foundations/components/marquee/examples/marquee.preview")
+    ),
+    source: `"use client";
+
+import { Marquee } from "@/foundations/components/marquee/marquee";
+import { Egg } from "@/components/icons/egg";
+
+const MarqueePreview = () => {
+  return (
+    <Marquee className="w-96 items-center gap-2" direction="left">
+      Foundations
+      <Egg />
+    </Marquee>
+  );
+};
+
+export default MarqueePreview;
+`,
+  },
   ["sequence-as-child"]: {
     component: dynamic(
       () =>

@@ -139,6 +139,10 @@ export const navigation: NavigationItem[] = [
         href: "/components/instance-counter",
       },
       {
+        title: "Marquee",
+        href: "/components/marquee",
+      },
+      {
         title: "Sequence",
         href: "/components/sequence",
       },
@@ -158,6 +162,10 @@ export const navigation: NavigationItem[] = [
       {
         title: "debounce",
         href: "/utils/debounce",
+      },
+      {
+        title: "dom",
+        href: "/utils/dom",
       },
       {
         title: "math",
