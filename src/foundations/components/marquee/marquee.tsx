@@ -68,7 +68,7 @@ export const Marquee = ({
 
     progress.current = (progress.current + delta / getDuration()) % 1 || 0;
 
-    root.style.setProperty("--p", progress.current.toString());
+    root.style.setProperty("--progress", progress.current.toString());
   });
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export const Marquee = ({
       setNumClones(numClones);
 
       root.style.setProperty(
-        "--l",
+        "--content-length",
         `${contentLength.current + gapLength * content.length}px`
       );
     };
@@ -149,13 +149,13 @@ export const Marquee = ({
       className={cn(
         "box-content flex w-max overflow-hidden will-change-transform",
         "[&>*]:shrink-0 [&>*]:will-change-transform",
-        axis === "x" && "flex-row [&>*]:translate-x-(--t)",
-        axis === "y" && "flex-col [&>*]:translate-y-(--t)",
+        axis === "x" && "flex-row [&>*]:translate-x-(--translate)",
+        axis === "y" && "flex-col [&>*]:translate-y-(--translate)",
         className
       )}
       style={{
         ...style,
-        "--t": `calc((${direction === "normal" ? "-1 * " : "-1 + "}var(--p,0)) * var(--l,0px))`,
+        "--translate": `calc((${direction === "normal" ? "-1 * " : "-1 + "}var(--progress,0)) * var(--content-length,0px))`,
       }}
     >
       {transformedChildren}
