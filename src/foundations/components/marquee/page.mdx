@@ -48,7 +48,7 @@ export const metadata = {
     duration: {
       type: "number | ((contentLength: number) => number)",
       description: "The duration of the marquee in milliseconds.",
-      default: 1,
+      default: '(contentLength) => contentLength * 50',
     },
     paused: {
       type: "boolean",
