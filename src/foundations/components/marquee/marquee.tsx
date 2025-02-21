@@ -26,20 +26,28 @@ interface MarqueeProps extends ComponentPropsWithoutRef<"div"> {
 
 export const Marquee = ({
   direction: propDirection = "left",
-  children,
   paused = false,
-  duration = (l) => l * 0.05,
+  children,
+  duration,
   style,
   className,
   ...props
 }: MarqueeProps) => {
   const [numClones, setNumClones] = useState<number>(1);
-  const { ref: rootRef, isIntersecting } =
+  const [rootRef, { isIntersecting }] =
     useIntersectionObserver<HTMLDivElement>();
 
   const progress = useRef(0);
   const contentLength = useRef(0);
   const deferredResizeHandler = useRef<() => void | null>(null);
+
+  const getDuration = useMemo(() => {
+    if (typeof duration === "number") return () => duration;
+    if (typeof duration === "function")
+      return () => duration(contentLength.current);
+
+    return () => contentLength.current * 0.05;
+  }, [duration, contentLength]);
 
   const [axis, direction] = useMemo(() => {
     return [
@@ -57,11 +65,8 @@ export const Marquee = ({
     const root = rootRef.current;
     if (!root) return;
 
-    const durationValue =
-      typeof duration === "number" ? duration : duration(contentLength.current);
-
     progress.current =
-      (progress.current + delta / (durationValue * 1000)) % 1 || 0;
+      (progress.current + delta / (getDuration() * 1000)) % 1 || 0;
 
     root.style.setProperty("--p", progress.current.toString());
   });
@@ -122,7 +127,7 @@ export const Marquee = ({
       resizeObserver.disconnect();
       deferredResizeHandler.current = null;
     };
-  }, [children, axis, duration, ticker, rootRef]);
+  }, [children, axis, rootRef, ticker]);
 
   const transformedChildren = useMemo(() => {
     return Children.map(children, (child) => {
