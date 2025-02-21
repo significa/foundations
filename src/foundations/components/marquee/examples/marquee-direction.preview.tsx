@@ -10,7 +10,6 @@ const MarqueeDirectionExample = () => {
         <div key={direction}>
           <div className="mb-2 font-medium capitalize">{direction}</div>
           <Marquee
-            duration={(l) => l * 0.05}
             direction={direction as "left" | "right" | "up" | "down"}
             className="border-border text-foreground-secondary h-[2.5em] w-48 items-center gap-2 rounded border px-2"
           >

@@ -46,7 +46,8 @@ export const Marquee = ({
     if (typeof duration === "function")
       return () => duration(contentLength.current);
 
-    return () => contentLength.current * 0.05;
+    // default duration to 50ms per pixel
+    return () => contentLength.current * 50;
   }, [duration, contentLength]);
 
   const [axis, direction] = useMemo(() => {
@@ -65,8 +66,7 @@ export const Marquee = ({
     const root = rootRef.current;
     if (!root) return;
 
-    progress.current =
-      (progress.current + delta / (getDuration() * 1000)) % 1 || 0;
+    progress.current = (progress.current + delta / getDuration()) % 1 || 0;
 
     root.style.setProperty("--p", progress.current.toString());
   });

@@ -174,7 +174,6 @@ const MarqueeDirectionExample = () => {
         <div key={direction}>
           <div className="mb-2 font-medium capitalize">{direction}</div>
           <Marquee
-            duration={(l) => l * 0.05}
             direction={direction as "left" | "right" | "up" | "down"}
             className="border-border text-foreground-secondary h-[2.5em] w-48 items-center gap-2 rounded border px-2"
           >
@@ -204,27 +203,28 @@ import { useState } from "react";
 import { Egg } from "@/components/icons/egg";
 
 const MarqueeDurationExample = () => {
-  const [duration, setDuration] = useState(1);
+  const [duration, setDuration] = useState(1000);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <label htmlFor="speed" className="w-16 text-base font-medium">
-          Duration:
+        <label
+          htmlFor="speed"
+          className="text-base font-medium whitespace-nowrap"
+        >
+          Duration <span className="text-foreground-secondary">(ms)</span>
         </label>
         <input
           id="speed"
           type="range"
-          min={0.01}
-          max={2}
-          step={0.01}
+          min={100}
+          max={2000}
+          step={100}
           value={duration}
           onChange={(e) => setDuration(Number(e.target.value))}
           className="w-48"
         />
-        <span className="text-foreground-secondary w-12">
-          {duration.toFixed(2)}
-        </span>
+        <span className="text-foreground-secondary w-12">{duration}</span>
       </div>
       <Marquee
         duration={duration}
