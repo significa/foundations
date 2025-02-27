@@ -53,7 +53,6 @@ const MenuItem = ({
 
     const isNew =
       createdAt && differenceInDays(new Date(), new Date(createdAt)) < 30;
-
     if (isNew) return setTag("new");
 
     const isUpdated =
