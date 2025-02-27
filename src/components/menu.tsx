@@ -11,7 +11,9 @@ import {
   DisclosureContent,
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { differenceInDays } from "date-fns";
+import { Badge } from "@/foundations/ui/badge/badge";
 
 export const Menu = ({ items }: { items: typeof navigation }) => {
   return (
@@ -43,21 +45,21 @@ const MenuItem = ({
   const isActive = useMemo(() => pathname === item.href, [pathname, item.href]);
 
   const ref = useRef<HTMLAnchorElement>(null);
-  // const [tag, setTag] = useState<"new" | "updated" | undefined>(undefined);
+  const [tag, setTag] = useState<"new" | "updated" | undefined>(undefined);
 
-  // Compare `createdAt` and `updatedAt` with the current user's date at runtime.
-  // useEffect(() => {
-  //   const createdAt = ref.current?.dataset.createdAt;
-  //   const updatedAt = ref.current?.dataset.updatedAt;
+  useEffect(() => {
+    const createdAt = ref.current?.dataset.createdAt;
+    const updatedAt = ref.current?.dataset.updatedAt;
 
-  //   const isNew =
-  //     createdAt && differenceInDays(new Date(), new Date(createdAt)) < 1; // TODO: increase days to 30;
-  //   if (isNew) return setTag("new");
+    const isNew =
+      createdAt && differenceInDays(new Date(), new Date(createdAt)) < 30;
 
-  //   const isUpdated =
-  //     updatedAt && differenceInDays(new Date(), new Date(updatedAt)) < 1; // TODO: increase days to 15;
-  //   if (isUpdated) return setTag("updated");
-  // }, []);
+    if (isNew) return setTag("new");
+
+    const isUpdated =
+      updatedAt && differenceInDays(new Date(), new Date(updatedAt)) < 15;
+    if (isUpdated) return setTag("updated");
+  }, []);
 
   return (
     <Link
@@ -71,11 +73,11 @@ const MenuItem = ({
       )}
     >
       <span>{item.title}</span>
-      {/* {tag && (
+      {tag && (
         <Badge size="xs" variant={tag === "new" ? "success" : "info"}>
           {tag.toUpperCase()}
         </Badge>
-      )} */}
+      )}
     </Link>
   );
 };
