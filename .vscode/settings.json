@@ -1,5 +1,5 @@
 {
-	"[mdx]": {
-		"editor.wordWrap": "on"
-	}
+  "[mdx]": {
+    "editor.wordWrap": "on"
+  }
 }

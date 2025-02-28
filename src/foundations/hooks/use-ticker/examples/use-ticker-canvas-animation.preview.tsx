@@ -32,7 +32,7 @@ const UseTickerCanvasAnimation = () => {
 
   return (
     <div className="absolute inset-0 grid place-items-center">
-      <div className="absolute top-2 left-2 flex gap-2 z-10 justify-start">
+      <div className="absolute top-2 left-2 z-10 flex justify-start gap-2">
         <Button onClick={ticker.start} size="sm">
           <Play size={16} />
           Start
