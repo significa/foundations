@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "generate-imports": "tsx scripts/create-preview-imports.ts",
-    "dev": "concurrently \"npm run generate-imports -- --watch\" \"next dev\"",
-    "prebuild": "npm run generate-imports",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

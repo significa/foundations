@@ -1,3 +1,4 @@
+import path from "path";
 import { exec } from "child_process";
 import { promises as fs } from "fs";
 import { cache } from "react";
@@ -5,6 +6,14 @@ import { cache } from "react";
 export const readFile = cache(async (filePath: string) => {
   return await fs.readFile(filePath, "utf-8");
 });
+
+export async function* walkDirectory(dir: string): AsyncGenerator<string> {
+  for await (const d of await fs.opendir(dir)) {
+    const entry = path.join(dir, d.name);
+    if (d.isDirectory()) yield* walkDirectory(entry);
+    else if (d.isFile()) yield entry;
+  }
+}
 
 export const getDirectoryFiles = cache(async (dirPath: string) => {
   const files = await fs.readdir(dirPath);
