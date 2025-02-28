@@ -6,6 +6,7 @@ updates:
       interval: "weekly"
     groups:
       patch-updates:
-        update-types: patch
+        update-types:
+          - patch
         patterns:
           - "*"
