@@ -1,0 +1,70 @@
+export const metadata = {
+  title: "Color Picker",
+  description:
+    "An interactive color picker that allows users to visually select colors in real-time.",
+  preview: "color-picker",
+  files: ["src/foundations/ui/color-picker/color-picker.tsx"],
+  dependencies: [
+    {
+      name: "chroma-js",
+      href: "https://www.npmjs.com/package/chroma-js",
+    },
+  ],
+};
+
+## Features
+
+- **Interactive Color Selection**: Visual color picker with both hue slider and saturation-value area
+- **Real-time Preview**: Immediate color feedback as you interact with the picker
+- **Keyboard Navigation**: Full keyboard support for precise color adjustments
+- **Customizable Size**: Adjustable dimensions to fit your design needs
+
+## API Reference
+
+<PropsTable
+  definition={{
+    color: {
+      type: "HSV",
+      description:
+        "Current color value in HSV format [hue, saturation, value]. Each value should be between 0 and 1.",
+    },
+    onColorChange: {
+      type: "(color: HSV) => void",
+      description:
+        "Callback function that receives the new color value when the user makes a selection.",
+    },
+    size: {
+      type: "number",
+      default: "200",
+      description:
+        "Size of the color picker in pixels. Controls both width and height.",
+    },
+    disabled: {
+      type: "boolean",
+      default: "false",
+      description:
+        "When true, prevents user interaction with the color picker.",
+    },
+  }}
+/>
+
+## Examples
+
+### No Picked Color
+
+<Preview slug="color-picker" />
+
+### With Picked Color
+
+<Preview slug="color-picker-picked-color" />
+
+### Disabled
+
+<Preview slug="color-picker-disabled" />
+
+## Best Practices
+
+1. **Color Format**:
+
+   - Use the HSV format internally for consistent color manipulation
+   - Convert to appropriate formats (HEX, RGB) only when displaying or exporting

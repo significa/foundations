@@ -43,7 +43,7 @@ export const MobileNav = ({ items }: { items: typeof navigation }) => {
                 <X />
               </Button>
             </div>
-            <div className="h-[calc(100dvh_-_--spacing(14))] overflow-y-auto overscroll-contain pt-6">
+            <div className="h-[calc(100dvh-var(--spacing)*14)] overflow-y-auto overscroll-contain pt-6">
               <Menu items={items} />
             </div>
           </div>

@@ -9,8 +9,8 @@ import {
 } from "react";
 
 import { debounce } from "@/foundations/utils/debounce/debounce";
+import { sum } from "@/foundations/utils/math/sum";
 
-const sum = (...args: number[]) => args.reduce((acc, curr) => acc + curr, 0);
 
 const px = (value: number) => (isNaN(value) ? undefined : `${value}px`);
 

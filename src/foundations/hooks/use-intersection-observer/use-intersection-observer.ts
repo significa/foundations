@@ -11,8 +11,7 @@ interface UseIntersectionObserverOptions {
   rootMargin?: string;
 }
 
-export const useIntersectionObserver = (
-  ref: RefObject<HTMLElement | null> | RefObject<HTMLElement | null>[],
+export const useIntersectionObserver = <T extends HTMLElement>(
   {
     threshold = 0,
     root = null,
@@ -20,6 +19,7 @@ export const useIntersectionObserver = (
   }: UseIntersectionObserverOptions = {},
   callback?: IntersectionCallback
 ) => {
+  const ref = useRef<T>(null);
   const [state, setState] = useState<{
     isIntersecting: boolean;
     entry: IntersectionObserverEntry | undefined;
@@ -28,17 +28,12 @@ export const useIntersectionObserver = (
     entry: undefined,
   });
 
-
   const callbackRef = useRef<IntersectionCallback | undefined>(callback);
   callbackRef.current = callback;
 
   useEffect(() => {
-    const elements = [ref]
-      .flat()
-      .map((ref) => ref.current)
-      .filter((element) => !!element);
-
-    if (elements.length === 0) return;
+    const element = ref.current;
+    if (!element) return;
 
     const observer = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
@@ -55,10 +50,10 @@ export const useIntersectionObserver = (
       { threshold, root: root?.current, rootMargin }
     );
 
-    elements.forEach((element) => observer.observe(element));
+    observer.observe(element);
 
     return () => observer.disconnect();
   }, [ref, root, rootMargin, threshold]);
 
-  return state;
+  return [ref, state] as const;
 };
