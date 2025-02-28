@@ -11,7 +11,6 @@ import {
 import { debounce } from "@/foundations/utils/debounce/debounce";
 import { sum } from "@/foundations/utils/math/sum";
 
-
 const px = (value: number) => (isNaN(value) ? undefined : `${value}px`);
 
 interface StackProps extends HTMLAttributes<HTMLDivElement> {
