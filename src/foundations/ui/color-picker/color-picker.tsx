@@ -1,6 +1,6 @@
 "use client";
 import chroma from "chroma-js";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -30,10 +30,6 @@ const ColorPicker = React.forwardRef<HTMLInputElement, ColorPickerProps>(
     ref
   ) => {
     const [h, s, v] = color;
-
-    useEffect(() => {
-      console.log("ColorPicker", color);
-    }, [color]);
 
     const onSaturationValueChange = ([x, y]: [number, number]) => {
       onColorChange?.([h, x / size, 1 - y / size]);

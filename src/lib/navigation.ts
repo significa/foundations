@@ -54,6 +54,10 @@ export const navigation: NavigationItem[] = [
         href: "/ui/checkbox",
       },
       {
+        title: "Checkboxes Hierarchy",
+        href: "/ui/checkboxes-hierarchy",
+      },
+      {
         title: "Date Picker",
         href: "/ui/date-picker",
       },
