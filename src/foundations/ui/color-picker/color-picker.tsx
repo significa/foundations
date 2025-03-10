@@ -31,10 +31,6 @@ const ColorPicker = React.forwardRef<HTMLInputElement, ColorPickerProps>(
   ) => {
     const [h, s, v] = color;
 
-    useEffect(() => {
-      console.log("ColorPicker", color);
-    }, [color]);
-
     const onSaturationValueChange = ([x, y]: [number, number]) => {
       onColorChange?.([h, x / size, 1 - y / size]);
     };
