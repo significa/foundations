@@ -1,6 +1,6 @@
 "use client";
 import chroma from "chroma-js";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
