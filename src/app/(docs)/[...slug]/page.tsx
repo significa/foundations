@@ -140,15 +140,17 @@ export default async function Page({
 
         {metadata.dependencies && metadata.dependencies.length > 0 && (
           <>
-            <Heading heading="h2">Dependencies</Heading>
+            <Heading heading="h2" id="dependencies">
+              <a href="#dependencies">Dependencies</a>
+            </Heading>
             <DependenciesList dependencies={metadata.dependencies} />
           </>
         )}
 
         {metadata.files && metadata.files.length > 0 && (
           <>
-            <Heading heading="h2" className="[&>h2]:mb-0">
-              Source Code
+            <Heading heading="h2" className="[&>h2]:mb-0" id="source-code">
+              <a href="#source-code">Source Code</a>
             </Heading>
             {metadata.files.map((file) => (
               <SourceCode
