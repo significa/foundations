@@ -189,6 +189,10 @@ export const navigation: NavigationItem[] = [
         href: "/hooks/use-stable-callback",
       },
       {
+        title: "useMousePan",
+        href: "/hooks/use-mouse-pan",
+      },
+      {
         title: "useTicker",
         href: "/hooks/use-ticker",
       },

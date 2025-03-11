@@ -1,0 +1,41 @@
+export const metadata = {
+  title: "useMousePan",
+  description: "A hook for scrolling elements with a mouse pan gesture",
+  files: ["src/foundations/hooks/use-mouse-pan/use-mouse-pan.ts"],
+  dependencies: [
+    {
+      name: "math/lerp",
+      href: "/utils/math/#lerp",
+    },
+  ],
+};
+
+## Features
+
+- Enables mouse panning (click and drag) to scroll elements
+- Smooth momentum scrolling after releasing the drag
+- Supports both horizontal and vertical scrolling
+- Works with CSS scroll snap properties
+- Preserves native scrolling behavior when using mousewheel/trackpad
+
+## API Reference
+
+The hooks returns a `ref` that you can attach to an element.
+
+## Examples
+
+### Basic
+
+<Preview slug="use-mouse-pan" />
+
+### With Snap
+
+<Preview slug="use-mouse-pan-snap" />
+
+### Both Axis
+
+<Preview slug="use-mouse-pan-axis" />
+
+## Best Practices
+
+For better usability, set the cursor to `grab` by default and `grabbing` when actively panning (`"cursor-grab active:cursor-grabbing"`, if using Tailwind). This provides a clear visual indication that the element is draggable.
