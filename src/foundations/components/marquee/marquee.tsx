@@ -13,7 +13,6 @@ import {
 
 import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
 import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
-import { getCssValueLength } from "@/foundations/utils/dom/get-css-value-length";
 import { cn } from "@/lib/utils";
 
 type DurationProp = number | ((contentLength: number) => number);
@@ -93,8 +92,8 @@ export const Marquee = ({
 
     const onResize = () => {
       const rootLength = getLength(root);
-      const gapStyle = getComputedStyle(root).gap;
-      const gapLength = getCssValueLength(gapStyle);
+      const gap = Number(getComputedStyle(root).gap.replace("px", ""));
+      const gapLength = isNaN(gap) ? 0 : gap;
 
       contentLength.current = content.reduce(
         (acc, item) => acc + getLength(item as HTMLElement),
