@@ -35,3 +35,8 @@ html,
 body {
   height: 100%;
 }
+
+html {
+  /* scroll-padding-top for sticky header */
+  @apply scroll-pt-16 md:scroll-pt-20;
+}
