@@ -137,7 +137,7 @@ export const useMousePan = <T extends HTMLElement>() => {
       isPanning = false;
 
       // add velocity to the target scroll to simulate momentum
-      const blindScrollTarget = {
+      const unsnappedScrollTarget = {
         x: scroll.target.x + scroll.velocity.x * VELOCITY_MOMENTUM_FACTOR,
         y: scroll.target.y + scroll.velocity.y * VELOCITY_MOMENTUM_FACTOR,
       };
@@ -146,31 +146,34 @@ export const useMousePan = <T extends HTMLElement>() => {
       // https://www.nan.fyi/magic-motion#introducing-flip
       if (hasSnap) {
         const cloneContainer = document.createElement("div");
-        cloneContainer.style.cssText = `position:absolute;`;
+        cloneContainer.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;`;
 
         const clone = element.cloneNode(true) as HTMLDivElement;
-        clone.style.cssText = `visibility:hidden;pointer-events:none;width:${element.clientWidth}px;height:${element.clientHeight}px;z-index:-9999;`;
-
+        clone.style.cssText = `width:${element.clientWidth}px;height:${element.clientHeight}px;`;
+        clone.style.removeProperty("scroll-snap-type");
         cloneContainer.appendChild(clone);
         element.parentElement?.appendChild(cloneContainer);
 
         // we're relying on the fact that a scroll-snap element instants snaps to the target position when its scrollLeft or scrollTop are updated
-        clone.scrollLeft = blindScrollTarget.x;
-        clone.scrollTop = blindScrollTarget.y;
+        clone.scrollLeft = unsnappedScrollTarget.x;
+        clone.scrollTop = unsnappedScrollTarget.y;
         scroll.target = { x: clone.scrollLeft, y: clone.scrollTop };
 
         cloneContainer.remove();
 
-        // The following doesn't work on safari, but let's keep an eye on it because its a better and less convoluted approach
+        // The following code doesn't work consistently on safari, but let's keep an eye on it because its a better and less convoluted approach
         /* 
-          const currentScrollLeft = element.scrollLeft;
-          element.scrollLeft = blindTargetScrollLeft;
+          const currentScroll = { x: element.scrollLeft, y: element.scrollTop };
           element.style.removeProperty("scroll-snap-type");
-          GET SCROLL POSITION -> element.scrollLeft, element.scrollTop
-          element.style.setProperty("scroll-snap-type", "none"); 
+          element.scrollLeft = unsnappedScrollTarget.x;
+          element.scrollTop = unsnappedScrollTarget.y;
+          scroll.target = { x: element.scrollLeft, y: element.scrollTop };
+          element.style.setProperty("scroll-snap-type", "none");
+          element.scrollLeft = currentScroll.x;
+          element.scrollTop = currentScroll.y;
          */
       } else {
-        scroll.target = { ...blindScrollTarget };
+        scroll.target = { ...unsnappedScrollTarget };
       }
 
       const requiresTick =
