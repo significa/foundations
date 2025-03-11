@@ -8,7 +8,7 @@ const UseMousePanPreview = () => {
   return (
     <div
       ref={ref}
-      className="w-128 cursor-grab snap-x snap-mandatory overflow-x-auto active:cursor-grabbing"
+      className="w-full max-w-128 cursor-grab snap-x snap-mandatory overflow-x-auto active:cursor-grabbing"
     >
       <ul className="flex size-max gap-2">
         {new Array(12).fill(0).map((_, index) => (

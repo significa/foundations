@@ -1,9 +1,9 @@
 import { lerp } from "@/foundations/utils/math/lerp";
 import { useEffect, useRef } from "react";
 
-const VELOCITY_MOMENTUM_FACTOR = 10;
+const VELOCITY_MOMENTUM_FACTOR = 15;
 const DRAG_EASE = 1;
-const MOMENTUM_EASE = 0.1;
+const MOMENTUM_EASE = 0.09;
 const SETTLED_THRESHOLD = 0.01;
 
 export const useMousePan = <T extends HTMLElement>() => {
@@ -145,13 +145,21 @@ export const useMousePan = <T extends HTMLElement>() => {
       // if snap is enabled, compute the target scroll position using FLIP
       // https://www.nan.fyi/magic-motion#introducing-flip
       if (hasSnap) {
+        const cloneContainer = document.createElement("div");
+        cloneContainer.style.cssText = `position:absolute;`;
+
         const clone = element.cloneNode(true) as HTMLDivElement;
-        clone.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;width:${element.clientWidth}px;height:${element.clientHeight}px;`;
-        element.parentElement?.appendChild(clone);
+        clone.style.cssText = `visibility:hidden;pointer-events:none;width:${element.clientWidth}px;height:${element.clientHeight}px;z-index:-9999;`;
+
+        cloneContainer.appendChild(clone);
+        element.parentElement?.appendChild(cloneContainer);
+
+        // we're relying on the fact that a scroll-snap element instants snaps to the target position when its scrollLeft or scrollTop are updated
         clone.scrollLeft = blindScrollTarget.x;
         clone.scrollTop = blindScrollTarget.y;
         scroll.target = { x: clone.scrollLeft, y: clone.scrollTop };
-        clone.remove();
+
+        cloneContainer.remove();
 
         // The following doesn't work on safari, but let's keep an eye on it because its a better and less convoluted approach
         /* 
@@ -191,8 +199,9 @@ export const useMousePan = <T extends HTMLElement>() => {
     element.addEventListener("wheel", onWheel, { signal });
 
     return () => {
-      cancelTick();
       abortController.abort();
+      cancelTick();
+      onPanFinish();
     };
   }, []);
 
