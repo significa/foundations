@@ -1,0 +1,46 @@
+export const metadata = {
+  title: "useMousePan",
+  description: "A hook for scrolling elements with a mouse pan gesture",
+  files: ["src/foundations/hooks/use-mouse-pan/use-mouse-pan.ts"],
+  dependencies: [
+    {
+      name: "math/lerp",
+      href: "/utils/math/#lerp",
+    },
+  ],
+};
+
+## Features
+
+- **Scroll Snap Support** - Seamlessly works with CSS scroll-snap properties for precise control
+- **Multi-Axis Support** - Handles both horizontal and vertical scrolling directions
+- **Native Scroll Integration** - Preserves native scrolling behavior for wheel and touch events, allowing for a seamless cross-device experience
+
+## API Reference
+
+The hooks returns an object with:
+
+- `ref`: A ref to attach to a scrollable element
+- `cancelCurrent`: A function that stops the currently active pan interaction and/or animation. Useful when you need to manually control the element's scroll position (e.g. when calling `scrollTo`).
+
+## Examples
+
+### Basic
+
+<Preview slug="use-mouse-pan" />
+
+### With Snap
+
+<Preview slug="use-mouse-pan-snap" />
+
+### Both Axis
+
+<Preview slug="use-mouse-pan-axis" />
+
+### Simple Carousel
+
+<Preview slug="use-mouse-pan-carousel" />
+
+## Best Practices
+
+For better usability, set the cursor to `grab` by default and `grabbing` when actively panning (`"cursor-grab active:cursor-grabbing"`, if using Tailwind). This provides a clear visual indication that the element is draggable.

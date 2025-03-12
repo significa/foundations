@@ -23,7 +23,8 @@ export const PostHogProvider = ({
       person_profiles: "always",
       disable_compression: true,
       loaded: (posthog) => {
-        if (process.env.NODE_ENV === "development") posthog.debug();
+        // if (process.env.NODE_ENV === "development") posthog.debug();
+        posthog.debug(false);
       },
     });
   }, []);
