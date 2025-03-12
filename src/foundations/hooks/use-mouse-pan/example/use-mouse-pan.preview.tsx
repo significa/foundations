@@ -1,5 +1,6 @@
 "use client";
-import { useMousePan } from "../use-mouse-pan";
+
+import { useMousePan } from "@/foundations/hooks/use-mouse-pan/use-mouse-pan";
 import { cn } from "@/lib/utils";
 
 const UseMousePanPreview = () => {
