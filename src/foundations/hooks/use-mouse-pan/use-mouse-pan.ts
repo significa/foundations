@@ -22,6 +22,7 @@ type ScrollState = {
 
 export const useMousePan = <T extends HTMLElement>() => {
   const ref = useRef<T>(null);
+  const cancelCurrentRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const element = ref.current;
@@ -207,14 +208,15 @@ export const useMousePan = <T extends HTMLElement>() => {
       }
     };
 
-    // cancel all pan behavior when user manually scrolls
-    const onWheel = () => {
+    // cancel all pan behavior and animation
+    const cancelCurrent = () => {
       cancelTick();
       onPanFinish();
 
       scroll.velocity = { x: 0, y: 0 };
       scroll.current = { x: element.scrollLeft, y: element.scrollTop };
     };
+    cancelCurrentRef.current = cancelCurrent;
 
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -222,14 +224,19 @@ export const useMousePan = <T extends HTMLElement>() => {
     element.addEventListener("mousemove", onMouseMove, { signal });
     element.addEventListener("mouseup", onMouseUp, { signal });
     element.addEventListener("mouseleave", onMouseUp, { signal });
-    element.addEventListener("wheel", onWheel, { signal });
+    element.addEventListener("wheel", cancelCurrent, { signal });
 
     return () => {
+      cancelCurrentRef.current = () => {};
+
       abortController.abort();
       cancelTick();
       onPanFinish();
     };
   }, []);
 
-  return { ref };
+  return {
+    ref,
+    cancelCurrent: () => cancelCurrentRef.current(),
+  };
 };

@@ -53,18 +53,20 @@ const CarouselContext = createContext<{
 }>({ activeIndex: 0, setActiveIndex: () => {} });
 
 const Carousel = ({ children }: { children: ReactNode }) => {
-  const { ref } = useMousePan<HTMLDivElement>();
+  const { ref, cancelCurrent } = useMousePan<HTMLDivElement>();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const numItems = useMemo(() => Children.count(children), [children]);
 
   const to = (newIndex: number) => {
+    if (!ref.current) return;
     const next = clamp(0, newIndex, numItems - 1);
 
-    const child = ref.current?.firstElementChild?.children[next];
+    const child = ref.current.firstElementChild?.children[next];
     if (!child || !(child instanceof HTMLElement)) return;
 
-    ref.current?.scrollTo({
+    cancelCurrent();
+    ref.current.scrollTo({
       left: child.offsetLeft - ref.current.offsetLeft,
       behavior: "smooth",
     });

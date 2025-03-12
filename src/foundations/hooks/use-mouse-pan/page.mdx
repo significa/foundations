@@ -18,7 +18,10 @@ export const metadata = {
 
 ## API Reference
 
-The hooks returns an object with a `ref` that you can attach to an element.
+The hooks returns an object with:
+
+- `ref`: A ref that you can attach to an element
+- `cancelCurrent`: A function that stops the currently active pan interaction and/or animation. Useful when you need to manually control the element's scroll position (e.g. when calling `scrollTo`).
 
 ## Examples
 
