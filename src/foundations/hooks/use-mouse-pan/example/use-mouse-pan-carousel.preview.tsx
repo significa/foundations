@@ -58,9 +58,8 @@ const Carousel = ({ children }: { children: ReactNode }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const numItems = useMemo(() => Children.count(children), [children]);
 
-  const to = (direction: number) => {
-    const sign = Math.sign(direction);
-    const next = clamp(0, activeIndex + sign, numItems - 1);
+  const to = (newIndex: number) => {
+    const next = clamp(0, newIndex, numItems - 1);
 
     const child = ref.current?.firstElementChild?.children[next];
     if (!child || !(child instanceof HTMLElement)) return;
@@ -98,7 +97,7 @@ const Carousel = ({ children }: { children: ReactNode }) => {
               disabled={activeIndex === 0}
               variant="ghost"
               size="sm"
-              onClick={() => to(-1)}
+              onClick={() => to(activeIndex - 1)}
             >
               ←
             </Button>
@@ -106,7 +105,7 @@ const Carousel = ({ children }: { children: ReactNode }) => {
               disabled={activeIndex === numItems - 1}
               variant="ghost"
               size="sm"
-              onClick={() => to(1)}
+              onClick={() => to(activeIndex + 1)}
             >
               →
             </Button>
