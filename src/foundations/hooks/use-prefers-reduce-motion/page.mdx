@@ -1,0 +1,26 @@
+export const metadata = {
+  title: "usePrefersReduceMotion",
+  description: "A hook for scrolling elements with a mouse pan gesture",
+  files: [
+    "src/foundations/hooks/use-prefers-reduce-motion/use-prefers-reduce-motion.ts",
+  ],
+};
+
+## API Reference
+
+The hooks returns a boolean, if the user has set a preference to reduce motion animations e.g. transition animations
+
+## Examples
+
+### Basic
+
+<Preview slug="use-prefers-reduce-motion" />
+
+### With Framer motion
+
+<Preview slug="use-prefers-reduce-motion-framer" />
+
+
+## Best Practices
+
+To enhance accessibility, ensure this is set when using animations to comply with WCAG guidelines. If this setting is enabled on the user's computer, it may cause UI issues.
