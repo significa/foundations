@@ -14,8 +14,12 @@ const UsePrefersReduceMotionFramerPreview = () => {
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <h1 className="font-bold text-2xl">Animation is {prefersReducedMotion ? "disabled" : "enabled"}</h1>
-        {!prefersReducedMotion && <p>Turn on reduce motion in your system settings to see the effect</p>}
+        <h1 className="text-2xl font-bold">
+          Animation is {prefersReducedMotion ? "disabled" : "enabled"}
+        </h1>
+        {!prefersReducedMotion && (
+          <p>Turn on reduce motion in your system settings to see the effect</p>
+        )}
       </motion.div>
     </MotionConfig>
   );
