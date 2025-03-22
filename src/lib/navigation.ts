@@ -197,8 +197,8 @@ export const navigation: NavigationItem[] = [
         href: "/hooks/use-ticker",
       },
       {
-        title: "usePrefersReduceMotion",
-        href: "/hooks/use-prefers-reduce-motion",
+        title: "usePrefersReducedMotion",
+        href: "/hooks/use-prefers-reduced-motion",
       },
     ],
   },

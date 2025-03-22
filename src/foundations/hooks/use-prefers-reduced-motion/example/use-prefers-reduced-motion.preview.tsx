@@ -1,8 +1,8 @@
 "use client";
 
-import usePrefersReducedMotion from "../use-prefers-reduce-motion";
+import usePrefersReducedMotion from "../use-prefers-reduced-motion";
 
-const UserPrefersReduceMotionPreview = () => {
+const UserPrefersReducedMotionPreview = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
@@ -16,4 +16,4 @@ const UserPrefersReduceMotionPreview = () => {
   );
 };
 
-export default UserPrefersReduceMotionPreview;
+export default UserPrefersReducedMotionPreview;

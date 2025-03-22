@@ -4,7 +4,7 @@ import React from "react";
 
 const QUERY = "(prefers-reduced-motion: no-preference)";
 
-export default function usePrefersReducedMotion(): boolean {
+const usePrefersReducedMotion = (): boolean => {
   const [prefersReducedMotion, setPrefersReducedMotion] =
     React.useState<boolean>(false);
 
@@ -24,3 +24,5 @@ export default function usePrefersReducedMotion(): boolean {
 
   return prefersReducedMotion;
 }
+
+export default usePrefersReducedMotion;
