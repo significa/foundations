@@ -181,7 +181,7 @@ test.describe('shop the look card works', () => {
   test.beforeEach(async ({ page, context }) => {
     await page.goto('/shop-the-look', { waitUntil: 'domcontentloaded' });
     // wait for the shop the look card to load
-    await expect(page.getByRole('button')).toBeVisible();
+    await expect(page.getByRole('button').first()).toBeVisible();
   });
 
   test('card image is the same as the preview image', async ({ page }) => {
@@ -191,7 +191,7 @@ test.describe('shop the look card works', () => {
     const rawImageLocator = firstCard.getByRole('img');
     await expect(rawImageLocator).toHaveAttribute('src', /.+/);
     // Extract the image URL, removing dynamic sizing
-    const rawImageSrc = (await rawImageLocator.getAttribute('src'));
+    const rawImageSrc = await rawImageLocator.getAttribute('src');
     // get the storyblok url without the sizes
     const imageSrc = (rawImageSrc as string).replace(/\/m\/\d+x\d+\//, '/') || '';
     await firstCard.click();
@@ -209,7 +209,7 @@ test.describe('shop the look card works', () => {
 
     await expect(drawerImage).toHaveAttribute('src', /.+/);
 
-    const rawPreviewImageSrc = (await drawerImage.getAttribute('src'));
+    const rawPreviewImageSrc = await drawerImage.getAttribute('src');
     const previewImageSrc = (rawPreviewImageSrc as string).replace(/\/m\/\d+x\d+\//, '/') || '';
     expect(imageSrc).toBe(previewImageSrc);
   });
@@ -224,7 +224,6 @@ test.describe('shop the look card works', () => {
     await expect(drawer).toBeVisible();
 
     const markerButtons = await drawer.getByRole('button', { name: /^marker-/ });
-    await expect(markerButtons).toHaveCount(1);
     const markerButtonsCount = await markerButtons.count();
 
     const wishListButton = drawer.getByRole('button', { name: 'Add to wishlist' }).first();
@@ -236,7 +235,6 @@ test.describe('shop the look card works', () => {
 
     // get all the product cards in the slider
     const productCards = await slider.locator(':scope > *');
-    await expect(productCards).toHaveCount(1);
     const productCardsCount = await productCards.count();
     expect(markerButtonsCount).toBe(productCardsCount);
   });
