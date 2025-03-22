@@ -23,6 +23,6 @@ const usePrefersReducedMotion = (): boolean => {
   }, []);
 
   return prefersReducedMotion;
-}
+};
 
 export default usePrefersReducedMotion;
