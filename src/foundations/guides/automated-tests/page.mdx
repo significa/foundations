@@ -181,7 +181,7 @@ test.describe('shop the look card works', () => {
   test.beforeEach(async ({ page, context }) => {
     await page.goto('/shop-the-look', { waitUntil: 'domcontentloaded' });
     // wait for the shop the look card to load
-    await page.waitForSelector('div[role="button"]', { state: 'attached' });
+    await expect(page.getByRole('button')).toBeVisible();
   });
 
   test('card image is the same as the preview image', async ({ page }) => {
