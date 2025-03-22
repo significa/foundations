@@ -286,6 +286,40 @@ Check https://playwright.dev/docs/codegen for more information
 
 ## Best Practices
 
+### Handling Dynamic Content
+
+When dealing with elements that load asynchronously, follow these strategies:
+
+#### Using `locator.waitFor()` vs. `expect().toBeVisible()`
+
+- Use `locator.waitFor()` when waiting for an element that may take time to appear before interacting with it.
+- Use `expect(locator).toBeVisible()` when asserting visibility but ensure the element is already expected to be present.
+
+#### Properly Handling Lazy-Loaded Elements
+
+- Wait for elements inside containers that load asynchronously using `locator.waitFor()`.
+- Ensure elements are interactable before clicking.
+
+
+#### Avoiding Race Conditions with `.nth()` or `.first()`
+
+- Use `.nth(index)` when dealing with lists where elements may load at different times.
+- Use `.first()` to avoid race conditions when selecting the first available item.
+
+
+#### Consistent Locators
+
+- Prefer `getByRole()`, `getByText()`, and `getByLabel()` for better test resilience.
+- Avoid relying on css or xpath selectors when semantic roles are available.
+
+#### Improved Test Stability
+
+- Reduce reliance on `page.evaluate()` where possible.
+- Use built-in assertions to ensure elements are ready before interacting with them.
+
+
+### Key Points
+
 - Use user-facing locators like `getByRole`, `getByText`, and `getByLabel` instead of CSS selectors because your DOM can easily change and this can lead to failed tests.
 - Leverage web first assertions like `toBeVisible`, `toHaveValue`, `toHaveText` etc. Playwright automatically retries these assertions, with a default timeout of 5 seconds..
 - Focus on user-visible behavior (i.e. test things that real users interact with like color, texts, UI elements etc)
