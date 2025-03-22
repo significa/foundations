@@ -1,0 +1,427 @@
+export const metadata = {
+  title: "Automated tests",
+  description: "How to make it easy to setup automated tests with Playwright",
+};
+
+## Overview
+
+Regression testing can be exhausting, especially when you have to test all the previous features every time a new one is introduced. This slows down the development process.  
+
+While regression testing is crucial for maintaining software integrity, doing it manually over and over again can be quite a challenge.  
+
+Automated testing with frameworks like Playwright offers a better way to simplify regression testing. It ensures that applications remain functional and reliable with each update, without breaking a sweat (okay, maybe a little, but definitely still better than manual regression tests).  
+
+I'm sure you are probably wondering why Playwright? *Hold on to your horses!*  
+
+Playwright is known for its robust API, parallel execution, and ability to handle complex scenarios like network mocking, authentication, and visual testing.  
+
+But enough of the big words, well what I am trying to say is:
+
+- its easier to use,
+- it has simpler ways to integrate
+- it has the best auto-waiting feature, unlike some others that I won't name (CYPRESS!!! 😆)
+- you can run multiple tests in parallel (completely independent of each other)
+- overall its pretty cool
+
+### Why a guide?
+
+- Set up and configure Playwright efficiently.
+- Showcase some testing scenarios.
+- Follow best practices to improve test stability.
+- Integrate tests with CI/CD pipelines.
+
+## Setup (Installation & Configuration)
+
+To install Playwright, run the following command:
+
+- `npx playwright install --with-deps` to install playwright to download new browser binaries and their dependencies with
+- `npm init playwright@latest` to set up Playwright in your project with the necessary dependencies.
+- `npx playwright test` to run the test. You can also run the tests in ui mode by adding `--ui` flag
+
+Check https://playwright.dev/docs/running-tests for other flags
+
+
+### What's Installed?
+
+Playwright will download the browsers needed as well as create the following files.
+
+```
+playwright.config.ts
+package.json
+package-lock.json
+tests/
+  example.spec.ts
+tests-examples/
+  demo-todo-app.spec.ts
+```
+
+### Configuration
+
+Just as stated above, Playwright provides a configuration file `(playwright.config.ts or .js)` for managing test settings.  
+
+An example for a SvelteKit app looks like this:
+
+```ts title="Playwright.config.ts"
+import { defineConfig, devices } from '@playwright/test';
+
+/**
+ * Read environment variables from file.
+ * https://github.com/motdotla/dotenv
+ */
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+const BASE_URL = 'https://localhost:5173';
+
+/**
+ * See https://playwright.dev/docs/test-configuration.
+ */
+export default defineConfig({
+  testDir: './tests/e2e',
+  timeout: 60000,
+  /* Run tests in files in parallel */
+  fullyParallel: false,
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 2 : undefined,
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  reporter: [
+    [
+      'html',
+      {
+        outputFolder: process.env.CI ? 'playwright-report-ci' : 'playwright-report',
+        open: process.env.CI ? 'never' : 'always'
+      }
+    ]
+  ],
+  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  use: {
+    /* Base URL to use in actions like `await page.goto('/')`. */
+    baseURL: BASE_URL,
+    ignoreHTTPSErrors: true,
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    trace: 'on-first-retry',
+    headless: true
+  },
+
+  /* Configure projects for major browsers */
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] }
+    },
+
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] }
+    },
+
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] }
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] }
+    }
+  ],
+
+  /* Run your local dev server before starting the tests */
+  webServer: {
+    command: 'npm run dev',
+    url: BASE_URL,
+    reuseExistingServer: !process.env.CI,
+    timeout: 60000,
+    ignoreHTTPSErrors: true
+  }
+});
+
+```
+
+### Some points to note:
+- Retries & Workers should be limited to 2 or lower on the CI to improve the efficiency of the tests
+- Default timeout is 30s for each test case, this can be increased as you see fit but be mindful of the time so that the test execution do not take too long
+- Reports generated locally should be separated from the ci reports
+- webServer is setup so that before the Playwright CI runs the test script the page is served, this should be modified to suit the project
+- Remember to add the following generated files to .gitignore, .eslintignore && .prettierignore
+
+```
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+```
+
+
+## Test Examples
+
+```ts title="login.spec.ts"
+import { test, expect } from '@playwright/test';
+
+test('Should login successfully with valid credentials', async ({ page }) => {
+  await page.goto('/login');
+
+  // Fill form fields using user-facing locators
+  await page.getByLabel('Username').fill('development@significa.co');
+  await page.getByLabel('Password').fill('1Password');
+  await page.getByRole('button', { name: 'Submit' }).click();
+
+  // Verify submission success
+  await expect(page.getByText('Login successful')).toBeVisible();
+});
+```
+
+```ts title="shop-the-look.spec.ts"
+test.describe('shop the look card works', () => {
+  test.beforeEach(async ({ page, context }) => {
+    await page.goto('/shop-the-look', { waitUntil: 'domcontentloaded' });
+    // wait for the shop the look card to load
+    await page.waitForSelector('div[role="button"]', { state: 'attached' });
+  });
+
+  test('card image is the same as the preview image', async ({ page }) => {
+    const firstCard = await page.getByRole('button', { name: /[0-9]+ item(s)/ }).first();
+    await expect(firstCard).toBeVisible();
+    // Get the image inside the card and assert it has a valid src attribute
+    const rawImageLocator = firstCard.getByRole('img');
+    await expect(rawImageLocator).toHaveAttribute('src', /.+/);
+    // Extract the image URL, removing dynamic sizing
+    const rawImageSrc = (await rawImageLocator.getAttribute('src'));
+    // get the storyblok url without the sizes
+    const imageSrc = (rawImageSrc as string).replace(/\/m\/\d+x\d+\//, '/') || '';
+    await firstCard.click();
+
+    // wait for the drawer to load
+    const drawer = await page.getByRole('dialog');
+    await expect(drawer).toBeVisible();
+
+    const drawerImage = await drawer
+      .getByRole('img')
+      .filter({
+        hasNot: page.getByRole('region').getByRole('img')
+      })
+      .first();
+
+    await expect(drawerImage).toHaveAttribute('src', /.+/);
+
+    const rawPreviewImageSrc = (await drawerImage.getAttribute('src'));
+    const previewImageSrc = (rawPreviewImageSrc as string).replace(/\/m\/\d+x\d+\//, '/') || '';
+    expect(imageSrc).toBe(previewImageSrc);
+  });
+
+  test('consistent number of products', async ({ page }) => {
+    const firstCard = await page.getByRole('button', { name: /[0-9]+ item(s)/ }).first();
+    await expect(firstCard).toBeVisible();
+    await firstCard.click();
+
+    // wait for the drawer to load
+    const drawer = await page.getByRole('dialog');
+    await expect(drawer).toBeVisible();
+
+    const markerButtons = await drawer.getByRole('button', { name: /^marker-/ });
+    await expect(markerButtons).toHaveCount(1);
+    const markerButtonsCount = await markerButtons.count();
+
+    const wishListButton = drawer.getByRole('button', { name: 'Add to wishlist' }).first();
+    // wait for at least one wishlist button to load
+    await expect(wishListButton).toBeVisible();
+
+    const slider = drawer.getByRole('region').first();
+    await expect(slider).toBeVisible();
+
+    // get all the product cards in the slider
+    const productCards = await slider.locator(':scope > *');
+    await expect(productCards).toHaveCount(1);
+    const productCardsCount = await productCards.count();
+    expect(markerButtonsCount).toBe(productCardsCount);
+  });
+})
+```
+
+## Debugging
+
+### Debug tests in UI mode
+
+Asides from using `console.log` and `debugger`, Playwright UI mode offer a better debugging experience, where you can easily walk through each step of the test and visually see what was happening before, during and after each step.
+
+### Debug tests with the Playwright Inspector
+
+To debug all tests, run the Playwright test command followed by the `--debug` flag.   
+This command will open up a Browser window as well as the Playwright Inspector. 
+You can use the step over button at the top of the inspector to step through your test. 
+Or, press the play button to run your test from start to finish. Once the test has finished, the browser window will close
+
+### Debug tests with VSCode extension
+
+With the VS Code extension you can debug your tests right in VS Code, see error messages, set breakpoints and step through your tests.
+
+You can also debug in live mode with the VSCode extension or right click and select debug test (Just install the VSCode extension for better experience).
+
+### Enable Tracing for Debugging Failed Tests
+
+Playwright Trace Viewer is a GUI tool that lets you explore recorded Playwright traces of your tests. You can go back and forward through each action on the left side, and visually see what was happening during the action
+
+Check https://playwright.dev/docs/trace-viewer for more information
+
+
+## Test Generator
+
+Playwright provides a built-in test generator that records user actions and converts them into Playwright scripts.  
+
+There are two ways to use it:
+
+- install the VS Code extension and generate tests directly from VS Code. The extension is available on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright)
+  This opens a browser where interactions are recorded and transformed into a Playwright script.
+- use codegen to generate locators: run `npx playwright codegen playwright.dev` replace playwright.dev with the url of the page you want to pick a locator from
+
+This is good to get you started on your tests.
+
+Check https://playwright.dev/docs/codegen for more information
+
+
+## Best Practices
+
+- Use user-facing locators like `getByRole`, `getByText`, and `getByLabel` instead of CSS selectors because your DOM can easily change and this can lead to failed tests.
+- Leverage web first assertions like `toBeVisible`, `toHaveValue`, `toHaveText` etc. Playwright automatically retries these assertions, with a default timeout of 5 seconds..
+- Focus on user-visible behavior (i.e. test things that real users interact with like color, texts, UI elements etc)
+- Keep tests independent and stateless to reduce flakiness and improve reliability.
+- Use `beforeEach` and `afterEach` for setup/teardown for example, if multiple test cases require the same page, use `beforeEach` to navigate to it, ensuring a fresh context for every test..
+- Chain and filter locators to precisely target elements instead of selecting broad areas of the page.
+- Take advantage of test generators to speed up test creation
+- Run tests in parallel to speed up execution.
+- Test across all supported browsers to ensure cross-browser compatibility.
+- Centralize configuration in `playwright.config.ts` to maintain consistency across test runs.
+
+Pheew! thats a lot of do's and don'ts, but depending on your use case, these guidelines can be adjusted to fit the needs of your tests. After all, Playwright gives you the flexibility to make testing work your way! 🚀.
+
+
+## Test Reports
+
+Playwright provides built-in reporting capabilities.  
+Run `npx playwright show-report` to view the report. This will generate a report by default a html page in playwright-report folder.
+
+Check https://playwright.dev/docs/test-reporters for more information
+
+To ensure test reports are accessible:
+
+1. Just as stated [here](/guides/automated-tests#configuration) separate local test reports from ci reports
+2. Serve test reports on a route, see options below:
+
+### Serve from public/ Directory
+
+Update your CI/CD with the snippet below just after the Run Playwright tests to move the playwright test reports to the public folder. 
+Next.js automatically serves static files from the public folder, so if you move it there it should be accessible
+
+```
+  - name: Move Playwright report to public directory
+    run: |
+      mv playwright-report-ci/* public/playwright-report/
+```
+
+### Serve from a Custom API Route (More Control)
+
+If you don’t want to expose reports publicly or need authentication, you can create an API route in `pages/api/playwright.ts`:
+
+```tsx
+import { promises as fs } from 'fs';
+import path from 'path';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const isDev = process.env.NODE_ENV === 'development';
+    const playwrightDir = isDev ? 'playwright-report' : 'playwright-report-ci'
+    const reportPath = path.join(process.cwd(), playwrightDir, 'index.html');
+
+    // Read the HTML file
+    const report = await fs.readFile(reportPath, 'utf-8');
+
+    res.setHeader('Content-Type', 'text/html');
+    res.status(200).send(report);
+  } catch (err) {
+    res.status(404).send('Playwright report not found');
+  }
+}
+```
+
+
+## Continuous Integration (CI)
+
+When installing Playwright using the VS Code extension or with npm init playwright@latest you are given the option to add a GitHub Actions workflow.
+This creates a `playwright.yml` file inside a `.github/workflows` folder containing everything you need so that your tests run on each push and pull request into the main/master branch.
+After a few modifications here's an example for a SvelteKit app on vercel:
+
+```
+name: Playwright Tests
+on:
+  schedule:
+    - cron: '0 0 * * WED'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: E2E Tests
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+          node-version-file: '.nvmrc'
+          cache: npm
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Install Vercel CLI
+      run: npm install --global vercel@latest
+    - name: Link Vercel Project
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      run: |
+        vercel link --yes --token $VERCEL_TOKEN
+    - name: Fetch Vercel Environment Variables
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      run: |
+        vercel env pull .env --environment preview --token $VERCEL_TOKEN
+        source .env
+    - name: Build SvelteKit
+      run: npm run build
+    - name: Run Playwright tests
+      run: npx playwright test
+      env:
+        CI: 'true'
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
+```
+
+### The workflow performs these steps:
+
+1. Run on a schedule (in the example above it runs on every wednesdays 00:00 UTC)
+2. Clone your repository
+3. Install Node.js
+4. Install NPM Dependencies
+5. Install Playwright Browsers
+6. Fetch Env Variables
+7. Build Project
+8. Run Playwright tests
+9. Upload HTML report to the GitHub UI
+
+### Why are we running the Playwright CI on a schedule?
+
+Running Playwright tests can be time-consuming, and as the number of tests grows, execution time increases. 
+Instead of running them on every pull request, which could slow down the CI/CD process, scheduling test runs separately helps keep PR workflows efficient.  
+However, this approach may vary based on project needs. What's essential is ensuring tests run before deployment to production.
+
+---
+After all is said and done, this guide covers the essentials of Playwright, from setup and test creation to best practices and CI/CD integration. Following these steps will help you write robust and maintainable automated tests for your web applications.
