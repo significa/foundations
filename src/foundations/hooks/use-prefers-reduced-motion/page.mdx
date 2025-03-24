@@ -1,0 +1,25 @@
+export const metadata = {
+  title: "usePrefersReducedMotion",
+  description: "A hook for checking user preference for reduce motion",
+  files: [
+    "src/foundations/hooks/use-prefers-reduced-motion/use-prefers-reduced-motion.ts",
+  ],
+};
+
+## API Reference
+
+This hook returns a boolean indicating whether the user has enabled reduced motion preferences in their system settings. When true, it suggests the user prefers minimal or no animation effects.
+
+## Examples
+
+### Basic
+
+<Preview slug="use-prefers-reduced-motion" />
+
+## Best Practices
+
+This setting should be checked before implementing animations to ensure compliance with WCAG accessibility guidelines. When true, animations should be disabled or simplified to accommodate users who have enabled reduced motion preferences in their system settings.
+
+### Note
+
+For projects that already has motion installed, this hook already exists [here](https://motion.dev/docs/react-use-reduced-motion). Also to note tailwindcss has `motion-reduce`
