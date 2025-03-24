@@ -9,6 +9,7 @@ export default function SliderPreview() {
         min={0}
         max={100}
         value={50}
+        disabled
       />
     </div>
   );

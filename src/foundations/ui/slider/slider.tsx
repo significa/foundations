@@ -1,6 +1,6 @@
 "use client";
 
-import { cva } from "@/lib/utils";
+import { cva, cn } from "@/lib/utils";
 
 interface SliderProps extends Omit<React.ComponentPropsWithRef<"input">, 'onChange'> {
   min?: number;
@@ -9,6 +9,7 @@ interface SliderProps extends Omit<React.ComponentPropsWithRef<"input">, 'onChan
   value: number;
   onChange?: (value: number) => void;
   orientation?: 'horizontal' | 'vertical';
+  disabled?: boolean;
 }
 
 const containerStyle = cva({
@@ -63,7 +64,7 @@ const inputStyle = cva({
     '[&:active::-webkit-slider-thumb]:ring-gray-400/50',
     // firefox
     '[&:active::-moz-range-thumb]:ring-5',
-    '[&:active::-moz-range-thumb]:ring-red-400/50',
+    '[&:active::-moz-range-thumb]:ring-gray-400/50',
     // ie + edge
     '[&:active::-ms-thumb]:ring-5',
     '[&:active::-ms-thumb]:ring-gray-400/50',
@@ -128,6 +129,7 @@ const backgroundTrackStyle = cva({
 const progressTrackStyle = cva({
   base: [
     'absolute bg-gray-200 rounded-full z-[500]',
+    'disabled:bg-gray-400',
   ],
   variants: {
     variant: {
@@ -147,13 +149,17 @@ const Slider = ({
   value,
   onChange,
   orientation = 'horizontal',
+  disabled = false,
   ...props
 }: SliderProps) => {
   const calcProgressTrackFactor = (value: number) => value / max;
 
   return (
     <div
-      className={containerStyle({ variant: orientation })}
+    className={cn(
+      containerStyle({ variant: orientation }),
+      disabled && "opacity-50 pointer-events-none"
+    )}
       style={{
         "--progress-track-factor": `${calcProgressTrackFactor(value)}`
       } as React.CSSProperties}
