@@ -2,7 +2,7 @@
 
 import { cva, cn } from "@/lib/utils";
 
-interface SliderProps extends Omit<React.ComponentPropsWithRef<"input">, 'onChange'> {
+interface SliderProps extends Omit<React.ComponentPropsWithRef<"input">, 'onChange' | 'disabled'> {
   min?: number;
   max?: number;
   step?: number;
