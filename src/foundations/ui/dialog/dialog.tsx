@@ -22,7 +22,7 @@ import {
   useRole,
   useTransitionStatus,
 } from "@floating-ui/react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 import { cva, VariantProps } from "cva";
 
 import { cn } from "@/lib/utils";

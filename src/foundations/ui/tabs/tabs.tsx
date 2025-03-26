@@ -11,7 +11,7 @@ import {
   useId,
   use,
 } from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 
 import { cn } from "@/lib/utils";
 

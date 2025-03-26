@@ -37,7 +37,7 @@ import {
 } from "@/foundations/ui/popover/popover";
 import { Divider } from "@/foundations/ui/divider/divider";
 import { useStableCallback } from "@/foundations/hooks/use-stable-callback/use-stable-callback";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 
 type Item = {
   id: string;

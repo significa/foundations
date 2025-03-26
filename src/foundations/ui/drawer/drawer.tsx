@@ -14,7 +14,7 @@ import {
 } from "react";
 import { easings } from "@/lib/easings";
 import { cn } from "@/lib/utils";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 
 interface DrawerContext {
   open: boolean;

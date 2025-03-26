@@ -2,7 +2,7 @@
 
 import { FC, HTMLAttributes, PropsWithChildren } from "react";
 import { VariantProps } from "cva";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 
 import { cva, cn } from "@/lib/utils";
 
