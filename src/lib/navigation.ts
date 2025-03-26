@@ -113,6 +113,7 @@ export const navigation: NavigationItem[] = [
         title: "Select",
         href: "/ui/select",
       },
+
       {
         title: "Skeleton",
         href: "/ui/skeleton",
@@ -153,6 +154,10 @@ export const navigation: NavigationItem[] = [
       {
         title: "Sequence",
         href: "/components/sequence",
+      },
+      {
+        title: "Slot",
+        href: "/components/slot",
       },
       {
         title: "Stack",
