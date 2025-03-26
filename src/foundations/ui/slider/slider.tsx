@@ -1,16 +1,15 @@
 "use client";
 
-import { cva, cn } from "@/lib/utils";
+import { cn, cva } from "@/lib/utils";
 
 interface SliderProps
-  extends Omit<React.ComponentPropsWithRef<"input">, "onChange" | "disabled"> {
+  extends Omit<React.ComponentPropsWithRef<"input">, "onChange"> {
   min?: number;
   max?: number;
   step?: number;
-  value: number;
+  defaultValue: number;
   onChange?: (value: number) => void;
   orientation?: "horizontal" | "vertical";
-  disabled?: boolean;
 }
 
 const containerStyle = cva({
@@ -19,90 +18,93 @@ const containerStyle = cva({
     "[--track-thickness:--spacing(2)]",
     "[--thumb-size:--spacing(4)]",
 
-    "relative flex",
+    "inline-flex relative",
   ],
   variants: {
     variant: {
-      horizontal: "items-center w-full h-[var(--track-thickness)]",
-      vertical: "justify-center w-[var(--track-thickness)] h-full",
+      horizontal: "items-center w-full h-(--track-thickness)",
+      vertical: "justify-center w-(--track-thickness) h-full",
     },
+    disabled: {
+      true: "opacity-60 pointer-events-none",
+      false: "",
+    }
   },
   defaultVariants: {
     variant: "horizontal",
+    disabled: false,
   },
 });
 
 const inputStyle = cva({
   base: [
-    "absolute cursor-pointer appearance-none rounded-full",
+    "absolute cursor-pointer appearance-none rounded-full outline-none",
 
     // thumb
-    // webkit (chrome, safari)
+    // webkit
     "[&::-webkit-slider-thumb]:appearance-none",
-    "[&::-webkit-slider-thumb]:h-[var(--thumb-size)] [&::-webkit-slider-thumb]:w-[var(--thumb-size)] [&::-webkit-slider-thumb]:bg-gray-100",
-    "[&::-webkit-slider-thumb]:-mt-[calc((var(--thumb-size)-var(--track-thickness))/2)] [&::-webkit-slider-thumb]:rounded-full z-[1000]",
+    "[&::-webkit-slider-thumb]:transition-transform",
+    "[&::-webkit-slider-thumb]:h-(--thumb-size) [&::-webkit-slider-thumb]:w-(--thumb-size) [&::-webkit-slider-thumb]:bg-foreground",
+    "[&::-webkit-slider-thumb]:rounded-full z-[10]",
     // firefox
     "[&::-moz-range-thumb]:border-none",
-    "[&::-moz-range-thumb]:h-[var(--thumb-size)] [&::-moz-range-thumb]:w-[var(--thumb-size)] [&::-moz-range-thumb]:bg-gray-100",
+    "[&::-moz-range-thumb]:transition-transform",
+    "[&::-moz-range-thumb]:h-(--thumb-size) [&::-moz-range-thumb]:w-(--thumb-size) [&::-moz-range-thumb]:bg-foreground",
     "[&::-moz-range-thumb]:rounded-full",
-    // ie + edge
-    "[&::-ms-thumb]:appearance-none",
-    "[&::-ms-thumb]:h-[var(--thumb-size)] [&::-ms-thumb]:w-[var(--thumb-size)] [&::-ms-thumb]:bg-gray-100",
-    "[&::-ms-thumb]:rounded-full",
 
     // thumb hover
-    // webkit (chrome, safari)
+    // webkit
     "[&::-webkit-slider-thumb:hover]:scale-130",
     // firefox
     "[&::-moz-range-thumb:hover]:scale-130",
-    // ie + edge
-    "[&::-ms-thumb:hover]:scale-130",
 
     // thumb active
-    // webkit (chrome, safari)
+    // webkit
     "[&:active::-webkit-slider-thumb]:ring-5",
-    "[&:active::-webkit-slider-thumb]:ring-gray-400/50",
+    "[&:active::-webkit-slider-thumb]:ring-foreground/40",
     // firefox
     "[&:active::-moz-range-thumb]:ring-5",
-    "[&:active::-moz-range-thumb]:ring-gray-400/50",
-    // ie + edge
-    "[&:active::-ms-thumb]:ring-5",
-    "[&:active::-ms-thumb]:ring-gray-400/50",
+    "[&:active::-moz-range-thumb]:ring-foreground/40",
 
     // thumb focus
     // webkit (chrome, safari)
     "[&:focus::-webkit-slider-thumb]:ring-5",
-    "[&:focus::-webkit-slider-thumb]:ring-gray-400/50",
+    "[&:focus::-webkit-slider-thumb]:ring-foreground/40",
     // firefox
     "[&:focus::-moz-range-thumb]:ring-5",
-    "[&:focus::-moz-range-thumb]:ring-gray-400/50",
-    // ie + edge
-    "[&:focus::-ms-thumb]:ring-5",
-    "[&:focus::-ms-thumb]:ring-gray-400/50",
+    "[&:focus::-moz-range-thumb]:ring-foreground/40",
   ],
   variants: {
     variant: {
       horizontal: [
-        "w-full h-[var(--track-thickness)]",
+        "w-full h-(--track-thickness)",
+        
+        // thumb
+        // webkit
+        "[&::-webkit-slider-thumb]:-mt-[calc(var(--thumb-size)-var(--track-thickness))/2]",
+        // firefox
+        "[&::-moz-range-thumb]:-mt-[calc(var(--thumb-size)-var(--track-thickness))/2]",
 
         // track
-        // webkit (chrome, safari)
-        "[&::-webkit-slider-runnable-track]:h-[var(--track-thickness)]",
+        // webkit
+        "[&::-webkit-slider-runnable-track]:h-(--track-thickness)",
         // firefox
-        "[&::-moz-range-track]:h-[var(--track-thickness)]",
-        // ie + edge
-        "[&::-ms-track]:h-[var(--track-thickness)]",
+        "[&::-moz-range-track]:h-(--track-thickness)",
       ],
       vertical: [
-        "w-[var(--track-thickness)] h-full [writing-mode:vertical-lr] [direction:rtl]",
+        "w-(--track-thickness) h-full [writing-mode:vertical-lr] [direction:rtl]",
+
+        // thumb
+        // webkit
+        "[&::-webkit-slider-thumb]:-ml-[calc(var(--thumb-size)-var(--track-thickness))/2]",
+        // firefox
+        "[&::-moz-range-thumb]:-ml-[calc(var(--thumb-size)-var(--track-thickness))/2]",
 
         // track
-        // webkit (chrome, safari)
-        "[&::-webkit-slider-runnable-track]:w-[var(--track-thickness)]",
+        // webkit
+        "[&::-webkit-slider-runnable-track]:w-(--track-thickness)",
         // firefox
-        "[&::-moz-range-track]:w-[var(--track-thickness)]",
-        // ie + edge
-        "[&::-ms-track]:w-[var(--track-thickness)]",
+        "[&::-moz-range-track]:w-(--track-thickness)",
       ],
     },
   },
@@ -112,13 +114,13 @@ const inputStyle = cva({
 });
 
 const backgroundTrackStyle = cva({
-  base: ["absolute bg-gray-800 rounded-full"],
+  base: ["absolute bg-foreground-secondary/40 rounded-full"],
   variants: {
     variant: {
       horizontal:
-        "left-[calc(var(--thumb-size)/2)] w-[calc(100%-var(--thumb-size))] h-[var(--track-thickness)]",
+        "left-[calc(var(--thumb-size)/2)] w-[calc(100%-var(--thumb-size))] h-(--track-thickness)",
       vertical:
-        "bottom-[calc(var(--thumb-size)/2)] w-[var(--track-thickness)] h-[calc(100%-var(--thumb-size))]",
+        "bottom-[calc(var(--thumb-size)/2)] w-(--track-thickness) h-[calc(100%-var(--thumb-size))]",
     },
   },
   defaultVariants: {
@@ -127,7 +129,7 @@ const backgroundTrackStyle = cva({
 });
 
 const progressTrackStyle = cva({
-  base: ["absolute bg-gray-200 rounded-full z-[500]", "disabled:bg-gray-400"],
+  base: ["absolute bg-foreground/90 rounded-full z-[5]"],
   variants: {
     variant: {
       horizontal: "left-[calc(var(--thumb-size)/2)]",
@@ -143,38 +145,28 @@ const Slider = ({
   min = 0,
   max = 100,
   step = 1,
-  value,
+  defaultValue,
   onChange,
   orientation = "horizontal",
   disabled = false,
+  className,
   ...props
 }: SliderProps) => {
   const calcProgressTrackFactor = (value: number) => value / max;
 
   return (
     <div
-      className={cn(
-        containerStyle({ variant: orientation }),
-        disabled && "pointer-events-none opacity-50"
-      )}
-      style={
-        {
-          "--progress-track-factor": `${calcProgressTrackFactor(value)}`,
-        } as React.CSSProperties
-      }
+      className={cn(containerStyle({ variant: orientation, disabled }), className)}
+      style={{ "--progress-track-factor": `${calcProgressTrackFactor(defaultValue)}` }}
     >
       <div className={backgroundTrackStyle({ variant: orientation })} />
       <div
         className={progressTrackStyle({ variant: orientation })}
         style={{
-          width:
-            orientation === "horizontal"
-              ? `calc(var(--progress-track-factor)*100% - var(--thumb-size) * var(--progress-track-factor))`
-              : "var(--track-thickness)",
-          height:
-            orientation === "vertical"
-              ? `calc(var(--progress-track-factor)*100% - var(--thumb-size) * var(--progress-track-factor))`
-              : "var(--track-thickness)",
+          [orientation === "horizontal" ? "width" : "height"]:
+            `calc(var(--progress-track-factor)*100% - var(--thumb-size) * var(--progress-track-factor))`,
+          [orientation === "horizontal" ? "height" : "width"]:
+            `var(--track-thickness)`,
         }}
       />
       <input
@@ -182,9 +174,9 @@ const Slider = ({
         min={min}
         max={max}
         step={step}
-        defaultValue={value}
+        defaultValue={defaultValue}
         onChange={(e) => {
-          const target = e.target as HTMLInputElement;
+          const target = e.target;
           target.parentElement?.style.setProperty(
             "--progress-track-factor",
             `${calcProgressTrackFactor(Number(target.value))}`
@@ -192,6 +184,7 @@ const Slider = ({
           onChange?.(Number(target.value));
         }}
         className={inputStyle({ variant: orientation })}
+        disabled={disabled}
         {...props}
       />
     </div>

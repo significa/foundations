@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Slider",
-  description: "A slider component.",
+  description: "A slider component based on the native range input",
   files: ["src/foundations/ui/slider/slider.tsx"],
   preview: "slider",
 };
@@ -9,28 +9,64 @@ export const metadata = {
 
 Extends the native `input` element with `type="range"`.
 
+<PropsTable
+  definition={{
+    orientation: {
+      type: '"horizontal" | "vertical"',
+      description: "Orientation of the slider.",
+      default: '"horizontal"',
+    },
+    onChange: {
+      type: "(value: number) => void",
+      description: "Callback function when value changes. Receives the numeric value as an argument.",
+    },
+  }}
+/>
+
+The component uses CSS variables for customization:
+- `--track-thickness` - Thickness of the slider track
+- `--thumb-size` - Size of the slider thumb
+
 ## Examples
 
 ### Simple
+
+Basic usage of the slider component.
 
 <Preview slug="slider" />
 
 ### Steps
 
+Slider with defined step intervals.
+
 <Preview slug="slider-steps" />
 
 ### Vertical
+
+Vertical orientation of the slider.
 
 <Preview slug="slider-vertical" />
 
 ### Disabled
 
+Disabled state of the slider.
+
 <Preview slug="slider-disabled" />
 
 ## Best Practices
 
-1. **Usage**:
+1. **Usage Guidelines**:
+   - Always provide clear min and max values
+   - Consider step intervals for precise control
+   - Use appropriate slider length for the value range
+   - Set a meaningful default value
 
-   - Use CSS variables for track thickness and thumb size.
-   - Give width and height to the element containing the Slider
-   - Maintain consistent colors with theme
+2. **Accessibility**:
+   - Provide clear visual feedback
+   - Include aria-labels for screen readers
+   - Ensure keyboard navigation works (arrow keys)
+
+3. **Interaction**:
+   - Provide immediate visual feedback
+   - Consider adding value tooltips for precision
+   - Handle both mouse and touch interactions
