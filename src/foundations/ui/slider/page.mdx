@@ -18,12 +18,14 @@ Extends the native `input` element with `type="range"`.
     },
     onChange: {
       type: "(value: number) => void",
-      description: "Callback function when value changes. Receives the numeric value as an argument.",
+      description:
+        "Callback function when value changes. Receives the numeric value as an argument.",
     },
   }}
 />
 
 The component uses CSS variables for customization:
+
 - `--track-thickness` - Thickness of the slider track
 - `--thumb-size` - Size of the slider thumb
 
@@ -56,12 +58,14 @@ Disabled state of the slider.
 ## Best Practices
 
 1. **Usage Guidelines**:
+
    - Always provide clear min and max values
    - Consider step intervals for precise control
    - Use appropriate slider length for the value range
    - Set a meaningful default value
 
 2. **Accessibility**:
+
    - Provide clear visual feedback
    - Include aria-labels for screen readers
    - Ensure keyboard navigation works (arrow keys)

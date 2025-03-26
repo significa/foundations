@@ -28,7 +28,7 @@ const containerStyle = cva({
     disabled: {
       true: "opacity-60 pointer-events-none",
       false: "",
-    }
+    },
   },
   defaultVariants: {
     variant: "horizontal",
@@ -78,7 +78,7 @@ const inputStyle = cva({
     variant: {
       horizontal: [
         "w-full h-(--track-thickness)",
-        
+
         // thumb
         // webkit
         "[&::-webkit-slider-thumb]:-mt-[calc(var(--thumb-size)-var(--track-thickness))/2]",
@@ -156,8 +156,13 @@ const Slider = ({
 
   return (
     <div
-      className={cn(containerStyle({ variant: orientation, disabled }), className)}
-      style={{ "--progress-track-factor": `${calcProgressTrackFactor(defaultValue)}` }}
+      className={cn(
+        containerStyle({ variant: orientation, disabled }),
+        className
+      )}
+      style={{
+        "--progress-track-factor": `${calcProgressTrackFactor(defaultValue)}`,
+      }}
     >
       <div className={backgroundTrackStyle({ variant: orientation })} />
       <div
