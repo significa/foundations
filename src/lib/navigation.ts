@@ -78,6 +78,10 @@ export const navigation: NavigationItem[] = [
         href: "/ui/divider",
       },
       {
+        title: "Drawer",
+        href: "/ui/drawer",
+      },
+      {
         title: "Dropdown",
         href: "/ui/dropdown",
       },
