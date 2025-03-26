@@ -22,8 +22,8 @@ const containerStyle = cva({
   ],
   variants: {
     variant: {
-      horizontal: "items-center w-full h-(--track-thickness)",
-      vertical: "justify-center w-(--track-thickness) h-full",
+      horizontal: "items-center w-56 h-(--track-thickness)",
+      vertical: "justify-center w-(--track-thickness) h-56",
     },
     disabled: {
       true: "opacity-60 pointer-events-none",
