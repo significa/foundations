@@ -286,7 +286,7 @@ const DrawerActions = ({ children, ...props }: DrawerActionsProps) => {
     <Component
       {...props}
       className={cn(
-        "bg-background border-border sticky bottom-0 mt-auto flex gap-2 border-t p-2 pb-4",
+        "bg-background border-border sticky bottom-0 mt-auto flex gap-2 border-t p-3.5 max-md:pb-4.5",
         props.className
       )}
     >
