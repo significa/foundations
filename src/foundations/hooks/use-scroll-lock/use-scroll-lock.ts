@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo } from "react";
+import { RefObject, useEffect, useRef } from "react";
 
 export type ScrollLockTarget =
   | string
@@ -7,7 +7,6 @@ export type ScrollLockTarget =
   | undefined;
 
 const getTargetElement = (target: ScrollLockTarget): HTMLElement | null => {
-  if (typeof window === "undefined") return null;
   if (!target) return document.body;
   if (target instanceof HTMLElement) return target;
   if (typeof target === "string") return document.querySelector(target);
@@ -17,9 +16,14 @@ const getTargetElement = (target: ScrollLockTarget): HTMLElement | null => {
 };
 
 export const useScrollLock = (isLocked: boolean, target?: ScrollLockTarget) => {
-  const targetElement = useMemo(() => getTargetElement(target), [target]);
+  const targetElementRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    targetElementRef.current = getTargetElement(target);
+  }, [target]);
+
+  useEffect(() => {
+    const targetElement = targetElementRef.current;
     if (!targetElement) return;
 
     const previousStyles = {
@@ -45,5 +49,5 @@ export const useScrollLock = (isLocked: boolean, target?: ScrollLockTarget) => {
         targetElement.style.removeProperty("scrollbar-gutter");
       }
     };
-  }, [isLocked, targetElement]);
+  }, [isLocked]);
 };
