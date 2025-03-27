@@ -15,6 +15,10 @@ import {
 import { easings } from "@/lib/easings";
 import { cn } from "@/lib/utils";
 import { Slot } from "@/foundations/components/slot/slot";
+import {
+  useScrollLock,
+  ScrollLockTarget,
+} from "@/foundations/hooks/use-scroll-lock/use-scroll-lock";
 
 interface DrawerContext {
   open: boolean;
@@ -40,6 +44,7 @@ interface DrawerProps {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  scrollLockTarget?: ScrollLockTarget;
 }
 
 const Drawer = ({
@@ -47,6 +52,7 @@ const Drawer = ({
   defaultOpen,
   onOpenChange,
   children,
+  scrollLockTarget,
 }: DrawerProps) => {
   const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
   const [labelId, setLabelId] = useState<string | undefined>(undefined);
@@ -57,6 +63,8 @@ const Drawer = ({
     setInternalOpen(open);
     onOpenChange?.(open);
   };
+
+  useScrollLock(open, scrollLockTarget);
 
   return (
     <DrawerContext value={{ open, setOpen, labelId, setLabelId }}>

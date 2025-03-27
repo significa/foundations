@@ -206,6 +206,10 @@ export const navigation: NavigationItem[] = [
         href: "/hooks/use-mouse-pan",
       },
       {
+        title: "useScrollLock",
+        href: "/hooks/use-scroll-lock",
+      },
+      {
         title: "useTicker",
         href: "/hooks/use-ticker",
       },

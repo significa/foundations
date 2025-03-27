@@ -4,14 +4,9 @@ export const metadata = {
   files: ["src/foundations/ui/drawer/drawer.tsx"],
   preview: "drawer",
   dependencies: [
-    {
-      name: "motion/react",
-      href: "https://motion.dev/docs/react-quick-start",
-    },
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
+    { name: "Slot", href: "/components/slot" },
+    { name: "useScrollLock", href: "/hooks/use-scroll-lock" },
+    { name: "motion/react", href: "https://motion.dev/docs/react-quick-start" },
   ],
 };
 
@@ -45,10 +40,7 @@ export const metadata = {
 
 <PropsTable
   definition={{
-    open: {
-      type: "boolean",
-      description: "Whether the drawer is open.",
-    },
+    open: { type: "boolean", description: "Whether the drawer is open." },
     defaultOpen: {
       type: "boolean",
       description: "Whether the drawer is open by default.",
@@ -56,6 +48,11 @@ export const metadata = {
     onOpenChange: {
       type: "(open: boolean) => void",
       description: "Callback fired when the drawer's open state changes.",
+    },
+    scrollLockTarget: {
+      type: "string | HTMLElement | RefObject<HTMLElement>",
+      description:
+        "The element to lock the scroll on when the drawer is open. Defaults to the `body` element.",
     },
   }}
 />
