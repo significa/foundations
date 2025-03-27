@@ -1,7 +1,7 @@
 "use client";
 
 import { VariantProps } from "cva";
-import { Slot, Slottable } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@/foundations/components/slot/slot";
 
 import { cn, cva } from "@/lib/utils";
 
@@ -71,18 +71,24 @@ const Button = ({
       type={type}
       {...props}
     >
-      <Slottable>{children}</Slottable>
-      {isLoading && (
-        <span
-          data-button-spinner
-          className={cn(
-            "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-            "text-(--button-text-color)"
-          )}
-        >
-          <Spinner size={size} />
-        </span>
-      )}
+      <Slottable asChild={asChild} child={children}>
+        {(child) => (
+          <>
+            {child}
+            {isLoading && (
+              <span
+                data-button-spinner
+                className={cn(
+                  "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+                  "text-(--button-text-color)"
+                )}
+              >
+                <Spinner size={size} />
+              </span>
+            )}
+          </>
+        )}
+      </Slottable>
     </Comp>
   );
 };

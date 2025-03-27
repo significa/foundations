@@ -2,7 +2,7 @@
 
 import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
 import { createContext, use, useId, useState } from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 
 import { cn } from "@/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";

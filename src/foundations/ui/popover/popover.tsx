@@ -21,7 +21,7 @@ import {
   FloatingFocusManager,
   UseInteractionsReturn,
 } from "@floating-ui/react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 
 import { cn } from "@/lib/utils";
