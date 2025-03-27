@@ -106,6 +106,10 @@ export const navigation: NavigationItem[] = [
         href: "/ui/select",
       },
       {
+        title: "Slider",
+        href: "/ui/slider",
+      },
+      {
         title: "Skeleton",
         href: "/ui/skeleton",
       },
