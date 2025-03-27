@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, cva } from "@/lib/utils";
+import { cva } from "@/lib/utils";
 
 interface SliderProps
   extends Omit<React.ComponentPropsWithRef<"input">, "onChange"> {
@@ -156,10 +156,7 @@ const Slider = ({
 
   return (
     <div
-      className={cn(
-        containerStyle({ variant: orientation, disabled }),
-        className
-      )}
+      className={containerStyle({ variant: orientation, disabled, className })}
       style={{
         "--progress-track-factor": `${calcProgressTrackFactor(defaultValue)}`,
       }}
