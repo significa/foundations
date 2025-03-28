@@ -179,16 +179,16 @@ test("Should login successfully with valid credentials", async ({ page }) => {
 ```ts title="shop-the-look.spec.ts"
 test.describe("shop the look card works", () => {
   test.beforeEach(async ({ page, context }) => {
-    await page.goto("/shop-the-look", { waitUntil: "domcontentloaded" });
+    await page.goto("/shop-the-look", { waitUntil: "commit" });
     // wait for the shop the look card to load
-    await expect(page.getByRole("button").first()).toBeVisible();
+    const firstCard = page.getByRole('button', { name: /[0-9]+ item(s)/ }).first();
+    await expect(firstCard).toBeVisible({ timeout: 30000 });
   });
 
   test("card image is the same as the preview image", async ({ page }) => {
-    const firstCard = await page
+    const firstCard = page
       .getByRole("button", { name: /[0-9]+ item(s)/ })
       .first();
-    await expect(firstCard).toBeVisible();
     // Get the image inside the card and assert it has a valid src attribute
     const rawImageLocator = firstCard.getByRole("img");
     await expect(rawImageLocator).toHaveAttribute("src", /.+/);
@@ -200,10 +200,10 @@ test.describe("shop the look card works", () => {
     await firstCard.click();
 
     // wait for the drawer to load
-    const drawer = await page.getByRole("dialog");
+    const drawer = page.getByRole("dialog");
     await expect(drawer).toBeVisible();
 
-    const drawerImage = await drawer
+    const drawerImage = drawer
       .getByRole("img")
       .filter({
         hasNot: page.getByRole("region").getByRole("img"),
@@ -219,17 +219,16 @@ test.describe("shop the look card works", () => {
   });
 
   test("consistent number of products", async ({ page }) => {
-    const firstCard = await page
+    const firstCard = page
       .getByRole("button", { name: /[0-9]+ item(s)/ })
       .first();
-    await expect(firstCard).toBeVisible();
     await firstCard.click();
 
     // wait for the drawer to load
-    const drawer = await page.getByRole("dialog");
+    const drawer = page.getByRole("dialog");
     await expect(drawer).toBeVisible();
 
-    const markerButtons = await drawer.getByRole("button", {
+    const markerButtons = drawer.getByRole("button", {
       name: /^marker-/,
     });
     const markerButtonsCount = await markerButtons.count();
@@ -244,7 +243,7 @@ test.describe("shop the look card works", () => {
     await expect(slider).toBeVisible();
 
     // get all the product cards in the slider
-    const productCards = await slider.locator(":scope > *");
+    const productCards = slider.locator(":scope > *");
     const productCardsCount = await productCards.count();
     expect(markerButtonsCount).toBe(productCardsCount);
   });
@@ -435,6 +434,14 @@ jobs:
       run: npx playwright test
       env:
         CI: 'true'
+    - name: Copy Playwright Report to Public Folder
+      run: |
+        mkdir -p public/playwright-report
+        cp -r playwright-report-ci/* static/playwright-report
+    - name: Set Node.js Version for Vercel
+      run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+    - name: Deploy to Vercel
+      run: vercel deploy --yes --token ${{ secrets.VERCEL_TOKEN }}
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
@@ -453,7 +460,9 @@ jobs:
 6. Fetch Env Variables
 7. Build Project
 8. Run Playwright tests
-9. Upload HTML report to the GitHub UI
+9. Copy the new report and replace the reports in the public folder (in this case, in nextjs its public, for other frameworks like SvelteKit, its static)
+10. Deploy project with the new reports
+11. Upload the report (artifact) to the GitHub UI for a period of 30 days
 
 ### Why are we running the Playwright CI on a schedule?
 
