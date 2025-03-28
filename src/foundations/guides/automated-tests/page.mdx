@@ -181,7 +181,9 @@ test.describe("shop the look card works", () => {
   test.beforeEach(async ({ page, context }) => {
     await page.goto("/shop-the-look", { waitUntil: "commit" });
     // wait for the shop the look card to load
-    const firstCard = page.getByRole('button', { name: /[0-9]+ item(s)/ }).first();
+    const firstCard = page
+      .getByRole("button", { name: /[0-9]+ item(s)/ })
+      .first();
     await expect(firstCard).toBeVisible({ timeout: 30000 });
   });
 
