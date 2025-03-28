@@ -226,6 +226,10 @@ export const navigation: NavigationItem[] = [
         title: "Accessible Forms",
         href: "/guides/accessible-forms",
       },
+      {
+        title: "Automated Tests",
+        href: "/guides/automated-tests",
+      },
     ],
   },
 ];
