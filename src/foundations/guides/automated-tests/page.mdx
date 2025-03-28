@@ -428,20 +428,18 @@ jobs:
       run: |
         vercel env pull .env --environment preview --token $VERCEL_TOKEN
         source .env
-    - name: Build SvelteKit
+    - name: Build Application
       run: npm run build
     - name: Run Playwright tests
       run: npx playwright test
       env:
         CI: 'true'
-    - name: Copy Playwright Report to Public Folder
+    - name: Add Playwright reports to Vercel output
       run: |
-        mkdir -p public/playwright-report
-        cp -r playwright-report-ci/* static/playwright-report
-    - name: Set Node.js Version for Vercel
-      run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+        mkdir -p .vercel/output/static/playwright-report
+        cp -r playwright-report-ci/* .vercel/output/static/playwright-report/
     - name: Deploy to Vercel
-      run: vercel deploy --yes --token ${{ secrets.VERCEL_TOKEN }}
+      run: vercel deploy --yes --prebuilt --token ${{ secrets.VERCEL_TOKEN }}
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
@@ -458,9 +456,9 @@ jobs:
 4. Install NPM Dependencies
 5. Install Playwright Browsers
 6. Fetch Env Variables
-7. Build Project
+7. Build Application
 8. Run Playwright tests
-9. Copy the new report and replace the reports in the public folder (in this case, in nextjs its public, for other frameworks like SvelteKit, its static)
+9. Add the playwright report to the current build
 10. Deploy project with the new reports
 11. Upload the report (artifact) to the GitHub UI for a period of 30 days
 
