@@ -216,11 +216,11 @@ module.exports = {
 
 This section compares new reports with previous ones and defines failure/warning thresholds:
 
-Category Score Assertions: 
+Category Score Assertions:
 
-- 🔴 Fail if Performance drops by more than 5 points (below 0.7). 
-- ⚠️ Warn if: - Accessibility drops by 5+ points (below 0.8). 
-- Best Practices drops by 5+ points (below 0.9). 
+- 🔴 Fail if Performance drops by more than 5 points (below 0.7).
+- ⚠️ Warn if: - Accessibility drops by 5+ points (below 0.8).
+- Best Practices drops by 5+ points (below 0.9).
 - SEO drops by 5+ points (below 0.9).
 
 Key Performance Metric Assertions (Tracks key web vitals): - First Contentful Paint (FCP): 🚨 Warn if >2000ms or increases by 500ms. - Largest Contentful Paint (LCP): 🚨 Warn if >2500ms or increases by 500ms. - Cumulative Layout Shift (CLS): 🚨 Warn if >0.1 or increases by 0.05. - Total Blocking Time (TBT): 🚨 Warn if >300ms or increases by 100ms.
@@ -330,20 +330,19 @@ This section compares new reports with previous ones and sets pass/fail criteria
 
 Uses environment variables (process.env.\*) for thresholds, making it customizable per environment. If an environment variable is not set, it falls back to a default value.
 
-Category Score Assertions (Fail if below threshold)  
+Category Score Assertions (Fail if below threshold)
 
-- 🔴 Fail if: 
+- 🔴 Fail if:
 
-    - Performance score drops below env var (PERF_THRESHOLD/100) or default 0.6 (60%). 
-    - Accessibility score drops below env var (A11Y_THRESHOLD/100) or default 0.8 (80%). 
-    - Best Practices score drops below env var (BP_THRESHOLD/100) or default 0.9 (90%). 
-    - SEO score drops below env var (SEO_THRESHOLD/100) or default 0.9 (90%).
+  - Performance score drops below env var (PERF_THRESHOLD/100) or default 0.6 (60%).
+  - Accessibility score drops below env var (A11Y_THRESHOLD/100) or default 0.8 (80%).
+  - Best Practices score drops below env var (BP_THRESHOLD/100) or default 0.9 (90%).
+  - SEO score drops below env var (SEO_THRESHOLD/100) or default 0.9 (90%).
 
 Key Web Vital Thresholds (Warn if exceeded) - First Contentful Paint (FCP): 🚨 Warn if > env var (FCP_THRESHOLD) or default 2000ms. - Largest Contentful Paint (LCP): 🚨 Warn if > env var (LCP_THRESHOLD) or default 2500ms. - Cumulative Layout Shift (CLS): 🚨 Warn if > env var (CLS_THRESHOLD) or default 0.1. - Total Blocking Time (TBT): 🚨 Warn if > env var (TBT_THRESHOLD) or default 300ms. - Time to Interactive (TTI): 🚨 Warn if > env var (TTI_THRESHOLD) or default 3500ms.
 
-All of these are subject to change based on the application, for most of these configuration its set to warn. 
+All of these are subject to change based on the application, for most of these configuration its set to warn.
 Also its best to run the lighthouseci command on local before the first deployment so that there are available values to be compared it and the CI can work well.
-
 
 ### Adding Scripts to package.json
 
@@ -374,7 +373,6 @@ The report opens automatically in your browser with interactive charts showing:
 - Module composition
 - File sizes (parsed and gzipped)
 
-
 ### Lighthouse CI Reports
 
 Lighthouse CI generates comprehensive performance reports that include:
@@ -392,7 +390,7 @@ Key metrics to monitor:
 - Total Blocking Time (TBT) - Sum of time where main thread was blocked
 - Time to Interactive (TTI) - Time until the page becomes fully interactive
 
-When running npm run lhci, you'll receive a link to a temporary public dashboard with your results. 
+When running npm run lhci, you'll receive a link to a temporary public dashboard with your results.
 You can also configure Lighthouse CI to store results in a persistent dashboard.
 
 ## Continuous Integration (CI)
@@ -405,7 +403,7 @@ Create a `.github/workflows/lighthouse.yaml` file
 
 ```
 name: Lighthouse CI
-on: 
+on:
   push:
     branches: [ main, master ]
   pull_request:
@@ -449,12 +447,11 @@ jobs:
           retention-days: 30
 ```
 
-
 ### OPTION 2: Threshold-based Approach (Fixed Score Requirements)
 
 ```
 name: Lighthouse CI
-on: 
+on:
   push:
     branches: [ main, master ]
   pull_request:
@@ -493,7 +490,7 @@ jobs:
           A11Y_THRESHOLD: 80  # 80/100 accessibility score
           BP_THRESHOLD: 90    # 90/100 best practices score
           SEO_THRESHOLD: 90   # 90/100 SEO score
-        
+
           # Set specific metric thresholds (in milliseconds)
           FCP_THRESHOLD: 2000  # First Contentful Paint (ms)
           LCP_THRESHOLD: 2500  # Largest Contentful Paint (ms)
@@ -508,7 +505,6 @@ jobs:
             .lighthouseci
           retention-days: 30
 ```
-
 
 ## Setting Up LHCI Server (Optional)
 
@@ -539,7 +535,7 @@ upload: {
 ---
 
 Setting up performance tracking is just another tool in your arsenal to ensure code quality consistency overtime and more granular control on things that affects performance over time.  
-Also, remember that performance optimization is an ongoing process. Regularly review your reports, set increasingly ambitious goals, and make performance a key consideration in your development workflow.  
+Also, remember that performance optimization is an ongoing process. Regularly review your reports, set increasingly ambitious goals, and make performance a key consideration in your development workflow.
 
 For more detailed information, check out:
 
