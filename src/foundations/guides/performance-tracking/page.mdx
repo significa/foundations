@@ -1,0 +1,550 @@
+export const metadata = {
+  title: "Performance tracking & bundle analyzer",
+  description:
+    "A comprehensive guide to setting up performance tracking and bundle analysis for Next.js applications",
+};
+
+## Overview
+
+Monitoring web application performance is crucial for delivering an optimal user experience. This guide will walk you through setting up performance tracking and bundle analysis tools for your Next.js application. These tools will help you:
+
+- Track and measure performance metrics
+- Analyze your JavaScript bundles
+- Establish performance budgets
+- Integrate performance checks into your CI pipeline
+
+### Why a guide?
+
+Setting up proper performance monitoring can be complex and requires integrating multiple tools. This guide aims to simplify the process by providing:
+
+- Step-by-step installation instructions
+- Configuration examples for different approaches
+- Tips for interpreting performance reports
+- CI integration examples
+
+By following this guide, you'll establish a robust performance monitoring system that helps maintain or improve your application's speed and user experience over time.
+
+## Setup (Installation & Configuration)
+
+### Installing Required Packages
+
+First, let's install the necessary dependencies.
+We'll need Lighthouse CI for performance testing and @next/bundle-analyzer for bundle analysis. Although there are other bundle analyzers you can use depending on the frameworks' bundler (i.e. webpack or vite), other top-notch examples are rollup-plugin-visualizer and webpack-bundle-analyzer.
+For this example we are using Next.js (i.e @next/bundle-analyzer and @lhci/cli)
+
+```
+# Install Lighthouse CI
+npm install -D @lhci/cli
+
+# Install Next.js Bundle Analyzer
+npm install -D @next/bundle-analyzer
+```
+
+`@next/bundle-analyzer` is used to create a visual representation of the breakdown of your app's bundle, this can give insights on what affects your application (especially external libraries) on first load. It also helps differentiates between initial load and lazy-loaded chunks.
+`@lhci/cli` is a library from the Google's lighthouse tool we are familiar with on chrome web browser, and it helps provide insights on the performance of your app with the same metrics you see when you use it on chrome devtools. Lets call it automated performance tracker.
+
+### What's Installed? (i.e. files added during installation)
+
+After installation, you'll need to create the following files:
+
+- lighthouserc.js: Configuration file for Lighthouse CI
+- next.config.js (modified): Updated Next.js configuration to include the bundle analyzer
+- .github/workflows/lighthouse.yaml (optional): GitHub Actions workflow for CI integration
+
+Let's look at each of these files in detail.
+
+## Configuration
+
+### Next.js Bundle Analyzer Configuration
+
+First, let's set up the bundle analyzer by modifying the `next.config.js` file:
+
+```js title="next.config.js"
+// next.config.js
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+const nextConfig = {
+  reactStrictMode: true,
+  // Your other Next.js configurations
+};
+
+module.exports = withBundleAnalyzer(nextConfig);
+```
+
+With this configuration, you can run the bundle analyzer using:
+
+```
+ANALYZE=true npm run build
+```
+
+### Lighthouse CI Configuration
+
+Now, let's set up Lighthouse CI. Create a `.lighthouserc.js` file in your project root:
+
+There are two options to track the performance of your app and this will affect your configuration
+
+### OPTION 1: Delta-based Approach (Compare with Previous Scores)
+
+This approach compares your current performance scores with previous scores, ensuring your application doesn't regress.
+
+```js title=".lighthouserc.js"
+// .lighthouserc.js
+module.exports = {
+  ci: {
+    collect: {
+      url: ["https://nextjs-performance-xi.vercel.app/"],
+      numberOfRuns: 3,
+      settings: {
+        preset: "perf",
+        onlyCategories: [
+          "performance",
+          "accessibility",
+          "best-practices",
+          "seo",
+        ],
+      },
+    },
+    assert: {
+      assertions: {
+        // Fail if performance score drops by more than 5 points
+        "categories:performance": [
+          "error",
+          {
+            minScore: 0.7,
+            aggregationMethod: "median-run",
+            compareWithBaseline: true,
+            maxDelta: -0.05,
+          },
+        ],
+        // Warn if accessibility drops by more than 5 points
+        "categories:accessibility": [
+          "warn",
+          {
+            minScore: 0.8,
+            aggregationMethod: "median-run",
+            compareWithBaseline: true,
+            maxDelta: -0.05,
+          },
+        ],
+        // Warn if best-practices drops by more than 5 points
+        "categories:best-practices": [
+          "warn",
+          {
+            minScore: 0.9,
+            aggregationMethod: "median-run",
+            compareWithBaseline: true,
+            maxDelta: -0.05,
+          },
+        ],
+        // Warn if SEO drops by more than 5 points
+        "categories:seo": [
+          "warn",
+          {
+            minScore: 0.9,
+            aggregationMethod: "median-run",
+            compareWithBaseline: true,
+            maxDelta: -0.05,
+          },
+        ],
+
+        // Key metrics with delta checks
+        "first-contentful-paint": [
+          "warn",
+          {
+            maxNumericValue: 2000,
+            aggregationMethod: "median-run",
+            compareWithBaseline: true,
+            maxDelta: 500,
+          },
+        ],
+        "largest-contentful-paint": [
+          "warn",
+          {
+            maxNumericValue: 2500,
+            aggregationMethod: "median-run",
+            compareWithBaseline: true,
+            maxDelta: 500,
+          },
+        ],
+        "cumulative-layout-shift": [
+          "warn",
+          {
+            maxNumericValue: 0.1,
+            aggregationMethod: "median-run",
+            compareWithBaseline: true,
+            maxDelta: 0.05,
+          },
+        ],
+        "total-blocking-time": [
+          "warn",
+          {
+            maxNumericValue: 300,
+            aggregationMethod: "median-run",
+            compareWithBaseline: true,
+            maxDelta: 100,
+          },
+        ],
+      },
+    },
+    upload: {
+      target: "temporary-public-storage",
+    },
+    bulldozer: {
+      // Only keep data from main branch as baseline
+      dailyBranches: ["main", "master"],
+      // Keep last 10 baseline runs
+      dailyLimit: 10,
+    },
+    preset: "lighthouse:no-pwa",
+  },
+};
+```
+
+#### Lets breakdown the configuration
+
+1. collect - Gathering Lighthouse Reports
+
+   - URLs to test: Runs Lighthouse on https://nextjs-performance-xi.vercel.app/. (change to the staging or production URL)
+   - Runs per test: Conducts 3 test runs and takes the median score.
+   - Settings:
+     - Uses “perf” preset (optimized for performance testing).
+     - Only audits performance, accessibility, best practices, and SEO (no PWA checks).
+
+2. assert - Enforcing Performance Standards
+
+This section compares new reports with previous ones and defines failure/warning thresholds:
+
+Category Score Assertions: 
+
+- 🔴 Fail if Performance drops by more than 5 points (below 0.7). 
+- ⚠️ Warn if: - Accessibility drops by 5+ points (below 0.8). 
+- Best Practices drops by 5+ points (below 0.9). 
+- SEO drops by 5+ points (below 0.9).
+
+Key Performance Metric Assertions (Tracks key web vitals): - First Contentful Paint (FCP): 🚨 Warn if >2000ms or increases by 500ms. - Largest Contentful Paint (LCP): 🚨 Warn if >2500ms or increases by 500ms. - Cumulative Layout Shift (CLS): 🚨 Warn if >0.1 or increases by 0.05. - Total Blocking Time (TBT): 🚨 Warn if >300ms or increases by 100ms.
+
+3. upload - Storing Reports
+
+Uploads results to temporary public storage (useful for CI/CD pipelines). This can be updated to be stored in another server
+
+4. preset - Predefined Configurations
+
+Uses “lighthouse:no-pwa”, disabling PWA audits since they’re not needed.
+
+### OPTION 2: Threshold-based Approach (Fixed Score Requirements)
+
+This approach sets fixed threshold values that your application must meet.
+
+```js title=".lighthouserc.js"
+// lighthouserc.js
+module.exports = {
+  ci: {
+    collect: {
+      url: ["https://nextjs-performance-xi.vercel.app/"],
+      numberOfRuns: 3,
+      settings: {
+        preset: "perf",
+        onlyCategories: [
+          "performance",
+          "accessibility",
+          "best-practices",
+          "seo",
+        ],
+      },
+    },
+    assert: {
+      // Use environment variables for thresholds if available, otherwise use defaults
+      assertions: {
+        // Main category scores
+        "categories:performance": [
+          "error",
+          {
+            minScore: process.env.PERF_THRESHOLD
+              ? parseFloat(process.env.PERF_THRESHOLD) / 100
+              : 0.6,
+          },
+        ],
+        "categories:accessibility": [
+          "error",
+          {
+            minScore: process.env.A11Y_THRESHOLD
+              ? parseFloat(process.env.A11Y_THRESHOLD) / 100
+              : 0.8,
+          },
+        ],
+        "categories:best-practices": [
+          "error",
+          {
+            minScore: process.env.BP_THRESHOLD
+              ? parseFloat(process.env.BP_THRESHOLD) / 100
+              : 0.9,
+          },
+        ],
+        "categories:seo": [
+          "error",
+          {
+            minScore: process.env.SEO_THRESHOLD
+              ? parseFloat(process.env.SEO_THRESHOLD) / 100
+              : 0.9,
+          },
+        ],
+
+        // Key metrics with fixed thresholds
+        "first-contentful-paint": [
+          "warn",
+          { maxNumericValue: process.env.FCP_THRESHOLD || 2000 },
+        ],
+        "largest-contentful-paint": [
+          "warn",
+          { maxNumericValue: process.env.LCP_THRESHOLD || 2500 },
+        ],
+        "cumulative-layout-shift": [
+          "warn",
+          { maxNumericValue: process.env.CLS_THRESHOLD || 0.1 },
+        ],
+        "total-blocking-time": [
+          "warn",
+          { maxNumericValue: process.env.TBT_THRESHOLD || 300 },
+        ],
+        interactive: [
+          "warn",
+          { maxNumericValue: process.env.TTI_THRESHOLD || 3500 },
+        ],
+      },
+    },
+    upload: {
+      target: "temporary-public-storage",
+    },
+    preset: "lighthouse:no-pwa",
+  },
+};
+```
+
+#### Lets breakdown the configuration
+
+Similar to the first configuration the only difference is the assert, so i will just highlight that section here:
+
+This section compares new reports with previous ones and sets pass/fail criteria.
+
+Uses environment variables (process.env.\*) for thresholds, making it customizable per environment. If an environment variable is not set, it falls back to a default value.
+
+Category Score Assertions (Fail if below threshold)  
+
+- 🔴 Fail if: 
+
+    - Performance score drops below env var (PERF_THRESHOLD/100) or default 0.6 (60%). 
+    - Accessibility score drops below env var (A11Y_THRESHOLD/100) or default 0.8 (80%). 
+    - Best Practices score drops below env var (BP_THRESHOLD/100) or default 0.9 (90%). 
+    - SEO score drops below env var (SEO_THRESHOLD/100) or default 0.9 (90%).
+
+Key Web Vital Thresholds (Warn if exceeded) - First Contentful Paint (FCP): 🚨 Warn if > env var (FCP_THRESHOLD) or default 2000ms. - Largest Contentful Paint (LCP): 🚨 Warn if > env var (LCP_THRESHOLD) or default 2500ms. - Cumulative Layout Shift (CLS): 🚨 Warn if > env var (CLS_THRESHOLD) or default 0.1. - Total Blocking Time (TBT): 🚨 Warn if > env var (TBT_THRESHOLD) or default 300ms. - Time to Interactive (TTI): 🚨 Warn if > env var (TTI_THRESHOLD) or default 3500ms.
+
+All of these are subject to change based on the application, for most of these configuration its set to warn. 
+Also its best to run the lighthouseci command on local before the first deployment so that there are available values to be compared it and the CI can work well.
+
+
+### Adding Scripts to package.json
+
+Add these scripts to your package.json file:
+
+```json title="package.json"
+"scripts": {
+  // ... existing scripts
+  "analyze": "ANALYZE=true next build",
+  "lhci": "lhci autorun"
+}
+```
+
+## Reports
+
+### Bundle Analyzer Reports
+
+When you run npm run analyze, the bundle analyzer will generate a visual report showing your application's bundle composition. This report helps you:
+
+- Identify large dependencies
+- Find duplicate modules
+- Pinpoint opportunities for code splitting
+- Discover unused code
+
+The report opens automatically in your browser with interactive charts showing:
+
+- Bundle size by chunk
+- Module composition
+- File sizes (parsed and gzipped)
+
+
+### Lighthouse CI Reports
+
+Lighthouse CI generates comprehensive performance reports that include:
+
+- Performance Score - Overall rating of your app's performance
+- Accessibility Score - Rating of how accessible your app is
+- Best Practices Score - Rating of adherence to web best practices
+- SEO Score - Rating of search engine optimization
+
+Key metrics to monitor:
+
+- First Contentful Paint (FCP) - Time until the first content is rendered
+- Largest Contentful Paint (LCP) - Time until the largest content element is rendered
+- Cumulative Layout Shift (CLS) - Measure of visual stability
+- Total Blocking Time (TBT) - Sum of time where main thread was blocked
+- Time to Interactive (TTI) - Time until the page becomes fully interactive
+
+When running npm run lhci, you'll receive a link to a temporary public dashboard with your results. 
+You can also configure Lighthouse CI to store results in a persistent dashboard.
+
+## Continuous Integration (CI)
+
+Integrating performance testing into your CI workflow ensures that performance is monitored with every code change.
+
+Create a `.github/workflows/lighthouse.yaml` file
+
+### OPTION 1: Delta-based Approach (Compare with Previous Scores)
+
+```
+name: Lighthouse CI
+on: 
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-analyze:
+    name: Build and Analyze with Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Build with bundle analyzer
+        run: |
+          ANALYZE=true npm run build
+        env:
+          NEXT_BUNDLE_ANALYZER: true
+      - name: Run Lighthouse CI
+        run: |
+        # For PRs, compare with the base branch
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          lhci autorun --collect.url=http://localhost:3000 --collect.startServerCommand="npm run start" --collect.startServerReadyPattern="started server"
+        else
+          # For main branch, run without comparison but save as baseline
+          lhci autorun --collect.url=http://localhost:3000 --collect.startServerCommand="npm run start" --collect.startServerReadyPattern="started server"
+        fi
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build-and-reports
+          path: |
+            .next/analyze
+            .lighthouseci
+          retention-days: 30
+```
+
+
+### OPTION 2: Threshold-based Approach (Fixed Score Requirements)
+
+```
+name: Lighthouse CI
+on: 
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-analyze:
+    name: Build and Analyze with Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Build with bundle analyzer
+        run: |
+          ANALYZE=true npm run build
+        env:
+          NEXT_BUNDLE_ANALYZER: true
+      - name: Run Lighthouse CI
+        run: |
+        # For PRs, compare with the base branch
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          lhci autorun --collect.url=http://localhost:3000 --collect.startServerCommand="npm run start" --collect.startServerReadyPattern="started server"
+        else
+          # For main branch, run without comparison but save as baseline
+          lhci autorun --collect.url=http://localhost:3000 --collect.startServerCommand="npm run start" --collect.startServerReadyPattern="started server"
+        fi
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Set performance thresholds via environment variables
+          PERF_THRESHOLD: 60  # 60/100 performance score
+          A11Y_THRESHOLD: 80  # 80/100 accessibility score
+          BP_THRESHOLD: 90    # 90/100 best practices score
+          SEO_THRESHOLD: 90   # 90/100 SEO score
+        
+          # Set specific metric thresholds (in milliseconds)
+          FCP_THRESHOLD: 2000  # First Contentful Paint (ms)
+          LCP_THRESHOLD: 2500  # Largest Contentful Paint (ms)
+          CLS_THRESHOLD: 0.1   # Cumulative Layout Shift
+          TBT_THRESHOLD: 300   # Total Blocking Time (ms)
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build-and-reports
+          path: |
+            .next/analyze
+            .lighthouseci
+          retention-days: 30
+```
+
+
+## Setting Up LHCI Server (Optional)
+
+For more advanced usage, you can set up a Lighthouse CI Server to store and visualize historical data:
+
+1. Install the LHCI server:
+
+```
+npm install -g @lhci/server
+```
+
+2. Start the server:
+
+```
+lhci server --storage.storageMethod=sql --storage.sqlDialect=sqlite --storage.sqlDatabasePath=./lighthouse.db
+```
+
+3. Update your lighthouserc.js upload configuration:
+
+```
+upload: {
+  target: 'lhci',
+  serverBaseUrl: 'http://your-lhci-server:9001', // Your server URL
+  token: 'your-token', // Optional, if you've configured authentication
+},
+```
+
+---
+
+Setting up performance tracking is just another tool in your arsenal to ensure code quality consistency overtime and more granular control on things that affects performance over time.  
+Also, remember that performance optimization is an ongoing process. Regularly review your reports, set increasingly ambitious goals, and make performance a key consideration in your development workflow.  
+
+For more detailed information, check out:
+
+- [Lighthouse CI documentation](https://github.com/GoogleChrome/lighthouse-ci)
+- [Next.js Bundle Analyzer documentation](https://www.npmjs.com/package/@next/bundle-analyzer)
+- [Web Vitals](https://web.dev/vitals/) for understanding core performance metrics
+
+Happy optimizing!
