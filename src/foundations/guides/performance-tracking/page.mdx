@@ -28,9 +28,9 @@ By following this guide, you'll establish a robust performance monitoring system
 
 ### Installing Required Packages
 
-First, let's install the necessary dependencies.
-We'll need Lighthouse CI for performance testing and @next/bundle-analyzer for bundle analysis. Although there are other bundle analyzers you can use depending on the frameworks' bundler (i.e. webpack or vite), other top-notch examples are rollup-plugin-visualizer and webpack-bundle-analyzer.
-For this example we are using Next.js (i.e @next/bundle-analyzer and @lhci/cli)
+**First, let's install the necessary dependencies.**  
+We'll need Lighthouse CI for performance testing and `@next/bundle-analyzer` for bundle analysis. Although there are other bundle analyzers you can use depending on the frameworks' bundler (i.e. webpack or vite), other top-notch examples are rollup-plugin-visualizer and webpack-bundle-analyzer.
+For this example we are using Next.js (i.e `@next/bundle-analyzer` and `@lhci/cli`)
 
 ```
 # Install Lighthouse CI
@@ -204,7 +204,7 @@ module.exports = {
 
 #### Lets breakdown the configuration
 
-1. collect - Gathering Lighthouse Reports
+1. **collect** - Gathering Lighthouse Reports
 
    - URLs to test: Runs Lighthouse on https://nextjs-performance-xi.vercel.app/. (change to the staging or production URL)
    - Runs per test: Conducts 3 test runs and takes the median score.
@@ -212,24 +212,29 @@ module.exports = {
      - Uses “perf” preset (optimized for performance testing).
      - Only audits performance, accessibility, best practices, and SEO (no PWA checks).
 
-2. assert - Enforcing Performance Standards
+2. **assert** - Enforcing Performance Standards
 
-This section compares new reports with previous ones and defines failure/warning thresholds:
+    This section compares new reports with previous ones and defines failure/warning thresholds:
 
-Category Score Assertions:
+    **Category Score Assertions:**
 
-- 🔴 Fail if Performance drops by more than 5 points (below 0.7).
-- ⚠️ Warn if: - Accessibility drops by 5+ points (below 0.8).
-- Best Practices drops by 5+ points (below 0.9).
-- SEO drops by 5+ points (below 0.9).
+    - 🔴 Fail if Performance drops by more than 5 points (below 0.7).
+    - ⚠️ Warn if: - Accessibility drops by 5+ points (below 0.8).
+    - Best Practices drops by 5+ points (below 0.9).
+    - SEO drops by 5+ points (below 0.9).
 
-Key Performance Metric Assertions (Tracks key web vitals): - First Contentful Paint (FCP): 🚨 Warn if >2000ms or increases by 500ms. - Largest Contentful Paint (LCP): 🚨 Warn if >2500ms or increases by 500ms. - Cumulative Layout Shift (CLS): 🚨 Warn if >0.1 or increases by 0.05. - Total Blocking Time (TBT): 🚨 Warn if >300ms or increases by 100ms.
+    **Key Performance Metric Assertions (Tracks key web vitals):** 
 
-3. upload - Storing Reports
+      - First Contentful Paint (FCP): 🚨 Warn if >2000ms or increases by 500ms. 
+      - Largest Contentful Paint (LCP): 🚨 Warn if >2500ms or increases by 500ms. 
+      - Cumulative Layout Shift (CLS): 🚨 Warn if >0.1 or increases by 0.05. 
+      - Total Blocking Time (TBT): 🚨 Warn if >300ms or increases by 100ms.
+
+3. **upload** - Storing Reports
 
 Uploads results to temporary public storage (useful for CI/CD pipelines). This can be updated to be stored in another server
 
-4. preset - Predefined Configurations
+4. **preset** - Predefined Configurations
 
 Uses “lighthouse:no-pwa”, disabling PWA audits since they’re not needed.
 
@@ -339,7 +344,13 @@ Category Score Assertions (Fail if below threshold)
   - Best Practices score drops below env var (BP_THRESHOLD/100) or default 0.9 (90%).
   - SEO score drops below env var (SEO_THRESHOLD/100) or default 0.9 (90%).
 
-Key Web Vital Thresholds (Warn if exceeded) - First Contentful Paint (FCP): 🚨 Warn if > env var (FCP_THRESHOLD) or default 2000ms. - Largest Contentful Paint (LCP): 🚨 Warn if > env var (LCP_THRESHOLD) or default 2500ms. - Cumulative Layout Shift (CLS): 🚨 Warn if > env var (CLS_THRESHOLD) or default 0.1. - Total Blocking Time (TBT): 🚨 Warn if > env var (TBT_THRESHOLD) or default 300ms. - Time to Interactive (TTI): 🚨 Warn if > env var (TTI_THRESHOLD) or default 3500ms.
+**Key Web Vital Thresholds (Warn if exceeded)** 
+
+  - First Contentful Paint (FCP): 🚨 Warn if > env var (FCP_THRESHOLD) or default 2000ms. 
+  - Largest Contentful Paint (LCP): 🚨 Warn if > env var (LCP_THRESHOLD) or default 2500ms. 
+  - Cumulative Layout Shift (CLS): 🚨 Warn if > env var (CLS_THRESHOLD) or default 0.1. 
+  - Total Blocking Time (TBT): 🚨 Warn if > env var (TBT_THRESHOLD) or default 300ms. 
+  - Time to Interactive (TTI): 🚨 Warn if > env var (TTI_THRESHOLD) or default 3500ms.
 
 All of these are subject to change based on the application, for most of these configuration its set to warn.
 Also its best to run the lighthouseci command on local before the first deployment so that there are available values to be compared it and the CI can work well.
@@ -382,7 +393,7 @@ Lighthouse CI generates comprehensive performance reports that include:
 - Best Practices Score - Rating of adherence to web best practices
 - SEO Score - Rating of search engine optimization
 
-Key metrics to monitor:
+**Key metrics to monitor:**
 
 - First Contentful Paint (FCP) - Time until the first content is rendered
 - Largest Contentful Paint (LCP) - Time until the largest content element is rendered
