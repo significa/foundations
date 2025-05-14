@@ -30,6 +30,7 @@ export const useMousePan = <T extends HTMLElement>() => {
 
     let hasSnap = false;
     let isPanning = false;
+    let shouldPreventClick = false;
     let rafId: number | null = null;
 
     const mouse: MouseState = {
@@ -105,6 +106,7 @@ export const useMousePan = <T extends HTMLElement>() => {
     // on pan start
     const onMouseDown = (event: MouseEvent) => {
       isPanning = true;
+      shouldPreventClick = false;
 
       // check if the element has snap
       element.style.removeProperty("scroll-snap-type");
@@ -145,6 +147,11 @@ export const useMousePan = <T extends HTMLElement>() => {
       const walkX = currentMouseX - mouse.initial.x;
       const walkY = currentMouseY - mouse.initial.y;
 
+      // prevent click if is dragging
+      if (Math.abs(walkX) + Math.abs(walkY) > 0) {
+        shouldPreventClick = true;
+      }
+
       scroll.target = {
         x: scroll.initial.x - walkX,
         y: scroll.initial.y - walkY,
@@ -176,7 +183,7 @@ export const useMousePan = <T extends HTMLElement>() => {
         cloneContainer.appendChild(clone);
         (element.parentElement ?? element).appendChild(cloneContainer);
 
-        // we're relying on the fact that a scroll-snap element instants snaps to the target position when its scrollLeft or scrollTop are updated
+        // we're relying on the fact that a scroll-snap element instantly snaps to the target position when its scrollLeft or scrollTop are updated
         clone.scrollLeft = unsnappedScrollTarget.x;
         clone.scrollTop = unsnappedScrollTarget.y;
         scroll.target = { x: clone.scrollLeft, y: clone.scrollTop };
@@ -208,6 +215,13 @@ export const useMousePan = <T extends HTMLElement>() => {
       }
     };
 
+    const onClick = (event: MouseEvent) => {
+      if (shouldPreventClick) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+
     // cancel all pan behavior and animation
     const cancelCurrent = () => {
       cancelTick();
@@ -225,6 +239,7 @@ export const useMousePan = <T extends HTMLElement>() => {
     element.addEventListener("mouseup", onMouseUp, { signal });
     element.addEventListener("mouseleave", onMouseUp, { signal });
     element.addEventListener("wheel", cancelCurrent, { signal });
+    element.addEventListener("click", onClick, { signal });
 
     return () => {
       cancelCurrentRef.current = () => {};
