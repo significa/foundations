@@ -15,6 +15,14 @@ const getTargetElement = (target: ScrollLockTarget): HTMLElement | null => {
   return null;
 };
 
+interface StyleBackup {
+  overflow: string;
+  scrollbarGutter: string;
+}
+
+const styleBackupMap = new WeakMap<HTMLElement, StyleBackup>();
+const lockCounterMap = new WeakMap<HTMLElement, number>();
+
 export const useScrollLock = (isLocked: boolean, target?: ScrollLockTarget) => {
   const targetElementRef = useRef<HTMLElement | null>(null);
 
@@ -24,29 +32,39 @@ export const useScrollLock = (isLocked: boolean, target?: ScrollLockTarget) => {
 
   useEffect(() => {
     const targetElement = targetElementRef.current;
-    if (!targetElement) return;
+    if (!targetElement || !isLocked) return;
 
-    const previousStyles = {
-      overflow: targetElement.style.overflow,
-      scrollbarGutter: targetElement.style.scrollbarGutter,
-    };
+    const currentCount = lockCounterMap.get(targetElement) || 0;
 
-    if (isLocked) {
-      targetElement.style.overflow = "hidden";
-      targetElement.style.scrollbarGutter = "stable";
+    // Backup styles before first lock
+    if (currentCount === 0) {
+      styleBackupMap.set(targetElement, {
+        overflow: targetElement.style.overflow,
+        scrollbarGutter: targetElement.style.scrollbarGutter,
+      });
     }
 
-    return () => {
-      if (previousStyles.overflow) {
-        targetElement.style.overflow = previousStyles.overflow;
-      } else {
-        targetElement.style.removeProperty("overflow");
-      }
+    const newCount = currentCount + 1;
+    lockCounterMap.set(targetElement, newCount);
 
-      if (previousStyles.scrollbarGutter) {
-        targetElement.style.scrollbarGutter = previousStyles.scrollbarGutter;
-      } else {
-        targetElement.style.removeProperty("scrollbar-gutter");
+    Object.assign(targetElement.style, {
+      overflow: "hidden",
+      scrollbarGutter: "stable",
+    });
+
+    return () => {
+      const currentCount = lockCounterMap.get(targetElement) || 0;
+      const newCount = Math.max(0, currentCount - 1);
+      lockCounterMap.set(targetElement, newCount);
+
+      if (newCount === 0) {
+        const previousStyles = styleBackupMap.get(targetElement) || {
+          overflow: "",
+          scrollbarGutter: "",
+        };
+
+        Object.assign(targetElement.style, previousStyles);
+        styleBackupMap.delete(targetElement);
       }
     };
   }, [isLocked]);
