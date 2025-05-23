@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { PostHogProvider } from "./providers";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://foundations.significa.co"),
   title: "Foundations by Significa - A base config for digital products.",
   description:
     "Explore Significa Foundations: our design and development principles, methodologies, and tools that ensure every digital product we create is purposeful, accessible, and beautifully built.",
