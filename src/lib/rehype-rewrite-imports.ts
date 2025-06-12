@@ -5,8 +5,8 @@ import { visit } from "unist-util-visit";
 export const rehypeRewriteImports = () => (tree: Node) => {
   visit(tree, "text", (node: { value: string }) => {
     node.value = node.value
-      // Replace @/foundations/ui with @/components
-      .replace(/@\/foundations\/ui/g, "@/components")
+      // Replace @/foundations/ui and @/foundations/components with @/components
+      .replace(/@\/foundations(\/ui|\/components)/g, "@/components")
       // Replace @/foundations/utils with @/lib
       .replace(/@\/foundations\/utils/g, "@/lib")
       // Remove duplicate folder names (e.g. @/components/button/button to @/components/button)

@@ -1,0 +1,149 @@
+export const metadata = {
+  title: "Checkboxes Hierarchy",
+  description:
+    "A hierarchical checkbox component that enables nested selection of parent and child items.",
+  preview: "checkboxes-hierarchy",
+  files: ["src/foundations/ui/checkboxes-hierarchy/checkboxes-hierarchy.tsx"],
+  dependencies: [
+    {
+      name: "Checkbox",
+      href: "/ui/checkbox",
+    },
+    {
+      name: "Input",
+      href: "/ui/input",
+    },
+  ],
+};
+
+## Features
+
+- **Two-Level Hierarchy**: Parent-child checkbox structure with collapsible sections (parents and their immediate children only)
+- **Smart Selection**: Parent checkboxes control all children, show indeterminate state for partial selection
+- **State Persistence**: Selected states persist when collapsing parents or filtering
+- **Flexible Disabling**: Support for disabling individual children or entire parent sections
+- **Search Functionality**: Filter by both parent and child labels, preserving matching hierarchies
+- **Select All Option**: One-click selection of all visible and enabled checkboxes
+
+## API Reference
+
+<PropsTable
+  definition={{
+    className: {
+      type: "string",
+      description: "Additional CSS classes to apply to the component.",
+    },
+    levels: {
+      type: "Entry[]",
+      description:
+        "Array of hierarchical entries defining the parent level. Each Entry contains label, value, and optional children array for the second level. The component only renders two levels (parents and their immediate children).",
+    },
+    defaultChildrenSelected: {
+      type: "string[]",
+      default: "[]",
+      description: "Array of child values that should be selected by default.",
+    },
+    defaultParentsOpened: {
+      type: "string[]",
+      default: "[]",
+      description: "Array of parent values that should be expanded by default.",
+    },
+    disabledChildren: {
+      type: "string[]",
+      default: "[]",
+      description: "Array of child values that should be disabled.",
+    },
+    disabledParents: {
+      type: "string[]",
+      default: "[]",
+      description: "Array of parent values that should be disabled.",
+    },
+    showSelectAllOption: {
+      type: "boolean",
+      default: "false",
+      description: "When true, displays a 'All' option at the top.",
+    },
+    selectAllLabel: {
+      type: "string",
+      default: "All",
+      description: "Label text for the select all option.",
+    },
+    searchable: {
+      type: "boolean",
+      default: "false",
+      description: "When true, displays a search input to filter options.",
+    },
+    searchPlaceholder: {
+      type: "string",
+      default: "Search...",
+      description: "Placeholder text for the search input.",
+    },
+    searchEmptyMessage: {
+      type: "string",
+      default: "No results found",
+      description: "Message shown when search returns no results.",
+    },
+    onSelectedChange: {
+      type: "(selectedValues: string[]) => void",
+      description:
+        "Callback function that receives an array of selected values when selections change.",
+    },
+  }}
+/>
+
+### Entry Type
+
+The `Entry` type is used to define the structure of each item in the hierarchy:
+
+```typescript
+type Entry = {
+  label: string; // Display text for the checkbox
+  value: string; // Unique identifier for the checkbox
+  children?: Omit<Entry, "children">[]; // Optional array of child entries (second level only)
+};
+```
+
+## Examples
+
+### Basic
+
+<Preview slug="checkboxes-hierarchy-basic" />
+
+### With Default Parents Opened
+
+<Preview slug="checkboxes-hierarchy-default-opened" />
+
+### With Default Children Selected
+
+<Preview slug="checkboxes-hierarchy-default-selected" />
+
+### With Disabled Children and Disabled Parents
+
+<Preview slug="checkboxes-hierarchy-disabled-options" />
+
+### With Select All Option
+
+<Preview slug="checkboxes-hierarchy-all-option" />
+
+### With Search
+
+<Preview slug="checkboxes-hierarchy-search" />
+
+## Best Practices
+
+1. **Initial Setup**:
+
+   - Pre-expand important sections using `defaultParentsOpened`
+   - Set commonly used items as selected with `defaultChildrenSelected`
+   - Disable rarely used options rather than hiding them
+
+2. **Search Usage**:
+
+   - Enable search for hierarchies with more than 7-8 items
+   - Provide clear `searchEmptyMessage` to guide users
+
+3. **Select All Usage**:
+
+   - Add Select All for lists where bulk selection is common
+   - Use clear `selectAllLabel` that matches your content
+   - Consider disabling instead of hiding irrelevant items

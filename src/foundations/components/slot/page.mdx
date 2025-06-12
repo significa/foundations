@@ -1,0 +1,127 @@
+export const metadata = {
+  title: "Slot",
+  description:
+    "A utility component that merges its props onto its immediate child.",
+  files: ["src/foundations/components/slot/slot.tsx"],
+};
+
+## Anatomy
+
+```tsx
+<Slot>
+  <component />
+</Slot>
+```
+
+## Features
+
+- **Prop Merging**: Automatically merges props from the Slot onto its child element
+- **Style Composition**: Combines styles from both Slot and child element
+- **ClassName Merging**: Intelligently merges classNames using the `cn` utility
+- **Ref Forwarding**: Properly forwards refs to the child element
+- **Type Safety**: Full TypeScript support with proper type inference
+
+## API Reference
+
+### Slot
+
+<PropsTable
+  definition={{
+    children: {
+      type: "ReactElement",
+      description: "A single React element to merge props onto.",
+      required: true,
+    },
+    ref: {
+      type: "React.Ref<any>",
+      description: "A ref to forward to the child element.",
+    },
+  }}
+/>
+
+### Slottable
+
+A utility component for handling multiple children in Slot-based components.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to render the child as a Slot.",
+      required: true,
+    },
+    child: {
+      type: "ReactNode",
+      description: "The child element to render.",
+      required: true,
+    },
+    children: {
+      type: "(child: ReactNode) => ReactElement",
+      description:
+        "Render function that receives the child and returns a React element.",
+      required: true,
+    },
+  }}
+/>
+
+## Examples
+
+### Basic Usage
+
+Merging props onto a button element.
+
+```tsx
+<Slot onClick={() => alert("clicked")} data-foo="bar">
+  <button>Click me</button>
+</Slot>
+
+/**
+ * Renders:
+ *  <button data-foo="bar" onClick={() => alert("clicked")}>
+ *   Click me
+ *  </button>
+ */
+```
+
+### Using Slottable
+
+Handling multiple children with the Slottable component.
+
+```tsx
+<Slottable asChild child={<button>Click me</button>}>
+  {(child) => (
+    <>
+      <span>sufix</span>
+      {child}
+      <span>prefix</span>
+    </>
+  )}
+</Slottable>
+
+/**
+ * Renders:
+ *  <button>
+ *   <span>sufix</span>
+ *   click me
+ *   <span>prefix</span>
+ *  </button>
+ */
+```
+
+## Common Use Cases
+
+- Creating polymorphic components
+- Building flexible UI components that can render as different elements
+- Implementing component composition patterns
+
+## Technical Details
+
+The Slot component uses React's `cloneElement` to merge props onto its child element. It handles:
+
+- Prop spreading
+- Style composition
+- ClassName merging
+- Ref forwarding
+- Type safety
+
+The implementation ensures that props from the Slot take precedence over the child's props, while still preserving the child's original functionality.

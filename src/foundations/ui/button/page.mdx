@@ -3,112 +3,80 @@ export const metadata = {
   description:
     "The Button component provides a consistent way to trigger actions across the application.",
   preview: "button",
-  files: [
-    "src/foundations/ui/button/button.tsx",
-    "src/foundations/ui/spinner/spinner.tsx",
-  ],
+  files: ["src/foundations/ui/button/button.tsx"],
   dependencies: [
     { name: "Spinner", href: "/ui/spinner" },
     {
-      name: "@radix-ui/react-slot",
-      href: "https://www.npmjs.com/package/@radix-ui/react-slot",
+      name: "Slot",
+      href: "/components/slot",
     },
   ],
 };
 
 ## API Reference
 
-| Prop       | Type      | Default   | Description                                                                                |
-| :--------- | :-------- | :-------- | :----------------------------------------------------------------------------------------- |
-| `variant`  | `string`  | `primary` | The visual style variant of the button - can be 'primary', 'secondary', 'outline', 'ghost' |
-| `size`     | `string`  | `md`      | The size of the button - can be 'sm', 'md', 'lg'                                           |
-| `disabled` | `boolean` | -         | Whether the button is disabled and cannot be interacted with                               |
-| `loading`  | `boolean` | -         | Whether to show a loading spinner inside the button                                        |
-| `asChild`  | `boolean` | -         | Whether to merge props onto a child element instead of creating a button element           |
-
-## Testing markdown
-
-A bit of text with `inline code`.
-
-Another text with javascript inline `const a = 1;{:js}` and `console.log('hello');{:js}`.
-
-```js {6,7} showLineNumbers "exports" title="tailwind.config.js" caption="footer here"
-module.exports = {
-  theme: {
-    extend: {
-      keyframes: {
-        marquee: {
-          "0%": { transform: "translateX(0%)" },
-          "100%": { transform: "translateX(-100%)" },
-        },
-      },
+<PropsTable
+  definition={{
+    variant: {
+      type: ['"primary"', '"outline"', '"ghost"', '"destructive"'],
+      default: '"primary"',
     },
-  },
-  plugins: [require("tailwindcss-animate")],
-};
-```
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+    },
+    square: {
+      type: "boolean",
+      default: "false",
+      description:
+        "Makes the button a square. Helpful when you have a button with only an icon inside.",
+    },
+    isLoading: {
+      type: "boolean",
+      default: "false",
+      description: "Replaces the button content with a spinner",
+    },
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
 
-The name of the function is `getStringLength{:.entity.name.function}`.
-
-## Usage
-
-The Button component provides a consistent way to trigger actions across the application. It supports various styles and states to match your UI needs.
-
-The Button component is built with customization in mind, allowing you to adapt its appearance and behavior to match your application's design system. It leverages CSS variables for theming and supports custom class names through the className prop.
-
-![Closeup of various colorful buttons arranged in a pattern](https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&q=80)
-
-### Basic Example
-
-A simple button can be created with minimal props:
-
-<Preview slug="button" />
-
-### Variants
-
-The button comes with several pre-defined variants:
-
-- Default - The standard button style
-- Secondary - Used for secondary actions
-- Outline - A bordered button style
-- Ghost - A minimal button style
-
----
+## Examples
 
 ### Sizes
 
-Available size options include:
+<Preview slug="button-sizes" />
 
-1. Small - Compact buttons
-2. Medium (default) - Standard size
-3. Large - More prominent buttons
-4. Icon - Square aspect ratio for icon-only buttons
+### Variants
 
-## Accessibility
+<Preview slug="button-variants" />
 
-Buttons are built with accessibility in mind, following [WAI-ARIA Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/). They support:
+### Loading
 
-- Keyboard navigation
-- ARIA states
-- Screen reader announcements
+<Preview slug="button-loading" />
 
-> **Important**: When using icons in buttons, always provide an aria-label for screen readers.
+### Icons
 
-### Best Practices
+<Preview slug="button-icons" />
 
-Here are some guidelines for using buttons effectively:
+### disabled
 
-- Use clear, action-oriented text
-- Maintain consistent styling within context
-- Consider visual hierarchy
-- Ensure adequate touch targets
+<Preview slug="button-disabled" />
 
----
+### As Link
 
-## API Reference
+<Preview slug="button-as-link" />
 
-The Button component accepts all standard HTML button attributes plus additional props for customization. See the [button interface](#button-interface) for details.
+## Best Practices
 
-### Custom Styling
+1. **Variants**:
 
-You can extend the button styles using the `className` prop:
+   - Use primary for main actions
+   - Use destructive for dangerous actions
+   - Use ghost for subtle actions
+
+2. **Accessibility**:
+
+   - Ensure clear button text
+   - Consider loading states

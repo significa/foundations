@@ -3,4 +3,58 @@ export const metadata = {
   description: "How to setup your project to use Foundations.",
 };
 
-Hello world
+## Prerequisites
+
+- A [React 19](https://react.dev/blog/2024/12/05/react-19) project.
+- [Tailwind 4](https://tailwindcss.com/) installed and configured.
+
+> We are using React 19. If you still on 18, please check the [React 19 migration guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide).  
+> A few common changes are:
+>
+> - `ref` is now a prop like the others, so we don't need to use `forwardRef`.
+> - `<Context>` as a provider: You can now render `<Context>` as a provider instead of `<Context.Provider>`.
+> - `use` can be used instead of `useContext`.
+> - `MutableRefObject` is now `RefObject`.
+>
+> It's possible to use these components in React 18, but you will have to adapt the code as needed.
+
+## Installation
+
+Install the core dependencies:
+
+```bash
+npm install cva@beta tailwind-merge
+```
+
+> We are using CVA 1.0.0 (beta). Check what's new in [their docs](https://beta.cva.style/getting-started/whats-new).
+
+## CSS Setup
+
+<Tabs>
+  <TabsItems>
+    <TabsItem>Automatic color scheme</TabsItem>
+    <TabsItem>With theme switcher</TabsItem>
+  </TabsItems>
+  <TabsPanels>
+    <TabsPanel>
+      <SourceCode file="src/foundations/setup/globals-prefers-schema.css" />
+    </TabsPanel>
+    <TabsPanel>
+      <SourceCode file="src/foundations/setup/globals-data-attr.css" />
+    </TabsPanel>
+  </TabsPanels>
+</Tabs>
+
+## Utilities Setup
+
+Create a `lib/utils.ts` file with our utility functions:
+
+<SourceCode file="src/lib/utils/index.ts" />
+
+## Icons Setup
+
+We use [Phosphor Icons](https://phosphoricons.com/) by default, but you can use any icon library of your choice:
+
+```bash
+npm install @phosphor-icons/react
+```

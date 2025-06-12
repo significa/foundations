@@ -1,12 +1,19 @@
 import { z } from "zod";
-import * as runtime from "react/jsx-runtime";
-import { evaluate } from "@mdx-js/mdx";
 
 // Metadata
 const metadataSchema = z.object({
   title: z.string({ required_error: "Title is required" }),
   description: z.string().optional(),
-  preview: z.string().optional(),
+  preview: z
+    .union([
+      z.string(),
+      z.object({
+        slug: z.string(),
+        mode: z.enum(["inline", "iframe"]).optional(),
+        layout: z.enum(["centered", "padded", "fullscreen"]).optional(),
+      }),
+    ])
+    .optional(),
   files: z.array(z.string()).optional(),
   dependencies: z
     .array(
@@ -19,10 +26,34 @@ const metadataSchema = z.object({
 });
 
 export const getMetadata = async (content: string) => {
-  const { metadata } = await evaluate(content, runtime);
+  const fragment = content.match(
+    /export\s+const\s+metadata\s*=\s*{[\s\S]*?}\s*;/
+  )?.[0];
 
-  if (!metadata) {
-    throw new Error("Metadata is required in docs pages");
+  if (!fragment) {
+    throw new Error(
+      "Could not find metadata export in docs page. Expected 'export const metadata = {...};'"
+    );
+  }
+
+  let metadata;
+  try {
+    metadata = Function(
+      `"use strict"; ${fragment.replace("export", "")}; return metadata`
+    )();
+  } catch (error) {
+    throw new Error(
+      `Failed to evaluate metadata: ${error instanceof Error ? error.message : "Unknown error"}`,
+      { cause: error }
+    );
+  }
+
+  if (!metadata || typeof metadata !== "object") {
+    const type = metadata === null ? "null" : typeof metadata;
+
+    throw new Error(
+      `Invalid metadata format. Expected metadata to be an object, got: ${type}`
+    );
   }
 
   try {
@@ -32,7 +63,8 @@ export const getMetadata = async (content: string) => {
       throw new Error(
         `Page metadata malformed: ${error.errors
           .map((e) => e.message)
-          .join(", ")}`
+          .join(", ")}`,
+        { cause: error }
       );
     }
 

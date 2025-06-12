@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@import "./foundations/setup/globals-data-attr.css";
 
 @font-face {
   font-family: "Inter";
@@ -15,63 +15,35 @@
 }
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono: "Geist Mono", ui-monospace, monospace;
-
-  --color-background: oklch(100% 0 0);
-  --color-background-secondary: oklch(95% 0 0);
-
-  --color-foreground: oklch(0% 0 0);
-  --color-foreground-secondary: oklch(65% 0 0);
-
-  --color-border: oklch(94% 0 0);
-  --color-border-hard: oklch(92% 0 0);
-
-  --color-ring: oklch(0% 0 0 / 0.1);
-
-  --shadow-*: initial;
-  --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);
-  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.02), 0 2px 4px oklch(0 0 0 / 0.02);
-  --shadow-md: 0 2px 3px oklch(0 0 0 / 0.02), 0 3px 6px oklch(0 0 0 / 0.02);
-  --shadow-lg: 0 2px 4px oklch(0 0 0 / 0.02), 0 4px 8px oklch(0 0 0 / 0.02),
-    0 8px 16px oklch(0 0 0 / 0.02);
-}
-
-[data-theme="dark"] {
-  color-scheme: dark;
-
-  --color-background: oklch(12% 0 0);
-  --color-background-secondary: oklch(22% 0 0);
-
-  --color-foreground: oklch(95% 0 0);
-  --color-foreground-secondary: oklch(53% 0 0);
-
-  --color-border: oklch(24% 0 0);
-  --color-border-hard: oklch(26% 0 0);
-
-  --color-ring: oklch(100% 0 0 / 0.12);
 }
 
 @layer base {
   *,
+  ::after,
   ::before,
-  ::after {
-    border-color: var(--color-border);
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
   }
 }
 
-body {
-  font-family: var(--font-sans);
-
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@custom-variant safari {
+  /* This selector is hacky and might break in the future */
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    @slot;
+  }
 }
 
 html,
 body {
   height: 100%;
+}
+
+html {
+  /* scroll-padding-top for sticky header */
+  @apply scroll-pt-16 md:scroll-pt-20;
 }

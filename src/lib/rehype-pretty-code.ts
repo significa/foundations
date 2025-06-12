@@ -1,4 +1,5 @@
 import { Options } from "rehype-pretty-code";
+import { getSingletonHighlighter } from "shiki";
 
 export const rehypePrettyCodeOptions: Options = {
   theme: {
@@ -10,4 +11,5 @@ export const rehypePrettyCodeOptions: Options = {
     block: "js",
     inline: "text",
   },
+  getHighlighter: getSingletonHighlighter,
 };

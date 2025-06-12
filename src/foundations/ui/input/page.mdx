@@ -1,0 +1,143 @@
+export const metadata = {
+  title: "Input",
+  description: "A simple text input component.",
+  files: ["src/foundations/ui/input/input.tsx"],
+  preview: "input",
+  dependencies: [
+    {
+      name: "composeRefs",
+      href: "/utils/compose-refs",
+    },
+  ],
+};
+
+## Features
+
+- **Multiple Variants**: Supports default and minimal styles
+- **Validation States**: Built-in support for invalid state
+- **Flexible Addons**: Support for prefix and suffix elements
+- **Interactive Elements**: Optional interactive addons for enhanced functionality
+
+## Anatomy
+
+```tsx
+<InputGroup>
+  <InputPrefix />
+  <Input />
+  <InputSuffix />
+</InputGroup>
+```
+
+## API Reference
+
+### Input
+
+Extends the `input` element.
+
+<PropsTable
+  definition={{
+    variant: {
+      type: ['"default"', '"minimal"'],
+      default: '"default"',
+      description: "The visual style variant of the input.",
+    },
+    invalid: {
+      type: "boolean",
+      description: "Whether the input is in an invalid state.",
+    },
+  }}
+/>
+
+### InputGroup
+
+Extends the `div` element.
+
+This component is used to wrap the input when you want to add a prefix or suffix (e.g.: search icon, currency symbol, etc.)
+
+### InputPrefix
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    interactive: {
+      type: "boolean",
+      description: "Activates pointer events in the element",
+    },
+  }}
+/>
+
+### InputSuffix
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    interactive: {
+      type: "boolean",
+      description: "Activates pointer events in the element",
+    },
+  }}
+/>
+
+## Examples
+
+### Simple
+
+Basic usage of the input component.
+
+<Preview slug="input" />
+
+### Minimal
+
+A more subtle variant with minimal styling.
+
+<Preview slug="input-minimal" />
+
+### Disabled
+
+Example of a disabled input state.
+
+<Preview slug="input-disabled" />
+
+### Invalid
+
+Showing validation state with an invalid input.
+
+<Preview slug="input-invalid" />
+
+### Icon
+
+Input with an icon prefix.
+
+<Preview slug="input-icon" />
+
+### Text Addons
+
+Using text prefixes and suffixes.
+
+<Preview slug="input-text-addons" />
+
+### Icon and Action
+
+Combining an icon prefix with an interactive suffix.
+
+<Preview slug="input-icon-action" />
+
+### Interactive Addon
+
+Example with clickable addon elements.
+
+<Preview slug="input-interactive-addon" />
+
+## Best Practices
+
+1. **Validation**:
+
+   - Provide clear error messages
+   - Use appropriate input types
+
+2. **Addons**:
+   - Keep icons and text addons relevant
+   - Ensure interactive elements are clearly clickable
+   - Maintain consistent spacing

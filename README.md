@@ -55,6 +55,12 @@ The `src/foundations` folder contains all the foundational content and follows a
 
 While developing, you can visit `/preview/[slug]` to open a `[slug].preview.tsx` file. This makes it easier to develop in isolation.
 
+You can include a `layout` query parameter to configure the preview layout:
+
+- `/preview/[slug]?layout=centered` (default): centers your component in the screen
+- `/preview/[slug]?layout=padded`: adds just a small padding to the page
+- `/preview/[slug]?layout=fullscreen`: displays your component fullscreen
+
 ### Metadata
 
 Each `page.mdx` file should include the following metadata structure:

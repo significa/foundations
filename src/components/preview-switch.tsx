@@ -2,6 +2,7 @@
 
 import { Button } from "@/foundations/ui/button/button";
 import { cn } from "@/lib/utils";
+import { ArrowSquareOut } from "@phosphor-icons/react";
 import { createContext, use, useState } from "react";
 
 const PreviewSwitchContext = createContext<{
@@ -13,11 +14,15 @@ const PreviewSwitchContext = createContext<{
 export const PreviewSwitch = ({
   children,
   className,
-  disabled,
+  withSource,
+  slug,
+  layout,
 }: {
   children: React.ReactNode;
   className?: string;
-  disabled?: boolean;
+  withSource?: boolean;
+  slug: string;
+  layout?: "padded" | "centered" | "fullscreen";
 }) => {
   const [view, setView] = useState<"preview" | "code">("preview");
 
@@ -29,16 +34,28 @@ export const PreviewSwitch = ({
       )}
     >
       <PreviewSwitchContext value={{ view }}>{children}</PreviewSwitchContext>
-      {!disabled && (
+      <div className="absolute right-2 bottom-2 z-10 flex items-center gap-2">
+        {withSource && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setView(view === "preview" ? "code" : "preview")}
+          >
+            {view === "preview" ? "View source" : "View preview"}
+          </Button>
+        )}
         <Button
-          className="absolute right-2 bottom-2 z-10"
+          asChild
           size="sm"
           variant="outline"
-          onClick={() => setView(view === "preview" ? "code" : "preview")}
+          square
+          aria-label="Open in new window"
         >
-          {view === "preview" ? "View source" : "View preview"}
+          <a href={`/preview/${slug}?layout=${layout}`} target="_blank">
+            <ArrowSquareOut />
+          </a>
         </Button>
-      )}
+      </div>
     </div>
   );
 };

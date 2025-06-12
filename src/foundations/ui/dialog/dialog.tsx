@@ -22,7 +22,7 @@ import {
   useRole,
   useTransitionStatus,
 } from "@floating-ui/react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 import { cva, VariantProps } from "cva";
 
 import { cn } from "@/lib/utils";
@@ -109,7 +109,7 @@ interface DialogProps extends UseDialogOptions {
 }
 
 /**
- * Dialog allows you to create modal dialogs that overlay the main content.
+ * Dialog allows you to create modal elements that overlay the main content.
  *
  * @example
  * ```
@@ -233,7 +233,12 @@ const DialogContent = ({
         data-state={state}
         className={cn(dialogOverlayStyle({ align }), wrapperClassName)}
       >
-        <FloatingFocusManager context={context}>
+        <FloatingFocusManager
+          modal
+          context={context}
+          initialFocus={-1} // don't focus the first element
+          outsideElementsInert
+        >
           <div
             aria-labelledby={labelId}
             aria-describedby={descriptionId}
@@ -421,7 +426,6 @@ const FallbackButton = ({
 };
 
 export {
-  useDialogContext,
   Dialog,
   DialogTrigger,
   DialogContent,

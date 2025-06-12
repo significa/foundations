@@ -1,0 +1,173 @@
+export const metadata = {
+  title: "Tabs",
+  description:
+    "A tab navigation component with smooth animations and keyboard support.",
+  files: ["src/foundations/ui/tabs/tabs.tsx"],
+  preview: "tabs",
+  dependencies: [
+    {
+      name: "Slot",
+      href: "/components/slot",
+    },
+    {
+      name: "motion",
+      href: "https://motion.dev",
+    },
+  ],
+};
+
+## Features
+
+- **Smooth Animations**: Animated transitions between tabs using Framer Motion
+- **Keyboard Navigation**: Full keyboard support for tab navigation
+- **Orientation Support**: Both horizontal and vertical layouts
+- **Controlled & Uncontrolled**: Flexible state management options
+- **ARIA Support**: Full accessibility implementation
+- **Custom Styling**: Extensible styling through className props
+
+## Anatomy
+
+```tsx
+<Tabs>
+  <TabsItems>
+    <TabsItem />
+  </TabsItems>
+  <TabsPanels>
+    <TabsPanel />
+  </TabsPanels>
+</Tabs>
+```
+
+## API Reference
+
+### Tabs
+
+The root container component that manages the state and behavior of the tabs.
+
+<PropsTable
+  definition={{
+    defaultIndex: {
+      type: "number",
+      description: "The index of the tab that should be active by default.",
+    },
+    selectedIndex: {
+      type: "number",
+      description: "The controlled index of the active tab.",
+    },
+    onChange: {
+      type: "(index: number) => void",
+      description: "Callback fired when the active tab changes.",
+    },
+    orientation: {
+      type: '"horizontal" | "vertical"',
+      description: "The orientation of the tabs.",
+      default: "horizontal",
+    },
+  }}
+/>
+
+### TabsItems
+
+The container for tab buttons. Provides proper ARIA attributes and keyboard navigation.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### TabsItem
+
+The individual tab button component.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+    disabled: {
+      type: "boolean",
+      description: "Whether the tab is disabled.",
+      default: "false",
+    },
+  }}
+/>
+
+### TabsPanels
+
+The container for tab panels. Manages the visibility of panels based on the selected tab.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### TabsPanel
+
+The individual tab panel component.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+## Accessibility
+
+The Tabs component follows the [WAI-ARIA Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). It implements all the required ARIA attributes and keyboard interactions.
+
+## Examples
+
+### Basic Usage
+
+A basic example of tabs with icons and labels.
+
+<Preview slug="tabs" />
+
+### Vertical Orientation
+
+Tabs can be oriented vertically using the `orientation` prop.
+
+<Preview slug="tabs-vertical" />
+
+### Controlled Tabs
+
+Example of controlled tabs with external state management.
+
+<Preview slug="tabs-controlled" />
+
+## Best Practices
+
+1. **Content Organization**:
+
+   - Use meaningful tab labels that describe their content
+   - Keep tab labels concise
+   - Order tabs in a logical sequence
+
+2. **Performance**:
+
+   - Lazy load tab content when possible
+   - Consider using dynamic imports for heavy content
+   - Use motion animations sparingly on low-end devices
+
+3. **Accessibility**:
+
+   - Ensure tab labels are descriptive
+   - Maintain a logical tab order
+   - Consider users who navigate with keyboard only
+
+4. **Mobile Considerations**:
+   - Ensure touch targets are large enough
+   - Consider scrollable tabs for many items
+   - Test with different screen sizes

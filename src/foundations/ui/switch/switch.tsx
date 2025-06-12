@@ -1,22 +1,14 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useField } from "@/foundations/ui/field/field";
 
 const Switch = ({
   className,
-  id,
   ...props
 }: Omit<React.ComponentPropsWithRef<"input">, "type">) => {
-  const fieldCtx = useField();
-
   return (
     <input
       type="checkbox"
-      id={id ?? fieldCtx?.id}
-      aria-errormessage={fieldCtx?.["aria-errormessage"]}
-      aria-describedby={fieldCtx?.["aria-describedby"]}
-      aria-labelledby={fieldCtx?.["aria-labelledby"]}
       className={cn(
         "appearance-none",
         "bg-foreground/20 relative h-6 w-11 cursor-pointer rounded-xl transition",

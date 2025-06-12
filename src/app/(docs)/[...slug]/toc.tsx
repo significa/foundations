@@ -20,7 +20,7 @@ export const TableOfContents = ({
           }
         });
       },
-      { rootMargin: "-56px 0px -80%" }
+      { rootMargin: "-56px 0px -80%" } // header height 56px
     );
 
     const headingElements = headings.map(({ id }) =>
@@ -41,7 +41,7 @@ export const TableOfContents = ({
       {headings.map(({ id, level, text }) => (
         <a
           className={cn(
-            "ml-[max(0px,calc(var(--spacing)*4*var(--level)))] inline-block py-0.5 opacity-60 transition",
+            "ml-[max(0px,calc(--spacing(4)*var(--level)))] inline-block py-0.5 opacity-60 transition",
             activeSlug === id && "opacity-100"
           )}
           key={id}

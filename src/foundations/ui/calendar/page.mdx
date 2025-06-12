@@ -1,0 +1,157 @@
+export const metadata = {
+  title: "Calendar",
+  description:
+    "A component for selecting a date or date range with month and year navigation controls",
+  files: ["src/foundations/ui/calendar/calendar.tsx"],
+  preview: "calendar",
+  dependencies: [
+    {
+      name: "Button",
+      href: "/ui/button",
+    },
+    {
+      name: "date-fns",
+      href: "https://date-fns.org/",
+    },
+  ],
+};
+
+## Features
+
+- **Multiple Modes**: Support for single date and date range selection
+- **Flexible Week Start**: Configurable first day of the week
+- **Internationalization**: Full locale support through Intl API
+- **Date Constraints**: Ability to disable specific dates
+- **Navigation Controls**: Month and year navigation with buttons
+
+## API Reference
+
+Extends the `div` element.
+
+### Single
+
+When `mode="single"{:tsx}` (or when ommited).
+
+<PropsTable
+  definition={{
+    mode: {
+      type: '"single"',
+      description: "Sets the calendar to single date selection mode.",
+      default: '"single"',
+    },
+    value: {
+      type: "Date",
+      description: "The currently selected date.",
+      required: true,
+    },
+    onDateChange: {
+      type: "(date: Date) => void",
+      description: "Callback fired when a date is selected.",
+      required: true,
+    },
+  }}
+/>
+
+### Range
+
+When `mode="range"{:tsx}`.
+
+<PropsTable
+  definition={{
+    mode: {
+      type: '"range"',
+      description: "Sets the calendar to date range selection mode.",
+      required: true,
+    },
+    value: {
+      type: "[Date, Date]",
+      description: "The currently selected date range (start and end dates).",
+      required: true,
+    },
+    onDateChange: {
+      type: "(dates: [Date, Date]) => void",
+      description: "Callback fired when a date range is selected.",
+      required: true,
+    },
+  }}
+/>
+
+### Common
+
+Applies to both `mode="single"{:tsx}` and `mode="range"{:tsx}`.
+
+<PropsTable
+  definition={{
+    startWeekOn: {
+      type: ["0", "1", "2", "3", "4", "5", "6"],
+      description: "The day the week starts on (0 = Sunday, 1 = Monday, etc.).",
+      default: "0",
+    },
+    locale: {
+      type: "Intl.LocalesArgument",
+      description: "The locale to use for formatting dates and weekday names.",
+      default: '"en"',
+    },
+    getIsDisabled: {
+      type: "(date: Date) => boolean",
+      description: "Function to determine if a date should be disabled.",
+    },
+  }}
+/>
+
+## Examples
+
+### Single Date
+
+Basic usage with single date selection.
+
+<Preview slug="calendar" />
+
+### Date range
+
+Selecting a range of dates.
+
+<Preview slug="calendar-range" />
+
+### Start week on Monday
+
+Configuring the calendar to start weeks on Monday.
+
+<Preview slug="calendar-start-day" />
+
+### Disable future dates
+
+Using getIsDisabled to prevent selecting future dates.
+
+<Preview slug="calendar-disable-future" />
+
+### Locale
+
+Using a different locale for date formatting.
+
+<Preview slug="calendar-locale" />
+
+## Best Practices
+
+1. **Date Handling**:
+
+   - Always validate dates before passing them to the component
+   - Consider timezone implications when handling dates
+   - Use consistent date formatting throughout your application
+
+2. **Accessibility**:
+
+   - Provide clear instructions for date selection
+   - Consider adding helper text for date format requirements
+   - Ensure error messages are clear when invalid dates are selected
+
+3. **Mobile Considerations**:
+
+   - Test touch interactions for date selection
+   - Ensure sufficient spacing between dates for touch targets
+   - Consider using native date pickers on mobile devices
+
+4. **Validation**:
+   - Implement clear validation rules using getIsDisabled
+   - Show visual feedback for invalid date selections
+   - Consider date ranges that make sense for your use case

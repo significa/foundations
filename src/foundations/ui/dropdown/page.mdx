@@ -1,0 +1,191 @@
+export const metadata = {
+  title: "Dropdown",
+  description: "A floating menu that displays a list of options.",
+  files: ["src/foundations/ui/dropdown/dropdown.tsx"],
+  preview: "dropdown",
+  dependencies: [
+    {
+      name: "Popover",
+      href: "/ui/popover",
+    },
+    {
+      name: "useStableCallback",
+      href: "/hooks/use-stable-callback",
+    },
+    {
+      name: "Slot",
+      href: "/components/slot",
+    },
+    {
+      name: "@floating-ui/react",
+      href: "https://floating-ui.com/docs/react",
+    },
+  ],
+};
+
+## Features
+
+- **Smart Positioning**: Automatically adjusts position to stay in view
+- **Focus Management**: Traps focus within the menu when opened
+- **Section Support**: Group related items with optional headings
+- **Search**: Built-in search input for filtering items
+- **Multiple Selection**: Support for selecting multiple items
+- **Custom Items**: Flexible API for custom item rendering
+
+## Anatomy
+
+```tsx
+<Dropdown>
+  <DropdownTrigger />
+  <DropdownItems>
+    <DropdownSection>
+      <DropdownHeading />
+      <DropdownItem />
+      <DropdownDivider />
+      <DropdownItem />
+    </DropdownSection>
+    <DropdownSearchInput />
+    <DropdownEmpty />
+  </DropdownItems>
+</Dropdown>
+```
+
+## API Reference
+
+### Dropdown
+
+Extends the [`Popover`](/ui/popover) component.
+
+<PropsTable
+  definition={{
+    modal: {
+      type: "boolean",
+      description: "Whether to trap focus inside the dropdown.",
+      default: "true",
+    },
+    placement: {
+      type: "Placement",
+      description: "The placement of the dropdown relative to its trigger.",
+      default: '"bottom-start"',
+    },
+    onOpenChange: {
+      type: "(open: boolean) => void",
+      description: "Callback fired when the dropdown opens or closes.",
+    },
+  }}
+/>
+
+### DropdownTrigger
+
+Extends the [`PopoverTrigger`](/ui/popover#popovertrigger) component.
+
+### DropdownItems
+
+Extends the [`PopoverContent`](/ui/popover#popovercontent) component.
+
+The content will be rendered in a portal and will be positioned relative to the trigger.
+
+### DropdownItem
+
+Extends the `button` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to render the item as its child element.",
+    },
+    onSelect: {
+      type: "(e: { preventDefault: () => void }) => void",
+      description:
+        "Callback fired when the item is selected. Call `e.preventDefault()` to prevent the dropdown from closing.",
+    },
+  }}
+/>
+
+### DropdownSection
+
+Extends the `div` element.
+
+Groups related items together with an optional heading.
+
+### DropdownHeading
+
+Extends the `div` element.
+
+A heading for a section of items.
+
+### DropdownDivider
+
+A horizontal line to separate groups of items.
+
+### DropdownSearchInput
+
+Extends the [`PopoverSearchInput`](/ui/popover#popoversearchinput) component.
+
+A styled input with a search icon, useful for filtering items.
+
+### DropdownEmpty
+
+Extends the [`PopoverEmpty`](/ui/popover#popoverempty) component.
+
+A styled container for empty state messages.
+
+## Examples
+
+### Simple
+
+Basic usage with a list of items.
+
+<Preview slug="dropdown" />
+
+### With Sections
+
+Using sections to group related items.
+
+<Preview slug="dropdown-sections" />
+
+### With Icons
+
+Adding icons to dropdown items.
+
+<Preview slug="dropdown-icons" />
+
+### Multiple Selection
+
+Use checkboxes and prevent the dropdown from closing on selection to allow multiple items to be selected.
+
+<Preview slug="dropdown-multiple" />
+
+### Search with Create Option
+
+A complex example showing search functionality with the ability to create new items, and displaying selected items with avatars.
+
+<Preview slug="dropdown-search-create" />
+
+### Custom Items
+
+Using custom item rendering for complex layouts.
+
+<Preview slug="dropdown-custom-items" />
+
+## Best Practices
+
+1. **Content Organization**:
+
+   - Group related items into sections
+   - Use clear, descriptive labels
+   - Keep item text concise
+   - Consider using icons for visual clarity
+
+2. **Interaction Design**:
+
+   - Use multiple selection when appropriate
+   - Add search for long lists
+   - Show empty states for filtered results
+   - Consider keyboard users
+
+3. **Mobile Considerations**:
+   - Ensure touch targets are large enough
+   - Test on different screen sizes
+   - Consider native alternatives for complex cases

@@ -1,0 +1,58 @@
+export const metadata = {
+  title: "Divider",
+  description: "Dividers are used to visually separate content in a UI.",
+  files: ["src/foundations/ui/divider/divider.tsx"],
+  preview: "divider",
+};
+
+## Features
+
+- **Multiple Orientations**: Supports both horizontal and vertical layouts
+- **Semantic or Decorative**: Can be used as a semantic separator or purely decorative element
+- **Accessible**: Proper ARIA attributes for semantic dividers
+
+## API Reference
+
+<PropsTable
+  definition={{
+    orientation: {
+      type: ['"horizontal"', '"vertical"'],
+      description: "The orientation of the divider.",
+    },
+    decorative: {
+      type: "boolean",
+      description:
+        "Whether the divider is decorative. Doesn't add aria-orientation or role.",
+    },
+  }}
+/>
+
+## Examples
+
+### Horizontal
+
+Basic usage showing a horizontal divider.
+
+<Preview slug="divider" />
+
+### Vertical
+
+Example of a vertical divider between elements.
+
+<Preview slug="divider-vertical" />
+
+## Best Practices
+
+1. **Semantic Usage**:
+
+   - Use semantic dividers when separating distinct sections
+   - Use decorative dividers for visual separation only
+
+2. **Spacing**:
+
+   - Maintain consistent spacing around dividers
+   - Consider using margins instead of dividers for simple spacing
+
+3. **Visual Design**:
+   - Keep dividers subtle and not too prominent
+   - Ensure sufficient contrast with background

@@ -1,0 +1,65 @@
+export const metadata = {
+  title: "useIntersectionObserver",
+  description:
+    "A hook for observing the intersection of an element (or array of elements) with the viewport",
+  files: [
+    "src/foundations/hooks/use-intersection-observer/use-intersection-observer.ts",
+  ],
+};
+
+## API Reference
+
+<PropsTable
+  definition={{
+    options: {
+      type: "{ threshold?: number | number[], root?: RefObject<HTMLElement | null> | null, rootMargin?: string }",
+      description: "The options to pass to the IntersectionObserver.",
+    },
+    callback: {
+      type: "(isIntersecting: boolean, entry?: IntersectionObserverEntry) => void",
+      description: "The callback to call when the element(s) intersect.",
+    },
+  }}
+/>
+
+The hook returns a tuple containing:
+
+- `ref` (`RefObject<HTMLElement>`): A ref object to attach to the element(s) you want to observe
+- An object containing:
+  - `isIntersecting` (`boolean`): Whether the element is currently intersecting with the viewport
+  - `entry` (`IntersectionObserverEntry`): The full intersection observer entry with additional details
+
+**When a callback is provided**, the states (`isIntersecting` and `entry`) are never updated. This provides flexibility in handling intersection events - you can either react to changes declaratively using the returned state, or use the callback for more performant, render-independent updates.
+
+## Examples
+
+### Basic
+
+```tsx
+const Example = () => {
+  const [ref, { isIntersecting }] = useIntersectionObserver<HTMLDivElement>();
+
+  return (
+    <div ref={ref}>
+      {isIntersecting ? "Element is visible" : "Element is hidden"}
+    </div>
+  );
+};
+```
+
+### As Callback
+
+```tsx
+const Example = () => {
+  const [ref] = useIntersectionObserver<HTMLDivElement>(
+    { threshold: 0.5 },
+    (isIntersecting) => {
+      if (isIntersecting) {
+        window.dataLayer?.push({ event: "elementVisible" });
+      }
+    }
+  );
+
+  return <div ref={ref}>Element</div>;
+};
+```

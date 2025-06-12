@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { add, format, isSameDay, isSameMonth } from "date-fns";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { add, format, isSameDay, isSameMonth } from "date-fns";
+import { useMemo, useState } from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/foundations/ui/button/button";
+import { cn } from "@/lib/utils";
 
 /**
  * Generate a matrix of dates for a given month
@@ -282,6 +282,7 @@ const Calendar = ({
 
               return (
                 <button
+                  type="button"
                   key={ii}
                   aria-label={format(day, "yyyy-MM-dd")}
                   data-other-month={!isSameMonth(day, viewDate) || undefined}
@@ -292,7 +293,7 @@ const Calendar = ({
                   data-today={isToday || undefined}
                   disabled={getIsDisabled(day)}
                   className={cn(
-                    "group text-foreground relative isolate flex h-9 w-full min-w-9 items-center justify-center outline-none disabled:pointer-events-none disabled:opacity-30"
+                    "group text-foreground relative isolate flex h-9 w-full min-w-9 cursor-pointer items-center justify-center outline-none disabled:pointer-events-none disabled:opacity-30"
                   )}
                   onClick={() => handleDaySelect(day)}
                   onMouseEnter={() => handleDayHover(day)}
@@ -302,7 +303,7 @@ const Calendar = ({
                   <div
                     className={cn(
                       // base
-                      "ring-ring text-foreground/80 z-10 flex size-8 cursor-pointer items-center justify-center rounded-lg border border-transparent text-sm font-medium tabular-nums transition-shadow",
+                      "ring-ring text-foreground/80 z-10 flex size-8 items-center justify-center rounded-lg border border-transparent text-sm font-medium tabular-nums transition-shadow",
                       // hover
                       "group-hover:bg-background-secondary group-hover:text-foreground",
                       // selected
@@ -376,6 +377,7 @@ const HeaderTextButton = ({
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
+      type="button"
       className={cn(
         "ring-ring text-foreground/80 hover:text-foreground focus-visible:text-foreground cursor-pointer rounded-sm font-medium transition outline-none focus-visible:ring-4",
         className
@@ -394,6 +396,7 @@ const YearMonthButton = ({
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
+      type="button"
       className={cn(
         "ring-ring text-foreground/80 hover:bg-background-secondary hover:text-foreground focus-visible:text-foreground h-8 w-full cursor-pointer rounded-lg text-sm font-medium transition outline-none focus-visible:ring-4",
         className

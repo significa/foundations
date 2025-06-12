@@ -1,14 +1,8 @@
 "use client";
 
-import {
-  createContext,
-  FC,
-  HTMLAttributes,
-  PropsWithChildren,
-  use,
-} from "react";
+import { FC, HTMLAttributes, PropsWithChildren } from "react";
 import { VariantProps } from "cva";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 
 import { cva, cn } from "@/lib/utils";
 
@@ -39,13 +33,6 @@ interface BadgeProps extends React.ComponentPropsWithRef<"div"> {
   asChild?: boolean;
 }
 
-const BadgePropsContext = createContext<
-  Required<Pick<BadgeProps, "variant" | "size">>
->({
-  variant: "neutral",
-  size: "md",
-});
-
 const Badge = ({
   ref,
   children,
@@ -58,15 +45,13 @@ const Badge = ({
   const Comp = asChild ? Slot : "div";
 
   return (
-    <BadgePropsContext value={{ variant, size }}>
-      <Comp
-        ref={ref}
-        className={cn(badgeVariants({ variant, size }), className)}
-        {...rest}
-      >
-        {children}
-      </Comp>
-    </BadgePropsContext>
+    <Comp
+      ref={ref}
+      className={cn(badgeVariants({ variant, size }), className)}
+      {...rest}
+    >
+      {children}
+    </Comp>
   );
 };
 
@@ -103,36 +88,4 @@ const BadgeStatus: FC<PropsWithChildren<BadgeStatusProps>> = ({
   );
 };
 
-type BadgeAddonProps = HTMLAttributes<HTMLDivElement>;
-
-const addonVariants = cva({
-  base: "inline-flex h-5 items-center justify-center gap-1 bg-background px-1.5 text-foreground-secondary ring-1 ring-inset first:-ml-2 first:rounded-l-full last:-mr-2 last:rounded-r-full [&:first-child>[data-badge-icon]:first-child]:-ml-0.5 [&:last-child>[data-badge-icon]:last-child]:-mr-0.5",
-  variants: {
-    variant: {
-      neutral: "ring-foreground/20",
-      success: "ring-emerald-600/20",
-      error: "ring-orange-600/20",
-      warning: "ring-yellow-600/20",
-      info: "ring-blue-700/10",
-    },
-  },
-});
-
-const BadgeAddon: FC<PropsWithChildren<BadgeAddonProps>> = ({
-  children,
-  className,
-  ...rest
-}) => {
-  const context = use(BadgePropsContext);
-
-  return (
-    <div
-      className={cn(addonVariants({ variant: context.variant }), className)}
-      {...rest}
-    >
-      {children}
-    </div>
-  );
-};
-
-export { Badge, BadgeAddon, BadgeIcon, BadgeStatus };
+export { Badge, BadgeIcon, BadgeStatus };

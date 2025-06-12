@@ -1,0 +1,135 @@
+export const metadata = {
+  title: "Select",
+  description:
+    "A native select component with consistent styling across browsers.",
+  files: ["src/foundations/ui/select/select.tsx"],
+  preview: "select",
+};
+
+## Features
+
+- **Native Element**: Uses the browser's native select element for optimal mobile support
+- **Consistent Styling**: Normalized appearance across different browsers
+- **Form Integration**: Works seamlessly with form libraries and native form validation
+- **Prefix Support**: Optional prefix for additional context
+- **Variants**: Supports default and minimal visual styles
+- **Validation**: Built-in invalid state styling
+
+## Anatomy
+
+```tsx
+<SelectGroup>
+  <SelectPrefix />
+  <Select>
+    <option>
+  </Select>
+</SelectGroup>
+```
+
+## API Reference
+
+### Select
+
+Extends the `select` element.
+
+<PropsTable
+  definition={{
+    variant: {
+      type: ['"default"', '"minimal"'],
+      description: "The visual style variant to use.",
+      default: '"default"',
+    },
+    invalid: {
+      type: "boolean",
+      description: "Whether the select is in an invalid state.",
+      default: "false",
+    },
+  }}
+/>
+
+### SelectGroup
+
+Extends the `div` element.
+
+A wrapper component that provides proper spacing and layout for the select and its prefix.
+
+### SelectPrefix
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    interactive: {
+      type: "boolean",
+      description:
+        "When true, the prefix can be clicked and will receive focus.",
+      default: "false",
+    },
+  }}
+/>
+
+## Accessibility
+
+The Select component uses the native `<select>` element, which provides excellent accessibility out of the box:
+
+- Full keyboard navigation support
+- Screen reader announcements
+- Mobile-friendly interaction
+- Native form integration
+
+## Examples
+
+### Simple
+
+Basic usage with a list of options.
+
+<Preview slug="select" />
+
+### Minimal
+
+Using the minimal variant without borders.
+
+<Preview slug="select-minimal" />
+
+### Disabled
+
+The select in a disabled state.
+
+<Preview slug="select-disabled" />
+
+### Invalid
+
+The select showing an invalid state.
+
+<Preview slug="select-invalid" />
+
+### Prefix
+
+Using a prefix to provide additional context.
+
+<Preview slug="select-prefix" />
+
+## Best Practices
+
+1. **Use Listbox for Complex Cases**:
+
+   - If you need custom option rendering
+   - If you need search functionality
+   - If you need multiple selection
+   - If you need complex keyboard interactions
+
+2. **Mobile Considerations**:
+
+   - The native select provides the best experience on mobile devices
+   - It automatically adapts to the platform's native picker
+
+3. **Form Integration**:
+
+   - Use the `required` attribute for required fields
+   - Use the `name` attribute for form submission
+   - Use the `invalid` prop in conjunction with form validation
+
+4. **Accessibility**:
+   - Always provide a visible label or aria-label
+   - Group related selects with fieldset and legend
+   - Use aria-describedby for additional descriptions

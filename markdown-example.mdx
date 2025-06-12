@@ -119,6 +119,20 @@ See [rehype-pretty](https://rehype-pretty.pages.dev/) for more information.
 
 ## Some components
 
+### PropsTable
+
+Renders a table of props for a component.
+
+<PropsTable
+  definition={{
+    variant: {
+      type: ["neutral", "success", "error", "warning", "info"], // can be just a string
+      default: "neutral", // optional
+      description: "The visual style variant of the badge", // optional
+    },
+  }}
+/>
+
 ### Button
 
 A simple button component.

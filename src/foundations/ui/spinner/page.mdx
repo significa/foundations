@@ -1,53 +1,42 @@
 export const metadata = {
   title: "Spinner",
-  description: "A spinner component for loading states",
+  description: "A component to display a loading state.",
+  files: ["src/foundations/ui/spinner/spinner.tsx"],
   preview: "spinner",
 };
 
-# Install
+## API Reference
 
-Some text here
+Extends the `div` element.
 
-# Tabs
+<PropsTable
+  definition={{
+    size: {
+      type: ["xs", "sm", "md", "lg"],
+      default: "md",
+    },
+  }}
+/>
 
-<Tabs>
-  <TabsItems>
-    <TabsItem>
-      <span>Users</span>
-    </TabsItem>
-    <TabsItem>
-      <span>Billing</span>
-    </TabsItem>
-    <TabsItem>
-      <span>Settings</span>
-    </TabsItem>
-  </TabsItems>
-  <TabsPanels>
-    <TabsPanel>
-      <SourceCode file="src/foundations/ui/spinner/spinner.tsx" expandable />
-    </TabsPanel>
-    <TabsPanel>Panel 2</TabsPanel>
-    <TabsPanel>Panel 3</TabsPanel>
-  </TabsPanels>
-</Tabs>
+## Examples
 
-# Source code tree
+### Sizes
 
-<FileTree initialPath="components/spinner.tsx">
-  <FileTreeFile name="top.tsx">
-    <SourceCode file="src/foundations/ui/button/button.tsx" />
-  </FileTreeFile>
-  <FileTreeFolder name="components">
-    <FileTreeFile name="button.tsx">
-      <SourceCode file="src/foundations/ui/spinner/spinner.tsx" />
-    </FileTreeFile>
-    <FileTreeFile name="spinner.tsx">
-      <SourceCode file="src/foundations/ui/spinner/spinner.tsx" />
-    </FileTreeFile>
-    <FileTreeFolder name="ui">
-      <FileTreeFile name="spinner.tsx">
-        <SourceCode file="src/foundations/ui/spinner/spinner.tsx" />
-      </FileTreeFile>
-    </FileTreeFolder>
-  </FileTreeFolder>
-</FileTree>
+<Preview slug="spinner-sizes" />
+
+### Color
+
+<Preview slug="spinner-color" />
+
+## Best Practices
+
+1. **Usage**:
+
+   - Use appropriate size for context
+   - Consider using Skeleton for content loading
+   - Maintain consistent colors with theme
+
+2. **Accessibility**:
+
+   - Include aria-label for screen readers
+   - Consider reduced motion preferences

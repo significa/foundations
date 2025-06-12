@@ -1,0 +1,79 @@
+export const metadata = {
+  title: "Badge",
+  description:
+    "A Badge component with the possibility of adding an icon and a status",
+  files: ["src/foundations/ui/badge/badge.tsx"],
+  preview: "badge",
+  dependencies: [
+    {
+      name: "Slot",
+      href: "/components/slot",
+    },
+  ],
+};
+
+## Anatomy
+
+```tsx
+<Badge>
+  <BadgeIcon />
+  <BadgeStatus />
+</Badge>
+```
+
+## API Reference
+
+### Badge
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    variant: {
+      default: '"neutral"',
+      type: ['"neutral"', '"success"', '"error"', '"warning"', '"info"'],
+    },
+    size: {
+      default: '"md"',
+      type: ['"xs"', '"sm"', '"md"'],
+    },
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### BadgeIcon
+
+Extends the `div` element.
+
+### BadgeStatus
+
+Extends the `div` element.
+
+## Examples
+
+### Variants
+
+<Preview slug="badge-variants" />
+
+### Sizes
+
+<Preview slug="badge-sizes" />
+
+### With icon and status
+
+<Preview slug="badge" />
+
+## Best Practices
+
+1. **Usage**:
+
+   - Use appropriate variants for context
+   - Keep content concise
+   - Consider icon visibility at small sizes
+
+2. **Accessibility**:
+
+   - Ensure sufficient color contrast
+   - Provide clear meaning through text

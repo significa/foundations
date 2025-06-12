@@ -1,0 +1,85 @@
+export const metadata = {
+  title: "Avatar",
+  description:
+    "A visual representation of a user that displays initials when an image is unavailable",
+  files: ["src/foundations/ui/avatar/avatar.tsx"],
+  preview: "avatar",
+};
+
+## Anatomy
+
+```tsx
+<Avatar>
+  <AvatarImage />
+  <AvatarFallback />
+</Avatar>
+```
+
+## API Reference
+
+### Avatar
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    size: {
+      default: '"md"',
+      type: ['"2xs"', '"xs"', '"sm"', '"md"', '"lg"', '"xl"', '"2xl"', '"3xl"'],
+    },
+    variant: {
+      default: '"circle"',
+      type: ['"circle"', '"square"'],
+    },
+  }}
+/>
+
+### AvatarImage
+
+Extends the `img` element.
+
+<PropsTable
+  definition={{
+    src: {
+      type: "string",
+    },
+  }}
+/>
+
+### AvatarFallback
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    children: {
+      type: "string",
+    },
+  }}
+/>
+
+## Examples
+
+### Simple
+
+<Preview slug="avatar" />
+
+### Fallback
+
+<Preview slug="avatar-fallback" />
+
+### Sizes
+
+<Preview slug="avatar-sizes" />
+
+### Broken Image
+
+<Preview slug="avatar-broken-image" />
+
+### On top of media
+
+<Preview slug="avatar-on-top-of-media" />
+
+### Custom color
+
+<Preview slug="avatar-custom-color" />

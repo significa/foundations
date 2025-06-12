@@ -14,24 +14,19 @@ import { VariantProps } from "cva";
 import { cva, cn } from "@/lib/utils";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 
-import { useField } from "@/foundations/ui/field/field";
-
-const dateTypes = ["date", "datetime-local", "month", "time", "week"];
-
 const inputStyle = cva({
   base: [
     "transition",
     "w-full border h-10 rounded-xl px-4 py-1 text-base font-medium",
     "focus:outline-none focus-visible:border-foreground/20 focus-visible:ring-4 focus-visible:ring-ring focus-visible:text-foreground disabled:cursor-not-allowed disabled:opacity-50 text-foreground/80 placeholder:text-foreground-secondary data-[invalid]:border-red-500 data-[invalid]:hover:border-red-600 data-[invalid]:focus-visible:border-red-500 data-[invalid]:focus-visible:ring-red-500/20",
+    "pl-[var(--prefix-width,calc(var(--spacing)*4))]",
+    "pr-[var(--suffix-width,calc(var(--spacing)*4))]",
   ],
   variants: {
     variant: {
       default: "border-border bg-background hover:border-border-hard shadow-xs",
       minimal:
         "border-transparent bg-transparent hover:bg-background-secondary focus-visible:bg-background",
-      // TODO: Remove 'ultra-minimal' for foundations
-      "ultra-minimal":
-        "ring-0 border-0 p-0 h-auto data-invalid:text-red-500 data-invalid:placeholder:text-red-500/50 rounded-none outline-none focus-visible:ring-0",
     },
   },
   defaultVariants: {
@@ -45,56 +40,12 @@ interface InputProps
   variant?: VariantProps<typeof inputStyle>["variant"];
 }
 
-const Input = ({
-  className,
-  invalid: propsInvalid,
-  variant,
-  id,
-  ...props
-}: InputProps) => {
-  const { prefixWidth, suffixWidth } = use(InputGroupContext);
-  const fieldCtx = useField();
-
-  const invalid =
-    propsInvalid || !!fieldCtx?.["aria-errormessage"] || undefined;
-
+const Input = ({ className, invalid, variant, ...props }: InputProps) => {
   return (
     <input
-      id={id ?? fieldCtx?.id}
-      aria-errormessage={fieldCtx?.["aria-errormessage"]}
-      aria-describedby={fieldCtx?.["aria-describedby"]}
-      aria-labelledby={fieldCtx?.["aria-labelledby"]}
       data-invalid={invalid}
       aria-invalid={invalid}
-      className={cn(
-        inputStyle({ variant }),
-        prefixWidth > 0 &&
-          "pl-[calc(var(--prefix-width)+theme(spacing.4)+theme(spacing[1.5]))]",
-        suffixWidth > 0 &&
-          "pr-[calc(var(--suffix-width)+theme(spacing.4)+theme(spacing[1.5]))]",
-        props.type &&
-          dateTypes.includes(props.type) && [
-            "[&::-webkit-datetime-edit-fields-wrapper]:p-0",
-            "[&::-webkit-date-and-time-value]:min-h-[1.5em]",
-            "[&::-webkit-datetime-edit]:inline-flex",
-            "[&::-webkit-datetime-edit]:p-0",
-            "[&::-webkit-datetime-edit-year-field]:p-0",
-            "[&::-webkit-datetime-edit-month-field]:p-0",
-            "[&::-webkit-datetime-edit-day-field]:p-0",
-            "[&::-webkit-datetime-edit-hour-field]:p-0",
-            "[&::-webkit-datetime-edit-minute-field]:p-0",
-            "[&::-webkit-datetime-edit-second-field]:p-0",
-            "[&::-webkit-datetime-edit-millisecond-field]:p-0",
-            "[&::-webkit-datetime-edit-meridiem-field]:p-0",
-            "[&::-webkit-calendar-picker-indicator]:hidden",
-          ],
-        props.type === "number" && [
-          "[&::-webkit-inner-spin-button]:hidden",
-          "[&::-webkit-outer-spin-button]:hidden",
-          "[appearance:textfield]",
-        ],
-        className
-      )}
+      className={cn(inputStyle({ variant }), className)}
       {...props}
     />
   );
@@ -156,8 +107,12 @@ const InputGroup = ({
       <div
         className={cn("relative", className)}
         style={{
-          "--prefix-width": `${prefixWidth}px`,
-          "--suffix-width": `${suffixWidth}px`,
+          ...(prefixWidth > 0 && {
+            "--prefix-width": `calc(${prefixWidth}px + var(--spacing)*5.5)`,
+          }),
+          ...(suffixWidth > 0 && {
+            "--suffix-width": `calc(${suffixWidth}px + var(--spacing)*5.5)`,
+          }),
           ...style,
         }}
         {...props}

@@ -2,7 +2,7 @@
 
 import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
 import { createContext, use, useId, useState } from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/foundations/components/slot/slot";
 
 import { cn } from "@/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";
@@ -135,7 +135,10 @@ const DisclosureContent = ({
   children,
   className,
   ...props
-}: Omit<HTMLMotionProps<"div">, "id"> & { className?: string }) => {
+}: Omit<HTMLMotionProps<"div">, "id" | "children"> & {
+  className?: string;
+  children: React.ReactNode;
+}) => {
   const { open, id } = useDisclosureContext();
 
   return (
@@ -158,7 +161,10 @@ const DisclosureContent = ({
   );
 };
 
-const DisclosureChevron = () => {
+const DisclosureChevron = ({
+  className,
+  ...props
+}: React.ComponentPropsWithRef<"span">) => {
   const { open } = useDisclosureContext();
 
   return (
@@ -166,8 +172,10 @@ const DisclosureChevron = () => {
       aria-hidden="true"
       className={cn(
         "ease-out-cubic p-1 transition-transform duration-100",
-        open && "rotate-180"
+        open && "rotate-180",
+        className
       )}
+      {...props}
     >
       <CaretDown />
     </span>
