@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import type { PagefindSearchOptions, PagefindSearchResult, PagefindSearchResults } from '@/lib/pagefind-types';
 
@@ -31,7 +31,7 @@ export const SearchPage = () => {
     loadPagefind();
   }, [pagefindInstance]);
 
-  async function handleSearch() {
+  const handleSearch = useCallback(async () => {
     if (pagefindInstance) {
       const search = await pagefindInstance.debouncedSearch(query, 300);
       if (search === null) {
@@ -40,18 +40,17 @@ export const SearchPage = () => {
         setResults(search.results);
       }
     }
-  }
+  }, [pagefindInstance, query]);
 
   useEffect(() => {
     const getResults = async () => {
       for (const result of results) {
         const data = await result.data();
-        console.log(`${data.meta.title}`, data.sub_results);      
+        console.log(`${data.meta.title}`, data.sub_results, data.url);
       }
     }
 
     getResults();
-
   }, [results]);
 
   return (
@@ -60,8 +59,12 @@ export const SearchPage = () => {
         type="text"
         placeholder="Search..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onInput={handleSearch}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          if (e.target.value.trim()) {
+            handleSearch();
+          }
+        }}
       />
     </div>
   );
