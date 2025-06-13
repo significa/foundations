@@ -221,6 +221,10 @@ export const navigation: NavigationItem[] = [
         title: "useBreakpoint",
         href: "/hooks/use-breakpoint",
       },
+      {
+        title: "useDetectDevice",
+        href: "/hooks/use-detect-device",
+      },
     ],
   },
   {
