@@ -1,10 +1,7 @@
 export const metadata = {
   title: "useDetectDevice",
-  description:
-    "A hook for detecting the user's device type and platform",
-  files: [
-    "src/foundations/hooks/use-detect-device/use-detect-device.tsx",
-  ],
+  description: "A hook for detecting the user's device type and platform",
+  files: ["src/foundations/hooks/use-detect-device/use-detect-device.tsx"],
 };
 
 ## Features
@@ -22,11 +19,13 @@ The hook returns an object with the following methods:
   definition={{
     isMobileDevice: {
       type: "() => boolean",
-      description: "Returns true if the device is a mobile device (Android, iOS, Opera Mini, or Windows Mobile).",
+      description:
+        "Returns true if the device is a mobile device (Android, iOS, Opera Mini, or Windows Mobile).",
     },
     isDesktopDevice: {
       type: "() => boolean",
-      description: "Returns true if the device is a desktop device and not in SSR mode.",
+      description:
+        "Returns true if the device is a desktop device and not in SSR mode.",
     },
     isAndroidDevice: {
       type: "() => boolean",
@@ -34,11 +33,13 @@ The hook returns an object with the following methods:
     },
     isIosDevice: {
       type: "() => boolean",
-      description: "Returns true if the device is running iOS (iPhone, iPad, or iPod).",
+      description:
+        "Returns true if the device is running iOS (iPhone, iPad, or iPod).",
     },
     isSSRDevice: {
       type: "() => boolean",
-      description: "Returns true if the code is running in a server-side rendering environment.",
+      description:
+        "Returns true if the code is running in a server-side rendering environment.",
     },
   }}
 />
@@ -51,11 +52,7 @@ The hook returns an object with the following methods:
 const Example = () => {
   const { isMobileDevice, isDesktopDevice } = useDetectDevice();
 
-  return (
-    <div>
-      {isMobileDevice() ? <MobileLayout /> : <DesktopLayout />}
-    </div>
-  );
+  return <div>{isMobileDevice() ? <MobileLayout /> : <DesktopLayout />}</div>;
 };
 ```
 
@@ -80,21 +77,19 @@ const Example = () => {
 const Example = () => {
   const { isSSRDevice } = useDetectDevice();
 
-  return (
-    <div>
-      {!isSSRDevice() && <ClientOnlyComponent />}
-    </div>
-  );
+  return <div>{!isSSRDevice() && <ClientOnlyComponent />}</div>;
 };
 ```
 
 ## Best Practices
 
 1. **Initial Render**:
+
    - Handle the initial render state appropriately since device detection happens after mount
    - Consider using a default layout that works well for all devices
 
 2. **Performance**:
+
    - Call the detection methods only when needed, as they perform string matching
    - Cache the results if you need to use them multiple times in the same render
 
@@ -107,16 +102,3 @@ const Example = () => {
 - The hook uses the `navigator.userAgent` string to detect devices
 - All detection methods are functions to ensure they always return the latest state
 - The hook initializes with safe default values (all false) to handle SSR
-
-
-
-
-
-
-
-
-
-
-
-
-

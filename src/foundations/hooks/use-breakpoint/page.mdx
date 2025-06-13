@@ -1,10 +1,7 @@
 export const metadata = {
   title: "useBreakpoint",
-  description:
-    "A hook for observing the breakpoint of the window",
-  files: [
-    "src/foundations/hooks/use-breakpoint/use-breakpoint.ts",
-  ],
+  description: "A hook for observing the breakpoint of the window",
+  files: ["src/foundations/hooks/use-breakpoint/use-breakpoint.ts"],
 };
 
 ## Features
@@ -28,6 +25,7 @@ export const metadata = {
 
 The hook returns a boolean value indicating whether the window matches the given query.
 That is some base breakpoints already available:
+
 - `useMobile`
 - `useTablet`
 - `useDesktop`
@@ -40,11 +38,7 @@ That is some base breakpoints already available:
 const Example = () => {
   const isMobile = useMobile();
 
-  return (
-    <div>
-      {isMobile ? <MobileComponent /> : <DesktopComponent />}
-    </div>
-  );
+  return <div>{isMobile ? <MobileComponent /> : <DesktopComponent />}</div>;
 };
 ```
 
@@ -54,11 +48,7 @@ const Example = () => {
 const Example = () => {
   const isLargeScreen = useBreakpoint("(min-width: 1200px)");
 
-  return (
-    <div>
-      {isLargeScreen ? <LargeScreenLayout /> : <DefaultLayout />}
-    </div>
-  );
+  return <div>{isLargeScreen ? <LargeScreenLayout /> : <DefaultLayout />}</div>;
 };
 ```
 
@@ -83,10 +73,12 @@ const Example = () => {
 ## Best Practices
 
 1. **Breakpoint Consistency**:
+
    - Use the predefined hooks (`useMobile`, `useTablet`, `useDesktop`) for consistent breakpoints across your application
    - Document any custom breakpoints used in your project
 
 2. **Performance**:
+
    - Avoid using multiple breakpoint hooks in the same component when possible
    - Consider using css or tailwind media queries for simple responsive styles
 
