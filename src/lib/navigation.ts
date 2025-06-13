@@ -16,6 +16,8 @@ type NavigationItem = {
   }[];
 };
 
+
+
 export const navigation: NavigationItem[] = [
   {
     title: "Introduction",
@@ -267,4 +269,8 @@ export const getNavigationWithDates = async () => {
       ),
     }))
   );
+};
+
+export const findGroupByHref = (href: string) => {
+  return navigation.find((item) => item.children.some((child) => child.href === href));
 };
