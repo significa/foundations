@@ -78,6 +78,10 @@ export const navigation: NavigationItem[] = [
         href: "/ui/divider",
       },
       {
+        title: "Drawer",
+        href: "/ui/drawer",
+      },
+      {
         title: "Dropdown",
         href: "/ui/dropdown",
       },
@@ -108,6 +112,11 @@ export const navigation: NavigationItem[] = [
       {
         title: "Select",
         href: "/ui/select",
+      },
+
+      {
+        title: "Slider",
+        href: "/ui/slider",
       },
       {
         title: "Skeleton",
@@ -149,6 +158,10 @@ export const navigation: NavigationItem[] = [
       {
         title: "Sequence",
         href: "/components/sequence",
+      },
+      {
+        title: "Slot",
+        href: "/components/slot",
       },
       {
         title: "Stack",
@@ -193,6 +206,10 @@ export const navigation: NavigationItem[] = [
         href: "/hooks/use-mouse-pan",
       },
       {
+        title: "useScrollLock",
+        href: "/hooks/use-scroll-lock",
+      },
+      {
         title: "useTicker",
         href: "/hooks/use-ticker",
       },
@@ -208,6 +225,14 @@ export const navigation: NavigationItem[] = [
       {
         title: "Accessible Forms",
         href: "/guides/accessible-forms",
+      },
+      {
+        title: "Automated Tests",
+        href: "/guides/automated-tests",
+      },
+      {
+        title: "Performance Tracking",
+        href: "/guides/performance-tracking",
       },
     ],
   },

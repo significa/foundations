@@ -1,0 +1,41 @@
+export const metadata = {
+  title: "useScrollLock",
+  description:
+    "A hook that allows you to disable scrolling on an HTML element.",
+  files: ["src/foundations/hooks/use-scroll-lock/use-scroll-lock.ts"],
+};
+
+## Features
+
+- **No Layout Shift** - Forces `scrollbar-gutter` to `stable` to prevent layout shifts when the scroll is locked.
+- **No Side Effects** - The hook only adds styles to the target element and removes them (reverting to the previous styles) when the hook is unmounted.
+- **Custom Target** - Allows you to lock the scroll on a specific element or the entire page.
+
+## API Reference
+
+<PropsTable
+  definition={{
+    isLocked: {
+      name: "isLocked",
+      type: "boolean",
+      required: true,
+      description: "Whether to lock the scroll.",
+    },
+    target: {
+      name: "target",
+      type: "string | HTMLElement | RefObject<HTMLElement>",
+      description:
+        "The target element to lock the scroll on. Can be a string (selector), HTMLElement, or a RefObject with a HTMLElement.",
+    },
+  }}
+/>
+
+## Examples
+
+### Basic
+
+<Preview slug="use-scroll-lock" />
+
+### With Custom Target
+
+<Preview slug="use-scroll-lock-target" />
