@@ -7,6 +7,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerActions,
+  DrawerMain,
 } from "@/foundations/ui/drawer/drawer";
 import { useState } from "react";
 
@@ -28,15 +29,18 @@ const DrawerControlled = () => {
   };
 
   return (
-    <Drawer open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
+    <Drawer
+      open={open}
+      onOpenChange={(isOpen) => setOpen(isSubmitting ? true : isOpen)}
+    >
       <Button onClick={() => setOpen(true)}>Open Drawer</Button>
       <DrawerContent inert={isSubmitting}>
         <DrawerHeader>
           <DrawerTitle>Drawer Title</DrawerTitle>
         </DrawerHeader>
-        <div className="p-4 pb-32">
+        <DrawerMain>
           <p>Drawer dangerous content goes here.</p>
-        </div>
+        </DrawerMain>
         <DrawerActions className="flex gap-2">
           <Button
             className="grow"

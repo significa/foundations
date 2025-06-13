@@ -7,6 +7,7 @@ import {
   DrawerTrigger,
   DrawerClose,
   DrawerActions,
+  DrawerMain,
 } from "@/foundations/ui/drawer/drawer";
 
 const DrawerPreview = () => {
@@ -19,9 +20,9 @@ const DrawerPreview = () => {
         <DrawerHeader>
           <DrawerTitle>Drawer Title</DrawerTitle>
         </DrawerHeader>
-        <div className="p-4 pb-12">
+        <DrawerMain>
           <p>Drawer content goes here.</p>
-        </div>
+        </DrawerMain>
         <DrawerActions className="flex gap-2">
           <DrawerClose asChild>
             <Button variant="primary" className="grow">
