@@ -230,6 +230,10 @@ export const navigation: NavigationItem[] = [
         title: "Automated Tests",
         href: "/guides/automated-tests",
       },
+      {
+        title: "Performance Tracking",
+        href: "/guides/performance-tracking",
+      },
     ],
   },
 ];

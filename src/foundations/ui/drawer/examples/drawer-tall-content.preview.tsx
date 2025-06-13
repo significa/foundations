@@ -7,6 +7,7 @@ import {
   DrawerTrigger,
   DrawerClose,
   DrawerActions,
+  DrawerMain,
 } from "@/foundations/ui/drawer/drawer";
 
 const DrawerTallContent = () => {
@@ -19,7 +20,7 @@ const DrawerTallContent = () => {
         <DrawerHeader>
           <DrawerTitle>Drawer Title</DrawerTitle>
         </DrawerHeader>
-        <div className="p-4 pb-12">
+        <DrawerMain>
           {Array(24)
             .fill(null)
             .map((_, index) => (
@@ -27,7 +28,7 @@ const DrawerTallContent = () => {
                 This is paragraph {index + 1}.
               </p>
             ))}
-        </div>
+        </DrawerMain>
         <DrawerActions className="flex gap-2">
           <DrawerClose asChild>
             <Button className="grow">Submit</Button>
