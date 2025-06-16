@@ -112,6 +112,7 @@ export const Search = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Result[]>([]);
   const [pagefindInstance, setPagefindInstance] = useState<Pagefind | null>(null);
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const loadPagefind = async () => {
@@ -131,6 +132,8 @@ export const Search = () => {
   }, [pagefindInstance]);
 
   const handleSearch = useCallback(async () => {
+    setIsLoading(true)
+
     if (pagefindInstance) {
       const search = await pagefindInstance.debouncedSearch(query, 300);
       if (search === null) {
@@ -183,6 +186,7 @@ export const Search = () => {
       }, [] as Result[])
       
       setResults(groupedResults);
+      setIsLoading(false)
     }
   }, [pagefindInstance, query]);
   
@@ -211,7 +215,7 @@ export const Search = () => {
             }
           }}
         />
-        {query === '' ? 
+        {query === '' || isLoading ? 
           highlights.map((highlight, index) => (
             <Group key={index} result={highlight} />
           ))
