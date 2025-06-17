@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/foundations/ui/dialog/dialog";
-import { Input, InputGroup, InputPrefix } from "@/foundations/ui/input/input";
 import { navigation } from "@/lib/navigation";
 import {
   PagefindSearchOptions,
@@ -14,7 +13,7 @@ import {
 } from "@/lib/pagefind-types";
 
 import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const highlights = [
   {
@@ -118,7 +117,6 @@ export const Search = () => {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const loadPagefind = async () => {
@@ -213,32 +211,23 @@ export const Search = () => {
         if (!open) {
           setQuery("");
           setResults([]);
-          triggerRef.current?.blur();
         }
         setIsOpen(open);
       }}
       open={isOpen}
     >
       <DialogTrigger asChild>
-        <Button
-          size="sm"
-          square
-          variant="ghost"
-          className="pt-px"
-          ref={triggerRef}
-        >
+        <Button size="sm" square variant="ghost" className="pt-px">
           <MagnifyingGlass />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-1/2 w-256 rounded-2xl p-3">
-        <InputGroup>
-          <InputPrefix>
-            <MagnifyingGlass />
-          </InputPrefix>
-          <Input
+      <DialogContent className="flex h-[400px] max-h-[70svh] w-256 flex-col rounded-xl p-0">
+        <div className="border-border bg-background sticky top-0 z-10 flex w-full items-center border-b px-3 py-3">
+          <MagnifyingGlass className="mt-0.5 size-3.75" />
+          <input
             type="text"
+            className="ml-2.5 outline-none"
             placeholder="Search"
-            className="border-foreground-secondary bg-background-secondary rounded-lg"
             autoFocus
             value={query}
             onChange={(e) => {
@@ -248,18 +237,22 @@ export const Search = () => {
               }
             }}
           />
-        </InputGroup>
-        {query === "" || isLoading ? (
-          highlights.map((highlight, index) => (
-            <Group key={index} result={highlight} />
-          ))
-        ) : results.length > 0 ? (
-          results.map((result, index) => <Group key={index} result={result} />)
-        ) : (
-          <div className="text-foreground-secondary flex h-32 items-center justify-center text-sm">
-            No results found
-          </div>
-        )}
+        </div>
+        <div className="flex flex-col gap-4 overflow-y-auto pt-4 pb-1">
+          {query === "" || isLoading ? (
+            highlights.map((highlight, index) => (
+              <Group key={index} result={highlight} />
+            ))
+          ) : results.length > 0 ? (
+            results.map((result, index) => (
+              <Group key={index} result={result} />
+            ))
+          ) : (
+            <div className="text-foreground-secondary flex h-32 items-center justify-center text-sm">
+              No results found
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
@@ -273,14 +266,18 @@ const Group = ({ result }: GroupProps) => {
   const { group, items } = result;
 
   return (
-    <div key={group} className="mt-4 px-2">
-      <h3 className="text-foreground-secondary mb-2 text-sm">{group}</h3>
-      <div className="flex flex-col gap-1">
+    <div key={group} className="px-1">
+      <div className="px-2.5">
+        <h3 className="text-foreground-secondary mb-1 pb-1.5 text-xs">
+          {group}
+        </h3>
+      </div>
+      <div className="flex flex-col gap-0.5">
         {items.map((item, index) => (
           <a
             key={index}
             href={item.href}
-            className="hover:bg-background-secondary block rounded-lg px-3 py-2 text-sm"
+            className="hover:bg-background-secondary block rounded-lg px-2.5 py-1.5 text-sm"
           >
             {item.title}
           </a>
