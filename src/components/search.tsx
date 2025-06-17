@@ -14,7 +14,7 @@ import {
 } from "@/lib/pagefind-types";
 
 import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const highlights = [
   {
@@ -117,6 +117,8 @@ export const Search = () => {
     null
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const loadPagefind = async () => {
@@ -134,6 +136,18 @@ export const Search = () => {
     };
     loadPagefind();
   }, [pagefindInstance]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsOpen(true);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleSearch = useCallback(async () => {
     setIsLoading(true);
@@ -199,11 +213,20 @@ export const Search = () => {
         if (!open) {
           setQuery("");
           setResults([]);
+          triggerRef.current?.blur();
         }
+        setIsOpen(open);
       }}
+      open={isOpen}
     >
       <DialogTrigger asChild>
-        <Button size="sm" square variant="ghost" className="pt-0.5">
+        <Button
+          size="sm"
+          square
+          variant="ghost"
+          className="pt-px"
+          ref={triggerRef}
+        >
           <MagnifyingGlass />
         </Button>
       </DialogTrigger>
