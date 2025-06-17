@@ -143,7 +143,10 @@ const variants = {
     "--transform": "0%",
     "--backdrop-opacity": 1,
     transition: {
-      "--transform": { duration: 0.4, ease: easings["emphasized-decelerate"] },
+      "--transform": {
+        duration: 0.4,
+        ease: easings["emphasized-decelerate"],
+      },
       "--backdrop-opacity": { duration: 0.4 },
     },
   },
@@ -151,7 +154,10 @@ const variants = {
     "--transform": "100%",
     "--backdrop-opacity": 0,
     transition: {
-      "--transform": { duration: 0.25, ease: easings["emphasized-accelerate"] },
+      "--transform": {
+        duration: 0.25,
+        ease: easings["emphasized-accelerate"],
+      },
       "--backdrop-opacity": { duration: 0.4, delay: 0.1 },
     },
   },
@@ -229,7 +235,6 @@ const DrawerContent = ({
         clone.close();
         clone.showModal();
 
-        // @ts-expect-error animating css variables
         animate(clone, variants.closed, variants.closed.transition).then(() => {
           clone.remove();
         });
@@ -270,7 +275,7 @@ const DrawerContent = ({
           initial="closed"
           animate="open"
           exit="closed"
-          variants={!reducedMotion ? variants : {}}
+          variants={reducedMotion ? {} : variants}
           className={cn(
             "bg-background-high border-border mx-auto flex w-full max-w-screen flex-col overflow-y-auto border *:shrink-0",
             "max-md:mt-auto max-md:max-h-[calc(100dvh-(--spacing(12)))] max-md:translate-y-(--transform) max-md:rounded-xl max-md:rounded-b-none max-md:border-b-0",
