@@ -217,6 +217,14 @@ export const navigation: NavigationItem[] = [
         title: "usePrefersReducedMotion",
         href: "/hooks/use-prefers-reduced-motion",
       },
+      {
+        title: "useBreakpoint",
+        href: "/hooks/use-breakpoint",
+      },
+      {
+        title: "useDetectDevice",
+        href: "/hooks/use-detect-device",
+      },
     ],
   },
   {
