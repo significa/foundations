@@ -1,118 +1,122 @@
 "use client";
 
 import { Button } from "@/foundations/ui/button/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/foundations/ui/dialog/dialog";
-import { Input } from "@/foundations/ui/input/input";
-import { PagefindSearchOptions, PagefindSearchResults } from "@/lib/pagefind-types";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/foundations/ui/dialog/dialog";
+import { Input, InputGroup, InputPrefix } from "@/foundations/ui/input/input";
+import { navigation } from "@/lib/navigation";
+import {
+  PagefindSearchOptions,
+  PagefindSearchResults,
+} from "@/lib/pagefind-types";
 
 import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
 import { useCallback, useEffect, useState } from "react";
 
 const highlights = [
   {
-    group: 'Introduction',
+    group: "Introduction",
     items: [
       {
-        title: 'About',
-        href: '/about',
+        title: "About",
+        href: "/about",
       },
       {
-        title: 'Setup',
-        href: '/setup',
+        title: "Setup",
+        href: "/setup",
       },
-    ]
+    ],
   },
   {
-    group: 'UI',
+    group: "UI",
     items: [
       {
-        title: 'Button',
-        href: '/ui/button',
+        title: "Button",
+        href: "/ui/button",
       },
       {
-        title: 'Dropdown',
-        href: '/ui/dropdown',
+        title: "Dropdown",
+        href: "/ui/dropdown",
       },
       {
-        title: 'Input',
-        href: '/ui/input',
+        title: "Input",
+        href: "/ui/input",
       },
-    ]
+    ],
   },
   {
-    group: 'Components',
+    group: "Components",
     items: [
       {
-        title: 'InstanceCounter',
-        href: '/components/instance-counter',
+        title: "InstanceCounter",
+        href: "/components/instance-counter",
       },
       {
-        title: 'Slot',
-        href: '/components/slot',
+        title: "Slot",
+        href: "/components/slot",
       },
-    ]
+    ],
   },
   {
-    group: 'Utils',
+    group: "Hooks",
     items: [
       {
-        title: 'composeRefs',
-        href: '/utils/compose-refs',
+        title: "useIntersectionObserver",
+        href: "/hooks/use-intersection-observer",
       },
       {
-        title: 'debounce',
-        href: '/utils/debounce',
+        title: "useScrollLock",
+        href: "/hooks/use-scroll-lock",
       },
-    ]
+    ],
   },
   {
-    group: 'Hooks',
+    group: "Guides",
     items: [
       {
-        title: 'useIntersectionObserver',
-        href: '/hooks/use-intersection-observer',
+        title: "Accessible Forms",
+        href: "/guides/accessible-form",
       },
       {
-        title: 'useScrollLock',
-        href: '/hooks/use-scroll-lock',
+        title: "Automated Tests",
+        href: "/guides/automated-tests",
       },
-    ]
+    ],
   },
-  {
-    group: 'Guides',
-    items: [
-      {
-        title: 'Accessible Forms',
-        href: '/guides/accessible-form',
-      },
-      {
-        title: 'Automated Tests',
-        href: '/guides/automated-tests',
-      },
-    ]
-  },
-]
+];
 
 type Pagefind = {
-  search: (query: string, options?: PagefindSearchOptions) => Promise<PagefindSearchResults>;
-  debouncedSearch: (query: string, delay: number, options?: PagefindSearchOptions) => Promise<PagefindSearchResults | null>;
+  search: (
+    query: string,
+    options?: PagefindSearchOptions
+  ) => Promise<PagefindSearchResults>;
+  debouncedSearch: (
+    query: string,
+    delay: number,
+    options?: PagefindSearchOptions
+  ) => Promise<PagefindSearchResults | null>;
 };
 
 type ResultEntry = {
   title: string;
   href: string;
-}
+};
 
 type Result = {
-  group: string,
-  items: ResultEntry[]
+  group: string;
+  items: ResultEntry[];
 };
 
 export const Search = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Result[]>([]);
-  const [pagefindInstance, setPagefindInstance] = useState<Pagefind | null>(null);
-  const [isLoading, setIsLoading] = useState(false)
+  const [pagefindInstance, setPagefindInstance] = useState<Pagefind | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const loadPagefind = async () => {
@@ -132,31 +136,26 @@ export const Search = () => {
   }, [pagefindInstance]);
 
   const handleSearch = useCallback(async () => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     if (pagefindInstance) {
-      const search = await pagefindInstance.debouncedSearch(query, 300);
+      const search = await pagefindInstance.debouncedSearch(query, 200);
       if (search === null) {
         // a more recent search call has been made, do nothing
         return;
       }
 
-      const getGroupFromHref = (href: string) => {
-        const groupFromSlug = href.split('/').slice(-2)[0];
-        const resultGroup = !groupFromSlug ? 'introduction' : groupFromSlug;
-        const highlightMatch = highlights.find((highlight) => highlight.group.toLowerCase() === resultGroup)
-    
-        if (!highlightMatch) {
-          return resultGroup
-        }
-    
-        return highlightMatch.group
-      }
-      
+      const findGroupByHref = (href: string) => {
+        const navigationItem = navigation.find((item) =>
+          item.children.some((child) => child.href === href)
+        );
+        return navigationItem?.title;
+      };
+
       const processedResults = await Promise.all(
         search.results.map(async (result) => {
           const data = await result.data();
-          const href = data.url.split('.html')[0].replace('/server/app', '')
+          const href = data.url.split(".html")[0].replace("/server/app", "");
 
           return {
             title: data.meta.title,
@@ -166,85 +165,104 @@ export const Search = () => {
       );
 
       const groupedResults = processedResults.reduce((acc, result) => {
-        const group = getGroupFromHref(result.href);
+        const group = findGroupByHref(result.href) ?? "";
+
+        if (group === "") {
+          return acc;
+        }
+
         const foundIndex = acc.findIndex((item) => item.group === group);
 
         if (foundIndex !== -1) {
           acc[foundIndex] = {
             group: group,
-            items: [...acc[foundIndex].items, result]
-          }
-        }
-        else {
+            items: [...acc[foundIndex].items, result],
+          };
+        } else {
           acc.push({
             group: group,
-            items: [result]
-          })
+            items: [result],
+          });
         }
 
         return acc;
-      }, [] as Result[])
-      
+      }, [] as Result[]);
+
       setResults(groupedResults);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }, [pagefindInstance, query]);
-  
+
   return (
-    <Dialog onOpenChange={(open) => {
-      if (!open) {
-        setQuery('');
-        setResults([]);
-      }
-    }}>
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) {
+          setQuery("");
+          setResults([]);
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button size="sm" square variant="ghost" className="pt-0.5">
           <MagnifyingGlass />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-1/2 w-256 p-3 rounded-2xl">
-        <Input 
-          type="text" 
-          placeholder="Search" 
-          className="border-foreground-secondary rounded-lg bg-background-secondary" 
-          value={query} 
-          onChange={(e) => {
-            setQuery(e.target.value);
-            if (e.target.value.trim()) {
-              handleSearch();
-            }
-          }}
-        />
-        {query === '' || isLoading ? 
+      <DialogContent className="max-h-1/2 w-256 rounded-2xl p-3">
+        <InputGroup>
+          <InputPrefix>
+            <MagnifyingGlass />
+          </InputPrefix>
+          <Input
+            type="text"
+            placeholder="Search"
+            className="border-foreground-secondary bg-background-secondary rounded-lg"
+            autoFocus
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              if (e.target.value.trim()) {
+                handleSearch();
+              }
+            }}
+          />
+        </InputGroup>
+        {query === "" || isLoading ? (
           highlights.map((highlight, index) => (
             <Group key={index} result={highlight} />
           ))
-         : results.map((result, index) => (
-          <Group key={index} result={result} />
-        ))
-        }
+        ) : results.length > 0 ? (
+          results.map((result, index) => <Group key={index} result={result} />)
+        ) : (
+          <div className="text-foreground-secondary flex h-32 items-center justify-center text-sm">
+            No results found
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
 };
 
 type GroupProps = {
-  result: Result
+  result: Result;
 };
 
 const Group = ({ result }: GroupProps) => {
-  const { group, items } = result
+  const { group, items } = result;
 
   return (
     <div key={group} className="mt-4 px-2">
       <h3 className="text-foreground-secondary mb-2 text-sm">{group}</h3>
       <div className="flex flex-col gap-1">
         {items.map((item, index) => (
-          <a key={index} href={item.href} className="hover:bg-background-secondary block rounded-lg px-3 py-2 text-sm">
+          <a
+            key={index}
+            href={item.href}
+            className="hover:bg-background-secondary block rounded-lg px-3 py-2 text-sm"
+          >
             {item.title}
           </a>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
