@@ -1,0 +1,97 @@
+export const metadata = {
+  title: "useMatchMedia",
+  description: "A hook that uses the matchMedia api to observe a media queries",
+  files: [
+    "src/foundations/hooks/use-match-media/use-match-media.ts",
+  ],
+};
+
+
+## Features
+
+- **Media Query Support**: Observe any CSS media query for responsive behavior
+- **Real-time Updates**: Automatically updates when media query matches change
+- **Performance Optimized**: Efficient event listener management and cleanup
+
+## API Reference
+
+<PropsTable
+  definition={{
+    query: {
+      type: "string",
+      description: "The media query to observe",
+    },
+  }}
+/>
+
+
+## Examples
+
+### Basic Usage
+
+```tsx
+const Example = () => {
+  const isLargeScreen = useMatchMedia("(min-width: 1024px)");
+  const isLandscape = useMatchMedia("(orientation: landscape)");
+
+  return (
+    <div>
+      {isLargeScreen && <p>Large screen detected!</p>}
+      {isLandscape && <p>Landscape orientation!</p>}
+    </div>
+  );
+};
+```
+
+### Responsive Layout
+
+```tsx
+const ResponsiveLayout = () => {
+  const isMobile = useMatchMedia("(max-width: 767px)");
+  const isTablet = useMatchMedia("(min-width: 768px) and (max-width: 1023px)");
+  const isDesktop = useMatchMedia("(min-width: 1024px)");
+
+  return (
+    <div>
+      {isMobile && <MobileLayout />}
+      {isTablet && <TabletLayout />}
+      {isDesktop && <DesktopLayout />}
+    </div>
+  );
+};
+```
+
+### Accessibility Features
+
+```tsx
+const AccessibilityAware = () => {
+  const prefersDark = useMatchMedia("(prefers-color-scheme: dark)");
+  const prefersReducedMotion = useMatchMedia("(prefers-reduced-motion: reduce)");
+  const isHighContrast = useMatchMedia("(prefers-contrast: high)");
+
+  return (
+    <div className={prefersDark ? "dark-theme" : "light-theme"}>
+      {prefersReducedMotion && <p>Reduced motion enabled</p>}
+      {isHighContrast && <p>High contrast mode active</p>}
+    </div>
+  );
+};
+```
+
+### Device Capabilities
+
+```tsx
+const DeviceAware = () => {
+  const isHighDPI = useMatchMedia("(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)");
+  const isTouchDevice = useMatchMedia("(pointer: coarse)");
+  const isHoverCapable = useMatchMedia("(hover: hover)");
+
+  return (
+    <div>
+      {isHighDPI && <p>High DPI display detected</p>}
+      {isTouchDevice && <p>Touch device detected</p>}
+      {isHoverCapable && <p>Hover capable device</p>}
+    </div>
+  );
+};
+```
