@@ -217,6 +217,18 @@ export const navigation: NavigationItem[] = [
         title: "usePrefersReducedMotion",
         href: "/hooks/use-prefers-reduced-motion",
       },
+      {
+        title: "useMatchMedia",
+        href: "/hooks/use-match-media",
+      },
+      {
+        title: "useTailwindBreakpoint",
+        href: "/hooks/use-tailwind-breakpoint",
+      },
+      {
+        title: "useDetectDevice",
+        href: "/hooks/use-detect-device",
+      },
     ],
   },
   {
