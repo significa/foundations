@@ -2,33 +2,35 @@
 
 import { useEffect, useState } from "react";
 
-type DeviceInfo = {
-  isMobileDevice: boolean;
-  isDesktopDevice: boolean;
-  isAndroidDevice: boolean;
-  isIosDevice: boolean;
+type useDetectDevidePorps = {
+  isMobile: boolean;
+  isDesktop: boolean;
+  isAndroid: boolean;
+  isIos: boolean;
 };
 
-const getDetectDevice = (userAgent: NavigatorID["userAgent"]): DeviceInfo => {
+const getDetectDevice = (
+  userAgent: NavigatorID["userAgent"]
+): useDetectDevidePorps => {
   const isAndroid = /Android/.test(userAgent);
   const isIos = /iPad|iPhone/.test(userAgent);
   const isMobile = isAndroid || isIos;
   const isDesktop = !isMobile;
 
   return {
-    isMobileDevice: isMobile,
-    isDesktopDevice: isDesktop,
-    isAndroidDevice: isAndroid,
-    isIosDevice: isIos,
+    isMobile,
+    isDesktop,
+    isAndroid,
+    isIos,
   };
 };
 
 const useDetectDevice = () => {
-  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>({
-    isMobileDevice: false,
-    isDesktopDevice: false,
-    isAndroidDevice: false,
-    isIosDevice: false,
+  const [deviceInfo, setDeviceInfo] = useState<useDetectDevidePorps>({
+    isMobile: false,
+    isDesktop: false,
+    isAndroid: false,
+    isIos: false,
   });
 
   useEffect(() => {

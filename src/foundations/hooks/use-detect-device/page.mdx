@@ -41,22 +41,22 @@ The hook returns an object with the following methods:
 
 ```tsx
 const Example = () => {
-  const { isMobileDevice } = useDetectDevice();
+  const { isMobile } = useDetectDevice();
 
-  return <div>{isMobileDevice() ? <MobileLayout /> : <DesktopLayout />}</div>;
+  return <div>{isMobile ? <MobileLayout /> : <DesktopLayout />}</div>;
 };
 ```
 
-### Platform-Specific Features - Wallet
+### Platform-Specific Features
 
 ```tsx
 const AddToWallet = () => {
-  const { isAndroidDevice, isIosDevice } = useDetectDevice();
+  const { isAndroid, isIos } = useDetectDevice();
 
   return (
     <div>
-      {isAndroidDevice() && <AddToGoogleWallet />}
-      {isIosDevice() && <AddToAppleWallet />}
+      {isAndroid && <AddToGoogleWallet />}
+      {isIos && <AddToAppleWallet />}
     </div>
   );
 };
@@ -65,4 +65,3 @@ const AddToWallet = () => {
 ## Technical Notes
 
 - The hook uses the `navigator.userAgent` string to detect devices
-- The hook initializes with safe default values (all false) to handle SSR
