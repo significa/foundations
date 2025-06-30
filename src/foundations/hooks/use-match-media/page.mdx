@@ -1,11 +1,8 @@
 export const metadata = {
   title: "useMatchMedia",
   description: "A hook that uses the matchMedia api to observe a media queries",
-  files: [
-    "src/foundations/hooks/use-match-media/use-match-media.ts",
-  ],
+  files: ["src/foundations/hooks/use-match-media/use-match-media.ts"],
 };
-
 
 ## Features
 
@@ -23,7 +20,6 @@ export const metadata = {
     },
   }}
 />
-
 
 ## Examples
 
@@ -66,7 +62,9 @@ const ResponsiveLayout = () => {
 ```tsx
 const AccessibilityAware = () => {
   const prefersDark = useMatchMedia("(prefers-color-scheme: dark)");
-  const prefersReducedMotion = useMatchMedia("(prefers-reduced-motion: reduce)");
+  const prefersReducedMotion = useMatchMedia(
+    "(prefers-reduced-motion: reduce)"
+  );
   const isHighContrast = useMatchMedia("(prefers-contrast: high)");
 
   return (
@@ -82,7 +80,9 @@ const AccessibilityAware = () => {
 
 ```tsx
 const DeviceAware = () => {
-  const isHighDPI = useMatchMedia("(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)");
+  const isHighDPI = useMatchMedia(
+    "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)"
+  );
   const isTouchDevice = useMatchMedia("(pointer: coarse)");
   const isHoverCapable = useMatchMedia("(hover: hover)");
 

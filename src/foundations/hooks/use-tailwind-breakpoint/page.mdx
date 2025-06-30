@@ -1,7 +1,10 @@
 export const metadata = {
   title: "useTailwindBreakpoint",
-  description: "A hook for observing breakpoints using Tailwind CSS breakpoints and custom media queries",
-  files: ["src/foundations/hooks/use-tailwind-breakpoint/use-tailwind-breakpoint.ts"],
+  description:
+    "A hook for observing breakpoints using Tailwind CSS breakpoints and custom media queries",
+  files: [
+    "src/foundations/hooks/use-tailwind-breakpoint/use-tailwind-breakpoint.ts",
+  ],
 };
 
 ## Features
@@ -22,9 +25,7 @@ export const metadata = {
   }}
 />
 
-
 > **Note**: The actual available breakpoints depend on your Tailwind configuration. If you have custom screen tokens defined in your `theme`, those will also be available.
-
 
 ## Examples
 
@@ -35,9 +36,10 @@ export const metadata = {
 ## Best Practices
 
 1. **Breakpoint Consistency**:
+
    - Use `useTailwindBreakpoint` with Tailwind breakpoint names for consistency with your CSS
 
-5. **Separation of Concerns**:
+2. **Separation of Concerns**:
    - Use Tailwind classes for visual responsive design
    - Use the hook for JavaScript logic, state management, and conditional rendering
    - Don't duplicate responsive logic in both CSS and JavaScript
