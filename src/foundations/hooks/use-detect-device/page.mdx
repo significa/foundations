@@ -47,16 +47,16 @@ const Example = () => {
 };
 ```
 
-### Platform-Specific Features
+### Platform-Specific Features - Wallet
 
 ```tsx
-const Example = () => {
+const AddToWallet = () => {
   const { isAndroidDevice, isIosDevice } = useDetectDevice();
 
   return (
     <div>
-      {isAndroidDevice() && <AndroidSpecificFeature />}
-      {isIosDevice() && <IosSpecificFeature />}
+      {isAndroidDevice() && <AddToGoogleWallet />}
+      {isIosDevice() && <AddToAppleWallet />}
     </div>
   );
 };
