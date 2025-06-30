@@ -1,16 +1,20 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
-  ComponentPropsWithRef,
+  AnimatePresence,
+  motion,
+  animate,
+  useReducedMotion,
+} from "motion/react";
+import {
   createContext,
-  ReactNode,
   use,
+  useCallback,
+  useEffect,
   useId,
   useLayoutEffect,
   useRef,
   useState,
-  MouseEvent,
 } from "react";
 import { easings } from "@/lib/easings";
 import { cn } from "@/lib/utils";
@@ -19,6 +23,7 @@ import {
   useScrollLock,
   ScrollLockTarget,
 } from "@/foundations/hooks/use-scroll-lock/use-scroll-lock";
+import { useStableCallback } from "@/foundations/hooks/use-stable-callback/use-stable-callback";
 
 interface DrawerContext {
   open: boolean;
@@ -40,7 +45,7 @@ const useDrawerContext = () => {
 };
 
 interface DrawerProps {
-  children: ReactNode;
+  children: React.ReactNode;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -54,15 +59,19 @@ const Drawer = ({
   children,
   scrollLockTarget,
 }: DrawerProps) => {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
+  const stableOnOpenChange = useStableCallback(onOpenChange);
   const [labelId, setLabelId] = useState<string | undefined>(undefined);
 
+  const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
   const open = propOpen ?? internalOpen;
 
-  const setOpen = (open: boolean) => {
-    setInternalOpen(open);
-    onOpenChange?.(open);
-  };
+  const setOpen = useCallback(
+    (open: boolean) => {
+      setInternalOpen(open);
+      stableOnOpenChange?.(open);
+    },
+    [stableOnOpenChange]
+  );
 
   useScrollLock(open, scrollLockTarget);
 
@@ -73,15 +82,15 @@ const Drawer = ({
   );
 };
 
-interface DrawerTriggerProps extends ComponentPropsWithRef<"button"> {
-  children: ReactNode;
+interface DrawerTriggerProps extends React.ComponentPropsWithRef<"button"> {
+  children: React.ReactNode;
   asChild?: boolean;
 }
 
 const DrawerTrigger = ({ children, asChild, ...props }: DrawerTriggerProps) => {
   const { setOpen } = useDrawerContext();
 
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     props.onClick?.(event);
 
     if (!event.defaultPrevented) {
@@ -97,15 +106,15 @@ const DrawerTrigger = ({ children, asChild, ...props }: DrawerTriggerProps) => {
   );
 };
 
-interface DrawerCloseProps extends ComponentPropsWithRef<"button"> {
-  children: ReactNode;
+interface DrawerCloseProps extends React.ComponentPropsWithRef<"button"> {
+  children: React.ReactNode;
   asChild?: boolean;
 }
 
 const DrawerClose = ({ children, asChild, ...props }: DrawerCloseProps) => {
   const { setOpen } = useDrawerContext();
 
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     props.onClick?.(event);
 
     if (!event.defaultPrevented) {
@@ -134,7 +143,10 @@ const variants = {
     "--transform": "0%",
     "--backdrop-opacity": 1,
     transition: {
-      "--transform": { duration: 0.4, ease: easings["emphasized-decelerate"] },
+      "--transform": {
+        duration: 0.4,
+        ease: easings["emphasized-decelerate"],
+      },
       "--backdrop-opacity": { duration: 0.4 },
     },
   },
@@ -142,7 +154,10 @@ const variants = {
     "--transform": "100%",
     "--backdrop-opacity": 0,
     transition: {
-      "--transform": { duration: 0.25, ease: easings["emphasized-accelerate"] },
+      "--transform": {
+        duration: 0.25,
+        ease: easings["emphasized-accelerate"],
+      },
       "--backdrop-opacity": { duration: 0.4, delay: 0.1 },
     },
   },
@@ -150,7 +165,8 @@ const variants = {
 
 interface DrawerContentProps
   extends Omit<
-    ComponentPropsWithRef<"dialog">,
+    React.ComponentPropsWithRef<"dialog">,
+    | "open"
     | "onDrag"
     | "onDragEnd"
     | "onDragStart"
@@ -158,39 +174,78 @@ interface DrawerContentProps
     | "onDragStartCapture"
     | "onAnimationStart"
   > {
-  children: ReactNode;
+  children: React.ReactNode;
+  persistExitAnimation?: boolean;
 }
 
-const DrawerContent = ({ children, ...props }: DrawerContentProps) => {
+const DrawerContent = ({
+  children,
+  persistExitAnimation,
+  ...props
+}: DrawerContentProps) => {
+  const reducedMotion = useReducedMotion();
   const { labelId, open, setOpen } = useDrawerContext();
   const ref = useRef<HTMLDialogElement>(null);
-
-  const reducedMotion = useReducedMotion();
+  const hasCompletedExitAnimation = useRef(false);
 
   useLayoutEffect(() => {
     const dialog = ref.current;
+    if (!dialog) return;
 
-    if (dialog) {
-      // use native showModal() to ensure receives focus when opened, and ESC closes it
+    if (!dialog.open) {
+      // use native showModal() to ensure it receives focus when opened, and ESC closes it
       dialog.showModal();
-
-      // listen for changes to the dialog's open state, to update the open state when its closed non-programmatically
-      const mutationObserver = new MutationObserver(([mutation]) => {
-        if (mutation.attributeName === "open") {
-          setOpen(dialog.open);
-        }
-      });
-
-      mutationObserver.observe(dialog, { attributes: true });
-      return () => mutationObserver.disconnect();
     }
+
+    // prevent the default cancel event and use internal state to close the drawer instead
+    // this ensures drawer closing is synchronized with internal state, preventing layout shifts
+    const onCancel = (event: Event) => {
+      event.preventDefault();
+      setOpen(false);
+    };
+
+    dialog.addEventListener("cancel", onCancel);
+
+    return () => {
+      dialog.removeEventListener("cancel", onCancel);
+    };
   }, [open, setOpen]);
 
-  const handleDialogClick = (event: MouseEvent<HTMLDialogElement>) => {
+  useEffect(() => {
+    if (open) {
+      hasCompletedExitAnimation.current = false;
+    }
+
+    const dialog = ref.current;
+    if (reducedMotion || !persistExitAnimation || !dialog) return;
+
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      const isUnmounting = !!dialog && !ref.current;
+      const isIncompleteExitAnimation = !hasCompletedExitAnimation.current;
+
+      // if persistExitAnimation is true and the component is unmounting with an incomplete exit animation,
+      // we clone the dialog onto the body and run the exit animation before removing it
+      if (isUnmounting && isIncompleteExitAnimation) {
+        const clone = dialog.cloneNode(true) as typeof dialog;
+        clone.setAttribute("inert", "");
+        document.body.appendChild(clone);
+
+        // close and open as modal, because when an open dialog is cloned it loses its modal state
+        clone.close();
+        clone.showModal();
+
+        animate(clone, variants.closed, variants.closed.transition).then(() => {
+          clone.remove();
+        });
+      }
+    };
+  }, [open, persistExitAnimation, reducedMotion]);
+
+  const handleDialogClick = (event: React.MouseEvent<HTMLDialogElement>) => {
     // if the click is on the backdrop, close the drawer
     if ((event.target as HTMLElement).nodeName === "DIALOG") {
       const dialog = event.target as HTMLDialogElement;
-
       const { top, left, width, height } = dialog.getBoundingClientRect();
       const isOutsideDialog =
         top > event.clientY ||
@@ -200,12 +255,16 @@ const DrawerContent = ({ children, ...props }: DrawerContentProps) => {
 
       if (isOutsideDialog) {
         setOpen(false);
+        event.stopPropagation();
       }
     }
   };
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence
+      initial={false}
+      onExitComplete={() => (hasCompletedExitAnimation.current = true)}
+    >
       {open && (
         <motion.dialog
           {...props}
@@ -216,18 +275,25 @@ const DrawerContent = ({ children, ...props }: DrawerContentProps) => {
           initial="closed"
           animate="open"
           exit="closed"
-          variants={!reducedMotion ? variants : {}}
+          variants={reducedMotion ? {} : variants}
           className={cn(
-            "mx-auto flex w-full max-w-screen flex-col overflow-y-auto *:shrink-0",
-            "bg-background border-border rounded-xl border",
-            "max-md:mt-auto max-md:max-h-[calc(100vh-(--spacing(8)))] max-md:translate-y-(--transform) max-md:rounded-b-none max-md:border-b-0",
-            "md:mr-0 md:h-full md:max-h-screen md:max-w-160 md:translate-x-(--transform) md:rounded-r-none md:border-r-0",
+            "bg-background-high border-border mx-auto flex w-full max-w-screen flex-col overflow-y-auto border *:shrink-0",
+            "max-md:mt-auto max-md:max-h-[calc(100dvh-(--spacing(12)))] max-md:translate-y-(--transform) max-md:rounded-xl max-md:rounded-b-none max-md:border-b-0",
+            "md:mr-0 md:h-full md:max-h-screen md:max-w-160 md:translate-x-(--transform) md:border-0 md:border-l",
             "backdrop:bg-black/20 backdrop:opacity-(--backdrop-opacity) backdrop:backdrop-blur-sm",
             !reducedMotion && "will-change-transform",
             props.className
           )}
           onClick={handleDialogClick}
         >
+          {/* catch focus on safari  to avoid the focused element having a focus-visible outline */}
+          {/* we can remove it if apple ever fixes this */}
+          <div
+            className="safari:block sr-only hidden"
+            aria-hidden="true"
+            autoFocus
+            tabIndex={-1}
+          />
           {children}
         </motion.dialog>
       )}
@@ -235,8 +301,8 @@ const DrawerContent = ({ children, ...props }: DrawerContentProps) => {
   );
 };
 
-interface DrawerHeaderProps extends ComponentPropsWithRef<"header"> {
-  children: ReactNode;
+interface DrawerHeaderProps extends React.ComponentPropsWithRef<"header"> {
+  children: React.ReactNode;
   asChild?: boolean;
 }
 
@@ -246,7 +312,7 @@ const DrawerHeader = ({ children, ...props }: DrawerHeaderProps) => {
     <Component
       {...props}
       className={cn(
-        "bg-background border-border sticky top-0 rounded-t-xl border-b px-4 py-3.5",
+        "bg-background border-border sticky top-0 z-10 border-b p-3.5",
         props.className
       )}
     >
@@ -255,8 +321,8 @@ const DrawerHeader = ({ children, ...props }: DrawerHeaderProps) => {
   );
 };
 
-interface DrawerTitleProps extends ComponentPropsWithRef<"h2"> {
-  children: ReactNode;
+interface DrawerTitleProps extends React.ComponentPropsWithRef<"h2"> {
+  children: React.ReactNode;
   asChild?: boolean;
 }
 
@@ -276,15 +342,33 @@ const DrawerTitle = ({ children, ...props }: DrawerTitleProps) => {
     <Component
       {...props}
       id={id}
-      className={cn("text-foreground-secondary text-sm", props.className)}
+      className={cn("text-sm font-medium", props.className)}
     >
       {children}
     </Component>
   );
 };
 
-interface DrawerActionsProps extends ComponentPropsWithRef<"div"> {
-  children: ReactNode;
+interface DrawerMainProps extends React.ComponentPropsWithRef<"div"> {
+  asChild?: boolean;
+}
+
+const DrawerMain = ({
+  children,
+  className,
+  asChild,
+  ...props
+}: DrawerMainProps) => {
+  const Component = asChild ? Slot : "div";
+  return (
+    <Component {...props} className={cn("p-3.5", className)}>
+      {children}
+    </Component>
+  );
+};
+
+interface DrawerActionsProps extends React.ComponentPropsWithRef<"div"> {
+  children: React.ReactNode;
   asChild?: boolean;
 }
 
@@ -311,4 +395,5 @@ export {
   DrawerHeader,
   DrawerTitle,
   DrawerActions,
+  DrawerMain,
 };

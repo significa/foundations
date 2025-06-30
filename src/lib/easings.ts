@@ -1,4 +1,6 @@
-export const easings = {
+type Easing = [number, number, number, number];
+
+export const easings: Record<string, Easing> = {
   // Material design (M3) easings
   // See documentation for detailed information on recommended use cases and duration values:
   // https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration
