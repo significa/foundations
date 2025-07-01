@@ -1,6 +1,6 @@
 import { Header } from "./header";
 import { Footer } from "./footer";
-import { getNavigationWithDates } from "@/lib/navigation";
+import { getNavigationWithDates } from "@/lib/utils/navigation-utils";
 import { Menu } from "@/components/menu";
 
 export default async function DocsLayout({
