@@ -10,7 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@floating-ui/react": "^0.27.12",
+    "@floating-ui/react": "^0.27.13",
     "@hookform/resolvers": "^3.10.0",
     "@mdx-js/mdx": "^3.1.0",
     "@phosphor-icons/react": "^2.1.10",
@@ -31,11 +31,11 @@
     "remark-gfm": "^4.0.0",
     "shiki": "^1.29.1",
     "tailwind-merge": "^3.0.2",
-    "zod": "^3.24.1"
+    "zod": "^3.25.74"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4.0.15",
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/chroma-js": "^3.1.1",
     "@types/node": "^22",
     "@types/react": "^19",
@@ -46,7 +46,7 @@
     "eslint-config-prettier": "^10.1.5",
     "postcss": "^8",
     "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.12",
+    "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5"
