@@ -13,7 +13,7 @@ import {
 } from "@/lib/pagefind-types";
 
 import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const highlights = [
   {
@@ -147,62 +147,81 @@ export const Search = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleSearch = useCallback(async () => {
-    setIsLoading(true);
+  useEffect(() => {
+    const handleSearch = async () => {
+      setIsLoading(true);
+  
+      if (pagefindInstance) {
+        const search = await pagefindInstance.debouncedSearch(query, 200);
+        if (search === null) {
+          // a more recent search call has been made, do nothing
+          return;
+        }
+  
+        const findGroupByHref = (href: string) => {
+          const navigationItem = navigation.find((item) =>
+            item.children.some((child) => child.href === href)
+          );
+          return navigationItem?.title;
+        };
+  
+        const processedResults = await Promise.all(
+          search.results.map(async (result) => {
+            const data = await result.data();
+            const markedWords = [...(data.excerpt.matchAll(/<mark>(.*?)<\/mark>/g) || [])].map(match => match[1]);
 
-    if (pagefindInstance) {
-      const search = await pagefindInstance.debouncedSearch(query, 200);
-      if (search === null) {
-        // a more recent search call has been made, do nothing
-        return;
-      }
+            if (!markedWords.some((word) => word.toLowerCase().includes(query.toLowerCase()))) {
+              return;
+            }
 
-      const findGroupByHref = (href: string) => {
-        const navigationItem = navigation.find((item) =>
-          item.children.some((child) => child.href === href)
+            const href = data.url.split(".html")[0].replace("/server/app", "");
+  
+            return {
+              title: data.meta.title,
+              href: href,
+            };
+          })
         );
-        return navigationItem?.title;
-      };
+  
+        const groupedResults = processedResults.reduce((acc, result) => {
+          if (!result) {
+            return acc;
+          }
 
-      const processedResults = await Promise.all(
-        search.results.map(async (result) => {
-          const data = await result.data();
-          const href = data.url.split(".html")[0].replace("/server/app", "");
+          const group = findGroupByHref(result.href) ?? "";
+  
+          if (group === "") {
+            return acc;
+          }
+  
+          const foundIndex = acc.findIndex((item) => item.group === group);
 
-          return {
-            title: data.meta.title,
-            href: href,
-          };
-        })
-      );
-
-      const groupedResults = processedResults.reduce((acc, result) => {
-        const group = findGroupByHref(result.href) ?? "";
-
-        if (group === "") {
+          // Max number of items in each group
+          if (foundIndex !== -1 && acc[foundIndex].items.length >= 15) {
+            return acc;
+          }
+  
+          if (foundIndex !== -1) {
+            acc[foundIndex] = {
+              group: group,
+              items: [...acc[foundIndex].items, result],
+            };
+          } else {
+            acc.push({
+              group: group,
+              items: [result],
+            });
+          }
+  
           return acc;
-        }
+        }, [] as Result[]);
+  
+        setResults(groupedResults);
+        setIsLoading(false);
+      }
+    };
 
-        const foundIndex = acc.findIndex((item) => item.group === group);
-
-        if (foundIndex !== -1) {
-          acc[foundIndex] = {
-            group: group,
-            items: [...acc[foundIndex].items, result],
-          };
-        } else {
-          acc.push({
-            group: group,
-            items: [result],
-          });
-        }
-
-        return acc;
-      }, [] as Result[]);
-
-      setResults(groupedResults);
-      setIsLoading(false);
-    }
+    handleSearch()
   }, [pagefindInstance, query]);
 
   return (
@@ -232,14 +251,14 @@ export const Search = () => {
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
-              if (e.target.value.trim()) {
-                handleSearch();
-              }
+              // if (e.target.value.trim()) {
+              //   handleSearch();
+              // }
             }}
           />
         </div>
         <div className="flex flex-col gap-4 overflow-y-auto pt-4 pb-1">
-          {query === "" || isLoading ? (
+          {query === "" || (isLoading && query === '') ? (
             highlights.map((highlight, index) => (
               <Group key={index} result={highlight} />
             ))
