@@ -6,16 +6,8 @@ export const metadata = {
   preview: "dialog",
   dependencies: [
     {
-      name: "Button",
-      href: "/ui/button",
-    },
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-    {
-      name: "@floating-ui/react",
-      href: "https://floating-ui.com/docs/react",
+      name: "Modal",
+      href: "/ui/modal",
     },
   ],
 };
@@ -38,7 +30,7 @@ export const metadata = {
     <DialogClose />
     <DialogDescription />
     <DialogActions />
-  </DialogContent>
+  </Dialog.Content>
 </Dialog>
 ```
 
@@ -46,35 +38,15 @@ export const metadata = {
 
 ### Dialog
 
-<PropsTable
-  definition={{
-    open: {
-      type: "boolean",
-      description: "Whether the dialog is open.",
-    },
-    setOpen: {
-      type: "(open: boolean) => void",
-      description: "Callback fired when the dialog's open state changes.",
-    },
-  }}
-/>
+Extends the `Modal` component.
 
 ### DialogTrigger
 
-Extends the `button` element.
-
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether to merge props onto the child element.",
-    },
-  }}
-/>
+Extends the `ModalTrigger` component.
 
 ### DialogContent
 
-Extends the `div` element.
+Extends the `ModalContent` component.
 
 <PropsTable
   definition={{
@@ -83,42 +55,16 @@ Extends the `div` element.
       description: "The vertical alignment of the dialog.",
       default: '"center"',
     },
-    wrapperClassName: {
-      type: "string",
-      description: "Additional classes to apply to the dialog wrapper.",
-    },
   }}
 />
 
 ### DialogTitle
 
-Extends the `h2` element.
-
-This component automatically sets the `aria-labelledby` attribute on the dialog element, ensuring proper accessibility by connecting the title to the dialog content.
-
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether to merge props onto the child element.",
-    },
-  }}
-/>
+Extends the `ModalTitle` component.
 
 ### DialogDescription
 
-Extends the `p` element.
-
-This component automatically sets the `aria-describedby` attribute on the dialog element, ensuring proper accessibility by connecting the description to the dialog content.
-
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether to merge props onto the child element.",
-    },
-  }}
-/>
+Extends the `ModalDescription` component.
 
 ### DialogActions
 
@@ -128,9 +74,7 @@ This component is designed to be placed at the bottom of the dialog content, pro
 
 ### DialogClose
 
-Extends the `button` element.
-
-Meant to be used within a `Dialog`, it will dismiss the dialog when clicked.
+Extends the `ModalClose` component.
 
 <PropsTable
   definition={{

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "../../button/button";
 import {
   Dialog,
@@ -21,7 +23,9 @@ export default function DialogPreview() {
           Are you sure you want to leave this page?
         </DialogDescription>
         <DialogActions>
-          <Button>Confirm</Button>
+          <DialogClose asChild>
+            <Button>Confirm</Button>
+          </DialogClose>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>

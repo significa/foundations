@@ -4,18 +4,20 @@ export const metadata = {
   files: ["src/foundations/ui/drawer/drawer.tsx"],
   preview: "drawer",
   dependencies: [
-    { name: "Slot", href: "/components/slot" },
-    { name: "useScrollLock", href: "/hooks/use-scroll-lock" },
-    { name: "motion/react", href: "https://motion.dev/docs/react-quick-start" },
+    {
+      name: "Modal",
+      href: "/ui/Modal",
+    },
   ],
 };
 
 ## Features
 
-- **Native-like Implementation**: Uses the native `dialog` element to create a modal overlay
-- **Focus Management**: Automatically traps focus within the drawer
+- **Modal Overlay**: Creates an accessible modal dialog with backdrop
+- **Focus Management**: Automatically traps focus within the dialog
+- **Flexible Positioning**: Center or top alignment options
 - **Controlled & Uncontrolled**: Supports both controlled and uncontrolled modes
-- **Responsive**: Automatically changes alignment and origin based on screen size
+- **Customizable Actions**: Built-in support for common dialog actions
 
 ## Anatomy
 
@@ -26,7 +28,7 @@ export const metadata = {
     <DrawerHeader>
       <DrawerTitle />
     </DrawerHeader>
-    {/*  body */}
+    <DrawerDescription />
     <DrawerActions>
       <DrawerClose />
     </DrawerActions>
@@ -38,106 +40,35 @@ export const metadata = {
 
 ### Drawer
 
-<PropsTable
-  definition={{
-    open: { type: "boolean", description: "Whether the drawer is open." },
-    defaultOpen: {
-      type: "boolean",
-      description: "Whether the drawer is open by default.",
-    },
-    onOpenChange: {
-      type: "(open: boolean) => void",
-      description: "Callback fired when the drawer's open state changes.",
-    },
-    scrollLockTarget: {
-      type: "string | HTMLElement | RefObject<HTMLElement>",
-      description:
-        "The element to lock the scroll on when the drawer is open. Defaults to the `body` element.",
-    },
-  }}
-/>
+Extends the `Modal` component.
 
 ### DrawerTrigger
 
-Extends the `button` element.
-
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether the component is rendered as a child.",
-    },
-  }}
-/>
+Extends the `ModalTrigger` component.
 
 ### DrawerClose
 
-Extends the `button` element.
-
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether the component is rendered as a child.",
-    },
-  }}
-/>
+Extends the `ModalClose` component.
 
 ### DrawerContent
 
-Extends the `dialog` element.
-
-### DrawerHeader
-
-Extends the `header` element.
-
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether the component is rendered as a child.",
-    },
-  }}
-/>
+Extends the `ModalContent` component.
 
 ### DrawerTitle
 
-Extends the `p` element.
+Extends the `ModalTitle` component.
 
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether the component is rendered as a child.",
-    },
-  }}
-/>
+### DrawerDescription
 
-### DrawerMain
+Extends the `ModalDescription` component.
+
+### DrawerHeader
 
 Extends the `div` element.
-
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether the component is rendered as a child.",
-    },
-  }}
-/>
 
 ### DrawerActions
 
 Extends the `div` element.
-
-<PropsTable
-  definition={{
-    asChild: {
-      type: "boolean",
-      description: "Whether the component is rendered as a child.",
-    },
-  }}
-/>
 
 ## Examples
 
@@ -148,10 +79,6 @@ Extends the `div` element.
 ### Controlled
 
 <Preview slug="drawer-controlled" />
-
-### Persist Exit Animation
-
-<Preview slug="drawer-persist-animation" />
 
 ## Best Practices
 

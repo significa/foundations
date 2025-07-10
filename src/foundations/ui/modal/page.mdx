@@ -1,0 +1,161 @@
+export const metadata = {
+  title: "Modal",
+  description:
+    "Modal provides a way to display content in a layer above the main interface, using the native HTML dialog element.",
+  files: ["src/foundations/ui/modal/modal.tsx"],
+  preview: "modal",
+  dependencies: [
+    {
+      name: "Slot",
+      href: "/components/slot",
+    },
+    {
+      name: "useElementTransition",
+      href: "/hooks/use-element-transition",
+    },
+    {
+      name: "composeRefs",
+      href: "/utils/compose-refs",
+    },
+  ],
+};
+
+## Features
+
+- **Native Dialog**: Built on the HTML `<dialog>` element for optimal accessibility
+- **Backdrop Interaction**: Click outside to close, ESC key support
+- **Focus Management**: Automatic focus trapping and restoration
+- **Smooth Transitions**: Integrated with `useElementTransition` for animations
+- **Controlled & Uncontrolled**: Supports both controlled and uncontrolled modes
+
+## Anatomy
+
+```tsx
+<Modal>
+  <ModalTrigger />
+  <ModalContent>
+    <ModalTitle />
+    <ModalDescription />
+    <ModalClose />
+  </ModalContent>
+</Modal>
+```
+
+## API Reference
+
+### Modal
+
+<PropsTable
+  definition={{
+    open: {
+      type: "boolean",
+      description: "Controls the open state of the modal (controlled mode)",
+    },
+    onOpenChange: {
+      type: "(open: boolean) => void",
+      description: "Callback fired when the open state changes",
+    },
+    children: {
+      type: "ReactNode",
+      required: true,
+      description: "The modal components",
+    },
+  }}
+/>
+
+### ModalContent
+
+Extends the native `<dialog>` element.
+
+<PropsTable
+  definition={{
+    catchFocus: {
+      type: "boolean",
+      default: "true",
+      description: "Whether to catch initial focus to prevent scroll jumps",
+    },
+    className: {
+      type: "string",
+      description: "Additional CSS classes for the dialog element",
+    },
+  }}
+/>
+
+### ModalTrigger
+
+Extends the `Button` component.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      default: "false",
+      description: "Render as a child component instead of an h2",
+    },
+  }}
+/>
+
+### ModalClose
+
+Extends the `Button` component.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      default: "false",
+      description: "Render as a child component instead of an h2",
+    },
+  }}
+/>
+
+### ModalTitle
+
+Extends the `h2` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      default: "false",
+      description: "Render as a child component instead of an h2",
+    },
+  }}
+/>
+
+### ModalDescription
+
+Extends the `p` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      default: "false",
+      description: "Render as a child component instead of a p",
+    },
+  }}
+/>
+
+## Examples
+
+### Basic Modal
+
+<Preview slug="modal" />
+
+### Controlled Modal
+
+<Preview slug="modal-controlled" />
+
+## Best Practices
+
+1. **Accessibility**:
+
+   - Always provide `ModalTitle` for screen readers
+   - Use `ModalDescription` for additional context
+   - Ensure keyboard navigation works properly
+
+2. **User Experience**:
+
+   - Keep modal content focused and concise
+   - Provide clear actions (confirm/cancel)
