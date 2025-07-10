@@ -1,7 +1,7 @@
 export const metadata = {
   title: "Modal",
   description:
-    "Modal provides a way to display content in a layer above the main interface, using the native HTML dialog element.",
+    "Modal provides an unstyled basis to display content in a layer above the main interface.",
   files: ["src/foundations/ui/modal/modal.tsx"],
   preview: "modal",
   dependencies: [
@@ -33,7 +33,7 @@ body:has(dialog[open]) {
 
 ## Features
 
-- **Native Dialog**: Built on the HTML `<dialog>` element for optimal accessibility
+- **Native Dialog**: Built on top of the HTML `<dialog>` element for optimal accessibility and base functionality
 - **Backdrop Interaction**: Click outside to close, ESC key support
 - **Focus Management**: Automatic focus trapping and restoration
 - **Smooth Transitions**: Integrated with `useElementTransition` for animations
@@ -85,16 +85,12 @@ Extends the native `<dialog>` element.
       default: "true",
       description: "Whether to catch initial focus to prevent scroll jumps",
     },
-    className: {
-      type: "string",
-      description: "Additional CSS classes for the dialog element",
-    },
   }}
 />
 
 ### ModalTrigger
 
-Extends the `Button` component.
+Extends the `button` element.
 
 <PropsTable
   definition={{
@@ -108,7 +104,7 @@ Extends the `Button` component.
 
 ### ModalClose
 
-Extends the `Button` component.
+Extends the `button` element.
 
 <PropsTable
   definition={{
