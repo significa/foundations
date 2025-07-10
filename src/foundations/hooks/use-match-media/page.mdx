@@ -1,14 +1,13 @@
 export const metadata = {
   title: "useMatchMedia",
-  description: "A hook that uses the matchMedia api to observe a media queries",
+  description: "A hook that uses the matchMedia API to observe a media query",
   files: ["src/foundations/hooks/use-match-media/use-match-media.ts"],
 };
 
 ## Features
 
 - **Media Query Support**: Observe any CSS media query for responsive behavior
-- **Real-time Updates**: Automatically updates when media query matches change
-- **Performance Optimized**: Efficient event listener management and cleanup
+- **Real-time Updates**: Automatically updates when the media query match changes
 
 ## API Reference
 
@@ -16,7 +15,13 @@ export const metadata = {
   definition={{
     query: {
       type: "string",
+      required: true,
       description: "The media query to observe",
+    },
+    initialValue: {
+      type: "boolean",
+      default: "false",
+      description: "Initial value for the media query match",
     },
   }}
 />
