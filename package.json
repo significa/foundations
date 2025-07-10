@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.12",
-    "@hookform/resolvers": "^3.10.0",
+    "@hookform/resolvers": "^5.1.1",
     "@mdx-js/mdx": "^3.1.0",
     "@phosphor-icons/react": "^2.1.10",
     "chroma-js": "^3.1.2",
