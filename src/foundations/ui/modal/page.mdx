@@ -20,6 +20,17 @@ export const metadata = {
   ],
 };
 
+### CSS
+
+To prevent background scrolling when the modal is open, add the following CSS to your global styles:
+
+```css
+body:has(dialog[open]) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+```
+
 ## Features
 
 - **Native Dialog**: Built on the HTML `<dialog>` element for optimal accessibility
@@ -159,3 +170,7 @@ Extends the `p` element.
 
    - Keep modal content focused and concise
    - Provide clear actions (confirm/cancel)
+
+```
+
+```
