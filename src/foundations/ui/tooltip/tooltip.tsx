@@ -25,12 +25,12 @@ import {
   useInteractions,
   useMergeRefs,
   FloatingArrow,
-  FloatingPortal,
   useTransitionStatus,
   hide,
 } from "@floating-ui/react";
 
 import { cn } from "@/lib/utils";
+import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
 
 const DEFAULT_DELAY_IN = 600;
 const DEFAULT_DELAY_OUT = 0;
@@ -128,11 +128,10 @@ const Tooltip = ({
 
   const interactions = useInteractions([hover, focus, dismiss, role]);
 
-  const contentRef = useMergeRefs([ctx.refs.setFloating, ref]);
+  const { isMounted, status } = useTransitionStatus(ctx, { duration: 0 });
 
-  const { isMounted, status } = useTransitionStatus(ctx, {
-    duration: 0,
-  });
+  const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
+  const contentRef = useMergeRefs([ctx.refs.setFloating, ref, topLayerRef]);
 
   return (
     <>
@@ -151,38 +150,36 @@ const Tooltip = ({
         </span>
       )}
       {isMounted && (
-        <FloatingPortal>
-          <div
-            ref={contentRef}
-            className={cn(
-              "bg-foreground text-background ease-out-quint z-50 max-w-80 rounded-lg px-3 py-1.5 text-xs break-words drop-shadow-md transition duration-300",
-              "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
-              "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
-              "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
-              floating.middlewareData.hide?.referenceHidden && "hidden",
-              className
-            )}
-            data-state={status === "open" ? "open" : "closed"}
-            data-side={ctx.placement.split("-")[0]}
-            style={{
-              position: ctx.strategy,
-              top: ctx.y ?? 0,
-              left: ctx.x ?? 0,
-              ...props.style,
-            }}
-            {...interactions.getFloatingProps(props)}
-          >
-            <FloatingArrow
-              ref={arrowRef}
-              context={ctx}
-              className="fill-foreground"
-              tipRadius={1}
-              height={ARROW_HEIGHT}
-              width={ARROW_WIDTH}
-            />
-            {content}
-          </div>
-        </FloatingPortal>
+        <div
+          ref={contentRef}
+          className={cn(
+            "bg-foreground text-background ease-out-quint z-50 max-w-80 overflow-visible rounded-lg px-3 py-1.5 text-xs break-words drop-shadow-md transition duration-300",
+            "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
+            "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
+            "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
+            floating.middlewareData.hide?.referenceHidden && "hidden",
+            className
+          )}
+          data-state={status === "open" ? "open" : "closed"}
+          data-side={ctx.placement.split("-")[0]}
+          style={{
+            position: ctx.strategy,
+            top: ctx.y ?? 0,
+            left: ctx.x ?? 0,
+            ...props.style,
+          }}
+          {...interactions.getFloatingProps(props)}
+        >
+          <FloatingArrow
+            ref={arrowRef}
+            context={ctx}
+            className="fill-foreground"
+            tipRadius={1}
+            height={ARROW_HEIGHT}
+            width={ARROW_WIDTH}
+          />
+          {content}
+        </div>
       )}
     </>
   );

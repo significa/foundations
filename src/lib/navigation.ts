@@ -214,6 +214,10 @@ export const navigation: NavigationItem[] = [
         href: "/hooks/use-ticker",
       },
       {
+        title: "useTopLayer",
+        href: "/hooks/use-top-layer",
+      },
+      {
         title: "usePrefersReducedMotion",
         href: "/hooks/use-prefers-reduced-motion",
       },

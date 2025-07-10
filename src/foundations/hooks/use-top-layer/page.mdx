@@ -1,0 +1,72 @@
+export const metadata = {
+  title: "useTopLayer",
+  description:
+    "A hook that pushes an element to the application's Top Layer using the HTML popover API.",
+  files: ["src/foundations/hooks/use-top-layer/use-top-layer.ts"],
+};
+
+## Features
+
+- **Top Layer Positioning** - Elevates elements to the browser's Top Layer for guaranteed z-index supremacy
+- **HTML Popover API** - Uses the native HTML popover API for optimal performance and accessibility
+- **Conditional Activation** - Supports conditional activation/deactivation through the `active` parameter
+
+## API Reference
+
+<PropsTable
+  definition={{
+    active: {
+      name: "active",
+      type: "boolean",
+      description:
+        "Whether the element should be pushed to the Top Layer. Defaults to true.",
+    },
+  }}
+/>
+
+The hook returns a `RefObject<T | null>` that should be attached to the target HTML element.
+
+## Examples
+
+### Basic Usage
+
+```tsx
+const Component = () => {
+  const ref = useTopLayer<HTMLDivElement>();
+
+  return (
+    <div ref={ref} className="rounded border bg-white p-4 shadow">
+      This element is now in the Top Layer!
+    </div>
+  );
+};
+```
+
+### Conditional Top Layer
+
+```tsx
+const Component = ({ isOpen }) => {
+  const ref = useTopLayer<HTMLDivElement>(isOpen);
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "bg-opacity-50 fixed inset-0 bg-black",
+        isOpen ? "block" : "hidden"
+      )}
+    >
+      <div className="flex h-full items-center justify-center">
+        <div className="rounded-lg bg-white p-6 shadow-xl">
+          <h2>Modal Content</h2>
+          <p>This modal is in the Top Layer when open.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+## Further Reading
+
+For a deeper dive into the browser's Top Layer and how it works under the hood, check out the [MDN Web Docs on the Top Layer](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer).
