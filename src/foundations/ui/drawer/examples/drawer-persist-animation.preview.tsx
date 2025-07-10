@@ -12,7 +12,7 @@ import {
 } from "../drawer";
 import { Button } from "@/foundations/ui/button/button";
 import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
-import { Plus, Trash } from "@phosphor-icons/react/dist/ssr";
+import { PlusIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
 
 interface PersistItemProps {
@@ -32,7 +32,7 @@ const PersistItem = ({
       <Drawer>
         <DrawerTrigger asChild>
           <Button variant="outline" size="sm">
-            <Trash /> Remove
+            <TrashIcon /> Remove
           </Button>
         </DrawerTrigger>
         <DrawerContent persistExitAnimation={persistExitAnimation}>
@@ -93,7 +93,7 @@ const DrawerPersistAnimation = () => {
               ])
             }
           >
-            <Plus /> Add Item
+            <PlusIcon /> Add Item
           </Button>
         </div>
       </div>

@@ -22,7 +22,7 @@ import {
   UseInteractionsReturn,
 } from "@floating-ui/react";
 import { Slot } from "@/foundations/components/slot/slot";
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 import { cn } from "@/lib/utils";
 
@@ -347,7 +347,7 @@ const PopoverSearchInput = ({
 }: React.ComponentPropsWithRef<"input">) => {
   return (
     <div className="border-border relative mb-1 flex items-center rounded-t-lg border-b bg-transparent">
-      <MagnifyingGlass
+      <MagnifyingGlassIcon
         weight="bold"
         className="text-foreground absolute left-4 size-4 shrink-0"
       />

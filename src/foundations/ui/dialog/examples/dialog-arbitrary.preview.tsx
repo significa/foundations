@@ -1,4 +1,4 @@
-import { X } from "@phosphor-icons/react/dist/ssr";
+import { XIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Button } from "../../button/button";
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from "../dialog";
@@ -12,7 +12,7 @@ export default function DialogArbitraryPreview() {
       <DialogContent className="p-0">
         <DialogClose className="absolute top-3 right-3" asChild>
           <Button variant="outline" size="sm" square>
-            <X className="size-4" />
+            <XIcon className="size-4" />
           </Button>
         </DialogClose>
         <div className="flex flex-col items-center rounded-2xl p-6">

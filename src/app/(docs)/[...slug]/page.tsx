@@ -2,7 +2,7 @@ import path from "path";
 import { format } from "date-fns";
 
 import { notFound } from "next/navigation";
-import { Calendar, Pencil } from "@phosphor-icons/react/dist/ssr";
+import { CalendarIcon, PencilIcon } from "@phosphor-icons/react/dist/ssr";
 
 import {
   getMostRecentModifiedDate,
@@ -93,10 +93,10 @@ export default async function Page({
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Pencil /> Edit this page
+            <PencilIcon /> Edit this page
           </a>
           <p className="text-foreground-secondary flex items-center gap-1 text-xs">
-            <Calendar />
+            <CalendarIcon />
             Edited{" "}
             {format(
               await getMostRecentModifiedDate(

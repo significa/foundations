@@ -4,7 +4,7 @@ import { Menu } from "@/components/menu";
 import { Button } from "@/foundations/ui/button/button";
 import { Portal } from "@/foundations/ui/portal/portal";
 import { navigation } from "@/lib/navigation";
-import { List, X } from "@phosphor-icons/react";
+import { ListIcon, XIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -27,7 +27,7 @@ export const MobileNav = ({ items }: { items: typeof navigation }) => {
         aria-label="Open menu"
         onClick={() => setIsOpen(true)}
       >
-        <List />
+        <ListIcon />
       </Button>
       {isOpen && (
         <Portal>
@@ -40,7 +40,7 @@ export const MobileNav = ({ items }: { items: typeof navigation }) => {
                 aria-label="Close menu"
                 onClick={() => setIsOpen(false)}
               >
-                <X />
+                <XIcon />
               </Button>
             </div>
             <div className="h-[calc(100dvh-var(--spacing)*14)] overflow-y-auto overscroll-contain pt-6">

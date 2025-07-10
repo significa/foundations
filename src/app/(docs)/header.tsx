@@ -7,7 +7,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { GITHUB_REPO_URL } from "@/lib/constants";
 
 import { MobileNav } from "./mobile-nav";
-import { getNavigationWithDates } from "@/lib/utils/navigation-utils";
+import { getNavigationWithDates } from "@/lib/utils/navigation";
 import Link from "next/link";
 import { Search } from "@/components/search";
 

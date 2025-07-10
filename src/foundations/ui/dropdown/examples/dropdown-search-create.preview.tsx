@@ -11,7 +11,7 @@ import {
   DropdownSearchInput,
   DropdownTrigger,
 } from "@/foundations/ui/dropdown/dropdown";
-import { UserCircle } from "@phosphor-icons/react/dist/ssr";
+import { UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { useMemo, useState } from "react";
 import { Avatar, AvatarFallback } from "@/foundations/ui/avatar/avatar";
 
@@ -119,7 +119,7 @@ export default function DropdownSearchCreatePreview() {
         </div>
       ) : (
         <div className="text-foreground-secondary mt-4 flex h-8 items-center gap-1 text-sm">
-          <UserCircle className="text-base" /> No people selected
+          <UserCircleIcon className="text-base" /> No people selected
         </div>
       )}
     </div>

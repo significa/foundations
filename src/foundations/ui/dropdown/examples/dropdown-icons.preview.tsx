@@ -6,10 +6,10 @@ import {
   DropdownTrigger,
 } from "@/foundations/ui/dropdown/dropdown";
 import {
-  Copy,
-  PencilSimple,
-  Archive,
-  Trash,
+  CopyIcon,
+  PencilSimpleIcon,
+  ArchiveIcon,
+  TrashIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
 export default function DropdownIconsPreview() {
@@ -20,19 +20,19 @@ export default function DropdownIconsPreview() {
       </DropdownTrigger>
       <DropdownItems>
         <DropdownItem>
-          <PencilSimple />
+          <PencilSimpleIcon />
           Edit
         </DropdownItem>
         <DropdownItem>
-          <Copy />
+          <CopyIcon />
           Duplicate
         </DropdownItem>
         <DropdownItem>
-          <Archive />
+          <ArchiveIcon />
           Archive
         </DropdownItem>
         <DropdownItem disabled>
-          <Trash />
+          <TrashIcon />
           Delete
         </DropdownItem>
       </DropdownItems>

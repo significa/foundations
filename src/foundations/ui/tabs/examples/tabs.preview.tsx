@@ -1,4 +1,4 @@
-import { CreditCard, Gear, Users } from "@phosphor-icons/react/dist/ssr";
+import { CreditCardIcon, GearIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
 import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "../tabs";
 
 export default function TabsPreview() {
@@ -6,15 +6,15 @@ export default function TabsPreview() {
     <Tabs>
       <TabsItems>
         <TabsItem>
-          <Users />
+          <UsersIcon />
           <span>Users</span>
         </TabsItem>
         <TabsItem>
-          <CreditCard />
+          <CreditCardIcon />
           <span>Billing</span>
         </TabsItem>
         <TabsItem>
-          <Gear />
+          <GearIcon />
           <span>Settings</span>
         </TabsItem>
       </TabsItems>

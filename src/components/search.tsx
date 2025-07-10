@@ -11,8 +11,7 @@ import {
   PagefindSearchOptions,
   PagefindSearchResults,
 } from "@/lib/pagefind-types";
-
-import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useState } from "react";
 
 const highlights = [
@@ -243,12 +242,12 @@ export const Search = () => {
     >
       <DialogTrigger asChild>
         <Button size="sm" square variant="ghost" className="pt-px">
-          <MagnifyingGlass />
+          <MagnifyingGlassIcon />
         </Button>
       </DialogTrigger>
       <DialogContent className="flex h-[400px] max-h-[70svh] w-256 flex-col rounded-xl p-0">
         <div className="border-border bg-background sticky top-0 z-10 flex w-full items-center border-b px-3 py-3">
-          <MagnifyingGlass className="mt-0.5 size-3.75" />
+          <MagnifyingGlassIcon className="mt-0.5 size-3.75" />
           <input
             type="text"
             className="ml-2.5 outline-none"
@@ -257,9 +256,6 @@ export const Search = () => {
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
-              // if (e.target.value.trim()) {
-              //   handleSearch();
-              // }
             }}
           />
         </div>

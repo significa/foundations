@@ -2,7 +2,7 @@
 
 import { Button } from "@/foundations/ui/button/button";
 import { cn } from "@/lib/utils";
-import { ArrowSquareOut } from "@phosphor-icons/react";
+import { ArrowSquareOutIcon } from "@phosphor-icons/react";
 import { createContext, use, useState } from "react";
 
 const PreviewSwitchContext = createContext<{
@@ -52,7 +52,7 @@ export const PreviewSwitch = ({
           aria-label="Open in new window"
         >
           <a href={`/preview/${slug}?layout=${layout}`} target="_blank">
-            <ArrowSquareOut />
+            <ArrowSquareOutIcon />
           </a>
         </Button>
       </div>

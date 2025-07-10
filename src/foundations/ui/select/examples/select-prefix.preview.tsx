@@ -1,4 +1,4 @@
-import { User } from "@phosphor-icons/react/dist/ssr";
+import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 import { Select, SelectGroup, SelectPrefix } from "../select";
 
 export default function SelectPrefixPreview() {
@@ -6,7 +6,7 @@ export default function SelectPrefixPreview() {
     <div className="w-90">
       <SelectGroup>
         <SelectPrefix>
-          <User />
+          <UserIcon />
         </SelectPrefix>
         <Select>
           <option value="1">Option 1</option>
