@@ -2,8 +2,13 @@
 
 import { X } from "@phosphor-icons/react/dist/ssr";
 
-import { Button } from "../../button/button";
-import { Dialog, DialogClose, DialogContent, DialogTrigger } from "../dialog";
+import { Button } from "@/foundations/ui/button/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "@/foundations/ui/dialog/dialog";
 
 export default function DialogArbitraryPreview() {
   return (

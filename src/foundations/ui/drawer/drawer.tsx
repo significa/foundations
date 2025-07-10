@@ -6,7 +6,7 @@ import {
   ModalDescription,
   ModalTitle,
   ModalTrigger,
-} from "../modal/modal";
+} from "@/foundations/ui/modal/modal";
 
 type DrawerProps = React.ComponentProps<typeof Modal>;
 
