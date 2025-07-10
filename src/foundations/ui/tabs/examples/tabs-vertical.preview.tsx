@@ -1,4 +1,8 @@
-import { CreditCardIcon, GearIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  CreditCardIcon,
+  GearIcon,
+  UsersIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "../tabs";
 
 export default function TabsVerticalPreview() {
