@@ -24,6 +24,10 @@
   --shadow-lg:
     0 2px 4px oklch(0 0 0 / 0.02), 0 4px 8px oklch(0 0 0 / 0.02),
     0 8px 16px oklch(0 0 0 / 0.02);
+
+  /* easings */
+  --ease-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --ease-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,4 +57,9 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
 }

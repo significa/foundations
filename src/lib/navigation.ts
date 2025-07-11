@@ -142,6 +142,10 @@ export const navigation: NavigationItem[] = [
         title: "Tooltip",
         href: "/ui/tooltip",
       },
+      {
+        title: "Modal",
+        href: "/ui/modal",
+      },
     ],
   },
   {
@@ -214,6 +218,10 @@ export const navigation: NavigationItem[] = [
         href: "/hooks/use-ticker",
       },
       {
+        title: "useTopLayer",
+        href: "/hooks/use-top-layer",
+      },
+      {
         title: "usePrefersReducedMotion",
         href: "/hooks/use-prefers-reduced-motion",
       },
@@ -228,6 +236,10 @@ export const navigation: NavigationItem[] = [
       {
         title: "useDetectDevice",
         href: "/hooks/use-detect-device",
+      },
+      {
+        title: "useElementTransition",
+        href: "/hooks/use-element-transition",
       },
     ],
   },

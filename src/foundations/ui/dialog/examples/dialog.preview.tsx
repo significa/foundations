@@ -1,4 +1,6 @@
-import { Button } from "../../button/button";
+"use client";
+
+import { Button } from "@/foundations/ui/button/button";
 import {
   Dialog,
   DialogActions,
@@ -7,7 +9,7 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "../dialog";
+} from "@/foundations/ui/dialog/dialog";
 
 export default function DialogPreview() {
   return (
@@ -21,7 +23,9 @@ export default function DialogPreview() {
           Are you sure you want to leave this page?
         </DialogDescription>
         <DialogActions>
-          <Button>Confirm</Button>
+          <DialogClose asChild>
+            <Button>Confirm</Button>
+          </DialogClose>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>

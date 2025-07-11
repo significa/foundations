@@ -1,4 +1,6 @@
-import { Button } from "../../button/button";
+"use client";
+
+import { Button } from "@/foundations/ui/button/button";
 import {
   Dialog,
   DialogActions,
@@ -6,7 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
-} from "../dialog";
+} from "@/foundations/ui/dialog/dialog";
 
 export default function DialogTallPreview() {
   return (

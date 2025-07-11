@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/foundations/ui/button/button";
 import {
   Drawer,
@@ -7,7 +9,6 @@ import {
   DrawerTrigger,
   DrawerClose,
   DrawerActions,
-  DrawerMain,
 } from "@/foundations/ui/drawer/drawer";
 
 const DrawerTallContent = () => {
@@ -20,15 +21,13 @@ const DrawerTallContent = () => {
         <DrawerHeader>
           <DrawerTitle>Drawer Title</DrawerTitle>
         </DrawerHeader>
-        <DrawerMain>
-          {Array(24)
-            .fill(null)
-            .map((_, index) => (
-              <p key={index} className="mb-4">
-                This is paragraph {index + 1}.
-              </p>
-            ))}
-        </DrawerMain>
+        {Array(24)
+          .fill(null)
+          .map((_, index) => (
+            <p key={index} className="mb-4">
+              This is paragraph {index + 1}.
+            </p>
+          ))}
         <DrawerActions className="flex gap-2">
           <DrawerClose asChild>
             <Button className="grow">Submit</Button>
