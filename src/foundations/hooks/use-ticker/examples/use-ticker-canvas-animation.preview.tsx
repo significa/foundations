@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import { Play, Square, ArrowCounterClockwise } from "@phosphor-icons/react";
+import {
+  PlayIcon,
+  SquareIcon,
+  ArrowCounterClockwiseIcon,
+} from "@phosphor-icons/react";
 
 import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
 import { Button } from "@/foundations/ui/button/button";
@@ -34,15 +38,15 @@ const UseTickerCanvasAnimation = () => {
     <div className="absolute inset-0 grid place-items-center">
       <div className="absolute top-2 left-2 z-10 flex justify-start gap-2">
         <Button onClick={ticker.start} size="sm">
-          <Play size={16} />
+          <PlayIcon size={16} />
           Start
         </Button>
         <Button variant="outline" onClick={ticker.stop} size="sm">
-          <Square size={16} />
+          <SquareIcon size={16} />
           Stop
         </Button>
         <Button variant="outline" onClick={reset} size="sm">
-          <ArrowCounterClockwise size={16} />
+          <ArrowCounterClockwiseIcon size={16} />
           Reset
         </Button>
       </div>

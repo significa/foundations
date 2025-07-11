@@ -7,8 +7,9 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { GITHUB_REPO_URL } from "@/lib/constants";
 
 import { MobileNav } from "./mobile-nav";
-import { getNavigationWithDates } from "@/lib/navigation";
+import { getNavigationWithDates } from "@/lib/utils/navigation";
 import Link from "next/link";
+import { Search } from "@/components/search";
 
 export const Header = async () => {
   return (
@@ -22,6 +23,7 @@ export const Header = async () => {
           </Link>
         </div>
         <div className="flex items-center gap-1.5">
+          <Search />
           <Button variant="ghost" size="sm" square asChild>
             <a href={GITHUB_REPO_URL} target="_blank" rel="noopener noreferrer">
               <Octocat />

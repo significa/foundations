@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { Info } from "@phosphor-icons/react";
+import { InfoIcon } from "@phosphor-icons/react";
 
 import { Input, InputGroup, InputPrefix, InputSuffix } from "../input";
 import { Tooltip } from "../../tooltip/tooltip";
@@ -18,7 +18,7 @@ export default function InputInteractiveAddon() {
         <Input ref={input} placeholder="000 000 000" />
         <InputSuffix interactive>
           <Tooltip content="Your phone number will be visible">
-            <Info />
+            <InfoIcon />
           </Tooltip>
         </InputSuffix>
       </InputGroup>

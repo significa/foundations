@@ -2,7 +2,7 @@
 
 import { Button } from "@/foundations/ui/button/button";
 
-import { Moon, Sun } from "@phosphor-icons/react";
+import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { useTheme } from "next-themes";
 import { useCallback } from "react";
 
@@ -33,8 +33,8 @@ export const ThemeSwitcher = () => {
 
   return (
     <Button size="sm" square variant="ghost" onClick={toggle}>
-      <Sun className="hidden dark:block" />
-      <Moon className="block dark:hidden" />
+      <SunIcon className="hidden dark:block" />
+      <MoonIcon className="block dark:hidden" />
 
       <span className="sr-only">Toggle theme</span>
     </Button>

@@ -1,4 +1,4 @@
-import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { Input, InputGroup, InputPrefix } from "../input";
 
 export default function InputIcon() {
@@ -6,7 +6,7 @@ export default function InputIcon() {
     <div className="w-90">
       <InputGroup>
         <InputPrefix>
-          <MagnifyingGlass />
+          <MagnifyingGlassIcon />
         </InputPrefix>
         <Input placeholder="Search something" />
       </InputGroup>

@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@phosphor-icons/react";
+import { UserIcon } from "@phosphor-icons/react";
 import { VariantProps } from "cva";
 
 import { cn, cva } from "@/lib/utils";
@@ -82,7 +82,7 @@ const AvatarFallback = ({
 }: AvatarFallbackProps) => {
   return (
     <div className={cn("opacity-80", className)} {...props}>
-      {getInitials(children) || <User weight="bold" />}
+      {getInitials(children) || <UserIcon weight="bold" />}
     </div>
   );
 };

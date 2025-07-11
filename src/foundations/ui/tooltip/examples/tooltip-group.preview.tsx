@@ -1,4 +1,4 @@
-import { Clipboard, Scissors } from "@phosphor-icons/react/dist/ssr";
+import { ClipboardIcon, ScissorsIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "../../button/button";
 import { TooltipGroup, Tooltip } from "../tooltip";
 
@@ -8,12 +8,12 @@ export default function TooltipGroupPreview() {
       <TooltipGroup>
         <Tooltip content="Copy">
           <Button variant="outline" size="sm" square>
-            <Clipboard />
+            <ClipboardIcon />
           </Button>
         </Tooltip>
         <Tooltip content="Cut">
           <Button variant="outline" size="sm" square>
-            <Scissors />
+            <ScissorsIcon />
           </Button>
         </Tooltip>
       </TooltipGroup>

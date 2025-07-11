@@ -6,7 +6,7 @@ import {
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
 import { cn } from "@/lib/utils";
-import { FileText, Folder } from "@phosphor-icons/react";
+import { FileTextIcon, FolderIcon } from "@phosphor-icons/react";
 import { useState, createContext, use, useCallback, useEffect } from "react";
 
 const FileTreeContext = createContext<{
@@ -167,7 +167,7 @@ const FileNavigationItem = ({ name, node, path }: FileNavigationItemProps) => {
         isActive={selectedFile === fullPath}
         onClick={() => setSelectedFile(fullPath)}
       >
-        <FileText className="text-foreground-secondary" />
+        <FileTextIcon className="text-foreground-secondary" />
         <span>{name}</span>
       </Item>
     );
@@ -177,7 +177,7 @@ const FileNavigationItem = ({ name, node, path }: FileNavigationItemProps) => {
     <Disclosure key={fullPath} defaultOpen>
       <DisclosureTrigger asChild className="justify-start">
         <Item level={path.length + 1}>
-          <Folder className="text-foreground-secondary" />
+          <FolderIcon className="text-foreground-secondary" />
           <span>{name}</span>
         </Item>
       </DisclosureTrigger>

@@ -3,7 +3,7 @@
 import { Marquee } from "@/foundations/components/marquee/marquee";
 import { useState } from "react";
 import { Button } from "@/foundations/ui/button/button";
-import { Plus, Minus } from "@phosphor-icons/react";
+import { PlusIcon, MinusIcon } from "@phosphor-icons/react";
 
 const MarqueeDynamicContentExample = () => {
   const [items, setItems] = useState(["0"]);
@@ -22,11 +22,11 @@ const MarqueeDynamicContentExample = () => {
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         <Button onClick={addItem} variant="outline" size="sm">
-          <Plus size={16} />
+          <PlusIcon size={16} />
           Add
         </Button>
         <Button onClick={removeItem} variant="outline" size="sm">
-          <Minus size={16} />
+          <MinusIcon size={16} />
           Remove
         </Button>
       </div>

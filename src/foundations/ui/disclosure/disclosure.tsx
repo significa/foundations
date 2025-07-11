@@ -5,7 +5,7 @@ import { createContext, use, useId, useState } from "react";
 import { Slot } from "@/foundations/components/slot/slot";
 
 import { cn } from "@/lib/utils";
-import { CaretDown } from "@phosphor-icons/react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 
 interface DisclosureGroupContext {
   open: string | null;
@@ -177,7 +177,7 @@ const DisclosureChevron = ({
       )}
       {...props}
     >
-      <CaretDown />
+      <CaretDownIcon />
     </span>
   );
 };

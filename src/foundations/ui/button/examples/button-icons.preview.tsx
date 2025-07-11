@@ -1,8 +1,8 @@
 import {
-  ArrowSquareOut,
-  Package,
-  Pencil,
-  Sun,
+  ArrowSquareOutIcon,
+  PackageIcon,
+  PencilIcon,
+  SunIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "../button";
 
@@ -10,16 +10,16 @@ export default function ButtonIconsPreview() {
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Button variant="outline" square aria-label="Switch theme">
-        <Sun />
+        <SunIcon />
       </Button>
       <Button variant="outline">
-        <Pencil />
+        <PencilIcon />
         <span>Edit</span>
       </Button>
       <Button variant="outline">
-        <Package />
+        <PackageIcon />
         <span>External link</span>
-        <ArrowSquareOut />
+        <ArrowSquareOutIcon />
       </Button>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { Button } from "@/foundations/ui/button/button";
 import { cn } from "@/lib/utils";
-import { Check, Clipboard } from "@phosphor-icons/react";
+import { CheckIcon, ClipboardIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 
 export const CopyButton = ({
@@ -41,7 +41,7 @@ export const CopyButton = ({
       aria-label="Copy"
       className={cn(className)}
     >
-      {isCopied ? <Check /> : <Clipboard />}
+      {isCopied ? <CheckIcon /> : <ClipboardIcon />}
     </Button>
   );
 };

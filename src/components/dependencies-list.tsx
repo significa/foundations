@@ -1,5 +1,8 @@
 import { Badge, BadgeIcon } from "@/foundations/ui/badge/badge";
-import { ArrowSquareOut, Package } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowSquareOutIcon,
+  PackageIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 interface DependenciesListProps {
@@ -27,12 +30,12 @@ export const DependenciesList = ({ dependencies }: DependenciesListProps) => {
               target={type === "external" ? "_blank" : undefined}
             >
               <BadgeIcon>
-                <Package />
+                <PackageIcon />
               </BadgeIcon>
               <span>{name}</span>
               {type === "external" && (
                 <BadgeIcon>
-                  <ArrowSquareOut className="text-foreground-secondary" />
+                  <ArrowSquareOutIcon className="text-foreground-secondary" />
                 </BadgeIcon>
               )}
             </Component>

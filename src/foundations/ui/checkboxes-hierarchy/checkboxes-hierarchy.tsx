@@ -3,7 +3,7 @@ import { Checkbox } from "../checkbox/checkbox";
 import { Input } from "../input/input";
 import { cn } from "@/lib/utils";
 import { useMemo, useState } from "react";
-import { CaretDown } from "@phosphor-icons/react/dist/ssr";
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 
 type CheckboxesHierarchyProps = {
   className?: string;
@@ -258,7 +258,7 @@ const CheckboxesHierarchy = ({
                 className="cursor-pointer hover:opacity-80"
                 onClick={() => onParentClick(parent)}
               >
-                <CaretDown
+                <CaretDownIcon
                   className={`transition-transform duration-200 ${openedParents.includes(parent.value) ? "-rotate-180" : ""}`}
                 />
               </button>
