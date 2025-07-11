@@ -108,7 +108,7 @@ const DrawerActions = ({
   return (
     <DrawerBleed
       className={cn(
-        "bg-background border-border sticky bottom-0 mt-auto border-t p-(--drawer-p)",
+        "bg-background border-border sticky bottom-0 mt-auto flex gap-2 border-t p-(--drawer-p)",
         className
       )}
       {...props}
