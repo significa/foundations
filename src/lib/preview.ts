@@ -3,7 +3,7 @@ import { walkDirectory } from "./fs";
 
 export const getPreviewSourcePath = async (slug: string) => {
   for await (const filepath of walkDirectory("./src/foundations")) {
-    if (filepath.endsWith(`/${slug}.preview.tsx`)) {
+    if (filepath.endsWith(`${path.sep}${slug}.preview.tsx`)) {
       return filepath;
     }
   }
