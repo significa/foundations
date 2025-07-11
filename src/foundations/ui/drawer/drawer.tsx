@@ -25,13 +25,13 @@ const DrawerContent = ({
     <ModalContent
       className={cn(
         "[--drawer-p:--spacing(4)]",
-        "bg-background-high border-border mx-auto flex w-full max-w-screen flex-col overflow-y-auto border p-(--drawer-p) *:shrink-0",
+        "bg-background-high border-border mx-auto flex w-full max-w-screen flex-col !overflow-x-hidden overflow-y-auto border p-(--drawer-p) *:shrink-0",
         "has-[[data-drawer-actions]:last-child]:pb-0 has-[[data-modal-focus-catcher]:first-child+[data-drawer-header],[data-drawer-header]:first-child]:pt-0",
         "backdrop:bg-black/20 backdrop:backdrop-blur-sm not-data-[status=open]:backdrop:opacity-0",
         // desktop
         "md:mr-0 md:h-full md:max-h-screen md:w-full md:max-w-128 md:not-data-[status=open]:translate-x-full",
         // mobile
-        "min-h-[50svh] max-md:mb-0 max-md:max-h-[calc(100svh-4rem)] max-md:w-full max-md:rounded-t-xl max-md:not-data-[status=open]:translate-y-full",
+        "min-h-[50svh] max-md:mb-0 max-md:max-h-[calc(100svh-(--spacing(16)))] max-md:w-full max-md:rounded-t-xl max-md:not-data-[status=open]:translate-y-full",
         // animation props
         "ease-emphasized-decelerate not-data-[status=open]:ease-emphasized-accelerate transition-transform",
         "backdrop:transition-opacity backdrop:ease-in-out",
