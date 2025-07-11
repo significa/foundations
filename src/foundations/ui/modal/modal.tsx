@@ -193,7 +193,6 @@ const ModalContent = ({
       data-status={status}
       aria-labelledby={labelId}
       aria-describedby={descriptionId}
-      inert={!open || props.inert}
       className={cn("m-auto", className)}
       {...props}
     >
@@ -202,7 +201,12 @@ const ModalContent = ({
         // If that element is scrolled out of view, the dialog may jump to it, causing a jarring and confusing scroll.
         // Additionally, browsers like Safari may show focus-visible styles on that element, which can look odd.
         // The following element catches initial focus to prevent these issues.
-        <div className="sr-only" autoFocus tabIndex={-1} />
+        <div
+          className="sr-only"
+          autoFocus
+          tabIndex={-1}
+          data-modal-focus-catcher=""
+        />
       )}
       {children}
     </dialog>

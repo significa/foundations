@@ -24,8 +24,9 @@ const DrawerContent = ({
   return (
     <ModalContent
       className={cn(
-        "[--padding:--spacing(4)]",
-        "bg-background-high border-border mx-auto flex w-full max-w-screen flex-col overflow-y-auto border p-(--padding) *:shrink-0",
+        "[--drawer-p:--spacing(4)]",
+        "bg-background-high border-border mx-auto flex w-full max-w-screen flex-col overflow-y-auto border p-(--drawer-p) *:shrink-0",
+        "has-[[data-drawer-actions]:last-child]:pb-0 has-[[data-modal-focus-catcher]:first-child+[data-drawer-header],[data-drawer-header]:first-child]:pt-0",
         "backdrop:bg-black/20 backdrop:backdrop-blur-sm not-data-[status=open]:backdrop:opacity-0",
         // desktop
         "md:mr-0 md:h-full md:max-h-screen md:w-full md:max-w-128 md:not-data-[status=open]:translate-x-full",
@@ -73,20 +74,11 @@ const DrawerDescription = ({
   );
 };
 
-// Don't very much like having this
 const DrawerBleed = ({
   className,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
-  return (
-    <div
-      className={cn(
-        "relative -mx-(--padding) w-[calc(100%+2*var(--padding))]",
-        className
-      )}
-      {...props}
-    />
-  );
+  return <div className={cn("-mx-(--drawer-p)", className)} {...props} />;
 };
 
 const DrawerHeader = ({
@@ -97,10 +89,11 @@ const DrawerHeader = ({
   return (
     <DrawerBleed
       className={cn(
-        "bg-background border-border sticky -top-(--padding) z-10 -mt-(--padding) mb-(--padding) border-b p-(--padding)",
+        "bg-background border-border sticky top-0 z-10 mb-(--drawer-p) border-b p-(--drawer-p)",
         className
       )}
       {...props}
+      data-drawer-header=""
     >
       {children}
     </DrawerBleed>
@@ -115,10 +108,11 @@ const DrawerActions = ({
   return (
     <DrawerBleed
       className={cn(
-        "bg-background border-border sticky -bottom-(--padding) mt-auto -mb-(--padding) border-t p-(--padding)",
+        "bg-background border-border sticky bottom-0 mt-auto border-t p-(--drawer-p)",
         className
       )}
       {...props}
+      data-drawer-actions=""
     >
       {children}
     </DrawerBleed>
