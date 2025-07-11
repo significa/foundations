@@ -32,6 +32,9 @@ import {
 import { cn } from "@/lib/utils";
 import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
 
+// Let's keep an eye on popover="hint", it might be able to handle the tooltip logic natively
+// https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using#using_hint_popover_state
+
 const DEFAULT_DELAY_IN = 600;
 const DEFAULT_DELAY_OUT = 0;
 const ARROW_HEIGHT = 4;
