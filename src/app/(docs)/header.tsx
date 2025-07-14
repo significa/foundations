@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/foundations/ui/button/button";
 
 import { Egg } from "@/components/icons/egg";
@@ -6,16 +8,33 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 
 import { GITHUB_REPO_URL } from "@/lib/constants";
 
-import { MobileNav } from "./mobile-nav";
-import { getNavigationWithDates } from "@/lib/navigation";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ListIcon, XIcon } from "@phosphor-icons/react";
 
-export const Header = async () => {
+export const Header = () => {
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document
+      .getElementById("app-menu")
+      ?.setAttribute("data-mobile-menu-open", isMobileMenuOpen.toString());
+  }, [isMobileMenuOpen]);
+
   return (
     <div className="border-border bg-background/95 sticky top-0 z-50 border-b backdrop-blur-sm">
       <div className="mx-auto flex h-12 max-w-screen-2xl items-center justify-between gap-2 px-2 md:h-14 md:px-4">
         <div className="flex items-center gap-1.5">
-          <MobileNav items={await getNavigationWithDates()} />
+          <Button
+            className="xl:hidden"
+            variant="ghost"
+            size="sm"
+            square
+            aria-label="Open menu"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+          >
+            {isMobileMenuOpen ? <XIcon /> : <ListIcon />}
+          </Button>
           <Link href="/" className="flex items-center gap-1.5">
             <Egg />
             <div className="font-medium">Foundations</div>

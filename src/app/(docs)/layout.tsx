@@ -2,6 +2,7 @@ import { Header } from "./header";
 import { Footer } from "./footer";
 import { getNavigationWithDates } from "@/lib/navigation";
 import { Menu } from "@/components/menu";
+import { cn } from "@/lib/utils";
 
 export default async function DocsLayout({
   children,
@@ -12,10 +13,19 @@ export default async function DocsLayout({
     <div>
       <Header />
       <div className="mx-auto flex max-w-screen-2xl">
-        <aside className="sticky top-14 hidden h-[calc(100dvh-var(--spacing)*14)] w-[250px] shrink-0 overflow-y-auto border-r px-1 pt-6 md:px-2 xl:block">
+        <aside
+          id="app-menu"
+          // controlled by button by ./header.tsx component
+          data-mobile-menu-open="false"
+          className={cn(
+            "bg-background shrink-0 overflow-y-auto overscroll-contain px-2 md:px-4 xl:px-2 pt-2 pb-12",
+            "fixed top-12 hidden h-[calc(100dvh-var(--spacing)*12)] w-full data-[mobile-menu-open=true]:block max-xl:z-200 mt-px",
+            "xl:sticky md:top-14 md:h-[calc(100dvh-var(--spacing)*14)] xl:max-w-[250px] xl:border-r xl:pt-4 xl:block"
+          )}
+        >
           <Menu items={await getNavigationWithDates()} />
         </aside>
-        <main className="w-full gap-8 px-2 md:px-4 lg:flex">{children}</main>
+        <main className="w-full gap-8 px-4 lg:flex">{children}</main>
       </div>
       <Footer />
     </div>
