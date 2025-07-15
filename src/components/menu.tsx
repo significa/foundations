@@ -19,7 +19,7 @@ export const Menu = ({ items }: { items: typeof navigation }) => {
   return (
     <>
       {items.map((item) => (
-        <Disclosure key={item.title} defaultOpen className="mb-2">
+        <Disclosure key={item.title} defaultOpen className="mb-4">
           <DisclosureTrigger
             className={cn(
               "bg-background text-foreground-secondary sticky top-0 flex w-full cursor-pointer items-center justify-between px-3 py-2 text-sm font-medium",
