@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/foundations/ui/button/button";
 import {
   Drawer,
@@ -7,7 +9,7 @@ import {
   DrawerTrigger,
   DrawerClose,
   DrawerActions,
-  DrawerMain,
+  DrawerDescription,
 } from "@/foundations/ui/drawer/drawer";
 
 const DrawerPreview = () => {
@@ -20,9 +22,7 @@ const DrawerPreview = () => {
         <DrawerHeader>
           <DrawerTitle>Drawer Title</DrawerTitle>
         </DrawerHeader>
-        <DrawerMain>
-          <p>Drawer content goes here.</p>
-        </DrawerMain>
+        <DrawerDescription>Drawer content goes here.</DrawerDescription>
         <DrawerActions className="flex gap-2">
           <DrawerClose asChild>
             <Button variant="primary" className="grow">

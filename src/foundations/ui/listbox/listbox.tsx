@@ -17,7 +17,6 @@ import {
   flip,
   FloatingFocusManager,
   FloatingList,
-  FloatingPortal,
   inner,
   offset,
   Placement,
@@ -47,6 +46,7 @@ import {
   PopoverEmpty,
   PopoverSearchInput,
 } from "@/foundations/ui/popover/popover";
+import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
 
 // Utils
 
@@ -467,6 +467,8 @@ const ListboxOptions = <T,>({
     getFloatingProps,
   } = useListboxContext();
 
+  const topLayerRef = useTopLayer<HTMLDivElement>(context.open);
+
   useEffect(() => {
     const extractOptions = (children: React.ReactNode): Option<T>[] => {
       return Children.toArray(children).reduce<Option<T>[]>((acc, child) => {
@@ -499,36 +501,34 @@ const ListboxOptions = <T,>({
     }
   }, [children, setIsSearchable]);
 
-  const ref = useMergeRefs([refs.setFloating, refProp]);
+  const ref = useMergeRefs([refs.setFloating, refProp, topLayerRef]);
 
   if (!context.open) return null;
 
   return (
-    <FloatingPortal>
-      <FloatingFocusManager context={context}>
-        <div
-          ref={ref}
-          data-state={context.open ? "open" : "closed"}
-          className={cn(
-            "border-border bg-background text-foreground z-50 flex flex-col items-stretch rounded-xl border p-0 shadow-xl focus:outline-none",
-            "overflow-y-auto overscroll-contain",
-            "max-h-(--max-height) w-(--width)",
-            className
-          )}
-          style={{
-            ...floatingStyles,
-            ...style,
-          }}
-          {...getFloatingProps({
-            ...props,
-          })}
-        >
-          <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
-            {children}
-          </FloatingList>
-        </div>
-      </FloatingFocusManager>
-    </FloatingPortal>
+    <FloatingFocusManager context={context}>
+      <div
+        ref={ref}
+        data-state={context.open ? "open" : "closed"}
+        className={cn(
+          "border-border bg-background text-foreground z-50 flex flex-col items-stretch rounded-xl border p-0 shadow-xl focus:outline-none",
+          "overflow-y-auto overscroll-contain",
+          "max-h-(--max-height) w-(--width)",
+          className
+        )}
+        style={{
+          ...floatingStyles,
+          ...style,
+        }}
+        {...getFloatingProps({
+          ...props,
+        })}
+      >
+        <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
+          {children}
+        </FloatingList>
+      </div>
+    </FloatingFocusManager>
   );
 };
 

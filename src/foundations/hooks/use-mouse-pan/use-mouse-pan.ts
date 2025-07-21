@@ -178,7 +178,10 @@ export const useMousePan = <T extends HTMLElement>() => {
         cloneContainer.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;`;
 
         const clone = element.cloneNode(true) as HTMLDivElement;
-        clone.style.cssText = `width:${element.clientWidth}px;height:${element.clientHeight}px;`;
+        clone.style.cssText = `${element.style.cssText.replace(
+          /scroll-snap-type:.+?;/g,
+          "scroll-snap-type: auto;"
+        )}width:${element.clientWidth}px;height:${element.clientHeight}px;`;
 
         cloneContainer.appendChild(clone);
         (element.parentElement ?? element).appendChild(cloneContainer);

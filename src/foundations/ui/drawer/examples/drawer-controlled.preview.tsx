@@ -7,7 +7,6 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerActions,
-  DrawerMain,
 } from "@/foundations/ui/drawer/drawer";
 import { useState } from "react";
 
@@ -38,9 +37,7 @@ const DrawerControlled = () => {
         <DrawerHeader>
           <DrawerTitle>Drawer Title</DrawerTitle>
         </DrawerHeader>
-        <DrawerMain>
-          <p>Drawer dangerous content goes here.</p>
-        </DrawerMain>
+        <p>Drawer dangerous content goes here.</p>
         <DrawerActions className="flex gap-2">
           <Button
             className="grow"

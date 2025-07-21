@@ -1,0 +1,45 @@
+export const metadata = {
+  title: "useElementTransition",
+  description:
+    "A hook to manage the mounting, unmounting, and transition status of a DOM element with lifecycle-related CSS transitions",
+  files: [
+    "src/foundations/hooks/use-element-transition/use-element-transition.ts",
+  ],
+  dependencies: [
+    {
+      name: "nextFrame",
+      href: "/utils/dom#nextframe",
+    },
+  ],
+};
+
+## Features
+
+- **Non-interrupted Transitions**: Ensures elements remain mounted until CSS transitions complete
+- **Status Tracking**: Provides transition status states for fine-grained control
+- **Animation-Aware**: Automatically detects CSS animations and transitions, supporting disabled animations via CSS
+
+## API Reference
+
+<PropsTable
+  definition={{
+    shouldMount: {
+      type: "boolean",
+      required: true,
+      description:
+        "Controls whether the element should be mounted or unmounted",
+    },
+  }}
+/>
+
+The hook returns an object containing:
+
+- `ref` (`RefObject<T>`): A ref object to attach to the element you want to transition
+- `isMounted` (`boolean`): Whether the element should be rendered in the DOM
+- `status` (`"unmounted" | "initial" | "open" | "closed"`): The current transition status
+
+## Examples
+
+### Basic Usage
+
+<Preview slug="use-element-transition-basic" />

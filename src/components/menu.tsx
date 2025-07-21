@@ -19,8 +19,13 @@ export const Menu = ({ items }: { items: typeof navigation }) => {
   return (
     <>
       {items.map((item) => (
-        <Disclosure className="mb-4" key={item.title} defaultOpen>
-          <DisclosureTrigger className="text-foreground-secondary flex w-full cursor-pointer items-center justify-between px-3 pb-1 text-sm font-medium">
+        <Disclosure key={item.title} defaultOpen className="mb-4">
+          <DisclosureTrigger
+            className={cn(
+              "bg-background text-foreground-secondary sticky top-0 flex w-full cursor-pointer items-center justify-between px-3 py-2 text-sm font-medium",
+              "before:bg-background before:absolute before:bottom-full before:left-0 before:h-4 before:w-full"
+            )}
+          >
             <h3>{item.title}</h3>
             <DisclosureChevron />
           </DisclosureTrigger>
