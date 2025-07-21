@@ -6,11 +6,13 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/foundations/ui/dialog/dialog";
+import { Spinner } from "@/foundations/ui/spinner/spinner";
 import { navigation } from "@/lib/navigation";
 import {
   PagefindSearchOptions,
   PagefindSearchResults,
 } from "@/lib/pagefind-types";
+import { cn } from "@/lib/utils";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useState } from "react";
 
@@ -128,6 +130,9 @@ export const Search = () => {
           setPagefindInstance(instance);
         } catch (e) {
           console.error(e);
+          console.warn(
+            "[Pagefind]: Run 'npm run build' to index the site. Check the README for more information."
+          );
         }
       }
     };
@@ -148,8 +153,6 @@ export const Search = () => {
 
   useEffect(() => {
     const handleSearch = async () => {
-      setIsLoading(true);
-
       if (pagefindInstance) {
         const search = await pagefindInstance.debouncedSearch(query, 200);
         if (search === null) {
@@ -164,13 +167,17 @@ export const Search = () => {
           return navigationItem?.title;
         };
 
+        // Process each search result into an object consisting of its title and href
         const processedResults = await Promise.all(
           search.results.map(async (result) => {
             const data = await result.data();
+
+            // Array of marked words from each result's excerpt
             const markedWords = [
               ...(data.excerpt.matchAll(/<mark>(.*?)<\/mark>/g) || []),
             ].map((match) => match[1]);
 
+            // A result is skipped if no marked words match the query, this way we don't get "similar query" results
             if (
               !markedWords.some((word) =>
                 word.toLowerCase().includes(query.toLowerCase())
@@ -246,8 +253,19 @@ export const Search = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="flex h-[400px] max-h-[70svh] w-256 flex-col rounded-xl p-0">
-        <div className="border-border bg-background sticky top-0 z-10 flex w-full items-center border-b px-3 py-3">
-          <MagnifyingGlassIcon className="mt-0.5 size-3.75" />
+        <div
+          className={cn(
+            "border-border bg-background sticky top-0 z-10 flex w-full items-center border-b px-3.5 py-3",
+            !pagefindInstance && "pointer-events-none opacity-50"
+          )}
+        >
+          {isLoading ? (
+            <span className="mt-0.5 flex items-center">
+              <Spinner className="size-3.5" />
+            </span>
+          ) : (
+            <MagnifyingGlassIcon className="mt-0.5 size-3.5" />
+          )}
           <input
             type="text"
             className="ml-2.5 outline-none"
@@ -255,23 +273,33 @@ export const Search = () => {
             autoFocus
             value={query}
             onChange={(e) => {
+              if (!isLoading) setIsLoading(true);
               setQuery(e.target.value);
             }}
+            disabled={!pagefindInstance}
           />
         </div>
         <div className="flex flex-col gap-4 overflow-y-auto pt-4 pb-1">
-          {query === "" || (isLoading && query === "") ? (
-            highlights.map((highlight, index) => (
-              <Group key={index} result={highlight} />
-            ))
-          ) : results.length > 0 ? (
-            results.map((result, index) => (
-              <Group key={index} result={result} />
-            ))
-          ) : (
-            <div className="text-foreground-secondary flex h-32 items-center justify-center text-sm">
-              No results found
+          {!pagefindInstance ? (
+            <div className="text-foreground-secondary flex h-32 items-center justify-center px-3.5 text-center text-sm">
+              Could not load Pagefind instance.
             </div>
+          ) : (
+            <>
+              {(query === "" || (results.length === 0 && isLoading)) &&
+                highlights.map((highlight, index) => (
+                  <Group key={index} result={highlight} />
+                ))}
+              {(results.length > 0 || (results.length > 0 && isLoading)) &&
+                results.map((result, index) => (
+                  <Group key={index} result={result} />
+                ))}
+              {!isLoading && results.length === 0 && query !== "" && (
+                <div className="text-foreground-secondary flex h-32 items-center px-3.5 text-center text-sm">
+                  No results found
+                </div>
+              )}
+            </>
           )}
         </div>
       </DialogContent>
