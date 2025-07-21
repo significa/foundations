@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Tooltip } from "../tooltip";
 import { Button } from "../../button/button";
-import { Clipboard } from "@phosphor-icons/react";
+import { ClipboardIcon } from "@phosphor-icons/react";
 
 export default function TooltipPersistClickPreview() {
   const [copied, setCopied] = useState(false);
@@ -35,7 +35,7 @@ export default function TooltipPersistClickPreview() {
         onClick={() => setCopied(true)}
         aria-label="Copy"
       >
-        <Clipboard />
+        <ClipboardIcon />
       </Button>
     </Tooltip>
   );

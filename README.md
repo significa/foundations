@@ -88,6 +88,10 @@ This metadata is crucial for ensuring that each documentation page is properly s
 
 We use [GitHub Flavored Markdown Spec](https://github.github.com/gfm/). Additionally, several components are available for use without importing them. For a complete list of these components, refer to the `markdown.tsx` file.
 
+### Pagefind
+
+We use [Pagefind](https://pagefind.app/) to make searching Foundations possible. As the site is only indexed at build time, run `npm run build` in development mode to be able to use the search feature.
+
 ## License
 
 This project is licensed under the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html).

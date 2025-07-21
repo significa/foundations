@@ -1,6 +1,6 @@
 import { Header } from "./header";
 import { Footer } from "./footer";
-import { getNavigationWithDates } from "@/lib/navigation";
+import { getNavigationWithDates } from "@/lib/utils/navigation";
 import { Menu } from "@/components/menu";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,7 @@ export default async function DocsLayout({
           id="app-menu"
           // controlled by button by ./header.tsx component
           data-mobile-menu-open="false"
+          data-pagefind-ignore="all"
           className={cn(
             "bg-background shrink-0 overflow-y-auto overscroll-contain px-2 pt-2 pb-12 md:px-4 xl:px-2",
             "fixed top-12 mt-px hidden h-[calc(100dvh-var(--spacing)*12)] w-full data-[mobile-menu-open=true]:block max-xl:z-200",

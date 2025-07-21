@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, EyeClosed, Lock } from "@phosphor-icons/react";
+import { EyeIcon, EyeClosedIcon, LockIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { Input, InputGroup, InputPrefix, InputSuffix } from "../input";
@@ -12,7 +12,7 @@ export default function InputIconAction() {
     <div className="w-90">
       <InputGroup>
         <InputPrefix>
-          <Lock />
+          <LockIcon />
         </InputPrefix>
         <Input
           type={showPassword ? "text" : "password"}
@@ -20,7 +20,7 @@ export default function InputIconAction() {
         />
         <InputSuffix interactive>
           <button onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <Eye /> : <EyeClosed />}
+            {showPassword ? <EyeIcon /> : <EyeClosedIcon />}
           </button>
         </InputSuffix>
       </InputGroup>

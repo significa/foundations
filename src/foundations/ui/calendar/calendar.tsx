@@ -1,6 +1,6 @@
 "use client";
 
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { add, format, isSameDay, isSameMonth } from "date-fns";
 import { useMemo, useState } from "react";
 
@@ -360,11 +360,11 @@ const CalendarHeader = ({
   return (
     <div className="flex items-center justify-between p-1.5 text-sm font-medium">
       <Button variant="outline" square onClick={onPrevious}>
-        <CaretLeft />
+        <CaretLeftIcon />
       </Button>
       {children}
       <Button variant="outline" square onClick={onNext}>
-        <CaretRight />
+        <CaretRightIcon />
       </Button>
     </div>
   );

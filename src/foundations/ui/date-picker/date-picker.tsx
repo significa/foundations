@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar as CalendarIcon, CaretUpDown } from "@phosphor-icons/react";
+import { CalendarIcon, CaretUpDownIcon } from "@phosphor-icons/react";
 import { VariantProps } from "cva";
 
 import { cn } from "@/lib/utils";
@@ -53,7 +53,7 @@ const DatePickerTrigger = ({
         {children ?? (
           <span className="text-foreground-secondary">{placeholder}</span>
         )}
-        <CaretUpDown
+        <CaretUpDownIcon
           weight="bold"
           className="text-foreground/80 absolute top-1/2 right-3 -translate-y-1/2 text-base"
         />

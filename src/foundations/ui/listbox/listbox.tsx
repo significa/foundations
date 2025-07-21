@@ -36,7 +36,7 @@ import {
   useRole,
   useTypeahead,
 } from "@floating-ui/react";
-import { Check, CaretUpDown } from "@phosphor-icons/react";
+import { CheckIcon, CaretUpDownIcon } from "@phosphor-icons/react";
 import { VariantProps } from "cva";
 
 import { cn } from "@/lib/utils";
@@ -431,7 +431,7 @@ const ListboxButton = ({
           <span className="text-foreground-secondary">{placeholder}</span>
         )}
       </span>
-      <CaretUpDown
+      <CaretUpDownIcon
         weight="bold"
         className="text-foreground/80 absolute top-1/2 right-3 -translate-y-1/2 text-base"
       />
@@ -593,7 +593,7 @@ const ListboxOption = <T,>({
     >
       {children}
       {isSelected && withCheckmark && (
-        <Check
+        <CheckIcon
           weight="bold"
           className="text-foreground absolute top-1/2 right-3 -translate-y-1/2 text-sm"
         />

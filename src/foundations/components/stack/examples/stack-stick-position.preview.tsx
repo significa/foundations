@@ -1,7 +1,7 @@
 "use client";
 
 import { Divider } from "@/foundations/ui/divider/divider";
-import { MouseScroll } from "@phosphor-icons/react";
+import { MouseScrollIcon } from "@phosphor-icons/react";
 import {
   Stack,
   StackHeader,
@@ -12,11 +12,11 @@ const StackStickPositionPreview = () => {
   return (
     <div className="relative grid grid-cols-2 gap-8 py-[100vh]">
       <div className="text-foreground-secondary absolute top-[50vh] flex w-full items-center justify-center gap-1">
-        <MouseScroll />
+        <MouseScrollIcon />
         Scroll down
       </div>
       <div className="text-foreground-secondary absolute bottom-[50vh] flex w-full items-center justify-center gap-1">
-        <MouseScroll />
+        <MouseScrollIcon />
         Scroll up
       </div>
       <div>

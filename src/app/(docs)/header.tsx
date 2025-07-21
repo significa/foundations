@@ -9,6 +9,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { GITHUB_REPO_URL } from "@/lib/constants";
 
 import Link from "next/link";
+import { Search } from "@/components/search";
 import { useEffect, useState } from "react";
 import { ListIcon, XIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
@@ -47,6 +48,7 @@ export const Header = () => {
           </Link>
         </div>
         <div className="flex items-center gap-1.5">
+          <Search />
           <Button variant="ghost" size="sm" square asChild>
             <a href={GITHUB_REPO_URL} target="_blank" rel="noopener noreferrer">
               <Octocat />

@@ -1,4 +1,8 @@
-import { CreditCard, Gear, Users } from "@phosphor-icons/react/dist/ssr";
+import {
+  CreditCardIcon,
+  GearIcon,
+  UsersIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "../tabs";
 
 export default function TabsVerticalPreview() {
@@ -6,15 +10,15 @@ export default function TabsVerticalPreview() {
     <Tabs orientation="vertical" className="flex gap-4">
       <TabsItems className="w-60">
         <TabsItem className="w-full justify-start">
-          <Users />
+          <UsersIcon />
           <span>Users</span>
         </TabsItem>
         <TabsItem className="w-full justify-start">
-          <CreditCard />
+          <CreditCardIcon />
           <span>Billing</span>
         </TabsItem>
         <TabsItem className="w-full justify-start">
-          <Gear />
+          <GearIcon />
           <span>Settings</span>
         </TabsItem>
       </TabsItems>

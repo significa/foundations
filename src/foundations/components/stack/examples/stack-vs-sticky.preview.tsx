@@ -6,26 +6,26 @@ import {
   StackHeader,
   StackItem,
 } from "@/foundations/components/stack/stack";
-import { Pizza, Leaf, Fire } from "@phosphor-icons/react";
+import { PizzaIcon, LeafIcon, FireIcon } from "@phosphor-icons/react";
 
 import { cn } from "@/lib/utils";
 
 const items = [
   {
     title: "Pizza Toppings",
-    icon: Pizza,
+    icon: PizzaIcon,
     content:
       "The perfect pizza starts with quality ingredients. From fresh mozzarella to hand-crushed tomatoes, every topping should be carefully selected and balanced.",
   },
   {
     title: "Dough Secrets",
-    icon: Leaf,
+    icon: LeafIcon,
     content:
       "The key to great pizza dough is patience. Let it ferment slowly in the fridge for 24-72 hours to develop complex flavors and the perfect texture.",
   },
   {
     title: "Baking Tips",
-    icon: Fire,
+    icon: FireIcon,
     content:
       "A blazing hot oven is crucial for pizza perfection. Preheat your oven to its highest setting with a pizza stone inside for at least an hour before baking.",
   },
