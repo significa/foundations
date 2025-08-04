@@ -17,17 +17,14 @@ import {
   flip,
   FloatingFocusManager,
   FloatingList,
-  inner,
   offset,
   Placement,
   shift,
-  SideObject,
   size,
   useClick,
   useDismiss,
   useFloating,
   UseFloatingReturn,
-  useInnerOffset,
   useInteractions,
   UseInteractionsReturn,
   useListItem,
@@ -133,7 +130,7 @@ interface UseListboxFloatingOptions<T = string> {
   onChange: (value: T) => void;
   disabled?: boolean;
   invalid?: boolean;
-  placement?: Placement | "selection";
+  placement?: Placement;
   getIsSelected?: (a: T, b: T) => boolean;
   matchReferenceWidth?: boolean;
 }
@@ -143,7 +140,7 @@ const useListboxFloating = <T,>({
   onChange,
   disabled,
   invalid,
-  placement = "selection",
+  placement = "bottom",
   getIsSelected = defaultGetIsSelected,
   matchReferenceWidth = true,
 }: UseListboxFloatingOptions<T>) => {
@@ -153,10 +150,6 @@ const useListboxFloating = <T,>({
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const [options, setOptions] = useState<Option<T>[]>([]);
 
-  const [innerOffset, setInnerOffset] = useState(0);
-  const [fallback, setFallback] = useState(false);
-
-  const overflowRef = useRef<SideObject>(null);
   const elementsRef = useRef<(HTMLElement | null)[]>([]);
 
   const selectedIndex = useMemo(() => {
@@ -167,67 +160,32 @@ const useListboxFloating = <T,>({
     });
   }, [options, value, getIsSelected]);
 
-  if (!open) {
-    if (innerOffset !== 0) setInnerOffset(0);
-    if (fallback) setFallback(false);
-  }
-
-  const shouldPositionOnSelection =
-    placement === "selection" &&
-    !isSearchable &&
-    !fallback &&
-    selectedIndex !== -1;
-
   const floating = useFloating({
-    placement: placement === "selection" ? "bottom" : placement,
+    placement,
     open,
     onOpenChange: setOpen,
     whileElementsMounted: autoUpdate,
-    middleware: shouldPositionOnSelection
-      ? [
-          inner({
-            listRef: elementsRef,
-            overflowRef,
-            index: selectedIndex,
-            offset: innerOffset,
-            onFallbackChange: setFallback,
-            padding: 4,
-          }),
-          offset({
-            crossAxis: -2,
-          }),
-          size({
-            apply({ rects, elements }) {
-              if (matchReferenceWidth) {
-                elements.floating.style.setProperty(
-                  "--width",
-                  `${rects.reference.width}px`
-                );
-              }
-            },
-          }),
-        ]
-      : [
-          flip({ padding: 4 }),
-          shift({ padding: 4 }),
-          offset(4),
-          size({
-            apply({ rects, elements, availableHeight }) {
-              elements.floating.style.setProperty(
-                "--max-height",
-                `${availableHeight}px`
-              );
+    middleware: [
+      flip({ padding: 4 }),
+      shift({ padding: 4 }),
+      offset(4),
+      size({
+        apply({ rects, elements, availableHeight }) {
+          elements.floating.style.setProperty(
+            "--max-height",
+            `${availableHeight}px`
+          );
 
-              if (matchReferenceWidth) {
-                elements.floating.style.setProperty(
-                  "--width",
-                  `${rects.reference.width}px`
-                );
-              }
-            },
-            padding: 4,
-          }),
-        ],
+          if (matchReferenceWidth) {
+            elements.floating.style.setProperty(
+              "--width",
+              `${rects.reference.width}px`
+            );
+          }
+        },
+        padding: 4,
+      }),
+    ],
   });
 
   const handleSelect = useCallback(
@@ -295,11 +253,6 @@ const useListboxFloating = <T,>({
   });
   const dismiss = useDismiss(floating.context);
   const role = useRole(floating.context, { role: "listbox" });
-  const innerOffsetMiddleware = useInnerOffset(floating.context, {
-    enabled: !fallback,
-    onChange: setInnerOffset,
-    overflowRef,
-  });
 
   const interactions = useInteractions([
     listNav,
@@ -307,7 +260,6 @@ const useListboxFloating = <T,>({
     click,
     dismiss,
     role,
-    innerOffsetMiddleware,
   ]);
 
   return useMemo(
@@ -537,7 +489,6 @@ interface ListboxOptionProps<T = string>
   children: React.ReactNode;
   value: T;
   disabled?: boolean;
-  withCheckmark?: boolean;
 }
 
 const ListboxOption = <T,>({
@@ -546,7 +497,6 @@ const ListboxOption = <T,>({
   children,
   disabled,
   className,
-  withCheckmark = true,
   ...props
 }: ListboxOptionProps<T>) => {
   const {
@@ -579,8 +529,8 @@ const ListboxOption = <T,>({
       disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
-        "data-highlighted:bg-muted text-foreground/80 relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 text-left text-base font-medium outline-none select-none first:mt-1 last:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
-        withCheckmark && "pr-8",
+        "data-highlighted:bg-foreground/5 text-foreground relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 text-left font-medium outline-none select-none first-of-type:mt-1 last-of-type:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
+        "pr-8",
         className
       )}
       {...getItemProps({
@@ -592,7 +542,7 @@ const ListboxOption = <T,>({
       })}
     >
       {children}
-      {isSelected && withCheckmark && (
+      {isSelected && (
         <CheckIcon
           weight="bold"
           className="text-foreground absolute top-1/2 right-3 -translate-y-1/2 text-sm"
