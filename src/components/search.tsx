@@ -281,7 +281,7 @@ export const Search = () => {
         </div>
         <div className="flex flex-col gap-4 overflow-y-auto pt-4 pb-1">
           {!pagefindInstance ? (
-            <div className="text-muted-foreground flex h-32 items-center justify-center px-3.5 text-center text-sm">
+            <div className="text-muted-foreground flex items-center justify-center px-3.5 text-sm">
               Could not load Pagefind instance.
             </div>
           ) : (
@@ -295,7 +295,7 @@ export const Search = () => {
                   <Group key={index} result={result} />
                 ))}
               {!isLoading && results.length === 0 && query !== "" && (
-                <div className="text-muted-foreground flex h-32 items-center px-3.5 text-center text-sm">
+                <div className="text-muted-foreground flex items-center px-3.5 text-sm">
                   No results found
                 </div>
               )}
