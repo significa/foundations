@@ -15,7 +15,6 @@ import {
 import {
   autoUpdate,
   flip,
-  FloatingFocusManager,
   FloatingList,
   offset,
   Placement,
@@ -31,7 +30,6 @@ import {
   useListNavigation,
   useMergeRefs,
   useRole,
-  useTransitionStatus,
   useTypeahead,
 } from "@floating-ui/react";
 import { CheckIcon, CaretUpDownIcon } from "@phosphor-icons/react";
@@ -42,9 +40,9 @@ import { Divider } from "@/foundations/ui/divider/divider";
 import { inputStyle } from "@/foundations/ui/input/input";
 import {
   PopoverEmpty,
+  PopoverPanel,
   PopoverSearchInput,
 } from "@/foundations/ui/popover/popover";
-import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
 
 // Utils
 
@@ -296,35 +294,6 @@ const useListboxFloating = <T,>({
   );
 };
 
-const placementToTransformOrigin = (placement: Placement) => {
-  switch (placement) {
-    case "top":
-      return "bottom";
-    case "bottom":
-      return "top";
-    case "left":
-      return "right";
-    case "right":
-      return "left";
-    case "top-start":
-      return "bottom left";
-    case "top-end":
-      return "bottom right";
-    case "bottom-start":
-      return "top left";
-    case "bottom-end":
-      return "top right";
-    case "left-start":
-      return "right top";
-    case "left-end":
-      return "right bottom";
-    case "right-start":
-      return "left top";
-    case "right-end":
-      return "left bottom";
-  }
-};
-
 // Components
 
 type ListboxProps<T = string> = UseListboxFloatingOptions<T> & {
@@ -438,7 +407,6 @@ const ListboxOptions = <T,>({
   ref: refProp,
   children,
   className,
-  style,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
   const {
@@ -450,9 +418,6 @@ const ListboxOptions = <T,>({
     context,
     getFloatingProps,
   } = useListboxContext();
-
-  const { isMounted, status } = useTransitionStatus(context, { duration: 150 });
-  const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
 
   useEffect(() => {
     const extractOptions = (children: React.ReactNode): Option<T>[] => {
@@ -486,44 +451,24 @@ const ListboxOptions = <T,>({
     }
   }, [children, setIsSearchable]);
 
-  const ref = useMergeRefs([refs.setFloating, refProp, topLayerRef]);
-
-  if (!isMounted) return null;
+  const ref = useMergeRefs([refs.setFloating, refProp]);
 
   return (
-    <FloatingFocusManager context={context}>
-      <div
-        ref={ref}
-        data-state={["open", "initial"].includes(status) ? "open" : "closed"}
-        data-side={context.placement.split("-")[0]}
-        className={cn(
-          "border-border bg-background text-foreground z-50 flex flex-col items-stretch rounded-xl border p-0 shadow-xl focus:outline-none",
-          "overflow-y-auto overscroll-contain",
-          "max-h-(--max-height) w-(--width)",
-          "ease-out-expo origin-(--listbox-transform-origin) transition duration-300",
-          "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
-          "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
-          "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
-          className
-        )}
-        style={{
-          position: context.strategy,
-          top: context.y ?? 0,
-          left: context.x ?? 0,
-          "--listbox-transform-origin": placementToTransformOrigin(
-            context.placement
-          ),
-          ...style,
-        }}
-        {...getFloatingProps({
-          ...props,
-        })}
-      >
-        <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
-          {children}
-        </FloatingList>
-      </div>
-    </FloatingFocusManager>
+    <PopoverPanel
+      context={context}
+      ref={ref}
+      className={cn(
+        "border-border bg-background text-foreground z-50 flex flex-col items-stretch rounded-xl border p-0 shadow-xl focus:outline-none",
+        "overflow-y-auto overscroll-contain",
+        "max-h-(--max-height) w-(--width)",
+        className
+      )}
+      {...getFloatingProps(props)}
+    >
+      <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
+        {children}
+      </FloatingList>
+    </PopoverPanel>
   );
 };
 

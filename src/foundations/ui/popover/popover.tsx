@@ -19,6 +19,7 @@ import {
   useTransitionStatus,
   FloatingFocusManager,
   UseInteractionsReturn,
+  FloatingContext,
 } from "@floating-ui/react";
 import { Slot } from "@/foundations/components/slot/slot";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
@@ -213,52 +214,82 @@ const PopoverTrigger = ({
  */
 const PopoverContent = ({
   ref: refProp,
-  style,
   className,
   children,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
   const { context, refs, getFloatingProps, modal } = usePopoverContext();
-  const { isMounted, status } = useTransitionStatus(context, { duration: 150 });
 
+  const ref = useMergeRefs([refs.setFloating, refProp]);
+
+  return (
+    <PopoverPanel
+      context={context}
+      modal={modal}
+      ref={ref}
+      className={cn(
+        "border-border bg-background text-foreground z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border p-3 font-medium shadow-lg outline-none",
+        className
+      )}
+      {...getFloatingProps(props)}
+    >
+      {children}
+    </PopoverPanel>
+  );
+};
+
+interface PopoverPanelProps extends React.ComponentPropsWithRef<"div"> {
+  context: FloatingContext;
+  modal?: boolean;
+}
+
+/**
+ *
+ * PopoverPanel is the actual floating panel that will be positioned relative to the trigger.
+ * It's exported for internal purposes only, to avoid duplicating the logic of positioning and transitions.
+ * It is not part of the public API as it is included already in the PopoverContent component.
+ * @returns
+ */
+const PopoverPanel = ({
+  ref,
+  context,
+  modal,
+  className,
+  style,
+  ...props
+}: PopoverPanelProps) => {
+  const { isMounted, status } = useTransitionStatus(context, { duration: 150 });
   const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
 
-  const ref = useMergeRefs([refs.setFloating, refProp, topLayerRef]);
+  const mergedRef = useMergeRefs([ref, topLayerRef]);
 
   if (!isMounted) return null;
 
   return (
     <FloatingFocusManager context={context} modal={modal}>
       <div
+        ref={mergedRef}
         data-state={["open", "initial"].includes(status) ? "open" : "closed"}
         data-side={context.placement.split("-")[0]}
-        {...getFloatingProps({
-          ref,
-          className: cn(
-            "z-50 w-72 overflow-auto rounded-xl border border-border bg-background p-3 text-foreground font-medium shadow-lg outline-none max-h-(--max-height)",
-            "origin-(--popover-transform-origin) transition duration-300 ease-out-expo",
-            "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
-            "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
-            "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
-            className
-          ),
-          style: {
-            position: context.strategy,
-            top: context.y ?? 0,
-            left: context.x ?? 0,
-            "--popover-transform-origin": placementToTransformOrigin(
-              context.placement
-            ),
-            visibility: context.middlewareData.hide?.referenceHidden
-              ? "hidden"
-              : "visible",
-            ...style,
-          },
-          ...props,
-        })}
-      >
-        {children}
-      </div>
+        className={cn(
+          "ease-out-expo origin-(--transform-origin) transition duration-300",
+          "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
+          "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
+          "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
+          className
+        )}
+        style={{
+          position: context.strategy,
+          top: context.y ?? 0,
+          left: context.x ?? 0,
+          "--transform-origin": placementToTransformOrigin(context.placement),
+          visibility: context.middlewareData.hide?.referenceHidden
+            ? "hidden"
+            : "visible",
+          ...style,
+        }}
+        {...props}
+      />
     </FloatingFocusManager>
   );
 };
@@ -385,7 +416,9 @@ export {
   PopoverClose,
   PopoverSearchInput,
   PopoverEmpty,
+  // internal use only
   usePopoverFloating,
   PopoverContext,
   usePopoverContext,
+  PopoverPanel,
 };
