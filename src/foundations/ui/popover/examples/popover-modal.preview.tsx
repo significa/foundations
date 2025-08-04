@@ -13,11 +13,13 @@ export default function PopoverModalPreview() {
         <Button variant="outline">Open Modal Popover</Button>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col gap-4">
-        <h3 className="text-sm font-medium">This is a modal popover</h3>
-        <p className="text-muted-foreground text-sm">
-          It will trap focus inside. Very useful for popovers with advanced
-          interactions inside (like forms)
-        </p>
+        <div>
+          <h3 className="mb-1 text-sm font-medium">This is a modal popover</h3>
+          <p className="text-muted-foreground text-sm">
+            It will trap focus inside. Very useful for popovers with advanced
+            interactions inside (like forms)
+          </p>
+        </div>
         <div className="flex items-center gap-2">
           <PopoverClose asChild>
             <Button variant="outline" type="button">

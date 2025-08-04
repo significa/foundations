@@ -74,7 +74,7 @@ const usePopoverFloating = ({
           );
 
           elements.floating.style.setProperty(
-            "--popover-width",
+            "--width",
             `${rects.reference.width}px`
           );
         },
@@ -239,7 +239,7 @@ const PopoverContent = ({
         {...getFloatingProps({
           ref,
           className: cn(
-            "z-50 w-72 overflow-auto rounded-xl border border-border bg-background p-3 text-foreground shadow-lg outline-none max-h-(--max-height)",
+            "z-50 w-72 overflow-auto rounded-xl border border-border bg-background p-3 text-foreground font-medium shadow-lg outline-none max-h-(--max-height)",
             "origin-(--popover-transform-origin) transition duration-300 ease-out-expo",
             "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
             "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
@@ -348,7 +348,7 @@ const PopoverSearchInput = ({
   ...props
 }: React.ComponentPropsWithRef<"input">) => {
   return (
-    <div className="border-border relative mb-1 flex items-center rounded-t-lg border-b bg-transparent">
+    <div className="border-border relative flex items-center rounded-t-lg border-b bg-transparent">
       <MagnifyingGlassIcon
         weight="bold"
         className="text-foreground absolute left-4 size-4 shrink-0"
@@ -372,7 +372,7 @@ const PopoverEmpty = ({
   return (
     <div
       className={cn(
-        "text-muted-foreground pt-4 pb-5 text-center text-base",
+        "text-muted-foreground my-4 text-center text-base",
         className
       )}
       {...props}

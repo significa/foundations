@@ -15,7 +15,7 @@ export default function DropdownEmptyPreview() {
       </DropdownTrigger>
       <DropdownItems>
         <DropdownSearchInput placeholder="Search items..." />
-        <DropdownEmpty>No items found.</DropdownEmpty>
+        <DropdownEmpty>No items found</DropdownEmpty>
       </DropdownItems>
     </Dropdown>
   );
