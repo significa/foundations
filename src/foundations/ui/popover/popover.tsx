@@ -59,12 +59,8 @@ const usePopoverFloating = ({
         layoutShift: false,
       }),
     middleware: [
-      flip({
-        padding: 8,
-      }),
-      shift({
-        padding: 8,
-      }),
+      flip({ padding: 8 }),
+      shift({ padding: 8 }),
       offsetMiddleware(offset),
       size({
         apply({ rects, elements, availableHeight }) {
