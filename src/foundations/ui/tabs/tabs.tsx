@@ -16,6 +16,7 @@ import { Slot } from "@/foundations/components/slot/slot";
 import { cn } from "@/lib/utils";
 
 interface TabsContextValue {
+  id: string;
   tabs: string[];
   selectedTab: string;
   setSelectedTab: (id: string) => void;
@@ -51,6 +52,7 @@ const Tabs = ({
   children,
   ...props
 }: TabsProps) => {
+  const id = useId();
   const [internalSelectedIndex, setInternalSelectedIndex] = useState(
     defaultIndex ?? 0
   );
@@ -97,6 +99,7 @@ const Tabs = ({
 
   const ctx = useMemo(
     () => ({
+      id,
       tabs,
       selectedTab,
       setSelectedTab,
@@ -106,6 +109,7 @@ const Tabs = ({
       registerTab,
     }),
     [
+      id,
       tabs,
       selectedTab,
       setSelectedTab,
@@ -170,6 +174,7 @@ const TabsItem = ({
 }: TabsItemProps) => {
   const id = useId();
   const {
+    id: tabsId,
     selectedTab,
     setSelectedTab,
     registerTab,
@@ -249,7 +254,7 @@ const TabsItem = ({
       {isSelected && (
         <motion.span
           data-tab-indicator="true"
-          layoutId="tab-indicator"
+          layoutId={tabsId}
           aria-hidden="true"
           className="bg-muted absolute inset-0 z-0 rounded-xl"
           transition={{ type: "spring", duration: 0.3, bounce: 0.2 }}
