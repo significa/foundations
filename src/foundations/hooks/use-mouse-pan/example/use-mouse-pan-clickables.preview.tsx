@@ -9,7 +9,7 @@ const UseMousePanClickables = () => {
   return (
     <div
       ref={ref}
-      className="w-full max-w-128 cursor-grab overflow-x-auto **:cursor-grab active:cursor-grabbing active:**:cursor-grabbing"
+      className="w-full max-w-lg cursor-grab overflow-x-auto **:cursor-grab active:cursor-grabbing active:**:cursor-grabbing"
     >
       <ul className="flex size-max gap-2">
         {new Array(12).fill(0).map((_, index) => (

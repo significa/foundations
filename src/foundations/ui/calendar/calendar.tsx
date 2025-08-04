@@ -307,9 +307,9 @@ const Calendar = ({
                       // hover
                       "group-hover:bg-background-secondary group-hover:text-foreground",
                       // selected
-                      "group-data-[selected]:bg-foreground group-data-[selected]:text-background group-hover:group-data-[selected]:text-background",
+                      "group-data-selected:bg-foreground group-data-selected:text-background group-hover:group-data-selected:text-background",
                       // other month
-                      "group-data-[other-month]:text-foreground-secondary",
+                      "group-data-other-month:text-foreground-secondary",
                       // focus
                       "group-focus-visible:ring-4"
                     )}
@@ -331,9 +331,9 @@ const Calendar = ({
                     aria-hidden
                     className={cn(
                       "bg-background-secondary invisible absolute inset-x-0 inset-y-0.5 z-0",
-                      "group-data-[in-range]:visible",
-                      "group-data-[start-date]:visible group-data-[start-date]:left-1/2",
-                      "group-data-[end-date]:visible group-data-[end-date]:right-1/2"
+                      "group-data-in-range:visible",
+                      "group-data-start-date:visible group-data-start-date:left-1/2",
+                      "group-data-end-date:visible group-data-end-date:right-1/2"
                     )}
                   />
                 </button>

@@ -22,7 +22,7 @@ const SequencePreview = () => {
               "flex items-center gap-1.5 whitespace-nowrap",
               "hover:bg-background-secondary/30 transition-colors",
               'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
-              "before:origin-left before:scale-x-[var(--progress)]"
+              "before:origin-left before:scale-x-(--progress)"
             )}
           >
             <item.icon size={16} className="-ml-1 shrink-0" />

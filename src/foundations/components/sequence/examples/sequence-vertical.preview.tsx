@@ -15,7 +15,7 @@ const SequenceVertical = () => {
     <Sequence
       orientation="vertical"
       loop
-      className="flex max-w-128 gap-10"
+      className="flex max-w-lg gap-10"
       duration={3000}
     >
       <div className="flex gap-2">

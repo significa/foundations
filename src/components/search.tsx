@@ -252,7 +252,7 @@ export const Search = () => {
           <MagnifyingGlassIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex h-[400px] max-h-[70svh] w-256 flex-col rounded-xl p-0">
+      <DialogContent className="flex h-[400px] max-h-[70svh] w-5xl flex-col rounded-xl p-0">
         <div
           className={cn(
             "border-border bg-background sticky top-0 z-10 flex w-full items-center border-b px-3.5 py-3",

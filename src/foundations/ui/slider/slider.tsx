@@ -45,7 +45,7 @@ const inputStyle = cva({
     "[&::-webkit-slider-thumb]:appearance-none",
     "[&::-webkit-slider-thumb]:transition-transform",
     "[&::-webkit-slider-thumb]:h-(--thumb-size) [&::-webkit-slider-thumb]:w-(--thumb-size) [&::-webkit-slider-thumb]:bg-foreground",
-    "[&::-webkit-slider-thumb]:rounded-full z-[10]",
+    "[&::-webkit-slider-thumb]:rounded-full z-10",
     // firefox
     "[&::-moz-range-thumb]:border-none",
     "[&::-moz-range-thumb]:transition-transform",
@@ -129,7 +129,7 @@ const backgroundTrackStyle = cva({
 });
 
 const progressTrackStyle = cva({
-  base: ["absolute bg-foreground/90 rounded-full z-[5]"],
+  base: ["absolute bg-foreground/90 rounded-full z-5"],
   variants: {
     variant: {
       horizontal: "left-[calc(var(--thumb-size)/2)]",
