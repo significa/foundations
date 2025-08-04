@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/foundations/ui/button/button";
 import { cn } from "@/lib/utils";
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";

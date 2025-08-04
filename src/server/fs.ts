@@ -1,6 +1,6 @@
 import path from "path";
-import { exec } from "child_process";
-import { promises as fs } from "fs";
+import { exec } from "node:child_process";
+import { promises as fs } from "node:fs";
 import { cache } from "react";
 
 export const readFile = cache(async (filePath: string) => {

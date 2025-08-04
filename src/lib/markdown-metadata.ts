@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Metadata
 const metadataSchema = z.object({
-  title: z.string({ required_error: "Title is required" }),
+  title: z.string({ error: "Title is required" }),
   description: z.string().optional(),
   preview: z
     .union([
@@ -18,8 +18,8 @@ const metadataSchema = z.object({
   dependencies: z
     .array(
       z.object({
-        name: z.string({ required_error: "Dependency name is required" }),
-        href: z.string({ required_error: "Dependency href is required" }),
+        name: z.string({ error: "Dependency name is required" }),
+        href: z.string({ error: "Dependency href is required" }),
       })
     )
     .optional(),
@@ -56,18 +56,5 @@ export const getMetadata = async (content: string) => {
     );
   }
 
-  try {
-    return metadataSchema.parse(metadata);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      throw new Error(
-        `Page metadata malformed: ${error.errors
-          .map((e) => e.message)
-          .join(", ")}`,
-        { cause: error }
-      );
-    }
-
-    throw error;
-  }
+  return metadataSchema.parse(metadata);
 };

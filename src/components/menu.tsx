@@ -1,8 +1,3 @@
-"use client";
-
-import Link from "next/link";
-
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { navigation } from "@/lib/navigation";
 import {
@@ -11,9 +6,10 @@ import {
   DisclosureContent,
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { differenceInDays } from "date-fns";
 import { Badge } from "@/foundations/ui/badge/badge";
+import { Link } from "@tanstack/react-router";
 
 export const Menu = ({ items }: { items: typeof navigation }) => {
   return (
@@ -45,10 +41,6 @@ const MenuItem = ({
 }: {
   item: (typeof navigation)[number]["children"][number];
 }) => {
-  const pathname = usePathname();
-
-  const isActive = useMemo(() => pathname === item.href, [pathname, item.href]);
-
   const ref = useRef<HTMLAnchorElement>(null);
   const [tag, setTag] = useState<"new" | "updated" | undefined>(undefined);
 
@@ -70,10 +62,10 @@ const MenuItem = ({
       ref={ref}
       data-created-at={item.createdAt}
       data-updated-at={item.updatedAt}
-      href={item.href}
+      to={item.href}
+      activeProps={{ className: "bg-muted" }}
       className={cn(
-        "hover:bg-muted flex h-8 shrink-0 items-center gap-1 rounded-lg px-3 text-sm leading-none",
-        isActive && "bg-muted"
+        "hover:bg-muted flex h-8 shrink-0 items-center gap-1 rounded-lg px-3 text-sm leading-none"
       )}
     >
       <span>{item.title}</span>

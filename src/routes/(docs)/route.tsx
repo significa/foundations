@@ -1,14 +1,18 @@
-import { Header } from "./header";
-import { Footer } from "./footer";
-import { getNavigationWithDates } from "@/lib/utils/navigation";
+import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
 import { Menu } from "@/components/menu";
 import { cn } from "@/lib/utils";
+import { getNavigationWithDates } from "@/server/navigation";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export default async function DocsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const Route = createFileRoute("/(docs)")({
+  component: RouteComponent,
+  loader: async () => await getNavigationWithDates(),
+});
+
+function RouteComponent() {
+  const items = Route.useLoaderData();
+
   return (
     <div>
       <Header />
@@ -24,9 +28,11 @@ export default async function DocsLayout({
             "md:top-14 md:h-[calc(100dvh-var(--spacing)*14)] xl:sticky xl:block xl:max-w-[250px] xl:border-r xl:pt-4"
           )}
         >
-          <Menu items={await getNavigationWithDates()} />
+          <Menu items={items} />
         </aside>
-        <main className="w-full gap-8 px-4 lg:flex">{children}</main>
+        <main className="w-full gap-8 px-4 lg:flex">
+          <Outlet />
+        </main>
       </div>
       <Footer />
     </div>

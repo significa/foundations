@@ -1,13 +1,12 @@
 import "./markdown.css";
 
-import dynamic from "next/dynamic";
-import * as runtime from "react/jsx-runtime";
+// import * as runtime from "react/jsx-runtime";
 
-import { evaluate, UseMdxComponents } from "@mdx-js/mdx";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypePrettyCode from "rehype-pretty-code";
-import rehypeSlug from "rehype-slug";
-import remarkGfm from "remark-gfm";
+import { UseMdxComponents } from "@mdx-js/mdx";
+// import rehypeAutolinkHeadings from "rehype-autolink-headings";
+// import rehypePrettyCode from "rehype-pretty-code";
+// import rehypeSlug from "rehype-slug";
+// import remarkGfm from "remark-gfm";
 
 import { FileTree, FileTreeFolder, FileTreeFile } from "@/components/file-tree";
 import { Preview } from "@/components/preview";
@@ -22,37 +21,38 @@ import {
   TabsPanel,
 } from "@/foundations/ui/tabs/tabs";
 
-import { rehypePrettyCodeOptions } from "@/lib/rehype-pretty-code";
-import { rehypeRawCode } from "@/lib/rehype-raw-code";
-import { rehypeRewriteImports } from "@/lib/rehype-rewrite-imports";
+// import { rehypePrettyCodeOptions } from "@/lib/rehype-pretty-code";
+// import { rehypeRawCode } from "@/lib/rehype-raw-code";
+// import { rehypeRewriteImports } from "@/lib/rehype-rewrite-imports";
 import { cn } from "@/lib/utils";
 
 import { CopyButton } from "./copy-button";
 
-export const Markdown = async ({
+export const Markdown = ({
   children,
   className,
 }: {
   children: string;
   className?: string;
 }) => {
-  const { default: MDXContent } = await evaluate(children, {
-    ...runtime,
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [
-      rehypeSlug,
-      [rehypeAutolinkHeadings, { behavior: "wrap" }],
-      rehypeRewriteImports,
-      rehypeRawCode,
-      [rehypePrettyCode, rehypePrettyCodeOptions],
-    ],
-  });
+  // const { default: MDXContent } = await evaluate(children, {
+  //   ...runtime,
+  //   remarkPlugins: [remarkGfm],
+  //   rehypePlugins: [
+  //     rehypeSlug,
+  //     [rehypeAutolinkHeadings, { behavior: "wrap" }],
+  //     rehypeRewriteImports,
+  //     rehypeRawCode,
+  //     [rehypePrettyCode, rehypePrettyCodeOptions],
+  //   ],
+  // });
 
   return (
     <div
       className={cn("[&_&>div]:my-0 [&>div:not(:first-child)]:my-6", className)}
     >
-      <MDXContent components={components} />
+      {/* <MDXContent components={components} /> */}
+      <div>Hello from MDXContent</div>
     </div>
   );
 };
@@ -143,7 +143,8 @@ export const components: ReturnType<UseMdxComponents> = {
   FileTreeFolder,
   FileTreeFile,
   PropsTable,
-  SourceCode: dynamic(() =>
-    import("@/components/source-code").then((mod) => mod.SourceCode)
-  ),
+  // SourceCode: dynamic(() =>
+  //   import("@/components/source-code").then((mod) => mod.SourceCode)
+  // ),
+  SourceCode: () => <div>SourceCode Component Placeholder</div>, // Placeholder for dynamic import
 };

@@ -1,7 +1,4 @@
-"use client";
-
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
 
 interface PreviewLayoutProps {
   layout?: "fullscreen" | "centered" | "padded";
@@ -12,8 +9,9 @@ export const PreviewLayout = ({
   layout: layoutProp,
   children,
 }: PreviewLayoutProps) => {
-  const params = useSearchParams();
-  const layout = layoutProp || params.get("layout") || "centered";
+  // const params = useSearchParams();
+  // const layout = layoutProp || params.get("layout") || "centered";
+  const layout = layoutProp || "centered";
 
   return (
     <div

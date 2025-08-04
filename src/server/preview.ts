@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { walkDirectory } from "./fs";
 
 export const getPreviewSourcePath = async (slug: string) => {

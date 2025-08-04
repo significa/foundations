@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/foundations/ui/button/button";
 
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";

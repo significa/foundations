@@ -3,7 +3,7 @@ import {
   ArrowSquareOutIcon,
   PackageIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 interface DependenciesListProps {
   dependencies: {
@@ -17,7 +17,6 @@ export const DependenciesList = ({ dependencies }: DependenciesListProps) => {
     <div className="flex flex-wrap gap-2">
       {dependencies.map(({ name, href }) => {
         const type = href.startsWith("/") ? "internal" : "external";
-        const Component = type === "internal" ? Link : "a";
 
         return (
           <Badge
@@ -25,10 +24,7 @@ export const DependenciesList = ({ dependencies }: DependenciesListProps) => {
             asChild
             variant={type === "external" ? "neutral" : "info"}
           >
-            <Component
-              href={href}
-              target={type === "external" ? "_blank" : undefined}
-            >
+            <DependencyLink type={type} href={href}>
               <BadgeIcon>
                 <PackageIcon />
               </BadgeIcon>
@@ -38,10 +34,30 @@ export const DependenciesList = ({ dependencies }: DependenciesListProps) => {
                   <ArrowSquareOutIcon className="text-muted-foreground" />
                 </BadgeIcon>
               )}
-            </Component>
+            </DependencyLink>
           </Badge>
         );
       })}
     </div>
+  );
+};
+
+const DependencyLink = ({
+  type,
+  href,
+  children,
+}: {
+  type: "internal" | "external";
+  href: string;
+  children: React.ReactNode;
+}) => {
+  if (type === "internal") {
+    return <Link to={href}>{children}</Link>;
+  }
+
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
   );
 };

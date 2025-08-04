@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/foundations/ui/button/button";
 
 import { Egg } from "@/components/icons/egg";
@@ -8,15 +6,13 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 
 import { GITHUB_REPO_URL } from "@/lib/constants";
 
-import Link from "next/link";
-import { Search } from "@/components/search";
 import { useEffect, useState } from "react";
 import { ListIcon, XIcon } from "@phosphor-icons/react";
-import { usePathname } from "next/navigation";
+import { Link, useRouter } from "@tanstack/react-router";
 
 export const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     document
@@ -25,8 +21,12 @@ export const Header = () => {
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
+    const unsub = router.subscribe("onBeforeNavigate", () => {
+      setMobileMenuOpen(false);
+    });
+
+    return unsub;
+  }, [router]);
 
   return (
     <div className="border-border bg-background/95 sticky top-0 z-50 border-b backdrop-blur-sm">
@@ -42,13 +42,12 @@ export const Header = () => {
           >
             {isMobileMenuOpen ? <XIcon /> : <ListIcon />}
           </Button>
-          <Link href="/" className="flex items-center gap-1.5">
+          <Link to="/" className="flex items-center gap-1.5">
             <Egg />
             <div className="font-medium">Foundations</div>
           </Link>
         </div>
         <div className="flex items-center gap-1.5">
-          <Search />
           <Button variant="ghost" size="sm" square asChild>
             <a href={GITHUB_REPO_URL} target="_blank" rel="noopener noreferrer">
               <Octocat />

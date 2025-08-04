@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 
-import { getPreviewSourcePath } from "@/lib/preview";
 import { cn } from "@/lib/utils";
 
 import { DynamicComponent } from "./dynamic-component";
@@ -12,7 +11,7 @@ import {
 } from "./preview-switch";
 import { SourceCode } from "./source-code";
 
-export async function Preview({
+export function Preview({
   slug,
   mode = "inline",
   layout = "centered",
@@ -25,7 +24,8 @@ export async function Preview({
   className?: string;
   withSource?: boolean;
 }) {
-  const filepath = await getPreviewSourcePath(slug);
+  // const filepath = await getPreviewSourcePath(slug);
+  const filepath = '/foo/bar.tsx'; // Placeholder for the file path
 
   return (
     <PreviewSwitch

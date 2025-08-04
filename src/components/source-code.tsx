@@ -1,7 +1,3 @@
-import path from "path";
-
-import { readFile } from "@/lib/fs";
-
 import { Markdown } from "./markdown";
 import { ExpandableCode } from "./expandable-code";
 
@@ -12,16 +8,20 @@ interface SourceCodeProps {
   className?: string;
 }
 
-export const SourceCode = async ({
+export const SourceCode = ({
   file,
   expandable,
   withTitle,
   className,
 }: SourceCodeProps) => {
-  const code = await readFile(path.join(process.cwd(), ...file.split("/")));
+  // const code = await readFile(path.join(process.cwd(), ...file.split("/")));
 
-  const filename = path.basename(file);
-  const lang = path.extname(file).slice(1);
+  // const filename = path.basename(file);
+  // const lang = path.extname(file).slice(1);
+
+  const code = `Hello world!`;
+  const filename = "example.tsx";
+  const lang = "tsx";
 
   const Wrapper = expandable ? ExpandableCode : "div";
 

@@ -1,13 +1,15 @@
-import path from "path";
-import { getFoundationsPagePath } from "../constants";
-import {
-  getDirectoryFiles,
-  getMostRecentCreatedDate,
-  getMostRecentModifiedDate,
-} from "../fs";
-import { navigation } from "../navigation";
+import path from "node:path";
 
-export const getNavigationWithDates = async () => {
+import { createServerFn } from "@tanstack/react-start";
+
+import { navigation } from "@/lib/navigation";
+import { getFoundationsPagePath } from "@/lib/constants";
+
+import { getDirectoryFiles, getMostRecentCreatedDate, getMostRecentModifiedDate } from "./fs";
+
+export const getNavigationWithDates = createServerFn({
+  type: "static",
+}).handler(async () => {
   return await Promise.all(
     navigation.map(async (item) => ({
       ...item,
@@ -36,4 +38,4 @@ export const getNavigationWithDates = async () => {
       ),
     }))
   );
-};
+});

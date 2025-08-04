@@ -1,54 +1,40 @@
-import path from "path";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { format } from "date-fns";
 
-import { notFound } from "next/navigation";
 import { CalendarIcon, PencilIcon } from "@phosphor-icons/react/dist/ssr";
 
-import {
-  getMostRecentModifiedDate,
-  getDirectoryFiles,
-  readFile,
-} from "@/lib/fs";
-import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
-import { getMetadata } from "@/lib/markdown-metadata";
-import { getMarkdownToc } from "@/lib/markdown-toc";
-import { navigation } from "@/lib/navigation";
+import { GITHUB_REPO_URL } from "@/lib/constants";
 
 import { Preview } from "@/components/preview";
 import { Markdown, Heading } from "@/components/markdown";
 
-import { TableOfContents } from "./toc";
-import { Navigation } from "./navigation";
+import { TableOfContents } from "@/components/toc";
+import { ArticleNavigation } from "@/components/article-navigation";
 import { DependenciesList } from "@/components/dependencies-list";
 import { SourceCode } from "@/components/source-code";
+import { getPageContent } from "@/server/content";
 
 const isNotFoundError = (error: unknown): error is { code: "ENOENT" } => {
   return error instanceof Error && "code" in error && error.code === "ENOENT";
 };
 
-const getPageContent = async (filePath: string) => {
-  try {
-    return await readFile(path.join(process.cwd(), filePath));
-  } catch (error) {
-    if (isNotFoundError(error)) {
-      notFound();
+export const Route = createFileRoute("/(docs)/$")({
+  component: RouteComponent,
+  loader: async ({ params: { _splat = "" } }) => {
+    try {
+      return await getPageContent({ data: _splat });
+    } catch (error) {
+      console.log("Error loading page:", error);
+      if (isNotFoundError(error)) {
+        throw notFound();
+      }
+      throw error;
     }
+  },
+});
 
-    throw error;
-  }
-};
-
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ slug: string[] }>;
-}) {
-  const { slug } = await params;
-
-  const filePath = getFoundationsPagePath(slug);
-  const content = await getPageContent(filePath);
-  const toc = await getMarkdownToc(content);
-  const metadata = await getMetadata(content);
+function RouteComponent() {
+  const { content, metadata, toc, lastModifiedAt, filePath, slug } = Route.useLoaderData();
 
   return (
     <>
@@ -97,13 +83,7 @@ export default async function Page({
           </a>
           <p className="text-muted-foreground flex items-center gap-1 text-xs">
             <CalendarIcon />
-            Edited{" "}
-            {format(
-              await getMostRecentModifiedDate(
-                await getDirectoryFiles(path.dirname(filePath))
-              ),
-              "PPP"
-            )}
+            Edited {format(lastModifiedAt, "PPP")}
           </p>
         </div>
       </nav>
@@ -166,33 +146,8 @@ export default async function Page({
           <Markdown>{content}</Markdown>
         </div>
 
-        <Navigation slug={slug} />
+        <ArticleNavigation slug={slug} />
       </div>
     </>
   );
-}
-
-// Generate a page per menu item in the sidebar
-export async function generateStaticParams() {
-  const items = navigation.flatMap((item) =>
-    item.children.map((child) => ({ slug: child.href.split("/").slice(1) }))
-  );
-
-  return items;
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string[] }>;
-}) {
-  const { slug } = await params;
-
-  const content = await getPageContent(getFoundationsPagePath(slug));
-  const metadata = await getMetadata(content);
-
-  return {
-    title: metadata.title,
-    description: metadata.description,
-  };
 }

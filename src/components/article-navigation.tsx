@@ -1,9 +1,9 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 import { cn } from "@/lib/utils";
 import { navigation } from "@/lib/navigation";
 
-export const Navigation = ({ slug }: { slug: string[] }) => {
+export const ArticleNavigation = ({ slug }: { slug: string[] }) => {
   const flatMenu = navigation.reduce<(typeof navigation)[number]["children"]>(
     (acc, item) => {
       return [...acc, ...item.children];
@@ -57,7 +57,7 @@ const NavigationCard = ({
         "border-border hover:bg-foreground/3 focus-visible:bg-foreground/3 flex-1 rounded-lg border p-4 transition outline-none",
         className
       )}
-      href={href}
+      to={href}
     >
       <p className="text-muted-foreground mb-1 text-xs">{label}</p>
       <p className="text-sm font-medium">{title}</p>
