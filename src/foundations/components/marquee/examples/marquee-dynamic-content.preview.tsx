@@ -30,7 +30,7 @@ const MarqueeDynamicContentExample = () => {
           Remove
         </Button>
       </div>
-      <Marquee className="border-border text-foreground-secondary h-[2.5em] w-96 items-center gap-2 rounded border px-2">
+      <Marquee className="border-border text-muted-foreground h-[2.5em] w-96 items-center gap-2 rounded border px-2">
         {items}
       </Marquee>
     </div>

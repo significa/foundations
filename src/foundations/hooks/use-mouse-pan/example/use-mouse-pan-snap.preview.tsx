@@ -16,8 +16,8 @@ const UseMousePanPreview = () => {
           <li
             key={index}
             className={cn(
-              "no-select bg-foreground-secondary/15 h-32 w-64 snap-center rounded-sm",
-              index % 2 === 0 && "bg-foreground-secondary/30"
+              "no-select bg-muted-foreground/15 h-32 w-64 snap-center rounded-sm",
+              index % 2 === 0 && "bg-muted-foreground/30"
             )}
           />
         ))}

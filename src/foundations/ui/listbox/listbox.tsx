@@ -428,7 +428,7 @@ const ListboxButton = ({
     >
       <span className="flex flex-1 items-center gap-1.5 truncate text-left">
         {children ?? (
-          <span className="text-foreground-secondary">{placeholder}</span>
+          <span className="text-muted-foreground">{placeholder}</span>
         )}
       </span>
       <CaretUpDownIcon
@@ -579,7 +579,7 @@ const ListboxOption = <T,>({
       disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
-        "data-highlighted:bg-background-secondary text-foreground/80 relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 text-left text-base font-medium outline-none select-none first:mt-1 last:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
+        "data-highlighted:bg-muted text-foreground/80 relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 text-left text-base font-medium outline-none select-none first:mt-1 last:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
         withCheckmark && "pr-8",
         className
       )}

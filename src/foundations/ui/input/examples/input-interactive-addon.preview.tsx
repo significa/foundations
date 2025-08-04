@@ -12,11 +12,11 @@ export default function InputInteractiveAddon() {
   return (
     <div className="w-90">
       <InputGroup>
-        <InputPrefix className="flex items-center gap-2" interactive>
+        <InputPrefix className="pointer-events-auto flex items-center gap-2">
           <button onClick={() => alert("interactive")}>+351</button>
         </InputPrefix>
         <Input ref={input} placeholder="000 000 000" />
-        <InputSuffix interactive>
+        <InputSuffix className="pointer-events-auto">
           <Tooltip content="Your phone number will be visible">
             <InfoIcon />
           </Tooltip>

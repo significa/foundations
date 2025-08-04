@@ -35,7 +35,7 @@ export const DependenciesList = ({ dependencies }: DependenciesListProps) => {
               <span>{name}</span>
               {type === "external" && (
                 <BadgeIcon>
-                  <ArrowSquareOutIcon className="text-foreground-secondary" />
+                  <ArrowSquareOutIcon className="text-muted-foreground" />
                 </BadgeIcon>
               )}
             </Component>

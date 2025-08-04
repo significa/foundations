@@ -270,7 +270,7 @@ const DropdownItem = ({
       disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
-        "data-highlighted:bg-background-secondary text-foreground/80 relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-base font-medium outline-none select-none first:mt-1 last:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
+        "data-highlighted:bg-muted text-foreground/80 relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-base font-medium outline-none select-none first:mt-1 last:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
         className
       )}
       {...getItemProps({
@@ -333,7 +333,7 @@ const DropdownHeading = ({
   return (
     <div
       className={cn(
-        "text-foreground-secondary px-3.5 pt-3 pb-1 text-sm font-medium",
+        "text-muted-foreground px-3.5 pt-3 pb-1 text-sm font-medium",
         className
       )}
       {...props}

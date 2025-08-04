@@ -59,7 +59,7 @@ const NavigationCard = ({
       )}
       href={href}
     >
-      <p className="text-foreground-secondary mb-1 text-xs">{label}</p>
+      <p className="text-muted-foreground mb-1 text-xs">{label}</p>
       <p className="text-sm font-medium">{title}</p>
     </Link>
   );

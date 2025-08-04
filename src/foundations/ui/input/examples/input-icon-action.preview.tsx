@@ -18,8 +18,11 @@ export default function InputIconAction() {
           type={showPassword ? "text" : "password"}
           placeholder="Your password here"
         />
-        <InputSuffix interactive>
-          <button onClick={() => setShowPassword(!showPassword)}>
+        <InputSuffix className="pointer-events-auto">
+          <button
+            className="cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
             {showPassword ? <EyeIcon /> : <EyeClosedIcon />}
           </button>
         </InputSuffix>
