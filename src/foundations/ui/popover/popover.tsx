@@ -67,10 +67,15 @@ const usePopoverFloating = ({
       }),
       offsetMiddleware(offset),
       size({
-        apply({ elements, availableHeight }) {
+        apply({ rects, elements, availableHeight }) {
           elements.floating.style.setProperty(
             "--max-height",
             `${availableHeight}px`
+          );
+
+          elements.floating.style.setProperty(
+            "--popover-width",
+            `${rects.reference.width}px`
           );
         },
         padding: 4,
