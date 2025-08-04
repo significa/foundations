@@ -15,19 +15,15 @@ import {
 import {
   autoUpdate,
   flip,
-  FloatingFocusManager,
   FloatingList,
-  inner,
   offset,
   Placement,
   shift,
-  SideObject,
   size,
   useClick,
   useDismiss,
   useFloating,
   UseFloatingReturn,
-  useInnerOffset,
   useInteractions,
   UseInteractionsReturn,
   useListItem,
@@ -44,9 +40,9 @@ import { Divider } from "@/foundations/ui/divider/divider";
 import { inputStyle } from "@/foundations/ui/input/input";
 import {
   PopoverEmpty,
+  PopoverPanel,
   PopoverSearchInput,
 } from "@/foundations/ui/popover/popover";
-import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
 
 // Utils
 
@@ -133,7 +129,7 @@ interface UseListboxFloatingOptions<T = string> {
   onChange: (value: T) => void;
   disabled?: boolean;
   invalid?: boolean;
-  placement?: Placement | "selection";
+  placement?: Placement;
   getIsSelected?: (a: T, b: T) => boolean;
   matchReferenceWidth?: boolean;
 }
@@ -143,7 +139,7 @@ const useListboxFloating = <T,>({
   onChange,
   disabled,
   invalid,
-  placement = "selection",
+  placement = "bottom",
   getIsSelected = defaultGetIsSelected,
   matchReferenceWidth = true,
 }: UseListboxFloatingOptions<T>) => {
@@ -153,10 +149,6 @@ const useListboxFloating = <T,>({
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const [options, setOptions] = useState<Option<T>[]>([]);
 
-  const [innerOffset, setInnerOffset] = useState(0);
-  const [fallback, setFallback] = useState(false);
-
-  const overflowRef = useRef<SideObject>(null);
   const elementsRef = useRef<(HTMLElement | null)[]>([]);
 
   const selectedIndex = useMemo(() => {
@@ -167,67 +159,35 @@ const useListboxFloating = <T,>({
     });
   }, [options, value, getIsSelected]);
 
-  if (!open) {
-    if (innerOffset !== 0) setInnerOffset(0);
-    if (fallback) setFallback(false);
-  }
-
-  const shouldPositionOnSelection =
-    placement === "selection" &&
-    !isSearchable &&
-    !fallback &&
-    selectedIndex !== -1;
-
   const floating = useFloating({
-    placement: placement === "selection" ? "bottom" : placement,
+    placement,
     open,
     onOpenChange: setOpen,
-    whileElementsMounted: autoUpdate,
-    middleware: shouldPositionOnSelection
-      ? [
-          inner({
-            listRef: elementsRef,
-            overflowRef,
-            index: selectedIndex,
-            offset: innerOffset,
-            onFallbackChange: setFallback,
-            padding: 4,
-          }),
-          offset({
-            crossAxis: -2,
-          }),
-          size({
-            apply({ rects, elements }) {
-              if (matchReferenceWidth) {
-                elements.floating.style.setProperty(
-                  "--width",
-                  `${rects.reference.width}px`
-                );
-              }
-            },
-          }),
-        ]
-      : [
-          flip({ padding: 4 }),
-          shift({ padding: 4 }),
-          offset(4),
-          size({
-            apply({ rects, elements, availableHeight }) {
-              elements.floating.style.setProperty(
-                "--max-height",
-                `${availableHeight}px`
-              );
+    whileElementsMounted: (reference, floating, update) =>
+      autoUpdate(reference, floating, update, {
+        layoutShift: false,
+      }),
+    middleware: [
+      flip({ padding: 4 }),
+      shift({ padding: 4 }),
+      offset(4),
+      size({
+        apply({ rects, elements, availableHeight }) {
+          elements.floating.style.setProperty(
+            "--max-height",
+            `${availableHeight}px`
+          );
 
-              if (matchReferenceWidth) {
-                elements.floating.style.setProperty(
-                  "--width",
-                  `${rects.reference.width}px`
-                );
-              }
-            },
-            padding: 4,
-          }),
-        ],
+          if (matchReferenceWidth) {
+            elements.floating.style.setProperty(
+              "--width",
+              `${rects.reference.width}px`
+            );
+          }
+        },
+        padding: 4,
+      }),
+    ],
   });
 
   const handleSelect = useCallback(
@@ -295,11 +255,6 @@ const useListboxFloating = <T,>({
   });
   const dismiss = useDismiss(floating.context);
   const role = useRole(floating.context, { role: "listbox" });
-  const innerOffsetMiddleware = useInnerOffset(floating.context, {
-    enabled: !fallback,
-    onChange: setInnerOffset,
-    overflowRef,
-  });
 
   const interactions = useInteractions([
     listNav,
@@ -307,7 +262,6 @@ const useListboxFloating = <T,>({
     click,
     dismiss,
     role,
-    innerOffsetMiddleware,
   ]);
 
   return useMemo(
@@ -428,7 +382,7 @@ const ListboxButton = ({
     >
       <span className="flex flex-1 items-center gap-1.5 truncate text-left">
         {children ?? (
-          <span className="text-foreground-secondary">{placeholder}</span>
+          <span className="text-muted-foreground">{placeholder}</span>
         )}
       </span>
       <CaretUpDownIcon
@@ -453,7 +407,6 @@ const ListboxOptions = <T,>({
   ref: refProp,
   children,
   className,
-  style,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
   const {
@@ -463,11 +416,8 @@ const ListboxOptions = <T,>({
     elementsRef,
     labelsRef,
     context,
-    floatingStyles,
     getFloatingProps,
   } = useListboxContext();
-
-  const topLayerRef = useTopLayer<HTMLDivElement>(context.open);
 
   useEffect(() => {
     const extractOptions = (children: React.ReactNode): Option<T>[] => {
@@ -501,34 +451,24 @@ const ListboxOptions = <T,>({
     }
   }, [children, setIsSearchable]);
 
-  const ref = useMergeRefs([refs.setFloating, refProp, topLayerRef]);
-
-  if (!context.open) return null;
+  const ref = useMergeRefs([refs.setFloating, refProp]);
 
   return (
-    <FloatingFocusManager context={context}>
-      <div
-        ref={ref}
-        data-state={context.open ? "open" : "closed"}
-        className={cn(
-          "border-border bg-background text-foreground z-50 flex flex-col items-stretch rounded-xl border p-0 shadow-xl focus:outline-none",
-          "overflow-y-auto overscroll-contain",
-          "max-h-(--max-height) w-(--width)",
-          className
-        )}
-        style={{
-          ...floatingStyles,
-          ...style,
-        }}
-        {...getFloatingProps({
-          ...props,
-        })}
-      >
-        <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
-          {children}
-        </FloatingList>
-      </div>
-    </FloatingFocusManager>
+    <PopoverPanel
+      context={context}
+      ref={ref}
+      className={cn(
+        "border-border bg-background text-foreground z-50 flex flex-col items-stretch rounded-xl border p-0 shadow-xl focus:outline-none",
+        "overflow-y-auto overscroll-contain",
+        "max-h-(--max-height) w-(--width)",
+        className
+      )}
+      {...getFloatingProps(props)}
+    >
+      <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
+        {children}
+      </FloatingList>
+    </PopoverPanel>
   );
 };
 
@@ -537,7 +477,6 @@ interface ListboxOptionProps<T = string>
   children: React.ReactNode;
   value: T;
   disabled?: boolean;
-  withCheckmark?: boolean;
 }
 
 const ListboxOption = <T,>({
@@ -546,7 +485,6 @@ const ListboxOption = <T,>({
   children,
   disabled,
   className,
-  withCheckmark = true,
   ...props
 }: ListboxOptionProps<T>) => {
   const {
@@ -579,8 +517,8 @@ const ListboxOption = <T,>({
       disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
-        "data-highlighted:bg-background-secondary text-foreground/80 relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 text-left text-base font-medium outline-none select-none first:mt-1 last:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
-        withCheckmark && "pr-8",
+        "data-highlighted:bg-foreground/5 text-foreground relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 text-left font-medium outline-none select-none first-of-type:mt-1 last-of-type:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
+        "pr-8",
         className
       )}
       {...getItemProps({
@@ -592,7 +530,7 @@ const ListboxOption = <T,>({
       })}
     >
       {children}
-      {isSelected && withCheckmark && (
+      {isSelected && (
         <CheckIcon
           weight="bold"
           className="text-foreground absolute top-1/2 right-3 -translate-y-1/2 text-sm"

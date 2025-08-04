@@ -9,15 +9,15 @@ const UseMousePanBothPreview = () => {
   return (
     <div
       ref={ref}
-      className="aspect-square h-full max-h-128 w-full max-w-128 cursor-grab snap-both snap-mandatory overflow-auto active:cursor-grabbing"
+      className="aspect-square h-full max-h-128 w-full max-w-lg cursor-grab snap-both snap-mandatory overflow-auto active:cursor-grabbing"
     >
       <ul className="grid size-max grid-cols-13 grid-rows-13">
         {new Array(169).fill(0).map((_, index) => (
           <li
             key={index}
             className={cn(
-              "no-select bg-foreground-secondary/10 size-24 snap-center",
-              index % 2 === 0 && "bg-foreground-secondary/30"
+              "no-select bg-muted-foreground/10 size-24 snap-center",
+              index % 2 === 0 && "bg-muted-foreground/30"
             )}
           />
         ))}

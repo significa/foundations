@@ -28,11 +28,11 @@ const SequenceMotion = () => {
           <SequenceItem
             key={index}
             className={cn(
-              "border-background-secondary relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
+              "border-muted relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
               "flex items-center gap-1.5 whitespace-nowrap",
-              "hover:bg-background-secondary/30 transition-colors",
-              'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
-              "before:origin-left before:scale-x-[var(--progress)]"
+              "hover:bg-muted/30 transition-colors",
+              'before:bg-muted before:absolute before:inset-0 before:-z-10 before:content-[""]',
+              "before:origin-left before:scale-x-(--progress)"
             )}
           >
             <item.icon size={16} className="-ml-1 shrink-0" />
@@ -56,7 +56,7 @@ const SequenceMotion = () => {
                 <SequencePanel forceMount>
                   <div className="border-border flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
                     <motion.div
-                      className="text-foreground-secondary font-mono text-sm uppercase"
+                      className="text-muted-foreground font-mono text-sm uppercase"
                       initial={{ opacity: 0, y: "50%" }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{

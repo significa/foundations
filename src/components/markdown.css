@@ -129,7 +129,7 @@
     }
 
     [data-rehype-pretty-code-caption] {
-      color: var(--color-foreground-secondary);
+      color: var(--color-muted-foreground);
 
       border-bottom-left-radius: var(--radius-xl);
       border-bottom-right-radius: var(--radius-xl);

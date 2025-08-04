@@ -18,15 +18,16 @@ const inputStyle = cva({
   base: [
     "transition",
     "w-full border h-10 rounded-xl px-4 py-1 text-base font-medium",
-    "focus:outline-none focus-visible:border-foreground/20 focus-visible:ring-4 focus-visible:ring-ring focus-visible:text-foreground disabled:cursor-not-allowed disabled:opacity-50 text-foreground/80 placeholder:text-foreground-secondary data-[invalid]:border-red-500 data-[invalid]:hover:border-red-600 data-[invalid]:focus-visible:border-red-500 data-[invalid]:focus-visible:ring-red-500/20",
-    "pl-[var(--prefix-width,calc(var(--spacing)*4))]",
-    "pr-[var(--suffix-width,calc(var(--spacing)*4))]",
+    "focus:outline-none focus-visible:border-accent focus-visible:ring-4 focus-visible:ring-ring focus-visible:text-foreground disabled:cursor-not-allowed disabled:opacity-50 text-foreground/80 placeholder:text-muted-foreground data-invalid:border-red-500 data-invalid:hover:border-red-600 data-invalid:focus-visible:border-red-500 data-invalid:focus-visible:ring-red-500/20",
+    "pl-(--prefix-width,calc(var(--spacing)*4))",
+    "pr-(--suffix-width,calc(var(--spacing)*4))",
   ],
   variants: {
     variant: {
-      default: "border-border bg-background hover:border-border-hard shadow-xs",
+      default:
+        "border-border bg-background hover:border-mix-border/8 shadow-xs",
       minimal:
-        "border-transparent bg-transparent hover:bg-background-secondary focus-visible:bg-background",
+        "border-transparent bg-transparent hover:bg-muted focus-visible:bg-background",
     },
   },
   defaultVariants: {
@@ -143,14 +144,12 @@ const InputSuffix = (props: InputSuffixProps) => {
 
 interface InputAddonProps extends React.ComponentPropsWithRef<"div"> {
   onSetWidth?: (width: number) => void;
-  interactive?: boolean;
 }
 
 const InputAddon = ({
   ref,
   className,
   onSetWidth,
-  interactive,
   ...props
 }: InputAddonProps) => {
   const internalRef = useRef<HTMLDivElement | null>(null);
@@ -176,10 +175,7 @@ const InputAddon = ({
       data-input-addon
       className={cn(
         "absolute top-1/2 flex -translate-y-1/2 items-center justify-center text-base font-medium",
-        "first:left-4 last:right-4",
-        interactive
-          ? "text-foreground hover:text-foreground-secondary transition"
-          : "text-foreground pointer-events-none",
+        "text-foreground pointer-events-none first:left-4 last:right-4",
         className
       )}
       ref={composeRefs(ref, internalRef)}

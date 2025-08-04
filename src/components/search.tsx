@@ -252,7 +252,7 @@ export const Search = () => {
           <MagnifyingGlassIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex h-[400px] max-h-[70svh] w-256 flex-col rounded-xl p-0">
+      <DialogContent className="flex h-[400px] max-h-[70svh] w-5xl flex-col rounded-xl p-0">
         <div
           className={cn(
             "border-border bg-background sticky top-0 z-10 flex w-full items-center border-b px-3.5 py-3",
@@ -281,7 +281,7 @@ export const Search = () => {
         </div>
         <div className="flex flex-col gap-4 overflow-y-auto pt-4 pb-1">
           {!pagefindInstance ? (
-            <div className="text-foreground-secondary flex h-32 items-center justify-center px-3.5 text-center text-sm">
+            <div className="text-muted-foreground flex items-center justify-center px-3.5 text-sm">
               Could not load Pagefind instance.
             </div>
           ) : (
@@ -295,7 +295,7 @@ export const Search = () => {
                   <Group key={index} result={result} />
                 ))}
               {!isLoading && results.length === 0 && query !== "" && (
-                <div className="text-foreground-secondary flex h-32 items-center px-3.5 text-center text-sm">
+                <div className="text-muted-foreground flex items-center px-3.5 text-sm">
                   No results found
                 </div>
               )}
@@ -317,16 +317,14 @@ const Group = ({ result }: GroupProps) => {
   return (
     <div key={group} className="px-1">
       <div className="px-2.5">
-        <h3 className="text-foreground-secondary mb-1 pb-1.5 text-xs">
-          {group}
-        </h3>
+        <h3 className="text-muted-foreground mb-1 pb-1.5 text-xs">{group}</h3>
       </div>
       <div className="flex flex-col gap-0.5">
         {items.map((item, index) => (
           <a
             key={index}
             href={item.href}
-            className="hover:bg-background-secondary block rounded-lg px-2.5 py-1.5 text-sm"
+            className="hover:bg-muted block rounded-lg px-2.5 py-1.5 text-sm"
           >
             {item.title}
           </a>

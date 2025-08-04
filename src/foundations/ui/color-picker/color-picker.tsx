@@ -258,7 +258,7 @@ const ColorHandle = ({
   return (
     <div
       className={cn(
-        "absolute h-[var(--size)] w-[var(--size)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white bg-[var(--color)] shadow-lg",
+        "absolute h-(--size) w-(--size) -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white bg-(--color) shadow-lg",
         "transition-transform group-focus:scale-110 group-focus:outline group-focus:outline-4 group-focus:outline-[white]/40"
       )}
       style={{

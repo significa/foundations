@@ -18,7 +18,7 @@ const UseScrollLockTargetPreview = () => {
         <div className="h-[2000px]" />
       </main>
       <div
-        className="text-foreground-secondary absolute inset-0 flex items-center justify-center"
+        className="text-muted-foreground absolute inset-0 flex items-center justify-center"
         inert
       >
         Scroll me

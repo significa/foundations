@@ -147,9 +147,9 @@ export const Marquee = ({
       {...props}
       className={cn(
         "box-content flex w-max overflow-hidden will-change-transform",
-        "[&>*]:shrink-0 [&>*]:will-change-transform",
-        axis === "x" && "flex-row [&>*]:translate-x-(--translate)",
-        axis === "y" && "flex-col [&>*]:translate-y-(--translate)",
+        "*:shrink-0 *:will-change-transform",
+        axis === "x" && "flex-row *:translate-x-(--translate)",
+        axis === "y" && "flex-col *:translate-y-(--translate)",
         className
       )}
       style={{

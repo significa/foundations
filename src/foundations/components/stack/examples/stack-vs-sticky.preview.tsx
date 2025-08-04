@@ -46,7 +46,7 @@ const StackVsStickyPreview = () => {
                 </div>
                 <Divider />
               </StackHeader>
-              <div className="text-foreground-secondary text-md pt-4 pb-12">
+              <div className="text-muted-foreground text-md pt-4 pb-12">
                 {item.content}
               </div>
             </StackItem>
@@ -74,7 +74,7 @@ const StackVsStickyPreview = () => {
                 </div>
                 <Divider />
               </div>
-              <div className="text-foreground-secondary text-md pt-4 pb-12">
+              <div className="text-muted-foreground text-md pt-4 pb-12">
                 {item.content}
               </div>
             </div>

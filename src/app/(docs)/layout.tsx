@@ -12,7 +12,7 @@ export default async function DocsLayout({
   return (
     <div>
       <Header />
-      <div className="mx-auto flex max-w-screen-2xl">
+      <div className="mx-auto flex max-w-(--breakpoint-2xl)">
         <aside
           id="app-menu"
           // controlled by button by ./header.tsx component

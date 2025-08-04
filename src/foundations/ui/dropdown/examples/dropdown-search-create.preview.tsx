@@ -118,7 +118,7 @@ export default function DropdownSearchCreatePreview() {
           ))}
         </div>
       ) : (
-        <div className="text-foreground-secondary mt-4 flex h-8 items-center gap-1 text-sm">
+        <div className="text-muted-foreground mt-4 flex h-8 items-center gap-1 text-sm">
           <UserCircleIcon className="text-base" /> No people selected
         </div>
       )}

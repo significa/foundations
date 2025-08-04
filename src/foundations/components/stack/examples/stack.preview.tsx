@@ -43,7 +43,7 @@ const StackPreview = () => {
               <Divider />
             </StackHeader>
 
-            <div className="text-foreground-secondary text-md w-2/3 pt-4 pb-12">
+            <div className="text-muted-foreground text-md w-2/3 pt-4 pb-12">
               {item.content}
             </div>
           </StackItem>

@@ -15,7 +15,7 @@ const SequenceVertical = () => {
     <Sequence
       orientation="vertical"
       loop
-      className="flex max-w-128 gap-10"
+      className="flex max-w-lg gap-10"
       duration={3000}
     >
       <div className="flex gap-2">
@@ -44,7 +44,7 @@ const SequenceVertical = () => {
               value={index.toString()}
               className={cn(
                 "block h-8 text-left text-base font-medium",
-                "text-foreground-secondary data-[selected=true]:text-foreground",
+                "text-muted-foreground data-[selected=true]:text-foreground",
                 "hover:text-foreground/60 active:text-foreground/80 cursor-pointer"
               )}
             >

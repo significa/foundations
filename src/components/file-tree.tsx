@@ -167,7 +167,7 @@ const FileNavigationItem = ({ name, node, path }: FileNavigationItemProps) => {
         isActive={selectedFile === fullPath}
         onClick={() => setSelectedFile(fullPath)}
       >
-        <FileTextIcon className="text-foreground-secondary" />
+        <FileTextIcon className="text-muted-foreground" />
         <span>{name}</span>
       </Item>
     );
@@ -177,7 +177,7 @@ const FileNavigationItem = ({ name, node, path }: FileNavigationItemProps) => {
     <Disclosure key={fullPath} defaultOpen>
       <DisclosureTrigger asChild className="justify-start">
         <Item level={path.length + 1}>
-          <FolderIcon className="text-foreground-secondary" />
+          <FolderIcon className="text-muted-foreground" />
           <span>{name}</span>
         </Item>
       </DisclosureTrigger>
@@ -214,8 +214,8 @@ const Item = ({
       ref={ref}
       className={cn(
         "font-mono text-sm",
-        "hover:bg-background-secondary focus-visible:bg-foreground/10 mt-0.5 flex w-full cursor-pointer items-center gap-1 rounded-md px-2 py-1 pl-[calc(var(--level)*--spacing(2))] outline-none focus-visible:ring-transparent",
-        isActive && "bg-background-secondary",
+        "hover:bg-muted focus-visible:bg-foreground/10 mt-0.5 flex w-full cursor-pointer items-center gap-1 rounded-md px-2 py-1 pl-[calc(var(--level)*--spacing(2))] outline-none focus-visible:ring-transparent",
+        isActive && "bg-muted",
         className
       )}
       style={{ "--level": level }}

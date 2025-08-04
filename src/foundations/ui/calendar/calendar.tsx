@@ -256,7 +256,7 @@ const Calendar = ({
             return (
               <div
                 key={i}
-                className="text-foreground-secondary flex h-9 w-full min-w-9 items-center justify-center text-sm"
+                className="text-muted-foreground flex h-9 w-full min-w-9 items-center justify-center text-sm"
               >
                 {weekday.toLocaleDateString(locale, { weekday: "narrow" })}
               </div>
@@ -305,11 +305,11 @@ const Calendar = ({
                       // base
                       "ring-ring text-foreground/80 z-10 flex size-8 items-center justify-center rounded-lg border border-transparent text-sm font-medium tabular-nums transition-shadow",
                       // hover
-                      "group-hover:bg-background-secondary group-hover:text-foreground",
+                      "group-hover:bg-foreground/5 group-hover:text-foreground",
                       // selected
-                      "group-data-[selected]:bg-foreground group-data-[selected]:text-background group-hover:group-data-[selected]:text-background",
+                      "group-data-selected:bg-accent group-data-selected:text-accent-foreground group-hover:group-data-selected:text-accent-foreground",
                       // other month
-                      "group-data-[other-month]:text-foreground-secondary",
+                      "group-data-other-month:text-muted-foreground",
                       // focus
                       "group-focus-visible:ring-4"
                     )}
@@ -322,7 +322,7 @@ const Calendar = ({
                       aria-hidden
                       className={cn(
                         "bg-foreground absolute bottom-1.5 left-1/2 z-20 h-0.5 w-1.5 -translate-x-1/2 rounded-md",
-                        isSelected && "bg-background"
+                        isSelected && "bg-accent-foreground"
                       )}
                     />
                   )}
@@ -330,10 +330,10 @@ const Calendar = ({
                   <div
                     aria-hidden
                     className={cn(
-                      "bg-background-secondary invisible absolute inset-x-0 inset-y-0.5 z-0",
-                      "group-data-[in-range]:visible",
-                      "group-data-[start-date]:visible group-data-[start-date]:left-1/2",
-                      "group-data-[end-date]:visible group-data-[end-date]:right-1/2"
+                      "bg-muted invisible absolute inset-x-0 inset-y-0.5 z-0",
+                      "group-data-in-range:visible",
+                      "group-data-start-date:visible group-data-start-date:left-1/2",
+                      "group-data-end-date:visible group-data-end-date:right-1/2"
                     )}
                   />
                 </button>
@@ -398,7 +398,7 @@ const YearMonthButton = ({
     <button
       type="button"
       className={cn(
-        "ring-ring text-foreground/80 hover:bg-background-secondary hover:text-foreground focus-visible:text-foreground h-8 w-full cursor-pointer rounded-lg text-sm font-medium transition outline-none focus-visible:ring-4",
+        "ring-ring text-foreground/80 hover:bg-foreground/5 hover:text-foreground focus-visible:text-foreground h-8 w-full cursor-pointer rounded-lg text-sm font-medium transition outline-none focus-visible:ring-4",
         className
       )}
       {...props}

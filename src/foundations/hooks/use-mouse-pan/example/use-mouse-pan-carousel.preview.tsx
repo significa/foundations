@@ -79,14 +79,14 @@ const Carousel = ({ children }: { children: ReactNode }) => {
           {/* Scroller */}
           <div
             ref={ref}
-            className="w-full max-w-112 cursor-grab snap-x snap-mandatory overflow-x-auto overscroll-contain rounded-sm active:cursor-grabbing"
+            className="w-full max-w-md cursor-grab snap-x snap-mandatory overflow-x-auto overscroll-contain rounded-sm active:cursor-grabbing"
           >
             <ul
               className="grid size-max w-full grid-cols-[repeat(var(--num-items),100%)] gap-2"
               style={{ "--num-items": numItems }}
             >
               {Children.map(children, (child) => (
-                <li className="aspect-[3/2] w-full snap-center overflow-hidden rounded-sm select-none">
+                <li className="aspect-3/2 w-full snap-center overflow-hidden rounded-sm select-none">
                   {child}
                 </li>
               ))}
@@ -147,7 +147,7 @@ const CarouselItem = ({
       className="flex size-full items-end bg-cover bg-center"
       style={{ backgroundImage: `url(${image})` }}
     >
-      <div className="text-md from-foreground/85 w-full bg-gradient-to-t to-transparent p-6 pt-32 pr-12 font-medium">
+      <div className="text-md from-foreground/85 w-full bg-linear-to-t to-transparent p-6 pt-32 pr-12 font-medium">
         <div
           className={cn(
             "text-background",

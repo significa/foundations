@@ -15,7 +15,7 @@ export default function PopoverEmptyPreview() {
       </PopoverTrigger>
       <PopoverContent className="p-0">
         <PopoverSearchInput placeholder="Search items..." />
-        <PopoverEmpty>No items found.</PopoverEmpty>
+        <PopoverEmpty>No items found</PopoverEmpty>
       </PopoverContent>
     </Popover>
   );

@@ -9,15 +9,15 @@ const UseMousePanClickables = () => {
   return (
     <div
       ref={ref}
-      className="w-full max-w-128 cursor-grab overflow-x-auto **:cursor-grab active:cursor-grabbing active:**:cursor-grabbing"
+      className="w-full max-w-lg cursor-grab overflow-x-auto **:cursor-grab active:cursor-grabbing active:**:cursor-grabbing"
     >
       <ul className="flex size-max gap-2">
         {new Array(12).fill(0).map((_, index) => (
           <li
             key={index}
             className={cn(
-              "no-select bg-foreground-secondary/15 size-32 rounded-sm",
-              index % 2 === 0 && "bg-foreground-secondary/30"
+              "no-select bg-muted-foreground/15 size-32 rounded-sm",
+              index % 2 === 0 && "bg-muted-foreground/30"
             )}
           >
             <button

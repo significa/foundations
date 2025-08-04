@@ -11,7 +11,7 @@ const Item = () => {
   const index = useInstanceCounter();
 
   return (
-    <div className="bg-background-secondary my-2 w-fit rounded-md px-2 py-1 text-xs">
+    <div className="bg-muted my-2 w-fit rounded-md px-2 py-1 text-xs">
       Instance Index: {index}
     </div>
   );
@@ -24,7 +24,7 @@ const InstanceCounterPreview = () => {
   return (
     <InstanceCounterProvider onChange={setLength}>
       <div className="flex min-h-88 flex-col gap-4">
-        <div className="text-foreground-secondary text-sm">
+        <div className="text-muted-foreground text-sm">
           Number of Instances: {length}
         </div>
         <Button size="sm" onClick={() => setMount(!mount)}>
