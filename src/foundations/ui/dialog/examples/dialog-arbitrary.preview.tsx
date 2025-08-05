@@ -21,23 +21,23 @@ export default function DialogArbitraryPreview() {
           </Button>
         </DialogClose>
         <div className="flex flex-col items-center rounded-2xl p-6">
-          <div className="border-border bg-muted mb-4 size-24 rounded-full border" />
+          <div className="border-border bg-background-secondary mb-4 size-24 rounded-full border" />
           <h2 className="text-xl font-semibold">John Doe</h2>
-          <p className="text-muted-foreground mb-4 text-sm">
+          <p className="text-foreground-secondary mb-4 text-sm">
             Software Engineer
           </p>
           <div className="mb-6 flex space-x-4">
             <div className="text-center">
               <p className="font-semibold">1.2k</p>
-              <p className="text-muted-foreground text-xs">Followers</p>
+              <p className="text-foreground-secondary text-xs">Followers</p>
             </div>
             <div className="text-center">
               <p className="font-semibold">3.4k</p>
-              <p className="text-muted-foreground text-xs">Following</p>
+              <p className="text-foreground-secondary text-xs">Following</p>
             </div>
             <div className="text-center">
               <p className="font-semibold">567</p>
-              <p className="text-muted-foreground text-xs">Posts</p>
+              <p className="text-foreground-secondary text-xs">Posts</p>
             </div>
           </div>
           <Button>Follow</Button>

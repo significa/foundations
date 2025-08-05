@@ -256,7 +256,7 @@ const TabsItem = ({
           data-tab-indicator="true"
           layoutId={tabsId}
           aria-hidden="true"
-          className="bg-muted absolute inset-0 z-0 rounded-xl"
+          className="bg-background-secondary absolute inset-0 z-0 rounded-xl"
           transition={{ type: "spring", duration: 0.3, bounce: 0.2 }}
         />
       )}

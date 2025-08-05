@@ -256,7 +256,7 @@ const Calendar = ({
             return (
               <div
                 key={i}
-                className="text-muted-foreground flex h-9 w-full min-w-9 items-center justify-center text-sm"
+                className="text-foreground-secondary flex h-9 w-full min-w-9 items-center justify-center text-sm"
               >
                 {weekday.toLocaleDateString(locale, { weekday: "narrow" })}
               </div>
@@ -309,7 +309,7 @@ const Calendar = ({
                       // selected
                       "group-data-selected:bg-accent group-data-selected:text-accent-foreground group-hover:group-data-selected:text-accent-foreground",
                       // other month
-                      "group-data-other-month:text-muted-foreground",
+                      "group-data-other-month:text-foreground-secondary",
                       // focus
                       "group-focus-visible:ring-4"
                     )}
@@ -330,7 +330,7 @@ const Calendar = ({
                   <div
                     aria-hidden
                     className={cn(
-                      "bg-muted invisible absolute inset-x-0 inset-y-0.5 z-0",
+                      "bg-background-secondary invisible absolute inset-x-0 inset-y-0.5 z-0",
                       "group-data-in-range:visible",
                       "group-data-start-date:visible group-data-start-date:left-1/2",
                       "group-data-end-date:visible group-data-end-date:right-1/2"

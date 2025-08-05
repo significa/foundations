@@ -16,7 +16,7 @@ export default function TooltipRichContentPreview() {
           </Avatar>
           <div className="flex flex-col">
             <span>Pedro Brandão</span>
-            <span className="text-muted-foreground">Significa</span>
+            <span className="text-foreground-secondary">Significa</span>
           </div>
         </div>
       }

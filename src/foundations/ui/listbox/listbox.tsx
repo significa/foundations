@@ -382,7 +382,7 @@ const ListboxButton = ({
     >
       <span className="flex flex-1 items-center gap-1.5 truncate text-left">
         {children ?? (
-          <span className="text-muted-foreground">{placeholder}</span>
+          <span className="text-foreground-secondary">{placeholder}</span>
         )}
       </span>
       <CaretUpDownIcon

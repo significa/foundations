@@ -114,7 +114,7 @@ const inputStyle = cva({
 });
 
 const backgroundTrackStyle = cva({
-  base: ["absolute bg-muted-foreground/40 rounded-full"],
+  base: ["absolute bg-foreground-secondary/40 rounded-full"],
   variants: {
     variant: {
       horizontal:

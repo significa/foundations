@@ -17,7 +17,7 @@ const getInitials = (name: string | undefined) => {
 };
 
 const avatarStyle = cva({
-  base: "bg-muted-foreground/10 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm flex items-center justify-center overflow-hidden text-foreground/80 font-semibold relative",
+  base: "bg-foreground-secondary/10 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm flex items-center justify-center overflow-hidden text-foreground/80 font-semibold relative",
   variants: {
     variant: {
       circle: "rounded-full",

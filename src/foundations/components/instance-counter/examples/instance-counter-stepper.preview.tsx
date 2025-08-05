@@ -35,7 +35,7 @@ const Stepper = ({ children }: { children: ReactNode }) => {
               →
             </Button>
           </div>
-          <div className="bg-muted border-border min-w-48 rounded-lg border p-8 text-center">
+          <div className="bg-background-secondary border-border min-w-48 rounded-lg border p-8 text-center">
             {children}
           </div>
         </div>

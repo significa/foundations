@@ -11,7 +11,7 @@ export default function DisclosurePreview() {
         <DisclosureTrigger>
           Did you know that octopuses have three hearts?
         </DisclosureTrigger>
-        <DisclosureContent className="text-muted-foreground">
+        <DisclosureContent className="text-foreground-secondary">
           Two hearts pump blood to the gills, while the third one circulates it
           to the rest of the body. When they swim, their third heart actually
           stops beating - which is why they tend to crawl more than swim!
@@ -21,7 +21,7 @@ export default function DisclosurePreview() {
         <DisclosureTrigger>
           Want to hear about immortal jellyfish?
         </DisclosureTrigger>
-        <DisclosureContent className="text-muted-foreground">
+        <DisclosureContent className="text-foreground-secondary">
           The Turritopsis dohrnii jellyfish can technically live forever! When
           stressed, it can transform back into a juvenile form by turning its
           existing cells into different cell types. It&apos;s like having a

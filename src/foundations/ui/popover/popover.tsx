@@ -383,7 +383,7 @@ const PopoverSearchInput = ({
       />
       <input
         className={cn(
-          "placeholder:text-muted-foreground h-10 w-full border-0 bg-transparent p-4 pl-10 text-base font-medium transition-colors outline-none focus:ring-0",
+          "placeholder:text-foreground-secondary h-10 w-full border-0 bg-transparent p-4 pl-10 text-base font-medium transition-colors outline-none focus:ring-0",
           className
         )}
         {...props}
@@ -400,7 +400,7 @@ const PopoverEmpty = ({
   return (
     <div
       className={cn(
-        "text-muted-foreground my-4 text-center text-base",
+        "text-foreground-secondary my-4 text-center text-base",
         className
       )}
       {...props}

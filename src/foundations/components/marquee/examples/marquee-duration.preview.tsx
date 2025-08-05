@@ -14,7 +14,7 @@ const MarqueeDurationExample = () => {
           htmlFor="speed"
           className="text-base font-medium whitespace-nowrap"
         >
-          Duration <span className="text-muted-foreground">(ms)</span>
+          Duration <span className="text-foreground-secondary">(ms)</span>
         </label>
         <input
           id="speed"
@@ -26,11 +26,11 @@ const MarqueeDurationExample = () => {
           onChange={(e) => setDuration(Number(e.target.value))}
           className="w-48"
         />
-        <span className="text-muted-foreground w-12">{duration}</span>
+        <span className="text-foreground-secondary w-12">{duration}</span>
       </div>
       <Marquee
         duration={duration}
-        className="border-border text-muted-foreground h-[2.5em] w-96 items-center gap-2 rounded border px-2"
+        className="border-border text-foreground-secondary h-[2.5em] w-96 items-center gap-2 rounded border px-2"
       >
         Foundations
         <Egg />

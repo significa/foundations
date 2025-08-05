@@ -44,7 +44,7 @@ const SequenceVertical = () => {
               value={index.toString()}
               className={cn(
                 "block h-8 text-left text-base font-medium",
-                "text-muted-foreground data-[selected=true]:text-foreground",
+                "text-foreground-secondary data-[selected=true]:text-foreground",
                 "hover:text-foreground/60 active:text-foreground/80 cursor-pointer"
               )}
             >

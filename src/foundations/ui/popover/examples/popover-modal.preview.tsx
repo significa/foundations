@@ -15,7 +15,7 @@ export default function PopoverModalPreview() {
       <PopoverContent className="flex flex-col gap-4">
         <div>
           <h3 className="mb-1 text-sm font-medium">This is a modal popover</h3>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-foreground-secondary text-sm">
             It will trap focus inside. Very useful for popovers with advanced
             interactions inside (like forms)
           </p>

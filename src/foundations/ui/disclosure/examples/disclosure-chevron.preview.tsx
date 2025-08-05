@@ -13,7 +13,7 @@ export default function DisclosureChevronPreview() {
           Sloths can hold their breath for 40 minutes?
           <DisclosureChevron />
         </DisclosureTrigger>
-        <DisclosureContent className="text-muted-foreground">
+        <DisclosureContent className="text-foreground-secondary">
           While most mammals can only hold their breath for a few minutes,
           sloths can slow their heart rates to one-third of its normal rate,
           allowing them to stay underwater for up to 40 minutes! This helps them
@@ -25,7 +25,7 @@ export default function DisclosureChevronPreview() {
           Want to learn about platypus superpowers?
           <DisclosureChevron />
         </DisclosureTrigger>
-        <DisclosureContent className="text-muted-foreground">
+        <DisclosureContent className="text-foreground-secondary">
           Platypuses have electroreceptors in their bills that detect electrical
           signals from prey! They can sense the electrical fields produced by
           the muscular contractions of small aquatic animals. They&apos;re also

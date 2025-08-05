@@ -38,7 +38,7 @@ const SequencePreview = () => {
         {CONTENT.map((item, index) => (
           <SequencePanel key={index}>
             <div className="border-border absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
-              <div className="text-muted-foreground font-mono text-sm uppercase">
+              <div className="text-foreground-secondary font-mono text-sm uppercase">
                 {item.title}
               </div>
               <div className="pr-8 text-xl font-medium text-pretty">

@@ -57,7 +57,7 @@ export default async function Page({
           (metadata.dependencies && metadata.dependencies.length > 0) ||
           (metadata.files && metadata.files.length > 0)) && (
           <>
-            <h3 className="text-muted-foreground mb-3 font-medium">
+            <h3 className="text-foreground-secondary mb-3 font-medium">
               On this page
             </h3>
             <TableOfContents
@@ -86,7 +86,7 @@ export default async function Page({
             <hr className="my-6" />
           </>
         )}
-        <div className="text-muted-foreground text-xs">
+        <div className="text-foreground-secondary text-xs">
           <a
             className="hover:text-foreground mb-2 inline-flex items-center gap-1 font-medium transition"
             href={`${GITHUB_REPO_URL}/edit/main/${filePath}`}
@@ -95,7 +95,7 @@ export default async function Page({
           >
             <PencilIcon /> Edit this page
           </a>
-          <p className="text-muted-foreground flex items-center gap-1 text-xs">
+          <p className="text-foreground-secondary flex items-center gap-1 text-xs">
             <CalendarIcon />
             Edited{" "}
             {format(
@@ -112,7 +112,7 @@ export default async function Page({
         <div className="mb-8">
           <h1 className="text-3xl font-bold">{metadata.title}</h1>
           {metadata.description && (
-            <p className="text-muted-foreground mt-2">{metadata.description}</p>
+            <p className="text-foreground-secondary mt-2">{metadata.description}</p>
           )}
         </div>
         {metadata.preview && (

@@ -25,7 +25,7 @@ const FieldDescription = ({
 
   return (
     <p
-      className={cn("text-muted-foreground text-base font-medium", className)}
+      className={cn("text-foreground-secondary text-base font-medium", className)}
       id={id}
       {...props}
     >

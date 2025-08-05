@@ -22,7 +22,7 @@ export const Menu = ({ items }: { items: typeof navigation }) => {
         <Disclosure key={item.title} defaultOpen className="mb-4">
           <DisclosureTrigger
             className={cn(
-              "bg-background text-muted-foreground sticky top-0 flex w-full cursor-pointer items-center justify-between px-3 py-2 text-sm font-medium",
+              "bg-background text-foreground-secondary sticky top-0 flex w-full cursor-pointer items-center justify-between px-3 py-2 text-sm font-medium",
               "before:bg-background before:absolute before:bottom-full before:left-0 before:h-4 before:w-full"
             )}
           >
@@ -72,8 +72,8 @@ const MenuItem = ({
       data-updated-at={item.updatedAt}
       href={item.href}
       className={cn(
-        "hover:bg-muted flex h-8 shrink-0 items-center gap-1 rounded-lg px-3 text-sm leading-none",
-        isActive && "bg-muted"
+        "hover:bg-background-secondary flex h-8 shrink-0 items-center gap-1 rounded-lg px-3 text-sm leading-none",
+        isActive && "bg-background-secondary"
       )}
     >
       <span>{item.title}</span>

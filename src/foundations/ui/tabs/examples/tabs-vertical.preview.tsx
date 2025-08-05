@@ -25,17 +25,17 @@ export default function TabsVerticalPreview() {
       <TabsPanels className="w-90">
         <TabsPanel>
           <h3 className="text-lg font-medium">Users Panel</h3>
-          <p className="text-muted-foreground">Manage your users here.</p>
+          <p className="text-foreground-secondary">Manage your users here.</p>
         </TabsPanel>
         <TabsPanel>
           <h3 className="text-lg font-medium">Billing Panel</h3>
-          <p className="text-muted-foreground">
+          <p className="text-foreground-secondary">
             Manage your billing information.
           </p>
         </TabsPanel>
         <TabsPanel>
           <h3 className="text-lg font-medium">Settings Panel</h3>
-          <p className="text-muted-foreground">
+          <p className="text-foreground-secondary">
             Configure your application settings.
           </p>
         </TabsPanel>
