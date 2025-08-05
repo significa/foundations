@@ -21,11 +21,12 @@ import {
   UseInteractionsReturn,
   FloatingContext,
 } from "@floating-ui/react";
-import { Slot } from "@/foundations/components/slot/slot";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 import { cn } from "@/lib/utils";
+
 import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
+import { Slot } from "@/foundations/components/slot/slot";
 
 interface UsePopoverFloatingOptions {
   open?: boolean;

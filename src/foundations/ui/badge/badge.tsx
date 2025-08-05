@@ -1,7 +1,6 @@
 "use client";
 
-import { FC, HTMLAttributes, PropsWithChildren } from "react";
-import { VariantProps } from "cva";
+import type { VariantProps } from "cva";
 import { Slot } from "@/foundations/components/slot/slot";
 
 import { cva, cn } from "@/lib/utils";
@@ -55,11 +54,11 @@ const Badge = ({
   );
 };
 
-const BadgeIcon: FC<PropsWithChildren<HTMLAttributes<HTMLDivElement>>> = ({
+const BadgeIcon = ({
   children,
   className,
   ...rest
-}) => {
+}: React.ComponentPropsWithRef<"div">) => {
   return (
     <div
       data-badge-icon
@@ -71,12 +70,10 @@ const BadgeIcon: FC<PropsWithChildren<HTMLAttributes<HTMLDivElement>>> = ({
   );
 };
 
-type BadgeStatusProps = Omit<HTMLAttributes<HTMLDivElement>, "children">;
-
-const BadgeStatus: FC<PropsWithChildren<BadgeStatusProps>> = ({
+const BadgeStatus = ({
   className,
   ...rest
-}) => {
+}: Omit<React.ComponentPropsWithRef<"div">, 'children'>) => {
   return (
     <div
       className={cn(
