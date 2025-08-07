@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 interface TabsContextValue {
   id: string;
   tabs: string[];
-  selectedTab: string;
+  selectedTab: string | undefined;
   setSelectedTab: (id: string) => void;
   next: () => void;
   previous: () => void;
@@ -66,8 +66,11 @@ const Tabs = ({
       onChangeProp?.(index);
 
       // focus on the selected tab when changing index
-      const selectedTab = document.getElementById(getItemId(tabs[index]));
-      selectedTab?.focus();
+      const itemId = getItemId(tabs[index]);
+      if (itemId) {
+        const selectedTab = document.getElementById(itemId);
+        selectedTab?.focus();
+      }
     },
     [onChangeProp, tabs]
   );
@@ -162,7 +165,7 @@ interface TabsItemProps
   asChild?: boolean;
 }
 
-const getItemId = (id: string) => `tab${id}`;
+const getItemId = (id: string | undefined) => (id ? `tab${id}` : undefined);
 
 const TabsItem = ({
   children,
@@ -290,9 +293,10 @@ interface TabsPanelProps
   asChild?: boolean;
 }
 
-const PanelIdContext = createContext<string>("");
+const PanelIdContext = createContext<string | undefined>(undefined);
 
-const getPanelId = (id: string) => `tab-panel${id}`;
+const getPanelId = (id: string | undefined) =>
+  id ? `tab-panel${id}` : undefined;
 
 const TabsPanel = ({
   children,
