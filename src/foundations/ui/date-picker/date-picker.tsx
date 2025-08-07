@@ -6,7 +6,6 @@ import { VariantProps } from "cva";
 import { cn } from "@/lib/utils";
 import {
   Calendar,
-  type CalendarProps,
 } from "@/foundations/ui/calendar/calendar";
 import {
   Dropdown,
@@ -63,7 +62,7 @@ const DatePickerTrigger = ({
 };
 
 interface DatePickerContentCommonProps
-  extends Omit<CalendarProps, "mode" | "value" | "onDateChange"> {
+  extends Omit<React.ComponentPropsWithRef<typeof Calendar>, "mode" | "value" | "onDateChange"> {
   className?: string;
   children?: React.ReactNode;
 }

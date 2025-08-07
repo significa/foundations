@@ -408,4 +408,4 @@ const YearMonthButton = ({
   );
 };
 
-export { Calendar, type CalendarProps };
+export { Calendar };

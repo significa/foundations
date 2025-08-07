@@ -13,6 +13,7 @@ import { VariantProps } from "cva";
 
 import { cva, cn } from "@/lib/utils";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { Slot } from "@/foundations/components/slot/slot";
 
 const inputStyle = cva({
   base: [
@@ -123,7 +124,7 @@ const InputGroup = ({
 };
 
 interface InputPrefixProps extends React.ComponentPropsWithRef<"div"> {
-  interactive?: boolean;
+  asChild?: boolean;
 }
 
 const InputPrefix = (props: InputPrefixProps) => {
@@ -133,7 +134,7 @@ const InputPrefix = (props: InputPrefixProps) => {
 };
 
 interface InputSuffixProps extends React.ComponentPropsWithRef<"div"> {
-  interactive?: boolean;
+  asChild?: boolean;
 }
 
 const InputSuffix = (props: InputSuffixProps) => {
@@ -144,14 +145,17 @@ const InputSuffix = (props: InputSuffixProps) => {
 
 interface InputAddonProps extends React.ComponentPropsWithRef<"div"> {
   onSetWidth?: (width: number) => void;
+  asChild?: boolean;
 }
 
 const InputAddon = ({
   ref,
   className,
   onSetWidth,
+  asChild,
   ...props
 }: InputAddonProps) => {
+  const Comp = asChild ? Slot : "div";
   const internalRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
@@ -171,7 +175,7 @@ const InputAddon = ({
   }, [onSetWidth]);
 
   return (
-    <div
+    <Comp
       data-input-addon
       className={cn(
         "absolute top-1/2 flex -translate-y-1/2 items-center justify-center text-base font-medium",
