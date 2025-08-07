@@ -112,7 +112,9 @@ export default async function Page({
         <div className="mb-8">
           <h1 className="text-3xl font-bold">{metadata.title}</h1>
           {metadata.description && (
-            <p className="text-foreground-secondary mt-2">{metadata.description}</p>
+            <p className="text-foreground-secondary mt-2">
+              {metadata.description}
+            </p>
           )}
         </div>
         {metadata.preview && (

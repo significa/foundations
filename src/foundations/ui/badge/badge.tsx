@@ -73,7 +73,7 @@ const BadgeIcon = ({
 const BadgeStatus = ({
   className,
   ...rest
-}: Omit<React.ComponentPropsWithRef<"div">, 'children'>) => {
+}: Omit<React.ComponentPropsWithRef<"div">, "children">) => {
   return (
     <div
       className={cn(

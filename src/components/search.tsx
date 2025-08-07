@@ -317,7 +317,9 @@ const Group = ({ result }: GroupProps) => {
   return (
     <div key={group} className="px-1">
       <div className="px-2.5">
-        <h3 className="text-foreground-secondary mb-1 pb-1.5 text-xs">{group}</h3>
+        <h3 className="text-foreground-secondary mb-1 pb-1.5 text-xs">
+          {group}
+        </h3>
       </div>
       <div className="flex flex-col gap-0.5">
         {items.map((item, index) => (

@@ -4,9 +4,7 @@ import { CalendarIcon, CaretUpDownIcon } from "@phosphor-icons/react";
 import { VariantProps } from "cva";
 
 import { cn } from "@/lib/utils";
-import {
-  Calendar,
-} from "@/foundations/ui/calendar/calendar";
+import { Calendar } from "@/foundations/ui/calendar/calendar";
 import {
   Dropdown,
   DropdownItems,
@@ -62,7 +60,10 @@ const DatePickerTrigger = ({
 };
 
 interface DatePickerContentCommonProps
-  extends Omit<React.ComponentPropsWithRef<typeof Calendar>, "mode" | "value" | "onDateChange"> {
+  extends Omit<
+    React.ComponentPropsWithRef<typeof Calendar>,
+    "mode" | "value" | "onDateChange"
+  > {
   className?: string;
   children?: React.ReactNode;
 }

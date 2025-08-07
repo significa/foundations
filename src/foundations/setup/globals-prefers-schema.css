@@ -7,12 +7,13 @@
   /* Colors */
   --color-background: light-dark(oklch(100% 0 0), oklch(12% 0 0));
   --color-background-secondary: light-dark(oklch(96% 0 0), oklch(22% 0 0));
-  
+
   --color-foreground: light-dark(oklch(0% 0 0), oklch(95% 0 0));
   --color-foreground-secondary: light-dark(oklch(65% 0 0), oklch(53% 0 0));
 
   --color-accent: oklch(0.7 0.19 48);
-  --color-accent-foreground: oklch(100% 0 0); /* Foreground at the end means it is used on top of the accent color */
+  /* Foreground at the end means it is used on top of the accent color */
+  --color-accent-foreground: oklch(100% 0 0);
 
   --color-border: light-dark(oklch(94% 0 0), oklch(26% 0 0));
 
@@ -41,25 +42,26 @@
   }
 }
 
+/* prettier-ignore */
 @utility mix-with-* {
-  --color-mix-with: --value(--color- *, [ *]);
+  --color-mix-with: --value(--color-*, [*]);
 }
 
+/* prettier-ignore */
 @utility border-mix-* {
   border-color: color-mix(
     in oklab,
-    --value(--color- *, [ *]),
-    var(--color-mix-with, var(--color-foreground))
-      calc(--modifier(integer) * 1%)
+    --value(--color-*, [*]),
+    var(--color-mix-with, var(--color-foreground)) calc(--modifier(integer) * 1%)
   );
 }
 
+/* prettier-ignore */
 @utility bg-mix-* {
   background-color: color-mix(
     in oklab,
-    --value(--color- *, [ *]),
-    var(--color-mix-with, var(--color-foreground))
-      calc(--modifier(integer) * 1%)
+    --value(--color-*, [*]),
+    var(--color-mix-with, var(--color-foreground)) calc(--modifier(integer) * 1%)
   );
 }
 
