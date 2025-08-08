@@ -1,5 +1,5 @@
-import { Radio } from "../radio";
-import { Label } from "../../label/label";
+import { Radio } from "@/foundations/ui/radio/radio";
+import { Label } from "@/foundations/ui/label/label";
 
 export default function RadioPreview() {
   return (
