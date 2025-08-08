@@ -1,4 +1,4 @@
-import { Badge } from "../badge";
+import { Badge } from "@/foundations/ui/badge/badge";
 
 export default function BadgeVariantsPreview() {
   return (

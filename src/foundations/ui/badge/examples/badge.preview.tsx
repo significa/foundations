@@ -1,5 +1,5 @@
 import { PackageIcon } from "@phosphor-icons/react/dist/ssr";
-import { Badge, BadgeIcon, BadgeStatus } from "../badge";
+import { Badge, BadgeIcon, BadgeStatus } from "@/foundations/ui/badge/badge";
 
 export default function BadgePreview() {
   return (
