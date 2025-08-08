@@ -1,7 +1,7 @@
 export const metadata = {
   title: "Color Picker",
   description:
-    "An interactive color picker that allows users to visually select colors in real-time.",
+    "A composable color picker component with modular parts for building custom color selection interfaces.",
   preview: "color-picker",
   files: ["src/foundations/ui/color-picker/color-picker.tsx"],
   dependencies: [
@@ -14,57 +14,108 @@ export const metadata = {
 
 ## Features
 
-- **Interactive Color Selection**: Visual color picker with both hue slider and saturation-value area
-- **Real-time Preview**: Immediate color feedback as you interact with the picker
-- **Keyboard Navigation**: Full keyboard support for precise color adjustments
-- **Customizable Size**: Adjustable dimensions to fit your design needs
+- **Composable Architecture**: Mix and match different color picker parts
+- **Real-time Updates**: Immediate color feedback as you interact with the picker
+- **Keyboard Navigation**: Full keyboard support with arrow keys for precise adjustments
+- **Accessibility**: ARIA-compliant with proper screen reader support
+- **Touch Support**: Works seamlessly on touch devices
+
+## Anatomy
+
+```tsx
+<ColorPicker>
+  <ColorPicker.Area />
+  <ColorPicker.Hue />
+  <ColorPicker.Saturation />
+  <ColorPicker.Lightness />
+  <ColorPicker.Alpha />
+</ColorPicker>
+```
 
 ## API Reference
+
+### ColorPicker
+
+The root component that provides context for all color picker parts.
 
 <PropsTable
   definition={{
     color: {
-      type: "HSV",
+      type: "HSVA",
       description:
-        "Current color value in HSV format [hue, saturation, value]. Each value should be between 0 and 1.",
+        "Current color value in HSVA format [hue, saturation, value, alpha]. Hue is 0-360, others are 0-1.",
+      default: "[0, 1, 1, 1]",
     },
     onColorChange: {
-      type: "(color: HSV) => void",
+      type: "(color: HSVA) => void",
       description:
         "Callback function that receives the new color value when the user makes a selection.",
-    },
-    size: {
-      type: "number",
-      default: "200",
-      description:
-        "Size of the color picker in pixels. Controls both width and height.",
     },
     disabled: {
       type: "boolean",
       default: "false",
       description:
-        "When true, prevents user interaction with the color picker.",
+        "When true, prevents user interaction with all color picker parts.",
     },
   }}
 />
 
+### ColorPicker.Area
+
+A 2D saturation-value picker that displays as a square gradient.
+
+### ColorPicker.Hue
+
+A horizontal hue slider that displays the full color spectrum.
+
+### ColorPicker.Saturation
+
+A horizontal saturation slider for the current hue.
+
+### ColorPicker.Lightness
+
+A horizontal lightness/value slider for the current hue and saturation.
+
+### ColorPicker.Alpha
+
+A horizontal alpha/opacity slider with a checkered background pattern.
+
 ## Examples
 
-### No Picked Color
+### Basic Usage
 
 <Preview slug="color-picker" />
 
-### With Picked Color
+### With Initial Color
 
 <Preview slug="color-picker-picked-color" />
 
-### Disabled
+### Disabled State
 
 <Preview slug="color-picker-disabled" />
+
+### All Controls
+
+<Preview slug="color-picker-all-controls" />
 
 ## Best Practices
 
 1. **Color Format**:
 
-   - Use the HSV format internally for consistent color manipulation
-   - Convert to appropriate formats (HEX, RGB) only when displaying or exporting
+   - Use HSVA format internally for consistent color manipulation
+   - Convert to appropriate formats (HEX, RGB, HSL) for display or export
+   - Consider alpha channel support when needed
+
+2. **Layout and Composition**:
+
+   - Combine different picker parts based on your use case
+   - Use Area + Hue for most common scenarios
+   - Add Alpha slider when transparency is needed
+   - Consider space constraints when choosing components
+
+3. **Accessibility**:
+
+   - Ensure sufficient contrast between handles and backgrounds
+   - Test keyboard navigation thoroughly
+   - Provide clear labels for screen readers
+   - Consider users with color vision deficiencies

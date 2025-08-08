@@ -1,145 +1,99 @@
 "use client";
+
 import chroma from "chroma-js";
-import React, { useRef } from "react";
+import { createContext, use, useMemo, useRef } from "react";
 
 import { cn } from "@/lib/utils";
+import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 
-export type HSV = [number, number, number];
+type HSVA = [number, number, number, number];
 
-export type ColorPickerProps = Omit<
-  React.InputHTMLAttributes<HTMLDivElement>,
-  "color"
-> & {
-  color?: HSV;
-  onColorChange?: (color: HSV) => void;
-  size?: number;
+interface ColorPickerContextType {
+  color: HSVA;
+  onChange?: (color: HSVA) => void;
+  disabled?: boolean;
+}
+
+const ColorPickerContext = createContext<ColorPickerContextType | null>(null);
+
+const useColorPickerContext = () => {
+  const context = use(ColorPickerContext);
+
+  if (!context) {
+    throw new Error("ColorPicker components must be used within a ColorPicker");
+  }
+
+  return context;
 };
 
-const HANDLE_SIZE_RADIUS = 8;
+interface ColorPickerProps
+  extends Omit<React.ComponentPropsWithRef<"div">, "color" | "onChange"> {
+  color?: HSVA;
+  onColorChange?: (color: HSVA) => void;
+  disabled?: boolean;
+}
 
-const ColorPicker = React.forwardRef<HTMLInputElement, ColorPickerProps>(
-  (
-    {
-      className,
+const HANDLE_SIZE_RADIUS = 10;
+
+const ColorPickerRoot = ({
+  children,
+  color = [0, 1, 1, 1],
+  onColorChange,
+  disabled,
+  className,
+  ref,
+  ...props
+}: ColorPickerProps) => {
+  const contextValue = useMemo(
+    () => ({
+      color,
+      onChange: onColorChange,
       disabled,
-      color = [0, 1, 1],
-      onColorChange,
-      size = 254,
-      ...props
-    },
-    ref
-  ) => {
-    const [h, s, v] = color;
+    }),
+    [color, onColorChange, disabled]
+  );
 
-    const onSaturationValueChange = ([x, y]: [number, number]) => {
-      onColorChange?.([h, x / size, 1 - y / size]);
-    };
-
-    const onHueChange = ([x]: [number, number]) => {
-      onColorChange?.([(x / size) * 360, s, v]);
-    };
-
-    return (
+  return (
+    <ColorPickerContext value={contextValue}>
       <div
-        className={cn(disabled && "pointer-events-none opacity-48", className)}
         ref={ref}
+        className={cn(disabled && "pointer-events-none opacity-48", className)}
         {...props}
       >
-        <Draggable
-          onMove={onSaturationValueChange}
-          keyMap={{
-            up: (modifierKey) => {
-              onColorChange?.([
-                h,
-                s,
-                Math.min(1, v + (modifierKey ? 0.1 : 0.02)),
-              ]);
-            },
-            down: (modifierKey) => {
-              onColorChange?.([
-                h,
-                s,
-                Math.max(0, v - (modifierKey ? 0.1 : 0.02)),
-              ]);
-            },
-            left: (modifierKey) => {
-              onColorChange?.([
-                h,
-                Math.max(0, s - (modifierKey ? 0.1 : 0.02)),
-                v,
-              ]);
-            },
-            right: (modifierKey) => {
-              onColorChange?.([
-                h,
-                Math.min(1, s + (modifierKey ? 0.1 : 0.02)),
-                v,
-              ]);
-            },
-          }}
-          disabled={disabled}
-          size={size}
-          style={{
-            height: `${size}px`,
-            width: `${size}px`,
-            backgroundColor: chroma(h, 1, 1, "hsv").css(),
-            backgroundImage: `linear-gradient(transparent, black),
-            linear-gradient(to right, white, transparent)`,
-          }}
-        >
-          <ColorHandle color={color} top={1 - v} left={s} />
-        </Draggable>
-        <Draggable
-          onMove={onHueChange}
-          keyMap={{
-            left: (modifierKey) => {
-              onColorChange?.([Math.max(0, h - (modifierKey ? 10 : 2)), s, v]);
-            },
-            right: (modifierKey) => {
-              onColorChange?.([
-                Math.min(360, h + (modifierKey ? 10 : 2)),
-                s,
-                v,
-              ]);
-            },
-          }}
-          className="mt-4"
-          disabled={disabled}
-          size={size}
-          style={{
-            height: `${HANDLE_SIZE_RADIUS * 2}px`,
-            width: `${size}px`,
-            background:
-              "linear-gradient(90deg, hsl(0, 100%, 50%), hsl(30, 100%, 50%), hsl(60, 100%, 50%), hsl(90, 100%, 50%), hsl(120, 100%, 50%), hsl(150, 100%, 50%), hsl(180, 100%, 50%), hsl(210, 100%, 50%), hsl(240, 100%, 50%), hsl(270, 100%, 50%),hsl(300, 100%, 50%), hsl(330, 100%, 50%), hsl(360, 100%, 50%))",
-          }}
-        >
-          <ColorHandle color={[h, 1, 1]} left={h / 360} />
-        </Draggable>
+        {children}
       </div>
-    );
-  }
-);
-ColorPicker.displayName = "ColorPicker";
+    </ColorPickerContext>
+  );
+};
 
-interface DraggableProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "color"> {
+interface DraggableProps extends React.ComponentPropsWithRef<"div"> {
   onMove: (coords: [number, number]) => void;
-  keyMap: Partial<
+  keyMap?: Partial<
     Record<"up" | "down" | "left" | "right", (modifierKey: boolean) => void>
   >;
   disabled?: boolean;
-  size: number;
+  "aria-label"?: string;
+  "aria-valuetext"?: string;
+  "aria-valuenow"?: number;
+  "aria-valuemin"?: number;
+  "aria-valuemax"?: number;
 }
 
 const Draggable = ({
   disabled,
   className,
   onMove,
-  keyMap,
-  size,
+  keyMap = {},
+  children,
+  "aria-label": ariaLabel,
+  "aria-valuetext": ariaValueText,
+  "aria-valuenow": ariaValueNow,
+  "aria-valuemin": ariaValueMin = 0,
+  "aria-valuemax": ariaValueMax = 100,
+  ref,
   ...props
 }: DraggableProps) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const internalRef = useRef<HTMLDivElement>(null);
   const isSelecting = useRef(false);
 
   const handleStart = (
@@ -149,30 +103,28 @@ const Draggable = ({
       | React.MouseEvent<HTMLDivElement>
       | React.TouchEvent<HTMLDivElement>
   ) => {
-    if (disabled || !ref.current) return;
+    if (disabled || !internalRef.current) return;
 
-    // check if the click was on the boardRef or handleRef
-    const el = ref.current;
+    const el = internalRef.current;
     if (!el.contains(e.target as Node)) return;
 
     if (e.cancelable) e.preventDefault();
 
-    // start drag
     isSelecting.current = true;
 
-    // listen to events anywhere in the window to allow the user to stop the drag outside of the picker
-    window.addEventListener("mousemove", handleMove);
-    window.addEventListener("touchmove", handleMove);
+    window.addEventListener("mousemove", handleMove, { passive: false });
+    window.addEventListener("touchmove", handleMove, { passive: false });
     window.addEventListener("mouseup", handleStop);
     window.addEventListener("touchend", handleStop);
 
-    // move the handle to the correct position
     onMove(getCoordinatesFromEvent(e));
   };
 
   const handleStop = () => {
     isSelecting.current = false;
 
+    window.removeEventListener("mousemove", handleMove);
+    window.removeEventListener("touchmove", handleMove);
     window.removeEventListener("mouseup", handleStop);
     window.removeEventListener("touchend", handleStop);
   };
@@ -185,7 +137,6 @@ const Draggable = ({
     onMove(getCoordinatesFromEvent(e));
   };
 
-  // handler for both mouse and touch events that calculates the correct X and Y within the board
   const getCoordinatesFromEvent = (
     e:
       | MouseEvent
@@ -193,18 +144,20 @@ const Draggable = ({
       | React.MouseEvent<HTMLDivElement>
       | React.TouchEvent<HTMLDivElement>
   ) => {
-    const rect = ref.current?.getBoundingClientRect();
+    const rect = internalRef.current?.getBoundingClientRect();
+
+    if (!rect) return [0, 0] as [number, number];
 
     const clientX = "touches" in e ? (e.touches[0]?.clientX ?? 0) : e.clientX;
     const clientY = "touches" in e ? (e.touches[0]?.clientY ?? 0) : e.clientY;
 
-    const x = clientX - (rect?.left || 0);
-    const y = clientY - (rect?.top || 0);
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
-    return [Math.min(Math.max(x, 0), size), Math.min(Math.max(y, 0), size)] as [
-      number,
-      number,
-    ];
+    return [
+      Math.min(Math.max(x, 0), rect.width),
+      Math.min(Math.max(y, 0), rect.height),
+    ] as [number, number];
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -213,16 +166,16 @@ const Draggable = ({
     const key = e.key.toLowerCase();
     const modifierKey = e.shiftKey || e.metaKey;
 
-    if (key === "arrowup" && keyMap.up) {
+    if (key === "arrowup" && keyMap?.up) {
       e.preventDefault();
       keyMap.up(modifierKey);
-    } else if (key === "arrowdown" && keyMap.down) {
+    } else if (key === "arrowdown" && keyMap?.down) {
       e.preventDefault();
       keyMap.down(modifierKey);
-    } else if (key === "arrowleft" && keyMap.left) {
+    } else if (key === "arrowleft" && keyMap?.left) {
       e.preventDefault();
       keyMap.left(modifierKey);
-    } else if (key === "arrowright" && keyMap.right) {
+    } else if (key === "arrowright" && keyMap?.right) {
       e.preventDefault();
       keyMap.right(modifierKey);
     }
@@ -230,45 +183,357 @@ const Draggable = ({
 
   return (
     <div
-      ref={ref}
+      ref={composeRefs(internalRef, ref)}
       onMouseDown={handleStart}
       onTouchStart={handleStart}
       onKeyDown={handleKeyDown}
       className={cn(
-        "group relative cursor-pointer touch-none rounded-md ring-0",
+        "group relative cursor-pointer touch-none rounded-xl",
+        "focus-visible:ring-accent-element focus-visible:ring-4",
         className
       )}
-      tabIndex={0}
+      tabIndex={disabled ? -1 : 0}
+      role="slider"
+      aria-label={ariaLabel}
+      aria-valuetext={ariaValueText}
+      aria-valuenow={ariaValueNow}
+      aria-valuemin={ariaValueMin}
+      aria-valuemax={ariaValueMax}
+      aria-disabled={disabled}
       {...props}
-    />
+    >
+      {children}
+    </div>
   );
 };
 
-interface ColorHandleProps {
-  color: HSV;
+interface ColorPickerHandleProps {
+  color: HSVA;
   left: number;
   top?: number;
 }
 
-const ColorHandle = ({
+const ColorPickerHandle = ({
   color,
   left,
-  top = 0.5, // start at the vertical middle
-}: ColorHandleProps) => {
+  top = 0.5,
+}: ColorPickerHandleProps) => {
   return (
     <div
       className={cn(
-        "absolute h-(--size) w-(--size) -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white bg-(--color) shadow-lg",
-        "transition-transform group-focus:scale-110 group-focus:outline group-focus:outline-4 group-focus:outline-[white]/40"
+        "absolute h-[var(--size)] w-[var(--size)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white bg-[var(--color)] shadow-lg",
+        "transition-transform group-focus-visible:scale-110 group-focus-visible:outline-4 group-focus-visible:outline-[white]/40"
       )}
       style={{
         "--size": `${HANDLE_SIZE_RADIUS * 2}px`,
-        "--color": chroma.hsv(...color).css(),
+        "--color": chroma.hsv(color[0], color[1], color[2]).css(),
         left: `${left * 100}%`,
         top: `${top * 100}%`,
       }}
-    ></div>
+    />
   );
 };
 
-export { ColorPicker };
+const ColorPickerArea = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
+  const {
+    color: [h, s, v, a],
+    onChange,
+    disabled,
+  } = useColorPickerContext();
+
+  const internalRef = useRef<HTMLDivElement>(null);
+
+  const onMove = ([x, y]: [number, number]) => {
+    const rect = internalRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const normalizedX = x / rect.width;
+    const normalizedY = 1 - y / rect.height;
+    onChange?.([h, normalizedX, normalizedY, a]);
+  };
+
+  const keyMap = {
+    up: (modifierKey: boolean) =>
+      onChange?.([h, s, Math.min(1, v + (modifierKey ? 0.1 : 0.02)), a]),
+    down: (modifierKey: boolean) =>
+      onChange?.([h, s, Math.max(0, v - (modifierKey ? 0.1 : 0.02)), a]),
+    left: (modifierKey: boolean) =>
+      onChange?.([h, Math.max(0, s - (modifierKey ? 0.1 : 0.02)), v, a]),
+    right: (modifierKey: boolean) =>
+      onChange?.([h, Math.min(1, s + (modifierKey ? 0.1 : 0.02)), v, a]),
+  };
+
+  const ariaValueText = `Saturation ${Math.round(s * 100)}%, Value ${Math.round(v * 100)}%`;
+
+  return (
+    <Draggable
+      ref={composeRefs(internalRef, ref)}
+      onMove={onMove}
+      keyMap={keyMap}
+      disabled={disabled}
+      aria-label="Saturation and value"
+      aria-valuetext={ariaValueText}
+      aria-valuenow={Math.round(((s + v) / 2) * 100)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      className={cn("aspect-square w-full", className)}
+      style={{
+        backgroundColor: chroma(h, 1, 1, "hsv").css(),
+        backgroundImage: `linear-gradient(transparent, black),
+        linear-gradient(to right, white, transparent)`,
+      }}
+      {...props}
+    >
+      <ColorPickerHandle color={[h, s, v, a]} top={1 - v} left={s} />
+    </Draggable>
+  );
+};
+
+const ColorPickerHue = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
+  const {
+    color: [h, s, v, a],
+    onChange,
+    disabled,
+  } = useColorPickerContext();
+
+  const internalRef = useRef<HTMLDivElement>(null);
+
+  const onMove = ([x]: [number, number]) => {
+    const rect = internalRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const normalizedX = x / rect.width;
+    const newH = normalizedX * 360;
+    onChange?.([newH, s, v, a]);
+  };
+
+  const keyMap = {
+    left: (modifierKey: boolean) => {
+      const newH = Math.max(0, h - (modifierKey ? 10 : 2));
+      onChange?.([newH, s, v, a]);
+    },
+    right: (modifierKey: boolean) => {
+      const newH = Math.min(360, h + (modifierKey ? 10 : 2));
+      onChange?.([newH, s, v, a]);
+    },
+  };
+
+  const ariaValueText = `Hue ${Math.round(h)}°`;
+
+  return (
+    <Draggable
+      ref={composeRefs(internalRef, ref)}
+      onMove={onMove}
+      keyMap={keyMap}
+      disabled={disabled}
+      aria-label="Hue"
+      aria-valuetext={ariaValueText}
+      aria-valuenow={Math.round(h)}
+      aria-valuemin={0}
+      aria-valuemax={360}
+      className={cn("h-5 w-full", className)}
+      style={{
+        background:
+          "linear-gradient(90deg, hsl(0, 100%, 50%), hsl(30, 100%, 50%), hsl(60, 100%, 50%), hsl(90, 100%, 50%), hsl(120, 100%, 50%), hsl(150, 100%, 50%), hsl(180, 100%, 50%), hsl(210, 100%, 50%), hsl(240, 100%, 50%), hsl(270, 100%, 50%),hsl(300, 100%, 50%), hsl(330, 100%, 50%), hsl(360, 100%, 50%))",
+      }}
+      {...props}
+    >
+      <ColorPickerHandle color={[h, 1, 1, 1]} left={h / 360} />
+    </Draggable>
+  );
+};
+
+const ColorPickerSaturation = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
+  const {
+    color: [h, s, v, a],
+    onChange,
+    disabled,
+  } = useColorPickerContext();
+
+  const internalRef = useRef<HTMLDivElement>(null);
+
+  const onMove = ([x]: [number, number]) => {
+    const rect = internalRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const normalizedX = x / rect.width;
+    onChange?.([h, normalizedX, v, a]);
+  };
+
+  const keyMap = {
+    left: (modifierKey: boolean) => {
+      const newS = Math.max(0, s - (modifierKey ? 0.1 : 0.02));
+      onChange?.([h, newS, v, a]);
+    },
+    right: (modifierKey: boolean) => {
+      const newS = Math.min(1, s + (modifierKey ? 0.1 : 0.02));
+      onChange?.([h, newS, v, a]);
+    },
+  };
+
+  const ariaValueText = `Saturation ${Math.round(s * 100)}%`;
+
+  return (
+    <Draggable
+      ref={composeRefs(internalRef, ref)}
+      onMove={onMove}
+      keyMap={keyMap}
+      disabled={disabled}
+      aria-label="Saturation"
+      aria-valuetext={ariaValueText}
+      aria-valuenow={Math.round(s * 100)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      className={cn("h-5 w-full", className)}
+      style={{
+        background: `linear-gradient(90deg, ${chroma.hsv(h, 0, v).css()}, ${chroma.hsv(h, 1, v).css()})`,
+      }}
+      {...props}
+    >
+      <ColorPickerHandle color={[h, s, v, a]} left={s} />
+    </Draggable>
+  );
+};
+
+const ColorPickerLightness = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
+  const {
+    color: [h, s, v, a],
+    onChange,
+    disabled,
+  } = useColorPickerContext();
+
+  const internalRef = useRef<HTMLDivElement>(null);
+
+  const onMove = ([x]: [number, number]) => {
+    const rect = internalRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const normalizedX = x / rect.width;
+    onChange?.([h, s, normalizedX, a]);
+  };
+
+  const keyMap = {
+    left: (modifierKey: boolean) => {
+      const newV = Math.max(0, v - (modifierKey ? 0.1 : 0.02));
+      onChange?.([h, s, newV, a]);
+    },
+    right: (modifierKey: boolean) => {
+      const newV = Math.min(1, v + (modifierKey ? 0.1 : 0.02));
+      onChange?.([h, s, newV, a]);
+    },
+  };
+
+  const ariaValueText = `Lightness ${Math.round(v * 100)}%`;
+
+  return (
+    <Draggable
+      ref={composeRefs(internalRef, ref)}
+      onMove={onMove}
+      keyMap={keyMap}
+      disabled={disabled}
+      aria-label="Lightness"
+      aria-valuetext={ariaValueText}
+      aria-valuenow={Math.round(v * 100)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      className={cn("h-5 w-full", className)}
+      style={{
+        background: `linear-gradient(90deg, ${chroma.hsv(h, s, 0).css()}, ${chroma.hsv(h, s, 1).css()})`,
+      }}
+      {...props}
+    >
+      <ColorPickerHandle color={[h, s, v, a]} left={v} />
+    </Draggable>
+  );
+};
+
+const ColorPickerAlpha = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
+  const {
+    color: [h, s, v, a],
+    onChange,
+    disabled,
+  } = useColorPickerContext();
+
+  const internalRef = useRef<HTMLDivElement>(null);
+
+  const onMove = ([x]: [number, number]) => {
+    const rect = internalRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const normalizedX = x / rect.width;
+    onChange?.([h, s, v, normalizedX]);
+  };
+
+  const keyMap = {
+    left: (modifierKey: boolean) => {
+      const newAlpha = Math.max(0, a - (modifierKey ? 0.1 : 0.02));
+      onChange?.([h, s, v, newAlpha]);
+    },
+    right: (modifierKey: boolean) => {
+      const newAlpha = Math.min(1, a + (modifierKey ? 0.1 : 0.02));
+      onChange?.([h, s, v, newAlpha]);
+    },
+  };
+
+  const ariaValueText = `Alpha ${Math.round(a * 100)}%`;
+  const baseColor = chroma.hsv(h, s, v).css();
+
+  return (
+    <Draggable
+      ref={composeRefs(internalRef, ref)}
+      onMove={onMove}
+      keyMap={keyMap}
+      disabled={disabled}
+      aria-label="Alpha"
+      aria-valuetext={ariaValueText}
+      aria-valuenow={Math.round(a * 100)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      className={cn("relative h-5 w-full", className)}
+      style={{
+        backgroundImage: `
+          linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%), 
+          linear-gradient(-45deg, rgba(0,0,0,0.05) 25%, transparent 25%), 
+          linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.05) 75%), 
+          linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.05) 75%),
+          linear-gradient(90deg, transparent, ${baseColor})
+        `,
+        backgroundSize: "8px 8px, 8px 8px, 8px 8px, 8px 8px, 100% 100%",
+        backgroundPosition: "0 0, 0 4px, 4px -4px, -4px 0px, 0 0",
+      }}
+      {...props}
+    >
+      <ColorPickerHandle color={[h, s, v, a]} left={a} />
+    </Draggable>
+  );
+};
+
+const ColorPicker = Object.assign(ColorPickerRoot, {
+  Area: ColorPickerArea,
+  Hue: ColorPickerHue,
+  Saturation: ColorPickerSaturation,
+  Lightness: ColorPickerLightness,
+  Alpha: ColorPickerAlpha,
+});
+
+export { ColorPicker, type HSVA };
