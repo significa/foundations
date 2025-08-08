@@ -18,7 +18,9 @@ export interface SelectionStatus {
 /**
  * Flattens a hierarchical data structure to get all items
  */
-export function flattenHierarchicalData(items: HierarchicalItem[]): HierarchicalItem[] {
+export function flattenHierarchicalData(
+  items: HierarchicalItem[]
+): HierarchicalItem[] {
   return items.reduce<HierarchicalItem[]>((acc, item) => {
     acc.push(item);
     if (item.children) {
@@ -33,7 +35,7 @@ export function flattenHierarchicalData(items: HierarchicalItem[]): Hierarchical
  */
 export function getChildIds(item: HierarchicalItem): string[] {
   if (!item.children) return [];
-  return flattenHierarchicalData(item.children).map(child => child.id);
+  return flattenHierarchicalData(item.children).map((child) => child.id);
 }
 
 /**
@@ -42,8 +44,8 @@ export function getChildIds(item: HierarchicalItem): string[] {
 export function getEnabledChildIds(item: HierarchicalItem): string[] {
   if (!item.children) return [];
   return flattenHierarchicalData(item.children)
-    .filter(child => !child.disabled)
-    .map(child => child.id);
+    .filter((child) => !child.disabled)
+    .map((child) => child.id);
 }
 
 /**
@@ -58,13 +60,15 @@ export function getParentSelectionStatus(
   }
 
   const enabledChildIds = getEnabledChildIds(parentItem);
-  
+
   if (enabledChildIds.length === 0) {
     return { checked: false, indeterminate: false };
   }
 
-  const selectedChildCount = enabledChildIds.filter(id => selectedIds.has(id)).length;
-  
+  const selectedChildCount = enabledChildIds.filter((id) =>
+    selectedIds.has(id)
+  ).length;
+
   if (selectedChildCount === 0) {
     return { checked: false, indeterminate: false };
   } else if (selectedChildCount === enabledChildIds.length) {
@@ -82,15 +86,17 @@ export function getSelectAllStatus(
   selectedIds: Set<string>
 ): SelectionStatus {
   const allEnabledIds = flattenHierarchicalData(items)
-    .filter(item => !item.disabled)
-    .map(item => item.id);
-    
+    .filter((item) => !item.disabled)
+    .map((item) => item.id);
+
   if (allEnabledIds.length === 0) {
     return { checked: false, indeterminate: false };
   }
-  
-  const selectedEnabledCount = allEnabledIds.filter(id => selectedIds.has(id)).length;
-  
+
+  const selectedEnabledCount = allEnabledIds.filter((id) =>
+    selectedIds.has(id)
+  ).length;
+
   if (selectedEnabledCount === 0) {
     return { checked: false, indeterminate: false };
   } else if (selectedEnabledCount === allEnabledIds.length) {
@@ -108,15 +114,15 @@ export function filterHierarchicalData(
   searchQuery: string
 ): HierarchicalItem[] {
   if (!searchQuery.trim()) return items;
-  
+
   const query = searchQuery.toLowerCase();
-  
+
   return items
-    .map(item => {
-      const matchingChildren = item.children?.filter(child =>
+    .map((item) => {
+      const matchingChildren = item.children?.filter((child) =>
         child.label.toLowerCase().includes(query)
       );
-      
+
       if (item.label.toLowerCase().includes(query)) {
         return item;
       } else if (matchingChildren?.length) {
