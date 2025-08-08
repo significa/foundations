@@ -18,7 +18,7 @@ export default function ColorPickerAllControls() {
       <ColorPicker.Lightness />
       <ColorPicker.Alpha />
       <div
-        className="h-16 w-full rounded-lg border border-zinc-200"
+        className="border-border h-16 w-full rounded-lg border"
         style={{
           backgroundColor: chroma
             .hsv(color[0], color[1], color[2])
