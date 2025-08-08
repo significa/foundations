@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
-import { Button } from "@/foundations/ui/button/button";
 import { ClipboardIcon } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+
+import { Button } from "@/foundations/ui/button/button";
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipPersistClickPreview() {
   const [copied, setCopied] = useState(false);

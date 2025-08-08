@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
-import { cva } from "@/lib/utils";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { cva } from "@/lib/utils";
 
 import { useField } from "../field";
 

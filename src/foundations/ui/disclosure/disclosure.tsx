@@ -1,11 +1,11 @@
 "use client";
 
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
 import { createContext, use, useId, useState } from "react";
-import { Slot } from "@/foundations/components/slot/slot";
 
+import { Slot } from "@/foundations/components/slot/slot";
 import { cn } from "@/lib/utils";
-import { CaretDownIcon } from "@phosphor-icons/react";
 
 interface DisclosureGroupContext {
   open: string | null;
@@ -184,8 +184,8 @@ const DisclosureChevron = ({
 
 export {
   Disclosure,
-  DisclosureTrigger,
+  DisclosureChevron,
   DisclosureContent,
   DisclosureGroup,
-  DisclosureChevron,
+  DisclosureTrigger,
 };

@@ -1,11 +1,11 @@
 import {
-  FootprintsIcon,
-  TreePalmIcon,
-  SkullIcon,
-  HorseIcon,
-  PersonSimpleWalkIcon,
   CloudIcon,
+  FootprintsIcon,
+  HorseIcon,
   PersonIcon,
+  PersonSimpleWalkIcon,
+  SkullIcon,
+  TreePalmIcon,
 } from "@phosphor-icons/react";
 
 export const erasExtended = [

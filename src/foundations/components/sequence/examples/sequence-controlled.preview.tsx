@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/foundations/ui/button/button";
+import { cn } from "@/lib/utils";
+
 import {
   Sequence,
   SequenceItem,

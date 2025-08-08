@@ -1,8 +1,9 @@
-import { Button } from "@/foundations/ui/button/button";
 import {
   ArrowSquareOutIcon,
   PackageIcon,
 } from "@phosphor-icons/react/dist/ssr";
+
+import { Button } from "@/foundations/ui/button/button";
 
 export default function ButtonLinkPreview() {
   return (

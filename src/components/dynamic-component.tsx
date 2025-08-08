@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+
 import { Spinner } from "@/foundations/ui/spinner/spinner";
 
 interface DynamicComponent {

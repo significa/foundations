@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { VariantProps } from "cva";
+import { useEffect, useRef, useState } from "react";
 
-import { cn } from "@/lib/utils";
-
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 import { inputStyle } from "@/foundations/ui/input/input";
+import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { cn } from "@/lib/utils";
 
 interface TextareaProps extends React.ComponentPropsWithRef<"textarea"> {
   invalid?: boolean;

@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/foundations/ui/button/button";
-
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { useTheme } from "next-themes";
 import { useCallback } from "react";
+
+import { Button } from "@/foundations/ui/button/button";
 
 export const ThemeSwitcher = () => {
   const { setTheme, resolvedTheme } = useTheme();

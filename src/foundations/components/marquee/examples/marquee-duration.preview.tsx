@@ -1,8 +1,9 @@
 "use client";
 
-import { Marquee } from "@/foundations/components/marquee/marquee";
 import { useState } from "react";
+
 import { Egg } from "@/components/icons/egg";
+import { Marquee } from "@/foundations/components/marquee/marquee";
 
 const MarqueeDurationExample = () => {
   const [duration, setDuration] = useState(1000);

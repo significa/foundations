@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { DynamicComponent } from "@/components/dynamic-component";
 import { PreviewLayout } from "@/components/preview-layout";
-import { getPreviewSourcePath, getPreviewSlugs } from "@/lib/preview";
+import { getPreviewSlugs,getPreviewSourcePath } from "@/lib/preview";
 
 export async function generateStaticParams() {
   const slugs = await getPreviewSlugs();

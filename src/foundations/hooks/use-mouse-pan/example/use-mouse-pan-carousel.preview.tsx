@@ -15,8 +15,8 @@ import {
 } from "@/foundations/components/instance-counter/instance-counter";
 import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
 import { useMousePan } from "@/foundations/hooks/use-mouse-pan/use-mouse-pan";
-import { clamp } from "@/foundations/utils/math/clamp";
 import { Button } from "@/foundations/ui/button/button";
+import { clamp } from "@/foundations/utils/math/clamp";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [

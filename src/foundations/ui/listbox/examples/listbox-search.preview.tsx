@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
 import {
   Listbox,
   ListboxEmpty,
@@ -8,7 +10,6 @@ import {
   ListboxSearchInput,
   ListboxTrigger,
 } from "@/foundations/ui/listbox/listbox";
-import { useMemo, useState } from "react";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },

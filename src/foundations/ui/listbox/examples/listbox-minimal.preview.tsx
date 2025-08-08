@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
+
 import {
   Listbox,
   ListboxOption,
   ListboxOptions,
   ListboxTrigger,
 } from "@/foundations/ui/listbox/listbox";
-import { useState } from "react";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },

@@ -1,5 +1,7 @@
 "use client";
 
+import { Fragment, useState } from "react";
+
 import {
   Listbox,
   ListboxDivider,
@@ -7,7 +9,6 @@ import {
   ListboxOptions,
   ListboxTrigger,
 } from "@/foundations/ui/listbox/listbox";
-import { Fragment, useState } from "react";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },

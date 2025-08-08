@@ -1,7 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
+
+import { cn } from "@/lib/utils";
 
 interface PreviewLayoutProps {
   layout?: "fullscreen" | "centered" | "padded";

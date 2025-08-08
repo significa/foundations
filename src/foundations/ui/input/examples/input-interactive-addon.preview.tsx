@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
 import { InfoIcon } from "@phosphor-icons/react";
+import { useRef } from "react";
 
 import {
   Input,

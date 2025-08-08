@@ -1,5 +1,6 @@
 "use client";
 
+import { VariantProps } from "cva";
 import {
   Children,
   createContext,
@@ -9,11 +10,10 @@ import {
   useRef,
   useState,
 } from "react";
-import { VariantProps } from "cva";
 
-import { cva, cn } from "@/lib/utils";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 import { Slot } from "@/foundations/components/slot/slot";
+import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { cn,cva } from "@/lib/utils";
 
 const inputStyle = cva({
   base: [
@@ -188,4 +188,4 @@ const InputAddon = ({
   );
 };
 
-export { Input, inputStyle, InputGroup, InputPrefix, InputSuffix };
+export { Input, InputGroup, InputPrefix, inputStyle, InputSuffix };

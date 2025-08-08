@@ -1,5 +1,8 @@
 "use client";
 
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
+import { useEffect, useState } from "react";
+
 import { Button } from "@/foundations/ui/button/button";
 import {
   Dialog,
@@ -13,8 +16,6 @@ import {
   PagefindSearchResults,
 } from "@/lib/pagefind-types";
 import { cn } from "@/lib/utils";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
-import { useEffect, useState } from "react";
 
 const highlights = [
   {

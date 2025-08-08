@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils";
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";
 import { createContext, use, useState } from "react";
+
+import { Button } from "@/foundations/ui/button/button";
+import { cn } from "@/lib/utils";
 
 const PreviewSwitchContext = createContext<{
   view: "preview" | "code";

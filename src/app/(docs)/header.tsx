@@ -1,19 +1,17 @@
 "use client";
 
-import { Button } from "@/foundations/ui/button/button";
+import { ListIcon, XIcon } from "@phosphor-icons/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
+import { AccentSelection } from "@/components/accent-selection";
 import { Egg } from "@/components/icons/egg";
 import { Octocat } from "@/components/icons/octocat";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-
-import { GITHUB_REPO_URL } from "@/lib/constants";
-
-import Link from "next/link";
 import { Search } from "@/components/search";
-import { useEffect, useState } from "react";
-import { ListIcon, XIcon } from "@phosphor-icons/react";
-import { usePathname } from "next/navigation";
-import { AccentSelection } from "@/components/accent-selection";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { Button } from "@/foundations/ui/button/button";
+import { GITHUB_REPO_URL } from "@/lib/constants";
 
 export const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);

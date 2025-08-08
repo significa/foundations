@@ -1,5 +1,6 @@
-import { lerp } from "@/foundations/utils/math/lerp";
 import { useEffect, useRef } from "react";
+
+import { lerp } from "@/foundations/utils/math/lerp";
 
 const VELOCITY_MOMENTUM_FACTOR = 15; // multiplier for velocity added to the target scroll when pan is released
 const DRAG_EASE = 1; // ease factor when holding and panning (1 = no ease)

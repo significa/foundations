@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  useEffect,
-  useRef,
   HTMLAttributes,
   ReactElement,
   ReactNode,
+  useEffect,
+  useRef,
 } from "react";
 
 import { debounce } from "@/foundations/utils/debounce/debounce";

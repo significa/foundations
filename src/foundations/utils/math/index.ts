@@ -1,2 +1,2 @@
-export * from "./sum";
 export * from "./clamp";
+export * from "./sum";

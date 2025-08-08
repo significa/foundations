@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils";
 import { CheckIcon, ClipboardIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
+
+import { Button } from "@/foundations/ui/button/button";
+import { cn } from "@/lib/utils";
 
 export const CopyButton = ({
   content,

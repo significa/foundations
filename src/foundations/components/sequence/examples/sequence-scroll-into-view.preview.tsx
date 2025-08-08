@@ -2,14 +2,15 @@
 
 import { useRef } from "react";
 
-import { cn } from "@/lib/utils";
 import { scrollIntoViewIfNeeded } from "@/foundations/utils/dom/scroll-into-view-if-needed";
+import { cn } from "@/lib/utils";
+
 import {
   Sequence,
   SequenceItem,
+  SequenceItems,
   SequencePanel,
   SequencePanels,
-  SequenceItems,
 } from "../sequence";
 import { erasExtended as CONTENT } from "./content";
 

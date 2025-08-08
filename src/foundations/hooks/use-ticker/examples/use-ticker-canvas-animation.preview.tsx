@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
 import {
+  ArrowCounterClockwiseIcon,
   PlayIcon,
   SquareIcon,
-  ArrowCounterClockwiseIcon,
 } from "@phosphor-icons/react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
 import { Button } from "@/foundations/ui/button/button";

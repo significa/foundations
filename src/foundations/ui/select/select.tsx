@@ -2,13 +2,12 @@
 
 import { VariantProps } from "cva";
 
-import { cn } from "@/lib/utils";
-
 import {
   InputGroup,
   InputPrefix,
   inputStyle,
 } from "@/foundations/ui/input/input";
+import { cn } from "@/lib/utils";
 
 interface SelectProps extends React.ComponentPropsWithRef<"select"> {
   invalid?: boolean;

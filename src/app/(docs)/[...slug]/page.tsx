@@ -1,26 +1,24 @@
-import path from "path";
-import { format } from "date-fns";
-
-import { notFound } from "next/navigation";
 import { CalendarIcon, PencilIcon } from "@phosphor-icons/react/dist/ssr";
+import { format } from "date-fns";
+import { notFound } from "next/navigation";
+import path from "path";
 
+import { DependenciesList } from "@/components/dependencies-list";
+import { Heading,Markdown } from "@/components/markdown";
+import { Preview } from "@/components/preview";
+import { SourceCode } from "@/components/source-code";
+import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
 import {
-  getMostRecentModifiedDate,
   getDirectoryFiles,
+  getMostRecentModifiedDate,
   readFile,
 } from "@/lib/fs";
-import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";
 import { getMetadata } from "@/lib/markdown-metadata";
 import { getMarkdownToc } from "@/lib/markdown-toc";
 import { navigation } from "@/lib/navigation";
 
-import { Preview } from "@/components/preview";
-import { Markdown, Heading } from "@/components/markdown";
-
-import { TableOfContents } from "./toc";
 import { Navigation } from "./navigation";
-import { DependenciesList } from "@/components/dependencies-list";
-import { SourceCode } from "@/components/source-code";
+import { TableOfContents } from "./toc";
 
 const isNotFoundError = (error: unknown): error is { code: "ENOENT" } => {
   return error instanceof Error && "code" in error && error.code === "ENOENT";

@@ -1,27 +1,24 @@
 import "./markdown.css";
 
+import { evaluate, UseMdxComponents } from "@mdx-js/mdx";
 import dynamic from "next/dynamic";
 import * as runtime from "react/jsx-runtime";
-
-import { evaluate, UseMdxComponents } from "@mdx-js/mdx";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 
-import { FileTree, FileTreeFolder, FileTreeFile } from "@/components/file-tree";
+import { FileTree, FileTreeFile,FileTreeFolder } from "@/components/file-tree";
 import { Preview } from "@/components/preview";
 import { PropsTable } from "@/components/props-table";
-
 import { Button } from "@/foundations/ui/button/button";
 import {
   Tabs,
-  TabsItems,
   TabsItem,
-  TabsPanels,
+  TabsItems,
   TabsPanel,
+  TabsPanels,
 } from "@/foundations/ui/tabs/tabs";
-
 import { rehypePrettyCodeOptions } from "@/lib/rehype-pretty-code";
 import { rehypeRawCode } from "@/lib/rehype-raw-code";
 import { rehypeRewriteImports } from "@/lib/rehype-rewrite-imports";

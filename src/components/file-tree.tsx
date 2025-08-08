@@ -1,13 +1,14 @@
 "use client";
 
+import { FileTextIcon, FolderIcon } from "@phosphor-icons/react";
+import { createContext, use, useCallback, useEffect,useState } from "react";
+
 import {
   Disclosure,
   DisclosureContent,
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
 import { cn } from "@/lib/utils";
-import { FileTextIcon, FolderIcon } from "@phosphor-icons/react";
-import { useState, createContext, use, useCallback, useEffect } from "react";
 
 const FileTreeContext = createContext<{
   selectedFile: string | null;
@@ -226,4 +227,4 @@ const Item = ({
   );
 };
 
-export { FileTree, FileTreeFolder, FileTreeFile };
+export { FileTree, FileTreeFile,FileTreeFolder };

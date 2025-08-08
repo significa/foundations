@@ -1,16 +1,17 @@
 "use client";
 
+import chroma from "chroma-js";
+import { useState } from "react";
+
 import {
   ColorPicker,
+  ColorPickerAlpha,
   ColorPickerArea,
   ColorPickerHue,
-  ColorPickerSaturation,
   ColorPickerLightness,
-  ColorPickerAlpha,
+  ColorPickerSaturation,
   type HSVA,
 } from "@/foundations/ui/color-picker/color-picker";
-import { useState } from "react";
-import chroma from "chroma-js";
 
 export default function ColorPickerAllControls() {
   const [color, setColor] = useState<HSVA>([280, 0.6, 0.9, 0.8]);

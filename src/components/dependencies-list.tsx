@@ -1,9 +1,10 @@
-import { Badge, BadgeIcon } from "@/foundations/ui/badge/badge";
 import {
   ArrowSquareOutIcon,
   PackageIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+
+import { Badge, BadgeIcon } from "@/foundations/ui/badge/badge";
 
 interface DependenciesListProps {
   dependencies: {

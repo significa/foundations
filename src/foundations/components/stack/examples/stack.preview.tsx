@@ -1,12 +1,13 @@
 "use client";
 
-import { Divider } from "@/foundations/ui/divider/divider";
 import { BookOpenIcon, LightbulbIcon, WrenchIcon } from "@phosphor-icons/react";
+
 import {
   Stack,
   StackHeader,
   StackItem,
 } from "@/foundations/components/stack/stack";
+import { Divider } from "@/foundations/ui/divider/divider";
 
 const items = [
   {

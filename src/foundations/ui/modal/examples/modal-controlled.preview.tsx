@@ -1,8 +1,9 @@
 "use client";
 
-import { Modal, ModalContent, ModalTitle } from "@/foundations/ui/modal/modal";
-import { Button } from "@/foundations/ui/button/button";
 import { useState } from "react";
+
+import { Button } from "@/foundations/ui/button/button";
+import { Modal, ModalContent, ModalTitle } from "@/foundations/ui/modal/modal";
 
 const ModalControlledPreview = () => {
   const [open, setOpen] = useState(false);

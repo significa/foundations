@@ -2,8 +2,8 @@ import path from "path";
 
 import { readFile } from "@/lib/fs";
 
-import { Markdown } from "./markdown";
 import { ExpandableCode } from "./expandable-code";
+import { Markdown } from "./markdown";
 
 interface SourceCodeProps {
   file: string;

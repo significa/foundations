@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+
 import { Slot } from "@/foundations/components/slot/slot";
 import { useElementTransition } from "@/foundations/hooks/use-element-transition/use-element-transition";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
@@ -318,9 +319,9 @@ const ModalDescription = ({
 
 export {
   Modal,
-  ModalContent,
-  ModalTrigger,
   ModalClose,
-  ModalTitle,
+  ModalContent,
   ModalDescription,
+  ModalTitle,
+  ModalTrigger,
 };

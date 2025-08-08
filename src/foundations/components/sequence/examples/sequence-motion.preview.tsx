@@ -1,6 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { AnimatePresence,motion } from "motion/react";
+import { useState } from "react";
+
 import {
   Sequence,
   SequenceItem,
@@ -8,8 +10,7 @@ import {
   SequencePanel,
   SequencePanels,
 } from "@/foundations/components/sequence/sequence";
-import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 import { eras as CONTENT } from "./content";
 

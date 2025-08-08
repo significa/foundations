@@ -2,11 +2,11 @@
 
 import {
   Modal,
-  ModalTrigger,
-  ModalContent,
   ModalClose,
-  ModalTitle,
+  ModalContent,
   ModalDescription,
+  ModalTitle,
+  ModalTrigger,
 } from "@/foundations/ui/modal/modal";
 import { cn } from "@/lib/utils";
 
@@ -89,10 +89,10 @@ const DialogActions = ({
 
 export {
   Dialog,
-  DialogContent,
-  DialogTrigger,
-  DialogClose,
-  DialogTitle,
-  DialogDescription,
   DialogActions,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
 };

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Button } from "@/foundations/ui/button/button";
 import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
 import {
@@ -8,7 +10,6 @@ import {
   DropdownItems,
   DropdownTrigger,
 } from "@/foundations/ui/dropdown/dropdown";
-import { useState } from "react";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },

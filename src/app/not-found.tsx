@@ -1,9 +1,9 @@
-import React from "react";
-import Link from "next/link";
 import { HouseIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+import React from "react";
 
-import { Button } from "@/foundations/ui/button/button";
 import { Badge } from "@/foundations/ui/badge/badge";
+import { Button } from "@/foundations/ui/button/button";
 
 function NotFoundPage() {
   return (

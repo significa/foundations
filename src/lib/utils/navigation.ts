@@ -1,4 +1,5 @@
 import path from "path";
+
 import { getFoundationsPagePath } from "../constants";
 import {
   getDirectoryFiles,

@@ -1,9 +1,10 @@
 "use client";
 
-import { Marquee } from "@/foundations/components/marquee/marquee";
+import { MinusIcon,PlusIcon } from "@phosphor-icons/react";
 import { useState } from "react";
+
+import { Marquee } from "@/foundations/components/marquee/marquee";
 import { Button } from "@/foundations/ui/button/button";
-import { PlusIcon, MinusIcon } from "@phosphor-icons/react";
 
 const MarqueeDynamicContentExample = () => {
   const [items, setItems] = useState(["0"]);

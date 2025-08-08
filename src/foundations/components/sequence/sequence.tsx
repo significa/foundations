@@ -1,6 +1,5 @@
 "use client";
 
-import { Slot } from "@/foundations/components/slot/slot";
 import {
   ComponentPropsWithRef,
   createContext,
@@ -18,6 +17,7 @@ import {
   InstanceCounterProvider,
   useInstanceCounter,
 } from "@/foundations/components/instance-counter/instance-counter";
+import { Slot } from "@/foundations/components/slot/slot";
 import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
 import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
 import { clamp } from "@/foundations/utils/math/clamp";
@@ -336,4 +336,4 @@ const SequencePanel = ({
   );
 };
 
-export { Sequence, SequenceItem, SequencePanels, SequencePanel, SequenceItems };
+export { Sequence, SequenceItem, SequenceItems,SequencePanel, SequencePanels };

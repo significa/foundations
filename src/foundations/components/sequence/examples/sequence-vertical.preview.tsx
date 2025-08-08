@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import {
   Sequence,
   SequenceItem,
@@ -8,6 +7,8 @@ import {
   SequencePanel,
   SequencePanels,
 } from "@/foundations/components/sequence/sequence";
+import { cn } from "@/lib/utils";
+
 import { eras as CONTENT } from "./content";
 
 const SequenceVertical = () => {

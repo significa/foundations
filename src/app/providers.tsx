@@ -1,9 +1,10 @@
 "use client";
 
-import { SuspendedPostHogPageView } from "@/components/posthog-page-view";
 import posthog from "posthog-js";
 import { PostHogProvider as PHProvider } from "posthog-js/react";
 import { useEffect } from "react";
+
+import { SuspendedPostHogPageView } from "@/components/posthog-page-view";
 
 export const PostHogProvider = ({
   children,

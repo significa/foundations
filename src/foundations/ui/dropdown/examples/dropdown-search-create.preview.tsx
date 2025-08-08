@@ -1,5 +1,9 @@
 "use client";
 
+import { UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
+import { useMemo, useState } from "react";
+
+import { Avatar, AvatarFallback } from "@/foundations/ui/avatar/avatar";
 import { Button } from "@/foundations/ui/button/button";
 import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
 import {
@@ -11,9 +15,6 @@ import {
   DropdownSearchInput,
   DropdownTrigger,
 } from "@/foundations/ui/dropdown/dropdown";
-import { UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
-import { useMemo, useState } from "react";
-import { Avatar, AvatarFallback } from "@/foundations/ui/avatar/avatar";
 
 type Person = { id: number; name: string };
 

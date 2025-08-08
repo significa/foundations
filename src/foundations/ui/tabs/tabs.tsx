@@ -4,15 +4,15 @@ import { motion } from "motion/react";
 import {
   Children,
   createContext,
-  useState,
-  useLayoutEffect,
-  useMemo,
+  use,
   useCallback,
   useId,
-  use,
+  useLayoutEffect,
+  useMemo,
+  useState,
 } from "react";
-import { Slot } from "@/foundations/components/slot/slot";
 
+import { Slot } from "@/foundations/components/slot/slot";
 import { cn } from "@/lib/utils";
 
 interface TabsContextValue {
@@ -326,4 +326,4 @@ const TabsPanel = ({
   );
 };
 
-export { Tabs, TabsItems, TabsItem, TabsPanels, TabsPanel };
+export { Tabs, TabsItem, TabsItems, TabsPanel,TabsPanels };

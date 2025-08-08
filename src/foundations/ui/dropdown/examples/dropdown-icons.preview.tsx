@@ -1,3 +1,10 @@
+import {
+  ArchiveIcon,
+  CopyIcon,
+  PencilSimpleIcon,
+  TrashIcon,
+} from "@phosphor-icons/react/dist/ssr";
+
 import { Button } from "@/foundations/ui/button/button";
 import {
   Dropdown,
@@ -5,12 +12,6 @@ import {
   DropdownItems,
   DropdownTrigger,
 } from "@/foundations/ui/dropdown/dropdown";
-import {
-  CopyIcon,
-  PencilSimpleIcon,
-  ArchiveIcon,
-  TrashIcon,
-} from "@phosphor-icons/react/dist/ssr";
 
 export default function DropdownIconsPreview() {
   return (

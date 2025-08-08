@@ -1,7 +1,7 @@
 import {
-  DisclosureGroup,
   Disclosure,
   DisclosureContent,
+  DisclosureGroup,
   DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
 

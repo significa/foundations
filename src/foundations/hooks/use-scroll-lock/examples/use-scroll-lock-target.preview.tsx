@@ -1,7 +1,8 @@
 "use client";
 
-import { useScrollLock } from "@/foundations/hooks/use-scroll-lock/use-scroll-lock";
 import { useState } from "react";
+
+import { useScrollLock } from "@/foundations/hooks/use-scroll-lock/use-scroll-lock";
 import { Button } from "@/foundations/ui/button/button";
 
 const UseScrollLockTargetPreview = () => {

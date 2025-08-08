@@ -1,9 +1,9 @@
 "use client";
 
 import type { VariantProps } from "cva";
-import { Slot } from "@/foundations/components/slot/slot";
 
-import { cva, cn } from "@/lib/utils";
+import { Slot } from "@/foundations/components/slot/slot";
+import { cn,cva } from "@/lib/utils";
 
 const badgeVariants = cva({
   base: "inline-flex items-center gap-1 rounded-full font-semibold leading-none ring-1 ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",

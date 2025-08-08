@@ -4,8 +4,8 @@ import { VariantProps } from "cva";
 
 import { cn } from "@/lib/utils";
 
-import { inputStyle } from "./input";
 import { useField } from "../field";
+import { inputStyle } from "./input";
 
 interface SelectProps extends React.ComponentPropsWithRef<"select"> {
   invalid?: boolean;

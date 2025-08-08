@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 import {
   InstanceCounterProvider,
   useInstanceCounter,
 } from "@/foundations/components/instance-counter/instance-counter";
-import { useState } from "react";
 import { Button } from "@/foundations/ui/button/button";
 
 const Item = () => {

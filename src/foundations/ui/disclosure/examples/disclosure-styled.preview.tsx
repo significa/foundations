@@ -1,12 +1,11 @@
-import { cn } from "@/lib/utils";
-
 import {
   Disclosure,
-  DisclosureContent,
-  DisclosureTrigger,
   DisclosureChevron,
+  DisclosureContent,
   DisclosureGroup,
+  DisclosureTrigger,
 } from "@/foundations/ui/disclosure/disclosure";
+import { cn } from "@/lib/utils";
 
 const AccordionGroup = ({
   children,

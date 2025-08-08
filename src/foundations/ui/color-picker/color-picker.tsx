@@ -3,8 +3,8 @@
 import chroma from "chroma-js";
 import { createContext, use, useMemo, useRef } from "react";
 
-import { cn } from "@/lib/utils";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { cn } from "@/lib/utils";
 
 type HSVA = [number, number, number, number];
 
@@ -530,10 +530,10 @@ const ColorPickerAlpha = ({
 
 export {
   ColorPicker,
+  ColorPickerAlpha,
   ColorPickerArea,
   ColorPickerHue,
-  ColorPickerSaturation,
   ColorPickerLightness,
-  ColorPickerAlpha,
+  ColorPickerSaturation,
   type HSVA,
 };
