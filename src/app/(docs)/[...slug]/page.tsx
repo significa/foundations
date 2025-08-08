@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import path from "path";
 
 import { DependenciesList } from "@/components/dependencies-list";
-import { Heading,Markdown } from "@/components/markdown";
+import { Heading, Markdown } from "@/components/markdown";
 import { Preview } from "@/components/preview";
 import { SourceCode } from "@/components/source-code";
 import { getFoundationsPagePath, GITHUB_REPO_URL } from "@/lib/constants";

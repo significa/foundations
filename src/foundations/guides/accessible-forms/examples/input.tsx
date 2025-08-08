@@ -2,7 +2,7 @@
 
 import { VariantProps } from "cva";
 
-import { cn,cva } from "@/lib/utils";
+import { cn, cva } from "@/lib/utils";
 
 import { useField } from "../field";
 

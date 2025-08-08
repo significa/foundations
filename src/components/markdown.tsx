@@ -8,7 +8,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 
-import { FileTree, FileTreeFile,FileTreeFolder } from "@/components/file-tree";
+import { FileTree, FileTreeFile, FileTreeFolder } from "@/components/file-tree";
 import { Preview } from "@/components/preview";
 import { PropsTable } from "@/components/props-table";
 import { Button } from "@/foundations/ui/button/button";

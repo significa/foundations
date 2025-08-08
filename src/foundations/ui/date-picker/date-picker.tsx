@@ -112,4 +112,4 @@ const DatePickerPanel = ({
   );
 };
 
-export { DatePicker, DatePickerPanel,DatePickerTrigger };
+export { DatePicker, DatePickerPanel, DatePickerTrigger };

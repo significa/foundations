@@ -27,7 +27,7 @@ const eslintConfig = [
   {
     plugins: {
       "simple-import-sort": simpleImportSort,
-      "import": importPlugin,
+      import: importPlugin,
     },
     rules: {
       "@typescript-eslint/no-unused-vars": [

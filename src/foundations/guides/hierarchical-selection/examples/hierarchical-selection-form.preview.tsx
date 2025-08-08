@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Controller,useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/foundations/ui/button/button";
@@ -17,7 +17,7 @@ import { Input } from "@/foundations/ui/input/input";
 import { Label } from "@/foundations/ui/label/label";
 import { cn } from "@/lib/utils";
 
-import { filterHierarchicalData,HierarchicalItem } from "../hierarchical-data";
+import { filterHierarchicalData, HierarchicalItem } from "../hierarchical-data";
 import { useHierarchicalSelection } from "../use-hierarchical-selection";
 
 const schema = z.object({

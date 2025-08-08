@@ -1,6 +1,6 @@
 "use client";
 
-import { FireIcon,LeafIcon, PizzaIcon } from "@phosphor-icons/react";
+import { FireIcon, LeafIcon, PizzaIcon } from "@phosphor-icons/react";
 
 import {
   Stack,

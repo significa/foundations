@@ -336,4 +336,4 @@ const SequencePanel = ({
   );
 };
 
-export { Sequence, SequenceItem, SequenceItems,SequencePanel, SequencePanels };
+export { Sequence, SequenceItem, SequenceItems, SequencePanel, SequencePanels };

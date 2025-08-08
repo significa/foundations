@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef,useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 type IntersectionCallback = (
   isIntersecting: boolean,

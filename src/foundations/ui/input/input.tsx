@@ -13,7 +13,7 @@ import {
 
 import { Slot } from "@/foundations/components/slot/slot";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn,cva } from "@/lib/utils";
+import { cn, cva } from "@/lib/utils";
 
 const inputStyle = cva({
   base: [

@@ -326,4 +326,4 @@ const TabsPanel = ({
   );
 };
 
-export { Tabs, TabsItem, TabsItems, TabsPanel,TabsPanels };
+export { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels };

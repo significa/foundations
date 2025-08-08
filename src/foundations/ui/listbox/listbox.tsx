@@ -20,7 +20,7 @@ import {
   useRole,
   useTypeahead,
 } from "@floating-ui/react";
-import { CaretUpDownIcon,CheckIcon } from "@phosphor-icons/react";
+import { CaretUpDownIcon, CheckIcon } from "@phosphor-icons/react";
 import { VariantProps } from "cva";
 import {
   Children,

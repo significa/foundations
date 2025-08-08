@@ -14,7 +14,7 @@ import { Divider } from "@/foundations/ui/divider/divider";
 import { Input } from "@/foundations/ui/input/input";
 import { cn } from "@/lib/utils";
 
-import { filterHierarchicalData,HierarchicalItem } from "../hierarchical-data";
+import { filterHierarchicalData, HierarchicalItem } from "../hierarchical-data";
 import { useHierarchicalSelection } from "../use-hierarchical-selection";
 
 const sampleData: HierarchicalItem[] = [

@@ -1,7 +1,7 @@
 "use client";
 
 import { FileTextIcon, FolderIcon } from "@phosphor-icons/react";
-import { createContext, use, useCallback, useEffect,useState } from "react";
+import { createContext, use, useCallback, useEffect, useState } from "react";
 
 import {
   Disclosure,
@@ -227,4 +227,4 @@ const Item = ({
   );
 };
 
-export { FileTree, FileTreeFile,FileTreeFolder };
+export { FileTree, FileTreeFile, FileTreeFolder };
