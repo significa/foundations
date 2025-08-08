@@ -4,7 +4,7 @@ import {
   PencilIcon,
   SunIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { Button } from "../button";
+import { Button } from "@/foundations/ui/button/button";
 
 export default function ButtonIconsPreview() {
   return (
