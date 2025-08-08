@@ -3,8 +3,13 @@
 import { useRef } from "react";
 import { InfoIcon } from "@phosphor-icons/react";
 
-import { Input, InputGroup, InputPrefix, InputSuffix } from "../input";
-import { Tooltip } from "../../tooltip/tooltip";
+import {
+  Input,
+  InputGroup,
+  InputPrefix,
+  InputSuffix,
+} from "@/foundations/ui/input/input";
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function InputInteractiveAddon() {
   const input = useRef<HTMLInputElement>(null);

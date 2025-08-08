@@ -1,4 +1,9 @@
-import { Input, InputGroup, InputPrefix, InputSuffix } from "../input";
+import {
+  Input,
+  InputGroup,
+  InputPrefix,
+  InputSuffix,
+} from "@/foundations/ui/input/input";
 
 export default function InputTextAddons() {
   return (

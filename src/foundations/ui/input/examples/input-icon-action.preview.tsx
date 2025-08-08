@@ -3,7 +3,12 @@
 import { EyeIcon, EyeClosedIcon, LockIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
-import { Input, InputGroup, InputPrefix, InputSuffix } from "../input";
+import {
+  Input,
+  InputGroup,
+  InputPrefix,
+  InputSuffix,
+} from "@/foundations/ui/input/input";
 
 export default function InputIconAction() {
   const [showPassword, setShowPassword] = useState(false);

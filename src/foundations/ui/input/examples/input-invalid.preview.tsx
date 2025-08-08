@@ -1,4 +1,4 @@
-import { Input } from "../input";
+import { Input } from "@/foundations/ui/input/input";
 
 export default function InputInvalid() {
   return (
