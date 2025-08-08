@@ -30,19 +30,19 @@ export default function ColorPickerExample() {
             }
           />
 
-          <div className="grid grid-cols-[auto,1fr] gap-x-2 gap-y-1 text-xs">
+          <div className="grid grid-cols-[auto,1fr] gap-x-2 gap-y-1 font-mono text-xs">
             <span className="text-foreground-secondary font-medium">HEX</span>
-            <code className="rounded bg-zinc-50 px-1.5 py-0.5 font-mono text-zinc-900">
+            <code className="bg-background-secondary rounded px-1.5 py-0.5">
               {chroma.hsv(color[0], color[1], color[2]).hex().toUpperCase()}
             </code>
 
             <span className="text-foreground-secondary font-medium">RGB</span>
-            <code className="rounded bg-zinc-50 px-1.5 py-0.5 font-mono text-zinc-900">
+            <code className="bg-background-secondary rounded px-1.5 py-0.5">
               {chroma.hsv(color[0], color[1], color[2]).css()}
             </code>
 
             <span className="text-foreground-secondary font-medium">HSV</span>
-            <code className="rounded bg-zinc-50 px-1.5 py-0.5 font-mono text-zinc-900">
+            <code className="bg-background-secondary rounded px-1.5 py-0.5">
               {Math.round(color[0])}, {Math.round(color[1] * 100)}%,{" "}
               {Math.round(color[2] * 100)}%
             </code>
