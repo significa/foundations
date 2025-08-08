@@ -1,4 +1,4 @@
-import { Textarea } from "../textarea";
+import { Textarea } from "@/foundations/ui/textarea/textarea";
 
 export default function TextareaDisabledPreview() {
   return (

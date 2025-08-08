@@ -1,4 +1,4 @@
-import { TextareaResize } from "../textarea";
+import { TextareaResize } from "@/foundations/ui/textarea/textarea";
 
 export default function TextareaResizePreview() {
   return (
