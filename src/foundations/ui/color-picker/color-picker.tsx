@@ -35,7 +35,7 @@ interface ColorPickerProps
 
 const HANDLE_SIZE_RADIUS = 10;
 
-const ColorPickerRoot = ({
+const ColorPicker = ({
   children,
   color = [0, 1, 1, 1],
   onColorChange,
@@ -528,12 +528,12 @@ const ColorPickerAlpha = ({
   );
 };
 
-const ColorPicker = Object.assign(ColorPickerRoot, {
-  Area: ColorPickerArea,
-  Hue: ColorPickerHue,
-  Saturation: ColorPickerSaturation,
-  Lightness: ColorPickerLightness,
-  Alpha: ColorPickerAlpha,
-});
-
-export { ColorPicker, type HSVA };
+export {
+  ColorPicker,
+  ColorPickerArea,
+  ColorPickerHue,
+  ColorPickerSaturation,
+  ColorPickerLightness,
+  ColorPickerAlpha,
+  type HSVA,
+};

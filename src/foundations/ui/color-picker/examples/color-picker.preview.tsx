@@ -1,5 +1,11 @@
 "use client";
-import { ColorPicker, HSVA } from "@/foundations/ui/color-picker/color-picker";
+
+import {
+  ColorPicker,
+  ColorPickerArea,
+  ColorPickerHue,
+  type HSVA,
+} from "@/foundations/ui/color-picker/color-picker";
 import { useState } from "react";
 import chroma from "chroma-js";
 
@@ -11,8 +17,8 @@ export default function ColorPickerExample() {
       <div className="flex gap-4">
         <div className="flex flex-col gap-4">
           <ColorPicker className="w-48" color={color} onColorChange={setColor}>
-            <ColorPicker.Area />
-            <ColorPicker.Hue className="mt-2" />
+            <ColorPickerArea />
+            <ColorPickerHue className="mt-2" />
           </ColorPicker>
         </div>
 

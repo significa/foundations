@@ -1,5 +1,14 @@
 "use client";
-import { ColorPicker, HSVA } from "@/foundations/ui/color-picker/color-picker";
+
+import {
+  ColorPicker,
+  ColorPickerArea,
+  ColorPickerHue,
+  ColorPickerSaturation,
+  ColorPickerLightness,
+  ColorPickerAlpha,
+  type HSVA,
+} from "@/foundations/ui/color-picker/color-picker";
 import { useState } from "react";
 import chroma from "chroma-js";
 
@@ -12,11 +21,11 @@ export default function ColorPickerAllControls() {
       color={color}
       onColorChange={setColor}
     >
-      <ColorPicker.Area className="size-40" />
-      <ColorPicker.Hue />
-      <ColorPicker.Saturation />
-      <ColorPicker.Lightness />
-      <ColorPicker.Alpha />
+      <ColorPickerArea className="size-40" />
+      <ColorPickerHue />
+      <ColorPickerSaturation />
+      <ColorPickerLightness />
+      <ColorPickerAlpha />
       <div
         className="border-border h-16 w-full rounded-lg border"
         style={{

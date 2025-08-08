@@ -1,5 +1,11 @@
 "use client";
-import { ColorPicker, HSVA } from "@/foundations/ui/color-picker/color-picker";
+
+import {
+  ColorPicker,
+  ColorPickerArea,
+  ColorPickerHue,
+  type HSVA,
+} from "@/foundations/ui/color-picker/color-picker";
 import { useState } from "react";
 
 export default function ColorPickerWithInitialColor() {
@@ -7,8 +13,8 @@ export default function ColorPickerWithInitialColor() {
 
   return (
     <ColorPicker className="w-48" color={color} onColorChange={setColor}>
-      <ColorPicker.Area />
-      <ColorPicker.Hue className="mt-2" />
+      <ColorPickerArea />
+      <ColorPickerHue className="mt-2" />
     </ColorPicker>
   );
 }
