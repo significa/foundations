@@ -7,22 +7,90 @@ export const metadata = {
 
 ## API Reference
 
-Extends the native `input` element with `type="range"`.
+A composable slider component built on the native range input.
+
+### Slider
+
+The root container component.
 
 <PropsTable
   definition={{
+    min: {
+      type: "number",
+      description: "Minimum value of the slider.",
+      default: "0",
+    },
+    max: {
+      type: "number",
+      description: "Maximum value of the slider.",
+      default: "100",
+    },
+    step: {
+      type: "number",
+      description: "Step increment value.",
+      default: "1",
+    },
+    value: {
+      type: "number",
+      description: "Controlled value of the slider.",
+    },
+    defaultValue: {
+      type: "number",
+      description: "Default value for uncontrolled usage.",
+    },
+    onValueChange: {
+      type: "(value: number) => void",
+      description: "Callback function when value changes.",
+    },
     orientation: {
       type: '"horizontal" | "vertical"',
       description: "Orientation of the slider.",
       default: '"horizontal"',
     },
-    onChange: {
-      type: "(value: number) => void",
-      description:
-        "Callback function when value changes. Receives the numeric value as an argument.",
+    disabled: {
+      type: "boolean",
+      description: "Whether the slider is disabled.",
+      default: "false",
+    },
+    asChild: {
+      type: "boolean",
+      description: "Render as child element using Slot.",
+      default: "false",
     },
   }}
 />
+
+### SliderTrack
+
+The track background element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Render as child element using Slot.",
+      default: "false",
+    },
+  }}
+/>
+
+### SliderRange
+
+The filled range portion of the track.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Render as child element using Slot.",
+      default: "false",
+    },
+  }}
+/>
+
+### SliderThumb
+
+The draggable thumb element (renders as `input[type="range"]`). Extends all standard input props except `value` and `type`.
 
 The component uses CSS variables for customization:
 
@@ -33,7 +101,16 @@ The component uses CSS variables for customization:
 
 ### Simple
 
-Basic usage of the slider component.
+Basic usage with composable structure. The slider requires `SliderTrack`, `SliderRange`, and `SliderThumb` children.
+
+```tsx
+<Slider min={0} max={100} defaultValue={50}>
+  <SliderTrack>
+    <SliderRange />
+  </SliderTrack>
+  <SliderThumb />
+</Slider>
+```
 
 <Preview slug="slider" />
 
