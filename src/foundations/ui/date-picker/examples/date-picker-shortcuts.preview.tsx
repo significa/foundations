@@ -3,8 +3,15 @@
 import { useState } from "react";
 import { format } from "date-fns";
 
-import { DatePicker, DatePickerTrigger, DatePickerPanel } from "../date-picker";
-import { DropdownDivider, DropdownItem } from "../../dropdown/dropdown";
+import {
+  DatePicker,
+  DatePickerTrigger,
+  DatePickerPanel,
+} from "@/foundations/ui/date-picker/date-picker";
+import {
+  DropdownDivider,
+  DropdownItem,
+} from "@/foundations/ui/dropdown/dropdown";
 
 export default function DatePickerShortcutsPreview() {
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);

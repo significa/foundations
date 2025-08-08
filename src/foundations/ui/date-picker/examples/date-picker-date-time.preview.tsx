@@ -3,8 +3,12 @@
 import { useState } from "react";
 import { format } from "date-fns";
 
-import { DatePicker, DatePickerPanel, DatePickerTrigger } from "../date-picker";
-import { Input } from "../../input/input";
+import {
+  DatePicker,
+  DatePickerPanel,
+  DatePickerTrigger,
+} from "@/foundations/ui/date-picker/date-picker";
+import { Input } from "@/foundations/ui/input/input";
 
 export default function DatePickerDateTimePreview() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
