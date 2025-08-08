@@ -1,6 +1,6 @@
 import { ClipboardIcon, ScissorsIcon } from "@phosphor-icons/react/dist/ssr";
-import { Button } from "../../button/button";
-import { TooltipGroup, Tooltip } from "../tooltip";
+import { Button } from "@/foundations/ui/button/button";
+import { TooltipGroup, Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipGroupPreview() {
   return (

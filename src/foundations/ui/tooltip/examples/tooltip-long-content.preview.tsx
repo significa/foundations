@@ -1,4 +1,4 @@
-import { Tooltip } from "../tooltip";
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipLongContentPreview() {
   return (

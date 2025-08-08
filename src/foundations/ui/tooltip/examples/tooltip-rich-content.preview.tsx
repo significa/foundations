@@ -1,5 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from "../../avatar/avatar";
-import { Tooltip } from "../tooltip";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/foundations/ui/avatar/avatar";
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipRichContentPreview() {
   return (
