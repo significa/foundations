@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Calendar } from "../calendar";
+import { Calendar } from "@/foundations/ui/calendar/calendar";
 
 export default function CalendarDisableFuturePreview() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
