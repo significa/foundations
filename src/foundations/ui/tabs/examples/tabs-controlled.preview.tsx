@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "../tabs";
+import {
+  Tabs,
+  TabsItem,
+  TabsItems,
+  TabsPanel,
+  TabsPanels,
+} from "@/foundations/ui/tabs/tabs";
 
 export default function TabsControlledPreview() {
   const [selectedIndex, setSelectedIndex] = useState(0);

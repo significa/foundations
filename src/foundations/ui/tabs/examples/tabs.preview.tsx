@@ -3,7 +3,13 @@ import {
   GearIcon,
   UsersIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "../tabs";
+import {
+  Tabs,
+  TabsItem,
+  TabsItems,
+  TabsPanel,
+  TabsPanels,
+} from "@/foundations/ui/tabs/tabs";
 
 export default function TabsPreview() {
   return (
