@@ -46,10 +46,6 @@ export const navigation: NavigationItem[] = [
         href: "/ui/checkbox",
       },
       {
-        title: "Checkboxes Hierarchy",
-        href: "/ui/checkboxes-hierarchy",
-      },
-      {
         title: "Date Picker",
         href: "/ui/date-picker",
       },
@@ -245,6 +241,10 @@ export const navigation: NavigationItem[] = [
       {
         title: "Automated Tests",
         href: "/guides/automated-tests",
+      },
+      {
+        title: "Hierarchical Selection",
+        href: "/guides/hierarchical-selection",
       },
       {
         title: "Performance Tracking",

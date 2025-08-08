@@ -1,0 +1,344 @@
+export const metadata = {
+  title: "Hierarchical Selection",
+  description:
+    "Learn how to build hierarchical checkbox selection patterns using foundation components and reusable utilities.",
+};
+
+## Overview
+
+Hierarchical selection allows users to select items in a parent-child relationship structure, where selecting a parent automatically selects all its children, and selecting all children automatically selects the parent. This pattern is commonly used for category selection, permissions management, location pickers, and filtering interfaces.
+
+### Why a Guide?
+
+Rather than providing a rigid component with numerous props, this guide teaches you how to build hierarchical selection patterns using our existing foundation components. This approach:
+
+- **Teaches the pattern** instead of hiding complexity
+- **Provides flexibility** to adapt to your specific needs
+- **Uses foundation components** like `Disclosure`, `Checkbox`, and `Input`
+- **Offers reusable utilities** that can be copied to your project
+- **Follows composition principles** established in the foundation system
+
+## Core Concepts
+
+### Data Structure
+
+Hierarchical data follows a simple recursive structure:
+
+```typescript
+interface HierarchicalItem {
+  id: string;
+  label: string;
+  children?: HierarchicalItem[];
+  disabled?: boolean;
+}
+```
+
+### Selection Logic
+
+The key behaviors in hierarchical selection are:
+
+1. **Parent Selection**: Selecting a parent selects all enabled children
+2. **Child Selection**: When all children are selected, the parent becomes selected
+3. **Indeterminate State**: When some (but not all) children are selected, the parent shows indeterminate
+4. **Disabled Items**: Disabled items are excluded from parent-child selection logic
+
+## Source Code
+
+### Data Utilities
+
+These utilities handle the hierarchical data structure and selection logic:
+
+<SourceCode
+  file="src/foundations/guides/hierarchical-selection/hierarchical-data.ts"
+  expandable
+/>
+
+### Selection Hook
+
+The `useHierarchicalSelection` hook provides state management and selection methods:
+
+<SourceCode
+  file="src/foundations/guides/hierarchical-selection/use-hierarchical-selection.tsx"
+  expandable
+/>
+
+## Examples
+
+### Basic Implementation
+
+A simple parent-child checkbox structure with collapsible sections using the `Disclosure` component:
+
+<Preview slug="basic-hierarchical-selection" layout="padded" />
+
+### With Search Functionality
+
+Adding search capabilities to filter the hierarchy while preserving the selection state:
+
+<Preview slug="hierarchical-selection-with-search" layout="padded" />
+
+### Complex Example
+
+A full-featured implementation with disabled items, search, select-all, and action buttons:
+
+<Preview slug="hierarchical-selection-complex" layout="padded" />
+
+### Form Integration
+
+Integration with `react-hook-form` showing how to use hierarchical selection in forms:
+
+<Preview slug="hierarchical-selection-form" layout="padded" />
+
+## Building Your Own
+
+### Step 1: Set Up the Data Structure
+
+Define your hierarchical data using the `HierarchicalItem` interface:
+
+```typescript
+const data: HierarchicalItem[] = [
+  {
+    id: "frontend",
+    label: "Frontend",
+    children: [
+      { id: "react", label: "React" },
+      { id: "vue", label: "Vue" },
+      { id: "angular", label: "Angular" },
+    ],
+  },
+  {
+    id: "backend",
+    label: "Backend",
+    children: [
+      { id: "node", label: "Node.js" },
+      { id: "python", label: "Python" },
+      { id: "java", label: "Java" },
+    ],
+  },
+];
+```
+
+### Step 2: Initialize the Hook
+
+Set up the selection hook with your desired options:
+
+```typescript
+const {
+  selectedArray,
+  toggleItem,
+  toggleParent,
+  toggleParentOpen,
+  getParentStatus,
+  isSelected,
+  isParentOpen,
+} = useHierarchicalSelection({
+  defaultSelected: ["react"],
+  defaultOpened: ["frontend"],
+  onSelectionChange: (selected) => {
+    console.log("Selected:", selected);
+  },
+});
+```
+
+### Step 3: Build the UI
+
+Compose the UI using foundation components:
+
+```typescript
+return (
+  <div className="space-y-2">
+    {data.map((parent) => {
+      const parentStatus = getParentStatus(parent);
+      const isOpen = isParentOpen(parent.id);
+
+      return (
+        <Disclosure key={parent.id} open={isOpen}>
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2">
+              <Checkbox
+                checked={parentStatus.checked}
+                indeterminate={parentStatus.indeterminate}
+                onChange={(e) => toggleParent(parent, e.target.checked)}
+              />
+              <span>{parent.label}</span>
+            </label>
+
+            <DisclosureTrigger onClick={() => toggleParentOpen(parent.id)}>
+              <DisclosureChevron />
+            </DisclosureTrigger>
+          </div>
+
+          <DisclosureContent>
+            <div className="ml-6 space-y-2">
+              {parent.children?.map((child) => (
+                <label key={child.id} className="flex items-center gap-2">
+                  <Checkbox
+                    checked={isSelected(child.id)}
+                    onChange={() => toggleItem(child.id)}
+                  />
+                  <span>{child.label}</span>
+                </label>
+              ))}
+            </div>
+          </DisclosureContent>
+        </Disclosure>
+      );
+    })}
+  </div>
+);
+```
+
+## Advanced Features
+
+### Adding Search
+
+Use the `filterHierarchicalData` utility to add search functionality:
+
+```typescript
+const [searchQuery, setSearchQuery] = useState("");
+const filteredData = filterHierarchicalData(data, searchQuery);
+```
+
+### Select All Functionality
+
+Implement select-all with the `toggleAll` method and `getSelectAllStatus` utility:
+
+```typescript
+const selectAllStatus = getSelectAllStatus(data);
+
+<Checkbox
+  checked={selectAllStatus.checked}
+  indeterminate={selectAllStatus.indeterminate}
+  onChange={(e) => toggleAll(data, e.target.checked)}
+/>
+```
+
+### Disabled Items
+
+Mark items as disabled in your data structure:
+
+```typescript
+const dataWithDisabled: HierarchicalItem[] = [
+  {
+    id: "features",
+    label: "Features",
+    disabled: true, // Entire section disabled
+    children: [
+      { id: "feature-a", label: "Feature A" },
+      { id: "feature-b", label: "Feature B", disabled: true }, // Individual item disabled
+    ],
+  },
+];
+```
+
+### Form Integration
+
+Create a controlled component for forms:
+
+```typescript
+function HierarchicalField({ value, onChange, data, error }) {
+  const selection = useHierarchicalSelection({
+    defaultSelected: value,
+    onSelectionChange: onChange,
+  });
+
+  return (
+    <div>
+      {/* Your hierarchical selection UI */}
+      {error && <p className="text-red-600">{error}</p>}
+    </div>
+  );
+}
+
+// In your form
+<Controller
+  name="selectedItems"
+  control={control}
+  render={({ field }) => (
+    <HierarchicalField
+      value={field.value}
+      onChange={field.onChange}
+      data={hierarchicalData}
+      error={errors.selectedItems?.message}
+    />
+  )}
+/>
+```
+
+## Best Practices
+
+### Data Structure
+
+- **Use meaningful IDs**: Make IDs descriptive for better debugging
+- **Keep data flat**: Avoid deep nesting beyond 2-3 levels
+- **Consider disabled states**: Plan for items that shouldn't be selectable
+- **Separate display from logic**: Keep business logic separate from display logic
+
+### Performance
+
+- **Memoize filtered data**: Use `useMemo` for filtered results in search
+- **Debounce search**: Prevent excessive filtering on every keystroke
+- **Virtualize large lists**: Consider virtualization for hundreds of items
+- **Lazy load children**: Load child data on demand for large datasets
+
+### Accessibility
+
+- **Use proper labels**: Associate labels with checkboxes correctly
+- **Keyboard navigation**: Ensure all interactions work with keyboard
+- **Screen reader support**: Use `aria-expanded` and proper roles
+- **Focus management**: Maintain logical focus flow
+
+### User Experience
+
+- **Preserve selection**: Maintain selections when searching or filtering
+- **Show selection count**: Display how many items are selected
+- **Quick actions**: Provide shortcuts like "Select All" or preset selections
+- **Clear feedback**: Show loading states and error messages clearly
+
+## Common Patterns
+
+### Location Picker
+
+```typescript
+const locationData = [
+  {
+    id: "north-america",
+    label: "North America",
+    children: [
+      { id: "usa", label: "United States" },
+      { id: "canada", label: "Canada" },
+    ],
+  },
+];
+```
+
+### Permissions Management
+
+```typescript
+const permissionData = [
+  {
+    id: "user-management",
+    label: "User Management",
+    children: [
+      { id: "create-users", label: "Create Users" },
+      { id: "edit-users", label: "Edit Users" },
+      { id: "delete-users", label: "Delete Users" },
+    ],
+  },
+];
+```
+
+### Category Selection
+
+```typescript
+const categoryData = [
+  {
+    id: "electronics",
+    label: "Electronics",
+    children: [
+      { id: "smartphones", label: "Smartphones" },
+      { id: "laptops", label: "Laptops" },
+      { id: "tablets", label: "Tablets" },
+    ],
+  },
+];
+```
