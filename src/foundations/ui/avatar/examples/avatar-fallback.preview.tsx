@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "../avatar";
+import { Avatar, AvatarFallback } from "@/foundations/ui/avatar/avatar";
 
 export default function AvatarFallbackPreview() {
   return (
