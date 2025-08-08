@@ -1,6 +1,5 @@
 "use client";
 
-import chroma from "chroma-js";
 import { useState } from "react";
 
 import {
@@ -27,15 +26,6 @@ export default function ColorPickerAllControls() {
       <ColorPickerSaturation />
       <ColorPickerLightness />
       <ColorPickerAlpha />
-      <div
-        className="border-border h-16 w-full rounded-lg border"
-        style={{
-          backgroundColor: chroma
-            .hsv(color[0], color[1], color[2])
-            .alpha(color[3])
-            .css(),
-        }}
-      />
     </ColorPicker>
   );
 }
