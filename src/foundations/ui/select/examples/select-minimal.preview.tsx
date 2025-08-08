@@ -1,4 +1,4 @@
-import { Select } from "../select";
+import { Select } from "@/foundations/ui/select/select";
 
 export default function SelectMinimalPreview() {
   return (

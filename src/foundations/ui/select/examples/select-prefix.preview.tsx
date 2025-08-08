@@ -1,5 +1,9 @@
 import { UserIcon } from "@phosphor-icons/react/dist/ssr";
-import { Select, SelectGroup, SelectPrefix } from "../select";
+import {
+  Select,
+  SelectGroup,
+  SelectPrefix,
+} from "@/foundations/ui/select/select";
 
 export default function SelectPrefixPreview() {
   return (
