@@ -14,6 +14,11 @@ const themes: { label: string; background: string; foreground?: string }[] = [
   },
   { label: "Red", background: "oklch(0.64 0.21 25)" },
   { label: "Orange", background: "oklch(0.7 0.19 48)" },
+  {
+    label: "Yellow",
+    background: "oklch(83.84% 0.172 83.57)",
+    foreground: "oklch(0 0 0)",
+  },
   { label: "Green", background: "oklch(0.70 0.15 162)" },
   { label: "Blue", background: "oklch(0.62 0.19 260)" },
   { label: "Purple", background: "oklch(0.61 0.22 293)" },
