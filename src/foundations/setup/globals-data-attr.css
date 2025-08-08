@@ -13,9 +13,9 @@
   --color-foreground: light-dark(oklch(0% 0 0), oklch(95% 0 0));
   --color-foreground-secondary: light-dark(oklch(65% 0 0), oklch(53% 0 0));
 
-  --color-accent: oklch(0.7 0.19 48);
+  --color-accent: var(--color-foreground);
   /* Foreground at the end means it is used on top of the accent color */
-  --color-accent-foreground: oklch(100% 0 0);
+  --color-accent-foreground: var(--color-background);
 
   --color-border: light-dark(oklch(94% 0 0), oklch(26% 0 0));
 

@@ -13,6 +13,7 @@ import { Search } from "@/components/search";
 import { useEffect, useState } from "react";
 import { ListIcon, XIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
+import { AccentSelection } from "@/components/accent-selection";
 
 export const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -55,6 +56,7 @@ export const Header = () => {
             </a>
           </Button>
           <ThemeSwitcher />
+          <AccentSelection />
         </div>
       </div>
     </div>
