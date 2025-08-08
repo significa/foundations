@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@/foundations/ui/label/label";
-import { Checkbox } from "../checkbox";
+import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
 
 export default function CheckboxAllStatesPreview() {
   return (

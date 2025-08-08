@@ -1,4 +1,4 @@
-import { Checkbox } from "../checkbox";
+import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
 
 export default function CheckboxDisabledPreview() {
   return (
