@@ -6,7 +6,7 @@ import {
   DisclosureTrigger,
   DisclosureChevron,
   DisclosureGroup,
-} from "../disclosure";
+} from "@/foundations/ui/disclosure/disclosure";
 
 const AccordionGroup = ({
   children,
