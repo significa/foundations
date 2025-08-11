@@ -22,9 +22,7 @@ jobs:
       staging_domain: null
       production_branch: main
       production_domain: ${{ vars.PRODUCTION_DOMAIN }}
-      posthog_host: ${{ vars.POSTHOG_HOST }}
     secrets:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      POSTHOG_KEY: ${{ secrets.POSTHOG_KEY }}
