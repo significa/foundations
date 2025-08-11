@@ -33,7 +33,10 @@ export const PostHogProvider = ({
   }, []);
 
   if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+    console.log("No PostHog key found");
     return <>{children}</>;
+  } else {
+    console.log("PostHog key found");
   }
 
   return (
