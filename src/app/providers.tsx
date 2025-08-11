@@ -26,7 +26,7 @@ export const PostHogProvider = ({
         disable_compression: true,
         loaded: (posthog) => {
           // if (process.env.NODE_ENV === "development") posthog.debug();
-          posthog.debug(true);
+          posthog.debug(false);
         },
       });
     }
