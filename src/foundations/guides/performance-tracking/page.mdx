@@ -29,15 +29,15 @@ By following this guide, you'll establish a robust performance monitoring system
 ### Installing Required Packages
 
 **First, let's install the necessary dependencies.**  
-We'll need Lighthouse CI for performance testing and `@next/bundle-analyzer` for bundle analysis. Although there are other bundle analyzers you can use depending on the frameworks' bundler (i.e. webpack or vite), other top-notch examples are rollup-plugin-visualizer and webpack-bundle-analyzer.
+We'll need Lighthouse CI for performance testing and `@next/bundle-analyser` for bundle analysis. Although there are other bundle analysers you can use depending on the frameworks' bundler (i.e. webpack or Vite), other top-notch examples are rollup-plugin-visualizer and webpack-bundle-analyzer.
 For this example we are using Next.js (i.e `@next/bundle-analyzer` and `@lhci/cli`)
 
 ```
 # Install Lighthouse CI
 npm install -D @lhci/cli
 
-# Install Next.js Bundle Analyzer
-npm install -D @next/bundle-analyzer
+# Install Next.js Bundle Analyser
+npm install -D @next/bundle-analyser
 ```
 
 `@next/bundle-analyzer` is used to create a visual representation of the breakdown of your app's bundle, this can give insights on what affects your application (especially external libraries) on first load. It also helps differentiates between initial load and lazy-loaded chunks.
