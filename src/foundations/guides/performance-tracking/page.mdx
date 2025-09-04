@@ -40,7 +40,7 @@ npm install -D @lhci/cli
 npm install -D @next/bundle-analyser
 ```
 
-`@next/bundle-analyzer` is used to create a visual representation of the breakdown of your app's bundle, this can give insights on what affects your application (especially external libraries) on first load. It also helps differentiates between initial load and lazy-loaded chunks.
+`@next/bundle-analyzer` is used to create a visual representation of the breakdown of your app's bundle. This can give insights into what affects your application (especially external libraries) on first load. It also helps differentiate between initial load and lazy-loaded chunks.
 `@lhci/cli` is a library from Google's Lighthouse tool we are familiar with on Chrome web browser, and it helps provide insights on the performance of your app with the same metrics you see when you use it on Chrome DevTools. Let's call it an automated performance tracker.
 
 ### What's Installed? (i.e. files added during installation)
@@ -128,7 +128,7 @@ module.exports = {
             maxDelta: -0.05,
           },
         ],
-        // Warn if best-practices drops by more than 5 points
+        // Warn if best-practices drop by more than 5 points
         "categories:best-practices": [
           "warn",
           {
@@ -192,7 +192,7 @@ module.exports = {
       target: "temporary-public-storage",
     },
     bulldozer: {
-      // Only keep data from main branch as baseline
+      // Only keep data from the main branch as baseline
       dailyBranches: ["main", "master"],
       // Keep last 10 baseline runs
       dailyLimit: 10,
