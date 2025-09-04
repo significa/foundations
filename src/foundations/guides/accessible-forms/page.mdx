@@ -78,7 +78,7 @@ const Input = ({ invalid: propsInvalid, id, ...props }: InputProps) => {
 
 ### Custom Selects
 
-If you are using a custom `Select` component that uses a button instead of a native select element, you should ommit the `aria-errormessage` and `aria-invalid` attributes as they're reserved for form elements that can have validation errors (such as `input`, `textarea` and `select`):
+If you are using a custom `Select` component that uses a button instead of a native select element, you should omit the `aria-errormessage` and `aria-invalid` attributes as they're reserved for form elements that can have validation errors (such as `input`, `textarea` and `select`):
 
 ```tsx {2,4,8-10} showLineNumbers title="select.tsx"
 const SelectTrigger = ({ children, id, ...props }: SelectTriggerProps) => {
