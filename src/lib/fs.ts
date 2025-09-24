@@ -1,7 +1,11 @@
 import { exec } from "child_process";
 import { promises as fs } from "fs";
+import pLimit from "p-limit";
 import path from "path";
 import { cache } from "react";
+
+// Limit to 5 concurrent git operations to prevent EAGAIN error
+const limitGitConcurrency = pLimit(5);
 
 export const readFile = cache(async (filePath: string) => {
   return await fs.readFile(filePath, "utf-8");
@@ -28,42 +32,48 @@ export const sanitizeFilepath = (filePath: string): string => {
 const getGitCreatedTime = async (filePath: string): Promise<Date> => {
   filePath = sanitizeFilepath(filePath);
 
-  return await new Promise((resolve, reject) => {
-    exec(
-      `git log --diff-filter=A --format=%ct -- ${filePath}`,
-      (error, stdout) => {
-        if (error) {
-          reject(error);
-        } else {
-          // Return current date if file hasn't been committed yet
-          if (!stdout) {
-            resolve(new Date());
-          }
+  return limitGitConcurrency(
+    () =>
+      new Promise<Date>((resolve, reject) => {
+        exec(
+          `git log --diff-filter=A --format=%ct -- ${filePath}`,
+          (error, stdout) => {
+            if (error) {
+              reject(error);
+            } else {
+              // Return current date if file hasn't been committed yet
+              if (!stdout) {
+                resolve(new Date());
+              }
 
-          resolve(new Date(parseInt(stdout.trim(), 10) * 1000));
-        }
-      }
-    );
-  });
+              resolve(new Date(parseInt(stdout.trim(), 10) * 1000));
+            }
+          }
+        );
+      })
+  );
 };
 
 const getGitLastModifiedTime = async (filePath: string): Promise<Date> => {
   filePath = sanitizeFilepath(filePath);
 
-  return await new Promise((resolve, reject) => {
-    exec(`git log -1 --format=%ct -- ${filePath}`, (error, stdout) => {
-      if (error) {
-        reject(error);
-      } else {
-        // Return current date if file hasn't been committed yet
-        if (!stdout) {
-          resolve(new Date());
-        }
+  return limitGitConcurrency(
+    () =>
+      new Promise<Date>((resolve, reject) => {
+        exec(`git log -1 --format=%ct -- ${filePath}`, (error, stdout) => {
+          if (error) {
+            reject(error);
+          } else {
+            // Return current date if file hasn't been committed yet
+            if (!stdout) {
+              resolve(new Date());
+            }
 
-        resolve(new Date(parseInt(stdout.trim(), 10) * 1000));
-      }
-    });
-  });
+            resolve(new Date(parseInt(stdout.trim(), 10) * 1000));
+          }
+        });
+      })
+  );
 };
 
 export const getCreatedDate = cache(async (filePath: string) => {
