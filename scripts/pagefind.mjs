@@ -1,16 +1,17 @@
 import * as pagefind from "pagefind";
 
+const pagefindDir = process.env.NEXT_PUBLIC_PAGEFIND_DIR || '.next';
+
 // Create a Pagefind search index to work with
 const { index } = await pagefind.createIndex();
 
 // Index all HTML files in a directory
 await index.addDirectory({
-  path: ".next",
+  path: pagefindDir,
 });
 
-// Or, write the index to disk
 await index.writeFiles({
-  outputPath: "public/pagefind",
+  outputPath: pagefindDir === 'out' ? "out/pagefind" : "public/pagefind",
 });
 
 await pagefind.close();
