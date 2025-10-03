@@ -1,6 +1,6 @@
 import * as pagefind from "pagefind";
 
-const pagefindDir = process.env.NEXT_PUBLIC_PAGEFIND_DIR || '.next';
+const pagefindDir = process.env.NEXT_PUBLIC_PAGEFIND_DIR || ".next";
 
 // Create a Pagefind search index to work with
 const { index } = await pagefind.createIndex();
@@ -11,7 +11,7 @@ await index.addDirectory({
 });
 
 await index.writeFiles({
-  outputPath: pagefindDir === 'out' ? "out/pagefind" : "public/pagefind",
+  outputPath: pagefindDir === "out" ? "out/pagefind" : "public/pagefind",
 });
 
 await pagefind.close();
