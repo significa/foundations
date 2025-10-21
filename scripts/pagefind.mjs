@@ -8,7 +8,7 @@ console.log(`Pagefind indexing directory: `, pagefindDir);
 const { index } = await pagefind.createIndex();
 
 // Index all HTML files in a directory
-await index.addDirectory({  
+await index.addDirectory({
   path: pagefindDir,
 });
 
