@@ -2,7 +2,7 @@ import * as pagefind from "pagefind";
 
 const pagefindDir = process.env.PAGEFIND_DIR || ".next";
 
-console.log('Pagefind indexing directory: ', pagefindDir);
+console.log("Pagefind indexing directory: ", pagefindDir);
 
 // Create a Pagefind search index to work with
 const { index } = await pagefind.createIndex();
