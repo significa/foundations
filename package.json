@@ -8,7 +8,8 @@
     "postbuild": "node scripts/pagefind.mjs",
     "start": "next start",
     "lint": "next lint && npx prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "dev:generate-pagefind": "ENVIRONMENT=dev build && node scripts/pagefind.mjs"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.12",
