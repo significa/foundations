@@ -90,7 +90,7 @@ We use [GitHub Flavored Markdown Spec](https://github.github.com/gfm/). Addition
 
 ### Pagefind
 
-We use [Pagefind](https://pagefind.app/) to make searching Foundations possible. As the site is only indexed at build time, run `npm run build` in development mode to be able to use the search feature.
+We use [Pagefind](https://pagefind.app/) to make searching Foundations possible. As the site is only indexed at build time, run `npm run dev:generate-pagefind` in development mode to be able to use the search feature.
 
 ## License
 
