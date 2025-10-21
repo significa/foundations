@@ -1,11 +1,9 @@
 import * as pagefind from "pagefind";
 
-const env = process.env.ENVIRONMENT ?? "prod";
+const env = process.argv.slice(2).includes("--dev") ? "dev" : "prod";
 
 const pagefindPath = env === "dev" ? ".next" : "out";
 const pagefindOutPath = env === "dev" ? "public/pagefind" : "out/pagefind";
-
-console.log("Pagefind indexing directory: ", env);
 
 // Create a Pagefind search index to work with
 const { index } = await pagefind.createIndex();
