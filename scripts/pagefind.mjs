@@ -1,8 +1,8 @@
 import * as pagefind from "pagefind";
 
-const isProduction = process.env.NODE_ENV === "production";
+const pagefindDir = process.env.PAGEFIND_DIR || ".next";
 
-console.log("isProduction: ", isProduction);
+console.log('Pagefind indexing directory: ', pagefindDir);
 
 // Create a Pagefind search index to work with
 const { index } = await pagefind.createIndex();
@@ -13,7 +13,7 @@ await index.addDirectory({
 });
 
 await index.writeFiles({
-  outputPath: isProduction ? "out/pagefind" : "public/pagefind",
+  outputPath: pagefindDir === "out" ? "out/pagefind" : "public/pagefind",
 });
 
 await pagefind.close();
