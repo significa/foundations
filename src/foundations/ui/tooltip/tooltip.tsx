@@ -23,8 +23,11 @@ import {
 } from "@floating-ui/react";
 import {
   cloneElement,
+  createContext,
   isValidElement,
+  RefObject,
   useCallback,
+  useContext,
   useRef,
   useState,
 } from "react";
@@ -41,8 +44,28 @@ const ARROW_HEIGHT = 4;
 const ARROW_WIDTH = 8;
 const DEFAULT_GROUP_TIMEOUT_MS = 150;
 
-interface TooltipProps
-  extends Omit<React.ComponentPropsWithRef<"div">, "content"> {
+interface TooltipContextValue {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  context: ReturnType<typeof useFloating>["context"];
+  floating: ReturnType<typeof useFloating>;
+  interactions: ReturnType<typeof useInteractions>;
+  isMounted: boolean;
+  status: "unmounted" | "initial" | "open" | "close";
+  arrowRef: RefObject<SVGSVGElement | null>;
+}
+
+const TooltipContext = createContext<TooltipContextValue | null>(null);
+
+const useTooltipContext = () => {
+  const context = useContext(TooltipContext);
+  if (!context) {
+    throw new Error("Tooltip components must be used within a Tooltip");
+  }
+  return context;
+};
+
+interface TooltipProps {
   initialOpen?: boolean;
   open?: boolean;
   onOpenChange?: UseFloatingOptions["onOpenChange"];
@@ -52,25 +75,24 @@ interface TooltipProps
   delayOut?: number;
   disabled?: boolean;
   persistOnClick?: boolean;
-  content: React.ReactNode;
   children: React.ReactNode;
 }
 
 /**
- * Tooltip component
+ * Tooltip root component
  *
  * @example
  * ```
- * <Tooltip content="Tooltip content">
- *   <Button>Hover me</Button>
+ * <Tooltip>
+ *   <TooltipTrigger asChild>
+ *     <Button>Hover me</Button>
+ *   </TooltipTrigger>
+ *   <TooltipContent>Tooltip content</TooltipContent>
  * </Tooltip>
  * ```
  */
 const Tooltip = ({
-  ref,
-  content,
   children,
-  className,
   initialOpen = false,
   open: propsOpen,
   onOpenChange: propsOnOpenChange,
@@ -80,7 +102,6 @@ const Tooltip = ({
   delayOut = DEFAULT_DELAY_OUT,
   disabled = false,
   persistOnClick = false,
-  ...props
 }: TooltipProps) => {
   const arrowRef = useRef<SVGSVGElement | null>(null);
   const [internalOpen, setInternalOpen] = useState(initialOpen);
@@ -133,58 +154,108 @@ const Tooltip = ({
 
   const { isMounted, status } = useTransitionStatus(ctx, { duration: 0 });
 
-  const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
-  const contentRef = useMergeRefs([ctx.refs.setFloating, ref, topLayerRef]);
+  return (
+    <TooltipContext.Provider
+      value={{
+        open,
+        setOpen,
+        context: ctx,
+        floating,
+        interactions,
+        isMounted,
+        status,
+        arrowRef,
+      }}
+    >
+      {children}
+    </TooltipContext.Provider>
+  );
+};
+
+interface TooltipTriggerProps extends React.ComponentPropsWithRef<"span"> {
+  asChild?: boolean;
+  children: React.ReactNode;
+}
+
+const TooltipTrigger = ({
+  asChild = false,
+  children,
+  ...props
+}: TooltipTriggerProps) => {
+  const { context, interactions } = useTooltipContext();
+
+  if (asChild && isValidElement(children)) {
+    return cloneElement(
+      children,
+      interactions.getReferenceProps({
+        ref: context.refs.setReference,
+        ...props,
+      })
+    );
+  }
 
   return (
-    <>
-      {isValidElement(children) ? (
-        cloneElement(
-          children,
-          interactions.getReferenceProps({ ref: ctx.refs.setReference })
-        )
-      ) : (
-        <span
-          ref={ctx.refs.setReference}
-          {...interactions.getReferenceProps(props)}
-          className="inline-block outline-none"
-        >
-          {children}
-        </span>
+    <span
+      ref={context.refs.setReference}
+      {...interactions.getReferenceProps(props)}
+      className={cn("inline-block outline-none", props.className)}
+    >
+      {children}
+    </span>
+  );
+};
+
+interface TooltipContentProps extends React.ComponentPropsWithRef<"div"> {
+  children: React.ReactNode;
+}
+
+const TooltipContent = ({
+  ref,
+  children,
+  className,
+  ...props
+}: TooltipContentProps) => {
+  const { context, floating, interactions, isMounted, status, arrowRef } =
+    useTooltipContext();
+
+  const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
+  const contentRef = useMergeRefs([context.refs.setFloating, ref, topLayerRef]);
+
+  if (!isMounted) {
+    return null;
+  }
+
+  return (
+    <div
+      ref={contentRef}
+      className={cn(
+        "bg-foreground text-background ease-out-quint z-50 max-w-80 overflow-visible rounded-lg px-3 py-1.5 text-xs break-words drop-shadow-md transition duration-300",
+        "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
+        "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
+        "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
+        floating.middlewareData.hide?.referenceHidden && "hidden",
+        className
       )}
-      {isMounted && (
-        <div
-          ref={contentRef}
-          className={cn(
-            "bg-foreground text-background ease-out-quint z-50 max-w-80 overflow-visible rounded-lg px-3 py-1.5 text-xs break-words drop-shadow-md transition duration-300",
-            "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
-            "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
-            "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
-            floating.middlewareData.hide?.referenceHidden && "hidden",
-            className
-          )}
-          data-state={status === "open" ? "open" : "closed"}
-          data-side={ctx.placement.split("-")[0]}
-          style={{
-            position: ctx.strategy,
-            top: ctx.y ?? 0,
-            left: ctx.x ?? 0,
-            ...props.style,
-          }}
-          {...interactions.getFloatingProps(props)}
-        >
-          <FloatingArrow
-            ref={arrowRef}
-            context={ctx}
-            className="fill-foreground"
-            tipRadius={1}
-            height={ARROW_HEIGHT}
-            width={ARROW_WIDTH}
-          />
-          {content}
-        </div>
-      )}
-    </>
+      data-state={status === "open" ? "open" : "closed"}
+      data-side={context.placement.split("-")[0]}
+      style={{
+        position: context.strategy,
+        top: context.y ?? 0,
+        left: context.x ?? 0,
+        ...props.style,
+      }}
+      {...interactions.getFloatingProps(props)}
+    >
+      <FloatingArrow
+        ref={arrowRef}
+        context={context}
+        className="fill-foreground"
+        tipRadius={1}
+        height={ARROW_HEIGHT}
+        width={ARROW_WIDTH}
+      />
+      {children}
+    </div>
   );
 };
 
@@ -205,8 +276,11 @@ interface TooltipGroupProps {
  * <TooltipGroup>
  *   <div className="flex gap-2">
  *     {tools.map((tool) => (
- *       <Tooltip key={tool.id} content={tool.label}>
- *         <Button>{tool.icon}</Button>
+ *       <Tooltip key={tool.id}>
+ *         <TooltipTrigger asChild>
+ *           <Button>{tool.icon}</Button>
+ *         </TooltipTrigger>
+ *         <TooltipContent>{tool.label}</TooltipContent>
  *       </Tooltip>
  *     ))}
  *   </div>
@@ -230,4 +304,4 @@ const TooltipGroup = ({
   );
 };
 
-export { Tooltip, TooltipGroup };
+export { Tooltip, TooltipContent, TooltipGroup, TooltipTrigger };

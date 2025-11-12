@@ -1,69 +1,110 @@
 import { Button } from "@/foundations/ui/button/button";
-import { Tooltip, TooltipGroup } from "@/foundations/ui/tooltip/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipGroup,
+  TooltipTrigger,
+} from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipPlacementPreview() {
   return (
     <div className="flex w-full flex-col gap-2 overflow-auto p-2">
       <TooltipGroup>
-        <Tooltip content="Top" placement="top">
-          <Button variant="outline" size="sm">
-            Top
-          </Button>
+        <Tooltip placement="top">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Top
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Top</TooltipContent>
         </Tooltip>
-        <Tooltip content="Right" placement="right">
-          <Button variant="outline" size="sm">
-            Right
-          </Button>
+        <Tooltip placement="right">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Right
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Right</TooltipContent>
         </Tooltip>
-        <Tooltip content="Bottom" placement="bottom">
-          <Button variant="outline" size="sm">
-            Bottom
-          </Button>
+        <Tooltip placement="bottom">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Bottom
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Bottom</TooltipContent>
         </Tooltip>
-        <Tooltip content="Left" placement="left">
-          <Button variant="outline" size="sm">
-            Left
-          </Button>
+        <Tooltip placement="left">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Left
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Left</TooltipContent>
         </Tooltip>
-        <Tooltip content="Top Start" placement="top-start">
-          <Button variant="outline" size="sm">
-            Top Start
-          </Button>
+        <Tooltip placement="top-start">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Top Start
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Top Start</TooltipContent>
         </Tooltip>
-        <Tooltip content="Top End" placement="top-end">
-          <Button variant="outline" size="sm">
-            Top End
-          </Button>
+        <Tooltip placement="top-end">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Top End
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Top End</TooltipContent>
         </Tooltip>
-        <Tooltip content="Right Start" placement="right-start">
-          <Button variant="outline" size="sm">
-            Right Start
-          </Button>
+        <Tooltip placement="right-start">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Right Start
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Right Start</TooltipContent>
         </Tooltip>
-        <Tooltip content="Right End" placement="right-end">
-          <Button variant="outline" size="sm">
-            Right End
-          </Button>
+        <Tooltip placement="right-end">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Right End
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Right End</TooltipContent>
         </Tooltip>
-        <Tooltip content="Bottom Start" placement="bottom-start">
-          <Button variant="outline" size="sm">
-            Bottom Start
-          </Button>
+        <Tooltip placement="bottom-start">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Bottom Start
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Bottom Start</TooltipContent>
         </Tooltip>
-        <Tooltip content="Bottom End" placement="bottom-end">
-          <Button variant="outline" size="sm">
-            Bottom End
-          </Button>
+        <Tooltip placement="bottom-end">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Bottom End
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Bottom End</TooltipContent>
         </Tooltip>
-        <Tooltip content="Left Start" placement="left-start">
-          <Button variant="outline" size="sm">
-            Left Start
-          </Button>
+        <Tooltip placement="left-start">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Left Start
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Left Start</TooltipContent>
         </Tooltip>
-        <Tooltip content="Left End" placement="left-end">
-          <Button variant="outline" size="sm">
-            Left End
-          </Button>
+        <Tooltip placement="left-end">
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              Left End
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Left End</TooltipContent>
         </Tooltip>
       </TooltipGroup>
     </div>

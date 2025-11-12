@@ -3,12 +3,19 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/foundations/ui/avatar/avatar";
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipRichContentPreview() {
   return (
-    <Tooltip
-      content={
+    <Tooltip>
+      <TooltipTrigger>
+        <span>Hover to see rich content</span>
+      </TooltipTrigger>
+      <TooltipContent>
         <div className="flex items-center gap-1.5">
           <Avatar
             variant="square"
@@ -23,9 +30,7 @@ export default function TooltipRichContentPreview() {
             <span className="text-foreground-secondary">Significa</span>
           </div>
         </div>
-      }
-    >
-      <span>Hover to see rich content</span>
+      </TooltipContent>
     </Tooltip>
   );
 }

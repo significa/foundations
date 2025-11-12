@@ -25,15 +25,12 @@ export const metadata = {
 
 ## API Reference
 
-Extends the `div` element.
+### Tooltip
+
+Root component that manages tooltip state and provides context to child components.
 
 <PropsTable
   definition={{
-    content: {
-      type: "React.ReactNode",
-      required: true,
-      description: "The content of the tooltip.",
-    },
     open: {
       type: "boolean",
       description: "Used to control the tooltip's open state.",
@@ -81,6 +78,27 @@ Extends the `div` element.
     },
   }}
 />
+
+### TooltipTrigger
+
+The element that triggers the tooltip. Extends the `span` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description:
+        "When true, the trigger will merge props with its child element instead of wrapping it in a span.",
+      default: false,
+    },
+  }}
+/>
+
+### TooltipContent
+
+The tooltip content that appears when triggered. Extends the `div` element.
+
+<PropsTable definition={{}} />
 
 ## Examples
 

@@ -4,7 +4,11 @@ import { ClipboardIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/foundations/ui/button/button";
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipPersistClickPreview() {
   const [copied, setCopied] = useState(false);
@@ -24,20 +28,22 @@ export default function TooltipPersistClickPreview() {
     <Tooltip
       persistOnClick
       delayIn={0}
-      content={copied ? "Copied!" : "Copy"}
       onOpenChange={(open) => {
         if (!open) setCopied(false);
       }}
     >
-      <Button
-        variant="outline"
-        square
-        size="sm"
-        onClick={() => setCopied(true)}
-        aria-label="Copy"
-      >
-        <ClipboardIcon />
-      </Button>
+      <TooltipTrigger asChild>
+        <Button
+          variant="outline"
+          square
+          size="sm"
+          onClick={() => setCopied(true)}
+          aria-label="Copy"
+        >
+          <ClipboardIcon />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{copied ? "Copied!" : "Copy"}</TooltipContent>
     </Tooltip>
   );
 }
