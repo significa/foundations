@@ -6,7 +6,7 @@ export const metadata = {
 ## Overview
 
 For form-heavy products, creating accessible forms can be a bit of a challenge.
-Even if it's easy enough to connect labels to fields, suddenly you're asked to add descriptions and error messages and the code gets too verbose with ids and attributes everywhere.
+Even if it's easy enough to connect labels to fields, suddenly you're asked to add descriptions and error messages, and the code gets too verbose with IDs and attributes everywhere.
 
 This guide offers an alternative approach where most of the usual connections between form elements, labels, descriptions and error messages are handled automatically.
 
@@ -14,11 +14,11 @@ This guide offers an alternative approach where most of the usual connections be
 
 - Simple products can get by with a simpler approach
 - It's not a one-size-fits-all solution
-- It's best if you understand what's going on instead of having this functionality baked in the components by default
+- It's best if you understand what's going on instead of having this functionality baked into the components by default
 
 ## Source Code
 
-The idea is to create a Field component that will act basically as a Provider and exposes attributes and methods to register elements.
+The idea is to create a Field component that will act basically as a Provider and expose attributes and methods to register elements.
 
 ### Field
 
@@ -32,7 +32,7 @@ It will also allow you to easily improve your form components by adding the appr
 
 ### FieldError
 
-Field errors hooks up to the Field's context and will automatically register itself as an error message.
+Field errors hook up to the Field's context and will automatically register themselves as an error message.
 
 <SourceCode
   file="src/foundations/guides/accessible-forms/field-error.tsx"
@@ -41,7 +41,7 @@ Field errors hooks up to the Field's context and will automatically register its
 
 ### FieldDescription
 
-Field descriptions hooks up to the Field's context and will automatically register itself as a description.
+Field descriptions hook up to the Field's context and will automatically register themselves as a description.
 
 <SourceCode
   file="src/foundations/guides/accessible-forms/field-description.tsx"
@@ -52,9 +52,9 @@ Field descriptions hooks up to the Field's context and will automatically regist
 
 ### Form elements
 
-Add the following code yo your `input.tsx`, `textarea.tsx`, `checkbox.tsx`, `switch.tsx`, and similar components.
+Add the following code to your `input.tsx`, `textarea.tsx`, `checkbox.tsx`, `switch.tsx`, and similar components.
 
-> Warning: If you have custom components that use buttons instead of the native elements, you should ommit the `aria-errormessage` and `aria-invalid` attributes. See [Custom Selects](#custom-selects) below.
+> Warning: If you have custom components that use buttons instead of the native elements, you should omit the `aria-errormessage` and `aria-invalid` attributes. See [Custom Selects](#custom-selects) below.
 
 ```tsx {2,4,5,9-13} showLineNumbers title="input.tsx"
 const Input = ({ invalid: propsInvalid, id, ...props }: InputProps) => {
@@ -78,7 +78,7 @@ const Input = ({ invalid: propsInvalid, id, ...props }: InputProps) => {
 
 ### Custom Selects
 
-If you are using a custom `Select` component that uses a button instead of a native select element, you should ommit the `aria-errormessage` and `aria-invalid` attributes as they're reserved for form elements that can have validation errors (such as `input`, `textarea` and `select`):
+If you are using a custom `Select` component that uses a button instead of a native select element, you should omit the `aria-errormessage` and `aria-invalid` attributes as they're reserved for form elements that can have validation errors (such as `input`, `textarea` and `select`):
 
 ```tsx {2,4,8-10} showLineNumbers title="select.tsx"
 const SelectTrigger = ({ children, id, ...props }: SelectTriggerProps) => {
@@ -101,7 +101,7 @@ const SelectTrigger = ({ children, id, ...props }: SelectTriggerProps) => {
 
 ### Radio and Radio Groups
 
-Radio buttons are a bit special as they need to be grouped together, so the aria attributes should be set on the `RadioGroup` component instead:
+Radio buttons are a bit special as they need to be grouped, so the aria attributes should be set on the `RadioGroup` component instead:
 
 ```tsx showLineNumbers title="radio-group.tsx"
 interface RadioGroupProps extends React.ComponentPropsWithRef<"div"> {
@@ -150,7 +150,7 @@ Given that we'll have a nested structure, we'll also need some attributes on the
 </Field>
 ```
 
-We'll just add the `id` and `aria-describedby` attribute:
+We'll just add the `id` and `aria-describedby` attributes:
 
 ```tsx {6,11,12} showLineNumbers
 const Radio = ({
@@ -220,9 +220,9 @@ export { Label };
 
 ## Fieldset and Legend
 
-A `fieldset` is an HTML element used to group related elements within a form, providing a semantic way to organize form controls. It is often used in conjunction with the `<legend>` element, which provides a caption for the group.
+A `fieldset` is an HTML element used to group related elements within a form, providing a semantic way to organise form controls. It is often used in conjunction with the `<legend>` element, which provides a caption for the group.
 
-This grouping not only helps with visual organization but also improves accessibility by allowing screen readers to understand the relationship between grouped elements.
+This grouping not only helps with visual organisation but also improves accessibility by allowing screen readers to understand the relationship between grouped elements.
 
 Here we create a `Fieldset` component that will automatically register the `Legend` elements and expose them to the `Field` context.
 
@@ -251,7 +251,7 @@ You can add a `FieldDescription` and `FieldError` to the `Field` component:
   <div>
     <Label>Name</Label>
     <FieldDescription>
-      This is a description very very long description
+      This is a very, very long description
     </FieldDescription>
   </div>
   <Input {...register("name", { required: true })} />
