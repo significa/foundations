@@ -81,14 +81,14 @@ Root component that manages tooltip state and provides context to child componen
 
 ### TooltipTrigger
 
-The element that triggers the tooltip. Extends the `span` element.
+The element that triggers the tooltip. Renders as a `button` by default for accessibility and interactive functionality.
 
 <PropsTable
   definition={{
     asChild: {
       type: "boolean",
       description:
-        "When true, the trigger will merge props with its child element instead of wrapping it in a span.",
+        "When true, the trigger will merge props with its child element instead of rendering as a button.",
       default: false,
     },
   }}
@@ -116,7 +116,7 @@ Controlling the position of the tooltip relative to its trigger.
 
 ### Persist on Click
 
-Keeping the tooltip visible when the trigger is clicked.
+Keeping the tooltip visible when the trigger is clicked. This example also demonstrates that onClick handlers work perfectly with tooltips.
 
 <Preview slug="tooltip-persist-click" />
 
