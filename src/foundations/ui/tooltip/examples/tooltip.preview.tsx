@@ -1,5 +1,14 @@
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipPreview() {
-  return <Tooltip content="Or is there?">Nothing to see here</Tooltip>;
+  return (
+    <Tooltip>
+      <TooltipTrigger>Nothing to see here</TooltipTrigger>
+      <TooltipContent>Or is there?</TooltipContent>
+    </Tooltip>
+  );
 }

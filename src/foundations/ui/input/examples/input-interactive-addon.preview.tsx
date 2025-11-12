@@ -9,7 +9,11 @@ import {
   InputPrefix,
   InputSuffix,
 } from "@/foundations/ui/input/input";
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/foundations/ui/tooltip/tooltip";
 
 export default function InputInteractiveAddon() {
   const input = useRef<HTMLInputElement>(null);
@@ -22,8 +26,11 @@ export default function InputInteractiveAddon() {
         </InputPrefix>
         <Input ref={input} placeholder="000 000 000" />
         <InputSuffix className="pointer-events-auto">
-          <Tooltip content="Your phone number will be visible">
-            <InfoIcon />
+          <Tooltip>
+            <TooltipTrigger>
+              <InfoIcon />
+            </TooltipTrigger>
+            <TooltipContent>Your phone number will be visible</TooltipContent>
           </Tooltip>
         </InputSuffix>
       </InputGroup>
