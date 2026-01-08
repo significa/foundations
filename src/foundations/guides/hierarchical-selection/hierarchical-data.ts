@@ -16,15 +16,16 @@ export interface SelectionStatus {
 }
 
 /**
- * Flattens a hierarchical data structure to get all items
+ * Flattens a hierarchical data structure to get only leaf items (items without children)
  */
 export function flattenHierarchicalData(
   items: HierarchicalItem[]
 ): HierarchicalItem[] {
   return items.reduce<HierarchicalItem[]>((acc, item) => {
-    acc.push(item);
     if (item.children) {
       acc.push(...flattenHierarchicalData(item.children));
+    } else {
+      acc.push(item);
     }
     return acc;
   }, []);
