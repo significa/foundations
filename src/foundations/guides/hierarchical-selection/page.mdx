@@ -35,7 +35,7 @@ interface HierarchicalItem {
 
 ### Selection Logic
 
-The key behaviors in hierarchical selection are:
+The key behaviours in hierarchical selection are:
 
 1. **Parent Selection**: Selecting a parent selects all enabled children
 2. **Child Selection**: When all children are selected, the parent becomes selected
@@ -117,7 +117,7 @@ const data: HierarchicalItem[] = [
 ];
 ```
 
-### Step 2: Initialize the Hook
+### Step 2: Initialise the Hook
 
 Set up the selection hook with your desired options:
 
@@ -275,7 +275,7 @@ function HierarchicalField({ value, onChange, data, error }) {
 
 ### Performance
 
-- **Memoize filtered data**: Use `useMemo` for filtered results in search
+- **Memorise filtered data**: Use `useMemo` for filtered results in search
 - **Debounce search**: Prevent excessive filtering on every keystroke
 - **Virtualize large lists**: Consider virtualization for hundreds of items
 - **Lazy load children**: Load child data on demand for large datasets

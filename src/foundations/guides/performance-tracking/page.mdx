@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Performance tracking & bundle analyzer",
+  title: "Performance tracking & bundle analyser",
   description:
     "A comprehensive guide to setting up performance tracking and bundle analysis for Next.js applications",
 };
@@ -9,7 +9,7 @@ export const metadata = {
 Monitoring web application performance is crucial for delivering an optimal user experience. This guide will walk you through setting up performance tracking and bundle analysis tools for your Next.js application. These tools will help you:
 
 - Track and measure performance metrics
-- Analyze your JavaScript bundles
+- Analyse your JavaScript bundles
 - Establish performance budgets
 - Integrate performance checks into your CI pipeline
 
@@ -29,35 +29,35 @@ By following this guide, you'll establish a robust performance monitoring system
 ### Installing Required Packages
 
 **First, let's install the necessary dependencies.**  
-We'll need Lighthouse CI for performance testing and `@next/bundle-analyzer` for bundle analysis. Although there are other bundle analyzers you can use depending on the frameworks' bundler (i.e. webpack or vite), other top-notch examples are rollup-plugin-visualizer and webpack-bundle-analyzer.
+We'll need Lighthouse CI for performance testing and `@next/bundle-analyser` for bundle analysis. Although there are other bundle analysers you can use depending on the frameworks' bundler (i.e. webpack or Vite), other top-notch examples are rollup-plugin-visualizer and webpack-bundle-analyzer.
 For this example we are using Next.js (i.e `@next/bundle-analyzer` and `@lhci/cli`)
 
 ```
 # Install Lighthouse CI
 npm install -D @lhci/cli
 
-# Install Next.js Bundle Analyzer
-npm install -D @next/bundle-analyzer
+# Install Next.js Bundle Analyser
+npm install -D @next/bundle-analyser
 ```
 
-`@next/bundle-analyzer` is used to create a visual representation of the breakdown of your app's bundle, this can give insights on what affects your application (especially external libraries) on first load. It also helps differentiates between initial load and lazy-loaded chunks.
-`@lhci/cli` is a library from the Google's lighthouse tool we are familiar with on chrome web browser, and it helps provide insights on the performance of your app with the same metrics you see when you use it on chrome devtools. Lets call it automated performance tracker.
+`@next/bundle-analyzer` is used to create a visual representation of the breakdown of your app's bundle. This can give insights into what affects your application (especially external libraries) on first load. It also helps differentiate between initial load and lazy-loaded chunks.
+`@lhci/cli` is a library from Google's Lighthouse tool we are familiar with on Chrome web browser, and it helps provide insights on the performance of your app with the same metrics you see when you use it on Chrome DevTools. Let's call it an automated performance tracker.
 
 ### What's Installed? (i.e. files added during installation)
 
 After installation, you'll need to create the following files:
 
 - lighthouserc.js: Configuration file for Lighthouse CI
-- next.config.js (modified): Updated Next.js configuration to include the bundle analyzer
+- next.config.js (modified): Updated Next.js configuration to include the bundle analyser
 - .github/workflows/lighthouse.yaml (optional): GitHub Actions workflow for CI integration
 
 Let's look at each of these files in detail.
 
 ## Configuration
 
-### Next.js Bundle Analyzer Configuration
+### Next.js Bundle Analyser Configuration
 
-First, let's set up the bundle analyzer by modifying the `next.config.js` file:
+First, let's set up the bundle analyser by modifying the `next.config.js` file:
 
 ```js title="next.config.js"
 // next.config.js
@@ -73,7 +73,7 @@ const nextConfig = {
 module.exports = withBundleAnalyzer(nextConfig);
 ```
 
-With this configuration, you can run the bundle analyzer using:
+With this configuration, you can run the bundle analyser using:
 
 ```
 ANALYZE=true npm run build
@@ -83,7 +83,7 @@ ANALYZE=true npm run build
 
 Now, let's set up Lighthouse CI. Create a `.lighthouserc.js` file in your project root:
 
-There are two options to track the performance of your app and this will affect your configuration
+There are two options to track the performance of your app, and this will affect your configuration
 
 ### OPTION 1: Delta-based Approach (Compare with Previous Scores)
 
@@ -128,7 +128,7 @@ module.exports = {
             maxDelta: -0.05,
           },
         ],
-        // Warn if best-practices drops by more than 5 points
+        // Warn if best-practices drop by more than 5 points
         "categories:best-practices": [
           "warn",
           {
@@ -192,7 +192,7 @@ module.exports = {
       target: "temporary-public-storage",
     },
     bulldozer: {
-      // Only keep data from main branch as baseline
+      // Only keep data from the main branch as baseline
       dailyBranches: ["main", "master"],
       // Keep last 10 baseline runs
       dailyLimit: 10,
@@ -202,14 +202,14 @@ module.exports = {
 };
 ```
 
-#### Lets breakdown the configuration
+#### Let's break down the configuration
 
 1. **collect** - Gathering Lighthouse Reports
 
    - URLs to test: Runs Lighthouse on https://nextjs-performance-xi.vercel.app/. (change to the staging or production URL)
    - Runs per test: Conducts 3 test runs and takes the median score.
    - Settings:
-     - Uses “perf” preset (optimized for performance testing).
+     - Uses “perf” preset (optimised for performance testing).
      - Only audits performance, accessibility, best practices, and SEO (no PWA checks).
 
 2. **assert** - Enforcing Performance Standards
@@ -327,9 +327,9 @@ module.exports = {
 };
 ```
 
-#### Lets breakdown the configuration
+#### Let's break down the configuration
 
-Similar to the first configuration the only difference is the assert, so i will just highlight that section here:
+Similar to the first configuration, the only difference is the assert, so we will just highlight that section here:
 
 This section compares new reports with previous ones and sets pass/fail criteria.
 
@@ -352,8 +352,8 @@ Category Score Assertions (Fail if below threshold)
 - Total Blocking Time (TBT): 🚨 Warn if > env var (TBT_THRESHOLD) or default 300ms.
 - Time to Interactive (TTI): 🚨 Warn if > env var (TTI_THRESHOLD) or default 3500ms.
 
-All of these are subject to change based on the application, for most of these configuration its set to warn.
-Also its best to run the lighthouseci command on local before the first deployment so that there are available values to be compared it and the CI can work well.
+All of these are subject to change based on the application; for most of these configurations, it's set to warn.
+Also, it's best to run the lighthouseci command locally before the first deployment so that there are available values to be compared and the CI can work well.
 
 ### Adding Scripts to package.json
 
@@ -362,16 +362,16 @@ Add these scripts to your package.json file:
 ```json title="package.json"
 "scripts": {
   // ... existing scripts
-  "analyze": "ANALYZE=true next build",
+  "analyse": "ANALYZE=true next build",
   "lhci": "lhci autorun"
 }
 ```
 
 ## Reports
 
-### Bundle Analyzer Reports
+### Bundle Analyser Reports
 
-When you run npm run analyze, the bundle analyzer will generate a visual report showing your application's bundle composition. This report helps you:
+When you run npm run analyse, the bundle analyser will generate a visual report showing your application's bundle composition. This report helps you:
 
 - Identify large dependencies
 - Find duplicate modules
@@ -391,14 +391,14 @@ Lighthouse CI generates comprehensive performance reports that include:
 - Performance Score - Overall rating of your app's performance
 - Accessibility Score - Rating of how accessible your app is
 - Best Practices Score - Rating of adherence to web best practices
-- SEO Score - Rating of search engine optimization
+- SEO Score - Rating of search engine optimisation
 
 **Key metrics to monitor:**
 
 - First Contentful Paint (FCP) - Time until the first content is rendered
 - Largest Contentful Paint (LCP) - Time until the largest content element is rendered
 - Cumulative Layout Shift (CLS) - Measure of visual stability
-- Total Blocking Time (TBT) - Sum of time where main thread was blocked
+- Total Blocking Time (TBT) - Sum of time where the main thread was blocked
 - Time to Interactive (TTI) - Time until the page becomes fully interactive
 
 When running npm run lhci, you'll receive a link to a temporary public dashboard with your results.
@@ -422,7 +422,7 @@ on:
 
 jobs:
   build-and-analyze:
-    name: Build and Analyze with Lighthouse
+    name: Build and Analyse with Lighthouse
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -432,7 +432,7 @@ jobs:
           node-version: 20.x
       - name: Install dependencies
         run: npm ci
-      - name: Build with bundle analyzer
+      - name: Build with bundle analyser
         run: |
           ANALYZE=true npm run build
         env:
@@ -453,7 +453,7 @@ jobs:
         with:
           name: next-build-and-reports
           path: |
-            .next/analyze
+            .next/analyse
             .lighthouseci
           retention-days: 30
 ```
@@ -470,7 +470,7 @@ on:
 
 jobs:
   build-and-analyze:
-    name: Build and Analyze with Lighthouse
+    name: Build and Analyse with Lighthouse
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -480,7 +480,7 @@ jobs:
           node-version: 20.x
       - name: Install dependencies
         run: npm ci
-      - name: Build with bundle analyzer
+      - name: Build with bundle analyser
         run: |
           ANALYZE=true npm run build
         env:
@@ -512,14 +512,14 @@ jobs:
         with:
           name: next-build-and-reports
           path: |
-            .next/analyze
+            .next/analyse
             .lighthouseci
           retention-days: 30
 ```
 
 ## Setting Up LHCI Server (Optional)
 
-For more advanced usage, you can set up a Lighthouse CI Server to store and visualize historical data:
+For more advanced usage, you can set up a Lighthouse CI Server to store and visualise historical data:
 
 1. Install the LHCI server:
 
@@ -545,8 +545,8 @@ upload: {
 
 ---
 
-Setting up performance tracking is just another tool in your arsenal to ensure code quality consistency overtime and more granular control on things that affects performance over time.  
-Also, remember that performance optimization is an ongoing process. Regularly review your reports, set increasingly ambitious goals, and make performance a key consideration in your development workflow.
+Setting up performance tracking is just another tool in your arsenal to ensure code quality consistency over time and more granular control on things that affect performance over time.  
+Also, remember that performance optimisation is an ongoing process. Regularly review your reports, set increasingly ambitious goals, and make performance a key consideration in your development workflow.
 
 For more detailed information, check out:
 
@@ -554,4 +554,4 @@ For more detailed information, check out:
 - [Next.js Bundle Analyzer documentation](https://www.npmjs.com/package/@next/bundle-analyzer)
 - [Web Vitals](https://web.dev/vitals/) for understanding core performance metrics
 
-Happy optimizing!
+Happy optimising!
