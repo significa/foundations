@@ -1,0 +1,15 @@
+---
+import Shell from "@/layouts/shell.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const previews = await getCollection("previews");
+
+  return previews.map((preview) => ({
+    params: { slug: preview.id },
+    props: { preview },
+  }));
+}
+---
+
+<Shell> hello </Shell>

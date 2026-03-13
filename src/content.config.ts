@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
+import { previewLoader } from "./lib/loaders";
 
 const pages = defineCollection({
   loader: glob({
@@ -14,8 +15,20 @@ const pages = defineCollection({
   }),
 });
 
+const previews = defineCollection({
+  loader: previewLoader({
+    pattern: "about/preview.tsx",
+    base: "./src/foundations",
+    generateId: ({ entry }) => entry.replace("/preview.tsx", ""),
+  }),
+  schema: z.object({
+    filePath: z.string(),
+  }),
+});
+
 const collections = {
   pages,
+  previews,
 };
 
 export { collections };
