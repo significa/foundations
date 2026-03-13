@@ -1,0 +1,78 @@
+export const metadata = {
+  title: "Debounce",
+  description:
+    "A utility function that limits the rate at which a function can be called by delaying its execution until a specified time has passed since its last invocation.",
+  files: ["src/foundations/utils/debounce/debounce.ts"],
+};
+
+## API Reference
+
+<PropsTable
+  definition={{
+    function: {
+      type: "function",
+      required: true,
+      description: "The function to debounce.",
+    },
+    interval: {
+      type: "number",
+      description: "The time in milliseconds to delay the function execution.",
+      default: 64,
+    },
+  }}
+/>
+
+## Purpose
+
+The `debounce` utility function helps control the rate at which a function is called by delaying its execution until a specified time has passed since its last invocation. This is particularly useful when dealing with events that can fire rapidly in succession, like window resizing, scrolling, or user input.
+
+When a debounced function is called multiple times within the specified delay period, only the last call will be executed after the delay has elapsed. This helps optimize performance and prevent unnecessary function executions.
+
+## Examples
+
+### Search Input
+
+One of the most common use cases is implementing search functionality with an input field. Instead of making API calls on every keystroke, you can debounce the search function and only make the API call when the user stops typing.
+
+```ts copy
+const SearchInput = () => {
+  const [query, setQuery] = useState("")
+
+  const searchAPI = async (searchQuery: string) => {
+    // Simulated API call
+    console.log(`Searching for: ${searchQuery}`)
+  }
+
+  // Debounce the API call by 300ms
+  const debouncedSearch = debounce((value: string) => {
+    searchAPI(value)
+  }, 300)
+
+  return (
+    <input
+      type="text"
+      value={query}
+      onChange={(e) => {
+        const value = e.target.value
+        setQuery(value)
+        debouncedSearch(value)
+      }}
+      placeholder="Search..."
+    />
+  )
+}
+```
+
+### Window Resize Events
+
+When performing operations on window resize, you often only need the result of the last resize event (when the use stops dragging the window).
+
+```ts copy
+const onResize = debounce(() => {
+  // Measure element dimensions
+  const { width, height } = element.getBoundingClientRect();
+  console.log(`Element dimensions: ${width}x${height}`);
+}, 256);
+
+window.addEventListener("resize", onResize);
+```

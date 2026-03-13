@@ -1,0 +1,67 @@
+export const metadata = {
+  title: "useDetectDevice",
+  description: "A hook for detecting the user's device type and platform",
+  files: ["src/foundations/hooks/use-detect-device/use-detect-device.tsx"],
+};
+
+## Features
+
+- **Device Detection**: Detect if the user is on a mobile or desktop device
+- **Platform Detection**: Identify specific platforms (Android, iOS)
+- **SSR Support**: Handles server-side rendering gracefully
+
+## API Reference
+
+The hook returns an object with the following methods:
+
+<PropsTable
+  definition={{
+    isMobileDevice: {
+      type: "boolean",
+      description: "True if the device is a mobile device",
+    },
+    isDesktopDevice: {
+      type: "boolean",
+      description: "True if the device is a desktop device",
+    },
+    isAndroidDevice: {
+      type: "boolean",
+      description: "True if the device is running Android.",
+    },
+    isIosDevice: {
+      type: "boolean",
+      description: "True if the device is running iOS (iPhone, iPad, or iPod).",
+    },
+  }}
+/>
+
+## Examples
+
+### Basic Usage
+
+```tsx
+const Example = () => {
+  const { isMobile } = useDetectDevice();
+
+  return <div>{isMobile ? <MobileLayout /> : <DesktopLayout />}</div>;
+};
+```
+
+### Platform-Specific Features
+
+```tsx
+const AddToWallet = () => {
+  const { isAndroid, isIos } = useDetectDevice();
+
+  return (
+    <div>
+      {isAndroid && <AddToGoogleWallet />}
+      {isIos && <AddToAppleWallet />}
+    </div>
+  );
+};
+```
+
+## Technical Notes
+
+- The hook uses the `navigator.userAgent` string to detect devices

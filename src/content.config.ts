@@ -4,7 +4,7 @@ import { glob } from "astro/loaders";
 
 const pages = defineCollection({
   loader: glob({
-    pattern: "**/*.mdx",
+    pattern: "about/page.mdx",
     base: "./src/foundations",
     generateId: ({ entry }) => entry.replace("/page.mdx", ""),
   }),

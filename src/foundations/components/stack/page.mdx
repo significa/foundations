@@ -1,0 +1,67 @@
+export const metadata = {
+  title: "Stack",
+  description:
+    "A component for creating scrollable sections with sticky headers, perfect for long-form content and documentation where maintaining context while scrolling is important.",
+  files: ["src/foundations/components/stack/stack.tsx"],
+  preview: {
+    slug: "stack",
+    mode: "iframe",
+    layout: "fullscreen",
+  },
+  dependencies: [
+    {
+      name: "debounce",
+      href: "/utils/debounce",
+    },
+    {
+      name: "math/sum",
+      href: "/utils/math#sum",
+    },
+  ],
+};
+
+## Features
+
+- **Unstyled**: No default styles, just the sticky behavior
+- **Automatic**: Handles all offset calculations and supports dynamic content heights
+- **Native**: Uses `position: sticky` under the hood without any on-scroll logic, so it's performant and works in all browsers
+- **No exit overlap**: Trailing item never overlaps with the header when exiting the viewport (see [Stack vs. Manual `position: sticky`](/preview/stack-vs-sticky?layout=fullscreen))
+
+## Anatomy
+
+```tsx
+<Stack>
+  <StackItem>
+    <StackHeader />
+    {/* content */}
+  </StackItem>
+</Stack>
+```
+
+## API Reference
+
+### Stack
+
+<PropsTable
+  definition={{
+    stick: {
+      default: "top",
+      type: "'top' | 'bottom'",
+      description: "Where in the viewport the stack should stick.",
+    },
+  }}
+/>
+
+### StackItem
+
+Extends the `div` element.
+
+### StackHeader
+
+Extends the `div` element.
+
+## Examples
+
+### Stick Position
+
+<Preview slug="stack-stick-position" mode="iframe" layout="fullscreen" />

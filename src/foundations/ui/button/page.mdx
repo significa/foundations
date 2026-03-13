@@ -1,0 +1,78 @@
+export const metadata = {
+  title: "Button",
+  description: "The Button component provides a consistent way to trigger actions across the application.",
+  preview: "button",
+  files: ["src/foundations/ui/button/button.tsx"],
+  dependencies: [
+    { name: "Spinner", href: "/ui/spinner" },
+    {
+      name: "Slot",
+      href: "/components/slot",
+    },
+  ],
+};
+
+## API Reference
+
+<PropsTable
+  definition={{
+    variant: {
+      type: ['"primary"', '"outline"', '"ghost"', '"destructive"'],
+      default: '"primary"',
+    },
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+    },
+    square: {
+      type: "boolean",
+      default: "false",
+      description: "Makes the button a square. Helpful when you have a button with only an icon inside.",
+    },
+    isLoading: {
+      type: "boolean",
+      default: "false",
+      description: "Replaces the button content with a spinner",
+    },
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+## Examples
+
+### Sizes
+
+<Preview slug="button-sizes" />
+
+### Variants
+
+<Preview slug="button-variants" />
+
+### Loading
+
+<Preview slug="button-loading" />
+
+### Icons
+
+<Preview slug="button-icons" />
+
+### disabled
+
+<Preview slug="button-disabled" />
+
+### As Link
+
+<Preview slug="button-as-link" />
+
+## Best Practices
+
+1. **Variants**:
+   - Use primary for main actions
+   - Use destructive for dangerous actions
+   - Use ghost for subtle actions
+
+2. **Accessibility**:
+   - Ensure clear button text
+   - Consider loading states

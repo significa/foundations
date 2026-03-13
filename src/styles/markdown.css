@@ -82,9 +82,5 @@
     td {
       @apply px-4 py-2 text-left;
     }
-
-    pre {
-      @apply border-border rounded-lg border p-4;
-    }
   }
 }

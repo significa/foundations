@@ -1,0 +1,97 @@
+export const metadata = {
+  title: "Drawer",
+  description: "A slide-in panel that overlays the main content.",
+  files: ["src/foundations/ui/drawer/drawer.tsx"],
+  preview: "drawer",
+  dependencies: [
+    {
+      name: "Modal",
+      href: "/ui/modal",
+    },
+  ],
+};
+
+## Features
+
+- **Modal Overlay**: Creates an accessible modal dialog with backdrop
+- **Focus Management**: Automatically traps focus within the dialog
+- **Flexible Positioning**: Center or top alignment options
+- **Controlled & Uncontrolled**: Supports both controlled and uncontrolled modes
+- **Customizable Actions**: Built-in support for common dialog actions
+
+## Anatomy
+
+```tsx
+<Drawer>
+  <DrawerTrigger />
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle />
+    </DrawerHeader>
+    <DrawerDescription />
+    <DrawerActions>
+      <DrawerClose />
+    </DrawerActions>
+  </DrawerContent>
+</Drawer>
+```
+
+## API Reference
+
+### Drawer
+
+Extends the `Modal` component.
+
+### DrawerContent
+
+Extends the `ModalContent` component.
+
+### DrawerTrigger
+
+Extends the `ModalTrigger` component.
+
+### DrawerClose
+
+Extends the `ModalClose` component.
+
+### DrawerTitle
+
+Extends the `ModalTitle` component.
+
+### DrawerDescription
+
+Extends the `ModalDescription` component.
+
+### DrawerHeader
+
+Extends the `div` element.
+
+### DrawerActions
+
+Extends the `div` element.
+
+## Examples
+
+### Simple
+
+<Preview slug="drawer" />
+
+### Tall Content
+
+<Preview slug="drawer-tall-content" />
+
+### Controlled
+
+<Preview slug="drawer-controlled" />
+
+## Best Practices
+
+1. **Content Structure**:
+   - Always include a clear title that describes the purpose
+   - Keep content concise and focused
+   - Use appropriate action labels (avoid "OK/Cancel")
+
+2. **Performance**:
+   - Lazy load dialog content if needed
+   - Consider using dynamic imports for heavy content
+   - Clean up resources when dialog closes
