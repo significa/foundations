@@ -1,7 +1,7 @@
 {
-  "name": "",
+  "name": "foundations",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.1-development",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -9,9 +9,23 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "format": "prettier --list-different --write .",
+    "format:check": "prettier --check .",
+    "types:check": "astro sync && tsc -noEmit",
+    "eslint": "eslint .",
+    "lint": "pnpm format:check && pnpm types:check && pnpm eslint"
   },
   "dependencies": {
-    "astro": "^6.0.4"
+    "astro": "^6.0.4",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "typescript-eslint": "^8.57.0"
+  },
+  "devDependencies": {
+    "eslint": "^10.0.3",
+    "eslint-plugin-astro": "^1.6.0",
+    "prettier": "3.8.1",
+    "prettier-plugin-astro": "0.14.1",
+    "prettier-plugin-tailwind": "2.2.12"
   }
 }
