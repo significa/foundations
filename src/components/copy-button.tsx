@@ -10,7 +10,7 @@ type CopyButtonProps = {
 
 const CopyButton = ({ className, ...props }: CopyButtonProps) => {
   const [isCopied, setIsCopied] = useState(false);
-  const timeout = useRef<null | number>(null);
+  const timeout = useRef<NodeJS.Timeout | null>(null);
 
   const handleCopy = () => {
     const text =

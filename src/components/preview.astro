@@ -1,0 +1,25 @@
+---
+import { getEntry } from "astro:content";
+import ComponentPreview from "@/components/component-preview.astro";
+import SourceCode from "@/components/source-code.astro";
+
+type Props = {
+  slug: string;
+};
+
+const { slug } = Astro.props;
+
+const entry = await getEntry("previews", slug);
+
+if (!entry) {
+  throw new Error(`No preview found for slug: ${slug}`);
+}
+---
+
+<div>
+  preview:
+  <ComponentPreview slug={slug} />
+
+  code:
+  <SourceCode file={entry.data.file} />
+</div>

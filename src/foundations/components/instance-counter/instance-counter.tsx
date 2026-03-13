@@ -23,6 +23,7 @@ const InstanceCounterProvider = ({ children, onChange }: InstanceCounterProvider
   const keys = useRef<string[]>([]);
   const isMounted = useRef(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   const getIndex = useCallback(
     (key: string) => {
       if (keys.current.includes(key)) {
@@ -33,7 +34,6 @@ const InstanceCounterProvider = ({ children, onChange }: InstanceCounterProvider
 
       return keys.current.length - 1;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [seed]
   );
 

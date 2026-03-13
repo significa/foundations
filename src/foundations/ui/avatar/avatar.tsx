@@ -54,10 +54,7 @@ interface AvatarImageProps extends React.ComponentPropsWithRef<"img"> {
 }
 
 const AvatarImage = ({ className, src, ...props }: AvatarImageProps) => {
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img className={cn("absolute inset-0 z-1 object-cover", className)} src={src} alt="" {...props} />
-  );
+  return <img className={cn("absolute inset-0 z-1 object-cover", className)} src={src} alt="" {...props} />;
 };
 
 interface AvatarFallbackProps extends React.ComponentPropsWithRef<"div"> {

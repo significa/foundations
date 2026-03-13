@@ -1,0 +1,18 @@
+---
+import { getEntry } from "astro:content";
+import { PreviewRenderer } from "@/components/preview-renderer";
+
+type Props = {
+  slug: string;
+};
+
+const { slug } = Astro.props;
+
+const entry = await getEntry("previews", Astro.props.slug);
+
+if (!entry) {
+  throw new Error(`No entry found for slug: ${slug}`);
+}
+---
+
+<PreviewRenderer client:load moduleKey={entry.data.file} exportName={entry.data.exportName} />
