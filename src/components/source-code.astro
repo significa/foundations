@@ -1,0 +1,28 @@
+---
+import { readFile } from "fs/promises";
+import path from "path";
+import CodeBlock from "./code-block.astro";
+import { Code } from "astro:components";
+import type { CodeLanguage } from "astro";
+
+type Props = {
+  file: string;
+};
+
+const { file } = Astro.props;
+
+const content = await readFile(path.join(process.cwd(), file), "utf-8");
+const extension = path.extname(file).slice(1);
+---
+
+<CodeBlock>
+  <Code
+    slot="pre"
+    code={content}
+    lang={extension as CodeLanguage}
+    themes={{
+      light: "kanagawa-lotus",
+      dark: "github-dark",
+    }}
+  />
+</CodeBlock>

@@ -1,0 +1,34 @@
+---
+import { CopyButton } from "@/components/copy-button";
+import { uid } from "@/lib/utils/uid";
+import { cn } from "@/lib/utils/classnames";
+
+const id = uid();
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div
+  id={id}
+  data-code
+  class={cn("relative my-4 w-full overflow-auto rounded-lg border px-4 py-3", "font-mono text-[0.9rem] font-medium", className)}
+>
+  {
+    Astro.slots.has("default") && (
+      <pre>
+        <slot />
+      </pre>
+    )
+  }
+  <slot name="pre" />
+  <CopyButton className="absolute top-2 right-2 opacity-80" client:idle target={`#${id} > pre`} />
+</div>
+
+<style is:global>
+  [data-code] {
+    pre {
+      display: flex;
+      background: transparent !important;
+    }
+  }
+</style>

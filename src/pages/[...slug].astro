@@ -1,7 +1,11 @@
 ---
-import Shell from "@/layouts/shell.astro";
-import Code from "@/components/code.astro";
 import { getCollection, render } from "astro:content";
+import CodeBlock from "@/components/code-block.astro";
+import SourceCode from "@/components/source-code.astro";
+import Shell from "@/layouts/shell.astro";
+
+const previews = await getCollection("previews");
+console.log(previews);
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
@@ -28,7 +32,8 @@ const { Content } = await render(page);
     <section data-markdown>
       <Content
         components={{
-          pre: Code,
+          pre: CodeBlock,
+          SourceCode: SourceCode,
         }}
       />
     </section>
