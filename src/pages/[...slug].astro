@@ -1,0 +1,31 @@
+---
+import Shell from "@/layouts/shell.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+
+  return pages.map((page) => ({
+    params: { slug: page.id },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+
+const { Content } = await render(page);
+---
+
+<Shell meta={{ title: "Foundations" }}>
+  <div class="mx-auto max-w-3xl flex-1 py-6 md:py-8">
+    <section>
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold">{page.data.title}</h1>
+        <p class="text-foreground-secondary mt-2">{page.data.description}</p>
+      </div>
+    </section>
+    <section data-markdown>
+      <Content />
+    </section>
+  </div>
+</Shell>
