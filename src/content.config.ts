@@ -28,11 +28,15 @@ const pages = defineCollection({
     description: z.string(),
     preview: reference("previews").optional(),
     files: z.array(z.string()).optional(),
-    meta: z
-      .object({
-        folder: z.string(),
-      })
+    dependencies: z
+      .array(
+        z.object({
+          name: z.string(),
+          href: z.string(),
+        })
+      )
       .optional(),
+    meta: z.object({ folder: z.string() }).optional(),
   }),
 });
 

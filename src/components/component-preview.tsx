@@ -4,9 +4,9 @@ type ComponentPreviewProps = {
   file: string;
 };
 
-const modules = import.meta.glob("/src/foundations/**/*.preview.tsx", { eager: true });
-
 const ComponentPreview = ({ file }: ComponentPreviewProps) => {
+  const modules = import.meta.glob("/src/foundations/**/*.preview.tsx", { eager: true });
+
   const Component = useMemo(() => {
     try {
       // @ts-expect-error - dynamic import with glob

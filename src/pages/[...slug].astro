@@ -8,7 +8,8 @@ import PageLayout from "@/layouts/page.astro";
 import PropsTable from "@/components/props-table.astro";
 import { TableOfContents } from "@/components/table-of-contents";
 import { GITHUB_REPO_URL } from "@/lib/constants";
-import { PencilIcon } from "@phosphor-icons/react";
+import { PencilIcon, PackageIcon, ArrowSquareOutIcon } from "@phosphor-icons/react";
+import { Badge, BadgeIcon } from "@/foundations/ui/badge/badge";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
@@ -59,10 +60,40 @@ const { Content, headings } = await render(page);
 
       <section data-markdown class="pb-40">
         {page.data.preview && <Preview slug={page.data.preview.id} />}
+
+        {
+          page.data.dependencies && page.data.dependencies.length > 0 && (
+            <>
+              <h2 id="dependencies">Dependencies</h2>
+              <div class="flex flex-wrap gap-2">
+                {page.data.dependencies.map(({ name, href }) => {
+                  const type = href.startsWith("/") ? "internal" : "external";
+
+                  return (
+                    <a href={href} target={type === "external" ? "_blank" : undefined}>
+                      <Badge key={name} variant={type === "external" ? "neutral" : "info"}>
+                        <BadgeIcon>
+                          <PackageIcon />
+                        </BadgeIcon>
+                        <span>{name}</span>
+                        {type === "external" && (
+                          <BadgeIcon>
+                            <ArrowSquareOutIcon className="text-foreground-secondary" />
+                          </BadgeIcon>
+                        )}
+                      </Badge>
+                    </a>
+                  );
+                })}
+              </div>
+            </>
+          )
+        }
+
         {
           page.data.files && page.data.files.length > 0 && (
             <>
-              <h2>Source Code</h2>
+              <h2 id="source-code">Source Code</h2>
               {page.data.files.map((file) => (
                 <SourceCode class="mt-6" file={file} collapsible />
               ))}
