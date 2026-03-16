@@ -1,31 +1,24 @@
-export const metadata = {
-  title: "Sequence",
-  description: "A component for creating timed sequences of content with automatic progression.",
-  files: ["src/foundations/components/sequence/sequence.tsx"],
-  preview: "sequence",
-  dependencies: [
-    {
-      name: "InstanceCounter",
-      href: "/components/instance-counter",
-    },
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-    {
-      name: "useTicker",
-      href: "/hooks/use-ticker",
-    },
-    {
-      name: "useIntersectionObserver",
-      href: "/hooks/use-intersection-observer",
-    },
-    {
-      name: "math/clamp",
-      href: "/utils/math/#clamp",
-    },
-  ],
-};
+---
+title: Sequence
+description: A component for creating timed sequences of content with automatic progression.
+preview: sequence
+files:
+  - src/foundations/components/sequence/sequence.tsx
+dependencies:
+  - name: InstanceCounter
+    href: /components/instance-counter
+  - name: Slot
+    href: /components/slot
+  - name: useTicker
+    href: /hooks/use-ticker
+  - name: useIntersectionObserver
+    href: /hooks/use-intersection-observer
+  - name: math/clamp
+    href: /utils/math/#clamp
+
+meta:
+  folder: components
+---
 
 ## Features
 

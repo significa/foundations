@@ -4,6 +4,7 @@ import "@/styles/global.css";
 type Props = {
   meta?: {
     title?: string;
+    description?: string;
   };
 };
 
@@ -14,7 +15,8 @@ const { meta } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>{meta?.title}</title>
+    <title>{meta?.title || "Foundations by Significa"}</title>
+    {meta?.description && <meta name="description" content={meta.description} />}
   </head>
   <body>
     <slot />

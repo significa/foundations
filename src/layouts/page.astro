@@ -19,7 +19,7 @@ const pages = await getCollection("pages");
       "bg-background shrink-0 overflow-y-auto overscroll-contain px-2 pt-2 pb-12 md:px-4 xl:px-2",
       // in mobile we use fixed positioning and control it in the Header component
       "fixed top-12 mt-px hidden h-[calc(100dvh-var(--spacing)*12)] w-full data-[mobile-menu-open=true]:block max-xl:z-200",
-      "md:top-14 md:h-[calc(100dvh-var(--spacing)*14)] xl:sticky xl:block xl:max-w-[250px] xl:border-r xl:pt-4"
+      "md:top-14 md:h-[calc(100dvh-var(--spacing)*14)] xl:sticky xl:block xl:max-w-64 xl:border-r xl:pt-4"
     )}
   >
     <Menu items={getNavigationItems(pages)} currentPath={Astro.url.pathname} client:load />

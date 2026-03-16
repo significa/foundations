@@ -5,7 +5,7 @@ import { previewLoader } from "./lib/loaders";
 
 const pages = defineCollection({
   loader: glob({
-    pattern: "about/page.mdx",
+    pattern: "**/page.mdx",
     base: "./src/foundations",
     generateId: ({ entry }) => entry.replace("/page.mdx", ""),
   }),
@@ -22,7 +22,7 @@ const pages = defineCollection({
 
 const previews = defineCollection({
   loader: previewLoader({
-    pattern: "about/*.preview.tsx",
+    pattern: "**/*.preview.tsx",
     base: "./src/foundations",
     generateId: ({ entry }) => entry.replace(".preview.tsx", ""),
   }),
