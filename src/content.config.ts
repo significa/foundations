@@ -17,12 +17,12 @@ const pages = defineCollection({
 
 const previews = defineCollection({
   loader: previewLoader({
-    pattern: "**/preview.tsx",
+    pattern: "about/*.preview.tsx",
     base: "./src/foundations",
+    generateId: ({ entry }) => entry.replace(".preview.tsx", ""),
   }),
   schema: z.object({
     file: z.string(),
-    exportName: z.string(),
   }),
 });
 

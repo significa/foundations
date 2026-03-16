@@ -2,19 +2,18 @@ import { useMemo } from "react";
 
 type ComponentPreviewProps = {
   moduleKey: string;
-  exportName: string;
 };
 
-const modules = import.meta.glob("/src/foundations/**/preview.tsx", { eager: true });
+const modules = import.meta.glob("/src/foundations/**/*.preview.tsx", { eager: true });
 
-const PreviewRenderer = ({ moduleKey, exportName }: ComponentPreviewProps) => {
+const PreviewRenderer = ({ moduleKey }: ComponentPreviewProps) => {
   const Component = useMemo(() => {
     try {
       // @ts-expect-error - dynamic import with glob
-      const module = modules[moduleKey]?.[exportName];
+      const module = modules[moduleKey]?.default;
 
       if (!module) {
-        throw new Error(`Module or export not found: ${moduleKey} - ${exportName}`);
+        throw new Error(`Module not found: ${moduleKey}`);
       }
 
       return module;
@@ -22,7 +21,7 @@ const PreviewRenderer = ({ moduleKey, exportName }: ComponentPreviewProps) => {
       console.error(`Error loading module: ${error}`);
       return () => <div>Error loading component</div>;
     }
-  }, [moduleKey, exportName]);
+  }, [moduleKey]);
 
   return <Component />;
 };

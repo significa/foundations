@@ -16,6 +16,9 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 
+const previews = await getCollection("previews");
+console.log(previews);
+
 const { Content } = await render(page);
 ---
 
