@@ -1,7 +1,8 @@
 ---
 import { getEntry } from "astro:content";
-import ComponentPreview from "@/components/component-preview.astro";
 import SourceCode from "@/components/source-code.astro";
+import { Button, buttonStyle } from "@/foundations/ui/button/button";
+import { ArrowSquareOutIcon } from "@phosphor-icons/react";
 
 type Props = {
   slug: string;
@@ -14,12 +15,43 @@ const entry = await getEntry("previews", slug);
 if (!entry) {
   throw new Error(`No preview found for slug: ${slug}`);
 }
+
+const previewPath = `/preview/${entry.id}`;
 ---
 
-<div>
-  preview:
-  <ComponentPreview slug={slug} />
+<div class="group relative h-75 md:h-100" data-id="preview">
+  <div class="h-full group-has-data-[view=source]:hidden">
+    <iframe src={previewPath} class="h-full w-full rounded-lg border p-4"></iframe>
+  </div>
 
-  code:
-  <SourceCode file={entry.data.file} />
+  <SourceCode file={entry.data.file} class="h-full group-has-data-[view=preview]:hidden" />
+  <div class="absolute right-0 bottom-0 z-20 flex items-center gap-2 p-3">
+    <Button size="sm" variant="outline" data-id="preview-toggle" data-view="source" className="after:content-[attr(data-view)]">
+      View
+    </Button>
+    <a
+      href={previewPath}
+      target="_blank"
+      class={buttonStyle({
+        size: "sm",
+        variant: "outline",
+        square: true,
+        className: "no-underline cursor-pointer",
+      })}
+    >
+      <ArrowSquareOutIcon />
+    </a>
+  </div>
 </div>
+
+<script>
+  const toggles = [...document.querySelectorAll("[data-id=preview-toggle]")];
+
+  for (const toggle of toggles) {
+    toggle?.addEventListener("click", () => {
+      const currentView = toggle.getAttribute("data-view");
+      const newView = currentView === "preview" ? "source" : "preview";
+      toggle.setAttribute("data-view", newView);
+    });
+  }
+</script>

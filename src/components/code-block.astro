@@ -2,16 +2,20 @@
 import { CopyButton } from "@/components/copy-button";
 import { uid } from "@/lib/utils/uid";
 import { cn } from "@/lib/utils/classnames";
+import type { HTMLAttributes } from "astro/types";
+
+type Props = Omit<HTMLAttributes<"div">, "id">;
 
 const id = uid();
 
-const { class: className } = Astro.props;
+const { class: className, ...props } = Astro.props;
 ---
 
 <div
   id={id}
   data-code
-  class={cn("relative my-4 w-full overflow-auto rounded-lg border px-4 py-3", "font-mono text-[0.9rem] font-medium", className)}
+  class={cn("relative my-4 w-full overflow-auto rounded-lg border p-4", "font-mono text-[0.9rem] font-medium", className)}
+  {...props}
 >
   {
     Astro.slots.has("default") && (
