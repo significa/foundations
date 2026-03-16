@@ -10,6 +10,13 @@ type NavigationItem = {
   }[];
 };
 
+const FOLDER_SORT_ORDER: Record<string, number> = {
+  introduction: 0,
+  ui: 1,
+  components: 2,
+  hooks: 3,
+};
+
 const getNavigationItems = (collection: CollectionEntry<"pages">[]): NavigationItem[] => {
   const items: NavigationItem[] = [];
 
@@ -34,7 +41,12 @@ const getNavigationItems = (collection: CollectionEntry<"pages">[]): NavigationI
     }
   }
 
-  return items;
+  return items.sort((a, b) => {
+    const orderA = FOLDER_SORT_ORDER[a.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
+    const orderB = FOLDER_SORT_ORDER[b.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
+
+    return orderA - orderB;
+  });
 };
 
 export { getNavigationItems };
