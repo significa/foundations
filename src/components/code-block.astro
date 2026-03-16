@@ -15,17 +15,23 @@ const { class: className, style: _style, ...props } = Astro.props;
 <div
   id={id}
   data-code
-  class={cn("relative my-4 w-full overflow-auto rounded-lg border p-4", "font-mono text-[0.9rem] font-medium", className)}
+  class={cn(
+    "relative my-4 size-full w-full overflow-hidden rounded-lg border",
+    "font-mono text-[0.9rem] font-medium",
+    className
+  )}
   {...props}
 >
-  {
-    Astro.slots.has("default") && (
-      <pre>
-        <slot />
-      </pre>
-    )
-  }
-  <slot name="pre" />
+  <div class="size-full overflow-auto p-4 *:w-fit">
+    {
+      Astro.slots.has("default") && (
+        <pre>
+          <slot />
+        </pre>
+      )
+    }
+    <slot name="pre" />
+  </div>
   <CopyButton className="absolute top-2 right-2 opacity-80" client:idle target={`#${id} > pre`} />
 </div>
 
