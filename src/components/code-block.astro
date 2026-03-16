@@ -8,7 +8,8 @@ type Props = Omit<HTMLAttributes<"div">, "id">;
 
 const id = uid();
 
-const { class: className, ...props } = Astro.props;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { class: className, style: _style, ...props } = Astro.props;
 ---
 
 <div

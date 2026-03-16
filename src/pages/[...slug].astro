@@ -4,40 +4,89 @@ import CodeBlock from "@/components/code-block.astro";
 import SourceCode from "@/components/source-code.astro";
 import Preview from "@/components/preview.astro";
 import Shell from "@/layouts/shell.astro";
+import PageLayout from "@/layouts/page.astro";
+import { TableOfContents } from "@/components/table-of-contents";
+import { GITHUB_REPO_URL } from "@/lib/constants";
+import { PencilIcon } from "@phosphor-icons/react";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
 
-  return pages.map((page) => ({
+  return pages.map((page, index, arr) => ({
     params: { slug: page.id },
-    props: { page },
+    props: {
+      page,
+      previousPage: arr[index - 1],
+      nextPage: arr[index + 1],
+    },
   }));
 }
 
-const { page } = Astro.props;
-
-const previews = await getCollection("previews");
-console.log(previews);
-
-const { Content } = await render(page);
+const { page, previousPage, nextPage } = Astro.props;
+const { Content, headings } = await render(page);
 ---
 
 <Shell meta={{ title: "Foundations" }}>
-  <div class="mx-auto max-w-3xl flex-1 py-6 md:py-8">
-    <section>
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold">{page.data.title}</h1>
-        <p class="text-foreground-secondary mt-2">{page.data.description}</p>
+  <PageLayout>
+    <nav
+      class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-[200px] shrink-0 overflow-y-auto pt-6 text-sm lg:block"
+    >
+      <>
+        <h3 class="text-foreground-secondary mb-3 font-medium">On this page</h3>
+        <TableOfContents client:load headings={headings} />
+        <hr class="my-6" />
+      </>
+      <div class="text-foreground-secondary text-xs">
+        <a
+          class="hover:text-foreground mb-2 inline-flex items-center gap-1 font-medium transition"
+          href={`${GITHUB_REPO_URL}/edit/main/${page.filePath}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <PencilIcon /> Edit this page
+        </a>
       </div>
-    </section>
-    <section data-markdown>
-      <Content
-        components={{
-          pre: CodeBlock,
-          SourceCode,
-          Preview,
-        }}
-      />
-    </section>
-  </div>
+    </nav>
+
+    <div class="mx-auto max-w-3xl flex-1 py-6 md:py-8">
+      <section>
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold">{page.data.title}</h1>
+          <p class="text-foreground-secondary mt-2">{page.data.description}</p>
+        </div>
+      </section>
+      <section data-markdown class="pb-40">
+        <Content
+          components={{
+            pre: CodeBlock,
+            SourceCode,
+            Preview,
+          }}
+        />
+      </section>
+
+      {
+        (previousPage || nextPage) && (
+          <section class="flex flex-col gap-4 sm:flex-row">
+            {[previousPage, nextPage].map((page, index) => {
+              if (!page) return null;
+
+              return (
+                <a
+                  class:list={[
+                    "border-border hover:bg-foreground/3 focus-visible:bg-foreground/3 flex-1 rounded-lg border p-4 transition outline-none",
+                    index > 0 && "text-right",
+                  ]}
+                  href={`/${page.id}`}
+                >
+                  <p class="text-foreground-secondary mb-1 text-xs">{["Previous", "Next"][index]}</p>
+                  <p class="text-sm font-medium">{page.data.title}</p>
+                </a>
+              );
+            })}
+          </section>
+        )
+      }
+    </div>
+  </PageLayout>
 </Shell>

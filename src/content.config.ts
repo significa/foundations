@@ -12,6 +12,11 @@ const pages = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
+    meta: z
+      .object({
+        folder: z.string(),
+      })
+      .optional(),
   }),
 });
 

@@ -30,4 +30,9 @@
   ::file-selector-button {
     border-color: var(--color-border, currentColor);
   }
+
+  html {
+    /* scroll-padding-top for sticky header */
+    @apply scroll-pt-16 motion-safe:scroll-smooth md:scroll-pt-20;
+  }
 }
