@@ -56,7 +56,20 @@ const { Content, headings } = await render(page);
           <p class="text-foreground-secondary mt-2">{page.data.description}</p>
         </div>
       </section>
+
       <section data-markdown class="pb-40">
+        {page.data.preview && <Preview slug={page.data.preview.id} />}
+        {
+          page.data.files && page.data.files.length > 0 && (
+            <>
+              <h2>Source Code</h2>
+              {page.data.files.map((file) => (
+                <SourceCode class="mt-6" file={file} collapsible />
+              ))}
+            </>
+          )
+        }
+
         <Content
           components={{
             pre: CodeBlock,

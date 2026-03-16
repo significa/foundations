@@ -9,6 +9,7 @@ import { themes } from "@/lib/shiki";
 
 type Props = HTMLAttributes<"div"> & {
   file: string;
+  collapsible?: boolean;
 };
 
 const { file, ...props } = Astro.props;
