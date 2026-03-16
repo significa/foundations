@@ -19,14 +19,19 @@ if (!entry) {
 const previewPath = `/preview/${entry.id}`;
 ---
 
-<div class="group relative h-75 md:h-100" data-id="preview">
-  <div class="h-full group-has-data-[view=source]:hidden">
+<div class="group relative h-75 md:h-100" data-id="preview" data-view="preview">
+  <div class="h-full group-data-[view=source]:hidden">
     <iframe src={previewPath} class="h-full w-full rounded-lg border p-4"></iframe>
   </div>
+  <SourceCode file={entry.data.file} class="h-full group-data-[view=preview]:hidden" />
 
-  <SourceCode file={entry.data.file} class="h-full group-has-data-[view=preview]:hidden" />
   <div class="absolute right-0 bottom-0 z-20 flex items-center gap-2 p-3">
-    <Button size="sm" variant="outline" data-id="preview-toggle" data-view="source" className="after:content-[attr(data-view)]">
+    <Button
+      size="sm"
+      variant="outline"
+      data-id="preview-toggle"
+      className="after:content-['source'] group-data-[view=source]:after:content-['preview']"
+    >
       View
     </Button>
     <a
@@ -49,9 +54,13 @@ const previewPath = `/preview/${entry.id}`;
 
   for (const toggle of toggles) {
     toggle?.addEventListener("click", () => {
-      const currentView = toggle.getAttribute("data-view");
+      const container = toggle.closest("[data-id=preview]");
+      if (!container) return;
+
+      const currentView = container.getAttribute("data-view");
       const newView = currentView === "preview" ? "source" : "preview";
-      toggle.setAttribute("data-view", newView);
+
+      container.setAttribute("data-view", newView);
     });
   }
 </script>

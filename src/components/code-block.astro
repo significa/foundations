@@ -1,28 +1,33 @@
 ---
 import { CopyButton } from "@/components/copy-button";
+import { Button } from "@/foundations/ui/button/button";
 import { uid } from "@/lib/utils/uid";
 import { cn } from "@/lib/utils/classnames";
 import type { HTMLAttributes } from "astro/types";
 
-type Props = Omit<HTMLAttributes<"div">, "id">;
+type Props = Omit<HTMLAttributes<"div">, "id"> & {
+  collapsible?: boolean;
+};
 
 const id = uid();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { class: className, style: _style, ...props } = Astro.props;
+const { class: className, collapsible = false, style: _style, ...props } = Astro.props;
 ---
 
 <div
   id={id}
   data-code
-  class={cn(
-    "relative my-4 size-full w-full overflow-hidden rounded-lg border",
-    "font-mono text-[0.9rem] font-medium",
-    className
-  )}
+  class={cn("group relative my-4 size-full w-full overflow-hidden", "font-mono text-[0.9rem] font-medium", className)}
+  data-collapsible={collapsible}
   {...props}
 >
-  <div class="size-full overflow-auto p-4 *:w-fit">
+  <div
+    class={cn(
+      "size-full overflow-auto rounded-lg border p-4 *:w-fit",
+      "group-data-[collapsible=true]:max-h-64 group-data-[collapsible=true]:mask-[linear-gradient(0deg,transparent_0%,black_--spacing(32))]"
+    )}
+  >
     {
       Astro.slots.has("default") && (
         <pre>
@@ -33,6 +38,19 @@ const { class: className, style: _style, ...props } = Astro.props;
     <slot name="pre" />
   </div>
   <CopyButton className="absolute top-2 right-2 opacity-80" client:idle target={`#${id} > pre`} />
+
+  {
+    collapsible && (
+      <Button
+        data-id="code-block-expand"
+        size="sm"
+        variant="outline"
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
+      >
+        Expand
+      </Button>
+    )
+  }
 </div>
 
 <style is:global>
@@ -43,3 +61,21 @@ const { class: className, style: _style, ...props } = Astro.props;
     }
   }
 </style>
+
+<script>
+  const toggles = [...document.querySelectorAll("[data-id='code-block-expand']")];
+
+  for (const toggle of toggles) {
+    toggle.addEventListener(
+      "click",
+      () => {
+        const codeBlock = toggle.closest("[data-code]");
+
+        codeBlock?.setAttribute("data-collapsible", "false");
+
+        toggle.remove();
+      },
+      { once: true }
+    );
+  }
+</script>

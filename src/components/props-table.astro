@@ -1,0 +1,63 @@
+---
+import { cn } from "@/lib/utils/classnames";
+
+type Props = {
+  definition: Record<
+    string,
+    {
+      default?: string;
+      required?: boolean;
+      type: string | string[];
+      description?: string;
+    }
+  >;
+};
+
+const { definition } = Astro.props;
+
+const thClassname = cn("p-3 py-2.5 text-left font-semibold");
+const tdClassname = cn("p-3 text-left align-top text-sm");
+const entryClassname = cn("bg-foreground/4 text-foreground/60 rounded-sm border px-1 py-0.5 font-[0.95em]");
+
+const hasDescription = Object.values(definition).some(({ description }) => description);
+---
+
+<div class="my-6 overflow-x-auto rounded-xl border border-b-0">
+  <table class="w-full">
+    <thead>
+      <tr class="border-border m-0 border-b">
+        <th class={cn(hasDescription ? "w-1/6" : "w-1/4", thClassname)}>Prop</th>
+        <th class={cn(hasDescription ? "w-1/6" : "w-1/4", thClassname)}>Default</th>
+        <th class={cn(hasDescription ? "w-2/6" : "w-2/4", thClassname)}>Type</th>
+        {hasDescription && <th class={cn("w-2/6", thClassname)}>Description</th>}
+      </tr>
+    </thead>
+    <tbody>
+      {
+        Object.entries(definition).map(([prop, { default: defaultValue, type, description, required }]) => {
+          const types = Array.isArray(type) ? type : [type];
+
+          return (
+            <tr class="border-border m-0 border-b">
+              <td class={cn(tdClassname, "flex items-center gap-1")}>
+                <code class={entryClassname}>
+                  {prop}
+                  {required && <span class="text-red-500"> *</span>}
+                </code>
+              </td>
+              <td class={tdClassname}>
+                {defaultValue !== undefined ? <code class={entryClassname}>{defaultValue}</code> : "-"}
+              </td>
+              <td class={cn(tdClassname, "flex flex-wrap gap-1")}>
+                {types.map((t) => (
+                  <code class={entryClassname}>{t}</code>
+                ))}
+              </td>
+              {hasDescription && <td class={tdClassname}>{description && <>{description}</>}</td>}
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+</div>

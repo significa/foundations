@@ -5,6 +5,7 @@ import SourceCode from "@/components/source-code.astro";
 import Preview from "@/components/preview.astro";
 import Shell from "@/layouts/shell.astro";
 import PageLayout from "@/layouts/page.astro";
+import PropsTable from "@/components/props-table.astro";
 import { TableOfContents } from "@/components/table-of-contents";
 import { GITHUB_REPO_URL } from "@/lib/constants";
 import { PencilIcon } from "@phosphor-icons/react";
@@ -61,6 +62,7 @@ const { Content, headings } = await render(page);
             pre: CodeBlock,
             SourceCode,
             Preview,
+            PropsTable,
           }}
         />
       </section>

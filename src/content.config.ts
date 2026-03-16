@@ -24,7 +24,10 @@ const previews = defineCollection({
   loader: previewLoader({
     pattern: "**/*.preview.tsx",
     base: "./src/foundations",
-    generateId: ({ entry }) => entry.replace(".preview.tsx", ""),
+    generateId: ({ entry }) => {
+      const filename = entry.split("/").pop() || "";
+      return filename.replace(".preview.tsx", "");
+    },
   }),
   schema: z.object({
     file: z.string(),

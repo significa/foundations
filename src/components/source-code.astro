@@ -5,6 +5,7 @@ import CodeBlock from "./code-block.astro";
 import { Code } from "astro:components";
 import type { CodeLanguage } from "astro";
 import type { HTMLAttributes } from "astro/types";
+import { themes } from "@/lib/shiki";
 
 type Props = HTMLAttributes<"div"> & {
   file: string;
@@ -17,13 +18,5 @@ const extension = path.extname(file).slice(1);
 ---
 
 <CodeBlock {...props}>
-  <Code
-    slot="pre"
-    code={content}
-    lang={extension as CodeLanguage}
-    themes={{
-      light: "kanagawa-lotus",
-      dark: "github-dark",
-    }}
-  />
+  <Code slot="pre" code={content} lang={extension as CodeLanguage} themes={themes} />
 </CodeBlock>
