@@ -1,10 +1,12 @@
-import type { APIRoute } from "astro";
-import { getCollection } from "astro:content";
+import { getCollection } from 'astro:content';
+import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ site }) => {
-  const pages = await getCollection("pages");
+  const pages = await getCollection('pages');
 
-  const baseUrl = site ? site.href.replace(/\/$/, "") : "https://foundations.significa.co";
+  const baseUrl = site
+    ? site.href.replace(/\/$/, '')
+    : 'https://foundations.significa.co';
 
   const urls = pages
     .map((page) => {
@@ -13,7 +15,7 @@ export const GET: APIRoute = async ({ site }) => {
     <loc>${baseUrl}/${page.id}</loc>
   </url>`;
     })
-    .join("");
+    .join('');
 
   const raw = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -22,7 +24,7 @@ ${urls}
 
   return new Response(raw, {
     headers: {
-      "Content-Type": "application/xml",
+      'Content-Type': 'application/xml',
     },
   });
 };

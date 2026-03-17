@@ -1,11 +1,12 @@
-import { Avatar, AvatarFallback } from "@/foundations/ui/avatar/avatar";
+import { Avatar, AvatarFallback } from '@/foundations/ui/avatar/avatar';
 
 export default function AvatarOnTopOfMediaPreview() {
   return (
     <div
-      className="relative size-32 overflow-hidden rounded-lg bg-cover bg-center"
+      className="relative size-32 overflow-hidden rounded-lg bg-center bg-cover"
       style={{
-        backgroundImage: "url(https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80)",
+        backgroundImage:
+          'url(https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80)',
       }}
     >
       <div className="flex h-full items-center justify-center">

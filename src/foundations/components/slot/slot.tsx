@@ -1,6 +1,6 @@
-import { Children, cloneElement, isValidElement } from "react";
+import { Children, cloneElement, isValidElement } from 'react';
 
-import { cn } from "@/lib/utils/classnames";
+import { cn } from '@/lib/utils/classnames';
 
 const isValidSlottableElement = (
   value: unknown
@@ -9,10 +9,19 @@ const isValidSlottableElement = (
   className?: string;
   style?: React.CSSProperties;
 }> => {
-  return isValidElement(value) && !!value.props && typeof value.props === "object" && "key" in value;
+  return (
+    isValidElement(value) &&
+    !!value.props &&
+    typeof value.props === 'object' &&
+    'key' in value
+  );
 };
 
-export const Slot = ({ children, ref, ...props }: React.ComponentPropsWithRef<React.ElementType>) => {
+export const Slot = ({
+  children,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<React.ElementType>) => {
   const element = Children.only(children);
 
   if (isValidSlottableElement(element)) {
@@ -28,10 +37,10 @@ export const Slot = ({ children, ref, ...props }: React.ComponentPropsWithRef<Re
     });
   }
 
-  throw new Error("Slot needs a valid react element child");
+  throw new Error('Slot needs a valid react element child');
 };
 
-Slot.displayName = "Slot";
+Slot.displayName = 'Slot';
 
 type SlottableProps = {
   asChild: boolean;
@@ -44,7 +53,12 @@ type SlottableProps = {
  *
  * see https://github.com/radix-ui/primitives/issues/1825
  */
-export const Slottable = ({ asChild, child, children, ...props }: SlottableProps) => {
+export const Slottable = ({
+  asChild,
+  child,
+  children,
+  ...props
+}: SlottableProps) => {
   return (
     <>
       {asChild

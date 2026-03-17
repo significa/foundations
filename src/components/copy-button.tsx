@@ -1,8 +1,8 @@
-import { CheckIcon, ClipboardIcon } from "@phosphor-icons/react";
-import { useEffect, useRef, useState } from "react";
+import { CheckIcon, ClipboardIcon } from '@phosphor-icons/react';
+import { useEffect, useRef, useState } from 'react';
 
-import { Button } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils/classnames";
+import { Button } from '@/foundations/ui/button/button';
+import { cn } from '@/lib/utils/classnames';
 
 type CopyButtonProps = {
   className?: string;
@@ -14,9 +14,10 @@ const CopyButton = ({ className, ...props }: CopyButtonProps) => {
 
   const handleCopy = () => {
     const text =
-      "target" in props && props.target
-        ? ((document.querySelector(props.target) as HTMLElement)?.innerText ?? "")
-        : (props.content ?? "");
+      'target' in props && props.target
+        ? ((document.querySelector(props.target) as HTMLElement)?.innerText ??
+          '')
+        : (props.content ?? '');
 
     navigator.clipboard.writeText(text);
     setIsCopied(true);
@@ -35,7 +36,14 @@ const CopyButton = ({ className, ...props }: CopyButtonProps) => {
   }, []);
 
   return (
-    <Button variant="ghost" size="xs" square onClick={handleCopy} aria-label="Copy" className={cn(className)}>
+    <Button
+      variant="ghost"
+      size="xs"
+      square
+      onClick={handleCopy}
+      aria-label="Copy"
+      className={cn(className)}
+    >
       {isCopied ? <CheckIcon /> : <ClipboardIcon />}
     </Button>
   );

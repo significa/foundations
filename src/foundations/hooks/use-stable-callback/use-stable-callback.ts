@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: expected
 type AnyFunction = (...args: any[]) => any;
 
 export const useStableCallback = <T extends AnyFunction>(callback?: T) => {

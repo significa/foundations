@@ -1,7 +1,7 @@
 export const scrollIntoViewIfNeeded = (
   root: HTMLElement,
   target: HTMLElement,
-  options: Omit<ScrollToOptions, "left" | "top"> = {}
+  options: Omit<ScrollToOptions, 'left' | 'top'> = {}
 ) => {
   const hasVerticalScroll = root.scrollHeight > root.clientHeight;
   const hasHorizontalScroll = root.scrollWidth > root.clientWidth;

@@ -1,10 +1,14 @@
-"use client";
+'use client';
 
-import { format } from "date-fns";
-import { useState } from "react";
+import { format } from 'date-fns';
+import { useState } from 'react';
 
-import { DatePicker, DatePickerPanel, DatePickerTrigger } from "@/foundations/ui/date-picker/date-picker";
-import { Input } from "@/foundations/ui/input/input";
+import {
+  DatePicker,
+  DatePickerPanel,
+  DatePickerTrigger,
+} from '@/foundations/ui/date-picker/date-picker';
+import { Input } from '@/foundations/ui/input/input';
 
 export default function DatePickerDateTimePreview() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -13,7 +17,7 @@ export default function DatePickerDateTimePreview() {
     <div className="flex items-center gap-2">
       <DatePicker placement="bottom-start">
         <DatePickerTrigger className="w-60" placeholder="Select date">
-          {format(selectedDate, "PPP")}
+          {format(selectedDate, 'PPP')}
         </DatePickerTrigger>
         <DatePickerPanel
           className="w-72"

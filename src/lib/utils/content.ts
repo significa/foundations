@@ -1,4 +1,4 @@
-import type { CollectionEntry } from "astro:content";
+import type { CollectionEntry } from 'astro:content';
 
 type NavigationItem = {
   title: string;
@@ -18,12 +18,14 @@ const FOLDER_SORT_ORDER: Record<string, number> = {
   utils: 4,
 };
 
-const getNavigationItems = (collection: CollectionEntry<"pages">[]): NavigationItem[] => {
+const getNavigationItems = (
+  collection: CollectionEntry<'pages'>[]
+): NavigationItem[] => {
   const items: NavigationItem[] = [];
 
   for (const entry of collection) {
     const { title, meta } = entry.data;
-    const folder = meta?.folder || "Pages";
+    const folder = meta?.folder || 'Pages';
 
     const existingGroup = items.find((item) => item.title === folder);
 
@@ -43,12 +45,14 @@ const getNavigationItems = (collection: CollectionEntry<"pages">[]): NavigationI
   }
 
   return items.sort((a, b) => {
-    const orderA = FOLDER_SORT_ORDER[a.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
-    const orderB = FOLDER_SORT_ORDER[b.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
+    const orderA =
+      FOLDER_SORT_ORDER[a.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
+    const orderB =
+      FOLDER_SORT_ORDER[b.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
 
     return orderA - orderB;
   });
 };
 
-export { getNavigationItems };
 export type { NavigationItem };
+export { getNavigationItems };

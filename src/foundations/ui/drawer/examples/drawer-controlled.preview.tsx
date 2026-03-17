@@ -1,9 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button } from "@/foundations/ui/button/button";
-import { Drawer, DrawerActions, DrawerContent, DrawerHeader, DrawerTitle } from "@/foundations/ui/drawer/drawer";
+import { Button } from '@/foundations/ui/button/button';
+import {
+  Drawer,
+  DrawerActions,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/foundations/ui/drawer/drawer';
 
 const DrawerControlled = () => {
   const [open, setOpen] = useState(false);
@@ -23,7 +29,10 @@ const DrawerControlled = () => {
   };
 
   return (
-    <Drawer open={open} onOpenChange={(isOpen) => setOpen(isSubmitting ? true : isOpen)}>
+    <Drawer
+      open={open}
+      onOpenChange={(isOpen) => setOpen(isSubmitting ? true : isOpen)}
+    >
       <Button onClick={() => setOpen(true)}>Open Drawer</Button>
       <DrawerContent inert={isSubmitting}>
         <DrawerHeader>
@@ -40,7 +49,12 @@ const DrawerControlled = () => {
           >
             Delete Everything
           </Button>
-          <Button className="grow" variant="outline" onClick={handleCancel} disabled={isSubmitting}>
+          <Button
+            className="grow"
+            variant="outline"
+            onClick={handleCancel}
+            disabled={isSubmitting}
+          >
             I&apos;m not sure
           </Button>
         </DrawerActions>

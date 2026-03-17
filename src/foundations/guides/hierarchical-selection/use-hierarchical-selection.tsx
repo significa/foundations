@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from 'react';
 
 import {
   flattenHierarchicalData,
   getEnabledChildIds,
   getParentSelectionStatus,
   getSelectAllStatus,
-  HierarchicalItem,
-  HierarchicalSelectionState,
-  SelectionStatus,
-} from "./hierarchical-data";
+  type HierarchicalItem,
+  type HierarchicalSelectionState,
+  type SelectionStatus,
+} from './hierarchical-data';
 
 export interface UseHierarchicalSelectionOptions {
   /** Initial selected item IDs */
@@ -56,8 +56,15 @@ export interface UseHierarchicalSelectionResult {
   isParentOpen: (parentId: string) => boolean;
 }
 
-export function useHierarchicalSelection(options: UseHierarchicalSelectionOptions = {}): UseHierarchicalSelectionResult {
-  const { defaultSelected = [], defaultOpened = [], onSelectionChange, onOpenChange } = options;
+export function useHierarchicalSelection(
+  options: UseHierarchicalSelectionOptions = {}
+): UseHierarchicalSelectionResult {
+  const {
+    defaultSelected = [],
+    defaultOpened = [],
+    onSelectionChange,
+    onOpenChange,
+  } = options;
 
   // Internal state
   const [state, setState] = useState<HierarchicalSelectionState>({
@@ -66,8 +73,14 @@ export function useHierarchicalSelection(options: UseHierarchicalSelectionOption
   });
 
   // Derived values
-  const selectedArray = useMemo(() => Array.from(state.selectedIds), [state.selectedIds]);
-  const openedArray = useMemo(() => Array.from(state.openParentIds), [state.openParentIds]);
+  const selectedArray = useMemo(
+    () => Array.from(state.selectedIds),
+    [state.selectedIds]
+  );
+  const openedArray = useMemo(
+    () => Array.from(state.openParentIds),
+    [state.openParentIds]
+  );
 
   // Update callbacks when arrays change
   const notifySelectionChange = useCallback(
@@ -118,9 +131,13 @@ export function useHierarchicalSelection(options: UseHierarchicalSelectionOption
         const enabledChildIds = getEnabledChildIds(parentItem);
 
         if (checked) {
-          enabledChildIds.forEach((id) => newSelectedIds.add(id));
+          enabledChildIds.forEach((id) => {
+            newSelectedIds.add(id);
+          });
         } else {
-          enabledChildIds.forEach((id) => newSelectedIds.delete(id));
+          enabledChildIds.forEach((id) => {
+            newSelectedIds.delete(id);
+          });
         }
 
         notifySelectionChange(newSelectedIds);
@@ -146,7 +163,11 @@ export function useHierarchicalSelection(options: UseHierarchicalSelectionOption
         if (checked) {
           newSelectedIds = new Set([...prev.selectedIds, ...allEnabledIds]);
         } else {
-          newSelectedIds = new Set(Array.from(prev.selectedIds).filter((id) => !allEnabledIds.includes(id)));
+          newSelectedIds = new Set(
+            Array.from(prev.selectedIds).filter(
+              (id) => !allEnabledIds.includes(id)
+            )
+          );
         }
 
         notifySelectionChange(newSelectedIds);

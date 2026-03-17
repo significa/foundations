@@ -1,6 +1,11 @@
-import { useCallback, useEffect, useRef } from "react";
-import { Button } from "@/foundations/ui/button/button";
-import { Dropdown, DropdownItem, DropdownItems, DropdownTrigger } from "@/foundations/ui/dropdown/dropdown";
+import { useCallback, useEffect, useRef } from 'react';
+import { Button } from '@/foundations/ui/button/button';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownItems,
+  DropdownTrigger,
+} from '@/foundations/ui/dropdown/dropdown';
 
 type Theme = {
   label: string;
@@ -10,21 +15,21 @@ type Theme = {
 
 const themes: Theme[] = [
   {
-    label: "Contrast",
-    background: "var(--color-foreground)",
-    foreground: "var(--color-background)",
+    label: 'Contrast',
+    background: 'var(--color-foreground)',
+    foreground: 'var(--color-background)',
   },
-  { label: "Red", background: "oklch(0.64 0.21 25)" },
-  { label: "Orange", background: "oklch(0.7 0.19 48)" },
+  { label: 'Red', background: 'oklch(0.64 0.21 25)' },
+  { label: 'Orange', background: 'oklch(0.7 0.19 48)' },
   {
-    label: "Yellow",
-    background: "oklch(83.84% 0.172 83.57)",
-    foreground: "oklch(0 0 0)",
+    label: 'Yellow',
+    background: 'oklch(83.84% 0.172 83.57)',
+    foreground: 'oklch(0 0 0)',
   },
-  { label: "Green", background: "oklch(0.70 0.15 162)" },
-  { label: "Blue", background: "oklch(0.62 0.19 260)" },
-  { label: "Purple", background: "oklch(0.61 0.22 293)" },
-  { label: "Pink", background: "oklch(0.66 0.21 354)" },
+  { label: 'Green', background: 'oklch(0.70 0.15 162)' },
+  { label: 'Blue', background: 'oklch(0.62 0.19 260)' },
+  { label: 'Purple', background: 'oklch(0.61 0.22 293)' },
+  { label: 'Pink', background: 'oklch(0.66 0.21 354)' },
 ];
 
 const ColorAccentSelect = () => {
@@ -32,8 +37,11 @@ const ColorAccentSelect = () => {
 
   const setTheme = useCallback((theme: Theme) => {
     currentTheme.current = theme;
-    document.body.style.setProperty("--color-accent", theme.background);
-    document.body.style.setProperty("--color-accent-foreground", theme.foreground ?? "oklch(100% 0 0)");
+    document.body.style.setProperty('--color-accent', theme.background);
+    document.body.style.setProperty(
+      '--color-accent-foreground',
+      theme.foreground ?? 'oklch(100% 0 0)'
+    );
   }, []);
 
   useEffect(() => {
@@ -41,18 +49,23 @@ const ColorAccentSelect = () => {
       setTheme(currentTheme.current);
     };
 
-    document.addEventListener("astro:after-swap", onAfterSwap);
+    document.addEventListener('astro:after-swap', onAfterSwap);
 
     return () => {
-      document.removeEventListener("astro:after-swap", onAfterSwap);
+      document.removeEventListener('astro:after-swap', onAfterSwap);
     };
   }, [setTheme]);
 
   return (
     <Dropdown>
       <DropdownTrigger asChild>
-        <Button variant="ghost" size="sm" square aria-label="Accent color selection">
-          <div className="bg-accent size-3 rounded-full" />
+        <Button
+          variant="ghost"
+          size="sm"
+          square
+          aria-label="Accent color selection"
+        >
+          <div className="size-3 rounded-full bg-accent" />
         </Button>
       </DropdownTrigger>
       <DropdownItems className="w-54">
@@ -61,7 +74,7 @@ const ColorAccentSelect = () => {
             <div
               className="size-3 rounded-full bg-(--bg)"
               style={{
-                "--bg": theme.background,
+                '--bg': theme.background,
               }}
             />
             <span>{theme.label}</span>

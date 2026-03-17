@@ -1,13 +1,24 @@
-"use client";
+'use client';
 
-import { createContext, Fragment, use, useCallback, useId, useMemo, useState } from "react";
+import {
+  createContext,
+  Fragment,
+  use,
+  useCallback,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
 
 interface FieldContextType {
   id: string;
-  "aria-errormessage"?: string;
-  "aria-describedby"?: string;
-  "aria-labelledby"?: string;
-  registerElement: (type: "error" | "description" | "label", id: string) => () => void;
+  'aria-errormessage'?: string;
+  'aria-describedby'?: string;
+  'aria-labelledby'?: string;
+  registerElement: (
+    type: 'error' | 'description' | 'label',
+    id: string
+  ) => () => void;
 }
 
 const FieldContext = createContext<FieldContextType | undefined>(undefined);
@@ -57,13 +68,13 @@ const Field = ({ children, className, ...props }: FieldProps) => {
   }, []);
 
   const registerElement = useCallback(
-    (type: "error" | "description" | "label", id: string) => {
+    (type: 'error' | 'description' | 'label', id: string) => {
       switch (type) {
-        case "error":
+        case 'error':
           return registerErrorElement(id);
-        case "description":
+        case 'description':
           return registerDescriptionElement(id);
-        case "label":
+        case 'label':
           return registerLabelElement(id);
       }
     },
@@ -71,24 +82,24 @@ const Field = ({ children, className, ...props }: FieldProps) => {
   );
 
   const ariaErrormessage = useMemo(() => {
-    return errorIds.length > 0 ? errorIds.join(" ") : undefined;
+    return errorIds.length > 0 ? errorIds.join(' ') : undefined;
   }, [errorIds]);
 
   const ariaDescribedby = useMemo(() => {
-    return descriptionIds.length > 0 ? descriptionIds.join(" ") : undefined;
+    return descriptionIds.length > 0 ? descriptionIds.join(' ') : undefined;
   }, [descriptionIds]);
 
   const ariaLabelledby = useMemo(() => {
-    return labelIds.length > 0 ? labelIds.join(" ") : undefined;
+    return labelIds.length > 0 ? labelIds.join(' ') : undefined;
   }, [labelIds]);
 
   const ctx = useMemo(
     () => ({
       registerElement,
       id,
-      "aria-errormessage": ariaErrormessage,
-      "aria-describedby": ariaDescribedby,
-      "aria-labelledby": ariaLabelledby,
+      'aria-errormessage': ariaErrormessage,
+      'aria-describedby': ariaDescribedby,
+      'aria-labelledby': ariaLabelledby,
     }),
     [registerElement, id, ariaErrormessage, ariaDescribedby, ariaLabelledby]
   );
@@ -97,8 +108,9 @@ const Field = ({ children, className, ...props }: FieldProps) => {
    * If it's being used just as a wrapper around components, treat it as a fragment (kind of like a provider) to avoid changing the layout of the DOM structure.
    * On the other hand, if it has props like `className`, treat it as a div.
    */
-  const hasOnlyChildren = Object.keys(props).length === 1 && "children" in props;
-  const Comp = hasOnlyChildren ? Fragment : "div";
+  const hasOnlyChildren =
+    Object.keys(props).length === 1 && 'children' in props;
+  const Comp = hasOnlyChildren ? Fragment : 'div';
 
   return (
     <FieldContext value={ctx}>

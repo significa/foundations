@@ -1,81 +1,85 @@
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
-import { useCallback, useEffect, useState } from "react";
-import { Button } from "@/foundations/ui/button/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/foundations/ui/dialog/dialog";
-import { Spinner } from "@/foundations/ui/spinner/spinner";
-import type { Pagefind } from "@/lib/types/pagefind";
-import { cn } from "@/lib/utils/classnames";
-import { WarningCircleIcon } from "@phosphor-icons/react";
+import { WarningCircleIcon } from '@phosphor-icons/react';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
+import { useCallback, useEffect, useState } from 'react';
+import { Button } from '@/foundations/ui/button/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from '@/foundations/ui/dialog/dialog';
+import { Spinner } from '@/foundations/ui/spinner/spinner';
+import type { Pagefind } from '@/lib/types/pagefind';
+import { cn } from '@/lib/utils/classnames';
 
 const MAX_ITEMS_PER_GROUP = 7;
 
 const HIGHLIGHTS: Result[] = [
   {
-    group: "Introduction",
+    group: 'Introduction',
     items: [
       {
-        title: "About",
-        href: "/about",
+        title: 'About',
+        href: '/about',
       },
       {
-        title: "Setup",
-        href: "/setup",
+        title: 'Setup',
+        href: '/setup',
       },
     ],
   },
   {
-    group: "UI",
+    group: 'UI',
     items: [
       {
-        title: "Button",
-        href: "/ui/button",
+        title: 'Button',
+        href: '/ui/button',
       },
       {
-        title: "Dropdown",
-        href: "/ui/dropdown",
+        title: 'Dropdown',
+        href: '/ui/dropdown',
       },
       {
-        title: "Input",
-        href: "/ui/input",
+        title: 'Input',
+        href: '/ui/input',
       },
     ],
   },
   {
-    group: "Components",
+    group: 'Components',
     items: [
       {
-        title: "InstanceCounter",
-        href: "/components/instance-counter",
+        title: 'InstanceCounter',
+        href: '/components/instance-counter',
       },
       {
-        title: "Slot",
-        href: "/components/slot",
+        title: 'Slot',
+        href: '/components/slot',
       },
     ],
   },
   {
-    group: "Hooks",
+    group: 'Hooks',
     items: [
       {
-        title: "useIntersectionObserver",
-        href: "/hooks/use-intersection-observer",
+        title: 'useIntersectionObserver',
+        href: '/hooks/use-intersection-observer',
       },
       {
-        title: "useScrollLock",
-        href: "/hooks/use-scroll-lock",
+        title: 'useScrollLock',
+        href: '/hooks/use-scroll-lock',
       },
     ],
   },
   {
-    group: "Guides",
+    group: 'Guides',
     items: [
       {
-        title: "Accessible Forms",
-        href: "/guides/accessible-form",
+        title: 'Accessible Forms',
+        href: '/guides/accessible-form',
       },
       {
-        title: "Automated Tests",
-        href: "/guides/automated-tests",
+        title: 'Automated Tests',
+        href: '/guides/automated-tests',
       },
     ],
   },
@@ -90,7 +94,7 @@ const Search = () => {
   const [pagefind, isPagefindError] = usePagefind();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [results, setResults] = useState<Result[]>(HIGHLIGHTS);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -111,14 +115,16 @@ const Search = () => {
           return {
             title: data.meta.title,
             folder: data.meta.folder,
-            href: data.url.replace(".html", ""),
+            href: data.url.replace('.html', ''),
           };
         })
       );
 
       const groupedMatches = matches.reduce((acc, result) => {
-        const group = result.folder || "other";
-        const existingGroupIndex = acc.findIndex((item) => item.group === group);
+        const group = result.folder || 'other';
+        const existingGroupIndex = acc.findIndex(
+          (item) => item.group === group
+        );
 
         if (existingGroupIndex !== -1) {
           acc[existingGroupIndex] = {
@@ -128,13 +134,12 @@ const Search = () => {
 
           return acc;
         } else {
-          return [
-            ...acc,
-            {
-              group: group,
-              items: [result],
-            },
-          ];
+          acc.push({
+            group: group,
+            items: [result],
+          });
+
+          return acc;
         }
       }, [] as Result[]);
 
@@ -146,7 +151,7 @@ const Search = () => {
 
   // Perform search whenever the query changes
   useEffect(() => {
-    if (query === "") {
+    if (query === '') {
       setResults(HIGHLIGHTS);
       setIsLoading(false);
       return;
@@ -159,21 +164,21 @@ const Search = () => {
   // Listen for Cmd+K or Ctrl+K to open the search dialog
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsOpen(true);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   return (
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        setQuery("");
+        setQuery('');
         setResults(HIGHLIGHTS);
         setIsOpen(open);
       }}
@@ -184,10 +189,21 @@ const Search = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent catchFocus={false} className="flex h-100 max-h-[70svh] flex-col rounded-xl p-0">
-        <div className={cn("border-border bg-background sticky top-0 z-10 flex w-full items-center border-b px-3.5 py-3")}>
+      <DialogContent
+        catchFocus={false}
+        className="flex h-100 max-h-[70svh] flex-col rounded-xl p-0"
+      >
+        <div
+          className={cn(
+            'sticky top-0 z-10 flex w-full items-center border-border border-b bg-background px-3.5 py-3'
+          )}
+        >
           <div className="flex size-4 items-center justify-center overflow-hidden">
-            {isLoading ? <Spinner className="size-3" /> : <MagnifyingGlassIcon className="mt-0.5 size-4" />}
+            {isLoading ? (
+              <Spinner className="size-3" />
+            ) : (
+              <MagnifyingGlassIcon className="mt-0.5 size-4" />
+            )}
           </div>
           <input
             type="text"
@@ -201,14 +217,14 @@ const Search = () => {
         <div className="flex flex-col gap-4 overflow-y-auto p-2 pt-4 pb-1">
           {isPagefindError ? (
             <div className="text-foreground-secondary">
-              <div className="text-foreground-secondary flex items-center justify-center gap-1 p-3.5 text-sm">
+              <div className="flex items-center justify-center gap-1 p-3.5 text-foreground-secondary text-sm">
                 <WarningCircleIcon />
                 Could not load Pagefind instance.
               </div>
               {import.meta.env.DEV && (
-                <div className="mt-4 space-y-1 text-center text-xs text-balance">
+                <div className="mt-4 space-y-1 text-balance text-center text-xs">
                   <p>Generate a development Pagefind instance by running</p>
-                  <code className="bg-foreground/4 mx-1 rounded-sm border px-1 py-0.5 leading-[2] font-[0.95rem]">
+                  <code className="mx-1 rounded-sm border bg-foreground/4 px-1 py-0.5 font-[0.95rem] leading-[2]">
                     pnpm dev:pagefind
                   </code>
                 </div>
@@ -217,18 +233,23 @@ const Search = () => {
           ) : (
             <>
               {results.map((result) => {
-                const clampedResults = [...result.items].splice(0, MAX_ITEMS_PER_GROUP);
+                const clampedResults = [...result.items].splice(
+                  0,
+                  MAX_ITEMS_PER_GROUP
+                );
                 if (clampedResults.length === 0) return null;
 
                 return (
                   <div key={result.group}>
-                    <h2 className="text-foreground-secondary mb-2 px-2.5 text-xs capitalize">{result.group}</h2>
+                    <h2 className="mb-2 px-2.5 text-foreground-secondary text-xs capitalize">
+                      {result.group}
+                    </h2>
                     <div className="flex flex-col gap-0.5">
                       {clampedResults.map((item) => (
                         <a
                           key={item.href}
                           href={item.href}
-                          className="hover:bg-background-secondary ring-ring block rounded-lg px-2.5 py-1.5 text-sm focus-visible:ring-4 focus-visible:outline-none"
+                          className="block rounded-lg px-2.5 py-1.5 text-sm ring-ring hover:bg-background-secondary focus-visible:outline-none focus-visible:ring-4"
                           onClick={() => setIsOpen(false)}
                         >
                           {item.title}
@@ -239,7 +260,7 @@ const Search = () => {
                 );
               })}
               {!!query && !isLoading && results.length === 0 && (
-                <div className="text-foreground-secondary flex h-full items-center justify-center gap-1 p-3.5 text-sm">
+                <div className="flex h-full items-center justify-center gap-1 p-3.5 text-foreground-secondary text-sm">
                   <WarningCircleIcon />
                   No results found.
                 </div>
@@ -259,12 +280,12 @@ const usePagefind = () => {
   useEffect(() => {
     const loadPagefind = async () => {
       try {
-        // use eval to circumvent vite and use native dynamic module import
-        await eval(`import("/pagefind/pagefind.js")`).then((mod) => {
+        // biome-ignore lint/security/noGlobalEval: use eval to circumvent vite and use native dynamic module import
+        await eval(`import("/pagefind/pagefind.js")`).then((mod: Pagefind) => {
           setInstance(mod);
         });
       } catch (e) {
-        console.error("Failed to load Pagefind instance:", e);
+        console.error('Failed to load Pagefind instance:', e);
         setIsError(true);
       }
     };

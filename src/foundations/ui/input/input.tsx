@@ -1,38 +1,56 @@
-"use client";
+'use client';
 
-import type { VariantProps } from "cva";
-import { Children, createContext, isValidElement, use, useLayoutEffect, useRef, useState } from "react";
+import type { VariantProps } from 'cva';
+import {
+  Children,
+  createContext,
+  isValidElement,
+  use,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn, cva } from "@/lib/utils/classnames";
+import { Slot } from '@/foundations/components/slot/slot';
+import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
+import { cn, cva } from '@/lib/utils/classnames';
 
 const inputStyle = cva({
   base: [
-    "transition",
-    "h-10 w-full rounded-xl border px-4 py-1 text-base font-medium",
-    "focus-visible:border-accent focus-visible:ring-ring focus-visible:text-foreground text-foreground/80 placeholder:text-foreground-secondary focus:outline-none focus-visible:ring-4 disabled:cursor-not-allowed disabled:opacity-50 data-invalid:border-red-500 data-invalid:hover:border-red-600 data-invalid:focus-visible:border-red-500 data-invalid:focus-visible:ring-red-500/20",
-    "pl-(--prefix-width,calc(var(--spacing)*4))",
-    "pr-(--suffix-width,calc(var(--spacing)*4))",
+    'transition',
+    'h-10 w-full rounded-xl border px-4 py-1 font-medium text-base',
+    'text-foreground/80 placeholder:text-foreground-secondary focus:outline-none focus-visible:border-accent focus-visible:text-foreground focus-visible:ring-4 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-invalid:border-red-500 data-invalid:focus-visible:border-red-500 data-invalid:focus-visible:ring-red-500/20 data-invalid:hover:border-red-600',
+    'pl-(--prefix-width,calc(var(--spacing)*4))',
+    'pr-(--suffix-width,calc(var(--spacing)*4))',
   ],
   variants: {
     variant: {
-      default: "border-border bg-background hover:border-mix-border/8 shadow-xs",
-      minimal: "hover:bg-background-secondary focus-visible:bg-background border-transparent bg-transparent",
+      default:
+        'border-border bg-background shadow-xs hover:border-mix-border/8',
+      minimal:
+        'border-transparent bg-transparent hover:bg-background-secondary focus-visible:bg-background',
     },
   },
   defaultVariants: {
-    variant: "default",
+    variant: 'default',
   },
 });
 
-interface InputProps extends Omit<React.ComponentPropsWithRef<"input">, "size"> {
+interface InputProps
+  extends Omit<React.ComponentPropsWithRef<'input'>, 'size'> {
   invalid?: boolean;
-  variant?: VariantProps<typeof inputStyle>["variant"];
+  variant?: VariantProps<typeof inputStyle>['variant'];
 }
 
 const Input = ({ className, invalid, variant, ...props }: InputProps) => {
-  return <input data-invalid={invalid} aria-invalid={invalid} className={cn(inputStyle({ variant }), className)} {...props} />;
+  return (
+    <input
+      data-invalid={invalid}
+      aria-invalid={invalid}
+      className={cn(inputStyle({ variant }), className)}
+      {...props}
+    />
+  );
 };
 
 interface InputGroupContextType {
@@ -53,37 +71,49 @@ const useInputGroup = () => {
   const ctx = use(InputGroupContext);
 
   if (!ctx) {
-    throw new Error("InputGroup must be used within an InputGroupContext");
+    throw new Error('InputGroup must be used within an InputGroupContext');
   }
 
   return ctx;
 };
 
-const InputGroup = ({ className, style, ...props }: React.ComponentPropsWithRef<"div">) => {
+const InputGroup = ({
+  className,
+  style,
+  ...props
+}: React.ComponentPropsWithRef<'div'>) => {
   const [prefixWidth, setPrefixWidth] = useState(0);
   const [suffixWidth, setSuffixWidth] = useState(0);
 
   // check if there are more than one InputPrefix or InputSuffix
   const tooManyPrefixes =
-    Children.toArray(props.children).filter((child) => isValidElement(child) && child.type === InputPrefix).length > 1;
+    Children.toArray(props.children).filter(
+      (child) => isValidElement(child) && child.type === InputPrefix
+    ).length > 1;
 
   const tooManySuffixes =
-    Children.toArray(props.children).filter((child) => isValidElement(child) && child.type === InputSuffix).length > 1;
+    Children.toArray(props.children).filter(
+      (child) => isValidElement(child) && child.type === InputSuffix
+    ).length > 1;
 
   if (tooManyPrefixes || tooManySuffixes) {
-    throw new Error("InputGroup cannot have more than one InputPrefix or InputSuffix");
+    throw new Error(
+      'InputGroup cannot have more than one InputPrefix or InputSuffix'
+    );
   }
 
   return (
-    <InputGroupContext value={{ prefixWidth, suffixWidth, setPrefixWidth, setSuffixWidth }}>
+    <InputGroupContext
+      value={{ prefixWidth, suffixWidth, setPrefixWidth, setSuffixWidth }}
+    >
       <div
-        className={cn("relative", className)}
+        className={cn('relative', className)}
         style={{
           ...(prefixWidth > 0 && {
-            "--prefix-width": `calc(${prefixWidth}px + var(--spacing)*5.5)`,
+            '--prefix-width': `calc(${prefixWidth}px + var(--spacing)*5.5)`,
           }),
           ...(suffixWidth > 0 && {
-            "--suffix-width": `calc(${suffixWidth}px + var(--spacing)*5.5)`,
+            '--suffix-width': `calc(${suffixWidth}px + var(--spacing)*5.5)`,
           }),
           ...style,
         }}
@@ -93,7 +123,7 @@ const InputGroup = ({ className, style, ...props }: React.ComponentPropsWithRef<
   );
 };
 
-interface InputPrefixProps extends React.ComponentPropsWithRef<"div"> {
+interface InputPrefixProps extends React.ComponentPropsWithRef<'div'> {
   asChild?: boolean;
 }
 
@@ -103,7 +133,7 @@ const InputPrefix = (props: InputPrefixProps) => {
   return <InputAddon {...props} onSetWidth={setPrefixWidth} />;
 };
 
-interface InputSuffixProps extends React.ComponentPropsWithRef<"div"> {
+interface InputSuffixProps extends React.ComponentPropsWithRef<'div'> {
   asChild?: boolean;
 }
 
@@ -113,13 +143,19 @@ const InputSuffix = (props: InputSuffixProps) => {
   return <InputAddon {...props} onSetWidth={setSuffixWidth} />;
 };
 
-interface InputAddonProps extends React.ComponentPropsWithRef<"div"> {
+interface InputAddonProps extends React.ComponentPropsWithRef<'div'> {
   onSetWidth?: (width: number) => void;
   asChild?: boolean;
 }
 
-const InputAddon = ({ ref, className, onSetWidth, asChild, ...props }: InputAddonProps) => {
-  const Comp = asChild ? Slot : "div";
+const InputAddon = ({
+  ref,
+  className,
+  onSetWidth,
+  asChild,
+  ...props
+}: InputAddonProps) => {
+  const Comp = asChild ? Slot : 'div';
   const internalRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
@@ -142,8 +178,8 @@ const InputAddon = ({ ref, className, onSetWidth, asChild, ...props }: InputAddo
     <Comp
       data-input-addon
       className={cn(
-        "absolute top-1/2 flex -translate-y-1/2 items-center justify-center text-base font-medium",
-        "text-foreground pointer-events-none first:left-4 last:right-4",
+        'absolute top-1/2 flex -translate-y-1/2 items-center justify-center font-medium text-base',
+        'pointer-events-none text-foreground first:left-4 last:right-4',
         className
       )}
       ref={composeRefs(ref, internalRef)}
@@ -152,4 +188,4 @@ const InputAddon = ({ ref, className, onSetWidth, asChild, ...props }: InputAddo
   );
 };
 
-export { Input, InputGroup, InputPrefix, inputStyle, InputSuffix };
+export { Input, InputGroup, InputPrefix, InputSuffix, inputStyle };

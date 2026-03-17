@@ -1,6 +1,16 @@
-import { CreditCardIcon, GearIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  CreditCardIcon,
+  GearIcon,
+  UsersIcon,
+} from '@phosphor-icons/react/dist/ssr';
 
-import { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels } from "@/foundations/ui/tabs/tabs";
+import {
+  Tabs,
+  TabsItem,
+  TabsItems,
+  TabsPanel,
+  TabsPanels,
+} from '@/foundations/ui/tabs/tabs';
 
 export default function TabsPreview() {
   return (

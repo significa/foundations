@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Dialog,
   DialogActions,
@@ -9,7 +9,7 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/foundations/ui/dialog/dialog";
+} from '@/foundations/ui/dialog/dialog';
 
 export default function DialogDestructivePreview() {
   return (
@@ -20,7 +20,8 @@ export default function DialogDestructivePreview() {
       <DialogContent className="w-80">
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogDescription>
-          This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+          This action cannot be undone. This will permanently delete your
+          account and remove your data from our servers.
         </DialogDescription>
         <DialogActions>
           <Button variant="destructive">Delete everything</Button>

@@ -1,5 +1,10 @@
-import { Button } from "@/foundations/ui/button/button";
-import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/foundations/ui/popover/popover";
+import { Button } from '@/foundations/ui/button/button';
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/foundations/ui/popover/popover';
 
 export default function PopoverModalPreview() {
   return (
@@ -9,9 +14,10 @@ export default function PopoverModalPreview() {
       </PopoverTrigger>
       <PopoverContent className="flex flex-col gap-4">
         <div>
-          <h3 className="mb-1 text-sm font-medium">This is a modal popover</h3>
+          <h3 className="mb-1 font-medium text-sm">This is a modal popover</h3>
           <p className="text-foreground-secondary text-sm">
-            It will trap focus inside. Very useful for popovers with advanced interactions inside (like forms)
+            It will trap focus inside. Very useful for popovers with advanced
+            interactions inside (like forms)
           </p>
         </div>
         <div className="flex items-center gap-2">

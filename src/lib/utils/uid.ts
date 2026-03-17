@@ -7,7 +7,7 @@ function* createUidGenerator(): Generator<number, never, unknown> {
 
 const generator = createUidGenerator();
 
-const uid = (prefix = "uid-"): string => {
+const uid = (prefix = 'uid-'): string => {
   const id = generator.next().value;
   return prefix ? `${prefix}${id}` : `${id}`;
 };

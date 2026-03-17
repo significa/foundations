@@ -1,10 +1,19 @@
-"use client";
+'use client';
 
-import { InfoIcon } from "@phosphor-icons/react";
-import { useRef } from "react";
+import { InfoIcon } from '@phosphor-icons/react';
+import { useRef } from 'react';
 
-import { Input, InputGroup, InputPrefix, InputSuffix } from "@/foundations/ui/input/input";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/foundations/ui/tooltip/tooltip";
+import {
+  Input,
+  InputGroup,
+  InputPrefix,
+  InputSuffix,
+} from '@/foundations/ui/input/input';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/foundations/ui/tooltip/tooltip';
 
 export default function InputInteractiveAddon() {
   const input = useRef<HTMLInputElement>(null);
@@ -13,7 +22,9 @@ export default function InputInteractiveAddon() {
     <div className="w-90">
       <InputGroup>
         <InputPrefix className="pointer-events-auto" asChild>
-          <button onClick={() => alert("interactive")}>+351</button>
+          <button type="button" onClick={() => alert('interactive')}>
+            +351
+          </button>
         </InputPrefix>
         <Input ref={input} placeholder="000 000 000" />
         <InputSuffix className="pointer-events-auto">

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils/classnames";
+import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils/classnames';
 
 type TableOfContentsProps = {
   headings: {
@@ -10,7 +10,7 @@ type TableOfContentsProps = {
 };
 
 const TableOfContents = ({ headings }: TableOfContentsProps) => {
-  const [activeSlug, setActiveSlug] = useState(headings[0]?.slug ?? "");
+  const [activeSlug, setActiveSlug] = useState(headings[0]?.slug ?? '');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -21,10 +21,12 @@ const TableOfContents = ({ headings }: TableOfContentsProps) => {
           }
         });
       },
-      { rootMargin: "-56px 0px -80%" } // header height 56px
+      { rootMargin: '-56px 0px -80%' } // header height 56px
     );
 
-    const headingElements = headings.map(({ slug }) => document.getElementById(slug));
+    const headingElements = headings.map(({ slug }) =>
+      document.getElementById(slug)
+    );
 
     headingElements.forEach((element) => {
       if (element) observer.observe(element);
@@ -40,12 +42,12 @@ const TableOfContents = ({ headings }: TableOfContentsProps) => {
       {headings.map(({ slug, depth, text }) => (
         <a
           className={cn(
-            "ml-[max(0px,calc(--spacing(4)*var(--level)))] inline-block py-0.5 opacity-60 transition",
-            activeSlug === slug && "opacity-100"
+            'ml-[max(0px,calc(--spacing(4)*var(--level)))] inline-block py-0.5 opacity-60 transition',
+            activeSlug === slug && 'opacity-100'
           )}
           key={slug}
           href={`#${slug}`}
-          style={{ "--level": depth - 2 }}
+          style={{ '--level': depth - 2 }}
         >
           {text}
         </a>

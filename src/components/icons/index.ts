@@ -1,2 +1,2 @@
-export * from "./octocat";
-export * from "./egg";
+export * from './egg';
+export * from './octocat';

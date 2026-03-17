@@ -1,6 +1,16 @@
-"use client";
+'use client';
 
-import { createContext, type ReactNode, use, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  createContext,
+  type ReactNode,
+  use,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 interface InstanceCounterContextType {
   getIndex: (key: string) => number;
@@ -17,7 +27,10 @@ interface InstanceCounterProviderProps {
   onChange?: (length: number) => void;
 }
 
-const InstanceCounterProvider = ({ children, onChange }: InstanceCounterProviderProps) => {
+const InstanceCounterProvider = ({
+  children,
+  onChange,
+}: InstanceCounterProviderProps) => {
   const [seed, setSeed] = useState(0);
 
   const keys = useRef<string[]>([]);
@@ -54,9 +67,13 @@ const InstanceCounterProvider = ({ children, onChange }: InstanceCounterProvider
 
   useEffect(() => {
     onChange?.(keys.current.length);
-  }, [seed, onChange]);
+  }, [onChange]);
 
-  return <InstanceCounterContext value={{ getIndex, invalidate }}>{children}</InstanceCounterContext>;
+  return (
+    <InstanceCounterContext value={{ getIndex, invalidate }}>
+      {children}
+    </InstanceCounterContext>
+  );
 };
 
 const useInstanceCounter = () => {
@@ -64,7 +81,9 @@ const useInstanceCounter = () => {
   const context = use(InstanceCounterContext);
 
   if (!context) {
-    throw new Error("useInstanceCounter must be used within an InstanceCounterProvider");
+    throw new Error(
+      'useInstanceCounter must be used within an InstanceCounterProvider'
+    );
   }
 
   const { getIndex, invalidate } = context;
@@ -72,7 +91,7 @@ const useInstanceCounter = () => {
   useEffect(() => {
     invalidate();
     return () => invalidate();
-  }, [invalidate, id]);
+  }, [invalidate]);
 
   return useMemo(() => getIndex(id), [getIndex, id]);
 };

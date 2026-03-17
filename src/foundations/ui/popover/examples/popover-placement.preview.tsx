@@ -1,5 +1,9 @@
-import { Button } from "@/foundations/ui/button/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/foundations/ui/popover/popover";
+import { Button } from '@/foundations/ui/button/button';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/foundations/ui/popover/popover';
 
 export default function PopoverPlacementPreview() {
   return (

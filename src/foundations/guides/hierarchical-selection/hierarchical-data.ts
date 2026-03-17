@@ -18,7 +18,9 @@ export interface SelectionStatus {
 /**
  * Flattens a hierarchical data structure to get only leaf items (items without children)
  */
-export function flattenHierarchicalData(items: HierarchicalItem[]): HierarchicalItem[] {
+export function flattenHierarchicalData(
+  items: HierarchicalItem[]
+): HierarchicalItem[] {
   return items.reduce<HierarchicalItem[]>((acc, item) => {
     if (item.children) {
       acc.push(...flattenHierarchicalData(item.children));
@@ -50,7 +52,10 @@ export function getEnabledChildIds(item: HierarchicalItem): string[] {
 /**
  * Determines the selection status of a parent item based on its children
  */
-export function getParentSelectionStatus(parentItem: HierarchicalItem, selectedIds: Set<string>): SelectionStatus {
+export function getParentSelectionStatus(
+  parentItem: HierarchicalItem,
+  selectedIds: Set<string>
+): SelectionStatus {
   if (parentItem.disabled) {
     return { checked: false, indeterminate: false };
   }
@@ -61,7 +66,9 @@ export function getParentSelectionStatus(parentItem: HierarchicalItem, selectedI
     return { checked: false, indeterminate: false };
   }
 
-  const selectedChildCount = enabledChildIds.filter((id) => selectedIds.has(id)).length;
+  const selectedChildCount = enabledChildIds.filter((id) =>
+    selectedIds.has(id)
+  ).length;
 
   if (selectedChildCount === 0) {
     return { checked: false, indeterminate: false };
@@ -75,7 +82,10 @@ export function getParentSelectionStatus(parentItem: HierarchicalItem, selectedI
 /**
  * Gets the selection status for "select all" functionality
  */
-export function getSelectAllStatus(items: HierarchicalItem[], selectedIds: Set<string>): SelectionStatus {
+export function getSelectAllStatus(
+  items: HierarchicalItem[],
+  selectedIds: Set<string>
+): SelectionStatus {
   const allEnabledIds = flattenHierarchicalData(items)
     .filter((item) => !item.disabled)
     .map((item) => item.id);
@@ -84,7 +94,9 @@ export function getSelectAllStatus(items: HierarchicalItem[], selectedIds: Set<s
     return { checked: false, indeterminate: false };
   }
 
-  const selectedEnabledCount = allEnabledIds.filter((id) => selectedIds.has(id)).length;
+  const selectedEnabledCount = allEnabledIds.filter((id) =>
+    selectedIds.has(id)
+  ).length;
 
   if (selectedEnabledCount === 0) {
     return { checked: false, indeterminate: false };
@@ -98,14 +110,19 @@ export function getSelectAllStatus(items: HierarchicalItem[], selectedIds: Set<s
 /**
  * Filters hierarchical data based on a search query
  */
-export function filterHierarchicalData(items: HierarchicalItem[], searchQuery: string): HierarchicalItem[] {
+export function filterHierarchicalData(
+  items: HierarchicalItem[],
+  searchQuery: string
+): HierarchicalItem[] {
   if (!searchQuery.trim()) return items;
 
   const query = searchQuery.toLowerCase();
 
   return items
     .map((item) => {
-      const matchingChildren = item.children?.filter((child) => child.label.toLowerCase().includes(query));
+      const matchingChildren = item.children?.filter((child) =>
+        child.label.toLowerCase().includes(query)
+      );
 
       if (item.label.toLowerCase().includes(query)) {
         return item;

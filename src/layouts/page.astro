@@ -1,11 +1,11 @@
 ---
-import Header from "@/components/header.astro";
-import Footer from "@/components/footer.astro";
-import { cn } from "@/lib/utils/classnames";
-import { Menu } from "@/components/menu";
 import { getCollection } from "astro:content";
-import { getNavigationItems } from "@/lib/utils/content";
 import type { HTMLAttributes } from "astro/types";
+import Footer from "@/components/footer.astro";
+import Header from "@/components/header.astro";
+import { Menu } from "@/components/menu";
+import { cn } from "@/lib/utils/classnames";
+import { getNavigationItems } from "@/lib/utils/content";
 
 const pages = await getCollection("pages");
 

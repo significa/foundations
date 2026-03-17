@@ -1,4 +1,4 @@
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 
 export default function ButtonVariantsPreview() {
   return (

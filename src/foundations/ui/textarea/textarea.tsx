@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import type { VariantProps } from "cva";
-import { useEffect, useRef, useState } from "react";
+import type { VariantProps } from 'cva';
+import { useEffect, useRef, useState } from 'react';
 
-import { inputStyle } from "@/foundations/ui/input/input";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn } from "@/lib/utils/classnames";
+import { inputStyle } from '@/foundations/ui/input/input';
+import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
+import { cn } from '@/lib/utils/classnames';
 
-interface TextareaProps extends React.ComponentPropsWithRef<"textarea"> {
+interface TextareaProps extends React.ComponentPropsWithRef<'textarea'> {
   invalid?: boolean;
-  variant?: VariantProps<typeof inputStyle>["variant"];
+  variant?: VariantProps<typeof inputStyle>['variant'];
 }
 
 const Textarea = ({ className, invalid, variant, ...props }: TextareaProps) => {
@@ -17,7 +17,11 @@ const Textarea = ({ className, invalid, variant, ...props }: TextareaProps) => {
     <textarea
       data-invalid={invalid}
       aria-invalid={invalid}
-      className={cn(inputStyle({ variant }), "h-auto resize-none py-2 leading-snug", className)}
+      className={cn(
+        inputStyle({ variant }),
+        'h-auto resize-none py-2 leading-snug',
+        className
+      )}
       {...props}
     />
   );
@@ -41,12 +45,19 @@ const TextareaResize = ({ ref, ...props }: TextareaProps) => {
 
   useEffect(() => {
     if (internalRef.current) {
-      internalRef.current.style.height = "auto";
+      internalRef.current.style.height = 'auto';
       internalRef.current.style.height = `${internalRef.current.scrollHeight}px`;
     }
-  }, [value]);
+  }, []);
 
-  return <Textarea ref={composeRefs(ref, internalRef)} {...props} value={value} onChange={handleChange} />;
+  return (
+    <Textarea
+      ref={composeRefs(ref, internalRef)}
+      {...props}
+      value={value}
+      onChange={handleChange}
+    />
+  );
 };
 
 export { Textarea, TextareaResize };

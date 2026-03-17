@@ -1,15 +1,15 @@
 ---
 import { getCollection, render } from "astro:content";
+import { ArrowSquareOutIcon, PackageIcon, PencilIcon } from "@phosphor-icons/react";
 import CodeBlock from "@/components/code-block.astro";
-import SourceCode from "@/components/source-code.astro";
 import Preview from "@/components/preview.astro";
-import Shell from "@/layouts/shell.astro";
-import PageLayout from "@/layouts/page.astro";
 import PropsTable from "@/components/props-table.astro";
+import SourceCode from "@/components/source-code.astro";
 import { TableOfContents } from "@/components/table-of-contents";
-import { GITHUB_REPO_URL } from "@/lib/constants";
-import { PencilIcon, PackageIcon, ArrowSquareOutIcon } from "@phosphor-icons/react";
 import { Badge, BadgeIcon } from "@/foundations/ui/badge/badge";
+import PageLayout from "@/layouts/page.astro";
+import Shell from "@/layouts/shell.astro";
+import { GITHUB_REPO_URL } from "@/lib/constants";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");

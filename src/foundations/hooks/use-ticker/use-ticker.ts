@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 type Ticker = {
   start: () => void;
@@ -6,7 +6,7 @@ type Ticker = {
   paused: boolean;
 };
 
-type TickerCallback = (timestamp: number, delta: number) => void | boolean;
+type TickerCallback = (timestamp: number, delta: number) => undefined | boolean;
 
 const MIN_DELTA = 0.000000001;
 

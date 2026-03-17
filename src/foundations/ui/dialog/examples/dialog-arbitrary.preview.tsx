@@ -1,7 +1,12 @@
-import { XIcon } from "@phosphor-icons/react/dist/ssr";
+import { XIcon } from '@phosphor-icons/react/dist/ssr';
 
-import { Button } from "@/foundations/ui/button/button";
-import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/foundations/ui/dialog/dialog";
+import { Button } from '@/foundations/ui/button/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from '@/foundations/ui/dialog/dialog';
 
 export default function DialogArbitraryPreview() {
   return (
@@ -16,9 +21,11 @@ export default function DialogArbitraryPreview() {
           </Button>
         </DialogClose>
         <div className="flex flex-col items-center rounded-2xl p-6">
-          <div className="border-border bg-background-secondary mb-4 size-24 rounded-full border" />
-          <h2 className="text-xl font-semibold">John Doe</h2>
-          <p className="text-foreground-secondary mb-4 text-sm">Software Engineer</p>
+          <div className="mb-4 size-24 rounded-full border border-border bg-background-secondary" />
+          <h2 className="font-semibold text-xl">John Doe</h2>
+          <p className="mb-4 text-foreground-secondary text-sm">
+            Software Engineer
+          </p>
           <div className="mb-6 flex space-x-4">
             <div className="text-center">
               <p className="font-semibold">1.2k</p>

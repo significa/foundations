@@ -1,4 +1,9 @@
-import { Slider, SliderRange, SliderThumb, SliderTrack } from "@/foundations/ui/slider/slider";
+import {
+  Slider,
+  SliderRange,
+  SliderThumb,
+  SliderTrack,
+} from '@/foundations/ui/slider/slider';
 
 export default function SliderPreview() {
   return (

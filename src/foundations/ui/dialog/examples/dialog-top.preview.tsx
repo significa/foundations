@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Dialog,
   DialogActions,
@@ -9,7 +9,7 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/foundations/ui/dialog/dialog";
+} from '@/foundations/ui/dialog/dialog';
 
 export default function DialogTopPreview() {
   return (
@@ -19,7 +19,9 @@ export default function DialogTopPreview() {
       </DialogTrigger>
       <DialogContent align="top">
         <DialogTitle>Unsaved changes</DialogTitle>
-        <DialogDescription>Are you sure you want to leave this page?</DialogDescription>
+        <DialogDescription>
+          Are you sure you want to leave this page?
+        </DialogDescription>
         <DialogActions>
           <Button>Confirm</Button>
           <DialogClose asChild>

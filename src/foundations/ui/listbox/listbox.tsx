@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
 import {
   autoUpdate,
-  flip,
   FloatingList,
+  flip,
   offset,
   type Placement,
   shift,
   size,
+  type UseFloatingReturn,
+  type UseInteractionsReturn,
   useClick,
   useDismiss,
   useFloating,
-  type UseFloatingReturn,
   useInteractions,
-  type UseInteractionsReturn,
   useListItem,
   useListNavigation,
   useMergeRefs,
   useRole,
   useTypeahead,
-} from "@floating-ui/react";
-import { CaretUpDownIcon, CheckIcon } from "@phosphor-icons/react";
-import type { VariantProps } from "cva";
+} from '@floating-ui/react';
+import { CaretUpDownIcon, CheckIcon } from '@phosphor-icons/react';
+import type { VariantProps } from 'cva';
 import {
   Children,
   createContext,
@@ -33,25 +33,32 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import { Divider } from "@/foundations/ui/divider/divider";
-import { inputStyle } from "@/foundations/ui/input/input";
-import { PopoverEmpty, PopoverPanel, PopoverSearchInput } from "@/foundations/ui/popover/popover";
-import { cn } from "@/lib/utils/classnames";
+import { Divider } from '@/foundations/ui/divider/divider';
+import { inputStyle } from '@/foundations/ui/input/input';
+import {
+  PopoverEmpty,
+  PopoverPanel,
+  PopoverSearchInput,
+} from '@/foundations/ui/popover/popover';
+import { cn } from '@/lib/utils/classnames';
 
 // Utils
 
-const hasChildren = (props: unknown): props is { children: React.ReactNode } => {
-  return typeof props === "object" && props !== null && "children" in props;
+const hasChildren = (
+  props: unknown
+): props is { children: React.ReactNode } => {
+  return typeof props === 'object' && props !== null && 'children' in props;
 };
 
 export function getTextContent(children: React.ReactNode): string {
-  if (typeof children === "string") return children;
-  if (typeof children === "number") return children.toString();
-  if (Array.isArray(children)) return children.map(getTextContent).join("");
-  if (isValidElement(children) && hasChildren(children.props)) return getTextContent(children.props.children);
-  return "";
+  if (typeof children === 'string') return children;
+  if (typeof children === 'number') return children.toString();
+  if (Array.isArray(children)) return children.map(getTextContent).join('');
+  if (isValidElement(children) && hasChildren(children.props))
+    return getTextContent(children.props.children);
+  return '';
 }
 
 // Context
@@ -62,7 +69,9 @@ type Option<T = string> = {
   disabled?: boolean;
 };
 
-interface ListboxContextType<T = string> extends UseFloatingReturn, UseInteractionsReturn {
+interface ListboxContextType<T = string>
+  extends UseFloatingReturn,
+    UseInteractionsReturn {
   elementsRef: React.RefObject<(HTMLElement | null)[]>;
   labelsRef: React.RefObject<string[]>;
   setOptions: (options: Option<T>[]) => void;
@@ -76,14 +85,16 @@ interface ListboxContextType<T = string> extends UseFloatingReturn, UseInteracti
   getIsSelected: (a: T, b: T) => boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: __
 const ListboxContext = createContext<ListboxContextType<any> | null>(null);
 
 const useListboxContext = <T,>() => {
-  const context = use(ListboxContext as React.Context<ListboxContextType<T> | null>);
+  const context = use(
+    ListboxContext as React.Context<ListboxContextType<T> | null>
+  );
 
   if (context == null) {
-    throw new Error("useListboxContext must be used within a Listbox");
+    throw new Error('useListboxContext must be used within a Listbox');
   }
 
   return context;
@@ -92,11 +103,11 @@ const useListboxContext = <T,>() => {
 // Utils
 
 const isObjectWithId = (value: unknown): value is { id: unknown } => {
-  return typeof value === "object" && value !== null && "id" in value;
+  return typeof value === 'object' && value !== null && 'id' in value;
 };
 
 const isPrimitive = (value: unknown): value is string | number | boolean => {
-  return typeof value !== "object" && value !== null;
+  return typeof value !== 'object' && value !== null;
 };
 
 const defaultGetIsSelected = <T,>(a: T, b: T) => {
@@ -128,7 +139,7 @@ const useListboxFloating = <T,>({
   onChange,
   disabled,
   invalid,
-  placement = "bottom",
+  placement = 'bottom',
   getIsSelected = defaultGetIsSelected,
   matchReferenceWidth = true,
 }: UseListboxFloatingOptions<T>) => {
@@ -162,10 +173,16 @@ const useListboxFloating = <T,>({
       offset(4),
       size({
         apply({ rects, elements, availableHeight }) {
-          elements.floating.style.setProperty("--max-height", `${availableHeight}px`);
+          elements.floating.style.setProperty(
+            '--max-height',
+            `${availableHeight}px`
+          );
 
           if (matchReferenceWidth) {
-            elements.floating.style.setProperty("--width", `${rects.reference.width}px`);
+            elements.floating.style.setProperty(
+              '--width',
+              `${rects.reference.width}px`
+            );
           }
         },
         padding: 4,
@@ -181,10 +198,14 @@ const useListboxFloating = <T,>({
       const isMultiple = Array.isArray(value);
 
       if (isMultiple) {
-        const isSelected = value.some((v) => getIsSelected(options[index].value, v));
+        const isSelected = value.some((v) =>
+          getIsSelected(options[index].value, v)
+        );
 
         return isSelected
-          ? onChange(value.filter((v) => !getIsSelected(options[index].value, v)) as T)
+          ? onChange(
+              value.filter((v) => !getIsSelected(options[index].value, v)) as T
+            )
           : onChange([...value, options[index].value] as T);
       }
 
@@ -230,12 +251,18 @@ const useListboxFloating = <T,>({
 
   const click = useClick(floating.context, {
     enabled: !disabled,
-    event: "mousedown",
+    event: 'mousedown',
   });
   const dismiss = useDismiss(floating.context);
-  const role = useRole(floating.context, { role: "listbox" });
+  const role = useRole(floating.context, { role: 'listbox' });
 
-  const interactions = useInteractions([listNav, typeahead, click, dismiss, role]);
+  const interactions = useInteractions([
+    listNav,
+    typeahead,
+    click,
+    dismiss,
+    role,
+  ]);
 
   return useMemo(
     () => ({
@@ -253,7 +280,16 @@ const useListboxFloating = <T,>({
       ...interactions,
       ...floating,
     }),
-    [highlightedIndex, value, invalid, disabled, setOptions, handleSelect, getIsSelected, interactions, floating]
+    [
+      highlightedIndex,
+      value,
+      invalid,
+      disabled,
+      handleSelect,
+      getIsSelected,
+      interactions,
+      floating,
+    ]
   );
 };
 
@@ -270,7 +306,11 @@ type ListboxProps<T = string> = UseListboxFloatingOptions<T> & {
  * Use Listbox when choosing a value from a list of options.
  * Use Dropdown instead when you want to trigger actions or navigation.
  */
-const Listbox = <T,>({ children, ref, ...props }: ListboxProps<T> & { ref?: React.Ref<ListboxContextType<T>> }) => {
+const Listbox = <T,>({
+  children,
+  ref,
+  ...props
+}: ListboxProps<T> & { ref?: React.Ref<ListboxContextType<T>> }) => {
   const contextValue = useListboxFloating(props);
 
   useImperativeHandle(ref, () => contextValue);
@@ -278,12 +318,19 @@ const Listbox = <T,>({ children, ref, ...props }: ListboxProps<T> & { ref?: Reac
   return <ListboxContext value={contextValue}>{children}</ListboxContext>;
 };
 
-interface ListboxTriggerProps extends React.ComponentPropsWithRef<"button"> {
-  variant?: VariantProps<typeof inputStyle>["variant"];
+interface ListboxTriggerProps extends React.ComponentPropsWithRef<'button'> {
+  variant?: VariantProps<typeof inputStyle>['variant'];
   placeholder?: string;
 }
 
-const ListboxTrigger = ({ ref: refProp, children, className, variant, placeholder, ...props }: ListboxTriggerProps) => {
+const ListboxTrigger = ({
+  ref: refProp,
+  children,
+  className,
+  variant,
+  placeholder,
+  ...props
+}: ListboxTriggerProps) => {
   const ctx = useListboxContext();
 
   const ref = useMergeRefs([ctx.refs.setReference, refProp]);
@@ -295,7 +342,7 @@ const ListboxTrigger = ({ ref: refProp, children, className, variant, placeholde
       variant={variant}
       className={className}
       disabled={ctx.disabled}
-      data-state={ctx.context.open ? "open" : "closed"}
+      data-state={ctx.context.open ? 'open' : 'closed'}
       data-invalid={ctx.invalid}
       {...ctx.getReferenceProps(props)}
     >
@@ -304,31 +351,43 @@ const ListboxTrigger = ({ ref: refProp, children, className, variant, placeholde
   );
 };
 
-interface ListboxButtonProps extends React.ComponentPropsWithRef<"button"> {
+interface ListboxButtonProps extends React.ComponentPropsWithRef<'button'> {
   placeholder?: string;
-  variant?: VariantProps<typeof inputStyle>["variant"];
+  variant?: VariantProps<typeof inputStyle>['variant'];
 }
 
 /**
  * ListboxButton is a button that mimics a select input style.
  */
-const ListboxButton = ({ ref, children, placeholder, variant, className, ...props }: ListboxButtonProps) => {
+const ListboxButton = ({
+  ref,
+  children,
+  placeholder,
+  variant,
+  className,
+  ...props
+}: ListboxButtonProps) => {
   return (
     <button
       ref={ref}
       type="button"
       className={cn(
         inputStyle({ variant }),
-        "flex items-center gap-1.5 enabled:cursor-pointer",
-        "relative w-full pr-10 pl-4",
+        'flex items-center gap-1.5 enabled:cursor-pointer',
+        'relative w-full pr-10 pl-4',
         className
       )}
       {...props}
     >
       <span className="flex flex-1 items-center gap-1.5 truncate text-left">
-        {children ?? <span className="text-foreground-secondary">{placeholder}</span>}
+        {children ?? (
+          <span className="text-foreground-secondary">{placeholder}</span>
+        )}
       </span>
-      <CaretUpDownIcon weight="bold" className="text-foreground/80 absolute top-1/2 right-3 -translate-y-1/2 text-base" />
+      <CaretUpDownIcon
+        weight="bold"
+        className="absolute top-1/2 right-3 -translate-y-1/2 text-base text-foreground/80"
+      />
     </button>
   );
 };
@@ -340,11 +399,24 @@ const hasOptionProps = (
   disabled?: boolean;
   children?: React.ReactNode;
 } => {
-  return typeof props === "object" && props !== null && "value" in props;
+  return typeof props === 'object' && props !== null && 'value' in props;
 };
 
-const ListboxOptions = <T,>({ ref: refProp, children, className, ...props }: React.ComponentPropsWithRef<"div">) => {
-  const { setOptions, setIsSearchable, refs, elementsRef, labelsRef, context, getFloatingProps } = useListboxContext();
+const ListboxOptions = <T,>({
+  ref: refProp,
+  children,
+  className,
+  ...props
+}: React.ComponentPropsWithRef<'div'>) => {
+  const {
+    setOptions,
+    setIsSearchable,
+    refs,
+    elementsRef,
+    labelsRef,
+    context,
+    getFloatingProps,
+  } = useListboxContext();
 
   useEffect(() => {
     const extractOptions = (children: React.ReactNode): Option<T>[] => {
@@ -385,9 +457,9 @@ const ListboxOptions = <T,>({ ref: refProp, children, className, ...props }: Rea
       context={context}
       ref={ref}
       className={cn(
-        "border-border bg-background text-foreground z-50 flex flex-col items-stretch rounded-xl border p-0 shadow-xl focus:outline-none",
-        "overflow-y-auto overscroll-contain",
-        "max-h-(--max-height) w-(--width)",
+        'z-50 flex flex-col items-stretch rounded-xl border border-border bg-background p-0 text-foreground shadow-xl focus:outline-none',
+        'overflow-y-auto overscroll-contain',
+        'max-h-(--max-height) w-(--width)',
         className
       )}
       {...getFloatingProps(props)}
@@ -399,14 +471,28 @@ const ListboxOptions = <T,>({ ref: refProp, children, className, ...props }: Rea
   );
 };
 
-interface ListboxOptionProps<T = string> extends Omit<React.ComponentPropsWithRef<"button">, "children" | "value"> {
+interface ListboxOptionProps<T = string>
+  extends Omit<React.ComponentPropsWithRef<'button'>, 'children' | 'value'> {
   children: React.ReactNode;
   value: T;
   disabled?: boolean;
 }
 
-const ListboxOption = <T,>({ ref: refProp, value, children, disabled, className, ...props }: ListboxOptionProps<T>) => {
-  const { highlightedIndex, value: contextValue, getIsSelected, getItemProps, handleSelect } = useListboxContext<T>();
+const ListboxOption = <T,>({
+  ref: refProp,
+  value,
+  children,
+  disabled,
+  className,
+  ...props
+}: ListboxOptionProps<T>) => {
+  const {
+    highlightedIndex,
+    value: contextValue,
+    getIsSelected,
+    getItemProps,
+    handleSelect,
+  } = useListboxContext<T>();
 
   const label = getTextContent(children);
 
@@ -430,8 +516,8 @@ const ListboxOption = <T,>({ ref: refProp, value, children, disabled, className,
       disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
-        "data-highlighted:bg-foreground/5 text-foreground relative mx-1 flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 text-left font-medium outline-none select-none first-of-type:mt-1 last-of-type:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
-        "pr-8",
+        'relative mx-1 flex cursor-pointer select-none items-center gap-1.5 rounded-lg px-4 py-2 text-left font-medium text-foreground outline-none first-of-type:mt-1 last-of-type:mb-1 data-disabled:pointer-events-none data-highlighted:bg-foreground/5 data-disabled:opacity-50',
+        'pr-8',
         className
       )}
       {...getItemProps({
@@ -443,13 +529,21 @@ const ListboxOption = <T,>({ ref: refProp, value, children, disabled, className,
       })}
     >
       {children}
-      {isSelected && <CheckIcon weight="bold" className="text-foreground absolute top-1/2 right-3 -translate-y-1/2 text-sm" />}
+      {isSelected && (
+        <CheckIcon
+          weight="bold"
+          className="absolute top-1/2 right-3 -translate-y-1/2 text-foreground text-sm"
+        />
+      )}
     </button>
   );
 };
 
-const ListboxDivider = ({ className, ...props }: Omit<React.ComponentPropsWithRef<"div">, "children">) => {
-  return <Divider className={cn("my-1", className)} {...props} />;
+const ListboxDivider = ({
+  className,
+  ...props
+}: Omit<React.ComponentPropsWithRef<'div'>, 'children'>) => {
+  return <Divider className={cn('my-1', className)} {...props} />;
 };
 
 /**
@@ -458,8 +552,14 @@ const ListboxDivider = ({ className, ...props }: Omit<React.ComponentPropsWithRe
  *
  * If this component is used, the `selection` placement will be ignored.
  */
-const ListboxSearchInput = ({ ref, onKeyDown, onChange, ...props }: React.ComponentPropsWithRef<"input">) => {
-  const { highlightedIndex, setHighlightedIndex, handleSelect } = useListboxContext();
+const ListboxSearchInput = ({
+  ref,
+  onKeyDown,
+  onChange,
+  ...props
+}: React.ComponentPropsWithRef<'input'>) => {
+  const { highlightedIndex, setHighlightedIndex, handleSelect } =
+    useListboxContext();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
@@ -468,7 +568,7 @@ const ListboxSearchInput = ({ ref, onKeyDown, onChange, ...props }: React.Compon
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       handleSelect(highlightedIndex);
     }
@@ -476,7 +576,14 @@ const ListboxSearchInput = ({ ref, onKeyDown, onChange, ...props }: React.Compon
     onKeyDown?.(event);
   };
 
-  return <PopoverSearchInput ref={ref} onKeyDown={handleKeyDown} onChange={handleChange} {...props} />;
+  return (
+    <PopoverSearchInput
+      ref={ref}
+      onKeyDown={handleKeyDown}
+      onChange={handleChange}
+      {...props}
+    />
+  );
 };
 
 const ListboxEmpty = PopoverEmpty;

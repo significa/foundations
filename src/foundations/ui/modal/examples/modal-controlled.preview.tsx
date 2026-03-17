@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button } from "@/foundations/ui/button/button";
-import { Modal, ModalContent, ModalTitle } from "@/foundations/ui/modal/modal";
+import { Button } from '@/foundations/ui/button/button';
+import { Modal, ModalContent, ModalTitle } from '@/foundations/ui/modal/modal';
 
 const ModalControlledPreview = () => {
   const [open, setOpen] = useState(false);
@@ -23,7 +23,10 @@ const ModalControlledPreview = () => {
   };
 
   return (
-    <Modal open={open} onOpenChange={(isOpen) => setOpen(isSubmitting ? true : isOpen)}>
+    <Modal
+      open={open}
+      onOpenChange={(isOpen) => setOpen(isSubmitting ? true : isOpen)}
+    >
       <Button onClick={() => setOpen(true)} variant="destructive">
         Delete
       </Button>
@@ -31,7 +34,11 @@ const ModalControlledPreview = () => {
         <ModalTitle className="my-1 font-semibold">Delete Account</ModalTitle>
         <p>Are you sure you want to proceed?</p>
         <div className="mt-4 flex gap-2">
-          <Button isLoading={isSubmitting} onClick={handleSubmit} variant="destructive">
+          <Button
+            isLoading={isSubmitting}
+            onClick={handleSubmit}
+            variant="destructive"
+          >
             Delete
           </Button>
           <Button onClick={handleCancel}>Cancel</Button>

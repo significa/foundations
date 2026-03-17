@@ -1,16 +1,20 @@
-"use client";
+'use client';
 
-import { ArrowCounterClockwiseIcon, PlayIcon, SquareIcon } from "@phosphor-icons/react";
-import { useCallback, useEffect, useRef } from "react";
+import {
+  ArrowCounterClockwiseIcon,
+  PlayIcon,
+  SquareIcon,
+} from '@phosphor-icons/react';
+import { useCallback, useEffect, useRef } from 'react';
 
-import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
-import { Button } from "@/foundations/ui/button/button";
+import { useTicker } from '@/foundations/hooks/use-ticker/use-ticker';
+import { Button } from '@/foundations/ui/button/button';
 
 const UseTickerCanvasAnimation = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const timeElapsed = useRef(0);
 
-  const ticker = useTicker((timestamp, delta) => {
+  const ticker = useTicker((_timestamp, delta) => {
     timeElapsed.current += delta;
 
     if (canvasRef.current) {
@@ -46,13 +50,22 @@ const UseTickerCanvasAnimation = () => {
           Reset
         </Button>
       </div>
-      <canvas ref={canvasRef} width={640} height={480} className="absolute h-full mix-blend-multiply" />
+      <canvas
+        ref={canvasRef}
+        width={640}
+        height={480}
+        className="absolute h-full mix-blend-multiply"
+      />
     </div>
   );
 };
 
-function renderFrame(canvas: HTMLCanvasElement, progress: number, clearCanvas?: boolean) {
-  const context = canvas.getContext("2d");
+function renderFrame(
+  canvas: HTMLCanvasElement,
+  progress: number,
+  clearCanvas?: boolean
+) {
+  const context = canvas.getContext('2d');
   if (!context) return;
 
   const angle = (progress * 0.002) % Math.PI;
@@ -68,13 +81,19 @@ function renderFrame(canvas: HTMLCanvasElement, progress: number, clearCanvas?: 
   // cover canvas with white at 0.33 alpha to get the trailing effect
   context.beginPath();
   context.rect(0, 0, width, height);
-  context.fillStyle = "rgba(255, 255, 255, 0.33)";
+  context.fillStyle = 'rgba(255, 255, 255, 0.33)';
   context.fill();
 
   // draw circle
   context.beginPath();
-  context.arc(0.5 * width, radius + y * (height - 2 * radius), radius, 0, Math.PI * 2);
-  context.fillStyle = "#222";
+  context.arc(
+    0.5 * width,
+    radius + y * (height - 2 * radius),
+    radius,
+    0,
+    Math.PI * 2
+  );
+  context.fillStyle = '#222';
   context.fill();
 }
 

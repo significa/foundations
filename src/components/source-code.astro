@@ -1,11 +1,11 @@
 ---
-import { readFile } from "fs/promises";
-import path from "path";
-import CodeBlock from "./code-block.astro";
 import { Code } from "astro:components";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import type { CodeLanguage } from "astro";
 import type { HTMLAttributes } from "astro/types";
 import { themes } from "@/lib/shiki";
+import CodeBlock from "./code-block.astro";
 
 type Props = HTMLAttributes<"div"> & {
   file: string;

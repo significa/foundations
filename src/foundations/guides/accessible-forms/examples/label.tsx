@@ -1,12 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useId } from "react";
+import { useEffect, useId } from 'react';
 
-import { cn } from "@/lib/utils/classnames";
+import { cn } from '@/lib/utils/classnames';
 
-import { useField } from "../field";
+import { useField } from '../field';
 
-const Label = ({ children, className, ...props }: React.ComponentPropsWithRef<"label">) => {
+const Label = ({
+  children,
+  className,
+  ...props
+}: React.ComponentPropsWithRef<'label'>) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
@@ -15,13 +19,18 @@ const Label = ({ children, className, ...props }: React.ComponentPropsWithRef<"l
   useEffect(() => {
     if (!fieldCtx) return;
 
-    const unregister = fieldCtx.registerElement("label", id);
+    const unregister = fieldCtx.registerElement('label', id);
 
     return unregister;
   }, [fieldCtx, id]);
 
   return (
-    <label className={cn("text-foreground text-base font-medium", className)} htmlFor={fieldCtx?.id} id={id} {...props}>
+    <label
+      className={cn('font-medium text-base text-foreground', className)}
+      htmlFor={fieldCtx?.id}
+      id={id}
+      {...props}
+    >
       {children}
     </label>
   );

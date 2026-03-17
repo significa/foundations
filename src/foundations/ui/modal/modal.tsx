@@ -1,14 +1,27 @@
-"use client";
+'use client';
 
-import { createContext, use, useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { useElementTransition } from "@/foundations/hooks/use-element-transition/use-element-transition";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from '@/foundations/components/slot/slot';
+import { useElementTransition } from '@/foundations/hooks/use-element-transition/use-element-transition';
+import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
+import { cn } from '@/lib/utils/classnames';
 
 // Hook to manage native <dialog> element behavior
-const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => {
+const useDialogElement = (
+  open: boolean,
+  setOpen: (isOpen: boolean) => void
+) => {
   const ref = useRef<HTMLDialogElement>(null);
 
   useLayoutEffect(() => {
@@ -26,7 +39,7 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
     // Prevent the default cancel event and use internal state to close the drawer instead
     // This ensures drawer closing is synchronized with internal state, preventing layout shifts
     element.addEventListener(
-      "cancel",
+      'cancel',
       (event: Event) => {
         event.preventDefault();
         setOpen(false);
@@ -37,9 +50,9 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
     // Prevent ESC from closing the dialog when the cancel event is prevented.
     // Unsure if this is a browser bug or intended behavior — the ESC key can push through the cancel event for some reason
     element.addEventListener(
-      "keydown",
+      'keydown',
       (event: KeyboardEvent) => {
-        if (event.key === "Escape" && open) {
+        if (event.key === 'Escape' && open) {
           event.preventDefault();
           setOpen(false);
         }
@@ -50,9 +63,9 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
     // Prevent ESC from closing the dialog when it is inert.
     // If the dialog is opened while inert, the focus goes to the window, which allows ESC to close the dialog unexpectedly.
     window.addEventListener(
-      "keydown",
+      'keydown',
       (event: KeyboardEvent) => {
-        if (event.key === "Escape" && element.inert && open) {
+        if (event.key === 'Escape' && element.inert && open) {
           event.preventDefault();
           setOpen(false);
         }
@@ -63,7 +76,7 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
     return () => {
       abortController.abort();
     };
-  }, [open, ref, setOpen]);
+  }, [open, setOpen]);
 
   useEffect(() => {
     const element = ref.current;
@@ -71,11 +84,14 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
 
     const handleDialogClick = (event: MouseEvent) => {
       // if the click is on the backdrop, close the drawer
-      if ((event.target as HTMLElement).nodeName === "DIALOG") {
+      if ((event.target as HTMLElement).nodeName === 'DIALOG') {
         const dialog = event.target as HTMLDialogElement;
         const { top, left, width, height } = dialog.getBoundingClientRect();
         const isOutsideModal =
-          top > event.clientY || event.clientY > top + height || left > event.clientX || event.clientX > left + width;
+          top > event.clientY ||
+          event.clientY > top + height ||
+          left > event.clientX ||
+          event.clientX > left + width;
 
         if (isOutsideModal) {
           event.stopPropagation();
@@ -84,10 +100,10 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
       }
     };
 
-    element.addEventListener("click", handleDialogClick);
+    element.addEventListener('click', handleDialogClick);
 
     return () => {
-      element.removeEventListener("click", handleDialogClick);
+      element.removeEventListener('click', handleDialogClick);
     };
   }, [setOpen, open]);
 
@@ -107,7 +123,7 @@ const useModalContext = () => {
   const context = use(ModalContext);
 
   if (!context) {
-    throw new Error("Modal component must be used within a Modal");
+    throw new Error('Modal component must be used within a Modal');
   }
 
   return context;
@@ -122,7 +138,9 @@ interface ModalProps {
 const Modal = ({ open: propsOpen, onOpenChange, children }: ModalProps) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const [labelId, setLabelId] = useState<string | undefined>(undefined);
-  const [descriptionId, setDescriptionId] = useState<string | undefined>(undefined);
+  const [descriptionId, setDescriptionId] = useState<string | undefined>(
+    undefined
+  );
 
   const open = propsOpen ?? internalOpen;
 
@@ -149,15 +167,24 @@ const Modal = ({ open: propsOpen, onOpenChange, children }: ModalProps) => {
   return <ModalContext value={ctx}>{children}</ModalContext>;
 };
 
-interface ModalContentProps extends React.ComponentPropsWithRef<"dialog"> {
+interface ModalContentProps extends React.ComponentPropsWithRef<'dialog'> {
   catchFocus?: boolean;
 }
 
-const ModalContent = ({ className, children, catchFocus = true, ...props }: ModalContentProps) => {
+const ModalContent = ({
+  className,
+  children,
+  catchFocus = true,
+  ...props
+}: ModalContentProps) => {
   const { open, labelId, descriptionId, setOpen } = useModalContext();
   const dialogRef = useDialogElement(open, setOpen);
 
-  const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
+  const {
+    ref: transitionRef,
+    isMounted,
+    status,
+  } = useElementTransition<HTMLDialogElement>(open);
 
   if (!isMounted) return;
 
@@ -167,7 +194,7 @@ const ModalContent = ({ className, children, catchFocus = true, ...props }: Moda
       data-status={status}
       aria-labelledby={labelId}
       aria-describedby={descriptionId}
-      className={cn("m-auto", className)}
+      className={cn('m-auto', className)}
       {...props}
     >
       {catchFocus && (
@@ -175,14 +202,19 @@ const ModalContent = ({ className, children, catchFocus = true, ...props }: Moda
         // If that element is scrolled out of view, the dialog may jump to it, causing a jarring and confusing scroll.
         // Additionally, browsers like Safari may show focus-visible styles on that element, which can look odd.
         // The following element catches initial focus to prevent these issues.
-        <div className="sr-only" autoFocus tabIndex={-1} data-modal-focus-catcher="" />
+        <div
+          className="sr-only"
+          autoFocus
+          tabIndex={-1}
+          data-modal-focus-catcher=""
+        />
       )}
       {children}
     </dialog>
   );
 };
 
-interface ModalTriggerProps extends React.ComponentPropsWithRef<"button"> {
+interface ModalTriggerProps extends React.ComponentPropsWithRef<'button'> {
   asChild?: boolean;
 }
 
@@ -197,7 +229,7 @@ const ModalTrigger = ({ asChild, children, ...props }: ModalTriggerProps) => {
     }
   };
 
-  const Component = asChild ? Slot : "button";
+  const Component = asChild ? Slot : 'button';
 
   return (
     <Component {...props} onClick={handleClick}>
@@ -206,11 +238,15 @@ const ModalTrigger = ({ asChild, children, ...props }: ModalTriggerProps) => {
   );
 };
 
-interface ModalCloseProps extends React.ComponentPropsWithRef<"button"> {
+interface ModalCloseProps extends React.ComponentPropsWithRef<'button'> {
   asChild?: boolean;
 }
 
-const ModalClose = ({ asChild = false, children, ...props }: ModalCloseProps) => {
+const ModalClose = ({
+  asChild = false,
+  children,
+  ...props
+}: ModalCloseProps) => {
   const { setOpen } = useModalContext();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -221,7 +257,7 @@ const ModalClose = ({ asChild = false, children, ...props }: ModalCloseProps) =>
     }
   };
 
-  const Component = asChild ? Slot : "button";
+  const Component = asChild ? Slot : 'button';
   return (
     <Component {...props} onClick={handleClick}>
       {children}
@@ -229,7 +265,7 @@ const ModalClose = ({ asChild = false, children, ...props }: ModalCloseProps) =>
   );
 };
 
-interface ModalTitleProps extends React.ComponentPropsWithRef<"h2"> {
+interface ModalTitleProps extends React.ComponentPropsWithRef<'h2'> {
   asChild?: boolean;
 }
 
@@ -245,7 +281,7 @@ const ModalTitle = ({ children, asChild, ...props }: ModalTitleProps) => {
     return () => setLabelId(undefined);
   }, [id, setLabelId]);
 
-  const Component = asChild ? Slot : "h2";
+  const Component = asChild ? Slot : 'h2';
   return (
     <Component id={id} {...props}>
       {children}
@@ -253,11 +289,15 @@ const ModalTitle = ({ children, asChild, ...props }: ModalTitleProps) => {
   );
 };
 
-interface ModalDescriptionProps extends React.ComponentPropsWithRef<"p"> {
+interface ModalDescriptionProps extends React.ComponentPropsWithRef<'p'> {
   asChild?: boolean;
 }
 
-const ModalDescription = ({ children, asChild, ...props }: ModalDescriptionProps) => {
+const ModalDescription = ({
+  children,
+  asChild,
+  ...props
+}: ModalDescriptionProps) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
@@ -269,7 +309,7 @@ const ModalDescription = ({ children, asChild, ...props }: ModalDescriptionProps
     return () => setDescriptionId(undefined);
   }, [id, setDescriptionId]);
 
-  const Component = asChild ? Slot : "p";
+  const Component = asChild ? Slot : 'p';
   return (
     <Component id={id} {...props}>
       {children}
@@ -277,4 +317,11 @@ const ModalDescription = ({ children, asChild, ...props }: ModalDescriptionProps
   );
 };
 
-export { Modal, ModalClose, ModalContent, ModalDescription, ModalTitle, ModalTrigger };
+export {
+  Modal,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalTitle,
+  ModalTrigger,
+};

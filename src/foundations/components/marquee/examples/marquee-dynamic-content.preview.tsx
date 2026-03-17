@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
-import { useState } from "react";
+import { MinusIcon, PlusIcon } from '@phosphor-icons/react';
+import { useState } from 'react';
 
-import { Marquee } from "@/foundations/components/marquee/marquee";
-import { Button } from "@/foundations/ui/button/button";
+import { Marquee } from '@/foundations/components/marquee/marquee';
+import { Button } from '@/foundations/ui/button/button';
 
 const MarqueeDynamicContentExample = () => {
-  const [items, setItems] = useState(["0"]);
+  const [items, setItems] = useState(['0']);
 
   const addItem = () => {
     setItems((prevItems) => [...prevItems, `${prevItems.length}`]);
@@ -31,7 +31,7 @@ const MarqueeDynamicContentExample = () => {
           Remove
         </Button>
       </div>
-      <Marquee className="border-border text-foreground-secondary h-[2.5em] w-96 items-center gap-2 rounded border px-2">
+      <Marquee className="h-[2.5em] w-96 items-center gap-2 rounded border border-border px-2 text-foreground-secondary">
         {items}
       </Marquee>
     </div>

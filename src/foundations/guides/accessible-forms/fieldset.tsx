@@ -1,8 +1,16 @@
-"use client";
+'use client';
 
-import { createContext, use, useCallback, useEffect, useId, useMemo, useState } from "react";
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
 
-import { cn } from "@/lib/utils/classnames";
+import { cn } from '@/lib/utils/classnames';
 
 interface FieldsetContextValue {
   registerLegendElement: (id: string) => () => void;
@@ -12,7 +20,11 @@ const FieldsetContext = createContext<FieldsetContextValue | null>(null);
 
 const useFieldset = () => use(FieldsetContext);
 
-const Fieldset = ({ children, className, ...props }: React.ComponentPropsWithRef<"fieldset">) => {
+const Fieldset = ({
+  children,
+  className,
+  ...props
+}: React.ComponentPropsWithRef<'fieldset'>) => {
   const [legendIds, setLegendIds] = useState<string[]>([]);
 
   const registerLegendElement = useCallback((id: string) => {
@@ -35,8 +47,11 @@ const Fieldset = ({ children, className, ...props }: React.ComponentPropsWithRef
   return (
     <FieldsetContext value={ctx}>
       <fieldset
-        aria-labelledby={legendIds.length > 0 ? legendIds.join(" ") : undefined}
-        className={cn("border-border space-y-6 not-first:border-t not-first:pt-6", className)}
+        aria-labelledby={legendIds.length > 0 ? legendIds.join(' ') : undefined}
+        className={cn(
+          'space-y-6 border-border not-first:border-t not-first:pt-6',
+          className
+        )}
         {...props}
       >
         {children}
@@ -45,7 +60,11 @@ const Fieldset = ({ children, className, ...props }: React.ComponentPropsWithRef
   );
 };
 
-const Legend = ({ children, className, ...props }: React.ComponentPropsWithRef<"legend">) => {
+const Legend = ({
+  children,
+  className,
+  ...props
+}: React.ComponentPropsWithRef<'legend'>) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
@@ -60,7 +79,11 @@ const Legend = ({ children, className, ...props }: React.ComponentPropsWithRef<"
   }, [ctx, id]);
 
   return (
-    <div id={id} className={cn("text-foreground text-base font-semibold", className)} {...props}>
+    <div
+      id={id}
+      className={cn('font-semibold text-base text-foreground', className)}
+      {...props}
+    >
       {children}
     </div>
   );
