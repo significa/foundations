@@ -3,6 +3,7 @@ import { getEntry } from "astro:content";
 import SourceCode from "@/components/source-code.astro";
 import { Button, buttonStyle } from "@/foundations/ui/button/button";
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";
+import { ComponentPreview } from "./component-preview";
 
 type Props = {
   slug: string;
@@ -17,10 +18,20 @@ if (!entry) {
 }
 
 const previewPath = `/preview/${entry.id}`;
+
+const { layout, mode } = entry.data.meta || {};
 ---
 
 <div class="group relative h-75 md:h-100" data-id="preview" data-view="preview">
-  <iframe src={previewPath} class="size-full rounded-lg border group-data-[view=source]:hidden"></iframe>
+  <div class="size-full overflow-hidden rounded-lg border group-data-[view=source]:hidden">
+    {
+      mode === "iframe" ? (
+        <iframe src={previewPath} class="size-full" />
+      ) : (
+        <ComponentPreview file={entry.data.file} layout={layout} client:visible />
+      )
+    }
+  </div>
   <SourceCode file={entry.data.file} class="h-full group-data-[view=preview]:hidden" />
 
   <div class="absolute right-0 bottom-0 z-20 flex items-center gap-2 p-3">

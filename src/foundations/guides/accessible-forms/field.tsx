@@ -1,24 +1,13 @@
 "use client";
 
-import {
-  createContext,
-  Fragment,
-  use,
-  useCallback,
-  useId,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, Fragment, use, useCallback, useId, useMemo, useState } from "react";
 
 interface FieldContextType {
   id: string;
   "aria-errormessage"?: string;
   "aria-describedby"?: string;
   "aria-labelledby"?: string;
-  registerElement: (
-    type: "error" | "description" | "label",
-    id: string
-  ) => () => void;
+  registerElement: (type: "error" | "description" | "label", id: string) => () => void;
 }
 
 const FieldContext = createContext<FieldContextType | undefined>(undefined);
@@ -108,8 +97,7 @@ const Field = ({ children, className, ...props }: FieldProps) => {
    * If it's being used just as a wrapper around components, treat it as a fragment (kind of like a provider) to avoid changing the layout of the DOM structure.
    * On the other hand, if it has props like `className`, treat it as a div.
    */
-  const hasOnlyChildren =
-    Object.keys(props).length === 1 && "children" in props;
+  const hasOnlyChildren = Object.keys(props).length === 1 && "children" in props;
   const Comp = hasOnlyChildren ? Fragment : "div";
 
   return (

@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 
 type ComponentPreviewProps = {
   file: string;
+  layout?: PreviewLayout;
 };
 
 const modules = import.meta.glob("/src/foundations/**/*.preview.tsx");
 
-const ComponentPreview = ({ file }: ComponentPreviewProps) => {
-  const [layout, setLayout] = useState<PreviewLayout>("centered");
+const ComponentPreview = ({ file, layout = "centered" }: ComponentPreviewProps) => {
   const [Component, setComponent] = useState<React.ComponentType>(() => () => (
     <div className="flex size-full items-center justify-center p-2">
       <Spinner />
@@ -23,12 +23,6 @@ const ComponentPreview = ({ file }: ComponentPreviewProps) => {
         .then((mod) => {
           // @ts-expect-error dynamic import is not typed
           setComponent(() => mod.default);
-
-          // @ts-expect-error dynamic import is not typed
-          if ("meta" in mod && mod.meta.layout) {
-            // @ts-expect-error dynamic import is not typed
-            setLayout(mod.meta.layout);
-          }
         })
         .catch((error) => {
           throw new Error(`Failed to load component for ${file}: ${error.message}`);

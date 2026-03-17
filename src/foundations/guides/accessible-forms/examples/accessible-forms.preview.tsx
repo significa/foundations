@@ -4,10 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  Fieldset,
-  Legend,
-} from "@/foundations/guides/accessible-forms/fieldset";
+import { Fieldset, Legend } from "@/foundations/guides/accessible-forms/fieldset";
 import { Button } from "@/foundations/ui/button/button";
 
 import { Field } from "../field";
@@ -26,7 +23,7 @@ const schema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
   country: z.string().min(1, "Please select a country"),
   message: z.string().optional(),
-  preference: z.enum(["email", "phone"], {
+  preference: z.literal(["email", "phone"], {
     errorMap: () => ({ message: "Please select a preference" }),
   }),
   newsletter: z.boolean(),
@@ -65,9 +62,7 @@ export default function FieldPreview() {
           <Field className="flex flex-col gap-2">
             <div>
               <Label>Name</Label>
-              <FieldDescription>
-                This is a description very very long description
-              </FieldDescription>
+              <FieldDescription>This is a description very very long description</FieldDescription>
             </div>
             <Input {...register("name", { required: true })} />
             <FieldError>{errors.name?.message}</FieldError>
@@ -80,9 +75,8 @@ export default function FieldPreview() {
             </div>
             <Input type="email" {...register("email", { required: true })} />
             <FieldDescription>
-              Your work e-mail address is preferred because it is more secure.
-              Please ask your administrator to whitelist the significa.co
-              domain.
+              Your work e-mail address is preferred because it is more secure. Please ask your administrator to whitelist the
+              significa.co domain.
             </FieldDescription>
             <FieldError>{errors.email?.message}</FieldError>
           </Field>
@@ -90,21 +84,17 @@ export default function FieldPreview() {
           <Field className="flex flex-col gap-2">
             <div>
               <Label>Country</Label>
-              <FieldDescription>
-                Your country is required to continue with the registration.
-              </FieldDescription>
+              <FieldDescription>Your country is required to continue with the registration.</FieldDescription>
             </div>
             <Select {...register("country")}>
               <option value="" disabled>
                 Select a country
               </option>
-              {["United States", "Canada", "United Kingdom", "Australia"].map(
-                (country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                )
-              )}
+              {["United States", "Canada", "United Kingdom", "Australia"].map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
             </Select>
             <FieldError>{errors.country?.message}</FieldError>
           </Field>
@@ -124,17 +114,11 @@ export default function FieldPreview() {
 
             <RadioGroup required className="flex flex-col gap-2">
               <Field className="flex items-center gap-2">
-                <Radio
-                  {...register("preference", { required: true })}
-                  value="email"
-                />
+                <Radio {...register("preference", { required: true })} value="email" />
                 <Label>Email</Label>
               </Field>
               <Field className="flex items-center gap-2">
-                <Radio
-                  {...register("preference", { required: true })}
-                  value="phone"
-                />
+                <Radio {...register("preference", { required: true })} value="phone" />
                 <Label>Phone</Label>
               </Field>
             </RadioGroup>

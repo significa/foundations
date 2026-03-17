@@ -50,6 +50,7 @@ const StackPreview = () => {
 
 export const meta = {
   layout: "fullscreen",
+  mode: "iframe",
 } satisfies PreviewMeta;
 
 export default StackPreview;

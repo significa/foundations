@@ -13,8 +13,9 @@ export async function getStaticPaths() {
 }
 
 const { preview } = Astro.props;
+const { layout } = preview.data.meta || {};
 ---
 
 <Shell>
-  <ComponentPreview client:visible file={preview.data.file} />
+  <ComponentPreview client:load file={preview.data.file} layout={layout} />
 </Shell>

@@ -56,15 +56,8 @@ export interface UseHierarchicalSelectionResult {
   isParentOpen: (parentId: string) => boolean;
 }
 
-export function useHierarchicalSelection(
-  options: UseHierarchicalSelectionOptions = {}
-): UseHierarchicalSelectionResult {
-  const {
-    defaultSelected = [],
-    defaultOpened = [],
-    onSelectionChange,
-    onOpenChange,
-  } = options;
+export function useHierarchicalSelection(options: UseHierarchicalSelectionOptions = {}): UseHierarchicalSelectionResult {
+  const { defaultSelected = [], defaultOpened = [], onSelectionChange, onOpenChange } = options;
 
   // Internal state
   const [state, setState] = useState<HierarchicalSelectionState>({
@@ -73,14 +66,8 @@ export function useHierarchicalSelection(
   });
 
   // Derived values
-  const selectedArray = useMemo(
-    () => Array.from(state.selectedIds),
-    [state.selectedIds]
-  );
-  const openedArray = useMemo(
-    () => Array.from(state.openParentIds),
-    [state.openParentIds]
-  );
+  const selectedArray = useMemo(() => Array.from(state.selectedIds), [state.selectedIds]);
+  const openedArray = useMemo(() => Array.from(state.openParentIds), [state.openParentIds]);
 
   // Update callbacks when arrays change
   const notifySelectionChange = useCallback(
@@ -159,11 +146,7 @@ export function useHierarchicalSelection(
         if (checked) {
           newSelectedIds = new Set([...prev.selectedIds, ...allEnabledIds]);
         } else {
-          newSelectedIds = new Set(
-            Array.from(prev.selectedIds).filter(
-              (id) => !allEnabledIds.includes(id)
-            )
-          );
+          newSelectedIds = new Set(Array.from(prev.selectedIds).filter((id) => !allEnabledIds.includes(id)));
         }
 
         notifySelectionChange(newSelectedIds);
