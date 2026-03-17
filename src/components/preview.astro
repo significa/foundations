@@ -22,7 +22,7 @@ const previewPath = `/preview/${entry.id}`;
 const { layout, mode } = entry.data.meta || {};
 ---
 
-<div class="group relative h-75 md:h-100" data-id="preview" data-view="preview">
+<div class="group relative h-75 md:h-100" data-id="preview" data-view="preview" data-escape-markdown>
   <div class="size-full overflow-hidden rounded-lg border group-data-[view=source]:hidden">
     {
       mode === "iframe" ? (
