@@ -15,6 +15,7 @@ const FOLDER_SORT_ORDER: Record<string, number> = {
   ui: 1,
   components: 2,
   hooks: 3,
+  utils: 4,
 };
 
 const getNavigationItems = (collection: CollectionEntry<"pages">[]): NavigationItem[] => {

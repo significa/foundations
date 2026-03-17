@@ -76,11 +76,11 @@ const MenuItem = ({ item, isActive }: MenuItemProps) => {
       data-updated-at={item.updatedAt}
       href={item.href}
       className={cn(
-        "hover:bg-background-secondary flex h-8 shrink-0 items-center gap-1 rounded-lg px-3 text-sm leading-none",
+        "hover:bg-background-secondary flex h-8 shrink-0 items-center gap-1 overflow-hidden rounded-lg px-3 text-sm leading-none",
         isActive && "bg-background-secondary"
       )}
     >
-      <span>{item.title}</span>
+      <span className="truncate py-0.5">{item.title}</span>
       {tag && (
         <Badge size="xs" variant={tag === "new" ? "success" : "info"}>
           {tag.toUpperCase()}
