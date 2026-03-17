@@ -64,19 +64,21 @@ const { class: className, collapsible = false, style: _style, ...props } = Astro
 </style>
 
 <script>
-  const toggles = [...document.querySelectorAll("[data-id='code-block-expand']")];
+  document.addEventListener("astro:page-load", () => {
+    const toggles = [...document.querySelectorAll("[data-id='code-block-expand']")];
 
-  for (const toggle of toggles) {
-    toggle.addEventListener(
-      "click",
-      () => {
-        const codeBlock = toggle.closest("[data-code]");
+    for (const toggle of toggles) {
+      toggle.addEventListener(
+        "click",
+        () => {
+          const codeBlock = toggle.closest("[data-code]");
 
-        codeBlock?.setAttribute("data-collapsible", "false");
+          codeBlock?.setAttribute("data-collapsible", "false");
 
-        toggle.remove();
-      },
-      { once: true }
-    );
-  }
+          toggle.remove();
+        },
+        { once: true }
+      );
+    }
+  });
 </script>

@@ -59,17 +59,19 @@ const { layout, mode } = entry.data.meta || {};
 </div>
 
 <script>
-  const toggles = [...document.querySelectorAll("[data-id=preview-toggle]")];
+  document.addEventListener("astro:page-load", () => {
+    const toggles = [...document.querySelectorAll("[data-id=preview-toggle]")];
 
-  for (const toggle of toggles) {
-    toggle?.addEventListener("click", () => {
-      const container = toggle.closest("[data-id=preview]");
-      if (!container) return;
+    for (const toggle of toggles) {
+      toggle?.addEventListener("click", () => {
+        const container = toggle.closest("[data-id=preview]");
+        if (!container) return;
 
-      const currentView = container.getAttribute("data-view");
-      const newView = currentView === "preview" ? "source" : "preview";
+        const currentView = container.getAttribute("data-view");
+        const newView = currentView === "preview" ? "source" : "preview";
 
-      container.setAttribute("data-view", newView);
-    });
-  }
+        container.setAttribute("data-view", newView);
+      });
+    }
+  });
 </script>
