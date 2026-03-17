@@ -9,12 +9,14 @@ import { getNavigationItems } from "@/lib/utils/content";
 const pages = await getCollection("pages");
 ---
 
-<Header />
+<Header transition:persist />
+
 <div class="mx-auto flex max-w-(--breakpoint-2xl)">
   <aside
     id="app-menu"
     data-mobile-menu-open="false"
     data-pagefind-ignore="all"
+    transition:persist
     class={cn(
       "bg-background shrink-0 overflow-y-auto overscroll-contain px-2 pt-2 pb-12 md:px-4 xl:px-2",
       // in mobile we use fixed positioning and control it in the Header component
@@ -29,4 +31,24 @@ const pages = await getCollection("pages");
     <slot />
   </main>
 </div>
-<Footer />
+
+<Footer transition:persist />
+
+<script>
+  (function persistAsideScrollPosition() {
+    const aside = document.getElementById("app-menu");
+    if (!aside) return;
+
+    let scrollY = 0;
+
+    document.addEventListener("astro:before-swap", () => {
+      scrollY = aside.scrollTop;
+      aside.style.overflow = "hidden";
+    });
+
+    document.addEventListener("astro:after-swap", () => {
+      aside.scrollTop = scrollY;
+      aside.style.removeProperty("overflow");
+    });
+  })();
+</script>

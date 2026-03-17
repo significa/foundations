@@ -10,7 +10,21 @@ type MenuProps = {
   items: NavigationItem[];
 };
 
-export const Menu = ({ items, currentPath }: MenuProps) => {
+export const Menu = ({ items, currentPath: initialPath }: MenuProps) => {
+  const [currentPath, setCurrentPath] = useState<string>(initialPath || "");
+
+  useEffect(() => {
+    const onPageLoad = () => {
+      setCurrentPath(window.location.pathname);
+    };
+
+    document.addEventListener("astro:page-load", onPageLoad);
+
+    return () => {
+      document.removeEventListener("astro:page-load", onPageLoad);
+    };
+  }, []);
+
   return (
     <>
       {items.map((item) => (

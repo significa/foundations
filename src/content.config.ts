@@ -14,11 +14,6 @@ const previews = defineCollection({
   }),
   schema: z.object({
     file: z.string(),
-    meta: z
-      .object({
-        layout: z.enum(["centered", "fullscreen", "padded"]).optional(),
-      })
-      .optional(),
   }),
 });
 
@@ -41,6 +36,7 @@ const pages = defineCollection({
         })
       )
       .optional(),
+    meta: z.object({ folder: z.string() }).optional(),
   }),
 });
 
