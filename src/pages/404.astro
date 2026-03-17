@@ -1,0 +1,20 @@
+---
+import Shell from "@/layouts/shell.astro";
+import { Badge } from "@/foundations/ui/badge/badge";
+import { buttonStyle } from "@/foundations/ui/button/button";
+import { HouseIcon } from "@phosphor-icons/react";
+---
+
+<Shell>
+  <main class="flex min-h-svh flex-col items-center justify-center gap-2.5 p-4 py-16 text-center">
+    <Badge>404</Badge>
+    <h1 class="mt-1 text-3xl font-bold">Page not found</h1>
+    <p class="text-foreground-secondary max-w-md text-base">
+      Oops! We couldn&apos;t find this page. Maybe it was moved, deleted, or never existed.
+    </p>
+    <a href="/" data-astro-reload class={buttonStyle({ variant: "outline", className: "mt-4" })}>
+      <HouseIcon />
+      Go back home
+    </a>
+  </main>
+</Shell>
