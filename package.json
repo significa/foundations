@@ -7,7 +7,9 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "dev:pagefind": "pnpm build && node ./scripts/pagefind.mjs --dev",
     "build": "astro build",
+    "postbuild": "node scripts/pagefind.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --list-different --write .",
@@ -32,6 +34,7 @@
     "cva": "1.0.0-beta.2",
     "date-fns": "^4.1.0",
     "motion": "^12.36.0",
+    "pagefind": "^1.4.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
