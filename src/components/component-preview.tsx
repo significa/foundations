@@ -1,14 +1,21 @@
 import { Spinner } from "@/foundations/ui/spinner/spinner";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils/classnames";
+import type { PreviewLayout } from "@/lib/preview";
 
 type ComponentPreviewProps = {
   file: string;
+  layout?: PreviewLayout;
 };
 
 const modules = import.meta.glob("/src/foundations/**/*.preview.tsx");
 
-const ComponentPreview = ({ file }: ComponentPreviewProps) => {
-  const [Component, setComponent] = useState<React.ComponentType | null>(null);
+const ComponentPreview = ({ file, layout = "centered" }: ComponentPreviewProps) => {
+  const [Component, setComponent] = useState<React.ComponentType>(() => () => (
+    <div className="flex size-full items-center justify-center p-2">
+      <Spinner />
+    </div>
+  ));
 
   useEffect(() => {
     try {
@@ -31,15 +38,19 @@ const ComponentPreview = ({ file }: ComponentPreviewProps) => {
     }
   }, [file]);
 
-  if (!Component) {
-    return (
-      <div className="flex size-full items-center justify-center p-2">
-        <Spinner />
-      </div>
-    );
-  }
-
-  return <Component />;
+  return (
+    <div
+      className={cn(
+        layout === "centered"
+          ? "flex h-full w-full flex-col items-center justify-center overflow-auto p-4"
+          : layout === "padded"
+            ? "h-full w-full overflow-auto p-4"
+            : "contents"
+      )}
+    >
+      <Component />
+    </div>
+  );
 };
 
 export { ComponentPreview };

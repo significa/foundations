@@ -1,7 +1,7 @@
 import { defineCollection, reference } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
-import { previewLoader } from "./lib/loaders";
+import { previewLoader } from "@/lib/preview";
 
 const previews = defineCollection({
   loader: previewLoader({
@@ -14,6 +14,11 @@ const previews = defineCollection({
   }),
   schema: z.object({
     file: z.string(),
+    meta: z
+      .object({
+        layout: z.enum(["centered", "fullscreen", "padded"]).optional(),
+      })
+      .optional(),
   }),
 });
 

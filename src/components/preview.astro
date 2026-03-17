@@ -20,9 +20,7 @@ const previewPath = `/preview/${entry.id}`;
 ---
 
 <div class="group relative h-75 md:h-100" data-id="preview" data-view="preview">
-  <div class="h-full group-data-[view=source]:hidden">
-    <iframe src={previewPath} class="h-full w-full rounded-lg border p-4"></iframe>
-  </div>
+  <iframe src={previewPath} class="size-full rounded-lg border group-data-[view=source]:hidden"></iframe>
   <SourceCode file={entry.data.file} class="h-full group-data-[view=preview]:hidden" />
 
   <div class="absolute right-0 bottom-0 z-20 flex items-center gap-2 p-3">

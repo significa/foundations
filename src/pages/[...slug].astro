@@ -60,7 +60,6 @@ const { Content, headings } = await render(page);
 
       <section data-markdown class="pb-40">
         {page.data.preview && <Preview slug={page.data.preview.id} />}
-
         {
           page.data.dependencies && page.data.dependencies.length > 0 && (
             <>

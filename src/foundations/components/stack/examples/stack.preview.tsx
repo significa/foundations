@@ -1,4 +1,4 @@
-"use client";
+import type { PreviewMeta } from "@/lib/preview";
 
 import { BookOpenIcon, LightbulbIcon, WrenchIcon } from "@phosphor-icons/react";
 
@@ -47,5 +47,9 @@ const StackPreview = () => {
     </div>
   );
 };
+
+export const meta = {
+  layout: "fullscreen",
+} satisfies PreviewMeta;
 
 export default StackPreview;

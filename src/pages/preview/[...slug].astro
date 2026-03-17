@@ -16,5 +16,5 @@ const { preview } = Astro.props;
 ---
 
 <Shell>
-  <ComponentPreview file={preview.data.file} client:load />
+  <ComponentPreview client:load layout={preview.data.meta?.layout} file={preview.data.file} />
 </Shell>
