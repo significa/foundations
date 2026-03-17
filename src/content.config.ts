@@ -41,7 +41,6 @@ const pages = defineCollection({
         })
       )
       .optional(),
-    meta: z.object({ folder: z.string() }).optional(),
   }),
 });
 

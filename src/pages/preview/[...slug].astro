@@ -2,6 +2,7 @@
 import Shell from "@/layouts/shell.astro";
 import { getCollection } from "astro:content";
 import { ComponentPreview } from "@/components/component-preview";
+import { cn } from "@/lib/utils/classnames";
 
 export async function getStaticPaths() {
   const previews = await getCollection("previews");
@@ -16,5 +17,5 @@ const { preview } = Astro.props;
 ---
 
 <Shell>
-  <ComponentPreview client:load layout={preview.data.meta?.layout} file={preview.data.file} />
+  <ComponentPreview client:load file={preview.data.file} />
 </Shell>
