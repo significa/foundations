@@ -63,4 +63,5 @@ import { MoonIcon, SunIcon } from "@phosphor-icons/react";
   }
 
   init();
+  document.addEventListener("astro:after-swap", init);
 </script>
