@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "dev:pagefind": "pnpm build && node ./scripts/pagefind.mjs --dev",
+    "dev:pagefind": "pnpm build && node ./scripts/pagefind.mjs --dev && pnpm dev",
     "build": "astro build",
     "postbuild": "node scripts/pagefind.mjs",
     "preview": "astro preview",

@@ -33,7 +33,7 @@ const lastModified = await getPageLastModifiedTime(page);
 ---
 
 <Shell meta={{ title: page.data.title, description: page.data.description }}>
-  <PageLayout data-pagefind-meta={`folder:${page.data.meta?.folder || ""}`}>
+  <PageLayout data-pagefind-meta={`folder:${page.data.folder || "Other"}`}>
     <nav
       class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-y-auto pt-6 text-sm lg:block"
     >

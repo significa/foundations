@@ -50,8 +50,7 @@ const getNavigationItems = async (
   const items: NavigationItem[] = [];
 
   for (const entry of collection) {
-    const { title, meta } = entry.data;
-    const folder = meta?.folder || 'Pages';
+    const { title, folder = 'Pages' } = entry.data;
 
     const existingGroup = items.find((item) => item.title === folder);
 
