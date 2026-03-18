@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import Posthog from "@/components/posthog.astro";
 
 import "@/styles/global.css";
 
@@ -18,7 +19,7 @@ const description =
   "Explore Significa Foundations: our design and development principles, methodologies, and tools that ensure every digital product we create is purposeful, accessible, and beautifully built.";
 ---
 
-<html lang="en">
+<html lang="en" transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -43,7 +44,9 @@ const description =
 
     <ClientRouter fallback="none" />
   </head>
-  <body transition:animate="none">
+  <body>
     <slot />
+
+    {import.meta.env.PROD && <Posthog />}
   </body>
 </html>
