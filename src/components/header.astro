@@ -48,14 +48,19 @@ import { GITHUB_REPO_URL } from "@/lib/constants";
 </div>
 
 <script>
-  const menu = document.getElementById("app-menu");
-  const menuToggle = document.querySelector("[data-id=menu-toggle]");
+  document.addEventListener("astro:page-load", () => {
+    const menu = document.getElementById("app-menu");
+    const menuToggle = document.querySelector("[data-id=menu-toggle]");
+    if (!menu || !menuToggle) return;
 
-  menuToggle?.addEventListener("click", () => {
-    const isOpen = menuToggle.getAttribute("data-open") === "true";
+    menuToggle.setAttribute("data-open", String(false));
+    menu.setAttribute("data-mobile-menu-open", String(false));
 
-    menu?.setAttribute("data-mobile-menu-open", String(isOpen));
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("data-open") === "true";
 
-    menuToggle.setAttribute("data-open", String(!isOpen));
+      menu.setAttribute("data-mobile-menu-open", String(!isOpen));
+      menuToggle.setAttribute("data-open", String(!isOpen));
+    });
   });
 </script>
