@@ -43,8 +43,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.7",
+    "@types/hast": "^3.0.4",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.2"
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "unist-util-visit": "^5.1.0"
   }
 }
