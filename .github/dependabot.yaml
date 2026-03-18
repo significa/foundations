@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "pnpm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      patch-updates:
+        update-types:
+          - patch
+        patterns:
+          - "*"
