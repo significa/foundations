@@ -30,7 +30,6 @@ const { page, previousPage, nextPage } = Astro.props;
 const { Content, headings } = await render(page);
 
 const lastModified = await getPageLastModifiedTime(page);
-console.log(lastModified);
 ---
 
 <Shell meta={{ title: page.data.title, description: page.data.description }}>
