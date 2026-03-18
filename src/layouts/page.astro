@@ -7,9 +7,11 @@ import { Menu } from "@/components/menu";
 import { cn } from "@/lib/utils/classnames";
 import { getNavigationItems } from "@/lib/utils/content";
 
+type Props = HTMLAttributes<"div">;
+
 const pages = await getCollection("pages");
 
-type Props = HTMLAttributes<"div">;
+const items = await getNavigationItems(pages);
 ---
 
 <div {...Astro.props}>
@@ -28,7 +30,7 @@ type Props = HTMLAttributes<"div">;
         "md:top-14 md:h-[calc(100dvh-var(--spacing)*14)] xl:sticky xl:block xl:max-w-64 xl:border-r xl:pt-4"
       )}
     >
-      <Menu items={getNavigationItems(pages)} currentPath={Astro.url.pathname} client:load />
+      <Menu items={items} currentPath={Astro.url.pathname} client:load />
     </aside>
 
     <main class="w-full gap-8 px-4 lg:flex">

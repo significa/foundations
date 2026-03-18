@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ site }) => {
     ? site.href.replace(/\/$/, '')
     : 'https://foundations.significa.co';
 
-  const urls = pages
+  const entries = pages
     .map((page) => {
       return `
   <url>
@@ -19,7 +19,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   const raw = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls}
+${entries}
 </urlset>`;
 
   return new Response(raw, {

@@ -1,4 +1,30 @@
 import type { CollectionEntry } from 'astro:content';
+import { getGitCreateTime, getGitLastModifiedTime } from './git';
+
+const getPageCreateTime = async (page: CollectionEntry<'pages'>) => {
+  const pageFile = page.filePath;
+  if (!pageFile) return null;
+
+  return getGitCreateTime(pageFile);
+};
+
+const getPageLastModifiedTime = async (page: CollectionEntry<'pages'>) => {
+  const pageFile = page.filePath;
+  if (!pageFile) return null;
+
+  const depFiles = page.data.files || [];
+  const files = [pageFile, ...depFiles];
+
+  const timestamps = await Promise.all(
+    files.map((filePath) => getGitLastModifiedTime(filePath))
+  );
+
+  const [earliest] = timestamps.sort(
+    (a, b) => new Date(a).getTime() - new Date(b).getTime()
+  );
+
+  return earliest;
+};
 
 type NavigationItem = {
   title: string;
@@ -18,9 +44,9 @@ const FOLDER_SORT_ORDER: Record<string, number> = {
   utils: 4,
 };
 
-const getNavigationItems = (
+const getNavigationItems = async (
   collection: CollectionEntry<'pages'>[]
-): NavigationItem[] => {
+): Promise<NavigationItem[]> => {
   const items: NavigationItem[] = [];
 
   for (const entry of collection) {
@@ -29,9 +55,14 @@ const getNavigationItems = (
 
     const existingGroup = items.find((item) => item.title === folder);
 
+    const createdAt = await getPageCreateTime(entry);
+    const updatedAt = await getPageLastModifiedTime(entry);
+
     const item = {
       title,
       href: `/${entry.id}`,
+      createdAt: createdAt ? new Date(createdAt) : undefined,
+      updatedAt: updatedAt ? new Date(updatedAt) : undefined,
     };
 
     if (existingGroup) {
@@ -55,4 +86,4 @@ const getNavigationItems = (
 };
 
 export type { NavigationItem };
-export { getNavigationItems };
+export { getNavigationItems, getPageLastModifiedTime };

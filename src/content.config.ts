@@ -14,7 +14,7 @@ const previews = defineCollection({
   }),
   schema: z.object({
     file: z.string(),
-    meta: previewMetaSchema.optional(),
+    meta: previewMetaSchema,
   }),
 });
 

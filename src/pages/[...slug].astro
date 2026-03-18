@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
-import { ArrowSquareOutIcon, PackageIcon, PencilIcon } from "@phosphor-icons/react";
+import { ArrowSquareOutIcon, PackageIcon, PencilIcon, CalendarIcon } from "@phosphor-icons/react";
+import { format } from "date-fns";
 import CodeBlock from "@/components/code-block.astro";
 import Preview from "@/components/preview.astro";
 import PropsTable from "@/components/props-table.astro";
@@ -10,6 +11,7 @@ import { Badge, BadgeIcon } from "@/foundations/ui/badge/badge";
 import PageLayout from "@/layouts/page.astro";
 import Shell from "@/layouts/shell.astro";
 import { GITHUB_REPO_URL } from "@/lib/constants";
+import { getPageLastModifiedTime } from "@/lib/utils/content";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
@@ -26,12 +28,15 @@ export async function getStaticPaths() {
 
 const { page, previousPage, nextPage } = Astro.props;
 const { Content, headings } = await render(page);
+
+const lastModified = await getPageLastModifiedTime(page);
+console.log(lastModified);
 ---
 
 <Shell meta={{ title: page.data.title, description: page.data.description }}>
-  <PageLayout data-pagefind-meta={`folder:${page.data.meta.folder || ""}`}>
+  <PageLayout data-pagefind-meta={`folder:${page.data.meta?.folder || ""}`}>
     <nav
-      class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-[200px] shrink-0 overflow-y-auto pt-6 text-sm lg:block"
+      class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-y-auto pt-6 text-sm lg:block"
     >
       <>
         <h3 class="text-foreground-secondary mb-3 font-medium">On this page</h3>
@@ -47,6 +52,14 @@ const { Content, headings } = await render(page);
         >
           <PencilIcon /> Edit this page
         </a>
+        {
+          lastModified && (
+            <p class="text-foreground-secondary flex items-center gap-1 text-xs">
+              <CalendarIcon />
+              Edited {format(lastModified, "PPP")}
+            </p>
+          )
+        }
       </div>
     </nav>
 
