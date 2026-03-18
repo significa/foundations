@@ -38,7 +38,7 @@ export const Marquee = ({
 
   const progress = useRef(0);
   const contentLength = useRef(0);
-  const deferredResizeHandler = useRef<() => undefined | null>(null);
+  const deferredResizeHandler = useRef<() => void>(null);
 
   const getDuration = useMemo(() => {
     if (typeof duration === 'number') return () => duration;

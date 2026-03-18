@@ -13,9 +13,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "types:check": "astro sync && tsc -noEmit",
-    "check": "biome check --write --unsafe . && prettier --list-different --write \"**/*.astro\"",
     "format": "biome format --write . && prettier --list-different --write \"**/*.astro\"",
-    "lint": "biome lint --write --unsafe ."
+    "lint": "biome lint --write --unsafe .",
+    "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.0",

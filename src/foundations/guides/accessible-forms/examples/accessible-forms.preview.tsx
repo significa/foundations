@@ -23,15 +23,15 @@ import { Textarea } from './textarea';
 const schema = z.object({
   company: z.string().optional(),
   name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email').min(1, 'Email is required'),
+  email: z.string().min(1, 'Email is required').email('Invalid email'),
   country: z.string().min(1, 'Please select a country'),
   message: z.string().optional(),
-  preference: z.literal(['email', 'phone'], {
-    errorMap: () => ({ message: 'Please select a preference' }),
+  preference: z.enum(['email', 'phone'], {
+    message: 'Please select a preference',
   }),
   newsletter: z.boolean(),
   terms: z.literal(true, {
-    errorMap: () => ({ message: 'Please accept the terms and conditions' }),
+    message: 'Please accept the terms and conditions',
   }),
 });
 

@@ -6,7 +6,11 @@ type Ticker = {
   paused: boolean;
 };
 
-type TickerCallback = (timestamp: number, delta: number) => undefined | boolean;
+type TickerCallback = (
+  timestamp: number,
+  delta: number
+  // biome-ignore lint/suspicious/noConfusingVoidType: intentional
+) => void | undefined | boolean;
 
 const MIN_DELTA = 0.000000001;
 
