@@ -17,6 +17,7 @@ jobs:
     uses: significa/actions/.github/workflows/vercel-app.yaml@main
     with:
       lint_command: pnpm check
+      install_command: pnpm install --frozen-lockfile
       test_command: null
       staging_branch: null
       staging_domain: null

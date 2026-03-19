@@ -26,20 +26,24 @@ Foundations is an opinionated collection of components, patterns, and guidelines
    cd foundations
    ```
 
-2. Install dependencies:
+1. Install dependencies:
+
+   Node version specified in `.nvmrc`
+   
+   TODO: document how to install `pnpm` with the version specified in the `package.json`
 
    ```bash
    pnpm install
    ```
 
-3. Create a `.env` file at the root with the required environment variables:
+1. Create a `.env` file at the root with the required environment variables:
 
    ```bash
    POSTHOG_KEY=...
    POSTHOG_HOST=...
    ```
 
-4. Start the dev server:
+1. Start the dev server:
 
    ```bash
    pnpm dev
