@@ -1,12 +1,11 @@
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
+import { SITE_ORIGIN } from '@/lib/constants';
 
 export const GET: APIRoute = async ({ site }) => {
   const pages = await getCollection('pages');
 
-  const baseUrl = site
-    ? site.href.replace(/\/$/, '')
-    : 'https://foundations.significa.co';
+  const baseUrl = site ? site.href.replace(/\/$/, '') : SITE_ORIGIN;
 
   const entries = pages
     .map((page) => {
