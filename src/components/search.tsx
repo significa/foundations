@@ -209,7 +209,6 @@ const Search = () => {
             type="text"
             className="ml-2.5 w-full outline-none"
             placeholder="Search..."
-            autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />

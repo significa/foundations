@@ -68,6 +68,8 @@
 }
 
 body {
+  scrollbar-gutter: stable;
+
   font-family: var(--font-sans);
 
   background-color: var(--color-background);
@@ -79,5 +81,4 @@ body {
 
 body:has(dialog[open]) {
   overflow: hidden;
-  scrollbar-gutter: stable;
 }

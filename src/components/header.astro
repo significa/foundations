@@ -12,7 +12,7 @@ import { GITHUB_REPO_URL } from "@/lib/constants";
   <div class="mx-auto flex h-12 max-w-(--breakpoint-2xl) items-center justify-between gap-2 px-2 md:h-14 md:px-4">
     <div class="flex items-center gap-1.5">
       <Button
-        data-id="menu-toggle"
+        id="app-menu-toggle"
         className="group xl:hidden"
         variant="ghost"
         size="sm"
@@ -50,7 +50,7 @@ import { GITHUB_REPO_URL } from "@/lib/constants";
 <script>
   document.addEventListener("astro:page-load", () => {
     const menu = document.getElementById("app-menu");
-    const menuToggle = document.querySelector("[data-id=menu-toggle]");
+    const menuToggle = document.getElementById("app-menu-toggle");
     if (!menu || !menuToggle) return;
 
     menuToggle.setAttribute("data-open", String(false));
@@ -64,3 +64,9 @@ import { GITHUB_REPO_URL } from "@/lib/constants";
     });
   });
 </script>
+
+<style is:global>
+  body:has(#app-menu-toggle[data-open="true"]) {
+    overflow: hidden;
+  }
+</style>
