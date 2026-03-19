@@ -1,11 +1,8 @@
-// @ts-check
-
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, envField } from 'astro/config';
 
-// https://astro.build/config
 export default defineConfig({
   site: 'https://foundations.significa.co',
   env: {
@@ -14,6 +11,10 @@ export default defineConfig({
       POSTHOG_HOST: envField.string({ context: 'client', access: 'public' }),
     },
   },
+  redirects: {
+    '/': '/about',
+  },
+
   integrations: [mdx(), react()],
   vite: {
     plugins: [tailwindcss()],
@@ -23,9 +24,6 @@ export default defineConfig({
       },
     },
     assetsInclude: '**/pagefind.js', // treat pagefind.js as an asset so it gets copied to the dist folder
-  },
-  redirects: {
-    '/': '/about',
   },
   markdown: {
     syntaxHighlight: 'shiki',
