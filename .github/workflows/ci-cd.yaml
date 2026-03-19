@@ -22,6 +22,7 @@ jobs:
       staging_domain: null
       production_branch: main
       production_domain: ${{ vars.PRODUCTION_DOMAIN }}
+      package_manager: pnpm
     secrets:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
