@@ -11,9 +11,6 @@ export default defineConfig({
       POSTHOG_HOST: envField.string({ context: 'client', access: 'public' }),
     },
   },
-  redirects: {
-    '/': '/about',
-  },
 
   integrations: [mdx(), react()],
   vite: {
