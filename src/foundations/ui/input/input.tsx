@@ -127,20 +127,32 @@ interface InputPrefixProps extends React.ComponentPropsWithRef<"div"> {
   asChild?: boolean;
 }
 
-const InputPrefix = (props: InputPrefixProps) => {
+const InputPrefix = ({ className, ...props }: InputPrefixProps) => {
   const { setPrefixWidth } = useInputGroup();
 
-  return <InputAddon {...props} onSetWidth={setPrefixWidth} />;
+  return (
+    <InputAddon
+      {...props}
+      className={cn("left-4", className)}
+      onSetWidth={setPrefixWidth}
+    />
+  );
 };
 
 interface InputSuffixProps extends React.ComponentPropsWithRef<"div"> {
   asChild?: boolean;
 }
 
-const InputSuffix = (props: InputSuffixProps) => {
+const InputSuffix = ({ className, ...props }: InputSuffixProps) => {
   const { setSuffixWidth } = useInputGroup();
 
-  return <InputAddon {...props} onSetWidth={setSuffixWidth} />;
+  return (
+    <InputAddon
+      {...props}
+      className={cn("right-4", className)}
+      onSetWidth={setSuffixWidth}
+    />
+  );
 };
 
 interface InputAddonProps extends React.ComponentPropsWithRef<"div"> {
@@ -179,7 +191,7 @@ const InputAddon = ({
       data-input-addon
       className={cn(
         "absolute top-1/2 flex -translate-y-1/2 items-center justify-center text-base font-medium",
-        "text-foreground pointer-events-none first:left-4 last:right-4",
+        "text-foreground pointer-events-none",
         className
       )}
       ref={composeRefs(ref, internalRef)}
