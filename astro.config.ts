@@ -17,6 +17,12 @@ export default defineConfig({
   integrations: [mdx(), react()],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        external: ['/pagefind/pagefind.js'], // don't bundle pagefind.js, treat it as an external asset
+      },
+    },
+    assetsInclude: '**/pagefind.js', // treat pagefind.js as an asset so it gets copied to the dist folder
   },
   redirects: {
     '/': '/about',

@@ -279,10 +279,9 @@ const usePagefind = () => {
   useEffect(() => {
     const loadPagefind = async () => {
       try {
-        // biome-ignore lint/security/noGlobalEval: use eval to circumvent vite and use native dynamic module import
-        await eval(`import("/pagefind/pagefind.js")`).then((mod: Pagefind) => {
-          setInstance(mod);
-        });
+        // @ts-expect-error - dynamic import not typed
+        const pagefind = await import('/pagefind/pagefind.js');
+        setInstance(pagefind);
       } catch (e) {
         console.error('Failed to load Pagefind instance:', e);
         setIsError(true);
