@@ -42,7 +42,7 @@ const TableOfContents = ({ headings }: TableOfContentsProps) => {
       {headings.map(({ slug, depth, text }) => (
         <a
           className={cn(
-            'ml-[max(0px,calc(--spacing(4)*var(--level)))] inline-block py-0.5 opacity-60 transition',
+            'ml-[max(0px,calc(--spacing(4)*var(--level)))] inline-block w-full py-0.5 opacity-60 transition hover:opacity-80',
             activeSlug === slug && 'opacity-100'
           )}
           key={slug}
