@@ -3,7 +3,7 @@ import { getEntry } from "astro:content";
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";
 import SourceCode from "@/components/source-code.astro";
 import { Button, buttonStyle } from "@/foundations/ui/button/button";
-import { ComponentPreview } from "./component-preview";
+import ComponentPreview from "./component-preview.astro";
 
 type Props = {
   slug: string;
@@ -28,7 +28,7 @@ const { layout, mode } = entry.data.meta || {};
       mode === "iframe" ? (
         <iframe src={previewPath} class="size-full" />
       ) : (
-        <ComponentPreview file={entry.data.file} layout={layout} client:visible />
+        <ComponentPreview file={entry.data.file} layout={layout} />
       )
     }
   </div>
