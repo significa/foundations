@@ -1,78 +1,28 @@
-name: Deploy to GitHub Pages
+name: CI/CD
 
 on:
   push:
     branches:
       - main
   pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
-env:
-  POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
-  POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 jobs:
-  check:
-    name: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm check
-
-  deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs:
-      - check
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm run build
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "./dist"
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+  ci-cd:
+    name: CI/CD
+    permissions:
+      contents: read
+      packages: read
+      deployments: write
+    uses: significa/actions/.github/workflows/vercel-app.yaml@vercel-app-simple-strategy
+    with:
+      lint_command: pnpm check
+      test_command: null
+      staging_branch: null
+      staging_domain: null
+      production_branch: main
+      production_domain: ${{ vars.PRODUCTION_DOMAIN }}
+    secrets:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
