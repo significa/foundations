@@ -130,7 +130,7 @@ interface InputPrefixProps extends React.ComponentPropsWithRef<"div"> {
 const InputPrefix = (props: InputPrefixProps) => {
   const { setPrefixWidth } = useInputGroup();
 
-  return <InputAddon side="left" {...props} onSetWidth={setPrefixWidth} />;
+  return <InputAddon {...props} className={cn('left-4', className)} onSetWidth={setPrefixWidth} />;
 };
 
 interface InputSuffixProps extends React.ComponentPropsWithRef<"div"> {
@@ -140,13 +140,12 @@ interface InputSuffixProps extends React.ComponentPropsWithRef<"div"> {
 const InputSuffix = (props: InputSuffixProps) => {
   const { setSuffixWidth } = useInputGroup();
 
-  return <InputAddon side="right" {...props} onSetWidth={setSuffixWidth} />;
+  return <InputAddon {...props} className={cn('right-4', className)} onSetWidth={setSuffixWidth} />;
 };
 
 interface InputAddonProps extends React.ComponentPropsWithRef<"div"> {
   onSetWidth?: (width: number) => void;
   asChild?: boolean;
-  side?: "left" | "right";
 }
 
 const InputAddon = ({
@@ -154,7 +153,6 @@ const InputAddon = ({
   className,
   onSetWidth,
   asChild,
-  side,
   ...props
 }: InputAddonProps) => {
   const Comp = asChild ? Slot : "div";
@@ -182,11 +180,6 @@ const InputAddon = ({
       className={cn(
         "absolute top-1/2 flex -translate-y-1/2 items-center justify-center text-base font-medium",
         "text-foreground pointer-events-none",
-        side === "left"
-          ? "left-4"
-          : side === "right"
-            ? "right-4"
-            : "first:left-4 last:right-4",
         className
       )}
       ref={composeRefs(ref, internalRef)}
