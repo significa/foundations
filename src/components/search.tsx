@@ -223,7 +223,7 @@ const Search = () => {
               {import.meta.env.DEV && (
                 <div className="mt-4 space-y-1 text-balance text-center text-xs">
                   <p>Generate a development Pagefind instance by running</p>
-                  <code className="mx-1 rounded-sm border bg-foreground/4 px-1 py-0.5 font-[0.95rem] leading-[2]">
+                  <code className="mx-1 rounded-sm border bg-foreground/4 px-1 py-0.5 font-[0.95rem] leading-loose">
                     pnpm dev:pagefind
                   </code>
                 </div>

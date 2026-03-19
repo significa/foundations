@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { Spinner } from '@/foundations/ui/spinner/spinner';
 import type { PreviewLayout } from '@/lib/preview';
 import { cn } from '@/lib/utils/classnames';
@@ -14,36 +14,30 @@ const ComponentPreview = ({
   file,
   layout = 'centered',
 }: ComponentPreviewProps) => {
-  const [Component, setComponent] = useState<React.ComponentType>(() => () => (
-    <div className="flex size-full items-center justify-center p-2">
-      <Spinner />
-    </div>
-  ));
-
-  useEffect(() => {
-    try {
-      modules[file]()
-        .then((mod) => {
-          // @ts-expect-error dynamic import is not typed
-          setComponent(() => mod.default);
-        })
-        .catch((error) => {
-          throw new Error(
-            `Failed to load component for ${file}: ${error.message}`
-          );
-        });
-    } catch (error) {
-      console.error(`Error importing module for ${file}:`, error);
-      setComponent(() => () => (
-        <div className="space-y-2 p-4 text-red-700 text-sm">
-          <p>Error loading component:</p>
-          <code className="rounded-md border bg-foreground/4 p-2 text-foreground/60 text-xs">
-            {file}
-          </code>
-        </div>
-      ));
-    }
-  }, [file]);
+  const Component = useMemo(
+    () =>
+      lazy(() => {
+        try {
+          return modules[file]().then((mod) => ({
+            // @ts-expect-error dynamic import is not typed
+            default: mod.default as React.ComponentType,
+          }));
+        } catch (err) {
+          console.error(`Error loading component preview for ${file}:`, err);
+          return Promise.resolve({
+            default: () => (
+              <div className="space-y-3 p-4 text-red-700 text-xs">
+                <p>Error loading component:</p>
+                <code className="rounded-md border border-red-200 bg-red-50 p-2 text-red-500">
+                  {file}
+                </code>
+              </div>
+            ),
+          });
+        }
+      }),
+    [file]
+  );
 
   return (
     <div
@@ -55,7 +49,15 @@ const ComponentPreview = ({
             : 'contents'
       )}
     >
-      <Component />
+      <Suspense
+        fallback={
+          <div className="flex size-full items-center justify-center p-2 opacity-32">
+            <Spinner />
+          </div>
+        }
+      >
+        <Component />
+      </Suspense>
     </div>
   );
 };
