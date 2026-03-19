@@ -133,7 +133,7 @@ const InputPrefix = ({ className, ...props }: InputPrefixProps) => {
   return (
     <InputAddon
       {...props}
-      className={cn("left-4", className)}
+      className={cn('left-4', className)}
       onSetWidth={setPrefixWidth}
     />
   );
@@ -149,7 +149,7 @@ const InputSuffix = ({ className, ...props }: InputSuffixProps) => {
   return (
     <InputAddon
       {...props}
-      className={cn("right-4", className)}
+      className={cn('right-4', className)}
       onSetWidth={setSuffixWidth}
     />
   );
@@ -190,8 +190,8 @@ const InputAddon = ({
     <Comp
       data-input-addon
       className={cn(
-        "absolute top-1/2 flex -translate-y-1/2 items-center justify-center text-base font-medium",
-        "text-foreground pointer-events-none",
+        'absolute top-1/2 flex -translate-y-1/2 items-center justify-center font-medium text-base',
+        'pointer-events-none text-foreground',
         className
       )}
       ref={composeRefs(ref, internalRef)}
