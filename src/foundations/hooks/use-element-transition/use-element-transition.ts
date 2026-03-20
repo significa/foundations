@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 
-import { nextFrame } from "@/foundations/utils/dom/next-frame";
+import { nextFrame } from '@/foundations/utils/dom/next-frame';
 
-type Status = "unmounted" | "initial" | "open" | "closed";
+type Status = 'unmounted' | 'initial' | 'open' | 'closed';
 
 interface UseElementTransitionReturn<T extends HTMLElement> {
   ref: React.RefObject<T | null>;
@@ -41,7 +41,7 @@ export const useElementTransition = <T extends HTMLElement>(
   const ref = useRef<T>(null);
   const [isMounted, setIsMounted] = useState(shouldMount);
   const [status, setStatus] = useState<Status>(
-    shouldMount ? "open" : "unmounted"
+    shouldMount ? 'open' : 'unmounted'
   );
 
   if (shouldMount && !isMounted) {
@@ -55,7 +55,7 @@ export const useElementTransition = <T extends HTMLElement>(
 
     const triggerUnmount = () => {
       setIsMounted(false);
-      setStatus("unmounted");
+      setStatus('unmounted');
     };
 
     nextFrame(() => {
@@ -70,12 +70,12 @@ export const useElementTransition = <T extends HTMLElement>(
           }
         };
 
-        element.addEventListener("transitionend", onTransitionEnd);
-        element.addEventListener("transitioncancel", onTransitionEnd);
+        element.addEventListener('transitionend', onTransitionEnd);
+        element.addEventListener('transitioncancel', onTransitionEnd);
 
         return () => {
-          element.removeEventListener("transitionend", onTransitionEnd);
-          element.removeEventListener("transitioncancel", onTransitionEnd);
+          element.removeEventListener('transitionend', onTransitionEnd);
+          element.removeEventListener('transitioncancel', onTransitionEnd);
         };
       } else {
         triggerUnmount();
@@ -87,14 +87,14 @@ export const useElementTransition = <T extends HTMLElement>(
     if (!ref.current) return;
 
     if (shouldMount) {
-      setStatus("initial");
+      setStatus('initial');
 
       return nextFrame(() => {
-        flushSync(() => setStatus("open"));
+        flushSync(() => setStatus('open'));
       }, 2); // firefox needs a second frame for the initial transition to work
     }
 
-    setStatus("closed");
+    setStatus('closed');
   }, [shouldMount]);
 
   return { ref, isMounted, status };

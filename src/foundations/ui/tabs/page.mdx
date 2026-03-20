@@ -1,20 +1,17 @@
-export const metadata = {
-  title: "Tabs",
-  description:
-    "A tab navigation component with smooth animations and keyboard support.",
-  files: ["src/foundations/ui/tabs/tabs.tsx"],
-  preview: "tabs",
-  dependencies: [
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-    {
-      name: "motion",
-      href: "https://motion.dev",
-    },
-  ],
-};
+---
+title: Tabs
+description: A tab navigation component with smooth animations and keyboard support.
+preview: tabs
+files:
+  - src/foundations/ui/tabs/tabs.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: motion
+    href: https://motion.dev
+
+folder: UI
+---
 
 ## Features
 
@@ -150,19 +147,16 @@ Example of controlled tabs with external state management.
 ## Best Practices
 
 1. **Content Organization**:
-
    - Use meaningful tab labels that describe their content
    - Keep tab labels concise
    - Order tabs in a logical sequence
 
 2. **Performance**:
-
    - Lazy load tab content when possible
    - Consider using dynamic imports for heavy content
    - Use motion animations sparingly on low-end devices
 
 3. **Accessibility**:
-
    - Ensure tab labels are descriptive
    - Maintain a logical tab order
    - Consider users who navigate with keyboard only

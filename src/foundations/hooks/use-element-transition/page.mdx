@@ -1,17 +1,15 @@
-export const metadata = {
-  title: "useElementTransition",
-  description:
-    "A hook to manage the mounting, unmounting, and transition status of a DOM element with lifecycle-related CSS transitions",
-  files: [
-    "src/foundations/hooks/use-element-transition/use-element-transition.ts",
-  ],
-  dependencies: [
-    {
-      name: "nextFrame",
-      href: "/utils/dom#nextframe",
-    },
-  ],
-};
+---
+title: useElementTransition
+description: >-
+  A hook to manage the mounting, unmounting, and transition status of a DOM element with lifecycle-related CSS transitions
+files:
+  - src/foundations/hooks/use-element-transition/use-element-transition.ts
+dependencies:
+  - name: nextFrame
+    href: /utils/dom#nextframe
+
+folder: hooks
+---
 
 ## Features
 
@@ -26,8 +24,7 @@ export const metadata = {
     shouldMount: {
       type: "boolean",
       required: true,
-      description:
-        "Controls whether the element should be mounted or unmounted",
+      description: "Controls whether the element should be mounted or unmounted",
     },
   }}
 />

@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@layer base {
+  [data-markdown] :not(:where([data-escape-markdown], [data-escape-markdown] *)) {
+    &:is(h1, h2, h3, h4, h5, h6) {
+      @apply mt-[2em] mb-[1em] font-semibold tracking-tight [&_a]:no-underline;
+    }
+
+    &:is(h1) {
+      @apply text-3xl;
+    }
+
+    &:is(h2) {
+      @apply border-b pb-4 text-2xl;
+    }
+
+    &:is(h3) {
+      @apply text-xl;
+    }
+
+    &:is(h4) {
+      @apply text-lg;
+    }
+
+    &:is(h5) {
+      @apply text-base;
+    }
+
+    &:is(h6) {
+      @apply text-sm;
+    }
+
+    &:is(p) {
+      @apply leading-relaxed not-first:mt-2;
+    }
+
+    &:is(a) {
+      @apply underline;
+    }
+
+    &:is(ul, ol) {
+      @apply my-4 ml-6;
+    }
+
+    &:is(ul) {
+      @apply list-disc;
+    }
+
+    &:is(ol) {
+      @apply list-decimal;
+    }
+
+    &:is(li) {
+      @apply mt-2;
+    }
+
+    &:is(blockquote) {
+      @apply bg-foreground/4 border-foreground/8 my-6 border-l-4 px-4 py-2;
+    }
+
+    &:is(img) {
+      @apply my-6 h-auto max-w-full rounded-xl;
+    }
+
+    &:is(tr) {
+      @apply border-border m-0 border-b;
+    }
+
+    &:is(th) {
+      @apply px-4 py-2 text-left font-semibold;
+    }
+
+    &:is(td) {
+      @apply px-4 py-2 text-left;
+    }
+  }
+}

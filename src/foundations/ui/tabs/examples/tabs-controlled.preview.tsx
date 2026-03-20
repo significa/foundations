@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 import {
   Tabs,
@@ -8,7 +8,7 @@ import {
   TabsItems,
   TabsPanel,
   TabsPanels,
-} from "@/foundations/ui/tabs/tabs";
+} from '@/foundations/ui/tabs/tabs';
 
 export default function TabsControlledPreview() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -19,6 +19,7 @@ export default function TabsControlledPreview() {
         <span className="text-foreground-secondary text-sm">Current tab:</span>
         <span className="font-medium">{selectedIndex}</span>
         <button
+          type="button"
           onClick={() => setSelectedIndex((prev) => (prev + 1) % 3)}
           className="rounded-lg border px-3 py-1 text-sm"
         >

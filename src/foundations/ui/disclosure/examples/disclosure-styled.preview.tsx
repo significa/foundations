@@ -4,16 +4,16 @@ import {
   DisclosureContent,
   DisclosureGroup,
   DisclosureTrigger,
-} from "@/foundations/ui/disclosure/disclosure";
-import { cn } from "@/lib/utils";
+} from '@/foundations/ui/disclosure/disclosure';
+import { cn } from '@/lib/utils/classnames';
 
 const AccordionGroup = ({
   children,
   className,
-}: React.ComponentProps<"div">) => {
+}: React.ComponentProps<'div'>) => {
   return (
     <DisclosureGroup>
-      <div className={cn("rounded-lg border", className)}>{children}</div>
+      <div className={cn('rounded-lg border', className)}>{children}</div>
     </DisclosureGroup>
   );
 };
@@ -23,7 +23,7 @@ const Accordion = ({
   className,
 }: React.ComponentProps<typeof Disclosure>) => {
   return (
-    <Disclosure className={cn("border-b last:border-b-0", className)}>
+    <Disclosure className={cn('border-b last:border-b-0', className)}>
       {children}
     </Disclosure>
   );
@@ -36,7 +36,7 @@ const AccordionTrigger = ({
   return (
     <DisclosureTrigger
       className={cn(
-        "hover:bg-foreground/5 flex cursor-pointer items-center justify-between gap-4 px-3 py-2 transition-colors",
+        'flex cursor-pointer items-center justify-between gap-4 px-3 py-2 transition-colors hover:bg-foreground/5',
         className
       )}
     >
@@ -52,7 +52,7 @@ const AccordionContent = ({
 }: React.ComponentProps<typeof DisclosureContent>) => {
   return (
     <DisclosureContent>
-      <div className={cn("border-t px-3 py-2", className)}>{children}</div>
+      <div className={cn('border-t px-3 py-2', className)}>{children}</div>
     </DisclosureContent>
   );
 };

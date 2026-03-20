@@ -1,16 +1,15 @@
-export const metadata = {
-  title: "Dialog",
-  description:
-    "Dialog allows you to create modal elements that overlay the main content.",
-  files: ["src/foundations/ui/dialog/dialog.tsx"],
-  preview: "dialog",
-  dependencies: [
-    {
-      name: "Modal",
-      href: "/ui/modal",
-    },
-  ],
-};
+---
+title: Dialog
+description: Dialog allows you to create modal elements that overlay the main content.
+preview: dialog
+files:
+  - src/foundations/ui/dialog/dialog.tsx
+dependencies:
+  - name: Modal
+    href: /ui/modal
+
+folder: UI
+---
 
 ## Features
 
@@ -120,13 +119,11 @@ Dialog with custom content layout.
 ## Best Practices
 
 1. **Content Structure**:
-
    - Always include a clear title that describes the purpose
    - Keep content concise and focused
    - Use appropriate action labels (avoid "OK/Cancel")
 
 2. **Mobile Considerations**:
-
    - Test on different screen sizes
    - Ensure touch targets are large enough
    - Consider native scroll behavior for tall content

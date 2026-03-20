@@ -2,7 +2,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/foundations/ui/tooltip/tooltip";
+} from '@/foundations/ui/tooltip/tooltip';
 
 export default function TooltipLongContentPreview() {
   return (

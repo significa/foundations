@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { MouseScrollIcon } from "@phosphor-icons/react";
+import { MouseScrollIcon } from '@phosphor-icons/react';
 
 import {
   Stack,
   StackHeader,
   StackItem,
-} from "@/foundations/components/stack/stack";
-import { Divider } from "@/foundations/ui/divider/divider";
+} from '@/foundations/components/stack/stack';
+import { Divider } from '@/foundations/ui/divider/divider';
 
 const StackStickPositionPreview = () => {
   return (
     <div className="relative grid grid-cols-2 gap-8 py-[100vh]">
-      <div className="text-foreground-secondary absolute top-[50vh] flex w-full items-center justify-center gap-1">
+      <div className="absolute top-[50vh] flex w-full items-center justify-center gap-1 text-foreground-secondary">
         <MouseScrollIcon />
         Scroll down
       </div>
-      <div className="text-foreground-secondary absolute bottom-[50vh] flex w-full items-center justify-center gap-1">
+      <div className="absolute bottom-[50vh] flex w-full items-center justify-center gap-1 text-foreground-secondary">
         <MouseScrollIcon />
         Scroll up
       </div>
@@ -28,7 +28,7 @@ const StackStickPositionPreview = () => {
                 <div className="py-2 font-medium">Section {num}</div>
                 <Divider />
               </StackHeader>
-              <div className="text-foreground-secondary py-2">
+              <div className="py-2 text-foreground-secondary">
                 This section demonstrates the default top sticky behavior where
                 headers stick to the top of the viewport as you scroll down.
               </div>
@@ -45,7 +45,7 @@ const StackStickPositionPreview = () => {
                 <div className="py-2 font-medium">Section {num}</div>
                 <Divider />
               </StackHeader>
-              <div className="text-foreground-secondary py-2">
+              <div className="py-2 text-foreground-secondary">
                 This section shows how headers can stick to the bottom of the
                 viewport when using stick=bottom. This is useful for bottom-up
                 navigation patterns.

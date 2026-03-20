@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
-@variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+}
 
 @theme {
   /* Typography */
@@ -29,9 +33,7 @@
   --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.02), 0 2px 4px oklch(0 0 0 / 0.02);
   --shadow-md: 0 2px 3px oklch(0 0 0 / 0.02), 0 3px 6px oklch(0 0 0 / 0.02);
-  --shadow-lg:
-    0 2px 4px oklch(0 0 0 / 0.02), 0 4px 8px oklch(0 0 0 / 0.02),
-    0 8px 16px oklch(0 0 0 / 0.02);
+  --shadow-lg: 0 2px 4px oklch(0 0 0 / 0.02), 0 4px 8px oklch(0 0 0 / 0.02), 0 8px 16px oklch(0 0 0 / 0.02);
 
   /* easings */
   --ease-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
@@ -66,6 +68,8 @@
 }
 
 body {
+  scrollbar-gutter: stable;
+
   font-family: var(--font-sans);
 
   background-color: var(--color-background);
@@ -77,5 +81,4 @@ body {
 
 body:has(dialog[open]) {
   overflow: hidden;
-  scrollbar-gutter: stable;
 }

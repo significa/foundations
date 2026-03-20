@@ -1,16 +1,16 @@
-export const metadata = {
-  title: "Color Picker",
-  description:
-    "A composable color picker component with modular parts for building custom color selection interfaces.",
-  preview: "color-picker",
-  files: ["src/foundations/ui/color-picker/color-picker.tsx"],
-  dependencies: [
-    {
-      name: "chroma-js",
-      href: "https://www.npmjs.com/package/chroma-js",
-    },
-  ],
-};
+---
+title: Color Picker
+description: >-
+  A composable color picker component with modular parts for building custom color selection interfaces.
+preview: color-picker
+files:
+  - src/foundations/ui/color-picker/color-picker.tsx
+dependencies:
+  - name: chroma-js
+    href: https://www.npmjs.com/package/chroma-js
+
+folder: UI
+---
 
 ## Features
 
@@ -42,20 +42,17 @@ The root component that provides context for all color picker parts.
   definition={{
     color: {
       type: "HSVA",
-      description:
-        "Current color value in HSVA format [hue, saturation, value, alpha]. Hue is 0-360, others are 0-1.",
+      description: "Current color value in HSVA format [hue, saturation, value, alpha]. Hue is 0-360, others are 0-1.",
       default: "[0, 1, 1, 1]",
     },
     onColorChange: {
       type: "(color: HSVA) => void",
-      description:
-        "Callback function that receives the new color value when the user makes a selection.",
+      description: "Callback function that receives the new color value when the user makes a selection.",
     },
     disabled: {
       type: "boolean",
       default: "false",
-      description:
-        "When true, prevents user interaction with all color picker parts.",
+      description: "When true, prevents user interaction with all color picker parts.",
     },
   }}
 />
@@ -105,20 +102,17 @@ A horizontal alpha/opacity slider with a checkered background pattern.
 ## Best Practices
 
 1. **Color Format**:
-
    - Use HSVA format internally for consistent color manipulation
    - Convert to appropriate formats (HEX, RGB, HSL) for display or export
    - Consider alpha channel support when needed
 
 2. **Layout and Composition**:
-
    - Combine different picker parts based on your use case
    - Use Area + Hue for most common scenarios
    - Add Alpha slider when transparency is needed
    - Consider space constraints when choosing components
 
 3. **Accessibility**:
-
    - Ensure sufficient contrast between handles and backgrounds
    - Test keyboard navigation thoroughly
    - Provide clear labels for screen readers

@@ -1,8 +1,9 @@
-export const metadata = {
-  title: "Performance tracking & bundle analyzer",
-  description:
-    "A comprehensive guide to setting up performance tracking and bundle analysis for Next.js applications",
-};
+---
+title: "Performance tracking & bundle analyzer"
+description: "A comprehensive guide to setting up performance tracking and bundle analysis for Next.js applications"
+
+folder: Guides
+---
 
 ## Overview
 
@@ -98,12 +99,7 @@ module.exports = {
       numberOfRuns: 3,
       settings: {
         preset: "perf",
-        onlyCategories: [
-          "performance",
-          "accessibility",
-          "best-practices",
-          "seo",
-        ],
+        onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
       },
     },
     assert: {
@@ -205,7 +201,6 @@ module.exports = {
 #### Lets breakdown the configuration
 
 1. **collect** - Gathering Lighthouse Reports
-
    - URLs to test: Runs Lighthouse on https://nextjs-performance-xi.vercel.app/. (change to the staging or production URL)
    - Runs per test: Conducts 3 test runs and takes the median score.
    - Settings:
@@ -217,14 +212,12 @@ module.exports = {
    This section compares new reports with previous ones and defines failure/warning thresholds:
 
    **Category Score Assertions:**
-
    - 🔴 Fail if Performance drops by more than 5 points (below 0.7).
    - ⚠️ Warn if: - Accessibility drops by 5+ points (below 0.8).
    - Best Practices drops by 5+ points (below 0.9).
    - SEO drops by 5+ points (below 0.9).
 
    **Key Performance Metric Assertions (Tracks key web vitals):**
-
    - First Contentful Paint (FCP): 🚨 Warn if >2000ms or increases by 500ms.
    - Largest Contentful Paint (LCP): 🚨 Warn if >2500ms or increases by 500ms.
    - Cumulative Layout Shift (CLS): 🚨 Warn if >0.1 or increases by 0.05.
@@ -251,12 +244,7 @@ module.exports = {
       numberOfRuns: 3,
       settings: {
         preset: "perf",
-        onlyCategories: [
-          "performance",
-          "accessibility",
-          "best-practices",
-          "seo",
-        ],
+        onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
       },
     },
     assert: {
@@ -266,57 +254,34 @@ module.exports = {
         "categories:performance": [
           "error",
           {
-            minScore: process.env.PERF_THRESHOLD
-              ? parseFloat(process.env.PERF_THRESHOLD) / 100
-              : 0.6,
+            minScore: process.env.PERF_THRESHOLD ? parseFloat(process.env.PERF_THRESHOLD) / 100 : 0.6,
           },
         ],
         "categories:accessibility": [
           "error",
           {
-            minScore: process.env.A11Y_THRESHOLD
-              ? parseFloat(process.env.A11Y_THRESHOLD) / 100
-              : 0.8,
+            minScore: process.env.A11Y_THRESHOLD ? parseFloat(process.env.A11Y_THRESHOLD) / 100 : 0.8,
           },
         ],
         "categories:best-practices": [
           "error",
           {
-            minScore: process.env.BP_THRESHOLD
-              ? parseFloat(process.env.BP_THRESHOLD) / 100
-              : 0.9,
+            minScore: process.env.BP_THRESHOLD ? parseFloat(process.env.BP_THRESHOLD) / 100 : 0.9,
           },
         ],
         "categories:seo": [
           "error",
           {
-            minScore: process.env.SEO_THRESHOLD
-              ? parseFloat(process.env.SEO_THRESHOLD) / 100
-              : 0.9,
+            minScore: process.env.SEO_THRESHOLD ? parseFloat(process.env.SEO_THRESHOLD) / 100 : 0.9,
           },
         ],
 
         // Key metrics with fixed thresholds
-        "first-contentful-paint": [
-          "warn",
-          { maxNumericValue: process.env.FCP_THRESHOLD || 2000 },
-        ],
-        "largest-contentful-paint": [
-          "warn",
-          { maxNumericValue: process.env.LCP_THRESHOLD || 2500 },
-        ],
-        "cumulative-layout-shift": [
-          "warn",
-          { maxNumericValue: process.env.CLS_THRESHOLD || 0.1 },
-        ],
-        "total-blocking-time": [
-          "warn",
-          { maxNumericValue: process.env.TBT_THRESHOLD || 300 },
-        ],
-        interactive: [
-          "warn",
-          { maxNumericValue: process.env.TTI_THRESHOLD || 3500 },
-        ],
+        "first-contentful-paint": ["warn", { maxNumericValue: process.env.FCP_THRESHOLD || 2000 }],
+        "largest-contentful-paint": ["warn", { maxNumericValue: process.env.LCP_THRESHOLD || 2500 }],
+        "cumulative-layout-shift": ["warn", { maxNumericValue: process.env.CLS_THRESHOLD || 0.1 }],
+        "total-blocking-time": ["warn", { maxNumericValue: process.env.TBT_THRESHOLD || 300 }],
+        interactive: ["warn", { maxNumericValue: process.env.TTI_THRESHOLD || 3500 }],
       },
     },
     upload: {
@@ -338,7 +303,6 @@ Uses environment variables (process.env.\*) for thresholds, making it customizab
 Category Score Assertions (Fail if below threshold)
 
 - 🔴 Fail if:
-
   - Performance score drops below env var (PERF_THRESHOLD/100) or default 0.6 (60%).
   - Accessibility score drops below env var (A11Y_THRESHOLD/100) or default 0.8 (80%).
   - Best Practices score drops below env var (BP_THRESHOLD/100) or default 0.9 (90%).

@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from 'react';
 
 import {
   flattenHierarchicalData,
   getEnabledChildIds,
   getParentSelectionStatus,
   getSelectAllStatus,
-  HierarchicalItem,
-  HierarchicalSelectionState,
-  SelectionStatus,
-} from "./hierarchical-data";
+  type HierarchicalItem,
+  type HierarchicalSelectionState,
+  type SelectionStatus,
+} from './hierarchical-data';
 
 export interface UseHierarchicalSelectionOptions {
   /** Initial selected item IDs */
@@ -131,9 +131,13 @@ export function useHierarchicalSelection(
         const enabledChildIds = getEnabledChildIds(parentItem);
 
         if (checked) {
-          enabledChildIds.forEach((id) => newSelectedIds.add(id));
+          enabledChildIds.forEach((id) => {
+            newSelectedIds.add(id);
+          });
         } else {
-          enabledChildIds.forEach((id) => newSelectedIds.delete(id));
+          enabledChildIds.forEach((id) => {
+            newSelectedIds.delete(id);
+          });
         }
 
         notifySelectionChange(newSelectedIds);

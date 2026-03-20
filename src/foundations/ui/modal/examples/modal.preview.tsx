@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Modal,
   ModalClose,
@@ -8,7 +8,7 @@ import {
   ModalDescription,
   ModalTitle,
   ModalTrigger,
-} from "@/foundations/ui/modal/modal";
+} from '@/foundations/ui/modal/modal';
 
 const ModalControlledPreview = () => {
   return (

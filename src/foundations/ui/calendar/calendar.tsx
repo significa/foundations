@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
-import { add, format, isSameDay, isSameMonth } from "date-fns";
-import { useMemo, useState } from "react";
+import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
+import { add, format, isSameDay, isSameMonth } from 'date-fns';
+import { useMemo, useState } from 'react';
 
-import { Button } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils";
+import { Button } from '@/foundations/ui/button/button';
+import { cn } from '@/lib/utils/classnames';
 
 /**
  * Generate a matrix of dates for a given month
@@ -50,7 +50,7 @@ const generateMonth = (
     : matrix;
 };
 
-interface CalendarCommonProps extends React.ComponentPropsWithRef<"div"> {
+interface CalendarCommonProps extends React.ComponentPropsWithRef<'div'> {
   getIsDisabled?: (date: Date) => boolean;
   startWeekOn?: 0 | 2 | 1 | 3 | 4 | 5 | 6;
   locale?: Intl.LocalesArgument;
@@ -59,18 +59,18 @@ interface CalendarCommonProps extends React.ComponentPropsWithRef<"div"> {
 interface CalendarSingleProps extends CalendarCommonProps {
   value: Date | null;
   onDateChange: (date: Date) => void;
-  mode?: "single";
+  mode?: 'single';
 }
 
 interface CalendarRangeProps extends CalendarCommonProps {
   value: [Date, Date] | null;
   onDateChange: (dates: [Date, Date]) => void;
-  mode: "range";
+  mode: 'range';
 }
 
 type CalendarProps = CalendarSingleProps | CalendarRangeProps;
 
-type CalendarView = "days" | "months" | "years";
+type CalendarView = 'days' | 'months' | 'years';
 
 const sortDates = (dates: [Date, Date]): [Date, Date] => {
   return [...dates].sort((a, b) => a.getTime() - b.getTime()) as [Date, Date];
@@ -82,13 +82,13 @@ const Calendar = ({
   value,
   getIsDisabled = () => false,
   startWeekOn = 0,
-  locale = "en",
+  locale = 'en',
   className,
   ...props
 }: CalendarProps) => {
-  const [view, setView] = useState<CalendarView>("days");
+  const [view, setView] = useState<CalendarView>('days');
   const [viewDate, setViewDate] = useState<Date>(
-    mode === "range" ? value?.[0] || new Date() : value || new Date()
+    mode === 'range' ? value?.[0] || new Date() : value || new Date()
   );
 
   // used to track a date range while it's being selected
@@ -105,7 +105,7 @@ const Calendar = ({
       return [null, null];
     }
 
-    if (mode === "range") {
+    if (mode === 'range') {
       return sortDates(value);
     }
 
@@ -142,7 +142,7 @@ const Calendar = ({
 
   const handleDaySelect = (date: Date) => {
     // not a range selection
-    if (mode !== "range") {
+    if (mode !== 'range') {
       return onDateChange(date);
     }
 
@@ -157,48 +157,48 @@ const Calendar = ({
   };
 
   const handleDayHover = (date: Date) => {
-    if (mode !== "range" || !transientRange) return;
+    if (mode !== 'range' || !transientRange) return;
 
     setTransientRange([transientRange[0], date]);
   };
 
   return (
-    <div className={cn("bg-background", className)} {...props}>
-      {view === "years" && (
+    <div className={cn('bg-background', className)} {...props}>
+      {view === 'years' && (
         <CalendarHeader
           onPrevious={() => setViewDate((prev) => add(prev, { years: -12 }))}
           onNext={() => setViewDate((prev) => add(prev, { years: 12 }))}
         >
           <HeaderTextButton
             className="flex items-center gap-1"
-            onClick={() => setView("days")}
+            onClick={() => setView('days')}
           >
             <span>{viewDate.getFullYear() - 5}</span>
-            <span>{"–"}</span>
+            <span>{'–'}</span>
             <span>{viewDate.getFullYear() + 6}</span>
           </HeaderTextButton>
         </CalendarHeader>
       )}
-      {view === "months" && (
+      {view === 'months' && (
         <CalendarHeader
           onPrevious={() => setViewDate((prev) => add(prev, { years: -1 }))}
           onNext={() => setViewDate((prev) => add(prev, { years: 1 }))}
         >
-          <HeaderTextButton onClick={() => setView("years")}>
+          <HeaderTextButton onClick={() => setView('years')}>
             {viewDate.getFullYear()}
           </HeaderTextButton>
         </CalendarHeader>
       )}
-      {view === "days" && (
+      {view === 'days' && (
         <CalendarHeader
           onPrevious={() => setViewDate((prev) => add(prev, { months: -1 }))}
           onNext={() => setViewDate((prev) => add(prev, { months: 1 }))}
         >
           <div className="flex items-center gap-1 text-sm">
-            <HeaderTextButton onClick={() => setView("months")}>
-              {viewDate.toLocaleDateString(locale, { month: "long" })}
+            <HeaderTextButton onClick={() => setView('months')}>
+              {viewDate.toLocaleDateString(locale, { month: 'long' })}
             </HeaderTextButton>
-            <HeaderTextButton onClick={() => setView("years")}>
+            <HeaderTextButton onClick={() => setView('years')}>
               {viewDate.getFullYear()}
             </HeaderTextButton>
           </div>
@@ -206,9 +206,9 @@ const Calendar = ({
       )}
 
       <div className="relative">
-        {(view === "years" || view === "months") && (
-          <div className="bg-background absolute inset-0 z-10 p-1">
-            {view === "years" && (
+        {(view === 'years' || view === 'months') && (
+          <div className="absolute inset-0 z-10 bg-background p-1">
+            {view === 'years' && (
               <div className="grid size-full grid-cols-3 grid-rows-4 p-0.5">
                 {Array.from({ length: 12 }, (_, i) => {
                   const year = viewDate.getFullYear() - 5 + i;
@@ -219,7 +219,7 @@ const Calendar = ({
                       className="h-full"
                       onClick={() => {
                         setViewDate(date);
-                        setView("months");
+                        setView('months');
                       }}
                     >
                       {year}
@@ -228,7 +228,7 @@ const Calendar = ({
                 })}
               </div>
             )}
-            {view === "months" && (
+            {view === 'months' && (
               <div className="grid size-full grid-cols-3 grid-rows-4 p-0.5">
                 {Array.from({ length: 12 }, (_, i) => {
                   const date = new Date(viewDate.getFullYear(), i, 1);
@@ -238,10 +238,10 @@ const Calendar = ({
                       className="h-full"
                       onClick={() => {
                         setViewDate(date);
-                        setView("days");
+                        setView('days');
                       }}
                     >
-                      {date.toLocaleDateString(locale, { month: "short" })}
+                      {date.toLocaleDateString(locale, { month: 'short' })}
                     </YearMonthButton>
                   );
                 })}
@@ -256,9 +256,9 @@ const Calendar = ({
             return (
               <div
                 key={i}
-                className="text-foreground-secondary flex h-9 w-full min-w-9 items-center justify-center text-sm"
+                className="flex h-9 w-full min-w-9 items-center justify-center text-foreground-secondary text-sm"
               >
-                {weekday.toLocaleDateString(locale, { weekday: "narrow" })}
+                {weekday.toLocaleDateString(locale, { weekday: 'narrow' })}
               </div>
             );
           })}
@@ -284,7 +284,7 @@ const Calendar = ({
                 <button
                   type="button"
                   key={ii}
-                  aria-label={format(day, "yyyy-MM-dd")}
+                  aria-label={format(day, 'yyyy-MM-dd')}
                   data-other-month={!isSameMonth(day, viewDate) || undefined}
                   data-start-date={isStartDate || undefined}
                   data-end-date={isEndDate || undefined}
@@ -293,7 +293,7 @@ const Calendar = ({
                   data-today={isToday || undefined}
                   disabled={getIsDisabled(day)}
                   className={cn(
-                    "group text-foreground relative isolate flex h-9 w-full min-w-9 cursor-pointer items-center justify-center outline-none disabled:pointer-events-none disabled:opacity-30"
+                    'group relative isolate flex h-9 w-full min-w-9 cursor-pointer items-center justify-center text-foreground outline-none disabled:pointer-events-none disabled:opacity-30'
                   )}
                   onClick={() => handleDaySelect(day)}
                   onMouseEnter={() => handleDayHover(day)}
@@ -303,15 +303,15 @@ const Calendar = ({
                   <div
                     className={cn(
                       // base
-                      "ring-ring text-foreground/80 z-10 flex size-8 items-center justify-center rounded-lg border border-transparent text-sm font-medium tabular-nums transition-shadow",
+                      'z-10 flex size-8 items-center justify-center rounded-lg border border-transparent font-medium text-foreground/80 text-sm tabular-nums ring-ring transition-shadow',
                       // hover
-                      "group-hover:bg-foreground/5 group-hover:text-foreground",
+                      'group-hover:bg-foreground/5 group-hover:text-foreground',
                       // selected
-                      "group-data-selected:bg-accent group-data-selected:text-accent-foreground group-hover:group-data-selected:text-accent-foreground",
+                      'group-data-selected:bg-accent group-data-selected:text-accent-foreground group-hover:group-data-selected:text-accent-foreground',
                       // other month
-                      "group-data-other-month:text-foreground-secondary",
+                      'group-data-other-month:text-foreground-secondary',
                       // focus
-                      "group-focus-visible:ring-4"
+                      'group-focus-visible:ring-4'
                     )}
                   >
                     {day.getDate()}
@@ -321,8 +321,8 @@ const Calendar = ({
                     <div
                       aria-hidden
                       className={cn(
-                        "bg-foreground absolute bottom-1.5 left-1/2 z-20 h-0.5 w-1.5 -translate-x-1/2 rounded-md",
-                        isSelected && "bg-accent-foreground"
+                        'absolute bottom-1.5 left-1/2 z-20 h-0.5 w-1.5 -translate-x-1/2 rounded-md bg-foreground',
+                        isSelected && 'bg-accent-foreground'
                       )}
                     />
                   )}
@@ -330,10 +330,10 @@ const Calendar = ({
                   <div
                     aria-hidden
                     className={cn(
-                      "bg-background-secondary invisible absolute inset-x-0 inset-y-0.5 z-0",
-                      "group-data-in-range:visible",
-                      "group-data-start-date:visible group-data-start-date:left-1/2",
-                      "group-data-end-date:visible group-data-end-date:right-1/2"
+                      'invisible absolute inset-x-0 inset-y-0.5 z-0 bg-background-secondary',
+                      'group-data-in-range:visible',
+                      'group-data-start-date:visible group-data-start-date:left-1/2',
+                      'group-data-end-date:visible group-data-end-date:right-1/2'
                     )}
                   />
                 </button>
@@ -358,7 +358,7 @@ const CalendarHeader = ({
   children,
 }: CalendarHeaderProps) => {
   return (
-    <div className="flex items-center justify-between p-1.5 text-sm font-medium">
+    <div className="flex items-center justify-between p-1.5 font-medium text-sm">
       <Button variant="outline" square onClick={onPrevious}>
         <CaretLeftIcon />
       </Button>
@@ -379,7 +379,7 @@ const HeaderTextButton = ({
     <button
       type="button"
       className={cn(
-        "ring-ring text-foreground/80 hover:text-foreground focus-visible:text-foreground cursor-pointer rounded-sm font-medium transition outline-none focus-visible:ring-4",
+        'cursor-pointer rounded-sm font-medium text-foreground/80 outline-none ring-ring transition hover:text-foreground focus-visible:text-foreground focus-visible:ring-4',
         className
       )}
       {...props}
@@ -398,7 +398,7 @@ const YearMonthButton = ({
     <button
       type="button"
       className={cn(
-        "ring-ring text-foreground/80 hover:bg-foreground/5 hover:text-foreground focus-visible:text-foreground h-8 w-full cursor-pointer rounded-lg text-sm font-medium transition outline-none focus-visible:ring-4",
+        'h-8 w-full cursor-pointer rounded-lg font-medium text-foreground/80 text-sm outline-none ring-ring transition hover:bg-foreground/5 hover:text-foreground focus-visible:text-foreground focus-visible:ring-4',
         className
       )}
       {...props}

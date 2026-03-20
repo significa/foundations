@@ -1,11 +1,11 @@
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Dropdown,
   DropdownItem,
   DropdownItems,
   DropdownSearchInput,
   DropdownTrigger,
-} from "@/foundations/ui/dropdown/dropdown";
+} from '@/foundations/ui/dropdown/dropdown';
 
 export default function DropdownSearchPreview() {
   return (

@@ -1,9 +1,12 @@
-export const metadata = {
-  title: "Portal",
-  description:
-    "A component that renders its children into a new DOM node outside the parent hierarchy.",
-  files: ["src/foundations/ui/portal/portal.tsx"],
-};
+---
+title: Portal
+description: >-
+  A component that renders its children into a new DOM node outside the parent hierarchy.
+files:
+  - src/foundations/ui/portal/portal.tsx
+
+folder: UI
+---
 
 ## Features
 
@@ -39,9 +42,7 @@ import { Portal } from "@/foundations/ui/portal/portal";
 export default function PortalExample() {
   return (
     <Portal>
-      <div className="fixed inset-0 bg-black/50">
-        This content is rendered at the end of document.body
-      </div>
+      <div className="fixed inset-0 bg-black/50">This content is rendered at the end of document.body</div>
     </Portal>
   );
 }
@@ -74,7 +75,6 @@ export default function CustomContainerExample() {
 ## Best Practices
 
 1. **Accessibility**: When using portals, ensure that:
-
    - The portal content is properly labeled with ARIA attributes
    - Focus management is handled correctly
    - The content is properly announced to screen readers

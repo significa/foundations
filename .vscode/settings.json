@@ -1,5 +1,8 @@
 {
-  "[mdx]": {
-    "editor.wordWrap": "on"
-  }
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "biome.enabled": true
 }

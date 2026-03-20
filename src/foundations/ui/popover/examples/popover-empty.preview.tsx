@@ -1,11 +1,11 @@
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Popover,
   PopoverContent,
   PopoverEmpty,
   PopoverSearchInput,
   PopoverTrigger,
-} from "@/foundations/ui/popover/popover";
+} from '@/foundations/ui/popover/popover';
 
 export default function PopoverEmptyPreview() {
   return (

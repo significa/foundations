@@ -1,0 +1,72 @@
+---
+import { ListIcon, XIcon } from "@phosphor-icons/react";
+import { ColorAccentSelect } from "@/components/color-accent-select";
+import { Egg, Octocat } from "@/components/icons";
+import { Search } from "@/components/search";
+import ThemeSwitcher from "@/components/theme-switcher.astro";
+import { Button, buttonStyle } from "@/foundations/ui/button/button";
+import { GITHUB_REPO_URL } from "@/lib/constants";
+---
+
+<div class="border-border bg-background/95 sticky top-0 z-50 border-b backdrop-blur-sm">
+  <div class="mx-auto flex h-12 max-w-(--breakpoint-2xl) items-center justify-between gap-2 px-2 md:h-14 md:px-4">
+    <div class="flex items-center gap-1.5">
+      <Button
+        id="app-menu-toggle"
+        className="group xl:hidden"
+        variant="ghost"
+        size="sm"
+        square
+        aria-label="Open menu"
+        data-open="false"
+      >
+        <ListIcon className="group-data-[open=true]:hidden" />
+        <XIcon className="group-data-[open=false]:hidden" />
+      </Button>
+      <a href="/" class="flex items-center gap-1.5">
+        <Egg />
+        <div class="font-medium">Foundations</div>
+      </a>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <Search client:idle />
+      <Button variant="ghost" size="sm" square asChild>
+        <a
+          href={GITHUB_REPO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View on GitHub"
+          class={buttonStyle({ size: "sm", variant: "ghost", square: true })}
+        >
+          <Octocat />
+        </a>
+      </Button>
+      <ThemeSwitcher />
+      <ColorAccentSelect client:idle transition:persist />
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const menu = document.getElementById("app-menu");
+    const menuToggle = document.getElementById("app-menu-toggle");
+    if (!menu || !menuToggle) return;
+
+    menuToggle.setAttribute("data-open", String(false));
+    menu.setAttribute("data-mobile-menu-open", String(false));
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("data-open") === "true";
+
+      menu.setAttribute("data-mobile-menu-open", String(!isOpen));
+      menuToggle.setAttribute("data-open", String(!isOpen));
+    });
+  });
+</script>
+
+<style is:global>
+  body:has(#app-menu-toggle[data-open="true"]) {
+    overflow: hidden;
+  }
+</style>

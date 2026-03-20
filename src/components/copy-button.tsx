@@ -1,23 +1,25 @@
-"use client";
+import { CheckIcon, ClipboardIcon } from '@phosphor-icons/react';
+import { useEffect, useRef, useState } from 'react';
 
-import { CheckIcon, ClipboardIcon } from "@phosphor-icons/react";
-import { useEffect, useRef, useState } from "react";
+import { Button } from '@/foundations/ui/button/button';
+import { cn } from '@/lib/utils/classnames';
 
-import { Button } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils";
-
-export const CopyButton = ({
-  content,
-  className,
-}: {
-  content: string;
+type CopyButtonProps = {
   className?: string;
-}) => {
+} & ({ content: string; target?: never } | { target: string; content?: never });
+
+const CopyButton = ({ className, ...props }: CopyButtonProps) => {
   const [isCopied, setIsCopied] = useState(false);
   const timeout = useRef<NodeJS.Timeout | null>(null);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(content);
+    const text =
+      'target' in props && props.target
+        ? ((document.querySelector(props.target) as HTMLElement)?.innerText ??
+          '')
+        : (props.content ?? '');
+
+    navigator.clipboard.writeText(text);
     setIsCopied(true);
 
     timeout.current = setTimeout(() => {
@@ -46,3 +48,5 @@ export const CopyButton = ({
     </Button>
   );
 };
+
+export { CopyButton };

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useMousePan } from "@/foundations/hooks/use-mouse-pan/use-mouse-pan";
-import { cn } from "@/lib/utils";
+import { useMousePan } from '@/foundations/hooks/use-mouse-pan/use-mouse-pan';
+import { cn } from '@/lib/utils/classnames';
 
 const UseMousePanClickables = () => {
   const { ref } = useMousePan<HTMLDivElement>();
@@ -16,13 +16,14 @@ const UseMousePanClickables = () => {
           <li
             key={index}
             className={cn(
-              "no-select bg-foreground-secondary/15 size-32 rounded-sm",
-              index % 2 === 0 && "bg-foreground-secondary/30"
+              'no-select size-32 rounded-sm bg-foreground-secondary/15',
+              index % 2 === 0 && 'bg-foreground-secondary/30'
             )}
           >
             <button
+              type="button"
               className="size-full text-sm"
-              onClick={() => window.alert("click")}
+              onClick={() => window.alert('click')}
             >
               [button]
             </button>

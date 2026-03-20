@@ -1,24 +1,19 @@
-export const metadata = {
-  title: "Date Picker",
-  description:
-    "A date picker component built with the Calendar and Dropdown components.",
-  files: ["src/foundations/ui/date-picker/date-picker.tsx"],
-  preview: "date-picker",
-  dependencies: [
-    {
-      name: "Calendar",
-      href: "/ui/calendar",
-    },
-    {
-      name: "Dropdown",
-      href: "/ui/dropdown",
-    },
-    {
-      name: "inputStyle",
-      href: "/ui/input",
-    },
-  ],
-};
+---
+title: Date Picker
+description: A date picker component built with the Calendar and Dropdown components.
+preview: date-picker
+files:
+  - src/foundations/ui/date-picker/date-picker.tsx
+dependencies:
+  - name: Calendar
+    href: /ui/calendar
+  - name: Dropdown
+    href: /ui/dropdown
+  - name: inputStyle
+    href: /ui/input
+
+folder: UI
+---
 
 ## Features
 
@@ -50,8 +45,7 @@ Extends the [`DropdownTrigger`](/ui/dropdown) component.
   definition={{
     placeholder: {
       type: "string",
-      description:
-        "The placeholder text to display when the date picker is empty.",
+      description: "The placeholder text to display when the date picker is empty.",
     },
     variant: {
       type: 'InputProps["variant"]',
@@ -87,13 +81,11 @@ Using predefined shortcuts for quick date selection.
 ## Best Practices
 
 1. **Input Format**:
-
    - Use clear date format patterns
    - Consider adding format hints in placeholder
    - Handle invalid date inputs gracefully
 
 2. **Shortcuts**:
-
    - Keep shortcuts relevant to use case
    - Use clear, descriptive labels
    - Consider common date ranges

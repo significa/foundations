@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { CaretDownIcon } from "@phosphor-icons/react";
-import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
-import { createContext, use, useId, useState } from "react";
+import { CaretDownIcon } from '@phosphor-icons/react';
+import { AnimatePresence, type HTMLMotionProps, motion } from 'motion/react';
+import { createContext, use, useId, useState } from 'react';
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { cn } from "@/lib/utils";
+import { Slot } from '@/foundations/components/slot/slot';
+import { cn } from '@/lib/utils/classnames';
 
 interface DisclosureGroupContext {
   open: string | null;
@@ -44,12 +44,12 @@ const useDisclosureContext = () => {
   const context = use(DisclosureContext);
 
   if (!context)
-    throw new Error("Disclosure components must be used within an Disclosure");
+    throw new Error('Disclosure components must be used within an Disclosure');
 
   return context;
 };
 
-interface DisclosureProps extends React.ComponentPropsWithRef<"div"> {
+interface DisclosureProps extends React.ComponentPropsWithRef<'div'> {
   defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -92,7 +92,7 @@ const Disclosure = ({
   );
 };
 
-interface DisclosureTriggerProps extends React.ComponentPropsWithRef<"button"> {
+interface DisclosureTriggerProps extends React.ComponentPropsWithRef<'button'> {
   asChild?: boolean;
 }
 
@@ -105,7 +105,7 @@ const DisclosureTrigger = ({
 }: DisclosureTriggerProps) => {
   const { open, setOpen, id } = useDisclosureContext();
 
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
@@ -119,7 +119,7 @@ const DisclosureTrigger = ({
       aria-controls={open ? getContentId(id) : undefined}
       data-open={open}
       className={cn(
-        "ring-ring flex w-full items-center justify-between text-left outline-none focus-visible:ring-4",
+        'flex w-full items-center justify-between text-left outline-none ring-ring focus-visible:ring-4',
         className
       )}
       {...props}
@@ -135,7 +135,7 @@ const DisclosureContent = ({
   children,
   className,
   ...props
-}: Omit<HTMLMotionProps<"div">, "id" | "children"> & {
+}: Omit<HTMLMotionProps<'div'>, 'id' | 'children'> & {
   className?: string;
   children: React.ReactNode;
 }) => {
@@ -146,11 +146,11 @@ const DisclosureContent = ({
       {open && (
         <motion.div
           id={getContentId(id)}
-          className={cn("overflow-hidden", className)}
+          className={cn('overflow-hidden', className)}
           data-open={open}
-          transition={{ type: "spring", bounce: 0, visualDuration: 0.15 }}
+          transition={{ type: 'spring', bounce: 0, visualDuration: 0.15 }}
           initial={{ height: 0 }}
-          animate={{ height: "auto" }}
+          animate={{ height: 'auto' }}
           exit={{ height: 0 }}
           {...props}
         >
@@ -164,15 +164,15 @@ const DisclosureContent = ({
 const DisclosureChevron = ({
   className,
   ...props
-}: React.ComponentPropsWithRef<"span">) => {
+}: React.ComponentPropsWithRef<'span'>) => {
   const { open } = useDisclosureContext();
 
   return (
     <span
       aria-hidden="true"
       className={cn(
-        "ease-out-cubic p-1 transition-transform duration-100",
-        open && "rotate-180",
+        'p-1 transition-transform duration-100 ease-out-cubic',
+        open && 'rotate-180',
         className
       )}
       {...props}

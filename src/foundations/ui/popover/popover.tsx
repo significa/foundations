@@ -1,35 +1,35 @@
-"use client";
+'use client';
 
 import {
   autoUpdate,
-  flip,
-  FloatingContext,
+  type FloatingContext,
   FloatingFocusManager,
+  flip,
   hide,
   offset as offsetMiddleware,
-  Placement,
+  type Placement,
   shift,
   size,
+  type UseFloatingOptions,
+  type UseInteractionsReturn,
   useClick,
   useDismiss,
   useFloating,
-  UseFloatingOptions,
   useInteractions,
-  UseInteractionsReturn,
   useMergeRefs,
   useRole,
   useTransitionStatus,
-} from "@floating-ui/react";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react";
-import { createContext, use, useCallback, useMemo, useState } from "react";
+} from '@floating-ui/react';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
+import { createContext, use, useCallback, useMemo, useState } from 'react';
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
-import { cn } from "@/lib/utils";
+import { Slot } from '@/foundations/components/slot/slot';
+import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
+import { cn } from '@/lib/utils/classnames';
 
 interface UsePopoverFloatingOptions {
   open?: boolean;
-  onOpenChange?: UseFloatingOptions["onOpenChange"];
+  onOpenChange?: UseFloatingOptions['onOpenChange'];
   placement?: Placement;
   offset?: number;
 }
@@ -37,13 +37,13 @@ interface UsePopoverFloatingOptions {
 const usePopoverFloating = ({
   open: propsOpen,
   onOpenChange: propsOnOpenChange,
-  placement = "bottom",
+  placement = 'bottom',
   offset = 4,
 }: UsePopoverFloatingOptions) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = propsOpen ?? internalOpen;
 
-  const setOpen = useCallback<NonNullable<UseFloatingOptions["onOpenChange"]>>(
+  const setOpen = useCallback<NonNullable<UseFloatingOptions['onOpenChange']>>(
     (open, event, reason) => {
       setInternalOpen(open);
       propsOnOpenChange?.(open, event, reason);
@@ -66,12 +66,12 @@ const usePopoverFloating = ({
       size({
         apply({ rects, elements, availableHeight }) {
           elements.floating.style.setProperty(
-            "--max-height",
+            '--max-height',
             `${availableHeight}px`
           );
 
           elements.floating.style.setProperty(
-            "--width",
+            '--width',
             `${rects.reference.width}px`
           );
         },
@@ -105,7 +105,7 @@ const usePopoverContext = () => {
   const context = use(PopoverContext);
 
   if (context == null) {
-    throw new Error("Popover components must be wrapped in <Popover />");
+    throw new Error('Popover components must be wrapped in <Popover />');
   }
 
   return context;
@@ -157,7 +157,7 @@ const Popover = ({ children, modal = false, ...props }: PopoverProps) => {
   );
 };
 
-interface PopoverTriggerProps extends React.ComponentPropsWithRef<"button"> {
+interface PopoverTriggerProps extends React.ComponentPropsWithRef<'button'> {
   asChild?: boolean;
 }
 
@@ -185,16 +185,16 @@ const PopoverTrigger = ({
   ...props
 }: PopoverTriggerProps) => {
   const context = usePopoverContext();
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : 'button';
 
   const ref = useMergeRefs([context.refs.setReference, refProp]);
 
   return (
     <Comp
       ref={ref}
-      type={asChild ? undefined : "button"}
-      className={cn(!asChild && "disabled:opacity-40", className)}
-      data-state={context.open ? "open" : "closed"}
+      type={asChild ? undefined : 'button'}
+      className={cn(!asChild && 'disabled:opacity-40', className)}
+      data-state={context.open ? 'open' : 'closed'}
       {...context.getReferenceProps(props)}
     >
       {children}
@@ -217,7 +217,7 @@ const PopoverContent = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithRef<"div">) => {
+}: React.ComponentPropsWithRef<'div'>) => {
   const { context, refs, getFloatingProps, modal } = usePopoverContext();
 
   const ref = useMergeRefs([refs.setFloating, refProp]);
@@ -228,7 +228,7 @@ const PopoverContent = ({
       modal={modal}
       ref={ref}
       className={cn(
-        "border-border bg-background text-foreground z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border p-3 font-medium shadow-lg outline-none",
+        'z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-background p-3 font-medium text-foreground shadow-lg outline-none',
         className
       )}
       {...getFloatingProps(props)}
@@ -238,7 +238,7 @@ const PopoverContent = ({
   );
 };
 
-interface PopoverPanelProps extends React.ComponentPropsWithRef<"div"> {
+interface PopoverPanelProps extends React.ComponentPropsWithRef<'div'> {
   context: FloatingContext;
   modal?: boolean;
 }
@@ -269,23 +269,23 @@ const PopoverPanel = ({
     <FloatingFocusManager context={context} modal={modal}>
       <div
         ref={mergedRef}
-        data-state={["open", "initial"].includes(status) ? "open" : "closed"}
-        data-side={context.placement.split("-")[0]}
+        data-state={['open', 'initial'].includes(status) ? 'open' : 'closed'}
+        data-side={context.placement.split('-')[0]}
         className={cn(
-          "ease-out-expo origin-(--transform-origin) transition duration-300",
-          "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
-          "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
-          "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
+          'origin-(--transform-origin) transition duration-300 ease-out-expo',
+          'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
+          'data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150',
+          'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
           className
         )}
         style={{
           position: context.strategy,
           top: context.y ?? 0,
           left: context.x ?? 0,
-          "--transform-origin": placementToTransformOrigin(context.placement),
+          '--transform-origin': placementToTransformOrigin(context.placement),
           visibility: context.middlewareData.hide?.referenceHidden
-            ? "hidden"
-            : "visible",
+            ? 'hidden'
+            : 'visible',
           ...style,
         }}
         {...props}
@@ -297,34 +297,34 @@ const PopoverPanel = ({
 // ugly and verbose but easy to reason about and maintain
 const placementToTransformOrigin = (placement: Placement) => {
   switch (placement) {
-    case "top":
-      return "bottom";
-    case "bottom":
-      return "top";
-    case "left":
-      return "right";
-    case "right":
-      return "left";
-    case "top-start":
-      return "bottom left";
-    case "top-end":
-      return "bottom right";
-    case "bottom-start":
-      return "top left";
-    case "bottom-end":
-      return "top right";
-    case "left-start":
-      return "right top";
-    case "left-end":
-      return "right bottom";
-    case "right-start":
-      return "left top";
-    case "right-end":
-      return "left bottom";
+    case 'top':
+      return 'bottom';
+    case 'bottom':
+      return 'top';
+    case 'left':
+      return 'right';
+    case 'right':
+      return 'left';
+    case 'top-start':
+      return 'bottom left';
+    case 'top-end':
+      return 'bottom right';
+    case 'bottom-start':
+      return 'top left';
+    case 'bottom-end':
+      return 'top right';
+    case 'left-start':
+      return 'right top';
+    case 'left-end':
+      return 'right bottom';
+    case 'right-start':
+      return 'left top';
+    case 'right-end':
+      return 'left bottom';
   }
 };
 
-interface PopoverCloseProps extends React.ComponentPropsWithRef<"button"> {
+interface PopoverCloseProps extends React.ComponentPropsWithRef<'button'> {
   asChild?: boolean;
 }
 
@@ -355,7 +355,7 @@ const PopoverClose = ({
   ...props
 }: PopoverCloseProps) => {
   const { setOpen } = usePopoverContext();
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
@@ -373,16 +373,16 @@ const PopoverClose = ({
 const PopoverSearchInput = ({
   className,
   ...props
-}: React.ComponentPropsWithRef<"input">) => {
+}: React.ComponentPropsWithRef<'input'>) => {
   return (
-    <div className="border-border relative flex items-center rounded-t-lg border-b bg-transparent">
+    <div className="relative flex items-center rounded-t-lg border-border border-b bg-transparent">
       <MagnifyingGlassIcon
         weight="bold"
-        className="text-foreground absolute left-4 size-4 shrink-0"
+        className="absolute left-4 size-4 shrink-0 text-foreground"
       />
       <input
         className={cn(
-          "placeholder:text-foreground-secondary h-10 w-full border-0 bg-transparent p-4 pl-10 text-base font-medium transition-colors outline-none focus:ring-0",
+          'h-10 w-full border-0 bg-transparent p-4 pl-10 font-medium text-base outline-none transition-colors placeholder:text-foreground-secondary focus:ring-0',
           className
         )}
         {...props}
@@ -395,11 +395,11 @@ const PopoverEmpty = ({
   children,
   className,
   ...props
-}: React.ComponentPropsWithRef<"div">) => {
+}: React.ComponentPropsWithRef<'div'>) => {
   return (
     <div
       className={cn(
-        "text-foreground-secondary my-4 text-center text-base",
+        'my-4 text-center text-base text-foreground-secondary',
         className
       )}
       {...props}

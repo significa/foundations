@@ -2,7 +2,7 @@ import {
   CreditCardIcon,
   GearIcon,
   UsersIcon,
-} from "@phosphor-icons/react/dist/ssr";
+} from '@phosphor-icons/react/dist/ssr';
 
 import {
   Tabs,
@@ -10,7 +10,7 @@ import {
   TabsItems,
   TabsPanel,
   TabsPanels,
-} from "@/foundations/ui/tabs/tabs";
+} from '@/foundations/ui/tabs/tabs';
 
 export default function TabsPreview() {
   return (

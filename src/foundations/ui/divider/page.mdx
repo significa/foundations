@@ -1,9 +1,12 @@
-export const metadata = {
-  title: "Divider",
-  description: "Dividers are used to visually separate content in a UI.",
-  files: ["src/foundations/ui/divider/divider.tsx"],
-  preview: "divider",
-};
+---
+title: Divider
+description: Dividers are used to visually separate content in a UI.
+preview: divider
+files:
+  - src/foundations/ui/divider/divider.tsx
+
+folder: UI
+---
 
 ## Features
 
@@ -21,8 +24,7 @@ export const metadata = {
     },
     decorative: {
       type: "boolean",
-      description:
-        "Whether the divider is decorative. Doesn't add aria-orientation or role.",
+      description: "Whether the divider is decorative. Doesn't add aria-orientation or role.",
     },
   }}
 />
@@ -44,12 +46,10 @@ Example of a vertical divider between elements.
 ## Best Practices
 
 1. **Semantic Usage**:
-
    - Use semantic dividers when separating distinct sections
    - Use decorative dividers for visual separation only
 
 2. **Spacing**:
-
    - Maintain consistent spacing around dividers
    - Consider using margins instead of dividers for simple spacing
 

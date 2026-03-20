@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import {
   createContext,
-  ReactNode,
+  type ReactNode,
   use,
   useCallback,
   useEffect,
@@ -10,7 +10,7 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 interface InstanceCounterContextType {
   getIndex: (key: string) => number;
@@ -36,6 +36,7 @@ const InstanceCounterProvider = ({
   const keys = useRef<string[]>([]);
   const isMounted = useRef(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   const getIndex = useCallback(
     (key: string) => {
       if (keys.current.includes(key)) {
@@ -46,7 +47,6 @@ const InstanceCounterProvider = ({
 
       return keys.current.length - 1;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [seed]
   );
 
@@ -67,7 +67,7 @@ const InstanceCounterProvider = ({
 
   useEffect(() => {
     onChange?.(keys.current.length);
-  }, [seed, onChange]);
+  }, [onChange]);
 
   return (
     <InstanceCounterContext value={{ getIndex, invalidate }}>
@@ -82,7 +82,7 @@ const useInstanceCounter = () => {
 
   if (!context) {
     throw new Error(
-      "useInstanceCounter must be used within an InstanceCounterProvider"
+      'useInstanceCounter must be used within an InstanceCounterProvider'
     );
   }
 
@@ -91,7 +91,7 @@ const useInstanceCounter = () => {
   useEffect(() => {
     invalidate();
     return () => invalidate();
-  }, [invalidate, id]);
+  }, [invalidate]);
 
   return useMemo(() => getIndex(id), [getIndex, id]);
 };

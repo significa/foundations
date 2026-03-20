@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -8,9 +8,9 @@ import {
   useId,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/classnames';
 
 interface FieldsetContextValue {
   registerLegendElement: (id: string) => () => void;
@@ -24,7 +24,7 @@ const Fieldset = ({
   children,
   className,
   ...props
-}: React.ComponentPropsWithRef<"fieldset">) => {
+}: React.ComponentPropsWithRef<'fieldset'>) => {
   const [legendIds, setLegendIds] = useState<string[]>([]);
 
   const registerLegendElement = useCallback((id: string) => {
@@ -47,9 +47,9 @@ const Fieldset = ({
   return (
     <FieldsetContext value={ctx}>
       <fieldset
-        aria-labelledby={legendIds.length > 0 ? legendIds.join(" ") : undefined}
+        aria-labelledby={legendIds.length > 0 ? legendIds.join(' ') : undefined}
         className={cn(
-          "border-border space-y-6 not-first:border-t not-first:pt-6",
+          'space-y-6 border-border not-first:border-t not-first:pt-6',
           className
         )}
         {...props}
@@ -64,7 +64,7 @@ const Legend = ({
   children,
   className,
   ...props
-}: React.ComponentPropsWithRef<"legend">) => {
+}: React.ComponentPropsWithRef<'legend'>) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
@@ -81,7 +81,7 @@ const Legend = ({
   return (
     <div
       id={id}
-      className={cn("text-foreground text-base font-semibold", className)}
+      className={cn('font-semibold text-base text-foreground', className)}
       {...props}
     >
       {children}

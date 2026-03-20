@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import { lerp } from "@/foundations/utils/math/lerp";
+import { lerp } from '@/foundations/utils/math/lerp';
 
 const VELOCITY_MOMENTUM_FACTOR = 15; // multiplier for velocity added to the target scroll when pan is released
 const DRAG_EASE = 1; // ease factor when holding and panning (1 = no ease)
@@ -48,7 +48,7 @@ export const useMousePan = <T extends HTMLElement>() => {
 
     // on pan finish (when it fully settles)
     const onPanFinish = () => {
-      element.style.removeProperty("scroll-snap-type");
+      element.style.removeProperty('scroll-snap-type');
     };
 
     const cancelTick = () => {
@@ -110,11 +110,11 @@ export const useMousePan = <T extends HTMLElement>() => {
       shouldPreventClick = false;
 
       // check if the element has snap
-      element.style.removeProperty("scroll-snap-type");
-      hasSnap = window.getComputedStyle(element).scrollSnapType !== "none";
+      element.style.removeProperty('scroll-snap-type');
+      hasSnap = window.getComputedStyle(element).scrollSnapType !== 'none';
 
       // remove snap if it exists, because it prevents setting scroll positions
-      if (hasSnap) element.style.setProperty("scroll-snap-type", "none");
+      if (hasSnap) element.style.setProperty('scroll-snap-type', 'none');
 
       mouse.initial = {
         x: event.pageX - element.offsetLeft,
@@ -175,13 +175,13 @@ export const useMousePan = <T extends HTMLElement>() => {
       // if snap is enabled, compute the target scroll position using (a sort of) FLIP
       // https://www.nan.fyi/magic-motion#introducing-flip
       if (hasSnap) {
-        const cloneContainer = document.createElement("div");
+        const cloneContainer = document.createElement('div');
         cloneContainer.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;`;
 
         const clone = element.cloneNode(true) as HTMLDivElement;
         clone.style.cssText = `${element.style.cssText.replace(
           /scroll-snap-type:.+?;/g,
-          "scroll-snap-type: auto;"
+          'scroll-snap-type: auto;'
         )}width:${element.clientWidth}px;height:${element.clientHeight}px;`;
 
         cloneContainer.appendChild(clone);
@@ -238,12 +238,12 @@ export const useMousePan = <T extends HTMLElement>() => {
 
     const abortController = new AbortController();
     const signal = abortController.signal;
-    element.addEventListener("mousedown", onMouseDown, { signal });
-    element.addEventListener("mousemove", onMouseMove, { signal });
-    element.addEventListener("mouseup", onMouseUp, { signal });
-    element.addEventListener("mouseleave", onMouseUp, { signal });
-    element.addEventListener("wheel", cancelCurrent, { signal });
-    element.addEventListener("click", onClick, { signal });
+    element.addEventListener('mousedown', onMouseDown, { signal });
+    element.addEventListener('mousemove', onMouseMove, { signal });
+    element.addEventListener('mouseup', onMouseUp, { signal });
+    element.addEventListener('mouseleave', onMouseUp, { signal });
+    element.addEventListener('wheel', cancelCurrent, { signal });
+    element.addEventListener('click', onClick, { signal });
 
     return () => {
       cancelCurrentRef.current = () => {};

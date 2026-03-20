@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useId } from "react";
+import { useEffect, useId } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/classnames';
 
-import { useField } from "./field";
+import { useField } from './field';
 
 const FieldDescription = ({
   children,
   className,
   ...props
-}: React.ComponentPropsWithRef<"p">) => {
+}: React.ComponentPropsWithRef<'p'>) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
@@ -19,7 +19,7 @@ const FieldDescription = ({
   useEffect(() => {
     if (!fieldCtx) return;
 
-    const unregister = fieldCtx.registerElement("description", id);
+    const unregister = fieldCtx.registerElement('description', id);
 
     return unregister;
   }, [fieldCtx, id]);
@@ -27,7 +27,7 @@ const FieldDescription = ({
   return (
     <p
       className={cn(
-        "text-foreground-secondary text-base font-medium",
+        'font-medium text-base text-foreground-secondary',
         className
       )}
       id={id}

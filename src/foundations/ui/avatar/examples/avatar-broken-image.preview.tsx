@@ -2,7 +2,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/foundations/ui/avatar/avatar";
+} from '@/foundations/ui/avatar/avatar';
 
 export default function AvatarBrokenImagePreview() {
   return (

@@ -1,0 +1,35 @@
+---
+import { Code } from "astro:components";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import type { CodeLanguage } from "astro";
+import type { HTMLAttributes } from "astro/types";
+import { themes } from "@/lib/shiki";
+import CodeBlock from "./code-block.astro";
+
+type Props = HTMLAttributes<"div"> & {
+  file: string;
+  collapsible?: boolean;
+};
+
+const { file, ...props } = Astro.props;
+
+const content = await readFile(path.join(process.cwd(), file), "utf-8");
+const extension = path.extname(file).slice(1);
+
+function rewriteImports(code: string) {
+  return (
+    code
+      // Replace @/foundations/ui and @/foundations/components with @/components
+      .replace(/@\/foundations(\/ui|\/components)/g, "@/components")
+      // Replace @/foundations/utils with @/lib
+      .replace(/@\/foundations\/utils/g, "@/lib")
+      // Remove duplicate folder names (e.g. @/components/button/button to @/components/button)
+      .replace(/\/([^/]+)\/\1/g, "/$1")
+  );
+}
+---
+
+<CodeBlock {...props}>
+  <Code slot="pre" code={rewriteImports(content)} lang={extension as CodeLanguage} themes={themes} />
+</CodeBlock>

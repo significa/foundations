@@ -2,12 +2,12 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/foundations/ui/avatar/avatar";
+} from '@/foundations/ui/avatar/avatar';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/foundations/ui/tooltip/tooltip";
+} from '@/foundations/ui/tooltip/tooltip';
 
 export default function TooltipRichContentPreview() {
   return (

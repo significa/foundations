@@ -1,0 +1,67 @@
+---
+import { MoonIcon, SunIcon } from "@phosphor-icons/react";
+import { Button } from "@/foundations/ui/button/button";
+---
+
+<Button size="sm" square variant="ghost" id="theme-switcher">
+  <SunIcon className="hidden dark:block" />
+  <MoonIcon className="block dark:hidden" />
+  <span class="sr-only">Toggle theme</span>
+</Button>
+
+<script>
+  import { THEME_STORAGE_KEY, isTheme, type Theme } from "@/lib/theme";
+
+  function getStoredTheme(): Theme | null {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    return isTheme(stored) ? stored : null;
+  }
+
+  function getSystemTheme(): "light" | "dark" {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function applyTheme(theme: Theme) {
+    const html = document.documentElement;
+
+    // disable transitions
+    const style = document.createElement("style");
+    const css = document.createTextNode(`* {
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -o-transition: none !important;
+        -ms-transition: none !important;
+        transition: none !important;
+      }`);
+    style.appendChild(css);
+    document.head.appendChild(style);
+
+    // re-enable transitions
+    setTimeout(() => {
+      document.head.removeChild(style);
+    }, 32);
+
+    if (theme === "dark") {
+      html.setAttribute("data-theme", "dark");
+    } else {
+      html.removeAttribute("data-theme");
+    }
+  }
+
+  function init() {
+    const theme = getStoredTheme() ?? getSystemTheme();
+    applyTheme(theme);
+
+    const switcher = document.getElementById("theme-switcher");
+
+    switcher?.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const next: Theme = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    });
+  }
+
+  init();
+  document.addEventListener("astro:after-swap", init);
+</script>

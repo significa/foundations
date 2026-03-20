@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
 import type {
   Placement,
   UseFloatingOptions,
   UseInteractionsReturn,
-} from "@floating-ui/react";
+} from '@floating-ui/react';
 import {
   arrow,
   autoUpdate,
-  flip,
   FloatingArrow,
   FloatingDelayGroup,
+  flip,
   hide,
   offset as offsetMiddleware,
   safePolygon,
@@ -23,7 +23,7 @@ import {
   useMergeRefs,
   useRole,
   useTransitionStatus,
-} from "@floating-ui/react";
+} from '@floating-ui/react';
 import {
   createContext,
   use,
@@ -31,11 +31,11 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
-import { cn } from "@/lib/utils";
+import { Slot } from '@/foundations/components/slot/slot';
+import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
+import { cn } from '@/lib/utils/classnames';
 
 // Let's keep an eye on popover="hint", it might be able to handle the tooltip logic natively
 // https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using#using_hint_popover_state
@@ -49,7 +49,7 @@ const DEFAULT_GROUP_TIMEOUT_MS = 150;
 interface UseTooltipFloatingOptions {
   initialOpen?: boolean;
   open?: boolean;
-  onOpenChange?: UseFloatingOptions["onOpenChange"];
+  onOpenChange?: UseFloatingOptions['onOpenChange'];
   placement?: Placement;
   offset?: number;
   delayIn?: number;
@@ -62,7 +62,7 @@ const useTooltipFloating = ({
   initialOpen = false,
   open: propsOpen,
   onOpenChange: propsOnOpenChange,
-  placement = "top",
+  placement = 'top',
   offset = 4,
   delayIn = DEFAULT_DELAY_IN,
   delayOut = DEFAULT_DELAY_OUT,
@@ -74,7 +74,7 @@ const useTooltipFloating = ({
 
   const open = propsOpen ?? internalOpen;
 
-  const setOpen = useCallback<NonNullable<UseFloatingOptions["onOpenChange"]>>(
+  const setOpen = useCallback<NonNullable<UseFloatingOptions['onOpenChange']>>(
     (open, event, reason) => {
       setInternalOpen(open);
       propsOnOpenChange?.(open, event, reason);
@@ -92,7 +92,7 @@ const useTooltipFloating = ({
         layoutShift: true,
       }),
     middleware: [
-      flip({ fallbackAxisSideDirection: "start", padding: offset * 2 }),
+      flip({ fallbackAxisSideDirection: 'start', padding: offset * 2 }),
       offsetMiddleware(offset + ARROW_HEIGHT),
       arrow({ element: arrowRef, padding: 8 }),
       hide(),
@@ -110,16 +110,7 @@ const useTooltipFloating = ({
       persistOnClick,
       ...floating,
     }),
-    [
-      open,
-      setOpen,
-      arrowRef,
-      delayIn,
-      delayOut,
-      disabled,
-      persistOnClick,
-      floating,
-    ]
+    [open, setOpen, delayIn, delayOut, disabled, persistOnClick, floating]
   );
 };
 
@@ -135,7 +126,7 @@ const useTooltipContext = () => {
   const context = use(TooltipContext);
 
   if (context == null) {
-    throw new Error("Tooltip components must be wrapped in <Tooltip />");
+    throw new Error('Tooltip components must be wrapped in <Tooltip />');
   }
 
   return context;
@@ -170,9 +161,9 @@ const Tooltip = ({ children, ...props }: TooltipProps) => {
     enabled: !floating.disabled,
     move: false,
     delay: {
-      open: typeof groupDelay === "object" ? groupDelay.open : floating.delayIn,
+      open: typeof groupDelay === 'object' ? groupDelay.open : floating.delayIn,
       close:
-        typeof groupDelay === "object" ? groupDelay.close : floating.delayOut,
+        typeof groupDelay === 'object' ? groupDelay.close : floating.delayOut,
     },
     handleClose: safePolygon({}),
   });
@@ -183,7 +174,7 @@ const Tooltip = ({ children, ...props }: TooltipProps) => {
   const dismiss = useDismiss(ctx, {
     referencePress: !floating.persistOnClick,
   });
-  const role = useRole(ctx, { role: "tooltip" });
+  const role = useRole(ctx, { role: 'tooltip' });
 
   const interactions = useInteractions([hover, focus, dismiss, role]);
 
@@ -200,7 +191,7 @@ const Tooltip = ({ children, ...props }: TooltipProps) => {
   );
 };
 
-interface TooltipTriggerProps extends React.ComponentPropsWithRef<"button"> {
+interface TooltipTriggerProps extends React.ComponentPropsWithRef<'button'> {
   asChild?: boolean;
 }
 
@@ -223,14 +214,14 @@ const TooltipTrigger = ({
   ...props
 }: TooltipTriggerProps) => {
   const context = useTooltipContext();
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : 'button';
 
   const ref = useMergeRefs([context.refs.setReference, refProp]);
 
   return (
     <Comp
       ref={ref}
-      type={asChild ? undefined : "button"}
+      type={asChild ? undefined : 'button'}
       {...context.getReferenceProps(props)}
     >
       {children}
@@ -253,7 +244,7 @@ const TooltipContent = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithRef<"div">) => {
+}: React.ComponentPropsWithRef<'div'>) => {
   const { context, refs, arrowRef, getFloatingProps } = useTooltipContext();
 
   const { isMounted, status } = useTransitionStatus(context, { duration: 0 });
@@ -267,15 +258,15 @@ const TooltipContent = ({
     <div
       ref={ref}
       className={cn(
-        "bg-foreground text-background ease-out-quint z-50 max-w-80 overflow-visible rounded-lg px-3 py-1.5 text-xs break-words whitespace-normal drop-shadow-md transition duration-300",
-        "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
-        "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
-        "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
-        context.middlewareData.hide?.referenceHidden && "hidden",
+        'z-50 max-w-80 overflow-visible whitespace-normal break-words rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md transition duration-300 ease-out-quint',
+        'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
+        'data-[state=closed]:scale-95 data-[state=closed]:opacity-0',
+        'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
+        context.middlewareData.hide?.referenceHidden && 'hidden',
         className
       )}
-      data-state={status === "open" ? "open" : "closed"}
-      data-side={context.placement.split("-")[0]}
+      data-state={status === 'open' ? 'open' : 'closed'}
+      data-side={context.placement.split('-')[0]}
       style={{
         position: context.strategy,
         top: context.y ?? 0,

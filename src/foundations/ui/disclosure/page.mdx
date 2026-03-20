@@ -1,20 +1,18 @@
-export const metadata = {
-  title: "Disclosure",
-  description:
-    "A mostly unstyled vertical set of interactive elements that each reveal a section of content when clicked",
-  files: ["src/foundations/ui/disclosure/disclosure.tsx"],
-  preview: "disclosure",
-  dependencies: [
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-    {
-      name: "motion",
-      href: "https://motion.dev",
-    },
-  ],
-};
+---
+title: Disclosure
+description: >-
+  A mostly unstyled vertical set of interactive elements that each reveal a section of content when clicked
+preview: disclosure
+files:
+  - src/foundations/ui/disclosure/disclosure.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: motion
+    href: https://motion.dev
+
+folder: UI
+---
 
 ## Features
 
@@ -47,8 +45,7 @@ Extends the `div` element.
   definition={{
     defaultOpen: {
       type: "boolean",
-      description:
-        "Whether the element is open by default. Useful when used as an uncontrolled component.",
+      description: "Whether the element is open by default. Useful when used as an uncontrolled component.",
     },
     open: {
       type: "boolean",
@@ -123,18 +120,9 @@ The `Disclosure` component serves as a low-level building block that enables pro
 You can easily use it to build a more opinionated `Accordion` component, like the example above.
 
 ```tsx
-import {
-  Disclosure,
-  DisclosureContent,
-  DisclosureTrigger,
-  DisclosureChevron,
-  DisclosureGroup,
-} from "../disclosure";
+import { Disclosure, DisclosureContent, DisclosureTrigger, DisclosureChevron, DisclosureGroup } from "../disclosure";
 
-const AccordionGroup = ({
-  children,
-  className,
-}: React.ComponentProps<"div">) => {
+const AccordionGroup = ({ children, className }: React.ComponentProps<"div">) => {
   return (
     <DisclosureGroup>
       <div className={cn("rounded-lg border", className)}>{children}</div>
@@ -142,21 +130,11 @@ const AccordionGroup = ({
   );
 };
 
-const Accordion = ({
-  children,
-  className,
-}: React.ComponentProps<typeof Disclosure>) => {
-  return (
-    <Disclosure className={cn("border-b last:border-b-0", className)}>
-      {children}
-    </Disclosure>
-  );
+const Accordion = ({ children, className }: React.ComponentProps<typeof Disclosure>) => {
+  return <Disclosure className={cn("border-b last:border-b-0", className)}>{children}</Disclosure>;
 };
 
-const AccordionTrigger = ({
-  children,
-  className,
-}: React.ComponentProps<typeof DisclosureTrigger>) => {
+const AccordionTrigger = ({ children, className }: React.ComponentProps<typeof DisclosureTrigger>) => {
   return (
     <DisclosureTrigger
       className={cn(
@@ -170,10 +148,7 @@ const AccordionTrigger = ({
   );
 };
 
-const AccordionContent = ({
-  children,
-  className,
-}: React.ComponentProps<typeof DisclosureContent>) => {
+const AccordionContent = ({ children, className }: React.ComponentProps<typeof DisclosureContent>) => {
   return (
     <DisclosureContent>
       <div className={cn("border-t px-3 py-2", className)}>{children}</div>
@@ -193,13 +168,11 @@ If you need a leaner approach, feel free to remove it.
 ## Best Practices
 
 1. **Content Organization**:
-
    - Use clear, descriptive trigger labels
    - Keep content concise and focused
    - Consider the order of disclosures
 
 2. **Mobile Considerations**:
-
    - Ensure touch targets are large enough
    - Test animations on lower-end devices
    - Consider using DisclosureGroup on mobile

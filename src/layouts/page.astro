@@ -1,0 +1,63 @@
+---
+import { getCollection } from "astro:content";
+import type { HTMLAttributes } from "astro/types";
+import Footer from "@/components/footer.astro";
+import Header from "@/components/header.astro";
+import { Menu } from "@/components/menu";
+import { cn } from "@/lib/utils/classnames";
+import { getNavigationItems } from "@/lib/utils/content";
+
+type Props = HTMLAttributes<"div">;
+
+const pages = await getCollection("pages");
+
+const items = await getNavigationItems(pages);
+---
+
+<div {...Astro.props}>
+  <Header transition:persist />
+
+  <div class="mx-auto flex max-w-(--breakpoint-2xl)">
+    <aside
+      id="app-menu"
+      data-mobile-menu-open="false"
+      data-pagefind-ignore="all"
+      transition:persist
+      class={cn(
+        "bg-background shrink-0",
+        // in mobile we use fixed positioning and control it in the Header component
+        "fixed top-12 mt-px hidden h-[calc(100dvh-var(--spacing)*12)] w-full data-[mobile-menu-open=true]:block max-xl:z-200",
+        "md:top-14 md:h-[calc(100dvh-var(--spacing)*14)] xl:sticky xl:block xl:max-w-64 xl:border-r"
+      )}
+    >
+      <div class="h-full overflow-y-auto overscroll-contain px-2 pt-2 pb-12 md:px-4 xl:px-2 xl:pt-4">
+        <Menu items={items} currentPath={Astro.url.pathname} client:load />
+      </div>
+    </aside>
+
+    <main class="w-full gap-8 px-4 lg:flex">
+      <slot />
+    </main>
+  </div>
+
+  <Footer transition:persist />
+</div>
+
+<script>
+  (function persistAsideScrollPosition() {
+    const aside = document.querySelector("#app-menu > div");
+    if (!aside || !(aside instanceof HTMLElement)) return;
+
+    let scrollY = 0;
+
+    document.addEventListener("astro:before-preparation", () => {
+      scrollY = aside.scrollTop;
+      aside.style.overflow = "hidden";
+    });
+
+    document.addEventListener("astro:after-swap", () => {
+      aside.scrollTop = scrollY;
+      aside.style.removeProperty("overflow");
+    });
+  })();
+</script>

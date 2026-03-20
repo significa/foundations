@@ -1,7 +1,9 @@
-export const metadata = {
-  title: "Accessible Forms",
-  description: "How to make it easy to create accessible forms",
-};
+---
+title: "Accessible Forms"
+description: "How to make it easy to create accessible forms"
+
+folder: "Guides"
+---
 
 ## Overview
 
@@ -25,28 +27,19 @@ The idea is to create a Field component that will act basically as a Provider an
 This is the main component for creating accessible forms. It will automatically connect labels, descriptions and error messages to their appropriate fields.
 It will also allow you to easily improve your form components by adding the appropriate attributes.
 
-<SourceCode
-  file="src/foundations/guides/accessible-forms/field.tsx"
-  expandable
-/>
+<SourceCode file="src/foundations/guides/accessible-forms/field.tsx" expandable />
 
 ### FieldError
 
 Field errors hooks up to the Field's context and will automatically register itself as an error message.
 
-<SourceCode
-  file="src/foundations/guides/accessible-forms/field-error.tsx"
-  expandable
-/>
+<SourceCode file="src/foundations/guides/accessible-forms/field-error.tsx" expandable />
 
 ### FieldDescription
 
 Field descriptions hooks up to the Field's context and will automatically register itself as a description.
 
-<SourceCode
-  file="src/foundations/guides/accessible-forms/field-description.tsx"
-  expandable
-/>
+<SourceCode file="src/foundations/guides/accessible-forms/field-description.tsx" expandable />
 
 ## Preparing your components
 
@@ -60,8 +53,7 @@ Add the following code yo your `input.tsx`, `textarea.tsx`, `checkbox.tsx`, `swi
 const Input = ({ invalid: propsInvalid, id, ...props }: InputProps) => {
   const fieldCtx = useField();
 
-  const invalid =
-    propsInvalid || !!fieldCtx?.["aria-errormessage"] || undefined;
+  const invalid = propsInvalid || !!fieldCtx?.["aria-errormessage"] || undefined;
 
   return (
     <input
@@ -108,12 +100,7 @@ interface RadioGroupProps extends React.ComponentPropsWithRef<"div"> {
   required?: boolean;
 }
 
-const RadioGroup = ({
-  children,
-  className,
-  required,
-  ...props
-}: RadioGroupProps) => {
+const RadioGroup = ({ children, className, required, ...props }: RadioGroupProps) => {
   const fieldCtx = useField();
 
   return (
@@ -153,11 +140,7 @@ Given that we'll have a nested structure, we'll also need some attributes on the
 We'll just add the `id` and `aria-describedby` attribute:
 
 ```tsx {6,11,12} showLineNumbers
-const Radio = ({
-  className,
-  id,
-  ...props
-}: Omit<React.ComponentPropsWithRef<"input">, "type">) => {
+const Radio = ({ className, id, ...props }: Omit<React.ComponentPropsWithRef<"input">, "type">) => {
   const fieldCtx = useField();
 
   return (
@@ -185,11 +168,7 @@ import { useEffect, useId } from "react";
 import { cn } from "@/lib/utils";
 import { useField } from "@/foundations/ui/field/field";
 
-const Label = ({
-  children,
-  className,
-  ...props
-}: React.ComponentPropsWithRef<"label">) => {
+const Label = ({ children, className, ...props }: React.ComponentPropsWithRef<"label">) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
@@ -204,12 +183,7 @@ const Label = ({
   }, [fieldCtx, id]);
 
   return (
-    <label
-      className={cn("text-foreground text-base font-medium", className)}
-      htmlFor={fieldCtx?.id}
-      id={id}
-      {...props}
-    >
+    <label className={cn("text-foreground text-base font-medium", className)} htmlFor={fieldCtx?.id} id={id} {...props}>
       {children}
     </label>
   );
@@ -226,10 +200,7 @@ This grouping not only helps with visual organization but also improves accessib
 
 Here we create a `Fieldset` component that will automatically register the `Legend` elements and expose them to the `Field` context.
 
-<SourceCode
-  file="src/foundations/guides/accessible-forms/fieldset.tsx"
-  expandable
-/>
+<SourceCode file="src/foundations/guides/accessible-forms/fieldset.tsx" expandable />
 
 ## Usage
 
@@ -250,9 +221,7 @@ You can add a `FieldDescription` and `FieldError` to the `Field` component:
 <Field>
   <div>
     <Label>Name</Label>
-    <FieldDescription>
-      This is a description very very long description
-    </FieldDescription>
+    <FieldDescription>This is a description very very long description</FieldDescription>
   </div>
   <Input {...register("name", { required: true })} />
   <FieldError>{errors.name?.message}</FieldError>

@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { format } from "date-fns";
-import { useState } from "react";
+import { format } from 'date-fns';
+import { useState } from 'react';
 
 import {
   DatePicker,
   DatePickerPanel,
   DatePickerTrigger,
-} from "@/foundations/ui/date-picker/date-picker";
+} from '@/foundations/ui/date-picker/date-picker';
 import {
   DropdownDivider,
   DropdownItem,
-} from "@/foundations/ui/dropdown/dropdown";
+} from '@/foundations/ui/dropdown/dropdown';
 
 export default function DatePickerShortcutsPreview() {
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
@@ -20,9 +20,7 @@ export default function DatePickerShortcutsPreview() {
     <DatePicker placement="bottom-start">
       <DatePickerTrigger className="w-80" placeholder="Select date range">
         {dateRange
-          ? format(dateRange[0], "MM/dd/yyyy") +
-            " - " +
-            format(dateRange[1], "MM/dd/yyyy")
+          ? `${format(dateRange[0], 'MM/dd/yyyy')} - ${format(dateRange[1], 'MM/dd/yyyy')}`
           : undefined}
       </DatePickerTrigger>
       <DatePickerPanel

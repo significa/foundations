@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useMousePan } from "@/foundations/hooks/use-mouse-pan/use-mouse-pan";
-import { cn } from "@/lib/utils";
+import { useMousePan } from '@/foundations/hooks/use-mouse-pan/use-mouse-pan';
+import { cn } from '@/lib/utils/classnames';
 
 const UseMousePanPreview = () => {
   const { ref } = useMousePan<HTMLDivElement>();
@@ -16,8 +16,8 @@ const UseMousePanPreview = () => {
           <li
             key={index}
             className={cn(
-              "no-select bg-foreground-secondary/15 h-32 w-64 snap-center rounded-sm",
-              index % 2 === 0 && "bg-foreground-secondary/30"
+              'no-select h-32 w-64 snap-center rounded-sm bg-foreground-secondary/15',
+              index % 2 === 0 && 'bg-foreground-secondary/30'
             )}
           />
         ))}

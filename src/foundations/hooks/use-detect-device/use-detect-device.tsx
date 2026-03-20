@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 type useDetectDevidePorps = {
   isMobile: boolean;
@@ -10,7 +10,7 @@ type useDetectDevidePorps = {
 };
 
 const getDetectDevice = (
-  userAgent: NavigatorID["userAgent"]
+  userAgent: NavigatorID['userAgent']
 ): useDetectDevidePorps => {
   const isAndroid = /Android/.test(userAgent);
   const isIos = /iPad|iPhone/.test(userAgent);
@@ -35,7 +35,7 @@ const useDetectDevice = () => {
 
   useEffect(() => {
     const userAgent =
-      typeof navigator === "undefined" ? "SSR" : navigator.userAgent;
+      typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
     setDeviceInfo(getDetectDevice(userAgent));
   }, []);
 

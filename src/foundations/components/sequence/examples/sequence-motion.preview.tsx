@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { AnimatePresence, motion } from 'motion/react';
+import { useState } from 'react';
 
 import {
   Sequence,
@@ -9,10 +9,10 @@ import {
   SequenceItems,
   SequencePanel,
   SequencePanels,
-} from "@/foundations/components/sequence/sequence";
-import { cn } from "@/lib/utils";
+} from '@/foundations/components/sequence/sequence';
+import { cn } from '@/lib/utils/classnames';
 
-import { eras as CONTENT } from "./content";
+import { eras as CONTENT } from './content';
 
 const SequenceMotion = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -29,11 +29,11 @@ const SequenceMotion = () => {
           <SequenceItem
             key={index}
             className={cn(
-              "border-background-secondary relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
-              "flex items-center gap-1.5 whitespace-nowrap",
-              "hover:bg-background-secondary/30 transition-colors",
-              'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
-              "before:origin-left before:scale-x-(--progress)"
+              'relative shrink-0 cursor-pointer overflow-hidden rounded-lg border border-background-secondary px-4 py-1 text-sm',
+              'flex items-center gap-1.5 whitespace-nowrap',
+              'transition-colors hover:bg-background-secondary/30',
+              'before:absolute before:inset-0 before:-z-10 before:bg-background-secondary before:content-[""]',
+              'before:origin-left before:scale-x-(--progress)'
             )}
           >
             <item.icon size={16} className="-ml-1 shrink-0" />
@@ -55,10 +55,10 @@ const SequenceMotion = () => {
                 transition={{ duration: 0.125 }}
               >
                 <SequencePanel forceMount>
-                  <div className="border-border flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
+                  <div className="flex h-full min-h-64 flex-col justify-between rounded-lg border border-border p-4">
                     <motion.div
-                      className="text-foreground-secondary font-mono text-sm uppercase"
-                      initial={{ opacity: 0, y: "50%" }}
+                      className="font-mono text-foreground-secondary text-sm uppercase"
+                      initial={{ opacity: 0, y: '50%' }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{
                         duration: 1.5,
@@ -69,8 +69,8 @@ const SequenceMotion = () => {
                       {item.title}
                     </motion.div>
                     <motion.div
-                      className="pr-8 text-xl font-medium text-pretty"
-                      initial={{ opacity: 0, y: "50%" }}
+                      className="text-pretty pr-8 font-medium text-xl"
+                      initial={{ opacity: 0, y: '50%' }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{
                         duration: 1.5,
@@ -84,7 +84,7 @@ const SequenceMotion = () => {
                 </SequencePanel>
               </motion.div>
             ) : (
-              <SequencePanel key={index + "placeholder"} />
+              <SequencePanel key={`${index}placeholder`} />
             )
           )}
         </AnimatePresence>

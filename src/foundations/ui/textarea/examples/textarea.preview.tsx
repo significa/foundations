@@ -1,4 +1,4 @@
-import { Textarea } from "@/foundations/ui/textarea/textarea";
+import { Textarea } from '@/foundations/ui/textarea/textarea';
 
 export default function TextareaPreview() {
   return (

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Drawer,
   DrawerActions,
@@ -10,7 +10,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/foundations/ui/drawer/drawer";
+} from '@/foundations/ui/drawer/drawer';
 
 const DrawerPreview = () => {
   return (

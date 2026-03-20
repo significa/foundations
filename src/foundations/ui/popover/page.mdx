@@ -1,23 +1,19 @@
-export const metadata = {
-  title: "Popover",
-  description: "A floating panel that is attached to a trigger element.",
-  files: ["src/foundations/ui/popover/popover.tsx"],
-  preview: "popover",
-  dependencies: [
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-    {
-      name: "useTopLayer",
-      href: "/hooks/use-top-layer",
-    },
-    {
-      name: "@floating-ui/react",
-      href: "https://floating-ui.com/docs/react",
-    },
-  ],
-};
+---
+title: Popover
+description: A floating panel that is attached to a trigger element.
+preview: popover
+files:
+  - src/foundations/ui/popover/popover.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: useTopLayer
+    href: /hooks/use-top-layer
+  - name: "@floating-ui/react"
+    href: https://floating-ui.com/docs/react
+
+folder: UI
+---
 
 ## Features
 
@@ -157,13 +153,11 @@ Displaying a message when no content is available.
 ## Best Practices
 
 1. **Positioning**:
-
    - Consider available screen space
    - Adjust offset based on content
    - Test on different screen sizes
 
 2. **Focus Management**:
-
    - Use modal mode for complex interactions
    - Ensure keyboard navigation works
    - Provide clear focus indicators

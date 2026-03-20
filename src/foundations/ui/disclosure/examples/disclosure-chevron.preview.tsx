@@ -3,7 +3,7 @@ import {
   DisclosureChevron,
   DisclosureContent,
   DisclosureTrigger,
-} from "@/foundations/ui/disclosure/disclosure";
+} from '@/foundations/ui/disclosure/disclosure';
 
 export default function DisclosureChevronPreview() {
   return (

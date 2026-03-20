@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
 import {
   FloatingList,
+  type UseInteractionsReturn,
   useClick,
   useDismiss,
   useInteractions,
-  UseInteractionsReturn,
   useListItem,
   useListNavigation,
   useMergeRefs,
   useRole,
   useTypeahead,
-} from "@floating-ui/react";
+} from '@floating-ui/react';
 import {
   createContext,
   use,
@@ -22,13 +22,13 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { useStableCallback } from "@/foundations/hooks/use-stable-callback/use-stable-callback";
-import { Divider } from "@/foundations/ui/divider/divider";
+import { Slot } from '@/foundations/components/slot/slot';
+import { useStableCallback } from '@/foundations/hooks/use-stable-callback/use-stable-callback';
+import { Divider } from '@/foundations/ui/divider/divider';
 import {
-  Popover,
+  type Popover,
   PopoverContent,
   PopoverContext,
   PopoverEmpty,
@@ -36,8 +36,8 @@ import {
   PopoverTrigger,
   usePopoverContext,
   usePopoverFloating,
-} from "@/foundations/ui/popover/popover";
-import { cn } from "@/lib/utils";
+} from '@/foundations/ui/popover/popover';
+import { cn } from '@/lib/utils/classnames';
 
 type Item = {
   id: string;
@@ -54,7 +54,7 @@ interface DropdownContextType {
   setHighlightedIndex: (index: number | null) => void;
   searchInputRef: HTMLInputElement | null;
   setSearchInputRef: (el: HTMLInputElement) => void;
-  getItemProps: UseInteractionsReturn["getItemProps"];
+  getItemProps: UseInteractionsReturn['getItemProps'];
   items: Items;
   registerItem: (item: Item) => () => void;
 }
@@ -65,7 +65,7 @@ const useInternalDropdownContext = () => {
   const context = use(DropdownContext);
 
   if (context == null) {
-    throw new Error("Dropdown components must be wrapped in <Dropdown />");
+    throw new Error('Dropdown components must be wrapped in <Dropdown />');
   }
 
   return context;
@@ -74,7 +74,7 @@ const useInternalDropdownContext = () => {
 const Dropdown = ({
   children,
   modal = true,
-  placement = "bottom-start",
+  placement = 'bottom-start',
   ...props
 }: React.ComponentProps<typeof Popover>) => {
   const floating = usePopoverFloating({ placement, ...props });
@@ -150,15 +150,7 @@ const Dropdown = ({
       registerItem,
       items,
     }),
-    [
-      elementsRef,
-      labelsRef,
-      highlightedIndex,
-      searchInputRef,
-      interactions,
-      registerItem,
-      items,
-    ]
+    [highlightedIndex, searchInputRef, interactions, registerItem, items]
   );
 
   return (
@@ -178,14 +170,14 @@ const DropdownItems = ({
   const { elementsRef } = useInternalDropdownContext();
 
   return (
-    <PopoverContent className={cn("p-0", className)} {...props}>
+    <PopoverContent className={cn('p-0', className)} {...props}>
       <FloatingList elementsRef={elementsRef}>{children}</FloatingList>
     </PopoverContent>
   );
 };
 
-interface DropdownItemProps extends React.ComponentPropsWithRef<"button"> {
-  onSelect?: Item["onSelect"];
+interface DropdownItemProps extends React.ComponentPropsWithRef<'button'> {
+  onSelect?: Item['onSelect'];
   asChild?: boolean;
 }
 
@@ -219,7 +211,7 @@ const DropdownItem = ({
 
   const isHighlighted = highlightedIndex === index;
 
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : 'button';
 
   useLayoutEffect(() => {
     const text = innerRef.current?.textContent;
@@ -245,7 +237,7 @@ const DropdownItem = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === "Enter" && highlightedIndex !== null) {
+    if (e.key === 'Enter' && highlightedIndex !== null) {
       // we are using elementsRef to preserve DOM order
       // certain items can be unmounted and registered again in a wrong position
       // elementsRef preserves the correct order
@@ -267,7 +259,7 @@ const DropdownItem = ({
       disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
-        "data-highlighted:bg-background-secondary text-foreground/80 relative mx-1 flex w-[calc(100%-calc(var(--spacing)*2))] cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-base font-medium outline-none select-none first-of-type:mt-1 last-of-type:mb-1 data-disabled:pointer-events-none data-disabled:opacity-50",
+        'relative mx-1 flex w-[calc(100%-calc(var(--spacing)*2))] cursor-pointer select-none items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium text-base text-foreground/80 outline-none first-of-type:mt-1 last-of-type:mb-1 data-disabled:pointer-events-none data-highlighted:bg-background-secondary data-disabled:opacity-50',
         className
       )}
       {...getItemProps({
@@ -293,16 +285,17 @@ const DropdownSection = ({
   children,
   className,
   ...props
-}: React.ComponentPropsWithRef<"div">) => {
+}: React.ComponentPropsWithRef<'div'>) => {
   const [titleId, setTitleId] = useState<string | undefined>(undefined);
 
   return (
     <DropdownSectionContext value={{ setTitleId }}>
+      {/** biome-ignore lint/a11y/useSemanticElements: maintain div */}
       <div
         role="group"
         aria-labelledby={titleId}
         className={cn(
-          "border-border flex flex-col items-stretch not-first:border-t",
+          'flex flex-col items-stretch border-border not-first:border-t',
           className
         )}
         {...props}
@@ -318,7 +311,7 @@ const DropdownHeading = ({
   id: propsId,
   className,
   ...props
-}: React.ComponentPropsWithRef<"div">) => {
+}: React.ComponentPropsWithRef<'div'>) => {
   const generatedId = useId();
   const id = propsId ?? generatedId;
   const ctx = use(DropdownSectionContext);
@@ -330,7 +323,7 @@ const DropdownHeading = ({
   return (
     <div
       className={cn(
-        "text-foreground-secondary px-3.5 pt-3 pb-1 text-sm font-medium",
+        'px-3.5 pt-3 pb-1 font-medium text-foreground-secondary text-sm',
         className
       )}
       {...props}
@@ -343,8 +336,8 @@ const DropdownHeading = ({
 const DropdownDivider = ({
   className,
   ...props
-}: React.ComponentPropsWithRef<"div">) => {
-  return <Divider className={cn("my-1", className)} {...props} />;
+}: React.ComponentPropsWithRef<'div'>) => {
+  return <Divider className={cn('my-1', className)} {...props} />;
 };
 
 const DropdownSearchInput = ({
@@ -352,7 +345,7 @@ const DropdownSearchInput = ({
   onChange,
   onKeyDown,
   ...props
-}: React.ComponentPropsWithRef<"input">) => {
+}: React.ComponentPropsWithRef<'input'>) => {
   const internalRef = useRef<HTMLInputElement | null>(null);
   const {
     highlightedIndex,
@@ -377,7 +370,7 @@ const DropdownSearchInput = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && highlightedIndex !== null) {
+    if (e.key === 'Enter' && highlightedIndex !== null) {
       const id = elementsRef.current[highlightedIndex]?.dataset.itemId;
       if (id) items[id]?.onSelect?.(e);
     }

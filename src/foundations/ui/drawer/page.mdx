@@ -1,15 +1,15 @@
-export const metadata = {
-  title: "Drawer",
-  description: "A slide-in panel that overlays the main content.",
-  files: ["src/foundations/ui/drawer/drawer.tsx"],
-  preview: "drawer",
-  dependencies: [
-    {
-      name: "Modal",
-      href: "/ui/modal",
-    },
-  ],
-};
+---
+title: Drawer
+description: A slide-in panel that overlays the main content.
+preview: drawer
+files:
+  - src/foundations/ui/drawer/drawer.tsx
+dependencies:
+  - name: Modal
+    href: /ui/modal
+
+folder: UI
+---
 
 ## Features
 
@@ -87,7 +87,6 @@ Extends the `div` element.
 ## Best Practices
 
 1. **Content Structure**:
-
    - Always include a clear title that describes the purpose
    - Keep content concise and focused
    - Use appropriate action labels (avoid "OK/Cancel")

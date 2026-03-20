@@ -2,21 +2,22 @@
 
 Foundations is an opinionated collection of components, patterns, and guidelines for building consistent and accessible user interfaces. Inspired by projects like [shadcn](https://ui.shadcn.com/), the goal is to allow developers to copy components into their projects and customize them as needed, or simply take inspiration to build their own versions.
 
+---
+
 ## Table of Contents
 
 - [Getting Started](#getting-started)
 - [Authoring](#authoring)
   - [Folder Structure](#folder-structure)
+  - [Pages](#pages)
   - [Code Previews](#code-previews)
-  - [Metadata](#metadata)
-  - [Markdown](#markdown)
-- [License](#license)
-- [Contributing](#contributing)
-- [Acknowledgments](#acknowledgments)
+- [Commands](#commands)
+- [Stack](#stack)
+- [Linting & Formatting](#linting--formatting)
+
+---
 
 ## Getting Started
-
-To get the project running locally, follow these steps:
 
 1. **Clone the repository:**
 
@@ -25,23 +26,42 @@ To get the project running locally, follow these steps:
    cd foundations
    ```
 
-2. **Install dependencies:**
+2. **Enable pnpm via Corepack:**
+
+   This project uses pnpm (version pinned in `package.json` via `packageManager`). Node version is specified in `.nvmrc`.
 
    ```bash
-   npm install
+   corepack enable pnpm
    ```
 
-3. **Run the development server:**
+3. **Install dependencies:**
 
    ```bash
-   npm run dev
+   pnpm install
    ```
 
-   This will start the server and watch for changes.
+4. **Set up environment variables:**
+
+   Create a `.env` file at the root:
+
+   ```bash
+   POSTHOG_KEY=...
+   POSTHOG_HOST=...
+   ```
+
+5. **Start the dev server:**
+
+   ```bash
+   pnpm dev
+   ```
+
+   The site will be available at `http://localhost:4321`.
+
+---
 
 ## Authoring
 
-Documentation pages are written in `.mdx` format. For a complete example, check out [markdown-example](./markdown-example.mdx).
+Documentation pages are written in `.mdx` format. All content is driven by [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/), defined in `src/content.config.ts`.
 
 ### Folder Structure
 
@@ -51,27 +71,18 @@ The `src/foundations` folder contains all the foundational content and follows a
 - Source files are added to the root of the folder.
 - Any file ending in `.preview.tsx` will be made available as a preview (see "Code Previews" below).
 
-### Code Previews
-
-While developing, you can visit `/preview/[slug]` to open a `[slug].preview.tsx` file. This makes it easier to develop in isolation.
-
-You can include a `layout` query parameter to configure the preview layout:
-
-- `/preview/[slug]?layout=centered` (default): centers your component in the screen
-- `/preview/[slug]?layout=padded`: adds just a small padding to the page
-- `/preview/[slug]?layout=fullscreen`: displays your component fullscreen
-
-### Metadata
+### Pages
 
 Each `page.mdx` file should include the following metadata structure:
 
 | Field          | Type   | Description                                         | Required |
 | -------------- | ------ | --------------------------------------------------- | -------- |
 | `title`        | String | The title of the docs page.                         | Yes      |
-| `description`  | String | A brief description of the docs page.               | No       |
+| `description`  | String | A brief description of the docs page.               | Yes      |
 | `preview`      | String | The slug of a "Code Preview" to be used as a cover. | No       |
 | `files`        | Array  | List of source files.                               | No       |
 | `dependencies` | Array  | List of dependencies, each with a name and href.    | No       |
+| `folder`       | String | Used for sidebar organization.                      | No       |
 
 #### Dependencies Structure
 
@@ -84,13 +95,55 @@ Each dependency in the `dependencies` array should have the following structure:
 
 This metadata is crucial for ensuring that each documentation page is properly structured and provides all necessary information.
 
-### Markdown
+### Code Previews
 
-We use [GitHub Flavored Markdown Spec](https://github.github.com/gfm/). Additionally, several components are available for use without importing them. For a complete list of these components, refer to the `markdown.tsx` file.
+While developing, you can visit `/preview/[slug]` to open a `[slug].preview.tsx` file. This makes it easier to develop in isolation.
 
-### Pagefind
+A preview file can optionally export a `meta` object to control how it is displayed.
 
-We use [Pagefind](https://pagefind.app/) to make searching Foundations possible. As the site is only indexed at build time, run `npm run dev:generate-pagefind` in development mode to be able to use the search feature.
+| Option   | Values                                 | Default      | Description                                                          |
+| -------- | -------------------------------------- | ------------ | -------------------------------------------------------------------- |
+| `layout` | `'centered'` `'fullscreen'` `'padded'` | `'centered'` | Controls how the preview is framed inside its container              |
+| `mode`   | `'inline'` `'iframe'`                  | `'iframe'`   | Whether the preview renders inline or inside an iframe in docs pages |
+
+---
+
+## Commands
+
+| Command             | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- |
+| `pnpm dev`          | Start the Astro development server                                   |
+| `pnpm dev:pagefind` | Build the site and start a dev server with Pagefind search working   |
+| `pnpm build`        | Build for production (includes Pagefind indexing via `postbuild`)    |
+| `pnpm preview`      | Preview the production build locally                                 |
+| `pnpm types:check`  | Run `astro sync` and TypeScript type checking                        |
+| `pnpm format`       | Auto-format all files (Biome for TS/TSX/CSS, Prettier for `.astro`)  |
+| `pnpm lint`         | Run Biome linter with auto-fix (including unsafe fixes)              |
+| `pnpm check`        | Full CI check: Biome CI + Prettier check on `.astro` + type checking |
+
+> **Note:** The `pnpm dev` command does not run Pagefind, so the search feature won't work in development unless you run `pnpm dev:pagefind`. See the [Pagefind](#pagefind) section for details.
+
+---
+
+## Stack
+
+| Tool                                        | Purpose                                                                    |
+| ------------------------------------------- | -------------------------------------------------------------------------- |
+| [Astro](https://astro.build)                | Core framework — static site generation, routing, MDX, content collections |
+| [React 19](https://react.dev)               | Interactive islands (component previews, search, menus, etc.)              |
+| [Tailwind CSS v4](https://tailwindcss.com)  | Utility-first styling via the Vite plugin                                  |
+| [MDX](https://mdxjs.com)                    | Markdown + JSX for content pages (`page.mdx` files)                        |
+| [Pagefind](https://pagefind.app)            | Static full-text search, indexed at build time                             |
+| [Phosphor Icons](https://phosphoricons.com) | Icon library                                                               |
+| [Shiki](https://shiki.matsu.io)             | Syntax highlighting (themes: `kanagawa-lotus` / `github-dark`)             |
+
+---
+
+## Linting & Formatting
+
+This project uses **both** Biome and Prettier — by design, not by accident.
+
+**Biome does not yet support `.astro` files**. Prettier, with the [`prettier-plugin-astro`](https://github.com/withastro/prettier-plugin-astro) plugin, fills that gap. Once Biome adds support for `.astro` files, we should remove Prettier and consolidate on Biome for all formatting and linting needs.
 
 ## License
 

@@ -3,15 +3,15 @@ import {
   CopyIcon,
   PencilSimpleIcon,
   TrashIcon,
-} from "@phosphor-icons/react/dist/ssr";
+} from '@phosphor-icons/react/dist/ssr';
 
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Dropdown,
   DropdownItem,
   DropdownItems,
   DropdownTrigger,
-} from "@/foundations/ui/dropdown/dropdown";
+} from '@/foundations/ui/dropdown/dropdown';
 
 export default function DropdownIconsPreview() {
   return (

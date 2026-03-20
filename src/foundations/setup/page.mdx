@@ -1,7 +1,9 @@
-export const metadata = {
-  title: "Setup",
-  description: "How to setup your project to use Foundations.",
-};
+---
+title: Setup
+description: How to setup your project to use Foundations.
+
+folder: "introduction"
+---
 
 ## Prerequisites
 
@@ -30,26 +32,19 @@ npm install cva@beta tailwind-merge
 
 ## CSS Setup
 
-<Tabs>
-  <TabsItems>
-    <TabsItem>Automatic color scheme</TabsItem>
-    <TabsItem>With theme switcher</TabsItem>
-  </TabsItems>
-  <TabsPanels>
-    <TabsPanel>
-      <SourceCode file="src/foundations/setup/globals-prefers-schema.css" />
-    </TabsPanel>
-    <TabsPanel>
-      <SourceCode file="src/foundations/setup/globals-data-attr.css" />
-    </TabsPanel>
-  </TabsPanels>
-</Tabs>
+### Automatic color scheme
+
+<SourceCode file="src/foundations/setup/globals-prefers-schema.css" />
+
+### With theme switcher
+
+<SourceCode file="src/foundations/setup/globals-data-attr.css" />
 
 ## Utilities Setup
 
 Create a `lib/utils.ts` file with our utility functions:
 
-<SourceCode file="src/lib/utils/index.ts" />
+<SourceCode file="src/lib/utils/classnames.ts" />
 
 ## Icons Setup
 

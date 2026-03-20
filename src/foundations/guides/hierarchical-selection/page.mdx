@@ -1,8 +1,9 @@
-export const metadata = {
-  title: "Hierarchical Selection",
-  description:
-    "Learn how to build hierarchical checkbox selection patterns using foundation components and reusable utilities.",
-};
+---
+title: "Hierarchical Selection"
+description: "Learn how to build hierarchical checkbox selection patterns using foundation components and reusable utilities."
+
+folder: Guides
+---
 
 ## Overview
 
@@ -48,19 +49,13 @@ The key behaviors in hierarchical selection are:
 
 These utilities handle the hierarchical data structure and selection logic:
 
-<SourceCode
-  file="src/foundations/guides/hierarchical-selection/hierarchical-data.ts"
-  expandable
-/>
+<SourceCode file="src/foundations/guides/hierarchical-selection/hierarchical-data.ts" expandable />
 
 ### Selection Hook
 
 The `useHierarchicalSelection` hook provides state management and selection methods:
 
-<SourceCode
-  file="src/foundations/guides/hierarchical-selection/use-hierarchical-selection.tsx"
-  expandable
-/>
+<SourceCode file="src/foundations/guides/hierarchical-selection/use-hierarchical-selection.tsx" expandable />
 
 ## Examples
 
@@ -122,21 +117,14 @@ const data: HierarchicalItem[] = [
 Set up the selection hook with your desired options:
 
 ```typescript
-const {
-  selectedArray,
-  toggleItem,
-  toggleParent,
-  toggleParentOpen,
-  getParentStatus,
-  isSelected,
-  isParentOpen,
-} = useHierarchicalSelection({
-  defaultSelected: ["react"],
-  defaultOpened: ["frontend"],
-  onSelectionChange: (selected) => {
-    console.log("Selected:", selected);
-  },
-});
+const { selectedArray, toggleItem, toggleParent, toggleParentOpen, getParentStatus, isSelected, isParentOpen } =
+  useHierarchicalSelection({
+    defaultSelected: ["react"],
+    defaultOpened: ["frontend"],
+    onSelectionChange: (selected) => {
+      console.log("Selected:", selected);
+    },
+  });
 ```
 
 ### Step 3: Build the UI

@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import ComponentPreview from "@/components/component-preview.astro";
+import Shell from "@/layouts/shell.astro";
+
+export async function getStaticPaths() {
+  const previews = await getCollection("previews");
+
+  return previews.map((preview) => ({
+    params: { slug: preview.id },
+    props: { preview },
+  }));
+}
+
+const { preview } = Astro.props;
+const { layout } = preview.data.meta || {};
+---
+
+<Shell>
+  <ComponentPreview file={preview.data.file} layout={layout} />
+</Shell>

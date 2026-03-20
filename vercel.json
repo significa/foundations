@@ -1,5 +1,5 @@
 {
-  "framework": null,
+  "framework": "astro",
   "cleanUrls": true,
-  "outputDirectory": "out"
+  "outputDirectory": "dist"
 }

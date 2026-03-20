@@ -3,9 +3,9 @@ import {
   PackageIcon,
   PencilIcon,
   SunIcon,
-} from "@phosphor-icons/react/dist/ssr";
+} from '@phosphor-icons/react/dist/ssr';
 
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 
 export default function ButtonIconsPreview() {
   return (

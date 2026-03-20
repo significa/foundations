@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from 'react';
 
 /**
  * Custom hook to push an element to the application's Top Layer.
@@ -19,12 +19,12 @@ export const useTopLayer = <T extends HTMLElement>(
     if (!element) return;
 
     if (active) {
-      element.setAttribute("popover", "manual");
+      element.setAttribute('popover', 'manual');
       element.showPopover();
     }
 
     return () => {
-      element.removeAttribute("popover");
+      element.removeAttribute('popover');
     };
   }, [active]);
 

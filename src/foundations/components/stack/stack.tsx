@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
 import {
-  HTMLAttributes,
-  ReactElement,
-  ReactNode,
+  type HTMLAttributes,
+  type ReactElement,
+  type ReactNode,
   useEffect,
   useRef,
-} from "react";
+} from 'react';
 
-import { debounce } from "@/foundations/utils/debounce/debounce";
-import { sum } from "@/foundations/utils/math/sum";
+import { debounce } from '@/foundations/utils/debounce/debounce';
+import { sum } from '@/foundations/utils/math/sum';
 
-const px = (value: number) => (isNaN(value) ? undefined : `${value}px`);
+const px = (value: number) => (Number.isNaN(value) ? undefined : `${value}px`);
 
 interface StackProps extends HTMLAttributes<HTMLDivElement> {
-  stick: "top" | "bottom";
+  stick: 'top' | 'bottom';
   children: ReactElement<typeof StackItem> | ReactElement<typeof StackItem>[];
 }
 
-const Stack = ({ stick = "top", children, ...rest }: StackProps) => {
+const Stack = ({ stick = 'top', children, ...rest }: StackProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -73,11 +73,11 @@ const Stack = ({ stick = "top", children, ...rest }: StackProps) => {
       heights.update();
 
       const preComputedMarginBottoms =
-        stick === "top" ? computeAlignTopBottomMargins() : [];
+        stick === 'top' ? computeAlignTopBottomMargins() : [];
 
       for (let index = 0; index < length; index++) {
         const styles = {
-          position: "sticky" as const,
+          position: 'sticky' as const,
           top: undefined as string | undefined,
           bottom: undefined as string | undefined,
           marginTop: undefined as string | undefined,
@@ -87,7 +87,7 @@ const Stack = ({ stick = "top", children, ...rest }: StackProps) => {
         // sum of all headers before the current item
         const preHeaderHeightSum = sum(...heights.headers.slice(0, index));
 
-        if (stick === "top") {
+        if (stick === 'top') {
           styles.top = px(preHeaderHeightSum);
           styles.marginBottom = px(preComputedMarginBottoms[index]);
           styles.marginTop = px(
@@ -95,7 +95,7 @@ const Stack = ({ stick = "top", children, ...rest }: StackProps) => {
           );
         }
 
-        if (stick === "bottom") {
+        if (stick === 'bottom') {
           // sum of all headers after the current item
           const subHeaderHeightSum = sum(
             ...heights.headers.slice(index + 1, length)
@@ -113,7 +113,7 @@ const Stack = ({ stick = "top", children, ...rest }: StackProps) => {
         Object.assign(items[index].style, styles);
       }
 
-      if (stick === "bottom") {
+      if (stick === 'bottom') {
         // correct layout deficit create by negative margins
         root.style.paddingBottom = px(sum(...heights.headers)) as string;
       }
@@ -126,13 +126,13 @@ const Stack = ({ stick = "top", children, ...rest }: StackProps) => {
       resizeObserver.disconnect();
 
       // clear styles
-      root.style.removeProperty("paddingBottom");
+      root.style.removeProperty('paddingBottom');
       items.forEach((item) => {
-        item.style.removeProperty("position");
-        item.style.removeProperty("bottom");
-        item.style.removeProperty("top");
-        item.style.removeProperty("marginTop");
-        item.style.removeProperty("marginBottom");
+        item.style.removeProperty('position');
+        item.style.removeProperty('bottom');
+        item.style.removeProperty('top');
+        item.style.removeProperty('marginTop');
+        item.style.removeProperty('marginBottom');
       });
     };
   }, [stick]);

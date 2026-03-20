@@ -1,19 +1,17 @@
-export const metadata = {
-  title: "Textarea",
-  description: "A taller input.",
-  files: ["src/foundations/ui/textarea/textarea.tsx"],
-  preview: "textarea",
-  dependencies: [
-    {
-      name: "inputStyle",
-      href: "/ui/input",
-    },
-    {
-      name: "composeRefs",
-      href: "/utils/compose-refs",
-    },
-  ],
-};
+---
+title: Textarea
+description: A taller input.
+preview: textarea
+files:
+  - src/foundations/ui/textarea/textarea.tsx
+dependencies:
+  - name: inputStyle
+    href: /ui/input
+  - name: composeRefs
+    href: /utils/compose-refs
+
+folder: UI
+---
 
 ## API Reference
 
@@ -55,12 +53,10 @@ When `field-sizing: content` is supported, we can remove this component and just
 ## Best Practices
 
 1. **Sizing**:
-
    - Consider initial height based on expected content
    - Allow resizing when appropriate
    - Maintain consistent width with other inputs
 
 2. **Accessibility**:
-
    - Provide clear labels
    - Consider character/word count indicators

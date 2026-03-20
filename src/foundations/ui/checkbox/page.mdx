@@ -1,15 +1,15 @@
-export const metadata = {
-  title: "Checkbox",
-  description: "A simple native checkbox prepared for indeterminate states",
-  files: ["src/foundations/ui/checkbox/checkbox.tsx"],
-  preview: "checkbox",
-  dependencies: [
-    {
-      name: "composeRefs",
-      href: "/utils/compose-refs",
-    },
-  ],
-};
+---
+title: Checkbox
+description: A simple native checkbox prepared for indeterminate states
+preview: checkbox
+files:
+  - src/foundations/ui/checkbox/checkbox.tsx
+dependencies:
+  - name: composeRefs
+    href: /utils/compose-refs
+
+folder: UI
+---
 
 ## API Reference
 
@@ -32,12 +32,10 @@ Extends the native `input` element with `type="checkbox"`.
 ## Best Practices
 
 1. **Labels**:
-
    - Always provide clear labels
    - Make labels clickable
    - Use consistent label positioning
 
 2. **Accessibility**:
-
    - Ensure keyboard navigation
    - Use fieldset for groups

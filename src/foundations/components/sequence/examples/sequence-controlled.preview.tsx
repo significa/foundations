@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils";
+import { Button } from '@/foundations/ui/button/button';
+import { cn } from '@/lib/utils/classnames';
 
 import {
   Sequence,
@@ -11,8 +11,8 @@ import {
   SequenceItems,
   SequencePanel,
   SequencePanels,
-} from "../sequence";
-import { eras as CONTENT } from "./content";
+} from '../sequence';
+import { eras as CONTENT } from './content';
 
 const SequenceControlled = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,11 +39,11 @@ const SequenceControlled = () => {
             <SequenceItem
               key={index}
               className={cn(
-                "border-background-secondary relative shrink-0 cursor-pointer overflow-hidden rounded-lg border px-4 py-1 text-sm",
-                "flex items-center gap-1.5 whitespace-nowrap",
-                "hover:bg-background-secondary/30 transition-colors",
-                'before:bg-background-secondary before:absolute before:inset-0 before:-z-10 before:content-[""]',
-                "before:origin-left before:scale-x-(--progress)"
+                'relative shrink-0 cursor-pointer overflow-hidden rounded-lg border border-background-secondary px-4 py-1 text-sm',
+                'flex items-center gap-1.5 whitespace-nowrap',
+                'transition-colors hover:bg-background-secondary/30',
+                'before:absolute before:inset-0 before:-z-10 before:bg-background-secondary before:content-[""]',
+                'before:origin-left before:scale-x-(--progress)'
               )}
             >
               <item.icon size={16} className="-ml-1 shrink-0" />
@@ -54,11 +54,11 @@ const SequenceControlled = () => {
         <SequencePanels className="relative h-64 w-full">
           {CONTENT.map((item, index) => (
             <SequencePanel key={index}>
-              <div className="border-border absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
-                <div className="text-foreground-secondary font-mono text-sm uppercase">
+              <div className="absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border border-border p-4">
+                <div className="font-mono text-foreground-secondary text-sm uppercase">
                   {item.title}
                 </div>
-                <div className="pr-8 text-xl font-medium text-pretty">
+                <div className="text-pretty pr-8 font-medium text-xl">
                   {item.description}
                 </div>
               </div>

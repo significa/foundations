@@ -1,4 +1,4 @@
-import { Skeleton } from "@/foundations/ui/skeleton/skeleton";
+import { Skeleton } from '@/foundations/ui/skeleton/skeleton';
 
 export default function SkeletonExample() {
   return (

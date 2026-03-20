@@ -1,24 +1,20 @@
-export const metadata = {
-  title: "Modal",
-  description:
-    "Modal provides an unstyled basis to display content in a layer above the main interface.",
-  files: ["src/foundations/ui/modal/modal.tsx"],
-  preview: "modal",
-  dependencies: [
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-    {
-      name: "useElementTransition",
-      href: "/hooks/use-element-transition",
-    },
-    {
-      name: "composeRefs",
-      href: "/utils/compose-refs",
-    },
-  ],
-};
+---
+title: Modal
+description: >-
+  Modal provides an unstyled basis to display content in a layer above the main interface.
+preview: modal
+files:
+  - src/foundations/ui/modal/modal.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: useElementTransition
+    href: /hooks/use-element-transition
+  - name: composeRefs
+    href: /utils/compose-refs
+
+folder: UI
+---
 
 ### CSS
 
@@ -157,13 +153,11 @@ Extends the `p` element.
 ## Best Practices
 
 1. **Accessibility**:
-
    - Always provide `ModalTitle` for screen readers
    - Use `ModalDescription` for additional context
    - Ensure keyboard navigation works properly
 
 2. **User Experience**:
-
    - Keep modal content focused and concise
    - Provide clear actions (confirm/cancel)
 

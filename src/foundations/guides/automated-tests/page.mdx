@@ -1,7 +1,9 @@
-export const metadata = {
-  title: "Automated tests",
-  description: "How to make it easy to setup automated tests with Playwright",
-};
+---
+title: "Automated tests"
+description: "How to make it easy to setup automated tests with Playwright"
+
+folder: "Guides"
+---
 
 ## Overview
 
@@ -93,9 +95,7 @@ export default defineConfig({
     [
       "html",
       {
-        outputFolder: process.env.CI
-          ? "playwright-report-ci"
-          : "playwright-report",
+        outputFolder: process.env.CI ? "playwright-report-ci" : "playwright-report",
         open: process.env.CI ? "never" : "always",
       },
     ],
@@ -181,24 +181,19 @@ test.describe("shop the look card works", () => {
   test.beforeEach(async ({ page, context }) => {
     await page.goto("/shop-the-look", { waitUntil: "commit" });
     // wait for the shop the look card to load
-    const firstCard = page
-      .getByRole("button", { name: /[0-9]+ item(s)/ })
-      .first();
+    const firstCard = page.getByRole("button", { name: /[0-9]+ item(s)/ }).first();
     await expect(firstCard).toBeVisible({ timeout: 30000 });
   });
 
   test("card image is the same as the preview image", async ({ page }) => {
-    const firstCard = page
-      .getByRole("button", { name: /[0-9]+ item(s)/ })
-      .first();
+    const firstCard = page.getByRole("button", { name: /[0-9]+ item(s)/ }).first();
     // Get the image inside the card and assert it has a valid src attribute
     const rawImageLocator = firstCard.getByRole("img");
     await expect(rawImageLocator).toHaveAttribute("src", /.+/);
     // Extract the image URL, removing dynamic sizing
     const rawImageSrc = await rawImageLocator.getAttribute("src");
     // get the storyblok url without the sizes
-    const imageSrc =
-      (rawImageSrc as string).replace(/\/m\/\d+x\d+\//, "/") || "";
+    const imageSrc = (rawImageSrc as string).replace(/\/m\/\d+x\d+\//, "/") || "";
     await firstCard.click();
 
     // wait for the drawer to load
@@ -215,15 +210,12 @@ test.describe("shop the look card works", () => {
     await expect(drawerImage).toHaveAttribute("src", /.+/);
 
     const rawPreviewImageSrc = await drawerImage.getAttribute("src");
-    const previewImageSrc =
-      (rawPreviewImageSrc as string).replace(/\/m\/\d+x\d+\//, "/") || "";
+    const previewImageSrc = (rawPreviewImageSrc as string).replace(/\/m\/\d+x\d+\//, "/") || "";
     expect(imageSrc).toBe(previewImageSrc);
   });
 
   test("consistent number of products", async ({ page }) => {
-    const firstCard = page
-      .getByRole("button", { name: /[0-9]+ item(s)/ })
-      .first();
+    const firstCard = page.getByRole("button", { name: /[0-9]+ item(s)/ }).first();
     await firstCard.click();
 
     // wait for the drawer to load
@@ -235,9 +227,7 @@ test.describe("shop the look card works", () => {
     });
     const markerButtonsCount = await markerButtons.count();
 
-    const wishListButton = drawer
-      .getByRole("button", { name: "Add to wishlist" })
-      .first();
+    const wishListButton = drawer.getByRole("button", { name: "Add to wishlist" }).first();
     // wait for at least one wishlist button to load
     await expect(wishListButton).toBeVisible();
 
@@ -369,10 +359,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const isDev = process.env.NODE_ENV === "development";
     const playwrightDir = isDev ? "playwright-report" : "playwright-report-ci";

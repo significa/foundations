@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef } from "react";
+import { type RefObject, useEffect, useRef } from 'react';
 
 export type ScrollLockTarget =
   | string
@@ -9,8 +9,8 @@ export type ScrollLockTarget =
 const getTargetElement = (target: ScrollLockTarget): HTMLElement | null => {
   if (!target) return document.body;
   if (target instanceof HTMLElement) return target;
-  if (typeof target === "string") return document.querySelector(target);
-  if (target && "current" in target) return target.current || null;
+  if (typeof target === 'string') return document.querySelector(target);
+  if (target && 'current' in target) return target.current || null;
 
   return null;
 };
@@ -48,8 +48,8 @@ export const useScrollLock = (isLocked: boolean, target?: ScrollLockTarget) => {
     lockCounterMap.set(targetElement, newCount);
 
     Object.assign(targetElement.style, {
-      overflow: "hidden",
-      scrollbarGutter: "stable",
+      overflow: 'hidden',
+      scrollbarGutter: 'stable',
     });
 
     return () => {
@@ -59,8 +59,8 @@ export const useScrollLock = (isLocked: boolean, target?: ScrollLockTarget) => {
 
       if (newCount === 0) {
         const previousStyles = styleBackupMap.get(targetElement) || {
-          overflow: "",
-          scrollbarGutter: "",
+          overflow: '',
+          scrollbarGutter: '',
         };
 
         Object.assign(targetElement.style, previousStyles);

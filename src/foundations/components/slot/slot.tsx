@@ -1,6 +1,6 @@
-import { Children, cloneElement, isValidElement } from "react";
+import { Children, cloneElement, isValidElement } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/classnames';
 
 const isValidSlottableElement = (
   value: unknown
@@ -12,8 +12,8 @@ const isValidSlottableElement = (
   return (
     isValidElement(value) &&
     !!value.props &&
-    typeof value.props === "object" &&
-    "key" in value
+    typeof value.props === 'object' &&
+    'key' in value
   );
 };
 
@@ -37,10 +37,10 @@ export const Slot = ({
     });
   }
 
-  throw new Error("Slot needs a valid react element child");
+  throw new Error('Slot needs a valid react element child');
 };
 
-Slot.displayName = "Slot";
+Slot.displayName = 'Slot';
 
 type SlottableProps = {
   asChild: boolean;

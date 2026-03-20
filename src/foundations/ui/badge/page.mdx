@@ -1,16 +1,15 @@
-export const metadata = {
-  title: "Badge",
-  description:
-    "A Badge component with the possibility of adding an icon and a status",
-  files: ["src/foundations/ui/badge/badge.tsx"],
-  preview: "badge",
-  dependencies: [
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-  ],
-};
+---
+title: Badge
+description: A Badge component with the possibility of adding an icon and a status
+preview: badge
+files:
+  - src/foundations/ui/badge/badge.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+
+folder: UI
+---
 
 ## Anatomy
 
@@ -68,12 +67,10 @@ Extends the `div` element.
 ## Best Practices
 
 1. **Usage**:
-
    - Use appropriate variants for context
    - Keep content concise
    - Consider icon visibility at small sizes
 
 2. **Accessibility**:
-
    - Ensure sufficient color contrast
    - Provide clear meaning through text

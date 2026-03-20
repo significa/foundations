@@ -1,6 +1,6 @@
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
+import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
 
-import { Input, InputGroup, InputPrefix } from "@/foundations/ui/input/input";
+import { Input, InputGroup, InputPrefix } from '@/foundations/ui/input/input';
 
 export default function InputIcon() {
   return (

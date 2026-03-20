@@ -3,7 +3,7 @@ import {
   InputGroup,
   InputPrefix,
   InputSuffix,
-} from "@/foundations/ui/input/input";
+} from '@/foundations/ui/input/input';
 
 export default function InputTextAddons() {
   return (

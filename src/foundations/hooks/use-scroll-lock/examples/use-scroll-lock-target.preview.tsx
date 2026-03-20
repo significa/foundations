@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useScrollLock } from "@/foundations/hooks/use-scroll-lock/use-scroll-lock";
-import { Button } from "@/foundations/ui/button/button";
+import { useScrollLock } from '@/foundations/hooks/use-scroll-lock/use-scroll-lock';
+import { Button } from '@/foundations/ui/button/button';
 
 const UseScrollLockTargetPreview = () => {
   const [isLocked, setIsLocked] = useState(false);
 
-  useScrollLock(isLocked, "#scroll-lock-target");
+  useScrollLock(isLocked, '#scroll-lock-target');
 
   return (
     <>
@@ -19,7 +19,7 @@ const UseScrollLockTargetPreview = () => {
         <div className="h-[2000px]" />
       </main>
       <div
-        className="text-foreground-secondary absolute inset-0 flex items-center justify-center"
+        className="absolute inset-0 flex items-center justify-center text-foreground-secondary"
         inert
       >
         Scroll me
@@ -29,7 +29,7 @@ const UseScrollLockTargetPreview = () => {
         className="absolute top-4 left-4"
         size="sm"
       >
-        {isLocked ? "Unlock" : "Lock"}
+        {isLocked ? 'Unlock' : 'Lock'}
       </Button>
     </>
   );

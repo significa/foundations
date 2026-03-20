@@ -1,10 +1,12 @@
-export const metadata = {
-  title: "Select",
-  description:
-    "A native select component with consistent styling across browsers.",
-  files: ["src/foundations/ui/select/select.tsx"],
-  preview: "select",
-};
+---
+title: Select
+description: A native select component with consistent styling across browsers.
+preview: select
+files:
+  - src/foundations/ui/select/select.tsx
+
+folder: UI
+---
 
 ## Features
 
@@ -109,19 +111,16 @@ Using a prefix to provide additional context.
 ## Best Practices
 
 1. **Use Listbox for Complex Cases**:
-
    - If you need custom option rendering
    - If you need search functionality
    - If you need multiple selection
    - If you need complex keyboard interactions
 
 2. **Mobile Considerations**:
-
    - The native select provides the best experience on mobile devices
    - It automatically adapts to the platform's native picker
 
 3. **Form Integration**:
-
    - Use the `required` attribute for required fields
    - Use the `name` attribute for form submission
    - Use the `invalid` prop in conjunction with form validation

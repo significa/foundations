@@ -1,303 +1,267 @@
-"use client";
-
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
-import { useEffect, useState } from "react";
-
-import { Button } from "@/foundations/ui/button/button";
+import { WarningCircleIcon } from '@phosphor-icons/react';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
+import { useCallback, useEffect, useState } from 'react';
+import { Button } from '@/foundations/ui/button/button';
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from "@/foundations/ui/dialog/dialog";
-import { Spinner } from "@/foundations/ui/spinner/spinner";
-import { navigation } from "@/lib/navigation";
-import {
-  PagefindSearchOptions,
-  PagefindSearchResults,
-} from "@/lib/pagefind-types";
-import { cn } from "@/lib/utils";
+} from '@/foundations/ui/dialog/dialog';
+import { Spinner } from '@/foundations/ui/spinner/spinner';
+import type { Pagefind } from '@/lib/types/pagefind';
+import { cn } from '@/lib/utils/classnames';
 
-const highlights = [
+const MAX_ITEMS_PER_GROUP = 7;
+
+const HIGHLIGHTS: Result[] = [
   {
-    group: "Introduction",
+    group: 'Introduction',
     items: [
       {
-        title: "About",
-        href: "/about",
+        title: 'About',
+        href: '/about',
       },
       {
-        title: "Setup",
-        href: "/setup",
+        title: 'Setup',
+        href: '/setup',
       },
     ],
   },
   {
-    group: "UI",
+    group: 'UI',
     items: [
       {
-        title: "Button",
-        href: "/ui/button",
+        title: 'Button',
+        href: '/ui/button',
       },
       {
-        title: "Dropdown",
-        href: "/ui/dropdown",
+        title: 'Dropdown',
+        href: '/ui/dropdown',
       },
       {
-        title: "Input",
-        href: "/ui/input",
+        title: 'Input',
+        href: '/ui/input',
       },
     ],
   },
   {
-    group: "Components",
+    group: 'Components',
     items: [
       {
-        title: "InstanceCounter",
-        href: "/components/instance-counter",
+        title: 'InstanceCounter',
+        href: '/components/instance-counter',
       },
       {
-        title: "Slot",
-        href: "/components/slot",
+        title: 'Slot',
+        href: '/components/slot',
       },
     ],
   },
   {
-    group: "Hooks",
+    group: 'Hooks',
     items: [
       {
-        title: "useIntersectionObserver",
-        href: "/hooks/use-intersection-observer",
+        title: 'useIntersectionObserver',
+        href: '/hooks/use-intersection-observer',
       },
       {
-        title: "useScrollLock",
-        href: "/hooks/use-scroll-lock",
+        title: 'useScrollLock',
+        href: '/hooks/use-scroll-lock',
       },
     ],
   },
   {
-    group: "Guides",
+    group: 'Guides',
     items: [
       {
-        title: "Accessible Forms",
-        href: "/guides/accessible-form",
+        title: 'Accessible Forms',
+        href: '/guides/accessible-form',
       },
       {
-        title: "Automated Tests",
-        href: "/guides/automated-tests",
+        title: 'Automated Tests',
+        href: '/guides/automated-tests',
       },
     ],
   },
 ];
 
-type Pagefind = {
-  search: (
-    query: string,
-    options?: PagefindSearchOptions
-  ) => Promise<PagefindSearchResults>;
-  debouncedSearch: (
-    query: string,
-    delay: number,
-    options?: PagefindSearchOptions
-  ) => Promise<PagefindSearchResults | null>;
-};
-
-type ResultEntry = {
-  title: string;
-  href: string;
-};
-
 type Result = {
   group: string;
-  items: ResultEntry[];
+  items: { title: string; href: string }[];
 };
 
-export const Search = () => {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Result[]>([]);
-  const [pagefindInstance, setPagefindInstance] = useState<Pagefind | null>(
-    null
-  );
-  const [isLoading, setIsLoading] = useState(false);
+const Search = () => {
+  const [pagefind, isPagefindError] = usePagefind();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<Result[]>(HIGHLIGHTS);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const loadPagefind = async () => {
-      if (!pagefindInstance) {
-        try {
-          const instance = await import(
-            // @ts-expect-error pagefind.js generated after build
-            /* webpackIgnore: true */ "/pagefind/pagefind.js"
-          );
-          setPagefindInstance(instance);
-        } catch (e) {
-          console.error(e);
-          console.warn(
-            "[Pagefind]: Run 'npm run build' to index the site. Check the README for more information."
-          );
+  const handleSearch = useCallback(
+    async (query: string) => {
+      if (!pagefind) return null;
+      setIsLoading(true);
+
+      const search = await pagefind.debouncedSearch(query);
+
+      // a more recent search call has been made, do nothing
+      if (!search) return;
+
+      const matches = await Promise.all(
+        search.results.map(async (result) => {
+          const data = await result.data();
+
+          return {
+            title: data.meta.title,
+            folder: data.meta.folder,
+            href: data.url.replace('.html', ''),
+          };
+        })
+      );
+
+      const groupedMatches = matches.reduce((acc, result) => {
+        const group = result.folder || 'other';
+        const existingGroupIndex = acc.findIndex(
+          (item) => item.group === group
+        );
+
+        if (existingGroupIndex !== -1) {
+          acc[existingGroupIndex] = {
+            group: group,
+            items: [...acc[existingGroupIndex].items, result],
+          };
+
+          return acc;
+        } else {
+          acc.push({
+            group: group,
+            items: [result],
+          });
+
+          return acc;
         }
-      }
-    };
-    loadPagefind();
-  }, [pagefindInstance]);
+      }, [] as Result[]);
 
+      setResults(groupedMatches);
+      setIsLoading(false);
+    },
+    [pagefind]
+  );
+
+  // Perform search whenever the query changes
+  useEffect(() => {
+    if (query === '') {
+      setResults(HIGHLIGHTS);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    handleSearch(query);
+  }, [query, handleSearch]);
+
+  // Listen for Cmd+K or Ctrl+K to open the search dialog
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsOpen(true);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  useEffect(() => {
-    const handleSearch = async () => {
-      if (pagefindInstance) {
-        const search = await pagefindInstance.debouncedSearch(query, 200);
-        if (search === null) {
-          // a more recent search call has been made, do nothing
-          return;
-        }
-
-        const findGroupByHref = (href: string) => {
-          const navigationItem = navigation.find((item) =>
-            item.children.some((child) => child.href === href)
-          );
-          return navigationItem?.title;
-        };
-
-        // Process each search result into an object consisting of its title and href
-        const processedResults = await Promise.all(
-          search.results.map(async (result) => {
-            const data = await result.data();
-
-            // Array of marked words from each result's excerpt
-            const markedWords = [
-              ...(data.excerpt.matchAll(/<mark>(.*?)<\/mark>/g) || []),
-            ].map((match) => match[1]);
-
-            // A result is skipped if no marked words match the query, this way we don't get "similar query" results
-            if (
-              !markedWords.some((word) =>
-                word.toLowerCase().includes(query.toLowerCase())
-              )
-            ) {
-              return;
-            }
-
-            const href = data.url.split(".html")[0].replace("/server/app", "");
-
-            return {
-              title: data.meta.title,
-              href: href,
-            };
-          })
-        );
-
-        const groupedResults = processedResults.reduce((acc, result) => {
-          if (!result) {
-            return acc;
-          }
-
-          const group = findGroupByHref(result.href) ?? "";
-
-          if (group === "") {
-            return acc;
-          }
-
-          const foundIndex = acc.findIndex((item) => item.group === group);
-
-          // Max number of items in each group
-          if (foundIndex !== -1 && acc[foundIndex].items.length >= 15) {
-            return acc;
-          }
-
-          if (foundIndex !== -1) {
-            acc[foundIndex] = {
-              group: group,
-              items: [...acc[foundIndex].items, result],
-            };
-          } else {
-            acc.push({
-              group: group,
-              items: [result],
-            });
-          }
-
-          return acc;
-        }, [] as Result[]);
-
-        setResults(groupedResults);
-        setIsLoading(false);
-      }
-    };
-
-    handleSearch();
-  }, [pagefindInstance, query]);
 
   return (
     <Dialog
+      open={isOpen}
       onOpenChange={(open) => {
-        if (!open) {
-          setQuery("");
-          setResults([]);
-        }
+        setQuery('');
+        setResults(HIGHLIGHTS);
         setIsOpen(open);
       }}
-      open={isOpen}
     >
       <DialogTrigger asChild>
         <Button size="sm" square variant="ghost" className="pt-px">
           <MagnifyingGlassIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex h-[400px] max-h-[70svh] w-5xl flex-col rounded-xl p-0">
+
+      <DialogContent
+        catchFocus={false}
+        className="flex h-100 max-h-[70svh] flex-col rounded-xl p-0"
+      >
         <div
           className={cn(
-            "border-border bg-background sticky top-0 z-10 flex w-full items-center border-b px-3.5 py-3",
-            !pagefindInstance && "pointer-events-none opacity-50"
+            'sticky top-0 z-10 flex w-full items-center border-border border-b bg-background px-3.5 py-3'
           )}
         >
-          {isLoading ? (
-            <span className="mt-0.5 flex items-center">
-              <Spinner className="size-3.5" />
-            </span>
-          ) : (
-            <MagnifyingGlassIcon className="mt-0.5 size-3.5" />
-          )}
+          <div className="flex size-4 items-center justify-center overflow-hidden">
+            {isLoading ? (
+              <Spinner className="size-3" />
+            ) : (
+              <MagnifyingGlassIcon className="mt-0.5 size-4" />
+            )}
+          </div>
           <input
             type="text"
-            className="ml-2.5 outline-none"
-            placeholder="Search"
-            autoFocus
+            className="ml-2.5 w-full outline-none"
+            placeholder="Search..."
             value={query}
-            onChange={(e) => {
-              if (!isLoading) setIsLoading(true);
-              setQuery(e.target.value);
-            }}
-            disabled={!pagefindInstance}
+            onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <div className="flex flex-col gap-4 overflow-y-auto pt-4 pb-1">
-          {!pagefindInstance ? (
-            <div className="text-foreground-secondary flex items-center justify-center px-3.5 text-sm">
-              Could not load Pagefind instance.
+        <div className="flex flex-col gap-4 overflow-y-auto p-2 pt-4 pb-1">
+          {isPagefindError ? (
+            <div className="text-foreground-secondary">
+              <div className="flex items-center justify-center gap-1 p-3.5 text-foreground-secondary text-sm">
+                <WarningCircleIcon />
+                Could not load Pagefind instance.
+              </div>
+              {import.meta.env.DEV && (
+                <div className="mt-4 space-y-1 text-balance text-center text-xs">
+                  <p>Generate a development Pagefind instance by running</p>
+                  <code className="mx-1 rounded-sm border bg-foreground/4 px-1 py-0.5 font-[0.95rem] leading-loose">
+                    pnpm dev:pagefind
+                  </code>
+                </div>
+              )}
             </div>
           ) : (
             <>
-              {(query === "" || (results.length === 0 && isLoading)) &&
-                highlights.map((highlight, index) => (
-                  <Group key={index} result={highlight} />
-                ))}
-              {(results.length > 0 || (results.length > 0 && isLoading)) &&
-                results.map((result, index) => (
-                  <Group key={index} result={result} />
-                ))}
-              {!isLoading && results.length === 0 && query !== "" && (
-                <div className="text-foreground-secondary flex items-center px-3.5 text-sm">
-                  No results found
+              {results.map((result) => {
+                const clampedResults = [...result.items].splice(
+                  0,
+                  MAX_ITEMS_PER_GROUP
+                );
+                if (clampedResults.length === 0) return null;
+
+                return (
+                  <div key={result.group}>
+                    <h2 className="mb-2 px-2.5 text-foreground-secondary text-xs capitalize">
+                      {result.group}
+                    </h2>
+                    <div className="flex flex-col gap-0.5">
+                      {clampedResults.map((item) => (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          className="block rounded-lg px-2.5 py-1.5 text-sm ring-ring hover:bg-background-secondary focus-visible:outline-none focus-visible:ring-4"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.title}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+              {!!query && !isLoading && results.length === 0 && (
+                <div className="flex h-full items-center justify-center gap-1 p-3.5 text-foreground-secondary text-sm">
+                  <WarningCircleIcon />
+                  No results found.
                 </div>
               )}
             </>
@@ -308,31 +272,26 @@ export const Search = () => {
   );
 };
 
-type GroupProps = {
-  result: Result;
+const usePagefind = () => {
+  const [instance, setInstance] = useState<Pagefind | null>(null);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const loadPagefind = async () => {
+      try {
+        // @ts-expect-error - dynamic import not typed
+        const pagefind = await import('/pagefind/pagefind.js');
+        setInstance(pagefind);
+      } catch (e) {
+        console.error('Failed to load Pagefind instance:', e);
+        setIsError(true);
+      }
+    };
+
+    loadPagefind();
+  }, []);
+
+  return [instance, isError] as const;
 };
 
-const Group = ({ result }: GroupProps) => {
-  const { group, items } = result;
-
-  return (
-    <div key={group} className="px-1">
-      <div className="px-2.5">
-        <h3 className="text-foreground-secondary mb-1 pb-1.5 text-xs">
-          {group}
-        </h3>
-      </div>
-      <div className="flex flex-col gap-0.5">
-        {items.map((item, index) => (
-          <a
-            key={index}
-            href={item.href}
-            className="hover:bg-background-secondary block rounded-lg px-2.5 py-1.5 text-sm"
-          >
-            {item.title}
-          </a>
-        ))}
-      </div>
-    </div>
-  );
-};
+export { Search };

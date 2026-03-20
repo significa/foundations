@@ -1,27 +1,21 @@
-export const metadata = {
-  title: "Listbox",
-  description: "A control for selecting a value from a list of options.",
-  files: ["src/foundations/ui/listbox/listbox.tsx"],
-  preview: "listbox",
-  dependencies: [
-    {
-      name: "Popover",
-      href: "/ui/popover",
-    },
-    {
-      name: "Divider",
-      href: "/ui/divider",
-    },
-    {
-      name: "inputStyle",
-      href: "/foundations/ui/input",
-    },
-    {
-      name: "@floating-ui/react",
-      href: "https://floating-ui.com/docs/react",
-    },
-  ],
-};
+---
+title: Listbox
+description: A control for selecting a value from a list of options.
+preview: listbox
+files:
+  - src/foundations/ui/listbox/listbox.tsx
+dependencies:
+  - name: Popover
+    href: /ui/popover
+  - name: Divider
+    href: /ui/divider
+  - name: inputStyle
+    href: /foundations/ui/input
+  - name: "@floating-ui/react"
+    href: https://floating-ui.com/docs/react
+
+folder: UI
+---
 
 ## Anatomy
 
@@ -56,8 +50,7 @@ export const metadata = {
   definition={{
     value: {
       type: "T | T[]",
-      description:
-        "The controlled value of the listbox. Can be a single value or an array for multiple selection.",
+      description: "The controlled value of the listbox. Can be a single value or an array for multiple selection.",
       required: true,
     },
     onChange: {
@@ -77,14 +70,12 @@ export const metadata = {
     },
     placement: {
       type: '"selection" | Placement',
-      description:
-        "The placement of the options relative to the trigger. Use 'selection' to align with the selected option.",
+      description: "The placement of the options relative to the trigger. Use 'selection' to align with the selected option.",
       default: '"selection"',
     },
     getIsSelected: {
       type: "(a: T, b: T) => boolean",
-      description:
-        "Custom comparison function to determine if two values are equal.",
+      description: "Custom comparison function to determine if two values are equal.",
     },
     matchReferenceWidth: {
       type: "boolean",

@@ -1,30 +1,75 @@
-import path from "path";
+import { glob, readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { runInNewContext } from 'node:vm';
+import type { Loader } from 'astro/loaders';
+import z from 'zod';
 
-import { walkDirectory } from "./fs";
+const previewMetaSchema = z.object({
+  layout: z.literal(['centered', 'fullscreen', 'padded']).optional(),
+  mode: z.literal(['inline', 'iframe']).optional(),
+});
 
-export const getPreviewSourcePath = async (slug: string) => {
-  for await (const filepath of walkDirectory("./src/foundations")) {
-    if (filepath.endsWith(`${path.sep}${slug}.preview.tsx`)) {
-      return filepath;
-    }
-  }
-  return undefined;
+type PreviewMeta = z.infer<typeof previewMetaSchema>;
+
+type PreviewLayout = NonNullable<PreviewMeta['layout']>;
+type PreviewMode = NonNullable<PreviewMeta['mode']>;
+
+type PreviewLoaderOptions = {
+  pattern: `${string}.tsx`;
+  base?: string;
+  generateId?: (options: { entry: string }) => string;
 };
 
-// FUTURE: We could use the webpack require.context API to get all the preview files,
-// but at the moment, it's not 1-1 compatible with turbopack
-// https://webpack.js.org/api/module-methods/#requirecontext
-//
-// example:
-// require.context("../foundations/", true, /\.preview\.tsx$/).keys();
-export const getPreviewSlugs = async () => {
-  const filepaths = [];
+const resolvePreviewMeta = async (filePath: string): Promise<PreviewMeta> => {
+  try {
+    const raw = await readFile(filePath, 'utf-8');
 
-  for await (const filepath of walkDirectory("./src/foundations")) {
-    if (filepath.endsWith(".preview.tsx")) {
-      filepaths.push(filepath);
-    }
+    const match = raw.match(/\bmeta\s*=\s*(\{[\s\S]*?\})/m);
+    if (!match) return {};
+
+    const result = runInNewContext(`(${match[1]})`);
+    const parsed = previewMetaSchema.safeParse(result);
+
+    if (parsed.success) return parsed.data;
+
+    console.warn(
+      `Invalid meta in ${filePath}:`,
+      parsed.error.flatten().fieldErrors
+    );
+  } catch (error) {
+    console.error(`Error reading meta from ${filePath}:`, error);
   }
 
-  return filepaths.map((filepath) => path.basename(filepath, ".preview.tsx"));
+  return {};
 };
+
+const previewLoader = ({ pattern, base, generateId }: PreviewLoaderOptions) => {
+  return {
+    name: 'preview-loader',
+    // TODO: watch files
+    load: async ({ store, parseData }) => {
+      const baseDir = resolve(base || '/src');
+
+      for await (const match of glob(pattern, { cwd: baseDir })) {
+        const absolutePath = resolve(baseDir, match);
+        const id = generateId?.({ entry: match }) ?? match;
+
+        const meta = await resolvePreviewMeta(absolutePath);
+
+        const data = await parseData({
+          id,
+          data: {
+            // Store the file path relative to the base directory for easier reference
+            file: absolutePath.replace(/^.*?(?=\/src\/)/, ''),
+            meta,
+          },
+        });
+
+        store.set({ id, data });
+      }
+    },
+  } satisfies Loader;
+};
+
+export type { PreviewLayout, PreviewMeta, PreviewMode };
+export { previewLoader, previewMetaSchema };

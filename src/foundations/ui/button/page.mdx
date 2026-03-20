@@ -1,17 +1,18 @@
-export const metadata = {
-  title: "Button",
-  description:
-    "The Button component provides a consistent way to trigger actions across the application.",
-  preview: "button",
-  files: ["src/foundations/ui/button/button.tsx"],
-  dependencies: [
-    { name: "Spinner", href: "/ui/spinner" },
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-  ],
-};
+---
+title: Button
+description: >-
+  The Button component provides a consistent way to trigger actions across the application.
+preview: button
+files:
+  - src/foundations/ui/button/button.tsx
+dependencies:
+  - name: Spinner
+    href: /ui/spinner
+  - name: Slot
+    href: /components/slot
+
+folder: UI
+---
 
 ## API Reference
 
@@ -28,8 +29,7 @@ export const metadata = {
     square: {
       type: "boolean",
       default: "false",
-      description:
-        "Makes the button a square. Helpful when you have a button with only an icon inside.",
+      description: "Makes the button a square. Helpful when you have a button with only an icon inside.",
     },
     isLoading: {
       type: "boolean",
@@ -71,12 +71,10 @@ export const metadata = {
 ## Best Practices
 
 1. **Variants**:
-
    - Use primary for main actions
    - Use destructive for dangerous actions
    - Use ghost for subtle actions
 
 2. **Accessibility**:
-
    - Ensure clear button text
    - Consider loading states

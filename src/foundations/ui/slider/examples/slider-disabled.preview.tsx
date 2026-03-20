@@ -3,7 +3,7 @@ import {
   SliderRange,
   SliderThumb,
   SliderTrack,
-} from "@/foundations/ui/slider/slider";
+} from '@/foundations/ui/slider/slider';
 
 export default function SliderPreview() {
   return (

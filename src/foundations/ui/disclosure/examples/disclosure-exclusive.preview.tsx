@@ -3,7 +3,7 @@ import {
   DisclosureContent,
   DisclosureGroup,
   DisclosureTrigger,
-} from "@/foundations/ui/disclosure/disclosure";
+} from '@/foundations/ui/disclosure/disclosure';
 
 export default function DisclosurePreview() {
   return (

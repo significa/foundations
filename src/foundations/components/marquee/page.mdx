@@ -1,19 +1,17 @@
-export const metadata = {
-  title: "Marquee",
-  description: "A component that displays a continuous stream of content.",
-  files: ["src/foundations/components/marquee/marquee.tsx"],
-  preview: "marquee",
-  dependencies: [
-    {
-      name: "useTicker",
-      href: "/hooks/use-ticker",
-    },
-    {
-      name: "useIntersectionObserver",
-      href: "/hooks/use-intersection-observer",
-    },
-  ],
-};
+---
+title: Marquee
+description: A component that displays a continuous stream of content.
+preview: marquee
+files:
+  - src/foundations/components/marquee/marquee.tsx
+dependencies:
+  - name: useTicker
+    href: /hooks/use-ticker
+  - name: useIntersectionObserver
+    href: /hooks/use-intersection-observer
+
+folder: components
+---
 
 ## Features
 
@@ -37,7 +35,7 @@ export const metadata = {
 <PropsTable
   definition={{
     direction: {
-      type: '"left" | "right" | "up" | "down"',
+      type: "'left' | 'right' | 'up' | 'down'",
       description: "The direction of the marquee.",
       default: '"left"',
     },

@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/foundations/ui/avatar/avatar";
+} from '@/foundations/ui/avatar/avatar';
 import {
   Listbox,
   ListboxOption,
   ListboxOptions,
   ListboxTrigger,
-} from "@/foundations/ui/listbox/listbox";
+} from '@/foundations/ui/listbox/listbox';
 
 const people = [
-  { id: 1, name: "Durward Reynolds" },
-  { id: 2, name: "Kenton Towne" },
-  { id: 3, name: "Therese Wunsch" },
-  { id: 4, name: "Benedict Kessler" },
-  { id: 5, name: "Katelyn Rohan" },
+  { id: 1, name: 'Durward Reynolds' },
+  { id: 2, name: 'Kenton Towne' },
+  { id: 3, name: 'Therese Wunsch' },
+  { id: 4, name: 'Benedict Kessler' },
+  { id: 5, name: 'Katelyn Rohan' },
 ];
 
 export default function ListboxCustomPreview() {
@@ -32,7 +32,7 @@ export default function ListboxCustomPreview() {
       <Listbox value={selectedPerson} onChange={setSelectedPerson}>
         <ListboxTrigger
           placeholder="Select person"
-          className={selectedPerson ? "pl-3" : ""}
+          className={selectedPerson ? 'pl-3' : ''}
         >
           {selectedPerson && (
             <span className="flex items-center gap-2">

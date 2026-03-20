@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Fragment, useState } from "react";
+import { Fragment, useState } from 'react';
 
 import {
   Listbox,
@@ -8,14 +8,14 @@ import {
   ListboxOption,
   ListboxOptions,
   ListboxTrigger,
-} from "@/foundations/ui/listbox/listbox";
+} from '@/foundations/ui/listbox/listbox';
 
 const people = [
-  { id: 1, name: "Durward Reynolds" },
-  { id: 2, name: "Kenton Towne" },
-  { id: 3, name: "Therese Wunsch" },
-  { id: 4, name: "Benedict Kessler" },
-  { id: 5, name: "Katelyn Rohan" },
+  { id: 1, name: 'Durward Reynolds' },
+  { id: 2, name: 'Kenton Towne' },
+  { id: 3, name: 'Therese Wunsch' },
+  { id: 4, name: 'Benedict Kessler' },
+  { id: 5, name: 'Katelyn Rohan' },
 ];
 
 export default function ListboxDividerPreview() {

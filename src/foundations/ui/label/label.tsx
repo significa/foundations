@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useId } from "react";
+import { useId } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/classnames';
 
 const Label = ({
   children,
   className,
   ...props
-}: React.ComponentPropsWithRef<"label">) => {
+}: React.ComponentPropsWithRef<'label'>) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
   return (
     <label
-      className={cn("text-foreground text-base font-medium", className)}
+      className={cn('font-medium text-base text-foreground', className)}
       id={id}
       {...props}
     >

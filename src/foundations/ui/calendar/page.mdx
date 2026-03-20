@@ -1,20 +1,18 @@
-export const metadata = {
-  title: "Calendar",
-  description:
-    "A component for selecting a date or date range with month and year navigation controls",
-  files: ["src/foundations/ui/calendar/calendar.tsx"],
-  preview: "calendar",
-  dependencies: [
-    {
-      name: "Button",
-      href: "/ui/button",
-    },
-    {
-      name: "date-fns",
-      href: "https://date-fns.org/",
-    },
-  ],
-};
+---
+title: Calendar
+description: >-
+  A component for selecting a date or date range with month and year navigation controls
+preview: calendar
+files:
+  - src/foundations/ui/calendar/calendar.tsx
+dependencies:
+  - name: Button
+    href: /ui/button
+  - name: date-fns
+    href: https://date-fns.org/
+
+folder: UI
+---
 
 ## Features
 
@@ -134,19 +132,16 @@ Using a different locale for date formatting.
 ## Best Practices
 
 1. **Date Handling**:
-
    - Always validate dates before passing them to the component
    - Consider timezone implications when handling dates
    - Use consistent date formatting throughout your application
 
 2. **Accessibility**:
-
    - Provide clear instructions for date selection
    - Consider adding helper text for date format requirements
    - Ensure error messages are clear when invalid dates are selected
 
 3. **Mobile Considerations**:
-
    - Test touch interactions for date selection
    - Ensure sufficient spacing between dates for touch targets
    - Consider using native date pickers on mobile devices

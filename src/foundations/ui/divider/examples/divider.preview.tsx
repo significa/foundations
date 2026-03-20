@@ -1,4 +1,4 @@
-import { Divider } from "@/foundations/ui/divider/divider";
+import { Divider } from '@/foundations/ui/divider/divider';
 
 export default function DividerPreview() {
   return (

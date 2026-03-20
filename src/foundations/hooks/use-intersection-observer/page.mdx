@@ -1,11 +1,12 @@
-export const metadata = {
-  title: "useIntersectionObserver",
-  description:
-    "A hook for observing the intersection of an element (or array of elements) with the viewport",
-  files: [
-    "src/foundations/hooks/use-intersection-observer/use-intersection-observer.ts",
-  ],
-};
+---
+title: useIntersectionObserver
+description: >-
+  A hook for observing the intersection of an element (or array of elements) with the viewport
+files:
+  - src/foundations/hooks/use-intersection-observer/use-intersection-observer.ts
+
+folder: hooks
+---
 
 ## API Reference
 
@@ -39,11 +40,7 @@ The hook returns a tuple containing:
 const Example = () => {
   const [ref, { isIntersecting }] = useIntersectionObserver<HTMLDivElement>();
 
-  return (
-    <div ref={ref}>
-      {isIntersecting ? "Element is visible" : "Element is hidden"}
-    </div>
-  );
+  return <div ref={ref}>{isIntersecting ? "Element is visible" : "Element is hidden"}</div>;
 };
 ```
 
@@ -51,14 +48,11 @@ const Example = () => {
 
 ```tsx
 const Example = () => {
-  const [ref] = useIntersectionObserver<HTMLDivElement>(
-    { threshold: 0.5 },
-    (isIntersecting) => {
-      if (isIntersecting) {
-        window.dataLayer?.push({ event: "elementVisible" });
-      }
+  const [ref] = useIntersectionObserver<HTMLDivElement>({ threshold: 0.5 }, (isIntersecting) => {
+    if (isIntersecting) {
+      window.dataLayer?.push({ event: "elementVisible" });
     }
-  );
+  });
 
   return <div ref={ref}>Element</div>;
 };

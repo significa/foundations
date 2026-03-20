@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 
 import {
   Sequence,
@@ -10,8 +10,8 @@ import {
   SequenceItems,
   SequencePanel,
   SequencePanels,
-} from "../sequence";
-import { eras as CONTENT } from "./content";
+} from '../sequence';
+import { eras as CONTENT } from './content';
 
 const SequencePreview = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -28,7 +28,7 @@ const SequencePreview = () => {
           <SequenceItem key={index} asChild>
             <Button
               size="sm"
-              variant={selectedIndex === index ? "primary" : "outline"}
+              variant={selectedIndex === index ? 'primary' : 'outline'}
             >
               <item.icon size={16} className="-ml-1 shrink-0" />
               {item.title}
@@ -39,11 +39,11 @@ const SequencePreview = () => {
       <SequencePanels className="relative h-64 w-full">
         {CONTENT.map((item, index) => (
           <SequencePanel key={index}>
-            <div className="border-border absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border p-4">
-              <div className="text-foreground-secondary font-mono text-sm uppercase">
+            <div className="absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border border-border p-4">
+              <div className="font-mono text-foreground-secondary text-sm uppercase">
                 {item.title}
               </div>
-              <div className="pr-8 text-xl font-medium text-pretty">
+              <div className="text-pretty pr-8 font-medium text-xl">
                 {item.description}
               </div>
             </div>

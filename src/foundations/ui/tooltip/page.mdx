@@ -1,19 +1,17 @@
-export const metadata = {
-  title: "Tooltip",
-  description: "Tooltips are used to display information on demand.",
-  files: ["src/foundations/ui/tooltip/tooltip.tsx"],
-  preview: "tooltip",
-  dependencies: [
-    {
-      name: "useTopLayer",
-      href: "/hooks/use-top-layer",
-    },
-    {
-      name: "@floating-ui/react",
-      href: "https://floating-ui.com/docs/react",
-    },
-  ],
-};
+---
+title: Tooltip
+description: Tooltips are used to display information on demand.
+preview: tooltip
+files:
+  - src/foundations/ui/tooltip/tooltip.tsx
+dependencies:
+  - name: useTopLayer
+    href: /hooks/use-top-layer
+  - name: "@floating-ui/react"
+    href: https://floating-ui.com/docs/react
+
+folder: UI
+---
 
 ## Features
 
@@ -37,13 +35,11 @@ Root component that manages tooltip state and provides context to child componen
     },
     onOpenChange: {
       type: "(open: boolean, event?: Event, reason?: OpenChangeReason) => void",
-      description:
-        "Callback function called when the tooltip's open state changes.",
+      description: "Callback function called when the tooltip's open state changes.",
     },
     initialOpen: {
       type: "boolean",
-      description:
-        "Whether the tooltip is open by default. Useful when used uncontrolled.",
+      description: "Whether the tooltip is open by default. Useful when used uncontrolled.",
       default: false,
     },
     placement: {
@@ -87,8 +83,7 @@ The element that triggers the tooltip. Renders as a `button` by default for acce
   definition={{
     asChild: {
       type: "boolean",
-      description:
-        "When true, the trigger will merge props with its child element instead of rendering as a button.",
+      description: "When true, the trigger will merge props with its child element instead of rendering as a button.",
       default: false,
     },
   }}
@@ -141,19 +136,16 @@ The tooltip automatically repositions to stay in view when scrolling.
 ## Best Practices
 
 1. **Content Guidelines**:
-
    - Keep tooltip content concise and focused
    - Use for supplementary information only
    - Avoid using for essential information
    - Consider using other components for complex interactions
 
 2. **Timing**:
-
    - Use appropriate delays to prevent accidental triggers
    - Adjust delays based on user behavior patterns
 
 3. **Positioning**:
-
    - Choose sensible default placements
    - Ensure tooltips don't obscure important content
    - Test behavior with different screen sizes

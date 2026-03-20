@@ -1,10 +1,10 @@
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipGroup,
   TooltipTrigger,
-} from "@/foundations/ui/tooltip/tooltip";
+} from '@/foundations/ui/tooltip/tooltip';
 
 export default function TooltipPlacementPreview() {
   return (

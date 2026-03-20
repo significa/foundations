@@ -1,9 +1,11 @@
-export const metadata = {
-  title: "Slot",
-  description:
-    "A utility component that merges its props onto its immediate child.",
-  files: ["src/foundations/components/slot/slot.tsx"],
-};
+---
+title: Slot
+description: A utility component that merges its props onto its immediate child.
+files:
+  - src/foundations/components/slot/slot.tsx
+
+folder: components
+---
 
 ## Anatomy
 
@@ -57,8 +59,7 @@ A utility component for handling multiple children in Slot-based components.
     },
     children: {
       type: "(child: ReactNode) => ReactElement",
-      description:
-        "Render function that receives the child and returns a React element.",
+      description: "Render function that receives the child and returns a React element.",
       required: true,
     },
   }}

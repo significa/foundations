@@ -1,0 +1,149 @@
+---
+import { getCollection, render } from "astro:content";
+import { ArrowSquareOutIcon, PackageIcon, PencilIcon, CalendarIcon } from "@phosphor-icons/react";
+import { format } from "date-fns";
+import CodeBlock from "@/components/code-block.astro";
+import Preview from "@/components/preview.astro";
+import PropsTable from "@/components/props-table.astro";
+import SourceCode from "@/components/source-code.astro";
+import { TableOfContents } from "@/components/table-of-contents";
+import { Badge, BadgeIcon } from "@/foundations/ui/badge/badge";
+import PageLayout from "@/layouts/page.astro";
+import Shell from "@/layouts/shell.astro";
+import { GITHUB_REPO_URL } from "@/lib/constants";
+import { getPageLastModifiedTime } from "@/lib/utils/content";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+
+  return pages.map((page, index, arr) => ({
+    params: { path: page.id },
+    props: {
+      page,
+      previousPage: arr[index - 1],
+      nextPage: arr[index + 1],
+    },
+  }));
+}
+
+const { page, previousPage, nextPage } = Astro.props;
+const { Content, headings } = await render(page);
+
+const lastModified = await getPageLastModifiedTime(page);
+---
+
+<Shell meta={{ title: page.data.title, description: page.data.description }}>
+  <PageLayout data-pagefind-meta={`folder:${page.data.folder || "Other"}`}>
+    <nav
+      class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-y-auto pt-6 text-sm lg:block"
+    >
+      <>
+        <h3 class="text-foreground-secondary mb-3 font-medium">On this page</h3>
+        <TableOfContents client:load headings={headings} />
+        <hr class="my-6" />
+      </>
+      <div class="text-foreground-secondary text-xs">
+        <a
+          class="hover:text-foreground mb-2 inline-flex items-center gap-1 font-medium transition"
+          href={`${GITHUB_REPO_URL}/edit/main/${page.filePath}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <PencilIcon /> Edit this page
+        </a>
+        {
+          lastModified && (
+            <p class="text-foreground-secondary flex items-center gap-1 text-xs">
+              <CalendarIcon />
+              Edited {format(lastModified, "PPP")}
+            </p>
+          )
+        }
+      </div>
+    </nav>
+
+    <div class="mx-auto max-w-3xl flex-1 py-6 md:py-8">
+      <section>
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold">{page.data.title}</h1>
+          <p class="text-foreground-secondary mt-2">{page.data.description}</p>
+        </div>
+      </section>
+
+      <section data-markdown class="pb-40">
+        {page.data.preview && <Preview slug={page.data.preview.id} />}
+        {
+          page.data.dependencies && page.data.dependencies.length > 0 && (
+            <>
+              <h2 id="dependencies">Dependencies</h2>
+              <div class="flex flex-wrap gap-2">
+                {page.data.dependencies.map(({ name, href }) => {
+                  const type = href.startsWith("/") ? "internal" : "external";
+
+                  return (
+                    <a href={href} target={type === "external" ? "_blank" : undefined}>
+                      <Badge key={name} variant={type === "external" ? "neutral" : "info"}>
+                        <BadgeIcon>
+                          <PackageIcon />
+                        </BadgeIcon>
+                        <span>{name}</span>
+                        {type === "external" && (
+                          <BadgeIcon>
+                            <ArrowSquareOutIcon className="text-foreground-secondary" />
+                          </BadgeIcon>
+                        )}
+                      </Badge>
+                    </a>
+                  );
+                })}
+              </div>
+            </>
+          )
+        }
+
+        {
+          page.data.files && page.data.files.length > 0 && (
+            <>
+              <h2 id="source-code">Source Code</h2>
+              {page.data.files.map((file) => (
+                <SourceCode class="mt-6" file={file} collapsible />
+              ))}
+            </>
+          )
+        }
+
+        <Content
+          components={{
+            pre: CodeBlock,
+            SourceCode,
+            Preview,
+            PropsTable,
+          }}
+        />
+      </section>
+
+      {
+        (previousPage || nextPage) && (
+          <section class="flex flex-col gap-4 sm:flex-row">
+            {[previousPage, nextPage].map((page, index) => {
+              if (!page) return null;
+
+              return (
+                <a
+                  class:list={[
+                    "border-border hover:bg-foreground/3 focus-visible:bg-foreground/3 flex-1 rounded-lg border p-4 transition outline-none",
+                    index > 0 && "text-right",
+                  ]}
+                  href={`/${page.id}`}
+                >
+                  <p class="text-foreground-secondary mb-1 text-xs">{["Previous", "Next"][index]}</p>
+                  <p class="text-sm font-medium">{page.data.title}</p>
+                </a>
+              );
+            })}
+          </section>
+        )
+      }
+    </div>
+  </PageLayout>
+</Shell>

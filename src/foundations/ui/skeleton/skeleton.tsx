@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/classnames';
 
 const Skeleton = ({
   className,
   ...props
-}: React.ComponentPropsWithRef<"div">) => {
+}: React.ComponentPropsWithRef<'div'>) => {
   return (
     <div
-      className={cn("bg-foreground/10 animate-pulse rounded-md", className)}
+      className={cn('animate-pulse rounded-md bg-foreground/10', className)}
       {...props}
     />
   );

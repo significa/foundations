@@ -14,14 +14,16 @@ jobs:
       contents: read
       packages: read
       deployments: write
-    uses: significa/actions/.github/workflows/vercel-app.yaml@vercel-app-simple-strategy
+    uses: significa/actions/.github/workflows/vercel-app.yaml@main
     with:
-      lint_command: npm run lint
+      lint_command: pnpm check
+      install_command: pnpm install --frozen-lockfile
       test_command: null
       staging_branch: null
       staging_domain: null
       production_branch: main
       production_domain: ${{ vars.PRODUCTION_DOMAIN }}
+      package_manager: pnpm
     secrets:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

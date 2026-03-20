@@ -1,31 +1,23 @@
-export const metadata = {
-  title: "Dropdown",
-  description: "A floating menu that displays a list of options.",
-  files: ["src/foundations/ui/dropdown/dropdown.tsx"],
-  preview: "dropdown",
-  dependencies: [
-    {
-      name: "Popover",
-      href: "/ui/popover",
-    },
-    {
-      name: "Divider",
-      href: "/ui/divider",
-    },
-    {
-      name: "Slot",
-      href: "/components/slot",
-    },
-    {
-      name: "useStableCallback",
-      href: "/hooks/use-stable-callback",
-    },
-    {
-      name: "@floating-ui/react",
-      href: "https://floating-ui.com/docs/react",
-    },
-  ],
-};
+---
+title: Dropdown
+description: A floating menu that displays a list of options.
+preview: dropdown
+files:
+  - src/foundations/ui/dropdown/dropdown.tsx
+dependencies:
+  - name: Popover
+    href: /ui/popover
+  - name: Divider
+    href: /ui/divider
+  - name: Slot
+    href: /components/slot
+  - name: useStableCallback
+    href: /hooks/use-stable-callback
+  - name: "@floating-ui/react"
+    href: https://floating-ui.com/docs/react
+
+folder: UI
+---
 
 ## Features
 
@@ -101,8 +93,7 @@ Extends the `button` element.
     },
     onSelect: {
       type: "(e: { preventDefault: () => void }) => void",
-      description:
-        "Callback fired when the item is selected. Call `e.preventDefault()` to prevent the dropdown from closing.",
+      description: "Callback fired when the item is selected. Call `e.preventDefault()` to prevent the dropdown from closing.",
     },
   }}
 />
@@ -176,14 +167,12 @@ Using custom item rendering for complex layouts.
 ## Best Practices
 
 1. **Content Organization**:
-
    - Group related items into sections
    - Use clear, descriptive labels
    - Keep item text concise
    - Consider using icons for visual clarity
 
 2. **Interaction Design**:
-
    - Use multiple selection when appropriate
    - Add search for long lists
    - Show empty states for filtered results

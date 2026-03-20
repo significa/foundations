@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useId } from "react";
+import { useEffect, useId } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/classnames';
 
-import { useField } from "./field";
+import { useField } from './field';
 
 const FieldError = ({
   children,
   className,
   ...props
-}: React.ComponentPropsWithRef<"p">) => {
+}: React.ComponentPropsWithRef<'p'>) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
 
@@ -19,7 +19,7 @@ const FieldError = ({
   useEffect(() => {
     if (!fieldCtx || !children) return;
 
-    const unregister = fieldCtx.registerElement("error", id);
+    const unregister = fieldCtx.registerElement('error', id);
 
     return unregister;
   }, [fieldCtx, id, children]);
@@ -28,7 +28,7 @@ const FieldError = ({
 
   return (
     <p
-      className={cn("text-base font-medium text-red-500", className)}
+      className={cn('font-medium text-base text-red-500', className)}
       id={id}
       role="alert"
       {...props}

@@ -1,4 +1,4 @@
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from '@/foundations/ui/button/button';
 import {
   Dropdown,
   DropdownHeading,
@@ -6,7 +6,7 @@ import {
   DropdownItems,
   DropdownSection,
   DropdownTrigger,
-} from "@/foundations/ui/dropdown/dropdown";
+} from '@/foundations/ui/dropdown/dropdown';
 
 export default function DropdownSectionsPreview() {
   return (
