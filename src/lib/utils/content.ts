@@ -29,6 +29,7 @@ const getPageLastModifiedTime = async (page: CollectionEntry<'pages'>) => {
 type NavigationItem = {
   title: string;
   children: {
+    id: string;
     title: string;
     href: string;
     createdAt?: Date;
@@ -58,6 +59,7 @@ const getNavigationItems = async (
     const updatedAt = await getPageLastModifiedTime(entry);
 
     const item = {
+      id: entry.id,
       title,
       href: `/${entry.id}`,
       createdAt: createdAt ? new Date(createdAt) : undefined,
