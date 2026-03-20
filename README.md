@@ -19,31 +19,37 @@ Foundations is an opinionated collection of components, patterns, and guidelines
 
 ## Getting Started
 
-1. Clone the repository:
+1. **Clone the repository:**
 
    ```bash
    git clone https://github.com/significa/foundations.git
    cd foundations
    ```
 
-1. Install dependencies:
+2. **Enable pnpm via Corepack:**
 
-   Node version specified in `.nvmrc`
-   
-   TODO: document how to install `pnpm` with the version specified in the `package.json`
+   This project uses pnpm (version pinned in `package.json` via `packageManager`). Node version is specified in `.nvmrc`.
+
+   ```bash
+   corepack enable pnpm
+   ```
+
+3. **Install dependencies:**
 
    ```bash
    pnpm install
    ```
 
-1. Create a `.env` file at the root with the required environment variables:
+4. **Set up environment variables:**
+
+   Create a `.env` file at the root:
 
    ```bash
    POSTHOG_KEY=...
    POSTHOG_HOST=...
    ```
 
-1. Start the dev server:
+5. **Start the dev server:**
 
    ```bash
    pnpm dev
