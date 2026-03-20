@@ -40,4 +40,17 @@
   body {
     height: 100%;
   }
+
+  .astro-code {
+    /* biome-ignore lint/complexity/noImportantStyles: intentional override */
+    background-color: transparent !important;
+  }
+
+  [data-theme="dark"] {
+    .astro-code,
+    .astro-code span {
+      /* biome-ignore lint/complexity/noImportantStyles: intentional override */
+      color: var(--shiki-dark) !important;
+    }
+  }
 }

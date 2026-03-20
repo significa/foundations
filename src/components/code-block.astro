@@ -11,7 +11,7 @@ type Props = Omit<HTMLAttributes<"div">, "id"> & {
 
 const id = uid();
 
-const { class: className, collapsible = false, style: _style, ...props } = Astro.props;
+const { class: className, collapsible = false, ...props } = Astro.props;
 ---
 
 <div

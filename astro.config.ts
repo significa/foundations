@@ -2,6 +2,7 @@ import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, envField } from 'astro/config';
+import { themes } from './src/lib/shiki';
 
 export default defineConfig({
   site: 'https://foundations.significa.co',
@@ -25,10 +26,7 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
-      themes: {
-        light: 'kanagawa-lotus',
-        dark: 'github-dark',
-      },
+      themes,
     },
   },
   devToolbar: {
