@@ -24,6 +24,7 @@ jobs:
       production_branch: main
       production_domain: ${{ vars.PRODUCTION_DOMAIN }}
       package_manager: pnpm
+      git_fetch_depth: 0
     secrets:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
