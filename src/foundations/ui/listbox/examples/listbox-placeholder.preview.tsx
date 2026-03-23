@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 
-import {
-  Listbox,
-  ListboxOption,
-  ListboxOptions,
-  ListboxTrigger,
-} from '@/foundations/ui/listbox/listbox';
+import { Listbox } from '@/foundations/ui/listbox/listbox';
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -25,16 +20,16 @@ export default function ListboxPlaceholderPreview() {
   return (
     <div className="w-80">
       <Listbox value={selectedPerson} onChange={setSelectedPerson}>
-        <ListboxTrigger placeholder="Select person">
+        <Listbox.Trigger placeholder="Select person">
           {selectedPerson?.name}
-        </ListboxTrigger>
-        <ListboxOptions>
+        </Listbox.Trigger>
+        <Listbox.Options>
           {people.map((person) => (
-            <ListboxOption key={person.id} value={person}>
+            <Listbox.Option key={person.id} value={person}>
               {person.name}
-            </ListboxOption>
+            </Listbox.Option>
           ))}
-        </ListboxOptions>
+        </Listbox.Options>
       </Listbox>
     </div>
   );

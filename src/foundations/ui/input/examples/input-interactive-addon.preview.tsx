@@ -3,39 +3,30 @@
 import { InfoIcon } from '@phosphor-icons/react';
 import { useRef } from 'react';
 
-import {
-  Input,
-  InputGroup,
-  InputPrefix,
-  InputSuffix,
-} from '@/foundations/ui/input/input';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/foundations/ui/tooltip/tooltip';
+import { Input } from '@/foundations/ui/input/input';
+import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
 
 export default function InputInteractiveAddon() {
   const input = useRef<HTMLInputElement>(null);
 
   return (
     <div className="w-90">
-      <InputGroup>
-        <InputPrefix className="pointer-events-auto" asChild>
+      <Input.Group>
+        <Input.Prefix className="pointer-events-auto" asChild>
           <button type="button" onClick={() => alert('interactive')}>
             +351
           </button>
-        </InputPrefix>
+        </Input.Prefix>
         <Input ref={input} placeholder="000 000 000" />
-        <InputSuffix className="pointer-events-auto">
+        <Input.Suffix className="pointer-events-auto">
           <Tooltip>
-            <TooltipTrigger>
+            <Tooltip.Trigger>
               <InfoIcon />
-            </TooltipTrigger>
-            <TooltipContent>Your phone number will be visible</TooltipContent>
+            </Tooltip.Trigger>
+            <Tooltip.Content>Your phone number will be visible</Tooltip.Content>
           </Tooltip>
-        </InputSuffix>
-      </InputGroup>
+        </Input.Suffix>
+      </Input.Group>
     </div>
   );
 }

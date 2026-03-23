@@ -60,4 +60,8 @@ const TextareaResize = ({ ref, ...props }: TextareaProps) => {
   );
 };
 
-export { Textarea, TextareaResize };
+const CompoundTextarea = Object.assign(Textarea, {
+  Resize: TextareaResize,
+});
+
+export { CompoundTextarea as Textarea };

@@ -1,23 +1,23 @@
-import { Avatar, AvatarFallback } from '@/foundations/ui/avatar/avatar';
+import { Avatar } from '@/foundations/ui/avatar/avatar';
 
 export default function AvatarFallbackPreview() {
   return (
     <div className="flex flex-wrap gap-2">
       {/* Full name */}
       <Avatar>
-        <AvatarFallback>Pedro Brandão</AvatarFallback>
+        <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
       {/* One word */}
       <Avatar>
-        <AvatarFallback>Significa</AvatarFallback>
+        <Avatar.Fallback>Significa</Avatar.Fallback>
       </Avatar>
       {/* Initials */}
       <Avatar>
-        <AvatarFallback>PB</AvatarFallback>
+        <Avatar.Fallback>PB</Avatar.Fallback>
       </Avatar>
       {/* No fallback */}
       <Avatar>
-        <AvatarFallback />
+        <Avatar.Fallback />
       </Avatar>
     </div>
   );

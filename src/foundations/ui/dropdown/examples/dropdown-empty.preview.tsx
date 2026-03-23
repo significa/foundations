@@ -1,22 +1,16 @@
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Dropdown,
-  DropdownEmpty,
-  DropdownItems,
-  DropdownSearchInput,
-  DropdownTrigger,
-} from '@/foundations/ui/dropdown/dropdown';
+import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
 
 export default function DropdownEmptyPreview() {
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
+      <Dropdown.Trigger asChild>
         <Button variant="outline">Empty Menu</Button>
-      </DropdownTrigger>
-      <DropdownItems>
-        <DropdownSearchInput placeholder="Search items..." />
-        <DropdownEmpty>No items found</DropdownEmpty>
-      </DropdownItems>
+      </Dropdown.Trigger>
+      <Dropdown.Items>
+        <Dropdown.SearchInput placeholder="Search items..." />
+        <Dropdown.Empty>No items found</Dropdown.Empty>
+      </Dropdown.Items>
     </Dropdown>
   );
 }

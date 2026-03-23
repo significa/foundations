@@ -3,12 +3,7 @@
 import { useState } from 'react';
 
 import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
-import {
-  Disclosure,
-  DisclosureChevron,
-  DisclosureContent,
-  DisclosureTrigger,
-} from '@/foundations/ui/disclosure/disclosure';
+import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
 import { Divider } from '@/foundations/ui/divider/divider';
 import { Input } from '@/foundations/ui/input/input';
 
@@ -127,16 +122,16 @@ export default function HierarchicalSelectionWithSearch() {
                   </label>
 
                   {!searchQuery && (
-                    <DisclosureTrigger
+                    <Disclosure.Trigger
                       onClick={() => toggleParentOpen(parent.id)}
                       className="w-auto cursor-pointer rounded p-1"
                     >
-                      <DisclosureChevron />
-                    </DisclosureTrigger>
+                      <Disclosure.Chevron />
+                    </Disclosure.Trigger>
                   )}
                 </div>
 
-                <DisclosureContent>
+                <Disclosure.Content>
                   <div className="mt-2 ml-6 space-y-2">
                     {parent.children?.map((child) => (
                       <label
@@ -153,7 +148,7 @@ export default function HierarchicalSelectionWithSearch() {
                       </label>
                     ))}
                   </div>
-                </DisclosureContent>
+                </Disclosure.Content>
               </Disclosure>
             );
           })}

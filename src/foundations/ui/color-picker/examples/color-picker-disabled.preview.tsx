@@ -1,7 +1,5 @@
 import {
   ColorPicker,
-  ColorPickerArea,
-  ColorPickerHue,
   type HSVA,
 } from '@/foundations/ui/color-picker/color-picker';
 
@@ -10,8 +8,8 @@ export default function ColorPickerDisabled() {
 
   return (
     <ColorPicker color={color} disabled>
-      <ColorPickerArea className="size-48" />
-      <ColorPickerHue className="mt-2 w-48" />
+      <ColorPicker.Area className="size-48" />
+      <ColorPicker.Hue className="mt-2 w-48" />
     </ColorPicker>
   );
 }

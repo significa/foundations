@@ -28,12 +28,8 @@ import { Slot } from '@/foundations/components/slot/slot';
 import { useStableCallback } from '@/foundations/hooks/use-stable-callback/use-stable-callback';
 import { Divider } from '@/foundations/ui/divider/divider';
 import {
-  type Popover,
-  PopoverContent,
+  Popover,
   PopoverContext,
-  PopoverEmpty,
-  PopoverSearchInput,
-  PopoverTrigger,
   usePopoverContext,
   usePopoverFloating,
 } from '@/foundations/ui/popover/popover';
@@ -160,19 +156,19 @@ const Dropdown = ({
   );
 };
 
-const DropdownTrigger = PopoverTrigger;
+const DropdownTrigger = Popover.Trigger;
 
 const DropdownItems = ({
   children,
   className,
   ...props
-}: React.ComponentProps<typeof PopoverContent>) => {
+}: React.ComponentProps<typeof Popover.Content>) => {
   const { elementsRef } = useInternalDropdownContext();
 
   return (
-    <PopoverContent className={cn('p-0', className)} {...props}>
+    <Popover.Content className={cn('p-0', className)} {...props}>
       <FloatingList elementsRef={elementsRef}>{children}</FloatingList>
-    </PopoverContent>
+    </Popover.Content>
   );
 };
 
@@ -379,7 +375,7 @@ const DropdownSearchInput = ({
   };
 
   return (
-    <PopoverSearchInput
+    <Popover.SearchInput
       ref={ref}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
@@ -388,19 +384,19 @@ const DropdownSearchInput = ({
   );
 };
 
-const DropdownEmpty = PopoverEmpty;
+const DropdownEmpty = Popover.Empty;
 
 const useDropdownContext = usePopoverContext;
 
-export {
-  Dropdown,
-  DropdownDivider,
-  DropdownEmpty,
-  DropdownHeading,
-  DropdownItem,
-  DropdownItems,
-  DropdownSearchInput,
-  DropdownSection,
-  DropdownTrigger,
-  useDropdownContext,
-};
+const CompoundDropdown = Object.assign(Dropdown, {
+  Trigger: DropdownTrigger,
+  Items: DropdownItems,
+  Item: DropdownItem,
+  Section: DropdownSection,
+  Heading: DropdownHeading,
+  Divider: DropdownDivider,
+  SearchInput: DropdownSearchInput,
+  Empty: DropdownEmpty,
+});
+
+export { CompoundDropdown as Dropdown, useDropdownContext };

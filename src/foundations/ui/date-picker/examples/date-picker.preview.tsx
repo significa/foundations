@@ -3,21 +3,17 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
 
-import {
-  DatePicker,
-  DatePickerPanel,
-  DatePickerTrigger,
-} from '@/foundations/ui/date-picker/date-picker';
+import { DatePicker } from '@/foundations/ui/date-picker/date-picker';
 
 export default function DatePickerPreview() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   return (
     <DatePicker placement="bottom-start">
-      <DatePickerTrigger className="w-60" placeholder="Select date">
+      <DatePicker.Trigger className="w-60" placeholder="Select date">
         {selectedDate ? format(selectedDate, 'PPP') : undefined}
-      </DatePickerTrigger>
-      <DatePickerPanel
+      </DatePicker.Trigger>
+      <DatePicker.Panel
         className="w-72"
         value={selectedDate}
         onDateChange={(date: Date) => {

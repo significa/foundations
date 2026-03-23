@@ -2,14 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import {
-  Listbox,
-  ListboxEmpty,
-  ListboxOption,
-  ListboxOptions,
-  ListboxSearchInput,
-  ListboxTrigger,
-} from '@/foundations/ui/listbox/listbox';
+import { Listbox } from '@/foundations/ui/listbox/listbox';
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -34,26 +27,26 @@ export default function ListboxMultiplePreview() {
   return (
     <div className="w-80">
       <Listbox value={selectedPeople} onChange={setSelectedPeople}>
-        <ListboxTrigger placeholder="Select people">
+        <Listbox.Trigger placeholder="Select people">
           {selectedPeople.length > 1
             ? `${selectedPeople.length} people selected`
             : selectedPeople[0]?.name}
-        </ListboxTrigger>
-        <ListboxOptions>
-          <ListboxSearchInput
+        </Listbox.Trigger>
+        <Listbox.Options>
+          <Listbox.SearchInput
             placeholder="Search people"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           {filteredPeople.map((person) => (
-            <ListboxOption key={person.id} value={person}>
+            <Listbox.Option key={person.id} value={person}>
               {person.name}
-            </ListboxOption>
+            </Listbox.Option>
           ))}
           {filteredPeople.length === 0 && (
-            <ListboxEmpty>No results</ListboxEmpty>
+            <Listbox.Empty>No results</Listbox.Empty>
           )}
-        </ListboxOptions>
+        </Listbox.Options>
       </Listbox>
     </div>
   );

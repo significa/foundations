@@ -4,49 +4,43 @@ import {
   UsersIcon,
 } from '@phosphor-icons/react/dist/ssr';
 
-import {
-  Tabs,
-  TabsItem,
-  TabsItems,
-  TabsPanel,
-  TabsPanels,
-} from '@/foundations/ui/tabs/tabs';
+import { Tabs } from '@/foundations/ui/tabs/tabs';
 
 export default function TabsVerticalPreview() {
   return (
     <Tabs orientation="vertical" className="flex gap-4">
-      <TabsItems className="w-60">
-        <TabsItem className="w-full justify-start">
+      <Tabs.Items className="w-60">
+        <Tabs.Item className="w-full justify-start">
           <UsersIcon />
           <span>Users</span>
-        </TabsItem>
-        <TabsItem className="w-full justify-start">
+        </Tabs.Item>
+        <Tabs.Item className="w-full justify-start">
           <CreditCardIcon />
           <span>Billing</span>
-        </TabsItem>
-        <TabsItem className="w-full justify-start">
+        </Tabs.Item>
+        <Tabs.Item className="w-full justify-start">
           <GearIcon />
           <span>Settings</span>
-        </TabsItem>
-      </TabsItems>
-      <TabsPanels className="w-90">
-        <TabsPanel>
+        </Tabs.Item>
+      </Tabs.Items>
+      <Tabs.Panels className="w-90">
+        <Tabs.Panel>
           <h3 className="font-medium text-lg">Users Panel</h3>
           <p className="text-foreground-secondary">Manage your users here.</p>
-        </TabsPanel>
-        <TabsPanel>
+        </Tabs.Panel>
+        <Tabs.Panel>
           <h3 className="font-medium text-lg">Billing Panel</h3>
           <p className="text-foreground-secondary">
             Manage your billing information.
           </p>
-        </TabsPanel>
-        <TabsPanel>
+        </Tabs.Panel>
+        <Tabs.Panel>
           <h3 className="font-medium text-lg">Settings Panel</h3>
           <p className="text-foreground-secondary">
             Configure your application settings.
           </p>
-        </TabsPanel>
-      </TabsPanels>
+        </Tabs.Panel>
+      </Tabs.Panels>
     </Tabs>
   );
 }

@@ -5,13 +5,7 @@ import { useState } from 'react';
 import { Button } from '@/foundations/ui/button/button';
 import { cn } from '@/lib/utils/classnames';
 
-import {
-  Sequence,
-  SequenceItem,
-  SequenceItems,
-  SequencePanel,
-  SequencePanels,
-} from '../sequence';
+import { Sequence } from '../sequence';
 import { eras as CONTENT } from './content';
 
 const SequenceControlled = () => {
@@ -34,9 +28,9 @@ const SequenceControlled = () => {
         currentIndex={currentIndex}
         onChange={setCurrentIndex}
       >
-        <SequenceItems className="flex gap-2 overflow-y-auto py-2">
+        <Sequence.Items className="flex gap-2 overflow-y-auto py-2">
           {CONTENT.map((item, index) => (
-            <SequenceItem
+            <Sequence.Item
               key={index}
               className={cn(
                 'relative shrink-0 cursor-pointer overflow-hidden rounded-lg border border-background-secondary px-4 py-1 text-sm',
@@ -48,12 +42,12 @@ const SequenceControlled = () => {
             >
               <item.icon size={16} className="-ml-1 shrink-0" />
               {item.title}
-            </SequenceItem>
+            </Sequence.Item>
           ))}
-        </SequenceItems>
-        <SequencePanels className="relative h-64 w-full">
+        </Sequence.Items>
+        <Sequence.Panels className="relative h-64 w-full">
           {CONTENT.map((item, index) => (
-            <SequencePanel key={index}>
+            <Sequence.Panel key={index}>
               <div className="absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border border-border p-4">
                 <div className="font-mono text-foreground-secondary text-sm uppercase">
                   {item.title}
@@ -62,9 +56,9 @@ const SequenceControlled = () => {
                   {item.description}
                 </div>
               </div>
-            </SequencePanel>
+            </Sequence.Panel>
           ))}
-        </SequencePanels>
+        </Sequence.Panels>
       </Sequence>
     </div>
   );

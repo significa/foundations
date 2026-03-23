@@ -3,18 +3,10 @@
 import { UserCircleIcon } from '@phosphor-icons/react/dist/ssr';
 import { useMemo, useState } from 'react';
 
-import { Avatar, AvatarFallback } from '@/foundations/ui/avatar/avatar';
+import { Avatar } from '@/foundations/ui/avatar/avatar';
 import { Button } from '@/foundations/ui/button/button';
 import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
-import {
-  Dropdown,
-  DropdownDivider,
-  DropdownEmpty,
-  DropdownItem,
-  DropdownItems,
-  DropdownSearchInput,
-  DropdownTrigger,
-} from '@/foundations/ui/dropdown/dropdown';
+import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
 
 type Person = { id: number; name: string };
 
@@ -57,17 +49,17 @@ export default function DropdownSearchCreatePreview() {
   return (
     <div className="w-96 rounded-3xl border border-border p-4">
       <Dropdown onOpenChange={onOpenChange}>
-        <DropdownTrigger asChild>
+        <Dropdown.Trigger asChild>
           <Button variant="outline">Select People</Button>
-        </DropdownTrigger>
-        <DropdownItems>
-          <DropdownSearchInput
+        </Dropdown.Trigger>
+        <Dropdown.Items>
+          <Dropdown.SearchInput
             placeholder="Search people"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           {filteredPeople.map((person) => (
-            <DropdownItem
+            <Dropdown.Item
               key={person.id}
               className="px-2"
               onSelect={(e) => {
@@ -85,15 +77,15 @@ export default function DropdownSearchCreatePreview() {
                 readOnly
               />
               <span>{person.name}</span>
-            </DropdownItem>
+            </Dropdown.Item>
           ))}
           {filteredPeople.length === 0 && (
-            <DropdownEmpty>No results</DropdownEmpty>
+            <Dropdown.Empty>No results</Dropdown.Empty>
           )}
           {search && (
             <>
-              <DropdownDivider />
-              <DropdownItem
+              <Dropdown.Divider />
+              <Dropdown.Item
                 onSelect={() => {
                   const newPerson = {
                     id: people.length + 1,
@@ -105,16 +97,16 @@ export default function DropdownSearchCreatePreview() {
                 }}
               >
                 Create &quot;{search}&quot;
-              </DropdownItem>
+              </Dropdown.Item>
             </>
           )}
-        </DropdownItems>
+        </Dropdown.Items>
       </Dropdown>
       {selected.length > 0 ? (
         <div className="mt-4 flex flex-wrap items-center gap-y-2 -space-x-2">
           {selected.map((person) => (
             <Avatar key={person.id} size="sm">
-              <AvatarFallback>{person.name[0]}</AvatarFallback>
+              <Avatar.Fallback>{person.name[0]}</Avatar.Fallback>
             </Avatar>
           ))}
         </div>

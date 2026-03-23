@@ -150,12 +150,12 @@ return (
               <span>{parent.label}</span>
             </label>
 
-            <DisclosureTrigger onClick={() => toggleParentOpen(parent.id)}>
-              <DisclosureChevron />
-            </DisclosureTrigger>
+            <Disclosure.Trigger onClick={() => toggleParentOpen(parent.id)}>
+              <Disclosure.Chevron />
+            </Disclosure.Trigger>
           </div>
 
-          <DisclosureContent>
+          <Disclosure.Content>
             <div className="ml-6 space-y-2">
               {parent.children?.map((child) => (
                 <label key={child.id} className="flex items-center gap-2">
@@ -167,7 +167,7 @@ return (
                 </label>
               ))}
             </div>
-          </DisclosureContent>
+          </Disclosure.Content>
         </Disclosure>
       );
     })}

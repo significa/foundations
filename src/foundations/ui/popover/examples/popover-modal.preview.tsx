@@ -1,18 +1,13 @@
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Popover,
-  PopoverClose,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/foundations/ui/popover/popover';
+import { Popover } from '@/foundations/ui/popover/popover';
 
 export default function PopoverModalPreview() {
   return (
     <Popover modal>
-      <PopoverTrigger asChild>
+      <Popover.Trigger asChild>
         <Button variant="outline">Open Modal Popover</Button>
-      </PopoverTrigger>
-      <PopoverContent className="flex flex-col gap-4">
+      </Popover.Trigger>
+      <Popover.Content className="flex flex-col gap-4">
         <div>
           <h3 className="mb-1 font-medium text-sm">This is a modal popover</h3>
           <p className="text-foreground-secondary text-sm">
@@ -21,14 +16,14 @@ export default function PopoverModalPreview() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <PopoverClose asChild>
+          <Popover.Close asChild>
             <Button variant="outline" type="button">
               Cancel
             </Button>
-          </PopoverClose>
+          </Popover.Close>
           <Button type="submit">Submit</Button>
         </div>
-      </PopoverContent>
+      </Popover.Content>
     </Popover>
   );
 }

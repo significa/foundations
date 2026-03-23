@@ -4,36 +4,30 @@ import {
   UsersIcon,
 } from '@phosphor-icons/react/dist/ssr';
 
-import {
-  Tabs,
-  TabsItem,
-  TabsItems,
-  TabsPanel,
-  TabsPanels,
-} from '@/foundations/ui/tabs/tabs';
+import { Tabs } from '@/foundations/ui/tabs/tabs';
 
 export default function TabsPreview() {
   return (
     <Tabs>
-      <TabsItems>
-        <TabsItem>
+      <Tabs.Items>
+        <Tabs.Item>
           <UsersIcon />
           <span>Users</span>
-        </TabsItem>
-        <TabsItem>
+        </Tabs.Item>
+        <Tabs.Item>
           <CreditCardIcon />
           <span>Billing</span>
-        </TabsItem>
-        <TabsItem>
+        </Tabs.Item>
+        <Tabs.Item>
           <GearIcon />
           <span>Settings</span>
-        </TabsItem>
-      </TabsItems>
-      <TabsPanels>
-        <TabsPanel>Panel 1</TabsPanel>
-        <TabsPanel>Panel 2</TabsPanel>
-        <TabsPanel>Panel 3</TabsPanel>
-      </TabsPanels>
+        </Tabs.Item>
+      </Tabs.Items>
+      <Tabs.Panels>
+        <Tabs.Panel>Panel 1</Tabs.Panel>
+        <Tabs.Panel>Panel 2</Tabs.Panel>
+        <Tabs.Panel>Panel 3</Tabs.Panel>
+      </Tabs.Panels>
     </Tabs>
   );
 }

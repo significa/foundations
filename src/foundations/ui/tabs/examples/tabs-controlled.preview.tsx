@@ -2,13 +2,7 @@
 
 import { useState } from 'react';
 
-import {
-  Tabs,
-  TabsItem,
-  TabsItems,
-  TabsPanel,
-  TabsPanels,
-} from '@/foundations/ui/tabs/tabs';
+import { Tabs } from '@/foundations/ui/tabs/tabs';
 
 export default function TabsControlledPreview() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -28,16 +22,16 @@ export default function TabsControlledPreview() {
       </div>
 
       <Tabs selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-        <TabsItems>
-          <TabsItem>Tab 1</TabsItem>
-          <TabsItem>Tab 2</TabsItem>
-          <TabsItem>Tab 3</TabsItem>
-        </TabsItems>
-        <TabsPanels>
-          <TabsPanel>Panel 1</TabsPanel>
-          <TabsPanel>Panel 2</TabsPanel>
-          <TabsPanel>Panel 3</TabsPanel>
-        </TabsPanels>
+        <Tabs.Items>
+          <Tabs.Item>Tab 1</Tabs.Item>
+          <Tabs.Item>Tab 2</Tabs.Item>
+          <Tabs.Item>Tab 3</Tabs.Item>
+        </Tabs.Items>
+        <Tabs.Panels>
+          <Tabs.Panel>Panel 1</Tabs.Panel>
+          <Tabs.Panel>Panel 2</Tabs.Panel>
+          <Tabs.Panel>Panel 3</Tabs.Panel>
+        </Tabs.Panels>
       </Tabs>
     </div>
   );

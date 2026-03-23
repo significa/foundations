@@ -3,11 +3,7 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
 
-import {
-  DatePicker,
-  DatePickerPanel,
-  DatePickerTrigger,
-} from '@/foundations/ui/date-picker/date-picker';
+import { DatePicker } from '@/foundations/ui/date-picker/date-picker';
 import { Input } from '@/foundations/ui/input/input';
 
 export default function DatePickerDateTimePreview() {
@@ -16,10 +12,10 @@ export default function DatePickerDateTimePreview() {
   return (
     <div className="flex items-center gap-2">
       <DatePicker placement="bottom-start">
-        <DatePickerTrigger className="w-60" placeholder="Select date">
+        <DatePicker.Trigger className="w-60" placeholder="Select date">
           {format(selectedDate, 'PPP')}
-        </DatePickerTrigger>
-        <DatePickerPanel
+        </DatePicker.Trigger>
+        <DatePicker.Panel
           className="w-72"
           value={selectedDate || new Date()}
           onDateChange={(date: Date) => {

@@ -200,4 +200,10 @@ const InputAddon = ({
   );
 };
 
-export { Input, InputGroup, InputPrefix, InputSuffix, inputStyle };
+const CompoundInput = Object.assign(Input, {
+  Group: InputGroup,
+  Prefix: InputPrefix,
+  Suffix: InputSuffix,
+});
+
+export { CompoundInput as Input, inputStyle };

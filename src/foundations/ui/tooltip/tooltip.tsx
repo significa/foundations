@@ -333,10 +333,10 @@ const TooltipGroup = ({
   );
 };
 
-export {
-  Tooltip,
-  TooltipContent,
-  TooltipGroup,
-  TooltipTrigger,
-  useTooltipContext,
-};
+const CompoundTooltip = Object.assign(Tooltip, {
+  Trigger: TooltipTrigger,
+  Content: TooltipContent,
+  Group: TooltipGroup,
+});
+
+export { CompoundTooltip as Tooltip, useTooltipContext };

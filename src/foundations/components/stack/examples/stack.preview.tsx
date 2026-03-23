@@ -1,9 +1,5 @@
 import { BookOpenIcon, LightbulbIcon, WrenchIcon } from '@phosphor-icons/react';
-import {
-  Stack,
-  StackHeader,
-  StackItem,
-} from '@/foundations/components/stack/stack';
+import { Stack } from '@/foundations/components/stack/stack';
 import { Divider } from '@/foundations/ui/divider/divider';
 import type { PreviewMeta } from '@/lib/preview';
 
@@ -24,7 +20,7 @@ const items = [
     title: 'Implementation',
     icon: WrenchIcon,
     content:
-      "To use the Stack component, wrap your content sections in StackItem components and include StackHeader components for the sticky headers. The Stack parent component manages all the positioning and scroll behavior automatically. You can customize the appearance using standard CSS classes and configure the stick behavior using the 'stick' prop.",
+      "To use the Stack component, wrap your content sections in Stack.Item components and include Stack.Header components for the sticky headers. The Stack parent component manages all the positioning and scroll behavior automatically. You can customize the appearance using standard CSS classes and configure the stick behavior using the 'stick' prop.",
   },
 ];
 
@@ -33,19 +29,19 @@ const StackPreview = () => {
     <div className="pt-[70vh] pb-[70vh]">
       <Stack stick="top">
         {items.map((item, index) => (
-          <StackItem key={index} className="bg-background px-4">
-            <StackHeader className="text-xl">
+          <Stack.Item key={index} className="bg-background px-4">
+            <Stack.Header className="text-xl">
               <div className="flex items-center gap-3">
                 <item.icon className="size-6" />
                 <h3 className="py-2">{item.title}</h3>
               </div>
               <Divider />
-            </StackHeader>
+            </Stack.Header>
 
             <div className="w-2/3 pt-4 pb-12 text-foreground-secondary text-md">
               {item.content}
             </div>
-          </StackItem>
+          </Stack.Item>
         ))}
       </Stack>
     </div>

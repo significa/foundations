@@ -1,18 +1,14 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/foundations/ui/tooltip/tooltip';
+import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
 
 export default function TooltipScrollPreview() {
   return (
     <div className="h-full w-full overflow-y-auto">
       <div className="flex h-[200vh] items-center justify-center">
         <Tooltip open>
-          <TooltipTrigger>
+          <Tooltip.Trigger>
             Scroll to see the tooltip reposition itself
-          </TooltipTrigger>
-          <TooltipContent>Tooltip content</TooltipContent>
+          </Tooltip.Trigger>
+          <Tooltip.Content>Tooltip content</Tooltip.Content>
         </Tooltip>
       </div>
     </div>

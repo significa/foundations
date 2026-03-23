@@ -1,23 +1,19 @@
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/foundations/ui/popover/popover';
+import { Popover } from '@/foundations/ui/popover/popover';
 
 export default function PopoverCustomWidthPreview() {
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <Popover.Trigger asChild>
         <Button variant="outline">Custom Width</Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-96">
+      </Popover.Trigger>
+      <Popover.Content className="w-96">
         <p>This popover has a custom width of 24rem (w-96).</p>
         <p className="mt-2 text-foreground-secondary text-sm">
           You can customize the width of the popover by adding a width utility
-          class to the PopoverContent component.
+          class to the Popover.Content component.
         </p>
-      </PopoverContent>
+      </Popover.Content>
     </Popover>
   );
 }

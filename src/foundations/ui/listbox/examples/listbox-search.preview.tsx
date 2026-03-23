@@ -2,14 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import {
-  Listbox,
-  ListboxEmpty,
-  ListboxOption,
-  ListboxOptions,
-  ListboxSearchInput,
-  ListboxTrigger,
-} from '@/foundations/ui/listbox/listbox';
+import { Listbox } from '@/foundations/ui/listbox/listbox';
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -32,22 +25,22 @@ export default function ListboxSearchPreview() {
   return (
     <div className="w-80">
       <Listbox value={selectedPerson} onChange={setSelectedPerson}>
-        <ListboxTrigger>{selectedPerson?.name}</ListboxTrigger>
-        <ListboxOptions>
-          <ListboxSearchInput
+        <Listbox.Trigger>{selectedPerson?.name}</Listbox.Trigger>
+        <Listbox.Options>
+          <Listbox.SearchInput
             placeholder="Search people"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           {filteredPeople.map((person) => (
-            <ListboxOption key={person.id} value={person}>
+            <Listbox.Option key={person.id} value={person}>
               {person.name}
-            </ListboxOption>
+            </Listbox.Option>
           ))}
           {filteredPeople.length === 0 && (
-            <ListboxEmpty>No results</ListboxEmpty>
+            <Listbox.Empty>No results</Listbox.Empty>
           )}
-        </ListboxOptions>
+        </Listbox.Options>
       </Listbox>
     </div>
   );

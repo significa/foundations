@@ -27,12 +27,12 @@ folder: UI
 
 ```tsx
 <Popover>
-  <PopoverTrigger />
-  <PopoverContent>
-    <PopoverClose />
-    <PopoverSearchInput />
-    <PopoverEmpty />
-  </PopoverContent>
+  <Popover.Trigger />
+  <Popover.Content>
+    <Popover.Close />
+    <Popover.SearchInput />
+    <Popover.Empty />
+  </Popover.Content>
 </Popover>
 ```
 
@@ -68,7 +68,7 @@ folder: UI
   }}
 />
 
-### PopoverTrigger
+### Popover.Trigger
 
 Extends the `button` element.
 
@@ -81,13 +81,13 @@ Extends the `button` element.
   }}
 />
 
-### PopoverContent
+### Popover.Content
 
 Extends the `div` element.
 
 The content will be rendered in a portal and will be positioned relative to the trigger.
 
-### PopoverClose
+### Popover.Close
 
 Extends the `button` element.
 
@@ -100,13 +100,13 @@ Extends the `button` element.
   }}
 />
 
-### PopoverSearchInput
+### Popover.SearchInput
 
 Extends the `input` element.
 
 A styled input with a search icon, useful for filtering content inside the popover.
 
-### PopoverEmpty
+### Popover.Empty
 
 Extends the `div` element.
 

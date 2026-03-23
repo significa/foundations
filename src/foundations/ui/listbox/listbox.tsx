@@ -37,11 +37,7 @@ import {
 
 import { Divider } from '@/foundations/ui/divider/divider';
 import { inputStyle } from '@/foundations/ui/input/input';
-import {
-  PopoverEmpty,
-  PopoverPanel,
-  PopoverSearchInput,
-} from '@/foundations/ui/popover/popover';
+import { Popover } from '@/foundations/ui/popover/popover';
 import { cn } from '@/lib/utils/classnames';
 
 // Utils
@@ -453,7 +449,7 @@ const ListboxOptions = <T,>({
   const ref = useMergeRefs([refs.setFloating, refProp]);
 
   return (
-    <PopoverPanel
+    <Popover.Panel
       context={context}
       ref={ref}
       className={cn(
@@ -467,7 +463,7 @@ const ListboxOptions = <T,>({
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>
-    </PopoverPanel>
+    </Popover.Panel>
   );
 };
 
@@ -577,7 +573,7 @@ const ListboxSearchInput = ({
   };
 
   return (
-    <PopoverSearchInput
+    <Popover.SearchInput
       ref={ref}
       onKeyDown={handleKeyDown}
       onChange={handleChange}
@@ -586,15 +582,16 @@ const ListboxSearchInput = ({
   );
 };
 
-const ListboxEmpty = PopoverEmpty;
+const ListboxEmpty = Popover.Empty;
 
-export {
-  Listbox,
-  ListboxButton,
-  ListboxDivider,
-  ListboxEmpty,
-  ListboxOption,
-  ListboxOptions,
-  ListboxSearchInput,
-  ListboxTrigger,
-};
+const CompoundListbox = Object.assign(Listbox, {
+  Trigger: ListboxTrigger,
+  Button: ListboxButton,
+  Options: ListboxOptions,
+  Option: ListboxOption,
+  Divider: ListboxDivider,
+  SearchInput: ListboxSearchInput,
+  Empty: ListboxEmpty,
+});
+
+export { CompoundListbox as Listbox };

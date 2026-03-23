@@ -3,13 +3,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import {
-  Sequence,
-  SequenceItem,
-  SequenceItems,
-  SequencePanel,
-  SequencePanels,
-} from '@/foundations/components/sequence/sequence';
+import { Sequence } from '@/foundations/components/sequence/sequence';
 import { cn } from '@/lib/utils/classnames';
 
 import { eras as CONTENT } from './content';
@@ -24,9 +18,9 @@ const SequenceMotion = () => {
       onChange={(index) => setSelectedIndex(index)}
       duration={3000}
     >
-      <SequenceItems className="flex w-full gap-2">
+      <Sequence.Items className="flex w-full gap-2">
         {CONTENT.map((item, index) => (
-          <SequenceItem
+          <Sequence.Item
             key={index}
             className={cn(
               'relative shrink-0 cursor-pointer overflow-hidden rounded-lg border border-background-secondary px-4 py-1 text-sm',
@@ -38,11 +32,11 @@ const SequenceMotion = () => {
           >
             <item.icon size={16} className="-ml-1 shrink-0" />
             {item.title}
-          </SequenceItem>
+          </Sequence.Item>
         ))}
-      </SequenceItems>
+      </Sequence.Items>
 
-      <SequencePanels className="mt-4 grid overflow-hidden">
+      <Sequence.Panels className="mt-4 grid overflow-hidden">
         <AnimatePresence mode="wait" initial={false}>
           {CONTENT.map((item, index) =>
             index === selectedIndex ? (
@@ -54,7 +48,7 @@ const SequenceMotion = () => {
                 exit={{ scale: 0.95 }}
                 transition={{ duration: 0.125 }}
               >
-                <SequencePanel forceMount>
+                <Sequence.Panel forceMount>
                   <div className="flex h-full min-h-64 flex-col justify-between rounded-lg border border-border p-4">
                     <motion.div
                       className="font-mono text-foreground-secondary text-sm uppercase"
@@ -81,14 +75,14 @@ const SequenceMotion = () => {
                       {item.description}
                     </motion.div>
                   </div>
-                </SequencePanel>
+                </Sequence.Panel>
               </motion.div>
             ) : (
-              <SequencePanel key={`${index}placeholder`} />
+              <Sequence.Panel key={`${index}placeholder`} />
             )
           )}
         </AnimatePresence>
-      </SequencePanels>
+      </Sequence.Panels>
     </Sequence>
   );
 };

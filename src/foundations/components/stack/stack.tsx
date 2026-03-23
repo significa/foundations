@@ -164,4 +164,9 @@ const StackHeader = ({ children, ...rest }: HTMLAttributes<HTMLDivElement>) => {
   );
 };
 
-export { Stack, StackHeader, StackItem };
+const CompoundStack = Object.assign(Stack, {
+  Item: StackItem,
+  Header: StackHeader,
+});
+
+export { CompoundStack as Stack };

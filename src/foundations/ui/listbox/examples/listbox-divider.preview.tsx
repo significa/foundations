@@ -2,13 +2,7 @@
 
 import { Fragment, useState } from 'react';
 
-import {
-  Listbox,
-  ListboxDivider,
-  ListboxOption,
-  ListboxOptions,
-  ListboxTrigger,
-} from '@/foundations/ui/listbox/listbox';
+import { Listbox } from '@/foundations/ui/listbox/listbox';
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -24,15 +18,15 @@ export default function ListboxDividerPreview() {
   return (
     <div className="w-80">
       <Listbox value={selectedPerson} onChange={setSelectedPerson}>
-        <ListboxTrigger>{selectedPerson?.name}</ListboxTrigger>
-        <ListboxOptions>
+        <Listbox.Trigger>{selectedPerson?.name}</Listbox.Trigger>
+        <Listbox.Options>
           {people.map((person, i) => (
             <Fragment key={person.id}>
-              <ListboxOption value={person}>{person.name}</ListboxOption>
-              {i === 2 && <ListboxDivider />}
+              <Listbox.Option value={person}>{person.name}</Listbox.Option>
+              {i === 2 && <Listbox.Divider />}
             </Fragment>
           ))}
-        </ListboxOptions>
+        </Listbox.Options>
       </Listbox>
     </div>
   );

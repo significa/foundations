@@ -339,4 +339,10 @@ const SliderThumb = ({
   );
 };
 
-export { Slider, SliderRange, SliderThumb, SliderTrack };
+const CompoundSlider = Object.assign(Slider, {
+  Track: SliderTrack,
+  Range: SliderRange,
+  Thumb: SliderThumb,
+});
+
+export { CompoundSlider as Slider };

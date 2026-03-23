@@ -1,31 +1,24 @@
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Dropdown,
-  DropdownHeading,
-  DropdownItem,
-  DropdownItems,
-  DropdownSection,
-  DropdownTrigger,
-} from '@/foundations/ui/dropdown/dropdown';
+import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
 
 export default function DropdownSectionsPreview() {
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
+      <Dropdown.Trigger asChild>
         <Button variant="outline">Open Menu</Button>
-      </DropdownTrigger>
-      <DropdownItems>
-        <DropdownSection>
-          <DropdownHeading>Actions</DropdownHeading>
-          <DropdownItem>Edit</DropdownItem>
-          <DropdownItem>Duplicate</DropdownItem>
-        </DropdownSection>
-        <DropdownSection>
-          <DropdownHeading>Danger Zone</DropdownHeading>
-          <DropdownItem>Archive</DropdownItem>
-          <DropdownItem disabled>Delete</DropdownItem>
-        </DropdownSection>
-      </DropdownItems>
+      </Dropdown.Trigger>
+      <Dropdown.Items>
+        <Dropdown.Section>
+          <Dropdown.Heading>Actions</Dropdown.Heading>
+          <Dropdown.Item>Edit</Dropdown.Item>
+          <Dropdown.Item>Duplicate</Dropdown.Item>
+        </Dropdown.Section>
+        <Dropdown.Section>
+          <Dropdown.Heading>Danger Zone</Dropdown.Heading>
+          <Dropdown.Item>Archive</Dropdown.Item>
+          <Dropdown.Item disabled>Delete</Dropdown.Item>
+        </Dropdown.Section>
+      </Dropdown.Items>
     </Dropdown>
   );
 }

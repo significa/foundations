@@ -336,4 +336,11 @@ const SequencePanel = ({
   );
 };
 
-export { Sequence, SequenceItem, SequenceItems, SequencePanel, SequencePanels };
+const CompoundSequence = Object.assign(Sequence, {
+  Items: SequenceItems,
+  Item: SequenceItem,
+  Panels: SequencePanels,
+  Panel: SequencePanel,
+});
+
+export { CompoundSequence as Sequence };

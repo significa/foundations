@@ -4,12 +4,7 @@ import { useState } from 'react';
 
 import { Button } from '@/foundations/ui/button/button';
 import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
-import {
-  Disclosure,
-  DisclosureChevron,
-  DisclosureContent,
-  DisclosureTrigger,
-} from '@/foundations/ui/disclosure/disclosure';
+import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
 import { Divider } from '@/foundations/ui/divider/divider';
 import { Input } from '@/foundations/ui/input/input';
 import { cn } from '@/lib/utils/classnames';
@@ -188,16 +183,16 @@ export default function ComplexHierarchicalSelection() {
                   </label>
 
                   {!searchQuery && (
-                    <DisclosureTrigger
+                    <Disclosure.Trigger
                       onClick={() => toggleParentOpen(parent.id)}
                       className="w-auto cursor-pointer rounded p-1"
                     >
-                      <DisclosureChevron />
-                    </DisclosureTrigger>
+                      <Disclosure.Chevron />
+                    </Disclosure.Trigger>
                   )}
                 </div>
 
-                <DisclosureContent>
+                <Disclosure.Content>
                   <div className="mt-2 ml-6 space-y-2 border-border border-l-2 pl-4">
                     {parent.children?.map((child) => {
                       const isChildDisabled =
@@ -233,7 +228,7 @@ export default function ComplexHierarchicalSelection() {
                       );
                     })}
                   </div>
-                </DisclosureContent>
+                </Disclosure.Content>
               </Disclosure>
             );
           })}

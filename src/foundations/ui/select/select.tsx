@@ -2,11 +2,7 @@
 
 import type { VariantProps } from 'cva';
 
-import {
-  InputGroup,
-  InputPrefix,
-  inputStyle,
-} from '@/foundations/ui/input/input';
+import { Input, inputStyle } from '@/foundations/ui/input/input';
 import { cn } from '@/lib/utils/classnames';
 
 interface SelectProps extends React.ComponentPropsWithRef<'select'> {
@@ -30,8 +26,13 @@ const Select = ({ className, invalid, variant, ...props }: SelectProps) => {
   );
 };
 
-const SelectGroup = InputGroup;
+const SelectGroup = Input.Group;
 
-const SelectPrefix = InputPrefix;
+const SelectPrefix = Input.Prefix;
 
-export { Select, SelectGroup, SelectPrefix };
+const CompoundSelect = Object.assign(Select, {
+  Group: SelectGroup,
+  Prefix: SelectPrefix,
+});
+
+export { CompoundSelect as Select };

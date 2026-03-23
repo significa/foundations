@@ -86,4 +86,9 @@ const AvatarFallback = ({
   );
 };
 
-export { Avatar, AvatarFallback, AvatarImage };
+const CompoundAvatar = Object.assign(Avatar, {
+  Image: AvatarImage,
+  Fallback: AvatarFallback,
+});
+
+export { CompoundAvatar as Avatar };

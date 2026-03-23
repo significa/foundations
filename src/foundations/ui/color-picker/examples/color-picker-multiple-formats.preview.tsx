@@ -5,10 +5,6 @@ import { useState } from 'react';
 
 import {
   ColorPicker,
-  ColorPickerAlpha,
-  ColorPickerArea,
-  ColorPickerHue,
-  ColorPickerSaturation,
   type HSVA,
 } from '@/foundations/ui/color-picker/color-picker';
 
@@ -20,10 +16,10 @@ export default function ColorPickerMultipleFormatsExample() {
       <div className="flex gap-4">
         <div className="flex flex-col gap-4">
           <ColorPicker className="w-36" color={color} onColorChange={setColor}>
-            <ColorPickerArea />
-            <ColorPickerHue className="mt-2" />
-            <ColorPickerSaturation className="mt-2" />
-            <ColorPickerAlpha className="mt-2" />
+            <ColorPicker.Area />
+            <ColorPicker.Hue className="mt-2" />
+            <ColorPicker.Saturation className="mt-2" />
+            <ColorPicker.Alpha className="mt-2" />
           </ColorPicker>
         </div>
 

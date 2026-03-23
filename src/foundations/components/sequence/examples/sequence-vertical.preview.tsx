@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  Sequence,
-  SequenceItem,
-  SequenceItems,
-  SequencePanel,
-  SequencePanels,
-} from '@/foundations/components/sequence/sequence';
+import { Sequence } from '@/foundations/components/sequence/sequence';
 import { cn } from '@/lib/utils/classnames';
 
 import { eras as CONTENT } from './content';
@@ -38,9 +32,9 @@ const SequenceVertical = () => {
             }}
           />
         </div>
-        <SequenceItems>
+        <Sequence.Items>
           {CONTENT.map((item, index) => (
-            <SequenceItem
+            <Sequence.Item
               key={index}
               value={index.toString()}
               className={cn(
@@ -50,17 +44,17 @@ const SequenceVertical = () => {
               )}
             >
               {item.title}
-            </SequenceItem>
+            </Sequence.Item>
           ))}
-        </SequenceItems>
+        </Sequence.Items>
       </div>
-      <SequencePanels className="min-h-64">
+      <Sequence.Panels className="min-h-64">
         {CONTENT.map((item, index) => (
-          <SequencePanel key={index} className="font-medium text-xl">
+          <Sequence.Panel key={index} className="font-medium text-xl">
             {item.description}
-          </SequencePanel>
+          </Sequence.Panel>
         ))}
-      </SequencePanels>
+      </Sequence.Panels>
     </Sequence>
   );
 };

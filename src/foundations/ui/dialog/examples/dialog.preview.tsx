@@ -1,36 +1,28 @@
 'use client';
 
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Dialog,
-  DialogActions,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from '@/foundations/ui/dialog/dialog';
+import { Dialog } from '@/foundations/ui/dialog/dialog';
 
 export default function DialogPreview() {
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <Dialog.Trigger asChild>
         <Button variant="outline">Open</Button>
-      </DialogTrigger>
-      <DialogContent className="w-80">
-        <DialogTitle>Unsaved changes</DialogTitle>
-        <DialogDescription>
+      </Dialog.Trigger>
+      <Dialog.Content className="w-80">
+        <Dialog.Title>Unsaved changes</Dialog.Title>
+        <Dialog.Description>
           Are you sure you want to leave this page?
-        </DialogDescription>
-        <DialogActions>
-          <DialogClose asChild>
+        </Dialog.Description>
+        <Dialog.Actions>
+          <Dialog.Close asChild>
             <Button>Confirm</Button>
-          </DialogClose>
-          <DialogClose asChild>
+          </Dialog.Close>
+          <Dialog.Close asChild>
             <Button variant="outline">Cancel</Button>
-          </DialogClose>
-        </DialogActions>
-      </DialogContent>
+          </Dialog.Close>
+        </Dialog.Actions>
+      </Dialog.Content>
     </Dialog>
   );
 }

@@ -3,27 +3,20 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
 
-import {
-  DatePicker,
-  DatePickerPanel,
-  DatePickerTrigger,
-} from '@/foundations/ui/date-picker/date-picker';
-import {
-  DropdownDivider,
-  DropdownItem,
-} from '@/foundations/ui/dropdown/dropdown';
+import { DatePicker } from '@/foundations/ui/date-picker/date-picker';
+import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
 
 export default function DatePickerShortcutsPreview() {
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
 
   return (
     <DatePicker placement="bottom-start">
-      <DatePickerTrigger className="w-80" placeholder="Select date range">
+      <DatePicker.Trigger className="w-80" placeholder="Select date range">
         {dateRange
           ? `${format(dateRange[0], 'MM/dd/yyyy')} - ${format(dateRange[1], 'MM/dd/yyyy')}`
           : undefined}
-      </DatePickerTrigger>
-      <DatePickerPanel
+      </DatePicker.Trigger>
+      <DatePicker.Panel
         className="w-80"
         mode="range"
         value={dateRange}
@@ -31,15 +24,15 @@ export default function DatePickerShortcutsPreview() {
           setDateRange(dates);
         }}
       >
-        <DropdownDivider />
-        <DropdownItem
+        <Dropdown.Divider />
+        <Dropdown.Item
           onSelect={() => {
             setDateRange([new Date(), new Date()]);
           }}
         >
           Today
-        </DropdownItem>
-        <DropdownItem
+        </Dropdown.Item>
+        <Dropdown.Item
           onSelect={() => {
             setDateRange([
               new Date(new Date().setDate(new Date().getDate() - 1)),
@@ -48,8 +41,8 @@ export default function DatePickerShortcutsPreview() {
           }}
         >
           Yesterday
-        </DropdownItem>
-        <DropdownItem
+        </Dropdown.Item>
+        <Dropdown.Item
           onSelect={() => {
             setDateRange([
               new Date(new Date().setDate(new Date().getDate() - 7)),
@@ -58,17 +51,17 @@ export default function DatePickerShortcutsPreview() {
           }}
         >
           Last 7 days
-        </DropdownItem>
-        <DropdownDivider />
-        <DropdownItem
+        </Dropdown.Item>
+        <Dropdown.Divider />
+        <Dropdown.Item
           className="text-red-500"
           onSelect={() => {
             setDateRange(null);
           }}
         >
           Clear
-        </DropdownItem>
-      </DatePickerPanel>
+        </Dropdown.Item>
+      </DatePicker.Panel>
     </DatePicker>
   );
 }

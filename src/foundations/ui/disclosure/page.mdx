@@ -25,14 +25,14 @@ folder: UI
 ## Anatomy
 
 ```tsx
-<DisclosureGroup>
+<Disclosure.Group>
   <Disclosure>
-    <DisclosureTrigger>
-      <DisclosureChevron />
-    </DisclosureTrigger>
-    <DisclosureContent />
+    <Disclosure.Trigger>
+      <Disclosure.Chevron />
+    </Disclosure.Trigger>
+    <Disclosure.Content />
   </Disclosure>
-</DisclosureGroup>
+</Disclosure.Group>
 ```
 
 ## API Reference
@@ -58,7 +58,7 @@ Extends the `div` element.
   }}
 />
 
-### DisclosureTrigger
+### Disclosure.Trigger
 
 Extends the `button` element.
 
@@ -71,21 +71,21 @@ Extends the `button` element.
   }}
 />
 
-### DisclosureContent
+### Disclosure.Content
 
 Extends the `div` element.
 
 The content that will be shown or hidden. Uses Motion for smooth height transitions.
 
-### DisclosureChevron
+### Disclosure.Chevron
 
 Extends the `span` element.
 
 Will render a caret that rotates when the disclosure is open.
 
-### DisclosureGroup
+### Disclosure.Group
 
-If you want to only allow one disclosure to be open at a time, you can wrap your disclosures in a `DisclosureGroup`.
+If you want to only allow one disclosure to be open at a time, you can wrap your disclosures in a `Disclosure.Group`.
 
 ## Examples
 
@@ -97,7 +97,7 @@ Basic usage with default styling.
 
 ### Exclusive
 
-Wraps your disclosures in a `DisclosureGroup` to ensure only one disclosure is open at a time.
+Wraps your disclosures in a `Disclosure.Group` to ensure only one disclosure is open at a time.
 
 <Preview slug="disclosure-exclusive" />
 
@@ -120,13 +120,13 @@ The `Disclosure` component serves as a low-level building block that enables pro
 You can easily use it to build a more opinionated `Accordion` component, like the example above.
 
 ```tsx
-import { Disclosure, DisclosureContent, DisclosureTrigger, DisclosureChevron, DisclosureGroup } from "../disclosure";
+import { Disclosure } from "../disclosure";
 
 const AccordionGroup = ({ children, className }: React.ComponentProps<"div">) => {
   return (
-    <DisclosureGroup>
+    <Disclosure.Group>
       <div className={cn("rounded-lg border", className)}>{children}</div>
-    </DisclosureGroup>
+    </Disclosure.Group>
   );
 };
 
@@ -134,25 +134,25 @@ const Accordion = ({ children, className }: React.ComponentProps<typeof Disclosu
   return <Disclosure className={cn("border-b last:border-b-0", className)}>{children}</Disclosure>;
 };
 
-const AccordionTrigger = ({ children, className }: React.ComponentProps<typeof DisclosureTrigger>) => {
+const AccordionTrigger = ({ children, className }: React.ComponentProps<typeof Disclosure.Trigger>) => {
   return (
-    <DisclosureTrigger
+    <Disclosure.Trigger
       className={cn(
         "hover:bg-foreground/5 flex cursor-pointer items-center justify-between gap-4 px-3 py-2 transition-colors",
         className
       )}
     >
       {children}
-      <DisclosureChevron />
-    </DisclosureTrigger>
+      <Disclosure.Chevron />
+    </Disclosure.Trigger>
   );
 };
 
-const AccordionContent = ({ children, className }: React.ComponentProps<typeof DisclosureContent>) => {
+const AccordionContent = ({ children, className }: React.ComponentProps<typeof Disclosure.Content>) => {
   return (
-    <DisclosureContent>
+    <Disclosure.Content>
       <div className={cn("border-t px-3 py-2", className)}>{children}</div>
-    </DisclosureContent>
+    </Disclosure.Content>
   );
 };
 ```
@@ -175,7 +175,7 @@ If you need a leaner approach, feel free to remove it.
 2. **Mobile Considerations**:
    - Ensure touch targets are large enough
    - Test animations on lower-end devices
-   - Consider using DisclosureGroup on mobile
+   - Consider using `Disclosure.Group` on mobile
 
 3. **Performance**:
    - Lazy load content if needed

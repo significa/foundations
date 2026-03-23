@@ -2,11 +2,7 @@ import { WarningCircleIcon } from '@phosphor-icons/react';
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from '@/foundations/ui/dialog/dialog';
+import { Dialog } from '@/foundations/ui/dialog/dialog';
 import { Spinner } from '@/foundations/ui/spinner/spinner';
 import type { Pagefind } from '@/lib/types/pagefind';
 import { cn } from '@/lib/utils/classnames';
@@ -183,13 +179,13 @@ const Search = () => {
         setIsOpen(open);
       }}
     >
-      <DialogTrigger asChild>
+      <Dialog.Trigger asChild>
         <Button size="sm" square variant="ghost" className="pt-px">
           <MagnifyingGlassIcon />
         </Button>
-      </DialogTrigger>
+      </Dialog.Trigger>
 
-      <DialogContent
+      <Dialog.Content
         catchFocus={false}
         className="flex h-100 max-h-[70svh] flex-col rounded-xl p-0"
       >
@@ -267,7 +263,7 @@ const Search = () => {
             </>
           )}
         </div>
-      </DialogContent>
+      </Dialog.Content>
     </Dialog>
   );
 };

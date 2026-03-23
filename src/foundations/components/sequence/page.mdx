@@ -32,12 +32,12 @@ folder: components
 
 ```tsx
 <Sequence>
-  <SequenceItems>
-    <SequenceItem />
-  </SequenceItems>
-  <SequencePanels>
-    <SequencePanel />
-  </SequencePanels>
+  <Sequence.Items>
+    <Sequence.Item />
+  </Sequence.Items>
+  <Sequence.Panels>
+    <Sequence.Panel />
+  </Sequence.Panels>
 </Sequence>
 ```
 
@@ -85,7 +85,7 @@ The root container component that manages the state and behavior of the sequence
   }}
 />
 
-### SequenceItems
+### Sequence.Items
 
 The container for sequence items.
 
@@ -98,7 +98,7 @@ The container for sequence items.
   }}
 />
 
-### SequenceItem
+### Sequence.Item
 
 The individual sequence item button component.
 
@@ -111,7 +111,7 @@ The individual sequence item button component.
   }}
 />
 
-### SequencePanels
+### Sequence.Panels
 
 The container for sequence panels.
 
@@ -124,7 +124,7 @@ The container for sequence panels.
   }}
 />
 
-### SequencePanel
+### Sequence.Panel
 
 The individual sequence panel component.
 
@@ -154,7 +154,7 @@ The individual sequence panel component.
 
 ### Animate Presence
 
-To make `AnimatePresence` work with `SequencePanel` and maintain accessibility, you need to jump through a few hoops. Because `SequencePanel`'s conditional rendering is only applied to its children, you need to force the panel to mount and unmount with a different key to trigger `AnimatePresence`'s `exit` animation. This example demonstrates how you would do it.
+To make `AnimatePresence` work with `Sequence.Panel` and maintain accessibility, you need to jump through a few hoops. Because `Sequence.Panel`'s conditional rendering is only applied to its children, you need to force the panel to mount and unmount with a different key to trigger `AnimatePresence`'s `exit` animation. This example demonstrates how you would do it.
 
 <Preview slug="sequence-motion" />
 

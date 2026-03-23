@@ -4,12 +4,7 @@ import { useState } from 'react';
 
 import { Button } from '@/foundations/ui/button/button';
 import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownItems,
-  DropdownTrigger,
-} from '@/foundations/ui/dropdown/dropdown';
+import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -24,12 +19,12 @@ export default function DropdownMultiplePreview() {
 
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
+      <Dropdown.Trigger asChild>
         <Button variant="outline">Select People</Button>
-      </DropdownTrigger>
-      <DropdownItems>
+      </Dropdown.Trigger>
+      <Dropdown.Items>
         {people.map((person) => (
-          <DropdownItem
+          <Dropdown.Item
             key={person.id}
             className="px-2"
             onSelect={(e) => {
@@ -47,9 +42,9 @@ export default function DropdownMultiplePreview() {
               readOnly
             />
             <span>{person.name}</span>
-          </DropdownItem>
+          </Dropdown.Item>
         ))}
-      </DropdownItems>
+      </Dropdown.Items>
     </Dropdown>
   );
 }

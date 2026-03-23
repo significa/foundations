@@ -1,19 +1,15 @@
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/foundations/ui/popover/popover';
+import { Popover } from '@/foundations/ui/popover/popover';
 
 export default function PopoverPreview() {
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <Popover.Trigger asChild>
         <Button variant="outline">Open Popover</Button>
-      </PopoverTrigger>
-      <PopoverContent>
+      </Popover.Trigger>
+      <Popover.Content>
         <p>This is the content of the popover.</p>
-      </PopoverContent>
+      </Popover.Content>
     </Popover>
   );
 }

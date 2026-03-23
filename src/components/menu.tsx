@@ -1,12 +1,7 @@
 import { differenceInDays } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
 import { Badge } from '@/foundations/ui/badge/badge';
-import {
-  Disclosure,
-  DisclosureChevron,
-  DisclosureContent,
-  DisclosureTrigger,
-} from '@/foundations/ui/disclosure/disclosure';
+import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
 import { cn } from '@/lib/utils/classnames';
 import type { NavigationItem } from '@/lib/utils/content';
 
@@ -34,16 +29,16 @@ export const Menu = ({ items, currentPath: initialPath }: MenuProps) => {
     <>
       {items.map((item) => (
         <Disclosure key={item.title} defaultOpen className="mb-4">
-          <DisclosureTrigger
+          <Disclosure.Trigger
             className={cn(
               'sticky top-0 flex w-full cursor-pointer items-center justify-between bg-background px-3 py-2 font-medium text-foreground-secondary text-sm capitalize',
               'before:absolute before:bottom-full before:left-0 before:h-4 before:w-full before:bg-background'
             )}
           >
             <h3>{item.title}</h3>
-            <DisclosureChevron />
-          </DisclosureTrigger>
-          <DisclosureContent className="flex flex-col gap-0.5">
+            <Disclosure.Chevron />
+          </Disclosure.Trigger>
+          <Disclosure.Content className="flex flex-col gap-0.5">
             {item.children.map((child) => (
               <MenuItem
                 key={child.href}
@@ -51,7 +46,7 @@ export const Menu = ({ items, currentPath: initialPath }: MenuProps) => {
                 isActive={child.href === currentPath}
               />
             ))}
-          </DisclosureContent>
+          </Disclosure.Content>
         </Disclosure>
       ))}
     </>

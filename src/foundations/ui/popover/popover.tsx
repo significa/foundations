@@ -125,12 +125,12 @@ interface PopoverProps extends UsePopoverFloatingOptions {
  * @example
  * ```
  * <Popover>
- *   <PopoverTrigger>
+ *   <Popover.Trigger>
  *     <Button>Open Popover</Button>
- *   </PopoverTrigger>
- *   <PopoverContent>
+ *   </Popover.Trigger>
+ *   <Popover.Content>
  *     <p>Popover Content</p>
- *   </PopoverContent>
+ *   </Popover.Content>
  * </Popover>
  * ```
  */
@@ -168,13 +168,13 @@ interface PopoverTriggerProps extends React.ComponentPropsWithRef<'button'> {
  *
  * @example
  * ```
- * <PopoverTrigger>
+ * <Popover.Trigger>
  *   <Button>Open Popover</Button>
- * </PopoverTrigger>
+ * </Popover.Trigger>
  *
- * <PopoverTrigger asChild={false}>
+ * <Popover.Trigger asChild={false}>
  *   Open Popover
- * </PopoverTrigger>
+ * </Popover.Trigger>
  * ```
  */
 const PopoverTrigger = ({
@@ -207,9 +207,9 @@ const PopoverTrigger = ({
  *
  * @example
  * ```
- * <PopoverContent>
+ * <Popover.Content>
  *   <p>Popover Content</p>
- * </PopoverContent>
+ * </Popover.Content>
  * ```
  */
 const PopoverContent = ({
@@ -338,14 +338,14 @@ interface PopoverCloseProps extends React.ComponentPropsWithRef<'button'> {
  * @example
  * ```
  * <Popover>
- *   <PopoverTrigger>
+ *   <Popover.Trigger>
  *     <Button>Open Popover</Button>
- *   </PopoverTrigger>
- *   <PopoverContent>
- *     <PopoverClose>
+ *   </Popover.Trigger>
+ *   <Popover.Content>
+ *     <Popover.Close>
  *       <Button>Cancel</Button>
- *     </PopoverClose>
- *   </PopoverContent>
+ *     </Popover.Close>
+ *   </Popover.Content>
  * </Popover>
  * ```
  */
@@ -409,15 +409,18 @@ const PopoverEmpty = ({
   );
 };
 
+const CompoundPopover = Object.assign(Popover, {
+  Trigger: PopoverTrigger,
+  Content: PopoverContent,
+  Close: PopoverClose,
+  SearchInput: PopoverSearchInput,
+  Empty: PopoverEmpty,
+  Panel: PopoverPanel,
+});
+
 export {
-  Popover,
-  PopoverClose,
-  PopoverContent,
+  CompoundPopover as Popover,
   PopoverContext,
-  PopoverEmpty,
-  PopoverPanel,
-  PopoverSearchInput,
-  PopoverTrigger,
   usePopoverContext,
   // internal use only
   usePopoverFloating,

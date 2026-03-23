@@ -326,4 +326,11 @@ const TabsPanel = ({
   );
 };
 
-export { Tabs, TabsItem, TabsItems, TabsPanel, TabsPanels };
+const CompoundTabs = Object.assign(Tabs, {
+  Items: TabsItems,
+  Item: TabsItem,
+  Panels: TabsPanels,
+  Panel: TabsPanel,
+});
+
+export { CompoundTabs as Tabs };

@@ -1,32 +1,25 @@
 'use client';
 
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Modal,
-  ModalClose,
-  ModalContent,
-  ModalDescription,
-  ModalTitle,
-  ModalTrigger,
-} from '@/foundations/ui/modal/modal';
+import { Modal } from '@/foundations/ui/modal/modal';
 
-const ModalControlledPreview = () => {
+const ModalPreview = () => {
   return (
     <Modal>
-      <ModalTrigger asChild>
+      <Modal.Trigger asChild>
         <Button variant="outline">Open</Button>
-      </ModalTrigger>
-      <ModalContent className="min-w-xs space-y-6 rounded-xl p-4">
+      </Modal.Trigger>
+      <Modal.Content className="min-w-xs space-y-6 rounded-xl p-4">
         <div className="space-y-1">
-          <ModalTitle className="font-semibold">Title</ModalTitle>
-          <ModalDescription>Description</ModalDescription>
+          <Modal.Title className="font-semibold">Title</Modal.Title>
+          <Modal.Description>Description</Modal.Description>
         </div>
-        <ModalClose asChild>
+        <Modal.Close asChild>
           <Button variant="outline">Close</Button>
-        </ModalClose>
-      </ModalContent>
+        </Modal.Close>
+      </Modal.Content>
     </Modal>
   );
 };
 
-export default ModalControlledPreview;
+export default ModalPreview;

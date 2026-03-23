@@ -1,23 +1,16 @@
 'use client';
 
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Dialog,
-  DialogActions,
-  DialogClose,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from '@/foundations/ui/dialog/dialog';
+import { Dialog } from '@/foundations/ui/dialog/dialog';
 
 export default function DialogTallPreview() {
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <Dialog.Trigger asChild>
         <Button variant="outline">Open Tall Dialog</Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogTitle>Very Tall Dialog</DialogTitle>
+      </Dialog.Trigger>
+      <Dialog.Content>
+        <Dialog.Title>Very Tall Dialog</Dialog.Title>
         <div>
           {Array(20)
             .fill(null)
@@ -29,12 +22,12 @@ export default function DialogTallPreview() {
               </p>
             ))}
         </div>
-        <DialogActions>
-          <DialogClose asChild>
+        <Dialog.Actions>
+          <Dialog.Close asChild>
             <Button variant="outline">Close</Button>
-          </DialogClose>
-        </DialogActions>
-      </DialogContent>
+          </Dialog.Close>
+        </Dialog.Actions>
+      </Dialog.Content>
     </Dialog>
   );
 }

@@ -32,17 +32,17 @@ folder: UI
 
 ```tsx
 <Dropdown>
-  <DropdownTrigger />
-  <DropdownItems>
-    <DropdownSection>
-      <DropdownHeading />
-      <DropdownItem />
-      <DropdownDivider />
-      <DropdownItem />
-    </DropdownSection>
-    <DropdownSearchInput />
-    <DropdownEmpty />
-  </DropdownItems>
+  <Dropdown.Trigger />
+  <Dropdown.Items>
+    <Dropdown.Section>
+      <Dropdown.Heading />
+      <Dropdown.Item />
+      <Dropdown.Divider />
+      <Dropdown.Item />
+    </Dropdown.Section>
+    <Dropdown.SearchInput />
+    <Dropdown.Empty />
+  </Dropdown.Items>
 </Dropdown>
 ```
 
@@ -71,17 +71,17 @@ Extends the [`Popover`](/ui/popover) component.
   }}
 />
 
-### DropdownTrigger
+### Dropdown.Trigger
 
 Extends the [`PopoverTrigger`](/ui/popover#popovertrigger) component.
 
-### DropdownItems
+### Dropdown.Items
 
 Extends the [`PopoverContent`](/ui/popover#popovercontent) component.
 
 The content will be rendered in a portal and will be positioned relative to the trigger.
 
-### DropdownItem
+### Dropdown.Item
 
 Extends the `button` element.
 
@@ -98,29 +98,29 @@ Extends the `button` element.
   }}
 />
 
-### DropdownSection
+### Dropdown.Section
 
 Extends the `div` element.
 
 Groups related items together with an optional heading.
 
-### DropdownHeading
+### Dropdown.Heading
 
 Extends the `div` element.
 
 A heading for a section of items.
 
-### DropdownDivider
+### Dropdown.Divider
 
 A horizontal line to separate groups of items.
 
-### DropdownSearchInput
+### Dropdown.SearchInput
 
 Extends the [`PopoverSearchInput`](/ui/popover#popoversearchinput) component.
 
 A styled input with a search icon, useful for filtering items.
 
-### DropdownEmpty
+### Dropdown.Empty
 
 Extends the [`PopoverEmpty`](/ui/popover#popoverempty) component.
 

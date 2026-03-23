@@ -1,35 +1,27 @@
 'use client';
 
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Dialog,
-  DialogActions,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from '@/foundations/ui/dialog/dialog';
+import { Dialog } from '@/foundations/ui/dialog/dialog';
 
 export default function DialogDestructivePreview() {
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <Dialog.Trigger asChild>
         <Button variant="destructive">Delete</Button>
-      </DialogTrigger>
-      <DialogContent className="w-80">
-        <DialogTitle>Are you sure?</DialogTitle>
-        <DialogDescription>
+      </Dialog.Trigger>
+      <Dialog.Content className="w-80">
+        <Dialog.Title>Are you sure?</Dialog.Title>
+        <Dialog.Description>
           This action cannot be undone. This will permanently delete your
           account and remove your data from our servers.
-        </DialogDescription>
-        <DialogActions>
+        </Dialog.Description>
+        <Dialog.Actions>
           <Button variant="destructive">Delete everything</Button>
-          <DialogClose asChild>
+          <Dialog.Close asChild>
             <Button variant="outline">Cancel</Button>
-          </DialogClose>
-        </DialogActions>
-      </DialogContent>
+          </Dialog.Close>
+        </Dialog.Actions>
+      </Dialog.Content>
     </Dialog>
   );
 }

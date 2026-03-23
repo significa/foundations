@@ -21,14 +21,14 @@ folder: UI
 
 ```tsx
 <Listbox value={value} onChange={onChange}>
-  <ListboxTrigger />
-  <ListboxOptions>
-    <ListboxSearchInput />
-    <ListboxOption />
-    <ListboxDivider />
-    <ListboxOption />
-    <ListboxEmpty />
-  </ListboxOptions>
+  <Listbox.Trigger />
+  <Listbox.Options>
+    <Listbox.SearchInput />
+    <Listbox.Option />
+    <Listbox.Divider />
+    <Listbox.Option />
+    <Listbox.Empty />
+  </Listbox.Options>
 </Listbox>
 ```
 
@@ -85,7 +85,7 @@ folder: UI
   }}
 />
 
-### ListboxTrigger
+### Listbox.Trigger
 
 Extends the `button` element.
 
@@ -103,13 +103,13 @@ Extends the `button` element.
   }}
 />
 
-### ListboxOptions
+### Listbox.Options
 
 Extends the `div` element.
 
 The options will be rendered in a portal and will be positioned relative to the trigger.
 
-### ListboxOption
+### Listbox.Option
 
 Extends the `button` element.
 
@@ -133,17 +133,17 @@ Extends the `button` element.
   }}
 />
 
-### ListboxDivider
+### Listbox.Divider
 
 A horizontal line to separate groups of options.
 
-### ListboxSearchInput
+### Listbox.SearchInput
 
 Extends the `input` element.
 
 A styled input with a search icon, useful for filtering options.
 
-### ListboxEmpty
+### Listbox.Empty
 
 A styled container for empty state messages.
 

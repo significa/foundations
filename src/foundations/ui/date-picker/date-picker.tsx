@@ -6,8 +6,6 @@ import type { VariantProps } from 'cva';
 import { Calendar } from '@/foundations/ui/calendar/calendar';
 import {
   Dropdown,
-  DropdownItems,
-  DropdownTrigger,
   useDropdownContext,
 } from '@/foundations/ui/dropdown/dropdown';
 import { inputStyle } from '@/foundations/ui/input/input';
@@ -21,7 +19,7 @@ const DatePicker = ({
 };
 
 interface DatePickerTriggerProps
-  extends React.ComponentProps<typeof DropdownTrigger> {
+  extends React.ComponentProps<typeof Dropdown.Trigger> {
   className?: string;
   children: React.ReactNode;
   variant?: VariantProps<typeof inputStyle>['variant'];
@@ -36,7 +34,7 @@ const DatePickerTrigger = ({
   ...props
 }: DatePickerTriggerProps) => {
   return (
-    <DropdownTrigger asChild {...props}>
+    <Dropdown.Trigger asChild {...props}>
       <button
         type="button"
         className={cn(
@@ -55,7 +53,7 @@ const DatePickerTrigger = ({
           className="absolute top-1/2 right-3 -translate-y-1/2 text-base text-foreground/80"
         />
       </button>
-    </DropdownTrigger>
+    </Dropdown.Trigger>
   );
 };
 
@@ -95,7 +93,7 @@ const DatePickerPanel = ({
   const { setOpen } = useDropdownContext();
 
   return (
-    <DropdownItems className={cn(className)}>
+    <Dropdown.Items className={cn(className)}>
       <Calendar
         {...props}
         mode={mode}
@@ -108,8 +106,13 @@ const DatePickerPanel = ({
         }}
       />
       {children}
-    </DropdownItems>
+    </Dropdown.Items>
   );
 };
 
-export { DatePicker, DatePickerPanel, DatePickerTrigger };
+const CompoundDatePicker = Object.assign(DatePicker, {
+  Trigger: DatePickerTrigger,
+  Panel: DatePickerPanel,
+});
+
+export { CompoundDatePicker as DatePicker };

@@ -317,11 +317,12 @@ const ModalDescription = ({
   );
 };
 
-export {
-  Modal,
-  ModalClose,
-  ModalContent,
-  ModalDescription,
-  ModalTitle,
-  ModalTrigger,
-};
+const CompoundModal = Object.assign(Modal, {
+  Content: ModalContent,
+  Trigger: ModalTrigger,
+  Close: ModalClose,
+  Title: ModalTitle,
+  Description: ModalDescription,
+});
+
+export { CompoundModal as Modal };

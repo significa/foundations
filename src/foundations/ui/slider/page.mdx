@@ -63,7 +63,7 @@ The root container component.
   }}
 />
 
-### SliderTrack
+### Slider.Track
 
 The track background element.
 
@@ -77,7 +77,7 @@ The track background element.
   }}
 />
 
-### SliderRange
+### Slider.Range
 
 The filled range portion of the track.
 
@@ -91,7 +91,7 @@ The filled range portion of the track.
   }}
 />
 
-### SliderThumb
+### Slider.Thumb
 
 The draggable thumb element (renders as `input[type="range"]`). Extends all standard input props except `value` and `type`.
 
@@ -104,14 +104,14 @@ The component uses CSS variables for customization:
 
 ### Simple
 
-Basic usage with composable structure. The slider requires `SliderTrack`, `SliderRange`, and `SliderThumb` children.
+Basic usage with composable structure. The slider requires `Slider.Track`, `Slider.Range`, and `Slider.Thumb` children.
 
 ```tsx
 <Slider min={0} max={100} defaultValue={50}>
-  <SliderTrack>
-    <SliderRange />
-  </SliderTrack>
-  <SliderThumb />
+  <Slider.Track>
+    <Slider.Range />
+  </Slider.Track>
+  <Slider.Thumb />
 </Slider>
 ```
 

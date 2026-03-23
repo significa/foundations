@@ -6,37 +6,32 @@ import {
 } from '@phosphor-icons/react/dist/ssr';
 
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownItems,
-  DropdownTrigger,
-} from '@/foundations/ui/dropdown/dropdown';
+import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
 
 export default function DropdownIconsPreview() {
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
+      <Dropdown.Trigger asChild>
         <Button variant="outline">Menu with Icons</Button>
-      </DropdownTrigger>
-      <DropdownItems>
-        <DropdownItem>
+      </Dropdown.Trigger>
+      <Dropdown.Items>
+        <Dropdown.Item>
           <PencilSimpleIcon />
           Edit
-        </DropdownItem>
-        <DropdownItem>
+        </Dropdown.Item>
+        <Dropdown.Item>
           <CopyIcon />
           Duplicate
-        </DropdownItem>
-        <DropdownItem>
+        </Dropdown.Item>
+        <Dropdown.Item>
           <ArchiveIcon />
           Archive
-        </DropdownItem>
-        <DropdownItem disabled>
+        </Dropdown.Item>
+        <Dropdown.Item disabled>
           <TrashIcon />
           Delete
-        </DropdownItem>
-      </DropdownItems>
+        </Dropdown.Item>
+      </Dropdown.Items>
     </Dropdown>
   );
 }

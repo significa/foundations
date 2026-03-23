@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { Button } from '@/foundations/ui/button/button';
-import { Modal, ModalContent, ModalTitle } from '@/foundations/ui/modal/modal';
+import { Modal } from '@/foundations/ui/modal/modal';
 
 const ModalControlledPreview = () => {
   const [open, setOpen] = useState(false);
@@ -30,8 +30,8 @@ const ModalControlledPreview = () => {
       <Button onClick={() => setOpen(true)} variant="destructive">
         Delete
       </Button>
-      <ModalContent inert={isSubmitting} className="rounded-xl p-4">
-        <ModalTitle className="my-1 font-semibold">Delete Account</ModalTitle>
+      <Modal.Content inert={isSubmitting} className="rounded-xl p-4">
+        <Modal.Title className="my-1 font-semibold">Delete Account</Modal.Title>
         <p>Are you sure you want to proceed?</p>
         <div className="mt-4 flex gap-2">
           <Button
@@ -43,7 +43,7 @@ const ModalControlledPreview = () => {
           </Button>
           <Button onClick={handleCancel}>Cancel</Button>
         </div>
-      </ModalContent>
+      </Modal.Content>
     </Modal>
   );
 };

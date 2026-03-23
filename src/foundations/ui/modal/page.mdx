@@ -39,12 +39,12 @@ body:has(dialog[open]) {
 
 ```tsx
 <Modal>
-  <ModalTrigger />
-  <ModalContent>
-    <ModalTitle />
-    <ModalDescription />
-    <ModalClose />
-  </ModalContent>
+  <Modal.Trigger />
+  <Modal.Content>
+    <Modal.Title />
+    <Modal.Description />
+    <Modal.Close />
+  </Modal.Content>
 </Modal>
 ```
 
@@ -70,7 +70,7 @@ body:has(dialog[open]) {
   }}
 />
 
-### ModalContent
+### Modal.Content
 
 Extends the native `<dialog>` element.
 
@@ -84,7 +84,7 @@ Extends the native `<dialog>` element.
   }}
 />
 
-### ModalTrigger
+### Modal.Trigger
 
 Extends the `button` element.
 
@@ -98,7 +98,7 @@ Extends the `button` element.
   }}
 />
 
-### ModalClose
+### Modal.Close
 
 Extends the `button` element.
 
@@ -112,7 +112,7 @@ Extends the `button` element.
   }}
 />
 
-### ModalTitle
+### Modal.Title
 
 Extends the `h2` element.
 
@@ -126,7 +126,7 @@ Extends the `h2` element.
   }}
 />
 
-### ModalDescription
+### Modal.Description
 
 Extends the `p` element.
 
@@ -153,14 +153,10 @@ Extends the `p` element.
 ## Best Practices
 
 1. **Accessibility**:
-   - Always provide `ModalTitle` for screen readers
-   - Use `ModalDescription` for additional context
+   - Always provide `Modal.Title` for screen readers
+   - Use `Modal.Description` for additional context
    - Ensure keyboard navigation works properly
 
 2. **User Experience**:
    - Keep modal content focused and concise
    - Provide clear actions (confirm/cancel)
-
-```
-
-```

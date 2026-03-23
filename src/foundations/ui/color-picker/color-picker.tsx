@@ -528,12 +528,12 @@ const ColorPickerAlpha = ({
   );
 };
 
-export {
-  ColorPicker,
-  ColorPickerAlpha,
-  ColorPickerArea,
-  ColorPickerHue,
-  ColorPickerLightness,
-  ColorPickerSaturation,
-  type HSVA,
-};
+const CompoundColorPicker = Object.assign(ColorPicker, {
+  Area: ColorPickerArea,
+  Hue: ColorPickerHue,
+  Saturation: ColorPickerSaturation,
+  Lightness: ColorPickerLightness,
+  Alpha: ColorPickerAlpha,
+});
+
+export { CompoundColorPicker as ColorPicker, type HSVA };

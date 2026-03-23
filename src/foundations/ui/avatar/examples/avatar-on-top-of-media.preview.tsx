@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from '@/foundations/ui/avatar/avatar';
+import { Avatar } from '@/foundations/ui/avatar/avatar';
 
 export default function AvatarOnTopOfMediaPreview() {
   return (
@@ -11,7 +11,7 @@ export default function AvatarOnTopOfMediaPreview() {
     >
       <div className="flex h-full items-center justify-center">
         <Avatar>
-          <AvatarFallback>Pedro Brandão</AvatarFallback>
+          <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
         </Avatar>
       </div>
     </div>

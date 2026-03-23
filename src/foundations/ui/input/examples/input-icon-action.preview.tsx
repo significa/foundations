@@ -3,27 +3,22 @@
 import { EyeClosedIcon, EyeIcon, LockIcon } from '@phosphor-icons/react';
 import { useState } from 'react';
 
-import {
-  Input,
-  InputGroup,
-  InputPrefix,
-  InputSuffix,
-} from '@/foundations/ui/input/input';
+import { Input } from '@/foundations/ui/input/input';
 
 export default function InputIconAction() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="w-90">
-      <InputGroup>
-        <InputPrefix>
+      <Input.Group>
+        <Input.Prefix>
           <LockIcon />
-        </InputPrefix>
+        </Input.Prefix>
         <Input
           type={showPassword ? 'text' : 'password'}
           placeholder="Your password here"
         />
-        <InputSuffix className="pointer-events-auto">
+        <Input.Suffix className="pointer-events-auto">
           <button
             type="button"
             className="cursor-pointer"
@@ -31,8 +26,8 @@ export default function InputIconAction() {
           >
             {showPassword ? <EyeIcon /> : <EyeClosedIcon />}
           </button>
-        </InputSuffix>
-      </InputGroup>
+        </Input.Suffix>
+      </Input.Group>
     </div>
   );
 }

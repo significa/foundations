@@ -2,17 +2,8 @@
 
 import { useState } from 'react';
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/foundations/ui/avatar/avatar';
-import {
-  Listbox,
-  ListboxOption,
-  ListboxOptions,
-  ListboxTrigger,
-} from '@/foundations/ui/listbox/listbox';
+import { Avatar } from '@/foundations/ui/avatar/avatar';
+import { Listbox } from '@/foundations/ui/listbox/listbox';
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -30,39 +21,39 @@ export default function ListboxCustomPreview() {
   return (
     <div className="w-80">
       <Listbox value={selectedPerson} onChange={setSelectedPerson}>
-        <ListboxTrigger
+        <Listbox.Trigger
           placeholder="Select person"
           className={selectedPerson ? 'pl-3' : ''}
         >
           {selectedPerson && (
             <span className="flex items-center gap-2">
               <Avatar size="xs">
-                <AvatarImage
+                <Avatar.Image
                   src={`https://api.dicebear.com/6.x/thumbs/svg?seed=${selectedPerson.name}`}
                 />
-                <AvatarFallback>{selectedPerson.name[0]}</AvatarFallback>
+                <Avatar.Fallback>{selectedPerson.name[0]}</Avatar.Fallback>
               </Avatar>
               <span>{selectedPerson.name}</span>
             </span>
           )}
-        </ListboxTrigger>
-        <ListboxOptions>
+        </Listbox.Trigger>
+        <Listbox.Options>
           {people.map((person) => (
-            <ListboxOption
+            <Listbox.Option
               key={person.id}
               value={person}
               className="flex items-center gap-2 px-3"
             >
               <Avatar size="xs">
-                <AvatarImage
+                <Avatar.Image
                   src={`https://api.dicebear.com/6.x/thumbs/svg?seed=${person.name}`}
                 />
-                <AvatarFallback>{person.name[0]}</AvatarFallback>
+                <Avatar.Fallback>{person.name[0]}</Avatar.Fallback>
               </Avatar>
               <span>{person.name}</span>
-            </ListboxOption>
+            </Listbox.Option>
           ))}
-        </ListboxOptions>
+        </Listbox.Options>
       </Listbox>
     </div>
   );

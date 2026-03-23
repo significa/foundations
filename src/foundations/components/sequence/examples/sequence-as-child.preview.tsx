@@ -4,13 +4,7 @@ import { useState } from 'react';
 
 import { Button } from '@/foundations/ui/button/button';
 
-import {
-  Sequence,
-  SequenceItem,
-  SequenceItems,
-  SequencePanel,
-  SequencePanels,
-} from '../sequence';
+import { Sequence } from '../sequence';
 import { eras as CONTENT } from './content';
 
 const SequencePreview = () => {
@@ -23,9 +17,9 @@ const SequencePreview = () => {
       onChange={(index) => setSelectedIndex(index)}
       duration={3000}
     >
-      <SequenceItems className="flex gap-2 overflow-y-auto py-2">
+      <Sequence.Items className="flex gap-2 overflow-y-auto py-2">
         {CONTENT.map((item, index) => (
-          <SequenceItem key={index} asChild>
+          <Sequence.Item key={index} asChild>
             <Button
               size="sm"
               variant={selectedIndex === index ? 'primary' : 'outline'}
@@ -33,12 +27,12 @@ const SequencePreview = () => {
               <item.icon size={16} className="-ml-1 shrink-0" />
               {item.title}
             </Button>
-          </SequenceItem>
+          </Sequence.Item>
         ))}
-      </SequenceItems>
-      <SequencePanels className="relative h-64 w-full">
+      </Sequence.Items>
+      <Sequence.Panels className="relative h-64 w-full">
         {CONTENT.map((item, index) => (
-          <SequencePanel key={index}>
+          <Sequence.Panel key={index}>
             <div className="absolute top-0 left-0 flex h-full min-h-64 flex-col justify-between rounded-lg border border-border p-4">
               <div className="font-mono text-foreground-secondary text-sm uppercase">
                 {item.title}
@@ -47,9 +41,9 @@ const SequencePreview = () => {
                 {item.description}
               </div>
             </div>
-          </SequencePanel>
+          </Sequence.Panel>
         ))}
-      </SequencePanels>
+      </Sequence.Panels>
     </Sequence>
   );
 };

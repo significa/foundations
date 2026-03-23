@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  Modal,
-  ModalClose,
-  ModalContent,
-  ModalDescription,
-  ModalTitle,
-  ModalTrigger,
-} from '@/foundations/ui/modal/modal';
+import { Modal } from '@/foundations/ui/modal/modal';
 import { cn } from '@/lib/utils/classnames';
 
 type DialogProps = React.ComponentProps<typeof Modal>;
@@ -16,7 +9,8 @@ const Dialog = ({ ...props }: DialogProps) => {
   return <Modal {...props} />;
 };
 
-interface DialogContentProps extends React.ComponentProps<typeof ModalContent> {
+interface DialogContentProps
+  extends React.ComponentProps<typeof Modal.Content> {
   align?: 'center' | 'top';
 }
 
@@ -27,7 +21,7 @@ const DialogContent = ({
   ...props
 }: DialogContentProps) => {
   return (
-    <ModalContent
+    <Modal.Content
       className={cn(
         'm-auto w-full max-w-[calc(100vw-(--spacing(8)))] rounded-3xl border border-border bg-background p-4 shadow-lg md:max-w-md',
         'max-h-[calc(100svh-2rem)] overflow-y-auto backdrop:bg-black/20 backdrop:backdrop-blur-sm',
@@ -39,23 +33,23 @@ const DialogContent = ({
       {...props}
     >
       {children}
-    </ModalContent>
+    </Modal.Content>
   );
 };
 
-const DialogTrigger = ModalTrigger;
+const DialogTrigger = Modal.Trigger;
 
-const DialogClose = ModalClose;
+const DialogClose = Modal.Close;
 
 const DialogTitle = ({
   children,
   className,
   ...props
-}: React.ComponentProps<typeof ModalTitle>) => {
+}: React.ComponentProps<typeof Modal.Title>) => {
   return (
-    <ModalTitle className={cn('pb-2 font-semibold', className)} {...props}>
+    <Modal.Title className={cn('pb-2 font-semibold', className)} {...props}>
       {children}
-    </ModalTitle>
+    </Modal.Title>
   );
 };
 
@@ -63,11 +57,11 @@ const DialogDescription = ({
   children,
   className,
   ...props
-}: React.ComponentProps<typeof ModalDescription>) => {
+}: React.ComponentProps<typeof Modal.Description>) => {
   return (
-    <ModalDescription className={cn('pb-2', className)} {...props}>
+    <Modal.Description className={cn('pb-2', className)} {...props}>
       {children}
-    </ModalDescription>
+    </Modal.Description>
   );
 };
 
@@ -87,12 +81,13 @@ const DialogActions = ({
   </div>
 );
 
-export {
-  Dialog,
-  DialogActions,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-};
+const CompoundDialog = Object.assign(Dialog, {
+  Content: DialogContent,
+  Title: DialogTitle,
+  Description: DialogDescription,
+  Actions: DialogActions,
+  Trigger: DialogTrigger,
+  Close: DialogClose,
+});
+
+export { CompoundDialog as Dialog };

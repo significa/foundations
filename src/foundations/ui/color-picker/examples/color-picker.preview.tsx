@@ -4,8 +4,6 @@ import { useState } from 'react';
 
 import {
   ColorPicker,
-  ColorPickerArea,
-  ColorPickerHue,
   type HSVA,
 } from '@/foundations/ui/color-picker/color-picker';
 
@@ -14,8 +12,8 @@ export default function ColorPickerExample() {
 
   return (
     <ColorPicker className="w-48" color={color} onColorChange={setColor}>
-      <ColorPickerArea />
-      <ColorPickerHue className="mt-2" />
+      <ColorPicker.Area />
+      <ColorPicker.Hue className="mt-2" />
     </ColorPicker>
   );
 }

@@ -1,11 +1,4 @@
-import {
-  Modal,
-  ModalClose,
-  ModalContent,
-  ModalDescription,
-  ModalTitle,
-  ModalTrigger,
-} from '@/foundations/ui/modal/modal';
+import { Modal } from '@/foundations/ui/modal/modal';
 import { cn } from '@/lib/utils/classnames';
 
 type DrawerProps = React.ComponentProps<typeof Modal>;
@@ -14,7 +7,7 @@ const Drawer = (props: DrawerProps) => {
   return <Modal {...props} />;
 };
 
-type DrawerContentProps = React.ComponentProps<typeof ModalContent>;
+type DrawerContentProps = React.ComponentProps<typeof Modal.Content>;
 
 const DrawerContent = ({
   className,
@@ -22,7 +15,7 @@ const DrawerContent = ({
   ...props
 }: DrawerContentProps) => {
   return (
-    <ModalContent
+    <Modal.Content
       className={cn(
         '[--drawer-p:--spacing(4)]',
         'overflow-x-hidden! mx-auto flex w-full max-w-screen flex-col overflow-y-auto border border-border bg-background-high p-(--drawer-p) *:shrink-0',
@@ -42,23 +35,23 @@ const DrawerContent = ({
       {...props}
     >
       {children}
-    </ModalContent>
+    </Modal.Content>
   );
 };
 
-const DrawerTrigger = ModalTrigger;
+const DrawerTrigger = Modal.Trigger;
 
-const DrawerClose = ModalClose;
+const DrawerClose = Modal.Close;
 
 const DrawerTitle = ({
   children,
   className,
   ...props
-}: React.ComponentProps<typeof ModalTitle>) => {
+}: React.ComponentProps<typeof Modal.Title>) => {
   return (
-    <ModalTitle className={cn('font-semibold', className)} {...props}>
+    <Modal.Title className={cn('font-semibold', className)} {...props}>
       {children}
-    </ModalTitle>
+    </Modal.Title>
   );
 };
 
@@ -66,11 +59,11 @@ const DrawerDescription = ({
   children,
   className,
   ...props
-}: React.ComponentProps<typeof ModalDescription>) => {
+}: React.ComponentProps<typeof Modal.Description>) => {
   return (
-    <ModalDescription className={cn('pb-2', className)} {...props}>
+    <Modal.Description className={cn('pb-2', className)} {...props}>
       {children}
-    </ModalDescription>
+    </Modal.Description>
   );
 };
 
@@ -119,14 +112,15 @@ const DrawerActions = ({
   );
 };
 
-export {
-  Drawer,
-  DrawerActions,
-  DrawerBleed,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-};
+const CompoundDrawer = Object.assign(Drawer, {
+  Content: DrawerContent,
+  Header: DrawerHeader,
+  Title: DrawerTitle,
+  Description: DrawerDescription,
+  Actions: DrawerActions,
+  Bleed: DrawerBleed,
+  Trigger: DrawerTrigger,
+  Close: DrawerClose,
+});
+
+export { CompoundDrawer as Drawer };

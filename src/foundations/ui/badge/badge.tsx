@@ -85,4 +85,9 @@ const BadgeStatus = ({
   );
 };
 
-export { Badge, BadgeIcon, BadgeStatus };
+const CompoundBadge = Object.assign(Badge, {
+  Icon: BadgeIcon,
+  Status: BadgeStatus,
+});
+
+export { CompoundBadge as Badge };

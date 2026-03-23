@@ -182,10 +182,11 @@ const DisclosureChevron = ({
   );
 };
 
-export {
-  Disclosure,
-  DisclosureChevron,
-  DisclosureContent,
-  DisclosureGroup,
-  DisclosureTrigger,
-};
+const CompoundDisclosure = Object.assign(Disclosure, {
+  Group: DisclosureGroup,
+  Trigger: DisclosureTrigger,
+  Content: DisclosureContent,
+  Chevron: DisclosureChevron,
+});
+
+export { CompoundDisclosure as Disclosure };

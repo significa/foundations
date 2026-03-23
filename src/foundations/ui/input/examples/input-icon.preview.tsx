@@ -1,16 +1,16 @@
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
 
-import { Input, InputGroup, InputPrefix } from '@/foundations/ui/input/input';
+import { Input } from '@/foundations/ui/input/input';
 
 export default function InputIcon() {
   return (
     <div className="w-90">
-      <InputGroup>
-        <InputPrefix>
+      <Input.Group>
+        <Input.Prefix>
           <MagnifyingGlassIcon />
-        </InputPrefix>
+        </Input.Prefix>
         <Input placeholder="Search something" />
-      </InputGroup>
+      </Input.Group>
     </div>
   );
 }

@@ -2,11 +2,7 @@
 
 import { FireIcon, LeafIcon, PizzaIcon } from '@phosphor-icons/react';
 
-import {
-  Stack,
-  StackHeader,
-  StackItem,
-} from '@/foundations/components/stack/stack';
+import { Stack } from '@/foundations/components/stack/stack';
 import { Divider } from '@/foundations/ui/divider/divider';
 import { cn } from '@/lib/utils/classnames';
 
@@ -38,18 +34,18 @@ const StackVsStickyPreview = () => {
         <h2 className="mb-8 px-4 font-medium text-lg">Stack Implementation</h2>
         <Stack stick="top">
           {items.map((item, index) => (
-            <StackItem key={index} className="bg-background px-4">
-              <StackHeader className="text-xl">
+            <Stack.Item key={index} className="bg-background px-4">
+              <Stack.Header className="text-xl">
                 <div className="flex items-center gap-3">
                   <item.icon className="size-6" />
                   <h3 className="py-2">{item.title}</h3>
                 </div>
                 <Divider />
-              </StackHeader>
+              </Stack.Header>
               <div className="pt-4 pb-12 text-foreground-secondary text-md">
                 {item.content}
               </div>
-            </StackItem>
+            </Stack.Item>
           ))}
         </Stack>
       </div>

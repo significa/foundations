@@ -4,11 +4,6 @@ import { useState } from 'react';
 
 import {
   ColorPicker,
-  ColorPickerAlpha,
-  ColorPickerArea,
-  ColorPickerHue,
-  ColorPickerLightness,
-  ColorPickerSaturation,
   type HSVA,
 } from '@/foundations/ui/color-picker/color-picker';
 
@@ -21,11 +16,11 @@ export default function ColorPickerAllControls() {
       color={color}
       onColorChange={setColor}
     >
-      <ColorPickerArea className="size-40" />
-      <ColorPickerHue />
-      <ColorPickerSaturation />
-      <ColorPickerLightness />
-      <ColorPickerAlpha />
+      <ColorPicker.Area className="size-40" />
+      <ColorPicker.Hue />
+      <ColorPicker.Saturation />
+      <ColorPicker.Lightness />
+      <ColorPicker.Alpha />
     </ColorPicker>
   );
 }

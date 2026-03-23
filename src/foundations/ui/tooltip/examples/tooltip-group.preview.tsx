@@ -1,34 +1,29 @@
 import { ClipboardIcon, ScissorsIcon } from '@phosphor-icons/react/dist/ssr';
 
 import { Button } from '@/foundations/ui/button/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipGroup,
-  TooltipTrigger,
-} from '@/foundations/ui/tooltip/tooltip';
+import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
 
 export default function TooltipGroupPreview() {
   return (
     <div className="flex items-center gap-2">
-      <TooltipGroup>
+      <Tooltip.Group>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <Tooltip.Trigger asChild>
             <Button variant="outline" size="sm" square>
               <ClipboardIcon />
             </Button>
-          </TooltipTrigger>
-          <TooltipContent>Copy</TooltipContent>
+          </Tooltip.Trigger>
+          <Tooltip.Content>Copy</Tooltip.Content>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <Tooltip.Trigger asChild>
             <Button variant="outline" size="sm" square>
               <ScissorsIcon />
             </Button>
-          </TooltipTrigger>
-          <TooltipContent>Cut</TooltipContent>
+          </Tooltip.Trigger>
+          <Tooltip.Content>Cut</Tooltip.Content>
         </Tooltip>
-      </TooltipGroup>
+      </Tooltip.Group>
     </div>
   );
 }

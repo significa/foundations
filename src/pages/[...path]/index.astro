@@ -7,7 +7,7 @@ import Preview from "@/components/preview.astro";
 import PropsTable from "@/components/props-table.astro";
 import SourceCode from "@/components/source-code.astro";
 import { TableOfContents } from "@/components/table-of-contents";
-import { Badge, BadgeIcon } from "@/foundations/ui/badge/badge";
+import { Badge } from "@/foundations/ui/badge/badge";
 import PageLayout from "@/layouts/page.astro";
 import Shell from "@/layouts/shell.astro";
 import { GITHUB_REPO_URL } from "@/lib/constants";
@@ -83,14 +83,14 @@ const lastModified = await getPageLastModifiedTime(page);
                   return (
                     <a href={href} target={type === "external" ? "_blank" : undefined}>
                       <Badge key={name} variant={type === "external" ? "neutral" : "info"}>
-                        <BadgeIcon>
+                        <Badge.Icon>
                           <PackageIcon />
-                        </BadgeIcon>
+                        </Badge.Icon>
                         <span>{name}</span>
                         {type === "external" && (
-                          <BadgeIcon>
+                          <Badge.Icon>
                             <ArrowSquareOutIcon className="text-foreground-secondary" />
-                          </BadgeIcon>
+                          </Badge.Icon>
                         )}
                       </Badge>
                     </a>
