@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Badge } from '@/foundations/ui/badge/badge';
 import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
 import { cn } from '@/lib/utils/classnames';
-import type { NavigationItem } from '@/lib/utils/content';
+import type { NavigationItem } from '@/lib/utils/navigation';
 
 type MenuProps = {
   currentPath?: string;

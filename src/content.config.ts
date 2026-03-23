@@ -38,6 +38,11 @@ const pages = defineCollection({
       )
       .optional(),
     folder: z.string().optional(),
+    meta: z
+      .object({
+        order: z.number().optional(),
+      })
+      .optional(),
   }),
 });
 

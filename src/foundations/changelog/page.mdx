@@ -1,0 +1,55 @@
+---
+title: Changelog
+description: Lastest significant updates and changes to the Significa Foundations library.
+
+folder: introduction
+
+meta:
+  order: 99
+---
+
+## March 2026
+
+### Compound Components
+
+All foundational components have been refactored to use a compound component pattern. Related sub-components are now exposed as static properties of their parent component rather than as separate named exports.
+
+This reduces import noise and makes the relationship between components explicit at the call site.
+
+#### Migration
+
+##### Definition
+
+```diff tsx
+- export { Badge, BadgeStatus, BadgeIcon };
++ const CompoundBadge = Object.assign(Badge, {
++  Status: BadgeStatus,
++  Icon: BadgeIcon,
++ });
++
++ export { CompoundBadge as Badge };
+```
+
+##### Usage
+
+```diff tsx
+- import { Badge, BadgeStatus, BadgeIcon } from "@/components/ui/badge";
++ import { Badge } from "@/components/ui/badge";
+
+const Card = ({ title, status }) => {
+  return (
+    <div>
+      <Badge>
+-       <BadgeIcon>
++       <Badge.Icon>
+          <Icon name="star" />
+-       </BadgeIcon>
++       </Badge.Icon>
+-       <BadgeStatus>{status}</BadgeStatus>
++       <Badge.Status>{status}</Badge.Status>
+      </Badge>
+      <h3>{title}</h3>
+    </div>
+  );
+};
+```

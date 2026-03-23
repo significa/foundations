@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
-import { getNavigationItems } from '@/lib/utils/content';
 import { link, markdown } from '@/lib/utils/markdown';
+import { getNavigationItems } from '@/lib/utils/navigation';
 
 export const GET: APIRoute = async () => {
   const pages = await getCollection('pages');

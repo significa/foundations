@@ -5,7 +5,7 @@ import Footer from "@/components/footer.astro";
 import Header from "@/components/header.astro";
 import { Menu } from "@/components/menu";
 import { cn } from "@/lib/utils/classnames";
-import { getNavigationItems } from "@/lib/utils/content";
+import { getNavigationItems } from "@/lib/utils/navigation";
 
 type Props = HTMLAttributes<"div">;
 
@@ -36,7 +36,14 @@ const items = await getNavigationItems(pages);
     </aside>
 
     <main class="w-full gap-8 px-4 lg:flex">
-      <slot />
+      <nav
+        class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-y-auto pt-6 text-sm lg:block"
+      >
+        <slot name="nav" />
+      </nav>
+      <div class="mx-auto max-w-3xl flex-1 py-6 md:py-8">
+        <slot />
+      </div>
     </main>
   </div>
 
