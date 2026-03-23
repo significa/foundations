@@ -33,7 +33,7 @@
     "chroma-js": "^3.2.0",
     "cva": "1.0.0-beta.4",
     "date-fns": "^4.1.0",
-    "motion": "^12.36.0",
+    "motion": "^12.38.0",
     "pagefind": "^1.4.0",
     "posthog-js": "^1.363.1",
     "react": "^19.2.4",
