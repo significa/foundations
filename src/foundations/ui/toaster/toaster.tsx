@@ -92,20 +92,26 @@ const createToastStore = (): ToastStore => {
         if (timer.timeoutId) {
           clearTimeout(timer.timeoutId);
           timer.timeoutId = null;
-          timer.remainingTime -= Date.now() - timer.startTime;
+
+          const elapsed = Date.now() - timer.startTime;
+          timer.remainingTime = Math.max(0, timer.remainingTime - elapsed);
         }
       });
     },
     resumeAll() {
       timers.forEach((timer, id) => {
-        if (timer.timeoutId === null && timer.remainingTime > 0) {
-          timer.startTime = Date.now();
+        if (timer.timeoutId === null) {
+          if (timer.remainingTime > 0) {
+            timer.startTime = Date.now();
 
-          if (timer.remainingTime !== Infinity) {
-            timer.timeoutId = setTimeout(
-              () => this.remove(id),
-              timer.remainingTime
-            );
+            if (timer.remainingTime !== Infinity) {
+              timer.timeoutId = setTimeout(
+                () => this.remove(id),
+                timer.remainingTime
+              );
+            }
+          } else {
+            this.remove(id);
           }
         }
       });
@@ -223,7 +229,7 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
         variant === 'positive' && 'border-green-200 bg-green-50 text-green-900',
         variant === 'negative' && 'border-red-200 bg-red-50 text-red-900'
       )}
-      role="alert"
+      role="status"
       aria-live="polite"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
