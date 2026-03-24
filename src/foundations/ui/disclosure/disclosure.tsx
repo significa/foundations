@@ -171,7 +171,7 @@ const DisclosureChevron = ({
     <span
       aria-hidden="true"
       className={cn(
-        'p-1 transition-transform duration-100 ease-out-cubic',
+        'p-1 transition-transform duration-200 ease-out',
         open && 'rotate-180',
         className
       )}

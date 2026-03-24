@@ -272,7 +272,7 @@ const PopoverPanel = ({
         data-state={['open', 'initial'].includes(status) ? 'open' : 'closed'}
         data-side={context.placement.split('-')[0]}
         className={cn(
-          'origin-(--transform-origin) transition duration-300 ease-out-expo',
+          'origin-(--transform-origin) transition duration-300 ease-out',
           'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
           'data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150',
           'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',

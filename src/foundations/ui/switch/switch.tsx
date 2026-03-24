@@ -13,7 +13,7 @@ const Switch = ({
         'appearance-none',
         'relative h-6 w-11 cursor-pointer rounded-xl bg-foreground/20 transition',
         // circle
-        'before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-xl before:bg-background before:transition-transform before:duration-200 before:ease-out-expo',
+        'before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-xl before:bg-background before:transition-transform before:duration-200 before:ease-emphasized-decelerate',
         // disabled
         'disabled:before:opacity-30',
         // checked

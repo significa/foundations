@@ -258,7 +258,7 @@ const TooltipContent = ({
     <div
       ref={ref}
       className={cn(
-        'z-50 max-w-80 overflow-visible whitespace-normal break-words rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md transition duration-300 ease-out-quint',
+        'z-50 max-w-80 overflow-visible whitespace-normal break-words rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md transition duration-300 ease-out',
         'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
         'data-[state=closed]:scale-95 data-[state=closed]:opacity-0',
         'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
