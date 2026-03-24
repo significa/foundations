@@ -72,7 +72,7 @@ export const GET = (async ({ params }) => {
   }
 
   const dependencies = page.data.dependencies?.map(
-    ({ name, href }) => `- ${link(name, href)}`
+    ({ name, href }) => `- ${link(name, href)}/llms.txt`
   );
 
   const files = page.data.files
