@@ -1,5 +1,3 @@
-'use client';
-
 import { UserIcon } from '@phosphor-icons/react';
 import type { VariantProps } from 'cva';
 

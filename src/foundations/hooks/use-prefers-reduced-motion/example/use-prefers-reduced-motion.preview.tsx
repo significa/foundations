@@ -1,5 +1,3 @@
-'use client';
-
 import usePrefersReducedMotion from '../use-prefers-reduced-motion';
 
 const UserPrefersReducedMotionPreview = () => {

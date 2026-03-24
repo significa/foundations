@@ -1,5 +1,3 @@
-'use client';
-
 import { CalendarIcon, CaretUpDownIcon } from '@phosphor-icons/react';
 import type { VariantProps } from 'cva';
 

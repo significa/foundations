@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 
 import { Egg } from '@/components/icons/egg';

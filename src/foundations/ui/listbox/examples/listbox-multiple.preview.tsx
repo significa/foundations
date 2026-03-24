@@ -1,5 +1,3 @@
-'use client';
-
 import { useMemo, useState } from 'react';
 
 import { Listbox } from '@/foundations/ui/listbox/listbox';

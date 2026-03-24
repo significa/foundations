@@ -1,5 +1,3 @@
-'use client';
-
 import { UserCircleIcon } from '@phosphor-icons/react/dist/ssr';
 import { useMemo, useState } from 'react';
 

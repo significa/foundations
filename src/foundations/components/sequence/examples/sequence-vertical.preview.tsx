@@ -1,5 +1,3 @@
-'use client';
-
 import { Sequence } from '@/foundations/components/sequence/sequence';
 import { cn } from '@/lib/utils/classnames';
 

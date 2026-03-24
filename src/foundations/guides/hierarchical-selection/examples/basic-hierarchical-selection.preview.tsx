@@ -1,5 +1,3 @@
-'use client';
-
 import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
 import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
 

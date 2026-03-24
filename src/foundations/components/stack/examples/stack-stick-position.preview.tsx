@@ -1,5 +1,3 @@
-'use client';
-
 import { MouseScrollIcon } from '@phosphor-icons/react';
 
 import { Stack } from '@/foundations/components/stack/stack';

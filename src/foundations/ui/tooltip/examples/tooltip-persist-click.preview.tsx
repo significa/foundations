@@ -1,5 +1,3 @@
-'use client';
-
 import { ClipboardIcon } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 

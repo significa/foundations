@@ -1,5 +1,3 @@
-'use client';
-
 import chroma from 'chroma-js';
 import { createContext, use, useMemo, useRef } from 'react';
 

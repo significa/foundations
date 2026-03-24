@@ -1,5 +1,3 @@
-'use client';
-
 import { Modal } from '@/foundations/ui/modal/modal';
 import { cn } from '@/lib/utils/classnames';
 

@@ -1,5 +1,3 @@
-'use client';
-
 import { cn, cva } from '@/lib/utils/classnames';
 
 import { useField } from '../field';

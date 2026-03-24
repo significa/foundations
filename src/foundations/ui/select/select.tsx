@@ -1,5 +1,3 @@
-'use client';
-
 import type { VariantProps } from 'cva';
 
 import { Input, inputStyle } from '@/foundations/ui/input/input';

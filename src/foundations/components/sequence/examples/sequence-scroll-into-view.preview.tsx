@@ -1,5 +1,3 @@
-'use client';
-
 import { useRef } from 'react';
 
 import { scrollIntoViewIfNeeded } from '@/foundations/utils/dom/scroll-into-view-if-needed';

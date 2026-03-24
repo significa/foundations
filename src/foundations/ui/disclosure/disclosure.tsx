@@ -1,5 +1,3 @@
-'use client';
-
 import { CaretDownIcon } from '@phosphor-icons/react';
 import { AnimatePresence, type HTMLMotionProps, motion } from 'motion/react';
 import { createContext, use, useId, useState } from 'react';

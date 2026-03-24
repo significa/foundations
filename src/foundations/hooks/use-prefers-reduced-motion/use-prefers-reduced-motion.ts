@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 
 const QUERY = '(prefers-reduced-motion: no-preference)';

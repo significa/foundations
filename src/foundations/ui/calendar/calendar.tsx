@@ -1,5 +1,3 @@
-'use client';
-
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import { add, format, isSameDay, isSameMonth } from 'date-fns';
 import { useMemo, useState } from 'react';

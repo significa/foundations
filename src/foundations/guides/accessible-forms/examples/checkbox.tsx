@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useRef } from 'react';
 
 import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';

@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/lib/utils/classnames';
 
 interface DividerProps extends React.ComponentPropsWithRef<'div'> {

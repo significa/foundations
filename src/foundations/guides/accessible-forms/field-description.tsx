@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useId } from 'react';
 
 import { cn } from '@/lib/utils/classnames';

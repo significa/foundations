@@ -1,5 +1,3 @@
-'use client';
-
 import type { VariantProps } from 'cva';
 
 import { Slot, Slottable } from '@/foundations/components/slot/slot';

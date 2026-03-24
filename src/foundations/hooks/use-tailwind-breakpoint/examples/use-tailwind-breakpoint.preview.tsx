@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/lib/utils/classnames';
 
 import { useTailwindBreakpoint } from '../use-tailwind-breakpoint';

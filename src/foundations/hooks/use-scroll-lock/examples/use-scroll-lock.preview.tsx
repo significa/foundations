@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 
 import { useScrollLock } from '@/foundations/hooks/use-scroll-lock/use-scroll-lock';

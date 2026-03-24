@@ -1,5 +1,3 @@
-'use client';
-
 import { EyeClosedIcon, EyeIcon, LockIcon } from '@phosphor-icons/react';
 import { useState } from 'react';
 

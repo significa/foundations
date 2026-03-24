@@ -1,5 +1,3 @@
-'use client';
-
 import type { VariantProps } from 'cva';
 import { useEffect, useRef, useState } from 'react';
 
