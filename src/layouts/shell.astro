@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import Posthog from "@/components/posthog.astro";
 
 import "@/styles/global.css";
+import { Toaster } from "@/foundations/ui/toaster/toaster";
 
 type Props = {
   meta?: {
@@ -47,6 +48,7 @@ const description =
   <body>
     <slot />
 
+    <Toaster client:load />
     {import.meta.env.PROD && <Posthog />}
   </body>
 </html>

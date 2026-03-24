@@ -24,6 +24,18 @@ const useDialogElement = (
 ) => {
   const ref = useRef<HTMLDialogElement>(null);
 
+  // Emit modal-open or modal-close custom event when the dialog is opened or closed,
+  // so other components can react to it
+  useEffect(() => {
+    const openEvent = new CustomEvent(
+      open ? 'ui:modal-open' : 'ui:modal-close',
+      {
+        detail: { origin: ref.current },
+      }
+    );
+    window.dispatchEvent(openEvent);
+  }, [open]);
+
   useLayoutEffect(() => {
     const element = ref.current;
     if (!element) return;
