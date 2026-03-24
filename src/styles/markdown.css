@@ -55,7 +55,7 @@
     }
 
     &:is(blockquote) {
-      @apply bg-foreground/4 border-foreground/8 my-6 border-l-4 px-4 py-2;
+      @apply bg-foreground/4 border-foreground/8 my-6 border-l-4 px-4 py-2 rounded-md;
     }
 
     &:is(img) {

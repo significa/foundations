@@ -1,0 +1,57 @@
+---
+title: Toaster
+description: A component for displaying transient messages to users, such as notifications or alerts.
+
+preview: toaster
+files:
+  - src/foundations/ui/toaster/toaster.tsx
+
+dependencies:
+  - name: motion
+    href: https://motion.dev
+
+folder: UI
+---
+
+> This component relies on custom events emitted by the `Modal` component. Ensure your `Modal` implementation dispatches the `ui:modal-open` and `ui:modal-close` events accordingly.
+
+## Usage
+
+Render the `Toaster` component at the root of your application.
+
+```tsx
+import { Toaster } from "@/components/ui/toaster";
+
+function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Toaster />
+      </body>
+    </html>
+  );
+}
+```
+
+Then, you can use the `toast` function to display messages.
+
+```tsx
+import { toast } from "@/components/ui/toaster";
+
+toast({ title: "This is a toast message!" });
+```
+
+## Example
+
+### With Description
+
+<Preview slug="toaster-description" />
+
+### Variants
+
+<Preview slug="toaster-variants" />
+
+### Duration
+
+<Preview slug="toaster-duration" />
