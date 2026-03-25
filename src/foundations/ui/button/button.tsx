@@ -1,17 +1,28 @@
 import type { VariantProps } from 'cva';
-
+import { Children, Fragment, isValidElement, useEffect } from 'react';
 import { Slot, Slottable } from '@/foundations/components/slot/slot';
 import { Spinner } from '@/foundations/ui/spinner/spinner';
 import { cn, cva } from '@/lib/utils/classnames';
+import { Divider } from '../divider/divider';
 
 const buttonStyle = cva({
-  base: 'relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium text-(--button-text-color) shadow-xs ring-ring transition [--button-text-color:var(--color-foreground)] focus-visible:outline-none focus-visible:ring-4 active:scale-98 enabled:cursor-pointer disabled:opacity-40',
+  base: [
+    'relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium text-(--button-text-color) shadow-xs [--button-text-color:var(--color-foreground)]',
+    'transition enabled:cursor-pointer disabled:opacity-40',
+    'active:not-in-data-ui-button-group:scale-98',
+    'ring-ring focus-visible:outline-none focus-visible:ring-4',
+    // inside button group
+    'in-data-ui-button-group:not-last:rounded-r-none in-data-ui-button-group:not-last:border-r-0',
+    'in-data-ui-button-group:not-first:rounded-l-none in-data-ui-button-group:not-first:border-l-0',
+  ],
   variants: {
     variant: {
-      primary: 'bg-accent [--button-text-color:var(--color-accent-foreground)]',
-      outline: 'border border-border bg-background focus-visible:border-accent',
+      primary:
+        'bg-accent [--button-text-color:var(--color-accent-foreground)] hover:bg-accent/90 in-data-ui-button-group:active:bg-accent/80',
+      outline:
+        'border border-border bg-background hover:bg-foreground/2 not-in-data-ui-button-group:focus-visible:border-accent in-data-ui-button-group:active:bg-foreground/4',
       ghost:
-        'border-none bg-transparent shadow-none ring-0 hover:bg-foreground/5',
+        'border-none bg-transparent shadow-none ring-0 hover:bg-foreground/5 in-data-ui-button-group:active:bg-foreground/10',
       destructive:
         'bg-red-600 ring-red-600/50 [--button-text-color:var(--color-white)] hover:bg-red-700',
     },
@@ -98,4 +109,49 @@ const IconButton = ({ ref, ...props }: IconButtonProps) => {
   return <Button square {...props} ref={ref} />;
 };
 
-export { Button, buttonStyle, IconButton };
+type ButtonGroupProps = React.ComponentPropsWithRef<'div'>;
+
+const ButtonGroup = ({ className, children, ...props }: ButtonGroupProps) => {
+  // Validate children to ensure they are Button or IconButton components
+  useEffect(() => {
+    const childArray = Children.toArray(children);
+    childArray.forEach((child, index) => {
+      if (
+        !isValidElement(child) ||
+        (child.type !== Button && child.type !== IconButton)
+      ) {
+        console.warn(
+          `Warning: ButtonGroup child at index ${index} is not a Button or IconButton component.`
+        );
+      }
+    });
+  }, [children]);
+
+  return (
+    <div
+      className={cn('flex items-center *:focus-visible:z-2', className)}
+      data-ui-button-group
+      {...props}
+    >
+      {Children.toArray(children).map((child, index) => {
+        return (
+          <Fragment key={index}>
+            {index !== 0 && (
+              <Divider
+                orientation="vertical"
+                className="z-1 -mr-px h-[1em] w-px"
+              />
+            )}
+            {child}
+          </Fragment>
+        );
+      })}
+    </div>
+  );
+};
+
+const CompoundButton = Object.assign(Button, {
+  Group: ButtonGroup,
+});
+
+export { buttonStyle, CompoundButton as Button, IconButton };
