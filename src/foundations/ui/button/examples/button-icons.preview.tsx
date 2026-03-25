@@ -5,14 +5,14 @@ import {
   SunIcon,
 } from '@phosphor-icons/react/dist/ssr';
 
-import { Button } from '@/foundations/ui/button/button';
+import { Button, IconButton } from '@/foundations/ui/button/button';
 
 export default function ButtonIconsPreview() {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Button variant="outline" square aria-label="Switch theme">
+      <IconButton variant="outline" aria-label="Switch theme">
         <SunIcon />
-      </Button>
+      </IconButton>
       <Button variant="outline">
         <PencilIcon />
         <span>Edit</span>

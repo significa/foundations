@@ -90,4 +90,12 @@ const Button = ({
   );
 };
 
-export { Button, buttonStyle };
+export interface IconButtonProps extends Omit<ButtonProps, 'square'> {
+  'aria-label': string;
+}
+
+const IconButton = ({ ref, ...props }: IconButtonProps) => {
+  return <Button square {...props} ref={ref} />;
+};
+
+export { Button, buttonStyle, IconButton };

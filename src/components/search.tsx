@@ -1,7 +1,7 @@
 import { WarningCircleIcon } from '@phosphor-icons/react';
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
 import { useCallback, useEffect, useState } from 'react';
-import { Button } from '@/foundations/ui/button/button';
+import { IconButton } from '@/foundations/ui/button/button';
 import { Dialog } from '@/foundations/ui/dialog/dialog';
 import { Spinner } from '@/foundations/ui/spinner/spinner';
 import type { Pagefind } from '@/lib/types/pagefind';
@@ -180,9 +180,14 @@ const Search = () => {
       }}
     >
       <Dialog.Trigger asChild>
-        <Button size="sm" square variant="ghost" className="pt-px">
+        <IconButton
+          size="sm"
+          variant="ghost"
+          aria-label="Search"
+          className="pt-px"
+        >
           <MagnifyingGlassIcon />
-        </Button>
+        </IconButton>
       </Dialog.Trigger>
 
       <Dialog.Content

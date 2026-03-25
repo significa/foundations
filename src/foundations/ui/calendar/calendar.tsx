@@ -1,8 +1,7 @@
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import { add, format, isSameDay, isSameMonth } from 'date-fns';
 import { useMemo, useState } from 'react';
-
-import { Button } from '@/foundations/ui/button/button';
+import { IconButton } from '@/foundations/ui/button/button';
 import { cn } from '@/lib/utils/classnames';
 
 /**
@@ -357,13 +356,17 @@ const CalendarHeader = ({
 }: CalendarHeaderProps) => {
   return (
     <div className="flex items-center justify-between p-1.5 font-medium text-sm">
-      <Button variant="outline" square onClick={onPrevious}>
+      <IconButton
+        variant="outline"
+        onClick={onPrevious}
+        aria-label="Previous month"
+      >
         <CaretLeftIcon />
-      </Button>
+      </IconButton>
       {children}
-      <Button variant="outline" square onClick={onNext}>
+      <IconButton variant="outline" onClick={onNext} aria-label="Next month">
         <CaretRightIcon />
-      </Button>
+      </IconButton>
     </div>
   );
 };

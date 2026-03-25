@@ -1,6 +1,6 @@
 import { XIcon } from '@phosphor-icons/react/dist/ssr';
 
-import { Button } from '@/foundations/ui/button/button';
+import { Button, IconButton } from '@/foundations/ui/button/button';
 import { Dialog } from '@/foundations/ui/dialog/dialog';
 
 export default function DialogArbitraryPreview() {
@@ -11,9 +11,9 @@ export default function DialogArbitraryPreview() {
       </Dialog.Trigger>
       <Dialog.Content className="p-0">
         <Dialog.Close className="absolute top-3 right-3" asChild>
-          <Button variant="outline" size="sm" square>
+          <IconButton variant="outline" size="sm" aria-label="Close dialog">
             <XIcon className="size-4" />
-          </Button>
+          </IconButton>
         </Dialog.Close>
         <div className="flex flex-col items-center rounded-2xl p-6">
           <div className="mb-4 size-24 rounded-full border border-border bg-background-secondary" />

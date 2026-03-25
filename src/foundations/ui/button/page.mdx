@@ -16,6 +16,8 @@ folder: UI
 
 ## API Reference
 
+### Button
+
 <PropsTable
   definition={{
     variant: {
@@ -38,6 +40,21 @@ folder: UI
     },
     asChild: {
       type: "boolean",
+    },
+  }}
+/>
+
+### IconButton
+
+Extends all `Button` props except `square` (which is always `true`).
+
+<PropsTable
+  definition={{
+    "aria-label": {
+      type: "string",
+      required: true,
+      description:
+        "Accessible label for the icon button. Required since there is no visible text for screen readers to announce.",
     },
   }}
 />
@@ -78,3 +95,6 @@ folder: UI
 2. **Accessibility**:
    - Ensure clear button text
    - Consider loading states
+
+3. **Use `IconButton` for icon-only buttons**:
+   When a button contains only an icon use `IconButton` instead of `Button`. Icon-only buttons are a common accessibility pitfall — without an `aria-label`, screen readers have nothing meaningful to announce, which makes the button invisible to users relying on assistive technology. `IconButton` makes `aria-label` required at the TypeScript level, turning a silent runtime omission into a compile-time error.

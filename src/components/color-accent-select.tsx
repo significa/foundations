@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { Button } from '@/foundations/ui/button/button';
+import { IconButton } from '@/foundations/ui/button/button';
 import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
 
 type Theme = {
@@ -54,14 +54,13 @@ const ColorAccentSelect = () => {
   return (
     <Dropdown>
       <Dropdown.Trigger asChild>
-        <Button
+        <IconButton
           variant="ghost"
           size="sm"
-          square
           aria-label="Accent color selection"
         >
           <div className="size-3 rounded-full bg-accent" />
-        </Button>
+        </IconButton>
       </Dropdown.Trigger>
       <Dropdown.Items className="w-54">
         {themes.map((theme) => (

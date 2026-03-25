@@ -1,7 +1,6 @@
 import { ClipboardIcon } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
-
-import { Button } from '@/foundations/ui/button/button';
+import { IconButton } from '@/foundations/ui/button/button';
 import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
 
 export default function TooltipPersistClickPreview() {
@@ -27,15 +26,14 @@ export default function TooltipPersistClickPreview() {
       }}
     >
       <Tooltip.Trigger asChild>
-        <Button
+        <IconButton
           variant="outline"
-          square
           size="sm"
           onClick={() => setCopied(true)}
           aria-label="Copy"
         >
           <ClipboardIcon />
-        </Button>
+        </IconButton>
       </Tooltip.Trigger>
       <Tooltip.Content>{copied ? 'Copied!' : 'Copy'}</Tooltip.Content>
     </Tooltip>

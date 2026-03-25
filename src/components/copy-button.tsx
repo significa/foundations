@@ -1,7 +1,6 @@
 import { CheckIcon, ClipboardIcon } from '@phosphor-icons/react';
 import { useEffect, useRef, useState } from 'react';
-
-import { Button } from '@/foundations/ui/button/button';
+import { IconButton } from '@/foundations/ui/button/button';
 import { cn } from '@/lib/utils/classnames';
 
 type CopyButtonProps = {
@@ -36,16 +35,15 @@ const CopyButton = ({ className, ...props }: CopyButtonProps) => {
   }, []);
 
   return (
-    <Button
+    <IconButton
       variant="ghost"
       size="xs"
-      square
       onClick={handleCopy}
       aria-label="Copy"
       className={cn(className)}
     >
       {isCopied ? <CheckIcon /> : <ClipboardIcon />}
-    </Button>
+    </IconButton>
   );
 };
 

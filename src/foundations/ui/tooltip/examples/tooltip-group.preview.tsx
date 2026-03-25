@@ -1,6 +1,5 @@
 import { ClipboardIcon, ScissorsIcon } from '@phosphor-icons/react/dist/ssr';
-
-import { Button } from '@/foundations/ui/button/button';
+import { IconButton } from '@/foundations/ui/button/button';
 import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
 
 export default function TooltipGroupPreview() {
@@ -9,17 +8,17 @@ export default function TooltipGroupPreview() {
       <Tooltip.Group>
         <Tooltip>
           <Tooltip.Trigger asChild>
-            <Button variant="outline" size="sm" square>
+            <IconButton variant="outline" size="sm" aria-label="Copy">
               <ClipboardIcon />
-            </Button>
+            </IconButton>
           </Tooltip.Trigger>
           <Tooltip.Content>Copy</Tooltip.Content>
         </Tooltip>
         <Tooltip>
           <Tooltip.Trigger asChild>
-            <Button variant="outline" size="sm" square>
+            <IconButton variant="outline" size="sm" aria-label="Cut">
               <ScissorsIcon />
-            </Button>
+            </IconButton>
           </Tooltip.Trigger>
           <Tooltip.Content>Cut</Tooltip.Content>
         </Tooltip>
