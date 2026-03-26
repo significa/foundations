@@ -44,12 +44,10 @@
   color-scheme: dark;
 }
 
-/* prettier-ignore */
 @utility mix-with-* {
   --color-mix-with: --value(--color-*, [*]);
 }
 
-/* prettier-ignore */
 @utility border-mix-* {
   border-color: color-mix(
     in oklab,
@@ -58,7 +56,6 @@
   );
 }
 
-/* prettier-ignore */
 @utility bg-mix-* {
   background-color: color-mix(
     in oklab,

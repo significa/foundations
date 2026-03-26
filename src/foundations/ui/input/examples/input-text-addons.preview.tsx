@@ -4,9 +4,9 @@ export default function InputTextAddons() {
   return (
     <div className="w-90">
       <Input.Group>
-        <Input.Prefix>https://</Input.Prefix>
+        <Input.Addon>https://</Input.Addon>
         <Input placeholder="subdomain" />
-        <Input.Suffix>.significa.co</Input.Suffix>
+        <Input.Addon>.significa.co</Input.Addon>
       </Input.Group>
     </div>
   );

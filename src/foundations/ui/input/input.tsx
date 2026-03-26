@@ -4,192 +4,146 @@ import {
   createContext,
   isValidElement,
   use,
-  useLayoutEffect,
+  useMemo,
   useRef,
-  useState,
 } from 'react';
-
 import { Slot } from '@/foundations/components/slot/slot';
 import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
 import { cn, cva } from '@/lib/utils/classnames';
 
+// Style for both input and input group
+// ———
+// Ideally we'd use a single composable variant combining :is() and :has() with arbitrary values
+// (e.g. is-or-has-[input:focus-visible]) to handle both direct and descendant pseudo-state targeting.
+// Tailwind doesn't support this yet, but we should be on the lookout for it and update the code when it does.
 const inputStyle = cva({
   base: [
+    'w-full',
+    'font-medium [&,&_*]:placeholder:text-foreground-secondary',
+    'rounded-xl border outline-none',
     'transition',
-    'h-10 w-full rounded-xl border px-4 py-1 font-medium text-base',
-    'text-foreground/80 placeholder:text-foreground-secondary focus:outline-none focus-visible:border-accent focus-visible:text-foreground focus-visible:ring-4 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-invalid:border-red-500 data-invalid:focus-visible:border-red-500 data-invalid:focus-visible:ring-red-500/20 data-invalid:hover:border-red-600',
-    'pl-(--prefix-width,calc(var(--spacing)*4))',
-    'pr-(--suffix-width,calc(var(--spacing)*4))',
+    // group
+    'flex items-center gap-1.5',
+    // focus-visible
+    'ring-ring [:focus-visible,:has(:focus-visible)]:border-accent [:focus-visible,:has(:focus-visible)]:text-foreground [:focus-visible,:has(:focus-visible)]:ring-4', // disabled
+    // disabled
+    '[:disabled,:has(input:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled)]:opacity-50',
+    // invalid
+    '[[data-invalid],:has([data-invalid])]:border-red-500! [[data-invalid],:has([data-invalid])]:ring-red-500/20 [[data-invalid],:has([data-invalid])]:hover:border-red-600',
+    // variants
   ],
   variants: {
     variant: {
-      default:
-        'border-border bg-background shadow-xs hover:border-mix-border/8',
-      minimal:
-        'border-transparent bg-transparent hover:bg-background-secondary focus-visible:bg-background',
+      default: [
+        'border-border shadow-xs hover:border-[color-mix(in_oklab,var(--color-border),var(--color-foreground)_8%)]',
+      ],
+      minimal: [
+        'border-transparent bg-transparent hover:bg-background-secondary [:focus-visible,:has(:focus-visible)]:bg-background',
+      ],
+    },
+    size: {
+      md: ['h-10 px-4 py-1', 'text-base'],
     },
   },
   defaultVariants: {
     variant: 'default',
+    size: 'md',
   },
 });
 
+const inputInGroupStyle = cva({
+  base: ['h-full w-full min-w-8 cursor-[inherit] outline-none'],
+});
+
+const InputGroupContext = createContext<null | true>(null);
+
+// We need to determine if the input is inside a group to apply the correct styles. This hook abstracts that logic.
+const useInputStyle = (
+  props: VariantProps<typeof inputStyle> & { className?: string }
+) => {
+  const inGroup = use(InputGroupContext);
+  return inGroup ? inputInGroupStyle(props) : inputStyle(props);
+};
+
 interface InputProps
-  extends Omit<React.ComponentPropsWithRef<'input'>, 'size'> {
+  extends Omit<React.ComponentPropsWithRef<'input'>, 'size'>,
+    VariantProps<typeof inputStyle> {
   invalid?: boolean;
-  variant?: VariantProps<typeof inputStyle>['variant'];
 }
 
-const Input = ({ className, invalid, variant, ...props }: InputProps) => {
+const Input = ({ className, invalid, size, variant, ...props }: InputProps) => {
   return (
     <input
       data-invalid={invalid}
       aria-invalid={invalid}
-      className={cn(inputStyle({ variant }), className)}
+      className={cn(useInputStyle({ variant, size }), className)}
       {...props}
     />
   );
-};
-
-interface InputGroupContextType {
-  prefixWidth: number;
-  suffixWidth: number;
-  setPrefixWidth: (width: number) => void;
-  setSuffixWidth: (width: number) => void;
-}
-
-const InputGroupContext = createContext<InputGroupContextType>({
-  prefixWidth: 0,
-  suffixWidth: 0,
-  setPrefixWidth: () => {},
-  setSuffixWidth: () => {},
-});
-
-const useInputGroup = () => {
-  const ctx = use(InputGroupContext);
-
-  if (!ctx) {
-    throw new Error('InputGroup must be used within an InputGroupContext');
-  }
-
-  return ctx;
 };
 
 const InputGroup = ({
   className,
   style,
+  children,
+  onClick,
   ...props
 }: React.ComponentPropsWithRef<'div'>) => {
-  const [prefixWidth, setPrefixWidth] = useState(0);
-  const [suffixWidth, setSuffixWidth] = useState(0);
+  // We need to extract the variant and size from the child Input to apply it to the group container for consistent styling.
+  const { variant, size } = useMemo(() => {
+    const inputChild = Children.toArray(children).find(
+      (child) => isValidElement(child) && child.type === Input
+    ) as React.ReactElement<InputProps> | undefined;
 
-  // check if there are more than one InputPrefix or InputSuffix
-  const tooManyPrefixes =
-    Children.toArray(props.children).filter(
-      (child) => isValidElement(child) && child.type === InputPrefix
-    ).length > 1;
+    const inputProps = inputChild ? (inputChild.props as InputProps) : null;
 
-  const tooManySuffixes =
-    Children.toArray(props.children).filter(
-      (child) => isValidElement(child) && child.type === InputSuffix
-    ).length > 1;
+    return { variant: inputProps?.variant, size: inputProps?.size };
+  }, [children]);
 
-  if (tooManyPrefixes || tooManySuffixes) {
-    throw new Error(
-      'InputGroup cannot have more than one InputPrefix or InputSuffix'
-    );
-  }
+  const handleGroupClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    onClick?.(e);
+
+    // If the click is on the group container (not on an input or addon), focus the first input child
+    if (!e.defaultPrevented && e.target === e.currentTarget) {
+      const firstInput = e.currentTarget.querySelector('input');
+      firstInput?.focus();
+    }
+  };
 
   return (
-    <InputGroupContext
-      value={{ prefixWidth, suffixWidth, setPrefixWidth, setSuffixWidth }}
-    >
+    <InputGroupContext value={true}>
+      {/** biome-ignore lint/a11y/useKeyWithClickEvents: intentional */}
+      {/** biome-ignore lint/a11y/noStaticElementInteractions: intentional */}
       <div
-        className={cn('relative', className)}
-        style={{
-          ...(prefixWidth > 0 && {
-            '--prefix-width': `calc(${prefixWidth}px + var(--spacing)*5.5)`,
-          }),
-          ...(suffixWidth > 0 && {
-            '--suffix-width': `calc(${suffixWidth}px + var(--spacing)*5.5)`,
-          }),
-          ...style,
-        }}
+        data-ui-input-group
+        className={inputStyle({
+          variant,
+          size,
+          className,
+        })}
+        onClick={handleGroupClick}
         {...props}
-      />
+      >
+        {children}
+      </div>
     </InputGroupContext>
   );
 };
 
-interface InputPrefixProps extends React.ComponentPropsWithRef<'div'> {
-  asChild?: boolean;
-}
-
-const InputPrefix = ({ className, ...props }: InputPrefixProps) => {
-  const { setPrefixWidth } = useInputGroup();
-
-  return (
-    <InputAddon
-      {...props}
-      className={cn('left-4', className)}
-      onSetWidth={setPrefixWidth}
-    />
-  );
-};
-
-interface InputSuffixProps extends React.ComponentPropsWithRef<'div'> {
-  asChild?: boolean;
-}
-
-const InputSuffix = ({ className, ...props }: InputSuffixProps) => {
-  const { setSuffixWidth } = useInputGroup();
-
-  return (
-    <InputAddon
-      {...props}
-      className={cn('right-4', className)}
-      onSetWidth={setSuffixWidth}
-    />
-  );
-};
-
 interface InputAddonProps extends React.ComponentPropsWithRef<'div'> {
-  onSetWidth?: (width: number) => void;
   asChild?: boolean;
 }
 
-const InputAddon = ({
-  ref,
-  className,
-  onSetWidth,
-  asChild,
-  ...props
-}: InputAddonProps) => {
+const InputAddon = ({ ref, className, asChild, ...props }: InputAddonProps) => {
   const Comp = asChild ? Slot : 'div';
   const internalRef = useRef<HTMLDivElement | null>(null);
-
-  useLayoutEffect(() => {
-    onSetWidth?.(internalRef.current?.offsetWidth ?? 0);
-
-    const observer = new ResizeObserver(([entry]) => {
-      if (entry?.contentRect.width) {
-        onSetWidth?.(Math.round(entry.contentRect.width));
-      }
-    });
-
-    if (internalRef.current) {
-      observer.observe(internalRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [onSetWidth]);
 
   return (
     <Comp
       data-input-addon
       className={cn(
-        'absolute top-1/2 flex -translate-y-1/2 items-center justify-center font-medium text-base',
-        'pointer-events-none text-foreground',
+        'pointer-events-none flex shrink-0 items-center justify-center',
+        'first:-ml-0.5 last:-mr-0.5',
         className
       )}
       ref={composeRefs(ref, internalRef)}
@@ -200,8 +154,7 @@ const InputAddon = ({
 
 const CompoundInput = Object.assign(Input, {
   Group: InputGroup,
-  Prefix: InputPrefix,
-  Suffix: InputSuffix,
+  Addon: InputAddon,
 });
 
-export { CompoundInput as Input, inputStyle };
+export { CompoundInput as Input, inputStyle, useInputStyle };

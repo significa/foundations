@@ -2,13 +2,13 @@ import { UserIcon } from '@phosphor-icons/react/dist/ssr';
 
 import { Select } from '@/foundations/ui/select/select';
 
-export default function SelectPrefixPreview() {
+export default function SelectAddonPreview() {
   return (
     <div className="w-90">
       <Select.Group>
-        <Select.Prefix>
+        <Select.Addon>
           <UserIcon />
-        </Select.Prefix>
+        </Select.Addon>
         <Select>
           <option value="1">Option 1</option>
           <option value="2">Option 2</option>

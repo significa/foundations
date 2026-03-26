@@ -10,20 +10,20 @@ export default function InputInteractiveAddon() {
   return (
     <div className="w-90">
       <Input.Group>
-        <Input.Prefix className="pointer-events-auto" asChild>
+        <Input.Addon className="pointer-events-auto" asChild>
           <button type="button" onClick={() => alert('interactive')}>
             +351
           </button>
-        </Input.Prefix>
+        </Input.Addon>
         <Input ref={input} placeholder="000 000 000" />
-        <Input.Suffix className="pointer-events-auto">
+        <Input.Addon className="pointer-events-auto">
           <Tooltip>
             <Tooltip.Trigger>
               <InfoIcon />
             </Tooltip.Trigger>
             <Tooltip.Content>Your phone number will be visible</Tooltip.Content>
           </Tooltip>
-        </Input.Suffix>
+        </Input.Addon>
       </Input.Group>
     </div>
   );

@@ -9,14 +9,14 @@ export default function InputIconAction() {
   return (
     <div className="w-90">
       <Input.Group>
-        <Input.Prefix>
+        <Input.Addon>
           <LockIcon />
-        </Input.Prefix>
+        </Input.Addon>
         <Input
           type={showPassword ? 'text' : 'password'}
           placeholder="Your password here"
         />
-        <Input.Suffix className="pointer-events-auto">
+        <Input.Addon className="pointer-events-auto">
           <button
             type="button"
             className="cursor-pointer"
@@ -24,7 +24,7 @@ export default function InputIconAction() {
           >
             {showPassword ? <EyeIcon /> : <EyeClosedIcon />}
           </button>
-        </Input.Suffix>
+        </Input.Addon>
       </Input.Group>
     </div>
   );
