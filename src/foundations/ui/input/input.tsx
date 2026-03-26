@@ -20,10 +20,10 @@ const inputStyle = cva({
   base: [
     'w-full',
     'font-medium [&,&_*]:placeholder:text-foreground-secondary',
-    'rounded-xl border outline-none',
+    'border outline-none',
     'transition',
     // group
-    'flex items-center gap-1.5',
+    'flex items-center',
     // focus-visible
     'ring-ring [:focus-visible,:has(:focus-visible)]:border-accent [:focus-visible,:has(:focus-visible)]:text-foreground [:focus-visible,:has(:focus-visible)]:ring-4', // disabled
     // disabled
@@ -42,7 +42,10 @@ const inputStyle = cva({
       ],
     },
     size: {
-      md: ['h-10 px-4 py-1', 'text-base'],
+      xs: ['h-6 gap-1 px-2', 'rounded-lg text-sm'],
+      sm: ['h-8 gap-1 px-3', 'rounded-lg text-sm'],
+      md: ['h-10 gap-2 px-4 py-1', 'rounded-xl text-base'],
+      lg: ['h-12 gap-2 px-5 py-1', 'rounded-2xl text-base'],
     },
   },
   defaultVariants: {

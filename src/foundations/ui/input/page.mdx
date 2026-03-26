@@ -41,6 +41,11 @@ Extends the `input` element.
       default: '"default"',
       description: "The visual style variant of the input.",
     },
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+      description: "The size of the input.",
+    },
     invalid: {
       type: "boolean",
       description: "Whether the input is in an invalid state.",
@@ -79,6 +84,10 @@ Basic usage of the input component.
 A more subtle variant with minimal styling.
 
 <Preview slug="input-minimal" />
+
+### Sizes
+
+<Preview slug="input-sizes" />
 
 ### Disabled
 

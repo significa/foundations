@@ -41,6 +41,11 @@ Extends the `select` element.
       description: "The visual style variant to use.",
       default: '"default"',
     },
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+      description: "The size of the input.",
+    },
     invalid: {
       type: "boolean",
       description: "Whether the select is in an invalid state.",
@@ -89,6 +94,12 @@ Basic usage with a list of options.
 Using the minimal variant without borders.
 
 <Preview slug="select-minimal" />
+
+### Sizes
+
+Using the minimal variant without borders.
+
+<Preview slug="select-sizes" />
 
 ### Disabled
 
