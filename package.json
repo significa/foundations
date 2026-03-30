@@ -35,7 +35,7 @@
     "date-fns": "^4.1.0",
     "motion": "^12.38.0",
     "pagefind": "^1.4.0",
-    "posthog-js": "^1.363.1",
+    "posthog-js": "^1.364.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.72.0",
