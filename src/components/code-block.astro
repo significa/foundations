@@ -37,7 +37,7 @@ const { class: className, collapsible = false, ...props } = Astro.props;
     }
     <slot name="pre" />
   </div>
-  <CopyButton className="absolute top-2 right-2 opacity-80" client:idle target={`#${id} > pre`} />
+  <CopyButton className="absolute top-2 right-2 opacity-80" client:idle target={`#${id} pre`} />
 
   {
     collapsible && (
