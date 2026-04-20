@@ -15,21 +15,34 @@ const getInitials = (name: string | undefined) => {
 };
 
 const avatarStyle = cva({
-  base: 'relative flex items-center justify-center overflow-hidden bg-foreground-secondary/10 font-semibold text-foreground/80 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm',
+  base: [
+    'relative flex items-center justify-center overflow-hidden bg-foreground-secondary/10 font-semibold text-foreground/80 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm',
+    'size-[calc(var(--radius)*2)]',
+    'in-data-ui-avatar-group:not-first:-ml-(--overlap) [--border:--spacing(0.5)] [--overlap:--spacing(3)]',
+  ],
   variants: {
     variant: {
-      circle: 'rounded-full',
-      square: 'rounded-md',
+      circle: [
+        'rounded-full',
+        '[&+div]:in-data-ui-avatar-group:not-first:mask-[radial-gradient(circle_at_calc(-50%+var(--overlap)+(-1*(var(--prev-radius)-var(--radius))))_50%,transparent_calc(var(--prev-radius)+var(--border)),black_0%)]',
+      ],
+      square: [
+        'rounded-md',
+        '[&+div]:in-data-ui-avatar-group:not-first:[clip-path:inset(0_0_0_calc(var(--overlap)+var(--border)))]',
+      ],
     },
     size: {
-      '2xs': 'size-4 text-2xs',
-      xs: 'size-6 text-2xs',
-      sm: 'size-8 text-xs',
-      md: 'size-10 text-sm',
-      lg: 'size-12 text-base',
-      xl: 'size-14 text-lg',
-      '2xl': 'size-16 text-xl',
-      '3xl': 'size-20 text-3xl',
+      '2xs':
+        'text-2xs [--radius:--spacing(2)] [&+*]:[--prev-radius:--spacing(2)]',
+      xs: 'text-2xs [--radius:--spacing(3)] [&+*]:[--prev-radius:--spacing(3)]',
+      sm: 'text-xs [--radius:--spacing(4)] [&+*]:[--prev-radius:--spacing(4)]',
+      md: 'text-sm [--radius:--spacing(5)] [&+*]:[--prev-radius:--spacing(5)]',
+      lg: 'text-base [--radius:--spacing(6)] [&+*]:[--prev-radius:--spacing(6)]',
+      xl: 'text-lg [--radius:--spacing(7)] [&+*]:[--prev-radius:--spacing(7)]',
+      '2xl':
+        'text-xl [--radius:--spacing(8)] [&+*]:[--prev-radius:--spacing(8)]',
+      '3xl':
+        'text-3xl [--radius:--spacing(10)] [&+*]:[--prev-radius:--spacing(10)]',
     },
   },
 });
@@ -84,9 +97,22 @@ const AvatarFallback = ({
   );
 };
 
+interface AvatarGroupProps extends React.ComponentPropsWithRef<'div'> {
+  children: React.ReactNode;
+}
+
+const AvatarGroup = ({ className, children }: AvatarGroupProps) => {
+  return (
+    <div className={cn('flex items-center', className)} data-ui-avatar-group>
+      {children}
+    </div>
+  );
+};
+
 const CompoundAvatar = Object.assign(Avatar, {
   Image: AvatarImage,
   Fallback: AvatarFallback,
+  Group: AvatarGroup,
 });
 
 export { CompoundAvatar as Avatar };
