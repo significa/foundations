@@ -86,8 +86,7 @@ const AvatarFallback = ({
   );
 };
 
-const toPercentage = (num: number) => num * 100;
-
+// dictionary of avatar size variants values mapped to their corresponding spacing size values
 const SIZE_MAP = {
   '2xs': 4,
   xs: 6,
@@ -99,12 +98,13 @@ const SIZE_MAP = {
   '3xl': 20,
 };
 
-const OVERLAP = '8px';
-
-const maskShapeProps = {
+const MASK_SHAPE_PROPS = {
   fill: 'black',
   stroke: 'black',
-  style: { strokeWidth: OVERLAP, transform: `translate(${OVERLAP}, 0)` },
+  style: {
+    strokeWidth: 'var(--overlap)',
+    transform: `translate(var(--overlap), 0)`,
+  },
 };
 
 interface AvatarGroupProps {
@@ -112,16 +112,13 @@ interface AvatarGroupProps {
 }
 
 const AvatarGroup = ({ children }: AvatarGroupProps) => {
+  const id = useId();
   const items = Children.toArray(children).filter(
     isValidElement
   ) as React.ReactElement<AvatarProps>[];
-  const id = useId();
 
   return (
-    <div
-      className="isolate flex items-center -space-x-(--overlap)"
-      style={{ '--overlap': OVERLAP } as React.CSSProperties}
-    >
+    <div className="isolate flex items-center -space-x-(--overlap) [--overlap:--spacing(2)]">
       {items.map((child, i) => {
         const previous = items[i - 1];
         if (!previous) return cloneElement(child, { key: i });
@@ -132,6 +129,8 @@ const AvatarGroup = ({ children }: AvatarGroupProps) => {
         const currentSize = child.props.size ?? 'md';
 
         const ratio = SIZE_MAP[previousSize] / SIZE_MAP[currentSize];
+
+        const toPercentage = (num: number) => `${num * 100}%`;
 
         return (
           <div
@@ -149,19 +148,19 @@ const AvatarGroup = ({ children }: AvatarGroupProps) => {
                 <rect width="100%" height="100%" fill="white" />
                 {previousVariant === 'circle' ? (
                   <circle
-                    cx={`${-0.5 * toPercentage(ratio)}%`}
-                    cy="50%"
-                    r={`${toPercentage(ratio / 2)}%`}
-                    {...maskShapeProps}
+                    cx={toPercentage(-0.5 * ratio)}
+                    cy={toPercentage(0.5)}
+                    r={toPercentage(ratio / 2)}
+                    {...MASK_SHAPE_PROPS}
                   />
                 ) : (
                   <rect
-                    x={`${toPercentage(-ratio)}%`}
-                    y={`${toPercentage(-0.5 * (ratio - 1))}%`}
-                    width={`${toPercentage(ratio)}%`}
-                    height={`${toPercentage(ratio)}%`}
+                    x={toPercentage(-ratio)}
+                    y={toPercentage(-0.5 * (ratio - 1))}
+                    width={toPercentage(ratio)}
+                    height={toPercentage(ratio)}
                     rx="6"
-                    {...maskShapeProps}
+                    {...MASK_SHAPE_PROPS}
                   />
                 )}
               </mask>
