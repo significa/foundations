@@ -107,18 +107,22 @@ const MASK_SHAPE_PROPS = {
   },
 };
 
-interface AvatarGroupProps {
-  children: React.ReactNode;
-}
+type AvatarGroupProps = React.ComponentPropsWithRef<'div'>;
 
-const AvatarGroup = ({ children }: AvatarGroupProps) => {
+const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
   const id = useId();
   const items = Children.toArray(children).filter(
     isValidElement
   ) as React.ReactElement<AvatarProps>[];
 
   return (
-    <div className="isolate flex items-center -space-x-(--overlap) [--overlap:--spacing(2)]">
+    <div
+      className={cn(
+        'isolate flex items-center -space-x-(--overlap) [--overlap:--spacing(2)]',
+        className
+      )}
+      {...props}
+    >
       {items.map((child, i) => {
         const previous = items[i - 1];
         if (!previous) return cloneElement(child, { key: i });
