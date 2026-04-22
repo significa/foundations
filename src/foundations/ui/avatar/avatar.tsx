@@ -1,6 +1,6 @@
 import { UserIcon } from '@phosphor-icons/react';
 import type { VariantProps } from 'cva';
-
+import { Children, cloneElement, isValidElement, useId } from 'react';
 import { cn, cva } from '@/lib/utils/classnames';
 
 const getInitials = (name: string | undefined) => {
@@ -17,32 +17,21 @@ const getInitials = (name: string | undefined) => {
 const avatarStyle = cva({
   base: [
     'relative flex items-center justify-center overflow-hidden bg-foreground-secondary/10 font-semibold text-foreground/80 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm',
-    'size-[calc(var(--radius)*2)]',
-    'in-data-ui-avatar-group:not-first:-ml-(--overlap) [--border:--spacing(0.5)] [--overlap:--spacing(3)]',
   ],
   variants: {
     variant: {
-      circle: [
-        'rounded-full',
-        '[&+div]:in-data-ui-avatar-group:not-first:mask-[radial-gradient(circle_at_calc(-50%+var(--overlap)+(-1*(var(--prev-radius)-var(--radius))))_50%,transparent_calc(var(--prev-radius)+var(--border)),black_0%)]',
-      ],
-      square: [
-        'rounded-md',
-        '[&+div]:in-data-ui-avatar-group:not-first:[clip-path:inset(0_0_0_calc(var(--overlap)+var(--border)))]',
-      ],
+      circle: 'rounded-full',
+      square: 'rounded-md',
     },
     size: {
-      '2xs':
-        'text-2xs [--radius:--spacing(2)] [&+*]:[--prev-radius:--spacing(2)]',
-      xs: 'text-2xs [--radius:--spacing(3)] [&+*]:[--prev-radius:--spacing(3)]',
-      sm: 'text-xs [--radius:--spacing(4)] [&+*]:[--prev-radius:--spacing(4)]',
-      md: 'text-sm [--radius:--spacing(5)] [&+*]:[--prev-radius:--spacing(5)]',
-      lg: 'text-base [--radius:--spacing(6)] [&+*]:[--prev-radius:--spacing(6)]',
-      xl: 'text-lg [--radius:--spacing(7)] [&+*]:[--prev-radius:--spacing(7)]',
-      '2xl':
-        'text-xl [--radius:--spacing(8)] [&+*]:[--prev-radius:--spacing(8)]',
-      '3xl':
-        'text-3xl [--radius:--spacing(10)] [&+*]:[--prev-radius:--spacing(10)]',
+      '2xs': 'size-4 text-2xs',
+      xs: 'size-6 text-2xs',
+      sm: 'size-8 text-xs',
+      md: 'size-10 text-sm',
+      lg: 'size-12 text-base',
+      xl: 'size-14 text-lg',
+      '2xl': 'size-16 text-xl',
+      '3xl': 'size-20 text-3xl',
     },
   },
 });
@@ -97,14 +86,93 @@ const AvatarFallback = ({
   );
 };
 
-interface AvatarGroupProps extends React.ComponentPropsWithRef<'div'> {
+const toPercentage = (num: number) => num * 100;
+
+const SIZE_MAP = {
+  '2xs': 4,
+  xs: 6,
+  sm: 8,
+  md: 10,
+  lg: 12,
+  xl: 14,
+  '2xl': 16,
+  '3xl': 20,
+};
+
+const OVERLAP = '8px';
+
+const maskShapeProps = {
+  fill: 'black',
+  stroke: 'black',
+  style: { strokeWidth: OVERLAP, transform: `translate(${OVERLAP}, 0)` },
+};
+
+interface AvatarGroupProps {
   children: React.ReactNode;
 }
 
-const AvatarGroup = ({ className, children }: AvatarGroupProps) => {
+const AvatarGroup = ({ children }: AvatarGroupProps) => {
+  const items = Children.toArray(children).filter(
+    isValidElement
+  ) as React.ReactElement<AvatarProps>[];
+  const id = useId();
+
   return (
-    <div className={cn('flex items-center', className)} data-ui-avatar-group>
-      {children}
+    <div
+      className="isolate flex items-center -space-x-(--overlap)"
+      style={{ '--overlap': OVERLAP } as React.CSSProperties}
+    >
+      {items.map((child, i) => {
+        const previous = items[i - 1];
+        if (!previous) return cloneElement(child, { key: i });
+
+        const maskId = `${id}-${i}`;
+        const previousVariant = previous.props.variant ?? 'circle';
+        const previousSize = previous.props.size ?? 'md';
+        const currentSize = child.props.size ?? 'md';
+
+        const ratio = SIZE_MAP[previousSize] / SIZE_MAP[currentSize];
+
+        return (
+          <div
+            key={i}
+            className="relative"
+            style={{
+              maskImage: `url(#${maskId})`,
+              WebkitMaskImage: `url(#${maskId})`,
+            }}
+          >
+            <svg
+              width="100%"
+              height="100%"
+              className="absolute"
+              aria-hidden="true"
+            >
+              <mask id={maskId}>
+                <rect width="100%" height="100%" fill="white" />
+                {previousVariant === 'circle' ? (
+                  <circle
+                    cx={`${-0.5 * toPercentage(ratio)}%`}
+                    cy="50%"
+                    r={`${toPercentage(ratio / 2)}%`}
+                    {...maskShapeProps}
+                  />
+                ) : (
+                  <rect
+                    x={`${toPercentage(-ratio)}%`}
+                    y={`${toPercentage(-0.5 * (ratio - 1))}%`}
+                    width={`${toPercentage(ratio)}%`}
+                    height={`${toPercentage(ratio)}%`}
+                    rx="6"
+                    {...maskShapeProps}
+                  />
+                )}
+              </mask>
+            </svg>
+            {child}
+          </div>
+        );
+      })}
     </div>
   );
 };
