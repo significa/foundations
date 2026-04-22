@@ -136,11 +136,8 @@ const AvatarGroup = ({ children }: AvatarGroupProps) => {
         return (
           <div
             key={i}
-            className="relative"
-            style={{
-              maskImage: `url(#${maskId})`,
-              WebkitMaskImage: `url(#${maskId})`,
-            }}
+            className="*:mask-(--mask) relative"
+            style={{ '--mask': `url(#${maskId})` }}
           >
             <svg
               width="100%"
