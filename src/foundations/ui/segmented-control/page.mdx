@@ -1,0 +1,78 @@
+---
+title: Segmented Control
+description: A compact control for switching between a small set of mutually exclusive options with smooth animations and keyboard support.
+preview: segmented-control
+files:
+  - src/foundations/ui/segmented-control/segmented-control.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: motion
+    href: https://motion.dev
+
+folder: UI
+---
+
+## Features
+
+- **Smooth Animations**: Animated indicator transitions using Motion layout animations
+- **Keyboard Navigation**: Full keyboard support with arrow key navigation
+- **Controlled & Uncontrolled**: Flexible state management options
+- **ARIA Support**: Full accessibility implementation with tab role
+- **Custom Styling**: Extensible styling through className props
+
+## Anatomy
+
+```tsx
+<SegmentedControl>
+  <SegmentedControl.Item />
+</SegmentedControl>
+```
+
+## API Reference
+
+### SegmentedControl
+
+The root container component that manages the state and behavior of the segmented control.
+
+<PropsTable
+  definition={{
+    defaultIndex: {
+      type: "number",
+      description: "The index of the segment that should be active by default.",
+    },
+    selectedIndex: {
+      type: "number",
+      description: "The controlled index of the active segment.",
+    },
+    onChange: {
+      type: "(index: number) => void",
+      description: "Callback fired when the active segment changes.",
+    },
+  }}
+/>
+
+### SegmentedControl.Item
+
+The individual segment button component.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+## Accessibility
+
+The Segmented Control component implements the [WAI-ARIA Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). Each item has `role="tab"` and `aria-selected` reflects the current selection state. Arrow keys move focus and selection between segments.
+
+## Examples
+
+### Basic Usage
+
+A basic example of a segmented control.
+
+<Preview slug="segmented-control" />
