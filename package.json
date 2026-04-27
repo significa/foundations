@@ -19,12 +19,12 @@
     "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.2",
-    "@astrojs/react": "^5.0.1",
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/react": "^5.0.4",
     "@floating-ui/react": "^0.27.19",
     "@hookform/resolvers": "^5.2.2",
     "@phosphor-icons/react": "^2.1.10",
-    "@tailwindcss/vite": "^4.2.2",
+    "@tailwindcss/vite": "^4.2.4",
     "@types/chroma-js": "^3.1.2",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
@@ -36,22 +36,22 @@
     "motion": "^12.38.0",
     "pagefind": "^1.4.0",
     "posthog-js": "^1.363.1",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "react-hook-form": "^7.72.0",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.4",
     "unified": "^11.0.5",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.8",
+    "@biomejs/biome": "2.4.13",
     "@types/hast": "^3.0.4",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "prettier-plugin-tailwindcss": "^0.7.3",
     "unist-util-visit": "^5.1.0"
   }
 }
