@@ -1,4 +1,4 @@
-# AGENTS.md
+# CLAUDE.md
 
 Guidelines for agentic coding agents working in this repository.
 
@@ -196,14 +196,3 @@ src/foundations/<category>/<name>/
 - Global styles live in `src/styles/global.css`; markdown-specific styles in `src/styles/markdown.css`.
 
 ---
-
-## Environment Variables
-
-Defined in `astro.config.ts` via Astro's typed env schema. Copy `.env.example` to `.env` to get started.
-
-| Variable       | Description                                         |
-| -------------- | --------------------------------------------------- |
-| `POSTHOG_KEY`  | PostHog analytics key (use `"development"` locally) |
-| `POSTHOG_HOST` | PostHog host URL (use `"development"` locally)      |
-
-Analytics only runs in production (`import.meta.env.PROD` gate).
