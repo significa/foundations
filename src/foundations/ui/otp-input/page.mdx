@@ -22,7 +22,7 @@ Each cell is a real `<input>` element. The root manages all state, keyboard navi
 <OTPInput>
   <OTPInput.Hidden name="otp" />
   <OTPInput.Cell />
-  <OTPInput.Separator />
+  <OTPInput.Divider />
   <OTPInput.Cell />
 </OTPInput>
 ```
@@ -89,7 +89,7 @@ Extends the `input` element, omitting `type` and `value` which are managed inter
 
 Extends the `input` element.
 
-### OTPInput.Separator
+### OTPInput.Divider
 
 Extends the `div` element. Renders an em dash by default, overridable via `children`.
 
@@ -99,9 +99,9 @@ Extends the `div` element. Renders an em dash by default, overridable via `child
 
 <Preview slug="otp-input" />
 
-### With Separator
+### With Divider
 
-Use `OTPInput.Separator` to visually split cells into groups. It renders an em dash by default but accepts any `children`.
+Use `OTPInput.Divider` to visually split cells into groups. It renders an em dash by default but accepts any `children`.
 
 <Preview slug="otp-input-separator" />
 

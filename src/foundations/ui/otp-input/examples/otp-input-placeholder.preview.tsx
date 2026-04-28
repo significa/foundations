@@ -2,11 +2,10 @@ import { OTPInput } from '@/foundations/ui/otp-input/otp-input';
 
 export default function OTPInputPlaceholderExample() {
   return (
-    <OTPInput placeholder="○">
+    <OTPInput placeholder="-">
       <OTPInput.Cell />
       <OTPInput.Cell />
       <OTPInput.Cell />
-      <OTPInput.Separator />
       <OTPInput.Cell />
       <OTPInput.Cell />
       <OTPInput.Cell />

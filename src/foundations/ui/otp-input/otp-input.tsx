@@ -359,7 +359,7 @@ const OTPInputHidden = ({ name, ...props }: OTPInputHiddenProps) => {
   return <input type="hidden" name={name} value={values.join('')} {...props} />;
 };
 
-const OTPInputSeparator = ({
+const OTPInputDivider = ({
   className,
   children,
   ...props
@@ -377,7 +377,7 @@ const OTPInputSeparator = ({
 
 const CompoundOTPInput = Object.assign(OTPInput, {
   Cell: OTPInputCell,
-  Separator: OTPInputSeparator,
+  Divider: OTPInputDivider,
   Hidden: OTPInputHidden,
 });
 

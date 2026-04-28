@@ -6,7 +6,7 @@ export default function OTPInputSeparatorExample() {
       <OTPInput.Cell />
       <OTPInput.Cell />
       <OTPInput.Cell />
-      <OTPInput.Separator />
+      <OTPInput.Divider />
       <OTPInput.Cell />
       <OTPInput.Cell />
       <OTPInput.Cell />
