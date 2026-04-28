@@ -8,7 +8,7 @@ import { SegmentedControl } from '@/foundations/ui/segmented-control/segmented-c
 
 export default function SegmentedControlPreview() {
   return (
-    <SegmentedControl className="flex rounded-2xl bg-background-secondary p-1">
+    <SegmentedControl>
       <SegmentedControl.Item>
         <ListIcon />
         <span>List</span>

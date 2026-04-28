@@ -39,6 +39,7 @@ interface SegmentedControlProps
   defaultIndex?: number;
   selectedIndex?: number;
   onChange?: (index: number) => void;
+  className?: string;
   children: React.ReactNode;
 }
 
@@ -46,6 +47,7 @@ const SegmentedControl = ({
   defaultIndex,
   selectedIndex: selectedIndexProp,
   onChange: onChangeProp,
+  className,
   children,
   ...props
 }: SegmentedControlProps) => {
@@ -125,7 +127,14 @@ const SegmentedControl = ({
 
   return (
     <SegmentedControlContext value={ctx}>
-      <div role="radiogroup" {...props}>
+      <div
+        role="radiogroup"
+        className={cn(
+          'flex rounded-2xl bg-background-secondary p-1',
+          className
+        )}
+        {...props}
+      >
         {children}
       </div>
     </SegmentedControlContext>
