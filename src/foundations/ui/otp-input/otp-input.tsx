@@ -388,5 +388,4 @@ const CompoundOTPInput = Object.assign(OTPInput, {
   Hidden: OTPInputHidden,
 });
 
-export type { OTPInputProps };
 export { CompoundOTPInput as OTPInput };
