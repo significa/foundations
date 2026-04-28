@@ -36,53 +36,59 @@ const useSegmentedControlContext = () => {
 
 interface SegmentedControlProps
   extends Omit<React.ComponentPropsWithRef<'div'>, 'onChange'> {
-  defaultIndex?: number;
-  selectedIndex?: number;
-  onChange?: (index: number) => void;
+  defaultValue?: string;
+  value?: string;
+  onChange?: (value: string) => void;
   className?: string;
   children: React.ReactNode;
 }
 
 const SegmentedControl = ({
-  defaultIndex,
-  selectedIndex: selectedIndexProp,
+  defaultValue,
+  value: selectedValueProp,
   onChange: onChangeProp,
   className,
   children,
   ...props
 }: SegmentedControlProps) => {
   const id = useId();
-  const [internalSelectedIndex, setInternalSelectedIndex] = useState(
-    defaultIndex ?? 0
-  );
+  const [internalSelectedValue, setInternalSelectedValue] = useState<
+    string | undefined
+  >(defaultValue);
   const [segments, setSegments] = useState<string[]>([]);
 
-  const selectedIndex = selectedIndexProp ?? internalSelectedIndex;
+  const selectedSegment = selectedValueProp ?? internalSelectedValue;
 
-  const setSelectedIndex = useCallback(
-    (index: number) => {
-      setInternalSelectedIndex(index);
-      onChangeProp?.(index);
+  useLayoutEffect(() => {
+    if (selectedSegment === undefined && segments.length > 0) {
+      setInternalSelectedValue(segments[0]);
+    }
+  }, [segments, selectedSegment]);
 
-      // focus on the selected segment when changing index
-      const itemId = getItemId(segments[index]);
+  const setSelectedSegment = useCallback(
+    (value: string) => {
+      setInternalSelectedValue(value);
+      onChangeProp?.(value);
+
+      const itemId = getItemId(value);
       if (itemId) {
-        const selectedSegment = document.getElementById(itemId);
-        selectedSegment?.focus();
+        document.getElementById(itemId)?.focus();
       }
     },
-    [onChangeProp, segments]
+    [onChangeProp]
   );
 
   const next = useCallback(() => {
-    setSelectedIndex((selectedIndex + 1) % segments.length);
-  }, [segments.length, selectedIndex, setSelectedIndex]);
+    const index = segments.indexOf(selectedSegment ?? '');
+    const nextSegment = segments[(index + 1) % segments.length];
+    if (nextSegment) setSelectedSegment(nextSegment);
+  }, [segments, selectedSegment, setSelectedSegment]);
 
   const previous = useCallback(() => {
-    setSelectedIndex(
-      selectedIndex <= 0 ? segments.length - 1 : selectedIndex - 1
-    );
-  }, [segments.length, selectedIndex, setSelectedIndex]);
+    const index = segments.indexOf(selectedSegment ?? '');
+    const prevSegment = segments[index <= 0 ? segments.length - 1 : index - 1];
+    if (prevSegment) setSelectedSegment(prevSegment);
+  }, [segments, selectedSegment, setSelectedSegment]);
 
   const registerSegment = useCallback((id: string) => {
     setSegments((prev) => [...prev, id]);
@@ -91,18 +97,6 @@ const SegmentedControl = ({
       setSegments((prev) => prev.filter((prevId) => prevId !== id));
     };
   }, []);
-
-  const selectedSegment = useMemo(
-    () => segments[selectedIndex],
-    [segments, selectedIndex]
-  );
-
-  const setSelectedSegment = useCallback(
-    (id: string) => {
-      setSelectedIndex(segments.indexOf(id));
-    },
-    [segments, setSelectedIndex]
-  );
 
   const ctx = useMemo(
     () => ({
@@ -148,6 +142,7 @@ interface SegmentedControlItemProps
   > {
   children: React.ReactNode;
   asChild?: boolean;
+  value: string;
 }
 
 const getItemId = (id: string | undefined) =>
@@ -159,9 +154,9 @@ const SegmentedControlItem = ({
   onClick,
   onKeyDown,
   className,
+  value,
   ...props
 }: SegmentedControlItemProps) => {
-  const id = useId();
   const {
     id: segmentsId,
     selectedSegment,
@@ -174,10 +169,10 @@ const SegmentedControlItem = ({
   const Comp = asChild ? Slot : 'button';
 
   useLayoutEffect(() => {
-    registerSegment(id);
-  }, [id, registerSegment]);
+    return registerSegment(value);
+  }, [value, registerSegment]);
 
-  const isSelected = selectedSegment === id;
+  const isSelected = selectedSegment === value;
 
   const handleKeyboardNavigation = (
     e: React.KeyboardEvent<HTMLButtonElement>
@@ -188,7 +183,7 @@ const SegmentedControlItem = ({
     };
 
     if (e.key === 'Enter' || e.key === ' ') {
-      setSelectedSegment(id);
+      setSelectedSegment(value);
     }
 
     if (keyOrientationMap.next === e.key) {
@@ -204,7 +199,7 @@ const SegmentedControlItem = ({
 
   return (
     <Comp
-      id={getItemId(id)}
+      id={getItemId(value)}
       type="button"
       className={cn(
         'relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground',
@@ -219,7 +214,7 @@ const SegmentedControlItem = ({
         onClick?.(e);
 
         if (!e.defaultPrevented) {
-          setSelectedSegment(id);
+          setSelectedSegment(value);
         }
       }}
       onKeyDown={(e) => {
@@ -229,6 +224,7 @@ const SegmentedControlItem = ({
           handleKeyboardNavigation(e);
         }
       }}
+      value={value}
       {...props}
     >
       {typeof children === 'string' ? <span>{children}</span> : children}

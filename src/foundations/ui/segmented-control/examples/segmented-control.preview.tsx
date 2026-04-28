@@ -9,15 +9,15 @@ import { SegmentedControl } from '@/foundations/ui/segmented-control/segmented-c
 export default function SegmentedControlPreview() {
   return (
     <SegmentedControl>
-      <SegmentedControl.Item>
+      <SegmentedControl.Item value="a">
         <ListIcon />
         <span>List</span>
       </SegmentedControl.Item>
-      <SegmentedControl.Item>
+      <SegmentedControl.Item value="b">
         <SquaresFourIcon />
         <span>Board</span>
       </SegmentedControl.Item>
-      <SegmentedControl.Item>
+      <SegmentedControl.Item value="c">
         <CalendarIcon />
         <span>Calendar</span>
       </SegmentedControl.Item>
