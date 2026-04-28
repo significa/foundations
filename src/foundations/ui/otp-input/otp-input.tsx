@@ -1,8 +1,6 @@
 import type { VariantProps } from 'cva';
 import {
-  Children,
   createContext,
-  isValidElement,
   use,
   useCallback,
   useMemo,
@@ -86,14 +84,7 @@ const OTPInput = ({
   ...props
 }: OTPInputProps) => {
   const cellRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  const cellCount = useMemo(
-    () =>
-      Children.toArray(children).filter(
-        (child) => isValidElement(child) && child.type === OTPInputCell
-      ).length,
-    [children]
-  );
+  const [cellCount, setCellCount] = useState(0);
 
   const [internalValues, setInternalValues] = useState<string[]>(() =>
     splitIntoSlots(defaultValue, cellCount)
@@ -276,7 +267,9 @@ const OTPInput = ({
         className={cn('flex items-center gap-2', className)}
         {...props}
       >
-        <InstanceCounterProvider>{children}</InstanceCounterProvider>
+        <InstanceCounterProvider onChange={setCellCount}>
+          {children}
+        </InstanceCounterProvider>
       </div>
     </OTPInputContext>
   );
