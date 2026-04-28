@@ -82,17 +82,7 @@ Extends the `div` element.
 
 ### OTPInput.Hidden
 
-Renders a hidden `<input>` for native form submission. Only needed when the OTP field is inside a `<form>`.
-
-<PropsTable
-  definition={{
-    name: {
-      type: "string",
-      required: true,
-      description: "The name of the hidden input used for form submission.",
-    },
-  }}
-/>
+Extends the `input` element, omitting `type` and `value` which are managed internally. Only needed when the OTP field is inside a `<form>`.
 
 ### OTPInput.Cell
 

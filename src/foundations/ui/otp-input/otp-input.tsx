@@ -17,7 +17,6 @@ import { inputStyle } from '@/foundations/ui/input/input';
 import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
 import { cn, compose, cva } from '@/lib/utils/classnames';
 
-// Splits a string into a fixed-length array of single characters, padding with empty strings.
 const splitIntoSlots = (value: string, length: number): string[] =>
   Array.from({ length }, (_, i) => value[i] ?? '');
 
@@ -47,12 +46,12 @@ interface OTPInputContextValue {
 const OTPInputContext = createContext<OTPInputContextValue | null>(null);
 
 const useOTPInputContext = () => {
-  const ctx = use(OTPInputContext);
-  if (!ctx)
+  const context = use(OTPInputContext);
+  if (!context)
     throw new Error(
       'OTPInputContext must be used within an OTPInput component'
     );
-  return ctx;
+  return context;
 };
 
 interface OTPInputProps
@@ -293,12 +292,24 @@ const otpCellStyle = compose(
   })
 );
 
-interface OTPInputCellProps {
-  ref?: React.Ref<HTMLInputElement>;
-  className?: string;
-}
+interface OTPInputCellProps
+  extends Omit<
+    React.ComponentPropsWithRef<'input'>,
+    // All of these are managed by the root via context and cannot be overridden per-cell.
+    | 'value'
+    | 'type'
+    | 'inputMode'
+    | 'autoComplete'
+    | 'placeholder'
+    | 'disabled'
+    | 'maxLength'
+    | 'onChange'
+    | 'onKeyDown'
+    | 'onFocus'
+    | 'onPaste'
+  > {}
 
-const OTPInputCell = ({ ref, className }: OTPInputCellProps) => {
+const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
   const index = useInstanceCounter();
   const {
     values,
@@ -337,6 +348,7 @@ const OTPInputCell = ({ ref, className }: OTPInputCellProps) => {
       disabled={disabled}
       data-invalid={invalid || undefined}
       aria-label={`Digit ${index + 1}`}
+      {...props}
       className={cn(otpCellStyle({ size }), className)}
       onChange={(e) => onCellChange(index, e.target.value)}
       onKeyDown={(e) => onCellKeyDown(index, e)}
@@ -346,13 +358,12 @@ const OTPInputCell = ({ ref, className }: OTPInputCellProps) => {
   );
 };
 
-interface OTPInputHiddenProps {
-  name: string;
-}
+interface OTPInputHiddenProps
+  extends Omit<React.ComponentPropsWithoutRef<'input'>, 'type' | 'value'> {}
 
-const OTPInputHidden = ({ name }: OTPInputHiddenProps) => {
+const OTPInputHidden = ({ name, ...props }: OTPInputHiddenProps) => {
   const { values } = useOTPInputContext();
-  return <input type="hidden" name={name} value={values.join('')} />;
+  return <input type="hidden" name={name} value={values.join('')} {...props} />;
 };
 
 const OTPInputSeparator = ({
