@@ -9,15 +9,17 @@ import {
   useRef,
   useState,
 } from 'react';
+import {
+  InstanceCounterProvider,
+  useInstanceCounter,
+} from '@/foundations/components/instance-counter/instance-counter';
 import { inputStyle } from '@/foundations/ui/input/input';
 import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
-import { cn } from '@/lib/utils/classnames';
+import { cn, compose, cva } from '@/lib/utils/classnames';
 
 // Splits a string into a fixed-length array of single characters, padding with empty strings.
 const splitIntoSlots = (value: string, length: number): string[] =>
   Array.from({ length }, (_, i) => value[i] ?? '');
-
-const CellIndexContext = createContext<number>(-1);
 
 interface OTPInputContextValue {
   values: string[];
@@ -59,7 +61,6 @@ interface OTPInputProps
   defaultValue?: string;
   onChange?: (value: string) => void;
   onFill?: (value: string) => void;
-  name?: string;
   size?: VariantProps<typeof inputStyle>['size'];
   inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
   placeholder?: string;
@@ -75,7 +76,6 @@ const OTPInput = ({
   defaultValue = '',
   onChange,
   onFill,
-  name,
   size = 'md',
   inputMode = 'numeric',
   placeholder,
@@ -233,17 +233,6 @@ const OTPInput = ({
     [updateValues, focusCell, cellCount, sanitize]
   );
 
-  // Inject a sequential index into each OTPInputCell so cells can identify
-  // which slot they represent without needing explicit props from the consumer.
-  let cellIndex = 0;
-  const processedChildren = Children.map(children, (child) => {
-    if (isValidElement(child) && child.type === OTPInputCell) {
-      const index = cellIndex++;
-      return <CellIndexContext value={index}>{child}</CellIndexContext>;
-    }
-    return child;
-  });
-
   const ctx = useMemo(
     () => ({
       values,
@@ -288,17 +277,21 @@ const OTPInput = ({
         className={cn('flex items-center gap-2', className)}
         {...props}
       >
-        {name && <input type="hidden" name={name} value={values.join('')} />}
-        {processedChildren}
+        <InstanceCounterProvider>{children}</InstanceCounterProvider>
       </div>
     </OTPInputContext>
   );
 };
 
-const cellWidth: Record<
-  NonNullable<VariantProps<typeof inputStyle>['size']>,
-  string
-> = { xs: 'w-6', sm: 'w-8', md: 'w-10', lg: 'w-12' };
+const otpCellStyle = compose(
+  inputStyle,
+  cva({
+    base: 'shrink-0 px-0 text-center',
+    variants: {
+      size: { xs: 'w-6', sm: 'w-8', md: 'w-10', lg: 'w-12' },
+    },
+  })
+);
 
 interface OTPInputCellProps {
   ref?: React.Ref<HTMLInputElement>;
@@ -306,7 +299,7 @@ interface OTPInputCellProps {
 }
 
 const OTPInputCell = ({ ref, className }: OTPInputCellProps) => {
-  const index = use(CellIndexContext);
+  const index = useInstanceCounter();
   const {
     values,
     size,
@@ -344,18 +337,22 @@ const OTPInputCell = ({ ref, className }: OTPInputCellProps) => {
       disabled={disabled}
       data-invalid={invalid || undefined}
       aria-label={`Digit ${index + 1}`}
-      className={cn(
-        inputStyle({ size }),
-        cellWidth[size],
-        'shrink-0 px-0 text-center',
-        className
-      )}
+      className={cn(otpCellStyle({ size }), className)}
       onChange={(e) => onCellChange(index, e.target.value)}
       onKeyDown={(e) => onCellKeyDown(index, e)}
       onFocus={() => onCellFocus(index)}
       onPaste={(e) => onCellPaste(index, e)}
     />
   );
+};
+
+interface OTPInputHiddenProps {
+  name: string;
+}
+
+const OTPInputHidden = ({ name }: OTPInputHiddenProps) => {
+  const { values } = useOTPInputContext();
+  return <input type="hidden" name={name} value={values.join('')} />;
 };
 
 const OTPInputSeparator = ({
@@ -377,6 +374,7 @@ const OTPInputSeparator = ({
 const CompoundOTPInput = Object.assign(OTPInput, {
   Cell: OTPInputCell,
   Separator: OTPInputSeparator,
+  Hidden: OTPInputHidden,
 });
 
 export type { OTPInputProps };

@@ -49,10 +49,6 @@ Extends the `div` element.
       description:
         "Callback fired when all cells are filled via paste or autofill. Does not fire on character-by-character typing.",
     },
-    name: {
-      type: "string",
-      description: "Name of the hidden input used for form submission.",
-    },
     size: {
       type: ['"xs"', '"sm"', '"md"', '"lg"'],
       default: '"md"',
@@ -78,6 +74,20 @@ Extends the `div` element.
     invalid: {
       type: "boolean",
       description: "Whether the input is in an invalid state.",
+    },
+  }}
+/>
+
+### OTPInput.Hidden
+
+Renders a hidden `<input>` for native form submission. Only needed when the OTP field is inside a `<form>`.
+
+<PropsTable
+  definition={{
+    name: {
+      type: "string",
+      required: true,
+      description: "The name of the hidden input used for form submission.",
     },
   }}
 />
@@ -133,6 +143,12 @@ Set `inputMode="text"` for codes that include letters. This switches the mobile 
 ### Invalid
 
 <Preview slug="otp-input-invalid" />
+
+### Form
+
+Use `OTPInput.Hidden` inside a `<form>` to expose the value as a named field for native form submission.
+
+<Preview slug="otp-input-form" />
 
 ### Password Manager
 
