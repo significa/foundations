@@ -125,7 +125,9 @@ const SegmentedControl = ({
 
   return (
     <SegmentedControlContext value={ctx}>
-      <div {...props}>{children}</div>
+      <div role="radiogroup" {...props}>
+        {children}
+      </div>
     </SegmentedControlContext>
   );
 };
@@ -139,7 +141,8 @@ interface SegmentedControlItemProps
   asChild?: boolean;
 }
 
-const getItemId = (id: string | undefined) => (id ? `segment-${id}` : undefined);
+const getItemId = (id: string | undefined) =>
+  id ? `segment-${id}` : undefined;
 
 const SegmentedControlItem = ({
   children,
@@ -199,8 +202,8 @@ const SegmentedControlItem = ({
         '[&>*:not([data-segment-indicator])]:z-10',
         className
       )}
-      role="tab"
-      aria-selected={isSelected || undefined}
+      role="radio"
+      aria-checked={isSelected || undefined}
       data-selected={isSelected || undefined}
       tabIndex={isSelected ? 0 : -1}
       onClick={(e) => {
@@ -225,7 +228,7 @@ const SegmentedControlItem = ({
           data-segment-indicator="true"
           layoutId={segmentsId}
           aria-hidden="true"
-          className="absolute inset-0 z-0 rounded-xl bg-background-secondary"
+          className="absolute inset-0 z-0 rounded-xl bg-background"
           transition={{ type: 'spring', duration: 0.3, bounce: 0.2 }}
         />
       )}
