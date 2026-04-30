@@ -245,5 +245,6 @@ Skip the entry when the change is invisible to consumers:
 - Internal renames of unexported symbols.
 - Refactors that don't change the public API or rendered output.
 - Docs-site infrastructure (the docs app itself, not the library).
+- New components — those are documented on their own page; mention in the changelog only if they replace something existing.
 
 Format entries like the "Compound Components" entry (March 2026) — short prose explaining what and why, plus a `diff tsx` block showing the before/after. Lead with bug fixes and required updates; group optional improvements below.
