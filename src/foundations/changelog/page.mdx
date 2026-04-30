@@ -71,6 +71,17 @@ Added `--ring-width` (default `4px`). All primitives now use `ring-(length:--rin
 - Track now spans the full slider width to align visually with surrounding content. This means the thumb doesn't _exactly_ track the track progress but the drift should be minimal and non-consequential.
 - Thumb styled with `bg-background`, border and `shadow-xs` to match Input and Dropdown.
 
+### Disclosure: `data-open` → `data-state`
+
+Disclosure's trigger and content elements now use `data-state="open" | "closed"` instead of `data-open={true | false}` to match the convention used by the rest of the library (Popover, Listbox, Tooltip).
+
+```diff tsx
+- data-open={open}
++ data-state={open ? 'open' : 'closed'}
+```
+
+If you target the disclosure trigger with `data-[open=true]:...` selectors in your project, update them to `data-[state=open]:...`.
+
 ## March 2026
 
 ### Compound Components

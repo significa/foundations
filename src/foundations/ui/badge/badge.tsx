@@ -3,7 +3,7 @@ import type { VariantProps } from 'cva';
 import { Slot } from '@/foundations/components/slot/slot';
 import { cn, cva } from '@/lib/utils/classnames';
 
-const badgeVariants = cva({
+const badgeStyle = cva({
   base: 'inline-flex items-center gap-1 rounded-full font-semibold leading-none ring-1 ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5',
   variants: {
     variant: {
@@ -25,8 +25,8 @@ const badgeVariants = cva({
 });
 
 interface BadgeProps extends React.ComponentPropsWithRef<'div'> {
-  variant?: VariantProps<typeof badgeVariants>['variant'];
-  size?: VariantProps<typeof badgeVariants>['size'];
+  variant?: VariantProps<typeof badgeStyle>['variant'];
+  size?: VariantProps<typeof badgeStyle>['size'];
   asChild?: boolean;
 }
 
@@ -44,7 +44,7 @@ const Badge = ({
   return (
     <Comp
       ref={ref}
-      className={cn(badgeVariants({ variant, size }), className)}
+      className={cn(badgeStyle({ variant, size }), className)}
       {...rest}
     >
       {children}

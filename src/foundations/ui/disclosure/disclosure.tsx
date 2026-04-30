@@ -115,7 +115,7 @@ const DisclosureTrigger = ({
       }}
       aria-expanded={open}
       aria-controls={open ? getContentId(id) : undefined}
-      data-open={open}
+      data-state={open ? 'open' : 'closed'}
       className={cn(
         'focus-visible:ring-(length:--ring-width) flex w-full items-center justify-between text-left outline-none ring-ring',
         className
@@ -145,7 +145,7 @@ const DisclosureContent = ({
         <motion.div
           id={getContentId(id)}
           className={cn('overflow-hidden', className)}
-          data-open={open}
+          data-state={open ? 'open' : 'closed'}
           transition={{ type: 'spring', bounce: 0, visualDuration: 0.15 }}
           initial={{ height: 0 }}
           animate={{ height: 'auto' }}
