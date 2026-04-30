@@ -16,8 +16,6 @@ Some items will be impossible to do until there is decent baseline support for t
 
 ## Missing components
 
-- [ ] Icon Button (forcing aria-label and a square aspect-ratio)
-- [ ] Segmented Controls
 - [ ] Pagination
 - [ ] Breadcrumb
 - [ ] Toggle Button
