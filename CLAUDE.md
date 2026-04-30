@@ -21,11 +21,12 @@ All commands use **pnpm** (v10.32.1, Node ≥ 22.12.0).
 
 ### CI gate
 
-`pnpm check` runs three things in sequence:
+`pnpm check` runs four things in sequence:
 
 1. `biome ci` — lints and checks formatting for all non-Astro files
 2. `prettier --check "**/*.astro"` — checks formatting for Astro files
 3. `pnpm types:check` — full TypeScript type check
+4. `pnpm check:deps` — verifies every component's `page.mdx` declares the cross-Foundations imports it uses (see "Page dependency discipline" below)
 
 **Always run `pnpm check` after making changes.** Fix all errors before considering a task done.
 
@@ -196,6 +197,26 @@ src/foundations/<category>/<name>/
 - May export `export const meta = { layout: 'centered' | 'fullscreen' | 'padded', mode: 'inline' | 'iframe' }`.
 - Available at `/preview/<slug>` during development.
 - Use `/dist/ssr` Phosphor icon imports to avoid SSR errors.
+
+### Page dependency discipline
+
+Every `page.mdx` must declare under `dependencies:` every cross-Foundations import its source files use. The CI script `scripts/check-page-deps.mjs` (run via `pnpm check:deps`) walks each component's source and fails if any `@/foundations/...` import isn't declared. This keeps the docs honest about what a consumer will actually drag in when they copy a component.
+
+Format:
+
+```yaml
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: composeRefs
+    href: /utils/compose-refs
+  - name: "@floating-ui/react"
+    href: https://floating-ui.com/docs/react
+```
+
+Internal hrefs are paths under `src/foundations/` (e.g., `/ui/popover` → `src/foundations/ui/popover/`). Anchors and trailing slashes are stripped during the check — `/utils/math#clamp` and `/utils/math` both match a `utils/math` import. External hrefs (starting with `https://`) are not validated.
+
+Imports from `@/lib/...` (utilities provided by the setup guide) are skipped automatically.
 
 ---
 
