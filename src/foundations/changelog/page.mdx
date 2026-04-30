@@ -101,7 +101,7 @@ Foundations now ships a [`Field`](/ui/field) component that wires labels, descri
 <Field invalid={!!errors.email}>
   <Field.Label>Email</Field.Label>
   <Field.Control>
-    <Input type="email" {...register('email')} />
+    <Input type="email" {...register("email")} />
   </Field.Control>
   <Field.Description>We'll never share it.</Field.Description>
   <Field.Error>{errors.email?.message}</Field.Error>
