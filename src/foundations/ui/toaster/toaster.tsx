@@ -1,10 +1,5 @@
 import { CheckCircleIcon, XCircleIcon, XIcon } from '@phosphor-icons/react';
-import {
-  AnimatePresence,
-  MotionConfig,
-  motion,
-  useReducedMotion,
-} from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { ComponentPropsWithoutRef } from 'react';
 import { useEffect, useSyncExternalStore } from 'react';
 import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
@@ -177,40 +172,38 @@ const Toaster = ({ className }: { className?: string }) => {
   }, [ref]);
 
   return (
-    <MotionConfig reducedMotion="user">
-      <div
-        ref={ref}
-        data-toaster-provider
-        className={cn(
-          'fixed flex size-full flex-col items-end justify-end overflow-hidden bg-transparent px-4 py-3',
-          'pointer-events-none',
-          className
-        )}
-      >
-        <AnimatePresence>
-          {toasts.map((toast, index) => {
-            return (
-              <motion.div
-                key={toast.id}
-                onMouseEnter={() => toastStore.pauseAll()}
-                onMouseLeave={() => toastStore.resumeAll()}
-                style={{ zIndex: toasts.length - index }}
-                initial={{ height: 0 }}
-                animate={{ height: 'auto' }}
-                exit={{ height: 0 }}
-                transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
-                className="pointer-events-auto box-border *:my-1.5"
-              >
-                <ToasterItem
-                  toast={toast}
-                  onDismiss={() => toastStore.remove(toast.id)}
-                />
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </div>
-    </MotionConfig>
+    <div
+      ref={ref}
+      data-toaster-provider
+      className={cn(
+        'fixed flex size-full flex-col items-end justify-end overflow-hidden bg-transparent px-4 py-3',
+        'pointer-events-none',
+        className
+      )}
+    >
+      <AnimatePresence>
+        {toasts.map((toast, index) => {
+          return (
+            <motion.div
+              key={toast.id}
+              onMouseEnter={() => toastStore.pauseAll()}
+              onMouseLeave={() => toastStore.resumeAll()}
+              style={{ zIndex: toasts.length - index }}
+              initial={{ height: 0 }}
+              animate={{ height: 'auto' }}
+              exit={{ height: 0 }}
+              transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+              className="pointer-events-auto box-border *:my-1.5"
+            >
+              <ToasterItem
+                toast={toast}
+                onDismiss={() => toastStore.remove(toast.id)}
+              />
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
+    </div>
   );
 };
 

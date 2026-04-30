@@ -2,7 +2,7 @@ import {
   ArrowCounterClockwiseIcon,
   SlidersHorizontalIcon,
 } from '@phosphor-icons/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CopyButton } from '@/components/copy-button';
 import { IconButton } from '@/foundations/ui/button/button';
 import { Popover } from '@/foundations/ui/popover/popover';
@@ -51,21 +51,6 @@ const DSConfig = () => {
   const [accent, setAccent] = useState<AccentTheme>(accentThemes[0]);
   const [radiusStep, setRadiusStep] = useState(RADIUS_DEFAULT);
   const [ringWidth, setRingWidth] = useState(RING_DEFAULT);
-
-  // Reapply custom property values on Astro view transitions
-  useEffect(() => {
-    const onAfterSwap = () => {
-      setRoot('--color-accent', accent.background);
-      setRoot(
-        '--color-accent-foreground',
-        accent.foreground ?? 'oklch(100% 0 0)'
-      );
-      setRoot('--radius', `${radiusStep * RADIUS_STEP_REM}rem`);
-      setRoot('--ring-width', `${ringWidth}px`);
-    };
-    document.addEventListener('astro:after-swap', onAfterSwap);
-    return () => document.removeEventListener('astro:after-swap', onAfterSwap);
-  }, [accent, radiusStep, ringWidth]);
 
   const handleAccentClick = (theme: AccentTheme) => {
     setAccent(theme);

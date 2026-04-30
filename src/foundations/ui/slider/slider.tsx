@@ -100,7 +100,7 @@ const Slider = ({
   );
 
   const progressFactor = useMemo(
-    () => (value - min) / (max - min),
+    () => (max === min ? 0 : (value - min) / (max - min)),
     [value, min, max]
   );
 
@@ -317,7 +317,7 @@ const SliderThumb = ({
       if (sliderElement) {
         sliderElement.style.setProperty(
           '--progress-track-factor',
-          `${(newValue - min) / (max - min)}`
+          `${max === min ? 0 : (newValue - min) / (max - min)}`
         );
       }
 
