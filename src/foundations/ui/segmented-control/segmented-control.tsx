@@ -12,6 +12,8 @@ import {
 import { Slot } from '@/foundations/components/slot/slot';
 import { cn } from '@/lib/utils/classnames';
 
+let segmentedControlInstanceCounter = 0;
+
 interface SegmentedControlContextValue {
   id: string;
   segments: string[];
@@ -51,7 +53,10 @@ const SegmentedControl = ({
   children,
   ...props
 }: SegmentedControlProps) => {
-  const id = useId();
+  const reactId = useId();
+  const [id] = useState(
+    () => `${reactId}-${++segmentedControlInstanceCounter}`
+  );
   const [internalSelectedValue, setInternalSelectedValue] = useState<
     string | undefined
   >(defaultValue);
@@ -207,7 +212,7 @@ const SegmentedControlItem = ({
         className
       )}
       role="radio"
-      aria-checked={isSelected || undefined}
+      aria-checked={isSelected}
       data-selected={isSelected || undefined}
       tabIndex={isSelected ? 0 : -1}
       onClick={(e) => {

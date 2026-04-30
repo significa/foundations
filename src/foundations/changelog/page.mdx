@@ -262,6 +262,20 @@ Disclosure's trigger and content elements now use `data-state="open" | "closed"`
 
 If you target the disclosure trigger with `data-[open=true]:...` selectors in your project, update them to `data-[state=open]:...`.
 
+### Added: `<SegmentedControl>` component
+
+A new [`SegmentedControl`](/ui/segmented-control) for switching between a small set of mutually-exclusive options. Animated indicator via `motion`'s `layoutId`, full WAI-ARIA radiogroup wiring, arrow-key navigation, and controlled/uncontrolled state.
+
+```tsx
+<SegmentedControl defaultValue="list">
+  <SegmentedControl.Item value="list">List</SegmentedControl.Item>
+  <SegmentedControl.Item value="board">Board</SegmentedControl.Item>
+  <SegmentedControl.Item value="calendar">Calendar</SegmentedControl.Item>
+</SegmentedControl>
+```
+
+Items accept `asChild` for polymorphic rendering.
+
 ## March 2026
 
 ### Changed: compound components
