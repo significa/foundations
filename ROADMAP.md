@@ -13,6 +13,7 @@ Some items will be impossible to do until there is decent baseline support for t
 - [ ] Forms. We have an article at @guides/acessible-forms that goes in depth in how we should build things to make accessible forms with the best DX possible. The content is good but the ergonomics aren't right (it requires us to update every field to add a `useField` hook to provide the correct attributes). We should take a look at how other libraries do this (e.g.: ShadCN) and improve our approach.
 - [ ] Select VS Listbox. If styling selects is baseline we should try to see if Listbox can be replaced by more customisation in the native Select component.
 - [ ] Tabs: Another variant to make them more flexible would be nice. Currently this style is a bit opinionated. Also, we sometimes have a bug where the `motion` element with `layoutId` transitions when it should not (e.g.: when navigating between pages with different tab components)
+- [ ] Drag to dismiss drawer (at least on mobile).
 
 ## Missing components
 
