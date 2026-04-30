@@ -149,7 +149,7 @@ const DSConfig = () => {
                     aria-label={theme.label}
                     aria-pressed={isActive}
                     onClick={() => handleAccentClick(theme)}
-                    className="focus-visible:ring-(length:--ring-width) size-6 cursor-pointer rounded-full outline-none ring-ring transition"
+                    className="focus-visible:ring-(length:--ring-width) size-6 cursor-pointer rounded-lg outline-none ring-ring transition"
                     style={{
                       backgroundColor: theme.background,
                       opacity: isActive ? 1 : 0.5,
@@ -164,7 +164,7 @@ const DSConfig = () => {
             <div className="flex items-center justify-between">
               <span className="font-medium text-xs">Radius</span>
               <span className="text-foreground-secondary text-xs tabular-nums">
-                {radiusStep}px
+                {radiusStep * RADIUS_STEP_REM}rem
               </span>
             </div>
             <Slider

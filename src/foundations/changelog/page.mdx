@@ -71,6 +71,14 @@ Added `--ring-width` (default `4px`). All primitives now use `ring-(length:--rin
 - Track now spans the full slider width to align visually with surrounding content. This means the thumb doesn't _exactly_ track the track progress but the drift should be minimal and non-consequential.
 - Thumb styled with `bg-background`, border and `shadow-xs` to match Input and Dropdown.
 
+### Squircle corners (progressive enhancement)
+
+Added a `--corner-shape` token (default `squircle`) and applied `corner-shape: var(--corner-shape)` globally. Where the browser supports the [`corner-shape`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/corner-shape) property (currently Chrome), all rounded elements render as iOS-style superellipses. Other browsers ignore the declaration and fall back to the standard circular `border-radius`. `.rounded-full` is opted out so circles stay circles.
+
+A squircle looks visually less rounded than a circle at the same `border-radius`, so derived radius tokens (`--radius-md`, `--radius-lg`, …, `--inset`) are scaled by `--radius-bump`, which is `1` by default and `1.6` under `@supports (corner-shape: squircle)`. The user-facing `--radius` dial keeps meaning "design intent" — the bump is applied internally so a given value yields comparable perceived roundness across browsers.
+
+To opt out of squircles entirely, set `--corner-shape: round` in your `:root`.
+
 ### Disclosure: `data-open` → `data-state`
 
 Disclosure's trigger and content elements now use `data-state="open" | "closed"` instead of `data-open={true | false}` to match the convention used by the rest of the library (Popover, Listbox, Tooltip).

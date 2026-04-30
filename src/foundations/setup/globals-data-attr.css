@@ -1,3 +1,4 @@
+/* biome-ignore-all lint/correctness/noUnknownProperty: corner-shape is experimental, supported in Chrome */
 @import "tailwindcss";
 
 @variant dark {
@@ -33,23 +34,26 @@
   --color-success: oklch(69.6% 0.17 162.48);
   --color-info: oklch(62.3% 0.214 259.815);
 
-  /* Border radius — change --radius to scale the system's roundness */
+  /* Border radius — --radius is the dial; --radius-bump compensates squircles in supporting browsers (see @supports below) */
   --radius: 0.125rem;
-  --radius-xs: calc(var(--radius) * 1);
-  --radius-sm: calc(var(--radius) * 2);
-  --radius-md: calc(var(--radius) * 3);
-  --radius-lg: calc(var(--radius) * 4);
-  --radius-xl: calc(var(--radius) * 6);
-  --radius-2xl: calc(var(--radius) * 8);
-  --radius-3xl: calc(var(--radius) * 12);
-  --radius-4xl: calc(var(--radius) * 16);
+  --radius-bump: 1;
+  --radius-xs: calc(var(--radius) * 1 * var(--radius-bump));
+  --radius-sm: calc(var(--radius) * 2 * var(--radius-bump));
+  --radius-md: calc(var(--radius) * 3 * var(--radius-bump));
+  --radius-lg: calc(var(--radius) * 4 * var(--radius-bump));
+  --radius-xl: calc(var(--radius) * 6 * var(--radius-bump));
+  --radius-2xl: calc(var(--radius) * 8 * var(--radius-bump));
+  --radius-3xl: calc(var(--radius) * 12 * var(--radius-bump));
+  --radius-4xl: calc(var(--radius) * 16 * var(--radius-bump));
 
-  /* Panel-item inset: visual breathing room derived from --radius.
-     Square systems collapse to flush items; rounded systems get pill insets. */
-  --inset: calc(var(--radius) * 2);
+  /* Panel-item inset, derived from radius (collapses to flush items at --radius: 0) */
+  --inset: calc(var(--radius) * 2 * var(--radius-bump));
 
-  /* Focus ring width — change to scale the focus halo of all interactive elements */
+  /* Focus ring */
   --ring-width: 4px;
+
+  /* Corner shape (round | squircle) */
+  --corner-shape: squircle;
 
   /* Shadows */
   --shadow-*: initial;
@@ -85,6 +89,19 @@
     --value(--color-*, [*]),
     var(--color-mix-with, var(--color-foreground)) calc(--modifier(integer) * 1%)
   );
+}
+
+/* Squircles where supported, with a carve-out for full circles and a radius bump to match perceived roundness */
+* {
+  corner-shape: var(--corner-shape);
+}
+.rounded-full {
+  corner-shape: round;
+}
+@supports (corner-shape: squircle) {
+  :root {
+    --radius-bump: 1.6;
+  }
 }
 
 body {
