@@ -19,11 +19,12 @@ const getPageLastModifiedTime = async (page: CollectionEntry<'pages'>) => {
     files.map((filePath) => getGitLastModifiedTime(filePath))
   );
 
-  const [earliest] = timestamps.sort(
-    (a, b) => new Date(a).getTime() - new Date(b).getTime()
-  );
+  // Most recent change across the page itself and any source files it documents
+  const [latest] = timestamps
+    .filter(Boolean)
+    .sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 
-  return earliest;
+  return latest ?? null;
 };
 
 export { getPageCreateTime, getPageLastModifiedTime };

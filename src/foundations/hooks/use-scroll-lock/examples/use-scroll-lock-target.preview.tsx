@@ -14,7 +14,7 @@ const UseScrollLockTargetPreview = () => {
         id="scroll-lock-target"
         className="absolute inset-0 overflow-y-auto"
       >
-        <div className="h-[2000px]" />
+        <div className="h-500" />
       </main>
       <div
         className="absolute inset-0 flex items-center justify-center text-foreground-secondary"

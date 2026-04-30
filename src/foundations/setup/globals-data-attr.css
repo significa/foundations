@@ -28,6 +28,32 @@
     color-mix(in oklab, var(--color-accent) 30%, transparent)
   );
 
+  --color-error: oklch(63.7% 0.237 25.331);
+  --color-warning: oklch(79.5% 0.184 86.047);
+  --color-success: oklch(69.6% 0.17 162.48);
+  --color-info: oklch(62.3% 0.214 259.815);
+
+  /* Border radius — --radius is the dial; --radius-bump compensates squircles in supporting browsers (see @supports below) */
+  --radius: 0.125rem;
+  --radius-bump: 1;
+  --radius-xs: calc(var(--radius) * 1 * var(--radius-bump));
+  --radius-sm: calc(var(--radius) * 2 * var(--radius-bump));
+  --radius-md: calc(var(--radius) * 3 * var(--radius-bump));
+  --radius-lg: calc(var(--radius) * 4 * var(--radius-bump));
+  --radius-xl: calc(var(--radius) * 6 * var(--radius-bump));
+  --radius-2xl: calc(var(--radius) * 8 * var(--radius-bump));
+  --radius-3xl: calc(var(--radius) * 12 * var(--radius-bump));
+  --radius-4xl: calc(var(--radius) * 16 * var(--radius-bump));
+
+  /* Panel-item inset, derived from radius (collapses to flush items at --radius: 0) */
+  --inset: calc(var(--radius) * 2 * var(--radius-bump));
+
+  /* Focus ring */
+  --ring-width: 4px;
+
+  /* Corner shape (round | squircle) */
+  --corner-shape: squircle;
+
   /* Shadows */
   --shadow-*: initial;
   --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);
@@ -62,6 +88,19 @@
     --value(--color-*, [*]),
     var(--color-mix-with, var(--color-foreground)) calc(--modifier(integer) * 1%)
   );
+}
+
+/* Squircles where supported, with a carve-out for full circles and a radius bump to match perceived roundness */
+* {
+  corner-shape: var(--corner-shape);
+}
+.rounded-full {
+  corner-shape: round;
+}
+@supports (corner-shape: squircle) {
+  :root {
+    --radius-bump: 1.6;
+  }
 }
 
 body {

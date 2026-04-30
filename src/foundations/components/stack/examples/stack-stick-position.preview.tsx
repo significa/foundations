@@ -1,4 +1,4 @@
-import { MouseScrollIcon } from '@phosphor-icons/react';
+import { MouseScrollIcon } from '@phosphor-icons/react/dist/ssr';
 
 import { Stack } from '@/foundations/components/stack/stack';
 import { Divider } from '@/foundations/ui/divider/divider';

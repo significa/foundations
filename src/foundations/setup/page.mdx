@@ -5,6 +5,8 @@ description: How to setup your project to use Foundations.
 folder: "introduction"
 ---
 
+import SetupCssTabs from "@/components/setup-css-tabs.astro";
+
 ## Prerequisites
 
 - A [React 19](https://react.dev/blog/2024/12/05/react-19) project.
@@ -32,13 +34,9 @@ npm install cva@beta tailwind-merge
 
 ## CSS Setup
 
-### Automatic color scheme
+Pick the strategy that matches your project: respect the user's OS preference automatically, or expose a manual theme switcher backed by a `data-theme` attribute on `<html>`.
 
-<SourceCode file="src/foundations/setup/globals-prefers-schema.css" />
-
-### With theme switcher
-
-<SourceCode file="src/foundations/setup/globals-data-attr.css" />
+<SetupCssTabs />
 
 ## Utilities Setup
 

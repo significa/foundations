@@ -1,5 +1,10 @@
-import { CaretDownIcon } from '@phosphor-icons/react';
-import { AnimatePresence, type HTMLMotionProps, motion } from 'motion/react';
+import { CaretDownIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+  AnimatePresence,
+  type HTMLMotionProps,
+  MotionConfig,
+  motion,
+} from 'motion/react';
 import { createContext, use, useId, useState } from 'react';
 
 import { Slot } from '@/foundations/components/slot/slot';
@@ -85,7 +90,9 @@ const Disclosure = ({
 
   return (
     <DisclosureContext value={{ open, setOpen, id }}>
-      <div {...props}>{children}</div>
+      <MotionConfig reducedMotion="user">
+        <div {...props}>{children}</div>
+      </MotionConfig>
     </DisclosureContext>
   );
 };
@@ -115,9 +122,9 @@ const DisclosureTrigger = ({
       }}
       aria-expanded={open}
       aria-controls={open ? getContentId(id) : undefined}
-      data-open={open}
+      data-state={open ? 'open' : 'closed'}
       className={cn(
-        'flex w-full items-center justify-between text-left outline-none ring-ring focus-visible:ring-4',
+        'focus-visible:ring-(length:--ring-width) flex w-full items-center justify-between text-left outline-none ring-ring',
         className
       )}
       {...props}
@@ -145,7 +152,7 @@ const DisclosureContent = ({
         <motion.div
           id={getContentId(id)}
           className={cn('overflow-hidden', className)}
-          data-open={open}
+          data-state={open ? 'open' : 'closed'}
           transition={{ type: 'spring', bounce: 0, visualDuration: 0.15 }}
           initial={{ height: 0 }}
           animate={{ height: 'auto' }}

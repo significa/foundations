@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { Button } from '@/foundations/ui/button/button';
 import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
 import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
+import { Field } from '@/foundations/ui/field/field';
 import { Input } from '@/foundations/ui/input/input';
-import { Label } from '@/foundations/ui/label/label';
 import { cn } from '@/lib/utils/classnames';
 
 import {
@@ -197,37 +197,32 @@ export default function HierarchicalSelectionForm() {
         <h2 className="font-semibold text-xl">Registration Form</h2>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name *</Label>
-            <Input
-              id="name"
-              {...register('name')}
-              placeholder="Enter your name"
-            />
-            {errors.name && (
-              <p className="text-red-600 text-sm">{errors.name.message}</p>
-            )}
-          </div>
+          <Field invalid={!!errors.name}>
+            <Field.Label>Name *</Field.Label>
+            <Field.Control>
+              <Input {...register('name')} placeholder="Enter your name" />
+            </Field.Control>
+            <Field.Error>{errors.name?.message}</Field.Error>
+          </Field>
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
-            <Input
-              id="email"
-              type="email"
-              {...register('email')}
-              placeholder="Enter your email"
-            />
-            {errors.email && (
-              <p className="text-red-600 text-sm">{errors.email.message}</p>
-            )}
-          </div>
+          <Field invalid={!!errors.email}>
+            <Field.Label>Email *</Field.Label>
+            <Field.Control>
+              <Input
+                type="email"
+                {...register('email')}
+                placeholder="Enter your email"
+              />
+            </Field.Control>
+            <Field.Error>{errors.email?.message}</Field.Error>
+          </Field>
         </div>
 
-        <div className="space-y-2">
-          <Label>Countries of Interest *</Label>
-          <p className="mb-3 text-foreground-secondary text-sm">
+        <Field>
+          <Field.Label>Countries of Interest *</Field.Label>
+          <Field.Description>
             Select the countries you are interested in for our services
-          </p>
+          </Field.Description>
 
           <Controller
             name="countries"
@@ -241,7 +236,7 @@ export default function HierarchicalSelectionForm() {
               />
             )}
           />
-        </div>
+        </Field>
 
         <div className="rounded bg-background-secondary p-3">
           <p className="mb-1 font-medium text-sm">
@@ -253,11 +248,7 @@ export default function HierarchicalSelectionForm() {
         </div>
 
         <div className="flex gap-3">
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="min-w-[120px]"
-          >
+          <Button type="submit" disabled={isSubmitting} className="min-w-30">
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </Button>
 

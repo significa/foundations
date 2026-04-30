@@ -1,4 +1,8 @@
-import { EyeClosedIcon, EyeIcon, LockIcon } from '@phosphor-icons/react';
+import {
+  EyeClosedIcon,
+  EyeIcon,
+  LockIcon,
+} from '@phosphor-icons/react/dist/ssr';
 import { useState } from 'react';
 
 import { Input } from '@/foundations/ui/input/input';

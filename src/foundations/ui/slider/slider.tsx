@@ -99,7 +99,10 @@ const Slider = ({
     [valueProp, onValueChange]
   );
 
-  const progressFactor = useMemo(() => value / max, [value, max]);
+  const progressFactor = useMemo(
+    () => (max === min ? 0 : (value - min) / (max - min)),
+    [value, min, max]
+  );
 
   const contextValue = useMemo(
     () => ({
@@ -151,10 +154,13 @@ const sliderTrackStyle = cva({
   ],
   variants: {
     orientation: {
+      // Inset the track ends by a quarter of the thumb size so the thumb visually
+      // extends slightly past the track at min/max, hiding the sliver of track
+      // that would otherwise peek out around the thumb's circular edge.
       horizontal:
-        'left-[calc(var(--thumb-size)/2)] h-(--track-thickness) w-[calc(100%-var(--thumb-size))]',
+        'right-[calc(var(--thumb-size)/4)] left-[calc(var(--thumb-size)/4)] h-(--track-thickness)',
       vertical:
-        'bottom-[calc(var(--thumb-size)/2)] h-[calc(100%-var(--thumb-size))] w-(--track-thickness)',
+        'top-[calc(var(--thumb-size)/4)] bottom-[calc(var(--thumb-size)/4)] w-(--track-thickness)',
     },
   },
   defaultVariants: {
@@ -235,14 +241,15 @@ const sliderThumbStyle = cva({
 
     // Reset default styles
     '[&::-webkit-slider-thumb]:appearance-none',
-    '[&::-moz-range-thumb]:border-none',
 
     // Thumb styles
     '[&::-webkit-slider-thumb]:transition',
-    '[&::-webkit-slider-thumb]:h-(--thumb-size) [&::-webkit-slider-thumb]:w-(--thumb-size) [&::-webkit-slider-thumb]:bg-foreground',
+    '[&::-webkit-slider-thumb]:h-(--thumb-size) [&::-webkit-slider-thumb]:w-(--thumb-size)',
+    '[&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-border [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:shadow-xs',
     '[&::-webkit-slider-thumb]:z-10 [&::-webkit-slider-thumb]:rounded-full',
     '[&::-moz-range-thumb]:transition',
-    '[&::-moz-range-thumb]:h-(--thumb-size) [&::-moz-range-thumb]:w-(--thumb-size) [&::-moz-range-thumb]:bg-foreground',
+    '[&::-moz-range-thumb]:h-(--thumb-size) [&::-moz-range-thumb]:w-(--thumb-size)',
+    '[&::-moz-range-thumb]:border [&::-moz-range-thumb]:border-border [&::-moz-range-thumb]:bg-background [&::-moz-range-thumb]:shadow-xs',
     '[&::-moz-range-thumb]:rounded-full',
 
     // Hover states
@@ -250,15 +257,13 @@ const sliderThumbStyle = cva({
     '[&::-moz-range-thumb:hover]:scale-130',
 
     // Active states
-    '[&:active::-webkit-slider-thumb]:ring-4',
-    '[&:active::-webkit-slider-thumb]:ring-foreground/40',
-    '[&:active::-moz-range-thumb]:ring-4',
-    '[&:active::-moz-range-thumb]:ring-foreground/40',
+    '[&:active::-webkit-slider-thumb]:scale-130',
+    '[&:active::-moz-range-thumb]:scale-130',
 
     // Focus states - apply to pseudo-elements only
-    '[&:focus-visible::-webkit-slider-thumb]:ring-4',
+    '[&:focus-visible::-webkit-slider-thumb]:ring-(length:--ring-width)',
     '[&:focus-visible::-webkit-slider-thumb]:ring-ring',
-    '[&:focus-visible::-moz-range-thumb]:ring-4',
+    '[&:focus-visible::-moz-range-thumb]:ring-(length:--ring-width)',
     '[&:focus-visible::-moz-range-thumb]:ring-ring',
   ],
   variants: {
@@ -312,13 +317,13 @@ const SliderThumb = ({
       if (sliderElement) {
         sliderElement.style.setProperty(
           '--progress-track-factor',
-          `${newValue / max}`
+          `${max === min ? 0 : (newValue - min) / (max - min)}`
         );
       }
 
       onChange?.(e);
     },
-    [setValue, max, onChange]
+    [setValue, min, max, onChange]
   );
 
   return (

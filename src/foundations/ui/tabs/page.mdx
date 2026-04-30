@@ -60,6 +60,12 @@ The root container component that manages the state and behavior of the tabs.
       description: "The orientation of the tabs.",
       default: "horizontal",
     },
+    variant: {
+      type: '"pill" | "underline"',
+      description:
+        "Visual style of the active tab indicator. `pill` fills the trigger with a soft background; `underline` draws a thin accent line on the trigger's edge.",
+      default: "pill",
+    },
   }}
 />
 
@@ -131,6 +137,12 @@ The Tabs component follows the [WAI-ARIA Tabs Pattern](https://www.w3.org/WAI/AR
 A basic example of tabs with icons and labels.
 
 <Preview slug="tabs" />
+
+### Underline Variant
+
+A more conventional tab style with a thin accent-colored line under the active trigger. Pass `variant="underline"` to opt in.
+
+<Preview slug="tabs-underline" />
 
 ### Vertical Orientation
 
