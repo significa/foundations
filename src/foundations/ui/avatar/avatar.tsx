@@ -1,6 +1,6 @@
 import { UserIcon } from '@phosphor-icons/react/dist/ssr';
 import type { VariantProps } from 'cva';
-import { Children, cloneElement, isValidElement, useId } from 'react';
+import { Children, Fragment, isValidElement, useId } from 'react';
 import { cn, cva } from '@/lib/utils/classnames';
 
 const getInitials = (name: string | undefined) => {
@@ -15,9 +15,7 @@ const getInitials = (name: string | undefined) => {
 };
 
 const avatarStyle = cva({
-  base: [
-    'relative flex items-center justify-center overflow-hidden bg-foreground-secondary/10 font-semibold text-foreground/80 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm',
-  ],
+  base: 'relative flex items-center justify-center overflow-hidden bg-foreground-secondary/10 font-semibold text-foreground/80 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm',
   variants: {
     variant: {
       circle: 'rounded-full',
@@ -86,7 +84,8 @@ const AvatarFallback = ({
   );
 };
 
-// dictionary of avatar size variants values mapped to their corresponding spacing size values
+// Tailwind spacing units for each Avatar size variant; `2xs` (size-4) is 4 spacing units, etc.
+// Kept in sync with `avatarStyle.variants.size` via the `satisfies` constraint below.
 const SIZE_MAP = {
   '2xs': 4,
   xs: 6,
@@ -96,14 +95,14 @@ const SIZE_MAP = {
   xl: 14,
   '2xl': 16,
   '3xl': 20,
-};
+} as const satisfies Record<NonNullable<AvatarProps['size']>, number>;
 
 const MASK_SHAPE_PROPS = {
   fill: 'black',
   stroke: 'black',
   style: {
     strokeWidth: 'var(--overlap)',
-    transform: `translate(var(--overlap), 0)`,
+    transform: 'translate(var(--overlap), 0)',
   },
 };
 
@@ -112,8 +111,11 @@ type AvatarGroupProps = React.ComponentPropsWithRef<'div'>;
 const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
   const id = useId();
   const items = Children.toArray(children).filter(
-    isValidElement
-  ) as React.ReactElement<AvatarProps>[];
+    (child): child is React.ReactElement<AvatarProps> =>
+      isValidElement(child) && child.type === Avatar
+  );
+
+  const toPercentage = (n: number) => `${n * 100}%`;
 
   return (
     <div
@@ -124,21 +126,19 @@ const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
       {...props}
     >
       {items.map((child, i) => {
+        const key = child.key ?? i;
         const previous = items[i - 1];
-        if (!previous) return cloneElement(child, { key: i });
+        if (!previous) return <Fragment key={key}>{child}</Fragment>;
 
         const maskId = `${id}-${i}`;
         const previousVariant = previous.props.variant ?? 'circle';
         const previousSize = previous.props.size ?? 'md';
         const currentSize = child.props.size ?? 'md';
-
         const ratio = SIZE_MAP[previousSize] / SIZE_MAP[currentSize];
-
-        const toPercentage = (num: number) => `${num * 100}%`;
 
         return (
           <div
-            key={i}
+            key={key}
             className="*:mask-(--mask) relative"
             style={{ '--mask': `url(#${maskId})` }}
           >

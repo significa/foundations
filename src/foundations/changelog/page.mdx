@@ -101,7 +101,7 @@ Foundations now ships a [`Field`](/ui/field) component that wires labels, descri
 <Field invalid={!!errors.email}>
   <Field.Label>Email</Field.Label>
   <Field.Control>
-    <Input type="email" {...register('email')} />
+    <Input type="email" {...register("email")} />
   </Field.Control>
   <Field.Description>We'll never share it.</Field.Description>
   <Field.Error>{errors.email?.message}</Field.Error>
@@ -261,6 +261,23 @@ Disclosure's trigger and content elements now use `data-state="open" | "closed"`
 ```
 
 If you target the disclosure trigger with `data-[open=true]:...` selectors in your project, update them to `data-[state=open]:...`.
+
+### Added: `Avatar.Group`
+
+[Avatar](/ui/avatar) now ships an `Avatar.Group` sub-component for stacked avatars. Each non-leading avatar is cut by an SVG mask shaped after the previous avatar's variant and size, so the gap is transparent rather than a painted ring. Direct `<Avatar>` children only — others are filtered out.
+
+```tsx
+<Avatar.Group>
+  <Avatar>
+    <Avatar.Image src="..." />
+    <Avatar.Fallback>JD</Avatar.Fallback>
+  </Avatar>
+  <Avatar>
+    <Avatar.Image src="..." />
+    <Avatar.Fallback>AS</Avatar.Fallback>
+  </Avatar>
+</Avatar.Group>
+```
 
 ## March 2026
 
