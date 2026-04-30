@@ -8,6 +8,69 @@ meta:
   order: 99
 ---
 
+## April 2026
+
+### Bug fix: Slider thumb position with non-zero `min`
+
+If you are using the Slider in your project, you should apply this fix.
+
+`progressFactor` was computed as `value / max`, ignoring `min`. As a result, sliders with a non-zero `min` placed the thumb at the wrong fraction of the range.
+
+```diff tsx
+- const progressFactor = useMemo(() => value / max, [value, max]);
++ const progressFactor = useMemo(
++   () => (value - min) / (max - min),
++   [value, min, max]
++ );
+```
+
+### Semantic color tokens
+
+Added `--color-error`, `--color-warning`, `--color-success` and `--color-info` to the theme. Components that previously hardcoded `red-*`, `emerald-*`, `yellow-*` and `blue-*` (Badge, Toaster, Button's `destructive` variant, Input's invalid state) now use these tokens. Updating a semantic color is a one-line change instead of a find-and-replace across files.
+
+```diff tsx
+- 'bg-red-500/10 text-red-600 ring-red-600/20'
++ 'bg-error/10 text-error ring-error/20'
+```
+
+### Configurable border radius
+
+The `--radius` custom property is now the dial that controls the system's roundness. Named radius tokens are derived from it:
+
+```css
+--radius: 0.125rem;
+--radius-xs: calc(var(--radius) * 1);
+--radius-sm: calc(var(--radius) * 2);
+--radius-md: calc(var(--radius) * 3);
+--radius-lg: calc(var(--radius) * 4);
+--radius-xl: calc(var(--radius) * 6);
+--radius-2xl: calc(var(--radius) * 8);
+--radius-3xl: calc(var(--radius) * 12);
+--radius-4xl: calc(var(--radius) * 16);
+```
+
+Default values match Tailwind's defaults exactly, so existing components render identically. Change `--radius` and the entire system scales proportionally.
+
+### Panel-item inset derived from radius
+
+A new `--inset: calc(var(--radius) * 2)` token controls the breathing room between panel items and their container edges. Square systems (`--radius: 0`) collapse to flush items; rounded systems get pill insets that follow the outer curve.
+
+Dropdown items and Listbox options use it via `mx-(--inset)` and stay curve-correct at any radius.
+
+### Configurable focus ring width
+
+Added `--ring-width` (default `4px`). All primitives now use `ring-(length:--ring-width)` instead of hardcoded `ring-4`, so the focus halo can be tuned in one place.
+
+```diff tsx
+- 'focus-visible:ring-4 ring-ring'
++ 'focus-visible:ring-(length:--ring-width) ring-ring'
+```
+
+### Slider polish
+
+- Track now spans the full slider width to align visually with surrounding content. This means the thumb doesn't _exactly_ track the track progress but the drift should be minimal and non-consequential.
+- Thumb styled with `bg-background`, border and `shadow-xs` to match Input and Dropdown.
+
 ## March 2026
 
 ### Compound Components

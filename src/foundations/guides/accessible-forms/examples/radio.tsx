@@ -4,7 +4,7 @@ import { useField } from '../field';
 
 const radioStyle = cva({
   base: [
-    'relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-full border border-border bg-background shadow-xs outline-none ring-ring transition focus-visible:ring-4 enabled:cursor-pointer enabled:not-checked:hover:border-border-hard',
+    'focus-visible:ring-(length:--ring-width) relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-full border border-border bg-background shadow-xs outline-none ring-ring transition enabled:cursor-pointer enabled:not-checked:hover:border-border-hard',
     // checked
     'checked:enabled:border-foreground checked:enabled:bg-foreground',
     // checked circle

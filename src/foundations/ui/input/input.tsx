@@ -25,7 +25,7 @@ const inputStyle = cva({
     // group
     'flex items-center',
     // focus-visible
-    'ring-ring [:focus-visible,:has(:focus-visible)]:border-accent [:focus-visible,:has(:focus-visible)]:text-foreground [:focus-visible,:has(:focus-visible)]:ring-4', // disabled
+    '[:focus-visible,:has(:focus-visible)]:ring-(length:--ring-width) ring-ring [:focus-visible,:has(:focus-visible)]:border-accent [:focus-visible,:has(:focus-visible)]:text-foreground', // disabled
     // disabled
     '[:disabled,:has(input:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled)]:opacity-50',
     // invalid

@@ -226,7 +226,7 @@ const TabsItem = ({
       id={getItemId(id)}
       type="button"
       className={cn(
-        'relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground',
+        'focus-visible:ring-(length:--ring-width) relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground data-selected:text-foreground',
         '[&>*:not([data-tab-indicator])]:z-10',
         className
       )}
@@ -275,7 +275,10 @@ const TabsPanels = ({ children, className, ...props }: TabsPanelsProps) => {
 
   return (
     <div
-      className={cn('ring-ring transition has-focus-visible:ring-4', className)}
+      className={cn(
+        'has-focus-visible:ring-(length:--ring-width) ring-ring transition',
+        className
+      )}
       {...props}
     >
       {Children.map(children, (child, index) => (

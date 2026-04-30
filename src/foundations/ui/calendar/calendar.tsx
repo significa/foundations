@@ -308,7 +308,7 @@ const Calendar = ({
                       // other month
                       'group-data-other-month:text-foreground-secondary',
                       // focus
-                      'group-focus-visible:ring-4'
+                      'group-focus-visible:ring-(length:--ring-width)'
                     )}
                   >
                     {day.getDate()}
@@ -380,7 +380,7 @@ const HeaderTextButton = ({
     <button
       type="button"
       className={cn(
-        'cursor-pointer rounded-sm font-medium text-foreground/80 outline-none ring-ring transition hover:text-foreground focus-visible:text-foreground focus-visible:ring-4',
+        'focus-visible:ring-(length:--ring-width) cursor-pointer rounded-sm font-medium text-foreground/80 outline-none ring-ring transition hover:text-foreground focus-visible:text-foreground',
         className
       )}
       {...props}
@@ -399,7 +399,7 @@ const YearMonthButton = ({
     <button
       type="button"
       className={cn(
-        'h-8 w-full cursor-pointer rounded-lg font-medium text-foreground/80 text-sm outline-none ring-ring transition hover:bg-foreground/5 hover:text-foreground focus-visible:text-foreground focus-visible:ring-4',
+        'focus-visible:ring-(length:--ring-width) h-8 w-full cursor-pointer rounded-lg font-medium text-foreground/80 text-sm outline-none ring-ring transition hover:bg-foreground/5 hover:text-foreground focus-visible:text-foreground',
         className
       )}
       {...props}

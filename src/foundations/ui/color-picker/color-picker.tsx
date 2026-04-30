@@ -187,7 +187,7 @@ const Draggable = ({
       onKeyDown={handleKeyDown}
       className={cn(
         'group relative cursor-pointer touch-none rounded-xl',
-        'focus-visible:ring-4 focus-visible:ring-accent-element',
+        'focus-visible:ring-(length:--ring-width) focus-visible:ring-accent-element',
         className
       )}
       tabIndex={disabled ? -1 : 0}

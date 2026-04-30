@@ -259,7 +259,7 @@ const ToastCloseButton = ({
       aria-label="Dismiss notification"
       className={cn(
         'relative mb-auto flex size-6 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-sm border-inherit bg-inherit',
-        'ring-ring focus-visible:outline-none focus-visible:ring-4',
+        'focus-visible:ring-(length:--ring-width) ring-ring focus-visible:outline-none',
         'after:absolute after:inset-0 after:bg-current after:opacity-0 hover:after:opacity-4 active:after:opacity-8'
       )}
     >

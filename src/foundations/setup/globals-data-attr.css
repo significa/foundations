@@ -33,6 +33,24 @@
   --color-success: oklch(69.6% 0.17 162.48);
   --color-info: oklch(62.3% 0.214 259.815);
 
+  /* Border radius — change --radius to scale the system's roundness */
+  --radius: 0.125rem;
+  --radius-xs: calc(var(--radius) * 1);
+  --radius-sm: calc(var(--radius) * 2);
+  --radius-md: calc(var(--radius) * 3);
+  --radius-lg: calc(var(--radius) * 4);
+  --radius-xl: calc(var(--radius) * 6);
+  --radius-2xl: calc(var(--radius) * 8);
+  --radius-3xl: calc(var(--radius) * 12);
+  --radius-4xl: calc(var(--radius) * 16);
+
+  /* Panel-item inset: visual breathing room derived from --radius.
+     Square systems collapse to flush items; rounded systems get pill insets. */
+  --inset: calc(var(--radius) * 2);
+
+  /* Focus ring width — change to scale the focus halo of all interactive elements */
+  --ring-width: 4px;
+
   /* Shadows */
   --shadow-*: initial;
   --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);
