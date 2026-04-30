@@ -149,7 +149,7 @@ const DSConfig = () => {
                     aria-label={theme.label}
                     aria-pressed={isActive}
                     onClick={() => handleAccentClick(theme)}
-                    className="focus-visible:ring-(length:--ring-width) size-6 cursor-pointer rounded-lg outline-none ring-ring transition"
+                    className="focus-visible:ring-(length:--ring-width) size-6 cursor-pointer rounded-full outline-none ring-ring transition"
                     style={{
                       backgroundColor: theme.background,
                       opacity: isActive ? 1 : 0.5,
@@ -178,7 +178,10 @@ const DSConfig = () => {
               <Slider.Track>
                 <Slider.Range />
               </Slider.Track>
-              <Slider.Thumb />
+              <Slider.Thumb
+                aria-label="Radius"
+                aria-valuetext={`${radiusStep} pixels`}
+              />
             </Slider>
           </div>
 
@@ -200,7 +203,10 @@ const DSConfig = () => {
               <Slider.Track>
                 <Slider.Range />
               </Slider.Track>
-              <Slider.Thumb />
+              <Slider.Thumb
+                aria-label="Focus ring width"
+                aria-valuetext={`${ringWidth} pixels`}
+              />
             </Slider>
           </div>
         </div>

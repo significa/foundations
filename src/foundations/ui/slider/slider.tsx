@@ -312,13 +312,13 @@ const SliderThumb = ({
       if (sliderElement) {
         sliderElement.style.setProperty(
           '--progress-track-factor',
-          `${newValue / max}`
+          `${(newValue - min) / (max - min)}`
         );
       }
 
       onChange?.(e);
     },
-    [setValue, max, onChange]
+    [setValue, min, max, onChange]
   );
 
   return (

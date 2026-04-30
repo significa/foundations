@@ -10,18 +10,49 @@ meta:
 
 ## April 2026
 
+### Bug fix: Tabs indicator animating between pages
+
+If you are using the Tabs in your project, you should apply this fix.
+
+The selected-tab indicator uses `motion`'s `layoutId` to animate between tabs. The `layoutId` was set to `useId()`, which produces the same value (e.g., `:r0:`) for the first Tabs in any React tree. When navigating between pages that each contain a Tabs component, `motion` treated the two indicators as a shared layout and animated between them.
+
+Fix: combine `useId()` with a module-level counter so each Tabs mount has a globally-unique scope.
+
+```diff tsx
++ // Module-level counter combined with useId() to give each Tabs instance a
++ // globally-unique layout scope.
++ let tabsInstanceCounter = 0;
+
+  const Tabs = ({ ... }) => {
+-   const id = useId();
++   const reactId = useId();
++   const [id] = useState(() => `${reactId}-${++tabsInstanceCounter}`);
+    // ...
+  };
+```
+
 ### Bug fix: Slider thumb position with non-zero `min`
 
 If you are using the Slider in your project, you should apply this fix.
 
-`progressFactor` was computed as `value / max`, ignoring `min`. As a result, sliders with a non-zero `min` placed the thumb at the wrong fraction of the range.
+The progress factor was computed as `value / max`, ignoring `min`. Sliders with a non-zero `min` placed the thumb at the wrong fraction of the range. The bug was in two places — the `useMemo` for the React render path and the direct-DOM update inside `Slider.Thumb`'s `onChange`. Both need fixing.
 
 ```diff tsx
+  // Slider component
 - const progressFactor = useMemo(() => value / max, [value, max]);
 + const progressFactor = useMemo(
 +   () => (value - min) / (max - min),
 +   [value, min, max]
 + );
+
+  // SliderThumb's handleChange
+  if (sliderElement) {
+    sliderElement.style.setProperty(
+      '--progress-track-factor',
+-     `${newValue / max}`
++     `${(newValue - min) / (max - min)}`
+    );
+  }
 ```
 
 ### Semantic color tokens
@@ -78,6 +109,81 @@ Added a `--corner-shape` token (default `squircle`) and applied `corner-shape: v
 A squircle looks visually less rounded than a circle at the same `border-radius`, so derived radius tokens (`--radius-md`, `--radius-lg`, …, `--inset`) are scaled by `--radius-bump`, which is `1` by default and `1.6` under `@supports (corner-shape: squircle)`. The user-facing `--radius` dial keeps meaning "design intent" — the bump is applied internally so a given value yields comparable perceived roundness across browsers.
 
 To opt out of squircles entirely, set `--corner-shape: round` in your `:root`.
+
+### Bug fix: Tabs panels all rendering on first paint
+
+If you are using Tabs in your project, you should apply this fix.
+
+Each `TabsItem` registers itself in a `tabs` array via `useLayoutEffect`. On the initial render (SSR + hydration), the array is empty, so `tabs[index]` is `undefined` for every panel — and the matching check `selectedTab === id` becomes `undefined === undefined`, which is `true` for **every** panel. All panels rendered until hydration corrected things.
+
+Fix: wrap each panel (and each item) in an index context, and fall back to index-based matching when ids haven't been registered yet.
+
+```diff tsx
++ const PanelIndexContext = createContext<number>(0);
+
+  const TabsPanels = ({ children, ... }) => {
+    const { tabs } = useTabsContext();
+    return (
+      <div ...>
+        {Children.map(children, (child, index) => (
++         <PanelIndexContext value={index}>
+            <PanelIdContext value={tabs[index]}>{child}</PanelIdContext>
++         </PanelIndexContext>
+        ))}
+      </div>
+    );
+  };
+
+  const TabsPanel = (...) => {
+    const id = use(PanelIdContext);
++   const index = use(PanelIndexContext);
++   const { selectedTab, selectedIndex } = useTabsContext();
+-   const { selectedTab } = useTabsContext();
+-   const isSelected = selectedTab === id;
++   const isSelected =
++     id !== undefined ? selectedTab === id : index === selectedIndex;
+    // ...
+  };
+```
+
+The same pattern is applied to `TabsItems` / `TabsItem` so the active indicator renders on the right tab from the first paint instead of popping in after hydration. `selectedIndex` was added to the Tabs context for both fallbacks. See the full diff in the source for the matching trigger-side change.
+
+### Reduced motion support in Disclosure, Tabs and Toaster
+
+These three components use `motion` (Framer Motion) for animations. Motion does not respect `prefers-reduced-motion` by default; it has to be opted in. Each of the three now wraps its motion content in a `<MotionConfig reducedMotion="user">` so animations are automatically shortened when the user requests reduced motion.
+
+```diff tsx
+- import { motion } from 'motion/react';
++ import { motion, MotionConfig } from 'motion/react';
+
+  // inside the component's render
++ <MotionConfig reducedMotion="user">
+    {/* ... motion children ... */}
++ </MotionConfig>
+```
+
+`MotionConfig` only shortens animation durations — it doesn't suppress transform values like `scale` or `y`. For Toaster the exit animation `{ opacity: 0, scale: 0.8, y: '-100%' }` was snapping instantly to the scaled/translated state on dismiss, which looked jarring. Toaster now uses `useReducedMotion()` to drop the transform values entirely when reduced motion is active, leaving just an opacity change.
+
+```diff tsx
++ import { useReducedMotion } from 'motion/react';
+
+  const ToasterItem = (...) => {
++   const reduceMotion = useReducedMotion();
+    return (
+      <motion.div
+        ...
+-       initial={{ opacity: 0, scale: 0.95 }}
+-       animate={{ opacity: 1, scale: 1 }}
+-       exit={{ opacity: 0, scale: 0.8, y: '-100%' }}
++       initial={reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
++       animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
++       exit={
++         reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8, y: '-100%' }
++       }
+      />
+    );
+  };
+```
 
 ### Disclosure: `data-open` → `data-state`
 

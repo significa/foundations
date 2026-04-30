@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { MotionConfig, motion } from 'motion/react';
 import {
   Children,
   createContext,
@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils/classnames';
 interface TabsContextValue {
   id: string;
   tabs: string[];
+  selectedIndex: number;
   selectedTab: string | undefined;
   setSelectedTab: (id: string) => void;
   next: () => void;
@@ -32,6 +33,12 @@ const useTabsContext = () => {
     throw new Error('TabsContext must be used within a Tabs component');
   return context;
 };
+
+// Module-level counter combined with useId() to give each Tabs instance a
+// globally-unique layout scope. useId() alone collides across React trees (e.g.
+// across Astro view transitions), causing motion's layoutId to animate the
+// indicator between unrelated Tabs on different pages.
+let tabsInstanceCounter = 0;
 
 interface TabsProps
   extends Omit<React.ComponentPropsWithRef<'div'>, 'onChange'> {
@@ -50,7 +57,8 @@ const Tabs = ({
   children,
   ...props
 }: TabsProps) => {
-  const id = useId();
+  const reactId = useId();
+  const [id] = useState(() => `${reactId}-${++tabsInstanceCounter}`);
   const [internalSelectedIndex, setInternalSelectedIndex] = useState(
     defaultIndex ?? 0
   );
@@ -102,6 +110,7 @@ const Tabs = ({
     () => ({
       id,
       tabs,
+      selectedIndex,
       selectedTab,
       setSelectedTab,
       next,
@@ -112,6 +121,7 @@ const Tabs = ({
     [
       id,
       tabs,
+      selectedIndex,
       selectedTab,
       setSelectedTab,
       next,
@@ -123,7 +133,9 @@ const Tabs = ({
 
   return (
     <TabsContext value={ctx}>
-      <div {...props}>{children}</div>
+      <MotionConfig reducedMotion="user">
+        <div {...props}>{children}</div>
+      </MotionConfig>
     </TabsContext>
   );
 };
@@ -132,6 +144,8 @@ interface TabsItemsProps
   extends Omit<React.ComponentPropsWithRef<'div'>, 'role'> {
   children: React.ReactNode;
 }
+
+const ItemIndexContext = createContext<number>(0);
 
 const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
   const { orientation } = useTabsContext();
@@ -149,7 +163,9 @@ const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
       )}
       {...props}
     >
-      {children}
+      {Children.map(children, (child, index) => (
+        <ItemIndexContext value={index}>{child}</ItemIndexContext>
+      ))}
     </div>
   );
 };
@@ -174,9 +190,11 @@ const TabsItem = ({
   ...props
 }: TabsItemProps) => {
   const id = useId();
+  const index = use(ItemIndexContext);
   const {
     id: tabsId,
     selectedTab,
+    selectedIndex,
     setSelectedTab,
     registerTab,
     orientation,
@@ -190,7 +208,9 @@ const TabsItem = ({
     registerTab(id);
   }, [id, registerTab]);
 
-  const isSelected = selectedTab === id;
+  // Match by id once registered; fall back to index for SSR / initial render.
+  const isSelected =
+    selectedTab !== undefined ? selectedTab === id : index === selectedIndex;
 
   const handleKeyboardNavigation = (
     e: React.KeyboardEvent<HTMLButtonElement>
@@ -282,7 +302,9 @@ const TabsPanels = ({ children, className, ...props }: TabsPanelsProps) => {
       {...props}
     >
       {Children.map(children, (child, index) => (
-        <PanelIdContext value={tabs[index]}>{child}</PanelIdContext>
+        <PanelIndexContext value={index}>
+          <PanelIdContext value={tabs[index]}>{child}</PanelIdContext>
+        </PanelIndexContext>
       ))}
     </div>
   );
@@ -295,6 +317,7 @@ interface TabsPanelProps
 }
 
 const PanelIdContext = createContext<string | undefined>(undefined);
+const PanelIndexContext = createContext<number>(0);
 
 const getPanelId = (id: string | undefined) =>
   id ? `tab-panel${id}` : undefined;
@@ -306,10 +329,14 @@ const TabsPanel = ({
   ...props
 }: TabsPanelProps) => {
   const id = use(PanelIdContext);
-  const { selectedTab } = useTabsContext();
+  const index = use(PanelIndexContext);
+  const { selectedTab, selectedIndex } = useTabsContext();
   const Comp = asChild ? Slot : 'div';
 
-  const isSelected = selectedTab === id;
+  // Match by id once tabs have registered themselves; fall back to index for the
+  // initial render before useLayoutEffect runs (SSR + first client render).
+  const isSelected =
+    id !== undefined ? selectedTab === id : index === selectedIndex;
 
   return (
     <Comp

@@ -1,5 +1,10 @@
 import { CaretDownIcon } from '@phosphor-icons/react';
-import { AnimatePresence, type HTMLMotionProps, motion } from 'motion/react';
+import {
+  AnimatePresence,
+  type HTMLMotionProps,
+  MotionConfig,
+  motion,
+} from 'motion/react';
 import { createContext, use, useId, useState } from 'react';
 
 import { Slot } from '@/foundations/components/slot/slot';
@@ -85,7 +90,9 @@ const Disclosure = ({
 
   return (
     <DisclosureContext value={{ open, setOpen, id }}>
-      <div {...props}>{children}</div>
+      <MotionConfig reducedMotion="user">
+        <div {...props}>{children}</div>
+      </MotionConfig>
     </DisclosureContext>
   );
 };
