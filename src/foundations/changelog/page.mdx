@@ -10,6 +10,41 @@ meta:
 
 ## April 2026
 
+### New: `<Field>` component (and removal of standalone `<Label>`)
+
+Foundations now ships a [`Field`](/ui/field) component that wires labels, descriptions and errors to form controls without forking every primitive. Wrap your input in `<Field.Control>` and the right `id` / `aria-labelledby` / `aria-describedby` / `aria-invalid` attributes get injected via [Slot](/components/slot). Multiple descriptions and conditional errors compose into one `aria-describedby` automatically.
+
+```tsx
+<Field invalid={!!errors.email}>
+  <Field.Label>Email</Field.Label>
+  <Field.Control>
+    <Input type="email" {...register('email')} />
+  </Field.Control>
+  <Field.Description>We'll never share it.</Field.Description>
+  <Field.Error>{errors.email?.message}</Field.Error>
+</Field>
+```
+
+The base form primitives (Input, Textarea, Checkbox, Radio, Select, Switch) stay dumb — they don't know about Field. When you want accessible wiring, you opt in by wrapping. When you don't, native form controls work as-is.
+
+This **replaces the standalone `<Label>` component**, which was a thin wrapper over `<label>` with default styling. `Field.Label` ports the same styling, so consumer copies have a clean migration path:
+
+```diff tsx
+- import { Label } from '@/foundations/ui/label/label';
+- <Label htmlFor={id}>Email</Label>
+- <Input id={id} {...} />
+
++ import { Field } from '@/foundations/ui/field/field';
++ <Field>
++   <Field.Label>Email</Field.Label>
++   <Field.Control><Input {...} /></Field.Control>
++ </Field>
+```
+
+If you used `<Label>` outside any form context (rare), a native `<label className="font-medium text-base text-foreground">` is the drop-in replacement.
+
+This also **replaces the previous `accessible-forms` guide**, which required forking every form primitive to consume a `useField()` hook. The educational content (ARIA reasoning, custom-select caveat, RadioGroup nesting pattern) has been ported to the new component's docs page.
+
 ### Bug fix: Tabs indicator animating between pages
 
 If you are using the Tabs in your project, you should apply this fix.
