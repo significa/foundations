@@ -12,11 +12,8 @@ Some items will be impossible to do until there is decent baseline support for t
 
 ## Missing components
 
-- [ ] Pagination
-- [ ] Breadcrumb
 - [ ] Toggle Button
 - [ ] File upload
 - [ ] CMD K
-- [ ] Kbd
 - [ ] Data Table
 - [ ] Spinner variants. Instead of doing just the same spinning circle, we should move into having a Loader with more options. Pulsing dots, plain ascii, etc. We can have interesting variants that can fit better with different design systems.
