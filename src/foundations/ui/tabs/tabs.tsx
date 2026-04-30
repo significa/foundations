@@ -13,6 +13,8 @@ import {
 import { Slot } from '@/foundations/components/slot/slot';
 import { cn } from '@/lib/utils/classnames';
 
+type TabsVariant = 'pill' | 'underline';
+
 interface TabsContextValue {
   id: string;
   tabs: string[];
@@ -22,6 +24,7 @@ interface TabsContextValue {
   next: () => void;
   previous: () => void;
   orientation: 'horizontal' | 'vertical';
+  variant: TabsVariant;
   registerTab: (id: string) => () => void;
 }
 
@@ -46,6 +49,7 @@ interface TabsProps
   selectedIndex?: number;
   onChange?: (index: number) => void;
   orientation?: TabsContextValue['orientation'];
+  variant?: TabsVariant;
   children: React.ReactNode;
 }
 
@@ -54,6 +58,7 @@ const Tabs = ({
   selectedIndex: selectedIndexProp,
   onChange: onChangeProp,
   orientation = 'horizontal',
+  variant = 'pill',
   children,
   ...props
 }: TabsProps) => {
@@ -116,6 +121,7 @@ const Tabs = ({
       next,
       previous,
       orientation,
+      variant,
       registerTab,
     }),
     [
@@ -127,6 +133,7 @@ const Tabs = ({
       next,
       previous,
       orientation,
+      variant,
       registerTab,
     ]
   );
@@ -148,17 +155,22 @@ interface TabsItemsProps
 const ItemIndexContext = createContext<number>(0);
 
 const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
-  const { orientation } = useTabsContext();
+  const { orientation, variant } = useTabsContext();
 
   return (
     <div
       role="tablist"
       aria-orientation={orientation}
       className={cn(
-        'flex gap-1.5',
+        'flex',
+        variant === 'pill' && 'gap-1.5',
         orientation === 'horizontal'
-          ? 'items-center pb-4'
-          : 'flex-col items-start pr-4',
+          ? variant === 'pill'
+            ? 'items-center pb-4'
+            : 'mb-4 items-center border-border border-b'
+          : variant === 'pill'
+            ? 'flex-col items-start pr-4'
+            : 'mr-4 flex-col items-start border-border border-r',
         className
       )}
       {...props}
@@ -198,6 +210,7 @@ const TabsItem = ({
     setSelectedTab,
     registerTab,
     orientation,
+    variant,
     next,
     previous,
   } = useTabsContext();
@@ -246,7 +259,10 @@ const TabsItem = ({
       id={getItemId(id)}
       type="button"
       className={cn(
-        'focus-visible:ring-(length:--ring-width) relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground data-selected:text-foreground',
+        'focus-visible:ring-(length:--ring-width) relative flex cursor-pointer items-center justify-center gap-1.5 px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground data-selected:text-foreground',
+        variant === 'pill' && 'rounded-xl',
+        variant === 'underline' &&
+          (orientation === 'horizontal' ? '-mb-px' : '-mr-px'),
         '[&>*:not([data-tab-indicator])]:z-10',
         className
       )}
@@ -277,7 +293,14 @@ const TabsItem = ({
           data-tab-indicator="true"
           layoutId={tabsId}
           aria-hidden="true"
-          className="absolute inset-0 z-0 rounded-xl bg-background-secondary"
+          className={cn(
+            'absolute z-0',
+            variant === 'pill' && 'inset-0 rounded-xl bg-background-secondary',
+            variant === 'underline' &&
+              (orientation === 'horizontal'
+                ? 'right-0 bottom-0 left-0 h-0.5 bg-accent'
+                : 'top-0 right-0 bottom-0 w-0.5 bg-accent')
+          )}
           transition={{ type: 'spring', duration: 0.3, bounce: 0.2 }}
         />
       )}

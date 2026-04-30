@@ -110,6 +110,25 @@ A squircle looks visually less rounded than a circle at the same `border-radius`
 
 To opt out of squircles entirely, set `--corner-shape: round` in your `:root`.
 
+### Tabs: new `underline` variant
+
+Tabs now accepts a `variant` prop — `pill` (default, current behavior) or `underline`. The underline variant uses a thin accent-colored line under the active trigger instead of the filled-pill indicator. The active-tab `motion.span` with `layoutId` is shared between variants, so the indicator still animates between triggers either way.
+
+```tsx
+<Tabs variant="underline">
+  <Tabs.Items>
+    <Tabs.Item>One</Tabs.Item>
+    <Tabs.Item>Two</Tabs.Item>
+  </Tabs.Items>
+  <Tabs.Panels>
+    <Tabs.Panel>...</Tabs.Panel>
+    <Tabs.Panel>...</Tabs.Panel>
+  </Tabs.Panels>
+</Tabs>
+```
+
+Default is `pill`, so existing usages are unaffected.
+
 ### Bug fix: Tabs panels all rendering on first paint
 
 If you are using Tabs in your project, you should apply this fix.
