@@ -1,0 +1,148 @@
+---
+title: OTP Input
+description: A composable OTP field where each cell is a real input, managed by a shared root.
+preview: otp-input
+files:
+  - src/foundations/ui/otp-input/otp-input.tsx
+dependencies:
+  - name: inputStyle
+    href: /ui/input
+  - name: composeRefs
+    href: /utils/compose-refs
+  - name: InstanceCounter
+    href: /components/instance-counter
+folder: UI
+---
+
+Each cell is a real `<input>` element. The root manages all state, keyboard navigation, and focus logic — cells and separators are purely presentational, composed freely as children.
+
+## Anatomy
+
+```tsx
+<OTPInput>
+  <OTPInput.Hidden name="otp" />
+  <OTPInput.Cell />
+  <OTPInput.Divider />
+  <OTPInput.Cell />
+</OTPInput>
+```
+
+## API Reference
+
+### OTPInput
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    value: {
+      type: "string",
+      description: "The controlled value of the OTP input.",
+    },
+    defaultValue: {
+      type: "string",
+      description: "The initial value when used as an uncontrolled component.",
+    },
+    onChange: {
+      type: "(value: string) => void",
+      description: "Callback fired on every change.",
+    },
+    onFill: {
+      type: "(value: string) => void",
+      description:
+        "Callback fired when all cells are filled via paste or autofill. Does not fire on character-by-character typing.",
+    },
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+      description: "The size applied to all cells.",
+    },
+    inputMode: {
+      type: "React.HTMLAttributes<HTMLInputElement>['inputMode']",
+      default: '"numeric"',
+      description: 'The inputMode applied to all cells. Use "text" for alphanumeric codes.',
+    },
+    placeholder: {
+      type: "string",
+      description: "Placeholder character shown in each empty cell.",
+    },
+    masked: {
+      type: "boolean",
+      description: "Whether to mask the entered values like a password field.",
+    },
+    disabled: {
+      type: "boolean",
+      description: "Whether all cells are disabled.",
+    },
+    invalid: {
+      type: "boolean",
+      description: "Whether the input is in an invalid state.",
+    },
+  }}
+/>
+
+### OTPInput.Hidden
+
+Extends the `input` element, omitting `type` and `value` which are managed internally. Only needed when the OTP field is inside a `<form>`.
+
+### OTPInput.Cell
+
+Extends the `input` element.
+
+### OTPInput.Divider
+
+Extends the `div` element. Renders an em dash by default, overridable via `children`.
+
+## Examples
+
+### Simple
+
+<Preview slug="otp-input" />
+
+### With Divider
+
+Use `OTPInput.Divider` to visually split cells into groups. It renders an em dash by default but accepts any `children`.
+
+<Preview slug="otp-input-separator" />
+
+### With Label
+
+Pass `id` to `OTPInput` and the same value as `htmlFor` on the `Label`. The id is automatically forwarded to the first cell, so clicking the label focuses it.
+
+<Preview slug="otp-input-label" />
+
+### Placeholder
+
+A single character shown in empty cells via the native `placeholder` attribute.
+
+<Preview slug="otp-input-placeholder" />
+
+### Masked
+
+Switches each cell to `type="password"` so entered characters are hidden.
+
+<Preview slug="otp-input-masked" />
+
+### Alphanumeric
+
+Set `inputMode="text"` for codes that include letters. This switches the mobile keyboard to the full keyboard and lifts the digit-only restriction.
+
+<Preview slug="otp-input-alphanumeric" />
+
+### Disabled
+
+<Preview slug="otp-input-disabled" />
+
+### Invalid
+
+<Preview slug="otp-input-invalid" />
+
+### Form
+
+Use `OTPInput.Hidden` inside a `<form>` to expose the value as a named field for native form submission.
+
+<Preview slug="otp-input-form" />
+
+### Password Manager
+
+<Preview slug="otp-input-password-manager" />

@@ -1,4 +1,4 @@
-import { MinusIcon, PlusIcon } from '@phosphor-icons/react';
+import { MinusIcon, PlusIcon } from '@phosphor-icons/react/dist/ssr';
 import { useState } from 'react';
 
 import { Marquee } from '@/foundations/components/marquee/marquee';

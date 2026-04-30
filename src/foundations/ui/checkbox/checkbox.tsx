@@ -10,7 +10,7 @@ interface CheckboxProps
 
 const checkboxStyle = cva({
   base: [
-    'relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-sm border border-border bg-background shadow-xs outline-none ring-ring transition focus-visible:ring-4 enabled:cursor-pointer enabled:not-checked:hover:border-mix-border/8',
+    'focus-visible:ring-(length:--ring-width) relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-sm border border-border bg-background shadow-xs outline-none ring-ring transition enabled:cursor-pointer enabled:not-checked:hover:border-mix-border/8',
     // checked
     'checked:enabled:hover:mix-with-accent-foreground checked:enabled:border-accent checked:enabled:bg-accent checked:enabled:hover:border-mix-accent/8',
     // indeterminate

@@ -10,7 +10,7 @@ const buttonStyle = cva({
     'relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium text-(--button-text-color) shadow-xs [--button-text-color:var(--color-foreground)]',
     'transition enabled:cursor-pointer disabled:opacity-40',
     'active:not-in-data-ui-button-group:scale-98',
-    'ring-ring focus-visible:outline-none focus-visible:ring-4',
+    'focus-visible:ring-(length:--ring-width) ring-ring focus-visible:outline-none',
     // inside button group
     'in-data-ui-button-group:not-last:rounded-r-none in-data-ui-button-group:not-last:border-r-0',
     'in-data-ui-button-group:not-first:rounded-l-none in-data-ui-button-group:not-first:border-l-0',
@@ -24,7 +24,7 @@ const buttonStyle = cva({
       ghost:
         'border-none bg-transparent shadow-none ring-0 hover:bg-foreground/5 in-data-ui-button-group:active:bg-foreground/10',
       destructive:
-        'bg-red-600 ring-red-600/50 [--button-text-color:var(--color-white)] hover:bg-red-700',
+        'bg-error ring-error/50 [--button-text-color:var(--color-white)] hover:bg-error/90',
     },
     size: {
       xs: 'rounded-lg px-2 text-sm [--button-height:--spacing(6)]',

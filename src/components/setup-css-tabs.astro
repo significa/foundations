@@ -1,0 +1,9 @@
+---
+import { SetupCssTabs } from "./setup-css-tabs";
+import SourceCode from "./source-code.astro";
+---
+
+<SetupCssTabs client:load>
+  <SourceCode slot="autoSlot" file="src/foundations/setup/globals-prefers-schema.css" />
+  <SourceCode slot="switcherSlot" file="src/foundations/setup/globals-data-attr.css" />
+</SetupCssTabs>
