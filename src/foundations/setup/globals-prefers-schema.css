@@ -22,6 +22,11 @@
     color-mix(in oklab, var(--color-accent) 30%, transparent)
   );
 
+  --color-error: oklch(63.7% 0.237 25.331);
+  --color-warning: oklch(79.5% 0.184 86.047);
+  --color-success: oklch(69.6% 0.17 162.48);
+  --color-info: oklch(62.3% 0.214 259.815);
+
   /* Shadows */
   --shadow-*: initial;
   --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);

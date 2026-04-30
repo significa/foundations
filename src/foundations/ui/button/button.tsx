@@ -24,7 +24,7 @@ const buttonStyle = cva({
       ghost:
         'border-none bg-transparent shadow-none ring-0 hover:bg-foreground/5 in-data-ui-button-group:active:bg-foreground/10',
       destructive:
-        'bg-red-600 ring-red-600/50 [--button-text-color:var(--color-white)] hover:bg-red-700',
+        'bg-error ring-error/50 [--button-text-color:var(--color-white)] hover:bg-error/90',
     },
     size: {
       xs: 'rounded-lg px-2 text-sm [--button-height:--spacing(6)]',

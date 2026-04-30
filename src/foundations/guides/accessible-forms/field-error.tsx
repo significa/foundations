@@ -26,7 +26,7 @@ const FieldError = ({
 
   return (
     <p
-      className={cn('font-medium text-base text-red-500', className)}
+      className={cn('font-medium text-base text-error', className)}
       id={id}
       role="alert"
       {...props}

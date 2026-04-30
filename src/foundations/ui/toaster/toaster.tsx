@@ -226,8 +226,9 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
       className={cn(
         'relative flex max-w-88 items-center gap-2 rounded-lg border p-3 pl-4 shadow-lg',
         variant === 'default' && 'border-border bg-background',
-        variant === 'positive' && 'border-green-200 bg-green-50 text-green-900',
-        variant === 'negative' && 'border-red-200 bg-red-50 text-red-900'
+        variant === 'positive' &&
+          'border-success/20 bg-success/10 text-success',
+        variant === 'negative' && 'border-error/20 bg-error/10 text-error'
       )}
       role="status"
       aria-live="polite"
@@ -259,7 +260,7 @@ const ToastCloseButton = ({
       className={cn(
         'relative mb-auto flex size-6 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-sm border-inherit bg-inherit',
         'ring-ring focus-visible:outline-none focus-visible:ring-4',
-        'after:absolute after:inset-0 after:bg-[currentColor] after:opacity-0 hover:after:opacity-4 active:after:opacity-8'
+        'after:absolute after:inset-0 after:bg-current after:opacity-0 hover:after:opacity-4 active:after:opacity-8'
       )}
     >
       <XIcon className="size-3 opacity-50" />
