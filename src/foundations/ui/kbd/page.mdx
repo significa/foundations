@@ -1,0 +1,81 @@
+---
+title: Kbd
+description: A keyboard key indicator for displaying shortcuts and key bindings.
+preview: kbd
+files:
+  - src/foundations/ui/kbd/kbd.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+
+folder: UI
+---
+
+## Anatomy
+
+```tsx
+<Kbd />
+
+<Kbd.Group>
+  <Kbd />
+  <Kbd />
+</Kbd.Group>
+```
+
+## API Reference
+
+### Kbd
+
+Extends the `kbd` element.
+
+<PropsTable
+  definition={{
+    size: {
+      default: '"md"',
+      type: ['"sm"', '"md"', '"lg"'],
+    },
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### Kbd.Group
+
+Extends the `span` element. Wraps multiple `Kbd`s with consistent spacing and alignment so they read as a single shortcut.
+
+## Examples
+
+### Sizes
+
+<Preview slug="kbd-sizes" />
+
+### Inline in text
+
+<Preview slug="kbd-inline" />
+
+## OS-aware shortcuts
+
+`Kbd` is a presentational element — it renders whatever you put inside. For OS-aware rendering (`⌘` on macOS, `Ctrl` elsewhere), detect the platform once at the top of your tree and pass the right symbol:
+
+```tsx
+const isMac = typeof navigator !== "undefined" && navigator.platform.toLowerCase().includes("mac");
+const modKey = isMac ? "⌘" : "Ctrl";
+
+<Kbd.Group>
+  <Kbd>{modKey}</Kbd>
+  <Kbd>K</Kbd>
+</Kbd.Group>;
+```
+
+Common Mac glyphs: `⌘` Command, `⌥` Option, `⌃` Control, `⇧` Shift, `⏎` Return, `⌫` Delete, `⎋` Escape, `⇥` Tab.
+
+## Best Practices
+
+1. **Usage**:
+   - Wrap multi-key shortcuts in `Kbd.Group` so spacing and alignment stay consistent.
+   - Keep contents to a single key or short label (`Esc`, `Tab`) — long words should be regular text.
+
+2. **Accessibility**:
+   - The `<kbd>` element is read by screen readers as keyboard input. Don't override the role.
+   - Provide written context next to the shortcut so it's discoverable without sight (e.g., "Press ⌘K to search").
