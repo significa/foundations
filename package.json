@@ -16,7 +16,8 @@
     "types:check": "astro sync && tsc -noEmit",
     "format": "biome format --write . && prettier --list-different --write \"**/*.astro\"",
     "lint": "biome lint --write --unsafe .",
-    "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check"
+    "check:deps": "node scripts/check-page-deps.mjs",
+    "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check && pnpm check:deps"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.2",

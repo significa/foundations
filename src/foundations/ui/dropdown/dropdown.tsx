@@ -253,7 +253,7 @@ const DropdownItem = ({
       disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
-        'relative mx-1 flex w-[calc(100%-calc(var(--spacing)*2))] cursor-pointer select-none items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium text-base text-foreground/80 outline-none first-of-type:mt-1 last-of-type:mb-1 data-disabled:pointer-events-none data-highlighted:bg-background-secondary data-disabled:opacity-50',
+        'relative mx-(--inset) flex w-[calc(100%-calc(var(--inset)*2))] cursor-pointer select-none items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium text-base text-foreground/80 outline-none first-of-type:mt-(--inset) last-of-type:mb-(--inset) data-disabled:pointer-events-none data-highlighted:bg-background-secondary data-disabled:opacity-50',
         className
       )}
       {...getItemProps({

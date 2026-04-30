@@ -1,4 +1,4 @@
-import { InfoIcon } from '@phosphor-icons/react';
+import { InfoIcon } from '@phosphor-icons/react/dist/ssr';
 import { useRef } from 'react';
 
 import { Input } from '@/foundations/ui/input/input';

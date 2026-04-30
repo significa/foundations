@@ -40,14 +40,11 @@ Foundations is an opinionated collection of components, patterns, and guidelines
    pnpm install
    ```
 
-4. **Set up environment variables:**
+4. **Set up environment variables (optional):**
 
-   Create a `.env` file at the root:
+   The project ships with no required environment variables. PostHog analytics is the only thing that uses them, and if `POSTHOG_KEY` / `POSTHOG_HOST` aren't set, the analytics init is skipped at runtime — local development works without a `.env` file.
 
-   ```bash
-   POSTHOG_KEY=...
-   POSTHOG_HOST=...
-   ```
+   To enable analytics, copy `.env.example` to `.env` and fill in real values.
 
 5. **Start the dev server:**
 
@@ -56,6 +53,8 @@ Foundations is an opinionated collection of components, patterns, and guidelines
    ```
 
    The site will be available at `http://localhost:4321`.
+
+   > Search uses [Pagefind](https://pagefind.app), which indexes the production HTML. `pnpm dev` does not index — open the search dialog and you'll see a hint to run `pnpm dev:pagefind` instead, which builds, indexes into `public/pagefind/`, and starts the dev server. Subsequent `pnpm dev` runs reuse that index until you wipe `public/pagefind/`.
 
 ---
 
@@ -121,7 +120,7 @@ A preview file can optionally export a `meta` object to control how it is displa
 | `pnpm lint`         | Run Biome linter with auto-fix (including unsafe fixes)              |
 | `pnpm check`        | Full CI check: Biome CI + Prettier check on `.astro` + type checking |
 
-> **Note:** The `pnpm dev` command does not run Pagefind, so the search feature won't work in development unless you run `pnpm dev:pagefind`. See the [Pagefind](#pagefind) section for details.
+> **Note:** `pnpm dev` does not index Pagefind, so the search dialog will show a "Could not load Pagefind instance" message. Run `pnpm dev:pagefind` once to build the index — subsequent `pnpm dev` runs will pick it up from `public/pagefind/`.
 
 ---
 

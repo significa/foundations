@@ -17,9 +17,9 @@ const Switch = ({
         // checked
         'checked:bg-foreground checked:before:translate-x-full',
         // focus
-        'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring',
+        'focus-visible:ring-(length:--ring-width) focus-visible:outline-none focus-visible:ring-ring',
         // stretch animation
-        'before:origin-left active:before:scale-x-110 active:before:rounded-[calc(var(--spacing)*2.25)] active:checked:before:origin-right',
+        'before:origin-left active:before:scale-x-110 active:before:rounded-[--spacing(2.25)] active:checked:before:origin-right',
         className
       )}
       {...props}

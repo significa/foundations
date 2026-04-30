@@ -1,0 +1,125 @@
+---
+title: Field
+description: Wires labels, descriptions and errors to form controls with the right ARIA attributes.
+preview: field
+files:
+  - src/foundations/ui/field/field.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+
+folder: UI
+---
+
+## Overview
+
+`Field` is the connective tissue between a label, a control, a description and an error. It wires the right `id` / `aria-labelledby` / `aria-describedby` / `aria-invalid` attributes onto the control without you having to keep track of ids by hand, and without forking every form primitive to consume a context.
+
+The base form components (`Input`, `Textarea`, `Checkbox`, `Radio`, `Select`, `Switch`) stay dumb on purpose — they don't know about `Field`. When you want accessible wiring, you reach for `Field`. When you don't, native form controls work as-is.
+
+## Anatomy
+
+```tsx
+<Field>
+  <Field.Label />
+  <Field.Control>
+    <input />
+  </Field.Control>
+  <Field.Description />
+  <Field.Error />
+</Field>
+```
+
+`Field.Control` is a [Slot](/components/slot) that injects ARIA attrs into its single child. The child can be any form control that spreads its props — Foundations primitives like [Input](/ui/input), [Textarea](/ui/textarea), [Checkbox](/ui/checkbox), [Radio](/ui/radio), [Select](/ui/select) and [Switch](/ui/switch) all work directly.
+
+## API Reference
+
+### Field
+
+The root component. Provides context for the rest, generates `id`s, and lays its children out as a flex column with a small gap so you don't have to add spacing by hand.
+
+<PropsTable
+  definition={{
+    invalid: {
+      type: "boolean",
+      description:
+        "Marks the wrapped control as invalid. `aria-invalid` is set on the control and `data-invalid` on the root for styling. Wire this to your validation source — RHF, Zod, server response, plain useState. Field doesn't care.",
+    },
+    className: {
+      type: "string",
+      description: "Forwarded to the root `<div>`.",
+    },
+  }}
+/>
+
+### Field.Label
+
+A `<label>` with `htmlFor` and `id` taken from context.
+
+### Field.Control
+
+Wraps its single child (a form control) and injects `id`, `aria-labelledby`, `aria-describedby` and `aria-invalid`.
+
+### Field.Description
+
+Renders a `<p>` and registers its `id` into the field's `aria-describedby` array. You can render multiple descriptions — they'll all be linked.
+
+### Field.Error
+
+Same as `Field.Description`, but only renders (and only registers) when its `children` are truthy. Adds `role="alert"` so screen readers announce changes. Pair with `invalid` on the root for the full picture.
+
+## ARIA reasoning
+
+Every relationship is expressed via attributes a screen reader actually consumes:
+
+- `<label htmlFor>` and `aria-labelledby` both point to the label, giving screen readers a name for the control on focus.
+- `aria-describedby` carries a space-separated list of message ids — both descriptions and errors. When an error appears or disappears, its id is added to or removed from the list automatically.
+- `aria-invalid` flips on when `invalid={true}`.
+
+We use `aria-describedby` for errors instead of `aria-errormessage` deliberately. `aria-errormessage` has weaker screen-reader support (especially older versions of NVDA and JAWS) and the mental model is simpler with one list of messages — descriptions and errors compose the same way.
+
+## Examples
+
+### Basic
+
+A label, an input and a description.
+
+<Preview slug="field" />
+
+### With error
+
+The error appears (and registers itself in `aria-describedby`) only while validation fails.
+
+<Preview slug="field-error" />
+
+### Radio group
+
+Native `<fieldset>` and `<legend>` group the radios; one `Field` per option carries the per-option label and description. The radio's name attribute keeps them mutually exclusive.
+
+<Preview slug="field-radio-group" />
+
+### With React Hook Form
+
+Pass `!!errors.x` to `invalid` and `errors.x?.message` as `Field.Error` children. That's the entire integration. The same pattern works with TanStack Form, Formik, or your own `useState`-driven validation.
+
+<Preview slug="field-with-rhf" />
+
+## Caveats
+
+### Components that aren't a single form control
+
+`Field.Control` injects props onto a single child. That works for native inputs and Foundations primitives that wrap them. It doesn't work cleanly for compound primitives where the actual control isn't the root element:
+
+- **Slider** — the form control is `Slider.Thumb` (a native `<input type="range">`). Wrap that, not the root.
+- **OTP Input** — the root is a container; the inputs are the cells.
+- **Listbox** — its trigger is a `<button>` whose attributes are managed by floating-ui, not the rendered DOM at the top of the tree.
+
+For these, either keep them outside `Field` or wire ARIA manually with the ids you control.
+
+### Custom selects
+
+If you build a custom select on top of a `<button>` (rather than the native `<select>`), avoid `aria-invalid` and treating it as a form control for validation purposes — those attributes are reserved for elements that have a native `validity` state. Use the native `<select>` (which Foundations exports) when you need form-validation semantics.
+
+### Don't override `id` / `aria-*` on `Field.Control`'s child
+
+`Field.Control` uses [Slot](/components/slot), which lets the child's explicit props override the injected ones. If you write `<Field.Control><Input id="custom" /></Field.Control>`, your `id` wins — and `Field.Label`'s `htmlFor` will no longer match. That's the explicit override path; reserve it for the rare case where you genuinely need a fixed id.

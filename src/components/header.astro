@@ -1,6 +1,6 @@
 ---
 import { ListIcon, XIcon } from "@phosphor-icons/react";
-import { ColorAccentSelect } from "@/components/color-accent-select";
+import { DSConfig } from "@/components/ds-config";
 import { Egg, Octocat } from "@/components/icons";
 import { Search } from "@/components/search";
 import ThemeSwitcher from "@/components/theme-switcher.astro";
@@ -43,7 +43,7 @@ import { GITHUB_REPO_URL } from "@/lib/constants";
         </a>
       </Button>
       <ThemeSwitcher />
-      <ColorAccentSelect client:idle transition:persist />
+      <DSConfig client:idle transition:persist />
     </div>
   </div>
 </header>

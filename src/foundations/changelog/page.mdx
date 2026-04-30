@@ -8,9 +8,263 @@ meta:
   order: 99
 ---
 
+## April 2026
+
+### Fixed: Tabs indicator animating between pages
+
+If you are using the Tabs in your project, you should apply this fix.
+
+The selected-tab indicator uses `motion`'s `layoutId` to animate between tabs. The `layoutId` was set to `useId()`, which produces the same value (e.g., `:r0:`) for the first Tabs in any React tree. When navigating between pages that each contain a Tabs component, `motion` treated the two indicators as a shared layout and animated between them.
+
+Fix: combine `useId()` with a module-level counter so each Tabs mount has a globally-unique scope.
+
+```diff tsx
++ // Module-level counter combined with useId() to give each Tabs instance a
++ // globally-unique layout scope.
++ let tabsInstanceCounter = 0;
+
+  const Tabs = ({ ... }) => {
+-   const id = useId();
++   const reactId = useId();
++   const [id] = useState(() => `${reactId}-${++tabsInstanceCounter}`);
+    // ...
+  };
+```
+
+### Fixed: Tabs panels all rendering on first paint
+
+If you are using Tabs in your project, you should apply this fix.
+
+Each `TabsItem` registers itself in a `tabs` array via `useLayoutEffect`. On the initial render (SSR + hydration), the array is empty, so `tabs[index]` is `undefined` for every panel — and the matching check `selectedTab === id` becomes `undefined === undefined`, which is `true` for **every** panel. All panels rendered until hydration corrected things.
+
+Fix: wrap each panel (and each item) in an index context, and fall back to index-based matching when ids haven't been registered yet.
+
+```diff tsx
++ const PanelIndexContext = createContext<number>(0);
+
+  const TabsPanels = ({ children, ... }) => {
+    const { tabs } = useTabsContext();
+    return (
+      <div ...>
+        {Children.map(children, (child, index) => (
++         <PanelIndexContext value={index}>
+            <PanelIdContext value={tabs[index]}>{child}</PanelIdContext>
++         </PanelIndexContext>
+        ))}
+      </div>
+    );
+  };
+
+  const TabsPanel = (...) => {
+    const id = use(PanelIdContext);
++   const index = use(PanelIndexContext);
++   const { selectedTab, selectedIndex } = useTabsContext();
+-   const { selectedTab } = useTabsContext();
+-   const isSelected = selectedTab === id;
++   const isSelected =
++     id !== undefined ? selectedTab === id : index === selectedIndex;
+    // ...
+  };
+```
+
+The same pattern is applied to `TabsItems` / `TabsItem` so the active indicator renders on the right tab from the first paint instead of popping in after hydration. `selectedIndex` was added to the Tabs context for both fallbacks. See the full diff in the source for the matching trigger-side change.
+
+### Fixed: Slider thumb position with non-zero `min`
+
+If you are using the Slider in your project, you should apply this fix.
+
+The progress factor was computed as `value / max`, ignoring `min`. Sliders with a non-zero `min` placed the thumb at the wrong fraction of the range. The bug was in two places — the `useMemo` for the React render path and the direct-DOM update inside `Slider.Thumb`'s `onChange`. Both need fixing.
+
+```diff tsx
+  // Slider component
+- const progressFactor = useMemo(() => value / max, [value, max]);
++ const progressFactor = useMemo(
++   () => (value - min) / (max - min),
++   [value, min, max]
++ );
+
+  // SliderThumb's handleChange
+  if (sliderElement) {
+    sliderElement.style.setProperty(
+      '--progress-track-factor',
+-     `${newValue / max}`
++     `${(newValue - min) / (max - min)}`
+    );
+  }
+```
+
+### Added: `<Field>` component (and removal of standalone `<Label>`)
+
+Foundations now ships a [`Field`](/ui/field) component that wires labels, descriptions and errors to form controls without forking every primitive. Wrap your input in `<Field.Control>` and the right `id` / `aria-labelledby` / `aria-describedby` / `aria-invalid` attributes get injected via [Slot](/components/slot). Multiple descriptions and conditional errors compose into one `aria-describedby` automatically.
+
+```tsx
+<Field invalid={!!errors.email}>
+  <Field.Label>Email</Field.Label>
+  <Field.Control>
+    <Input type="email" {...register('email')} />
+  </Field.Control>
+  <Field.Description>We'll never share it.</Field.Description>
+  <Field.Error>{errors.email?.message}</Field.Error>
+</Field>
+```
+
+The base form primitives (Input, Textarea, Checkbox, Radio, Select, Switch) stay dumb — they don't know about Field. When you want accessible wiring, you opt in by wrapping. When you don't, native form controls work as-is.
+
+This **replaces the standalone `<Label>` component**, which was a thin wrapper over `<label>` with default styling. `Field.Label` ports the same styling, so consumer copies have a clean migration path:
+
+```diff tsx
+- import { Label } from '@/foundations/ui/label/label';
+- <Label htmlFor={id}>Email</Label>
+- <Input id={id} {...} />
+
++ import { Field } from '@/foundations/ui/field/field';
++ <Field>
++   <Field.Label>Email</Field.Label>
++   <Field.Control><Input {...} /></Field.Control>
++ </Field>
+```
+
+If you used `<Label>` outside any form context (rare), a native `<label className="font-medium text-base text-foreground">` is the drop-in replacement.
+
+This also **replaces the previous `accessible-forms` guide**, which required forking every form primitive to consume a `useField()` hook. The educational content (ARIA reasoning, custom-select caveat, RadioGroup nesting pattern) has been ported to the new component's docs page.
+
+### Added: semantic color tokens
+
+Added `--color-error`, `--color-warning`, `--color-success` and `--color-info` to the theme. Components that previously hardcoded `red-*`, `emerald-*`, `yellow-*` and `blue-*` (Badge, Toaster, Button's `destructive` variant, Input's invalid state) now use these tokens. Updating a semantic color is a one-line change instead of a find-and-replace across files.
+
+```diff tsx
+- 'bg-red-500/10 text-red-600 ring-red-600/20'
++ 'bg-error/10 text-error ring-error/20'
+```
+
+### Added: configurable border radius
+
+The `--radius` custom property is now the dial that controls the system's roundness. Named radius tokens are derived from it:
+
+```css
+--radius: 0.125rem;
+--radius-xs: calc(var(--radius) * 1);
+--radius-sm: calc(var(--radius) * 2);
+--radius-md: calc(var(--radius) * 3);
+--radius-lg: calc(var(--radius) * 4);
+--radius-xl: calc(var(--radius) * 6);
+--radius-2xl: calc(var(--radius) * 8);
+--radius-3xl: calc(var(--radius) * 12);
+--radius-4xl: calc(var(--radius) * 16);
+```
+
+Default values match Tailwind's defaults exactly, so existing components render identically. Change `--radius` and the entire system scales proportionally.
+
+### Added: `--inset` token for panel-item breathing room
+
+A new `--inset: calc(var(--radius) * 2)` token controls the breathing room between panel items and their container edges. Square systems (`--radius: 0`) collapse to flush items; rounded systems get pill insets that follow the outer curve.
+
+Dropdown items and Listbox options use it via `mx-(--inset)` and stay curve-correct at any radius.
+
+### Added: configurable focus ring width
+
+Added `--ring-width` (default `4px`). All primitives now use `ring-(length:--ring-width)` instead of hardcoded `ring-4`, so the focus halo can be tuned in one place.
+
+```diff tsx
+- 'focus-visible:ring-4 ring-ring'
++ 'focus-visible:ring-(length:--ring-width) ring-ring'
+```
+
+### Changed: Slider visual polish
+
+- Track now spans the full slider width to align visually with surrounding content. This means the thumb doesn't _exactly_ track the track progress but the drift should be minimal and non-consequential.
+- Thumb styled with `bg-background`, border and `shadow-xs` to match Input and Dropdown.
+
+### Added: squircle corners (progressive enhancement)
+
+Added a `--corner-shape` token (default `squircle`) and applied `corner-shape: var(--corner-shape)` globally. Where the browser supports the [`corner-shape`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/corner-shape) property (currently Chrome), all rounded elements render as iOS-style superellipses. Other browsers ignore the declaration and fall back to the standard circular `border-radius`. `.rounded-full` is opted out so circles stay circles.
+
+A squircle looks visually less rounded than a circle at the same `border-radius`, so derived radius tokens (`--radius-md`, `--radius-lg`, …, `--inset`) are scaled by `--radius-bump`, which is `1` by default and `1.6` under `@supports (corner-shape: squircle)`. The user-facing `--radius` dial keeps meaning "design intent" — the bump is applied internally so a given value yields comparable perceived roundness across browsers.
+
+To opt out of squircles entirely, set `--corner-shape: round` in your `:root`.
+
+### Changed: Calendar accessibility (WAI-ARIA grid pattern)
+
+The Calendar now follows the WAI-ARIA grid pattern:
+
+- The day grid (and the months/years overview grids) get `role="grid"` with a context-aware `aria-label` (e.g., `"March 2026"`, `"Months in 2026"`, `"Years 2021 to 2032"`).
+- Each row is wrapped in `role="row"` (using `display: contents` for the months/years case so the CSS grid layout is preserved).
+- Weekday header cells get `role="columnheader"` with the full day name as `aria-label` (the visible character is still the narrow form, but screen readers announce "Monday" instead of "M").
+- Each date button gets `role="gridcell"`, `aria-selected`, and a natural-language `aria-label` via `toLocaleDateString({ dateStyle: 'full' })` — "Friday, March 14, 2026" — instead of the previous machine-readable `yyyy-MM-dd` string.
+- Header navigation buttons now use context-aware labels: `"Previous month"`/`"Next month"` in days view, `"Previous year"`/`"Next year"` in months view, `"Previous 12 years"`/`"Next 12 years"` in years view (the buttons used to always say "Previous month" / "Next month", which was misleading in the other views).
+
+If you've copied Calendar into your project and want these improvements, the diff is mostly additive: add the role/aria attributes and switch the label format.
+
+### Added: Tabs `underline` variant
+
+Tabs now accepts a `variant` prop — `pill` (default, current behavior) or `underline`. The underline variant uses a thin accent-colored line under the active trigger instead of the filled-pill indicator. The active-tab `motion.span` with `layoutId` is shared between variants, so the indicator still animates between triggers either way.
+
+```tsx
+<Tabs variant="underline">
+  <Tabs.Items>
+    <Tabs.Item>One</Tabs.Item>
+    <Tabs.Item>Two</Tabs.Item>
+  </Tabs.Items>
+  <Tabs.Panels>
+    <Tabs.Panel>...</Tabs.Panel>
+    <Tabs.Panel>...</Tabs.Panel>
+  </Tabs.Panels>
+</Tabs>
+```
+
+Default is `pill`, so existing usages are unaffected.
+
+### Added: reduced motion support in Disclosure, Tabs and Toaster
+
+These three components use `motion` (Framer Motion) for animations. Motion does not respect `prefers-reduced-motion` by default; it has to be opted in. Each of the three now wraps its motion content in a `<MotionConfig reducedMotion="user">` so animations are automatically shortened when the user requests reduced motion.
+
+```diff tsx
+- import { motion } from 'motion/react';
++ import { motion, MotionConfig } from 'motion/react';
+
+  // inside the component's render
++ <MotionConfig reducedMotion="user">
+    {/* ... motion children ... */}
++ </MotionConfig>
+```
+
+`MotionConfig` only shortens animation durations — it doesn't suppress transform values like `scale` or `y`. For Toaster the exit animation `{ opacity: 0, scale: 0.8, y: '-100%' }` was snapping instantly to the scaled/translated state on dismiss, which looked jarring. Toaster now uses `useReducedMotion()` to drop the transform values entirely when reduced motion is active, leaving just an opacity change.
+
+```diff tsx
++ import { useReducedMotion } from 'motion/react';
+
+  const ToasterItem = (...) => {
++   const reduceMotion = useReducedMotion();
+    return (
+      <motion.div
+        ...
+-       initial={{ opacity: 0, scale: 0.95 }}
+-       animate={{ opacity: 1, scale: 1 }}
+-       exit={{ opacity: 0, scale: 0.8, y: '-100%' }}
++       initial={reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
++       animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
++       exit={
++         reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8, y: '-100%' }
++       }
+      />
+    );
+  };
+```
+
+### Changed: Disclosure `data-open` → `data-state`
+
+Disclosure's trigger and content elements now use `data-state="open" | "closed"` instead of `data-open={true | false}` to match the convention used by the rest of the library (Popover, Listbox, Tooltip).
+
+```diff tsx
+- data-open={open}
++ data-state={open ? 'open' : 'closed'}
+```
+
+If you target the disclosure trigger with `data-[open=true]:...` selectors in your project, update them to `data-[state=open]:...`.
+
 ## March 2026
 
-### Compound Components
+### Changed: compound components
 
 All foundational components have been refactored to use a compound component pattern. Related sub-components are now exposed as static properties of their parent component rather than as separate named exports.
 

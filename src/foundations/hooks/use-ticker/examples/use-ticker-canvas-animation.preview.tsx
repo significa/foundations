@@ -2,7 +2,7 @@ import {
   ArrowCounterClockwiseIcon,
   PlayIcon,
   SquareIcon,
-} from '@phosphor-icons/react';
+} from '@phosphor-icons/react/dist/ssr';
 import { useCallback, useEffect, useRef } from 'react';
 
 import { useTicker } from '@/foundations/hooks/use-ticker/use-ticker';

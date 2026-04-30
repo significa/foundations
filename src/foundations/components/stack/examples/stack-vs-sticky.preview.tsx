@@ -1,4 +1,4 @@
-import { FireIcon, LeafIcon, PizzaIcon } from '@phosphor-icons/react';
+import { FireIcon, LeafIcon, PizzaIcon } from '@phosphor-icons/react/dist/ssr';
 
 import { Stack } from '@/foundations/components/stack/stack';
 import { Divider } from '@/foundations/ui/divider/divider';

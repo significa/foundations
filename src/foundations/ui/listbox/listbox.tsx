@@ -18,7 +18,7 @@ import {
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
-import { CaretUpDownIcon, CheckIcon } from '@phosphor-icons/react';
+import { CaretUpDownIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import type { VariantProps } from 'cva';
 import {
   Children,
@@ -510,7 +510,7 @@ const ListboxOption = <T,>({
       disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
-        'relative mx-1 flex cursor-pointer select-none items-center gap-1.5 rounded-lg px-4 py-2 text-left font-medium text-foreground outline-none first-of-type:mt-1 last-of-type:mb-1 data-disabled:pointer-events-none data-highlighted:bg-foreground/5 data-disabled:opacity-50',
+        'relative mx-(--inset) flex cursor-pointer select-none items-center gap-1.5 rounded-lg px-4 py-2 text-left font-medium text-foreground outline-none first-of-type:mt-(--inset) last-of-type:mb-(--inset) data-disabled:pointer-events-none data-highlighted:bg-foreground/5 data-disabled:opacity-50',
         'pr-8',
         className
       )}

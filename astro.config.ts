@@ -8,8 +8,17 @@ export default defineConfig({
   site: 'https://foundations.significa.co',
   env: {
     schema: {
-      POSTHOG_KEY: envField.string({ context: 'client', access: 'public' }),
-      POSTHOG_HOST: envField.string({ context: 'client', access: 'public' }),
+      // Both optional. Without them, PostHog analytics is skipped at runtime.
+      POSTHOG_KEY: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
+      POSTHOG_HOST: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
     },
   },
 

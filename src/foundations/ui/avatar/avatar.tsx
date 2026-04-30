@@ -1,4 +1,4 @@
-import { UserIcon } from '@phosphor-icons/react';
+import { UserIcon } from '@phosphor-icons/react/dist/ssr';
 import type { VariantProps } from 'cva';
 
 import { cn, cva } from '@/lib/utils/classnames';
