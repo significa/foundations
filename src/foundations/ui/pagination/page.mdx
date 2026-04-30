@@ -1,0 +1,136 @@
+---
+title: Pagination
+description: Navigation across paginated content with truncation for long ranges.
+preview: pagination
+files:
+  - src/foundations/ui/pagination/pagination.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+
+folder: UI
+---
+
+## Anatomy
+
+```tsx
+<Pagination>
+  <Pagination.List>
+    <Pagination.Item>
+      <Pagination.Previous />
+    </Pagination.Item>
+    <Pagination.Item>
+      <Pagination.Link />
+    </Pagination.Item>
+    <Pagination.Item>
+      <Pagination.Ellipsis />
+    </Pagination.Item>
+    <Pagination.Item>
+      <Pagination.Next />
+    </Pagination.Item>
+  </Pagination.List>
+</Pagination>
+```
+
+The compound parts are purely structural and styled. Pagination state (current page, total pages) lives with the consumer — wire it up to URL params, local state, or a router. The optional `usePagination` hook handles the truncation algorithm so you don't reinvent it.
+
+## API Reference
+
+### Pagination
+
+Extends the `nav` element. Renders with `aria-label="pagination"`.
+
+### Pagination.List
+
+Extends the `ul` element.
+
+### Pagination.Item
+
+Extends the `li` element.
+
+### Pagination.Link
+
+Extends the `button` element. Use `asChild` to render as an `<a>` (or framework Link) for URL-driven pagination.
+
+<PropsTable
+  definition={{
+    isActive: {
+      type: "boolean",
+      description: "Marks the link as the current page. Adds aria-current='page' and a selected style.",
+    },
+    size: {
+      default: '"sm"',
+      type: ['"sm"', '"md"'],
+    },
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### Pagination.Previous
+
+A `Pagination.Link` preset that renders a left chevron with `aria-label="Go to previous page"`. Icon-only by design — disable it (or omit `href` when used `asChild`) at the first page.
+
+### Pagination.Next
+
+A `Pagination.Link` preset that renders a right chevron with `aria-label="Go to next page"`. Icon-only by design.
+
+### Pagination.Ellipsis
+
+A decorative gap between page ranges. Rendered with `aria-hidden="true"` and an sr-only "More pages" label.
+
+## `usePagination` hook
+
+Computes the visible page sequence with truncation. Pass the current page and total count; it returns an array of items you can map over.
+
+```ts
+import { usePagination } from "@/foundations/ui/pagination/pagination";
+
+const items = usePagination({
+  page: 5,
+  count: 20,
+  siblingCount: 1, // pages on each side of `page`
+  boundaryCount: 1, // pages always visible at the start/end
+});
+
+// items: [
+//   { type: 'page', value: 1, selected: false, key: 'page-1' },
+//   { type: 'ellipsis', key: 'start-ellipsis' },
+//   { type: 'page', value: 4, selected: false, key: 'page-4' },
+//   { type: 'page', value: 5, selected: true,  key: 'page-5' },
+//   { type: 'page', value: 6, selected: false, key: 'page-6' },
+//   { type: 'ellipsis', key: 'end-ellipsis' },
+//   { type: 'page', value: 20, selected: false, key: 'page-20' },
+// ]
+```
+
+The hook returns a stable `key` for each item so React reconciles correctly across page changes.
+
+## Examples
+
+### Simple range
+
+For small page counts, skip the hook and map over the range directly.
+
+<Preview slug="pagination-simple" />
+
+### URL-driven with `asChild`
+
+Wrap the `Pagination.Link`, `Pagination.Previous`, and `Pagination.Next` around your routing library's link component.
+
+<Preview slug="pagination-link" />
+
+## Best Practices
+
+1. **State**:
+   - Pagination is almost always controlled. Source the current page from the URL when possible — it makes results shareable and survives refresh.
+   - `usePagination` is optional. For ≤7 pages, mapping a fixed range is clearer.
+
+2. **Accessibility**:
+   - The active page must have `aria-current="page"` (set automatically when `isActive` is true).
+   - Disable `Pagination.Previous` / `Pagination.Next` at the boundaries — don't just hide them.
+   - Ellipses are decorative; never put a focusable element inside them.
+
+3. **Routing**:
+   - Use `asChild` to compose with `next/link` or any router-aware component. Pass the destination `href` to the inner element so prefetching and link semantics work as expected.
