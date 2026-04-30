@@ -1,7 +1,7 @@
 import {
   ArrowCounterClockwiseIcon,
   SlidersHorizontalIcon,
-} from '@phosphor-icons/react';
+} from '@phosphor-icons/react/dist/ssr';
 import { useState } from 'react';
 import { CopyButton } from '@/components/copy-button';
 import { IconButton } from '@/foundations/ui/button/button';

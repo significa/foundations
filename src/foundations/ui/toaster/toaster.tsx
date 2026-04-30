@@ -1,4 +1,8 @@
-import { CheckCircleIcon, XCircleIcon, XIcon } from '@phosphor-icons/react';
+import {
+  CheckCircleIcon,
+  XCircleIcon,
+  XIcon,
+} from '@phosphor-icons/react/dist/ssr';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { ComponentPropsWithoutRef } from 'react';
 import { useEffect, useSyncExternalStore } from 'react';

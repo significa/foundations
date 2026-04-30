@@ -18,7 +18,7 @@ import {
   useRole,
   useTransitionStatus,
 } from '@floating-ui/react';
-import { MagnifyingGlassIcon } from '@phosphor-icons/react';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
 import { createContext, use, useCallback, useMemo, useState } from 'react';
 
 import { Slot } from '@/foundations/components/slot/slot';

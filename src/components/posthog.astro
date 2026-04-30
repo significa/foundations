@@ -3,7 +3,7 @@ import { POSTHOG_KEY, POSTHOG_HOST } from "astro:env/client";
 ---
 
 <script is:inline define:vars={{ POSTHOG_KEY, POSTHOG_HOST }}>
-  if (!window.__posthog_initialized) {
+  if (POSTHOG_KEY && POSTHOG_HOST && !window.__posthog_initialized) {
     window.__posthog_initialized = true;
 
     !(function (t, e) {

@@ -73,8 +73,7 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 - Biome's `organizeImports` runs automatically — do not manually sort imports.
 - Use `import type { Foo }` for type-only imports; never mix types and values in a single `import`.
-- For Phosphor icons inside `*.preview.tsx` files use the SSR-safe subpath:
-  `import { IconName } from '@phosphor-icons/react/dist/ssr'`
+- Always import Phosphor icons from the SSR-safe subpath: `import { IconName } from '@phosphor-icons/react/dist/ssr'`. The root barrel uses a dynamic registry that breaks with Astro SSR and is unreliable under Vite HMR (intermittent `Cannot read properties of undefined (reading 'call')` errors). The `/dist/ssr` build is static ESM, fully tree-shakable, SSR-safe, and HMR-stable.
 - Import `cn` and `cva` from `@/lib/utils/classnames`, not directly from their packages.
 
 ### Exports

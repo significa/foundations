@@ -1,6 +1,6 @@
 // biome-ignore-all lint/a11y/useSemanticElements: WAI-ARIA grid pattern via role attributes; the layout uses CSS grid which doesn't compose well with <table>.
 // biome-ignore-all lint/a11y/useFocusableInteractive: rows in a WAI-ARIA grid are structural (cells are the focusable elements); adding tabIndex to rows would be incorrect.
-import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
+import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
 import { add, isSameDay, isSameMonth } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { IconButton } from '@/foundations/ui/button/button';

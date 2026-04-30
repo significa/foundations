@@ -1,4 +1,4 @@
-import { CalendarIcon, CaretUpDownIcon } from '@phosphor-icons/react';
+import { CalendarIcon, CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr';
 import type { VariantProps } from 'cva';
 
 import { Calendar } from '@/foundations/ui/calendar/calendar';
