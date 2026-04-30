@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import Posthog from "@/components/posthog.astro";
 import { Toaster } from "@/foundations/ui/toaster/toaster";
+import { THEME_STORAGE_KEY } from "@/lib/theme";
 
 import "@/styles/global.css";
 
@@ -22,6 +23,24 @@ const description =
 
 <html lang="en" transition:animate="none">
   <head>
+    {/* Apply the stored or system theme synchronously before paint to avoid a flash of light theme on dark-mode sessions. */}
+    <script is:inline define:vars={{ storageKey: THEME_STORAGE_KEY }}>
+      (() => {
+        try {
+          const stored = localStorage.getItem(storageKey);
+          const theme =
+            stored === "light" || stored === "dark"
+              ? stored
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          if (theme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+          }
+        } catch {}
+      })();
+    </script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
 
