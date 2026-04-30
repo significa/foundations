@@ -252,10 +252,8 @@ const sliderThumbStyle = cva({
     '[&::-moz-range-thumb:hover]:scale-130',
 
     // Active states
-    '[&:active::-webkit-slider-thumb]:ring-(length:--ring-width)',
-    '[&:active::-webkit-slider-thumb]:ring-foreground/40',
-    '[&:active::-moz-range-thumb]:ring-(length:--ring-width)',
-    '[&:active::-moz-range-thumb]:ring-foreground/40',
+    '[&:active::-webkit-slider-thumb]:scale-130',
+    '[&:active::-moz-range-thumb]:scale-130',
 
     // Focus states - apply to pseudo-elements only
     '[&:focus-visible::-webkit-slider-thumb]:ring-(length:--ring-width)',
