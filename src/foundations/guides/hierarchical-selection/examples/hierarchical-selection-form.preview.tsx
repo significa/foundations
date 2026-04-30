@@ -248,11 +248,7 @@ export default function HierarchicalSelectionForm() {
         </div>
 
         <div className="flex gap-3">
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="min-w-[120px]"
-          >
+          <Button type="submit" disabled={isSubmitting} className="min-w-30">
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </Button>
 

@@ -10,7 +10,7 @@ meta:
 
 ## April 2026
 
-### Bug fix: Tabs indicator animating between pages
+### Fixed: Tabs indicator animating between pages
 
 If you are using the Tabs in your project, you should apply this fix.
 
@@ -31,7 +31,7 @@ Fix: combine `useId()` with a module-level counter so each Tabs mount has a glob
   };
 ```
 
-### Bug fix: Tabs panels all rendering on first paint
+### Fixed: Tabs panels all rendering on first paint
 
 If you are using Tabs in your project, you should apply this fix.
 
@@ -69,7 +69,7 @@ Fix: wrap each panel (and each item) in an index context, and fall back to index
 
 The same pattern is applied to `TabsItems` / `TabsItem` so the active indicator renders on the right tab from the first paint instead of popping in after hydration. `selectedIndex` was added to the Tabs context for both fallbacks. See the full diff in the source for the matching trigger-side change.
 
-### Bug fix: Slider thumb position with non-zero `min`
+### Fixed: Slider thumb position with non-zero `min`
 
 If you are using the Slider in your project, you should apply this fix.
 
@@ -93,7 +93,7 @@ The progress factor was computed as `value / max`, ignoring `min`. Sliders with 
   }
 ```
 
-### New: `<Field>` component (and removal of standalone `<Label>`)
+### Added: `<Field>` component (and removal of standalone `<Label>`)
 
 Foundations now ships a [`Field`](/ui/field) component that wires labels, descriptions and errors to form controls without forking every primitive. Wrap your input in `<Field.Control>` and the right `id` / `aria-labelledby` / `aria-describedby` / `aria-invalid` attributes get injected via [Slot](/components/slot). Multiple descriptions and conditional errors compose into one `aria-describedby` automatically.
 
@@ -128,7 +128,7 @@ If you used `<Label>` outside any form context (rare), a native `<label classNam
 
 This also **replaces the previous `accessible-forms` guide**, which required forking every form primitive to consume a `useField()` hook. The educational content (ARIA reasoning, custom-select caveat, RadioGroup nesting pattern) has been ported to the new component's docs page.
 
-### Semantic color tokens
+### Added: semantic color tokens
 
 Added `--color-error`, `--color-warning`, `--color-success` and `--color-info` to the theme. Components that previously hardcoded `red-*`, `emerald-*`, `yellow-*` and `blue-*` (Badge, Toaster, Button's `destructive` variant, Input's invalid state) now use these tokens. Updating a semantic color is a one-line change instead of a find-and-replace across files.
 
@@ -137,7 +137,7 @@ Added `--color-error`, `--color-warning`, `--color-success` and `--color-info` t
 + 'bg-error/10 text-error ring-error/20'
 ```
 
-### Configurable border radius
+### Added: configurable border radius
 
 The `--radius` custom property is now the dial that controls the system's roundness. Named radius tokens are derived from it:
 
@@ -155,13 +155,13 @@ The `--radius` custom property is now the dial that controls the system's roundn
 
 Default values match Tailwind's defaults exactly, so existing components render identically. Change `--radius` and the entire system scales proportionally.
 
-### Panel-item inset derived from radius
+### Added: `--inset` token for panel-item breathing room
 
 A new `--inset: calc(var(--radius) * 2)` token controls the breathing room between panel items and their container edges. Square systems (`--radius: 0`) collapse to flush items; rounded systems get pill insets that follow the outer curve.
 
 Dropdown items and Listbox options use it via `mx-(--inset)` and stay curve-correct at any radius.
 
-### Configurable focus ring width
+### Added: configurable focus ring width
 
 Added `--ring-width` (default `4px`). All primitives now use `ring-(length:--ring-width)` instead of hardcoded `ring-4`, so the focus halo can be tuned in one place.
 
@@ -170,12 +170,12 @@ Added `--ring-width` (default `4px`). All primitives now use `ring-(length:--rin
 + 'focus-visible:ring-(length:--ring-width) ring-ring'
 ```
 
-### Slider polish
+### Changed: Slider visual polish
 
 - Track now spans the full slider width to align visually with surrounding content. This means the thumb doesn't _exactly_ track the track progress but the drift should be minimal and non-consequential.
 - Thumb styled with `bg-background`, border and `shadow-xs` to match Input and Dropdown.
 
-### Squircle corners (progressive enhancement)
+### Added: squircle corners (progressive enhancement)
 
 Added a `--corner-shape` token (default `squircle`) and applied `corner-shape: var(--corner-shape)` globally. Where the browser supports the [`corner-shape`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/corner-shape) property (currently Chrome), all rounded elements render as iOS-style superellipses. Other browsers ignore the declaration and fall back to the standard circular `border-radius`. `.rounded-full` is opted out so circles stay circles.
 
@@ -183,7 +183,7 @@ A squircle looks visually less rounded than a circle at the same `border-radius`
 
 To opt out of squircles entirely, set `--corner-shape: round` in your `:root`.
 
-### Calendar accessibility
+### Changed: Calendar accessibility (WAI-ARIA grid pattern)
 
 The Calendar now follows the WAI-ARIA grid pattern:
 
@@ -195,7 +195,7 @@ The Calendar now follows the WAI-ARIA grid pattern:
 
 If you've copied Calendar into your project and want these improvements, the diff is mostly additive: add the role/aria attributes and switch the label format.
 
-### Tabs: new `underline` variant
+### Added: Tabs `underline` variant
 
 Tabs now accepts a `variant` prop — `pill` (default, current behavior) or `underline`. The underline variant uses a thin accent-colored line under the active trigger instead of the filled-pill indicator. The active-tab `motion.span` with `layoutId` is shared between variants, so the indicator still animates between triggers either way.
 
@@ -214,7 +214,7 @@ Tabs now accepts a `variant` prop — `pill` (default, current behavior) or `und
 
 Default is `pill`, so existing usages are unaffected.
 
-### Reduced motion support in Disclosure, Tabs and Toaster
+### Added: reduced motion support in Disclosure, Tabs and Toaster
 
 These three components use `motion` (Framer Motion) for animations. Motion does not respect `prefers-reduced-motion` by default; it has to be opted in. Each of the three now wraps its motion content in a `<MotionConfig reducedMotion="user">` so animations are automatically shortened when the user requests reduced motion.
 
@@ -251,7 +251,7 @@ These three components use `motion` (Framer Motion) for animations. Motion does 
   };
 ```
 
-### Disclosure: `data-open` → `data-state`
+### Changed: Disclosure `data-open` → `data-state`
 
 Disclosure's trigger and content elements now use `data-state="open" | "closed"` instead of `data-open={true | false}` to match the convention used by the rest of the library (Popover, Listbox, Tooltip).
 
@@ -264,7 +264,7 @@ If you target the disclosure trigger with `data-[open=true]:...` selectors in yo
 
 ## March 2026
 
-### Compound Components
+### Changed: compound components
 
 All foundational components have been refactored to use a compound component pattern. Related sub-components are now exposed as static properties of their parent component rather than as separate named exports.
 

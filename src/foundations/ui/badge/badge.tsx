@@ -16,7 +16,7 @@ const badgeStyle = cva({
     size: {
       md: 'h-6 px-2.5 text-sm',
       sm: 'h-5 px-2 text-xs',
-      xs: 'h-4 px-1.5 text-[10px]',
+      xs: 'h-4 px-1.5 text-2xs',
     },
   },
   defaultVariants: {
