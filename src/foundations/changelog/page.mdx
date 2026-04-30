@@ -10,6 +10,89 @@ meta:
 
 ## April 2026
 
+### Bug fix: Tabs indicator animating between pages
+
+If you are using the Tabs in your project, you should apply this fix.
+
+The selected-tab indicator uses `motion`'s `layoutId` to animate between tabs. The `layoutId` was set to `useId()`, which produces the same value (e.g., `:r0:`) for the first Tabs in any React tree. When navigating between pages that each contain a Tabs component, `motion` treated the two indicators as a shared layout and animated between them.
+
+Fix: combine `useId()` with a module-level counter so each Tabs mount has a globally-unique scope.
+
+```diff tsx
++ // Module-level counter combined with useId() to give each Tabs instance a
++ // globally-unique layout scope.
++ let tabsInstanceCounter = 0;
+
+  const Tabs = ({ ... }) => {
+-   const id = useId();
++   const reactId = useId();
++   const [id] = useState(() => `${reactId}-${++tabsInstanceCounter}`);
+    // ...
+  };
+```
+
+### Bug fix: Tabs panels all rendering on first paint
+
+If you are using Tabs in your project, you should apply this fix.
+
+Each `TabsItem` registers itself in a `tabs` array via `useLayoutEffect`. On the initial render (SSR + hydration), the array is empty, so `tabs[index]` is `undefined` for every panel — and the matching check `selectedTab === id` becomes `undefined === undefined`, which is `true` for **every** panel. All panels rendered until hydration corrected things.
+
+Fix: wrap each panel (and each item) in an index context, and fall back to index-based matching when ids haven't been registered yet.
+
+```diff tsx
++ const PanelIndexContext = createContext<number>(0);
+
+  const TabsPanels = ({ children, ... }) => {
+    const { tabs } = useTabsContext();
+    return (
+      <div ...>
+        {Children.map(children, (child, index) => (
++         <PanelIndexContext value={index}>
+            <PanelIdContext value={tabs[index]}>{child}</PanelIdContext>
++         </PanelIndexContext>
+        ))}
+      </div>
+    );
+  };
+
+  const TabsPanel = (...) => {
+    const id = use(PanelIdContext);
++   const index = use(PanelIndexContext);
++   const { selectedTab, selectedIndex } = useTabsContext();
+-   const { selectedTab } = useTabsContext();
+-   const isSelected = selectedTab === id;
++   const isSelected =
++     id !== undefined ? selectedTab === id : index === selectedIndex;
+    // ...
+  };
+```
+
+The same pattern is applied to `TabsItems` / `TabsItem` so the active indicator renders on the right tab from the first paint instead of popping in after hydration. `selectedIndex` was added to the Tabs context for both fallbacks. See the full diff in the source for the matching trigger-side change.
+
+### Bug fix: Slider thumb position with non-zero `min`
+
+If you are using the Slider in your project, you should apply this fix.
+
+The progress factor was computed as `value / max`, ignoring `min`. Sliders with a non-zero `min` placed the thumb at the wrong fraction of the range. The bug was in two places — the `useMemo` for the React render path and the direct-DOM update inside `Slider.Thumb`'s `onChange`. Both need fixing.
+
+```diff tsx
+  // Slider component
+- const progressFactor = useMemo(() => value / max, [value, max]);
++ const progressFactor = useMemo(
++   () => (value - min) / (max - min),
++   [value, min, max]
++ );
+
+  // SliderThumb's handleChange
+  if (sliderElement) {
+    sliderElement.style.setProperty(
+      '--progress-track-factor',
+-     `${newValue / max}`
++     `${(newValue - min) / (max - min)}`
+    );
+  }
+```
+
 ### New: `<Field>` component (and removal of standalone `<Label>`)
 
 Foundations now ships a [`Field`](/ui/field) component that wires labels, descriptions and errors to form controls without forking every primitive. Wrap your input in `<Field.Control>` and the right `id` / `aria-labelledby` / `aria-describedby` / `aria-invalid` attributes get injected via [Slot](/components/slot). Multiple descriptions and conditional errors compose into one `aria-describedby` automatically.
@@ -44,51 +127,6 @@ This **replaces the standalone `<Label>` component**, which was a thin wrapper o
 If you used `<Label>` outside any form context (rare), a native `<label className="font-medium text-base text-foreground">` is the drop-in replacement.
 
 This also **replaces the previous `accessible-forms` guide**, which required forking every form primitive to consume a `useField()` hook. The educational content (ARIA reasoning, custom-select caveat, RadioGroup nesting pattern) has been ported to the new component's docs page.
-
-### Bug fix: Tabs indicator animating between pages
-
-If you are using the Tabs in your project, you should apply this fix.
-
-The selected-tab indicator uses `motion`'s `layoutId` to animate between tabs. The `layoutId` was set to `useId()`, which produces the same value (e.g., `:r0:`) for the first Tabs in any React tree. When navigating between pages that each contain a Tabs component, `motion` treated the two indicators as a shared layout and animated between them.
-
-Fix: combine `useId()` with a module-level counter so each Tabs mount has a globally-unique scope.
-
-```diff tsx
-+ // Module-level counter combined with useId() to give each Tabs instance a
-+ // globally-unique layout scope.
-+ let tabsInstanceCounter = 0;
-
-  const Tabs = ({ ... }) => {
--   const id = useId();
-+   const reactId = useId();
-+   const [id] = useState(() => `${reactId}-${++tabsInstanceCounter}`);
-    // ...
-  };
-```
-
-### Bug fix: Slider thumb position with non-zero `min`
-
-If you are using the Slider in your project, you should apply this fix.
-
-The progress factor was computed as `value / max`, ignoring `min`. Sliders with a non-zero `min` placed the thumb at the wrong fraction of the range. The bug was in two places — the `useMemo` for the React render path and the direct-DOM update inside `Slider.Thumb`'s `onChange`. Both need fixing.
-
-```diff tsx
-  // Slider component
-- const progressFactor = useMemo(() => value / max, [value, max]);
-+ const progressFactor = useMemo(
-+   () => (value - min) / (max - min),
-+   [value, min, max]
-+ );
-
-  // SliderThumb's handleChange
-  if (sliderElement) {
-    sliderElement.style.setProperty(
-      '--progress-track-factor',
--     `${newValue / max}`
-+     `${(newValue - min) / (max - min)}`
-    );
-  }
-```
 
 ### Semantic color tokens
 
@@ -145,14 +183,6 @@ A squircle looks visually less rounded than a circle at the same `border-radius`
 
 To opt out of squircles entirely, set `--corner-shape: round` in your `:root`.
 
-### Page dependency validation in CI
-
-A new `scripts/check-page-deps.mjs` script runs as part of `pnpm check` (via `pnpm check:deps`). It walks every component's source files and fails CI if any cross-Foundations import (`@/foundations/...`) isn't declared in the corresponding `page.mdx` `dependencies:` block.
-
-This caught and corrected several existing omissions: Tooltip and Input were missing `Slot`, Slider was missing `Slot` + `composeRefs`, Color Picker was missing `composeRefs`, Toaster was missing `useTopLayer`, and Listbox had a typo (`/foundations/ui/input` → `/ui/input`). The dependency lists each component's `page.mdx` advertises now match what a consumer actually drags in when they copy the source.
-
-Imports from `@/lib/...` (utilities provided by the setup guide) are skipped automatically. External `dependencies` entries with `https://` hrefs aren't validated. The check normalises trailing slashes and `#anchor` suffixes, so `/utils/math#clamp` and `/utils/math` both match a `utils/math` import.
-
 ### Calendar accessibility
 
 The Calendar now follows the WAI-ARIA grid pattern:
@@ -183,44 +213,6 @@ Tabs now accepts a `variant` prop — `pill` (default, current behavior) or `und
 ```
 
 Default is `pill`, so existing usages are unaffected.
-
-### Bug fix: Tabs panels all rendering on first paint
-
-If you are using Tabs in your project, you should apply this fix.
-
-Each `TabsItem` registers itself in a `tabs` array via `useLayoutEffect`. On the initial render (SSR + hydration), the array is empty, so `tabs[index]` is `undefined` for every panel — and the matching check `selectedTab === id` becomes `undefined === undefined`, which is `true` for **every** panel. All panels rendered until hydration corrected things.
-
-Fix: wrap each panel (and each item) in an index context, and fall back to index-based matching when ids haven't been registered yet.
-
-```diff tsx
-+ const PanelIndexContext = createContext<number>(0);
-
-  const TabsPanels = ({ children, ... }) => {
-    const { tabs } = useTabsContext();
-    return (
-      <div ...>
-        {Children.map(children, (child, index) => (
-+         <PanelIndexContext value={index}>
-            <PanelIdContext value={tabs[index]}>{child}</PanelIdContext>
-+         </PanelIndexContext>
-        ))}
-      </div>
-    );
-  };
-
-  const TabsPanel = (...) => {
-    const id = use(PanelIdContext);
-+   const index = use(PanelIndexContext);
-+   const { selectedTab, selectedIndex } = useTabsContext();
--   const { selectedTab } = useTabsContext();
--   const isSelected = selectedTab === id;
-+   const isSelected =
-+     id !== undefined ? selectedTab === id : index === selectedIndex;
-    // ...
-  };
-```
-
-The same pattern is applied to `TabsItems` / `TabsItem` so the active indicator renders on the right tab from the first paint instead of popping in after hydration. `selectedIndex` was added to the Tabs context for both fallbacks. See the full diff in the source for the matching trigger-side change.
 
 ### Reduced motion support in Disclosure, Tabs and Toaster
 

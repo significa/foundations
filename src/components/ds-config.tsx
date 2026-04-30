@@ -2,7 +2,7 @@ import {
   ArrowCounterClockwiseIcon,
   SlidersHorizontalIcon,
 } from '@phosphor-icons/react/dist/ssr';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CopyButton } from '@/components/copy-button';
 import { IconButton } from '@/foundations/ui/button/button';
 import { Popover } from '@/foundations/ui/popover/popover';
@@ -41,31 +41,103 @@ const RING_MIN = 2;
 const RING_MAX = 6;
 const RING_DEFAULT = 4;
 
+const STORAGE_KEY = 'foundations-ds-config';
+
+type StoredConfig = {
+  accent: string;
+  radiusStep: number;
+  ringWidth: number;
+};
+
+const readStored = (): StoredConfig | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as StoredConfig) : null;
+  } catch {
+    return null;
+  }
+};
+
 const setRoot = (prop: string, value: string) =>
   document.documentElement.style.setProperty(prop, value);
 
 const removeRoot = (prop: string) =>
   document.documentElement.style.removeProperty(prop);
 
+const applyAccent = (theme: AccentTheme) => {
+  setRoot('--color-accent', theme.background);
+  setRoot('--color-accent-foreground', theme.foreground ?? 'oklch(100% 0 0)');
+};
+
 const DSConfig = () => {
-  const [accent, setAccent] = useState<AccentTheme>(accentThemes[0]);
-  const [radiusStep, setRadiusStep] = useState(RADIUS_DEFAULT);
-  const [ringWidth, setRingWidth] = useState(RING_DEFAULT);
+  const stored = readStored();
+  const initialAccent =
+    accentThemes.find((t) => t.label === stored?.accent) ?? accentThemes[0];
+
+  const [accent, setAccent] = useState<AccentTheme>(initialAccent);
+  const [radiusStep, setRadiusStep] = useState(
+    stored?.radiusStep ?? RADIUS_DEFAULT
+  );
+  const [ringWidth, setRingWidth] = useState(stored?.ringWidth ?? RING_DEFAULT);
+
+  // Re-apply on mount and on every Astro page swap (the new document's <html>
+  // arrives without our inline overrides).
+  useEffect(() => {
+    const apply = () => {
+      if (accent.label !== accentThemes[0].label) applyAccent(accent);
+      if (radiusStep !== RADIUS_DEFAULT) {
+        setRoot('--radius', `${radiusStep * RADIUS_STEP_REM}rem`);
+      }
+      if (ringWidth !== RING_DEFAULT) {
+        setRoot('--ring-width', `${ringWidth}px`);
+      }
+    };
+    apply();
+    document.addEventListener('astro:after-swap', apply);
+    return () => document.removeEventListener('astro:after-swap', apply);
+  }, [accent, radiusStep, ringWidth]);
+
+  // Persist whenever state changes.
+  useEffect(() => {
+    const payload: StoredConfig = {
+      accent: accent.label,
+      radiusStep,
+      ringWidth,
+    };
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+      // ignore quota / private-mode failures
+    }
+  }, [accent, radiusStep, ringWidth]);
 
   const handleAccentClick = (theme: AccentTheme) => {
     setAccent(theme);
-    setRoot('--color-accent', theme.background);
-    setRoot('--color-accent-foreground', theme.foreground ?? 'oklch(100% 0 0)');
+    if (theme.label === accentThemes[0].label) {
+      removeRoot('--color-accent');
+      removeRoot('--color-accent-foreground');
+    } else {
+      applyAccent(theme);
+    }
   };
 
   const handleRadiusChange = (step: number) => {
     setRadiusStep(step);
-    setRoot('--radius', `${step * RADIUS_STEP_REM}rem`);
+    if (step === RADIUS_DEFAULT) {
+      removeRoot('--radius');
+    } else {
+      setRoot('--radius', `${step * RADIUS_STEP_REM}rem`);
+    }
   };
 
   const handleRingChange = (width: number) => {
     setRingWidth(width);
-    setRoot('--ring-width', `${width}px`);
+    if (width === RING_DEFAULT) {
+      removeRoot('--ring-width');
+    } else {
+      setRoot('--ring-width', `${width}px`);
+    }
   };
 
   const handleReset = () => {
