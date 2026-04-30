@@ -8,6 +8,40 @@ meta:
   order: 99
 ---
 
+## May 2026
+
+### Added: Spinner variants (`dots`, `bars`, `frames`)
+
+`Spinner` now takes a `variant` prop. The default is still `ring` (no behavior change for existing consumers — including `Button`'s loading state). Three new variants ship alongside it: `dots` (three pulsing dots), `bars` (three-bar equalizer), and `frames` (cycles through any character array, with a `SPINNER_FRAMES` preset export and a `frames`/`interval` prop pair for custom sets).
+
+If you want the new `dots` or `bars` variants, copy the keyframes into your `@theme` block — they animate via Tailwind's `--animate-*` token convention:
+
+```diff css
+@theme {
+  /* ... */
++ --animate-spinner-dot: spinner-dot 1.4s ease-in-out infinite both;
++ --animate-spinner-bar: spinner-bar 1.2s ease-in-out infinite both;
++
++ @keyframes spinner-dot {
++   0%, 80%, 100% { opacity: 0.25; }
++   40% { opacity: 1; }
++ }
++
++ @keyframes spinner-bar {
++   0%, 40%, 100% { transform: scaleY(0.4); }
++   20% { transform: scaleY(1); }
++ }
+}
+```
+
+The `frames` variant is JS-only (no CSS setup needed). All variants animate regardless of `prefers-reduced-motion` — loading indicators communicate state, so freezing them would break the signal (consistent with the existing `ring` variant). Pass any `readonly string[]`:
+
+```tsx
+<Spinner variant="frames" />
+<Spinner variant="frames" frames={SPINNER_FRAMES.moon} interval={120} />
+<Spinner variant="frames" frames={["—", "\\", "|", "/"]} />
+```
+
 ## April 2026
 
 ### Fixed: Tabs indicator animating between pages
