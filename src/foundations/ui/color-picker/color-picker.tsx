@@ -219,7 +219,7 @@ const ColorPickerHandle = ({
   return (
     <div
       className={cn(
-        'absolute h-[var(--size)] w-[var(--size)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white bg-[var(--color)] shadow-lg',
+        'absolute h-(--size) w-(--size) -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-(--color) shadow-lg outline outline-foreground/5',
         'transition-transform group-focus-visible:scale-110 group-focus-visible:outline-4 group-focus-visible:outline-[white]/40'
       )}
       style={{

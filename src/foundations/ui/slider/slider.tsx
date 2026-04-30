@@ -154,8 +154,13 @@ const sliderTrackStyle = cva({
   ],
   variants: {
     orientation: {
-      horizontal: 'right-0 left-0 h-(--track-thickness)',
-      vertical: 'top-0 bottom-0 w-(--track-thickness)',
+      // Inset the track ends by a quarter of the thumb size so the thumb visually
+      // extends slightly past the track at min/max, hiding the sliver of track
+      // that would otherwise peek out around the thumb's circular edge.
+      horizontal:
+        'right-[calc(var(--thumb-size)/4)] left-[calc(var(--thumb-size)/4)] h-(--track-thickness)',
+      vertical:
+        'top-[calc(var(--thumb-size)/4)] bottom-[calc(var(--thumb-size)/4)] w-(--track-thickness)',
     },
   },
   defaultVariants: {

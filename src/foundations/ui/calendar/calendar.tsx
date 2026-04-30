@@ -1,5 +1,7 @@
+// biome-ignore-all lint/a11y/useSemanticElements: WAI-ARIA grid pattern via role attributes; the layout uses CSS grid which doesn't compose well with <table>.
+// biome-ignore-all lint/a11y/useFocusableInteractive: rows in a WAI-ARIA grid are structural (cells are the focusable elements); adding tabIndex to rows would be incorrect.
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
-import { add, format, isSameDay, isSameMonth } from 'date-fns';
+import { add, isSameDay, isSameMonth } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { IconButton } from '@/foundations/ui/button/button';
 import { cn } from '@/lib/utils/classnames';
@@ -165,6 +167,8 @@ const Calendar = ({
         <CalendarHeader
           onPrevious={() => setViewDate((prev) => add(prev, { years: -12 }))}
           onNext={() => setViewDate((prev) => add(prev, { years: 12 }))}
+          previousLabel="Previous 12 years"
+          nextLabel="Next 12 years"
         >
           <HeaderTextButton
             className="flex items-center gap-1"
@@ -180,6 +184,8 @@ const Calendar = ({
         <CalendarHeader
           onPrevious={() => setViewDate((prev) => add(prev, { years: -1 }))}
           onNext={() => setViewDate((prev) => add(prev, { years: 1 }))}
+          previousLabel="Previous year"
+          nextLabel="Next year"
         >
           <HeaderTextButton onClick={() => setView('years')}>
             {viewDate.getFullYear()}
@@ -190,6 +196,8 @@ const Calendar = ({
         <CalendarHeader
           onPrevious={() => setViewDate((prev) => add(prev, { months: -1 }))}
           onNext={() => setViewDate((prev) => add(prev, { months: 1 }))}
+          previousLabel="Previous month"
+          nextLabel="Next month"
         >
           <div className="flex items-center gap-1 text-sm">
             <HeaderTextButton onClick={() => setView('months')}>
@@ -206,138 +214,174 @@ const Calendar = ({
         {(view === 'years' || view === 'months') && (
           <div className="absolute inset-0 z-10 bg-background p-1">
             {view === 'years' && (
-              <div className="grid size-full grid-cols-3 grid-rows-4 p-0.5">
-                {Array.from({ length: 12 }, (_, i) => {
-                  const year = viewDate.getFullYear() - 5 + i;
-                  const date = new Date(year, viewDate.getMonth(), 1);
-                  return (
-                    <YearMonthButton
-                      key={i}
-                      className="h-full"
-                      onClick={() => {
-                        setViewDate(date);
-                        setView('months');
-                      }}
-                    >
-                      {year}
-                    </YearMonthButton>
-                  );
-                })}
+              <div
+                role="grid"
+                aria-label={`Years ${viewDate.getFullYear() - 5} to ${viewDate.getFullYear() + 6}`}
+                className="grid size-full grid-cols-3 grid-rows-4 p-0.5"
+              >
+                {Array.from({ length: 4 }, (_, rowIdx) => (
+                  <div role="row" className="contents" key={rowIdx}>
+                    {Array.from({ length: 3 }, (_, colIdx) => {
+                      const i = rowIdx * 3 + colIdx;
+                      const year = viewDate.getFullYear() - 5 + i;
+                      const date = new Date(year, viewDate.getMonth(), 1);
+                      return (
+                        <YearMonthButton
+                          key={i}
+                          role="gridcell"
+                          className="h-full"
+                          onClick={() => {
+                            setViewDate(date);
+                            setView('months');
+                          }}
+                        >
+                          {year}
+                        </YearMonthButton>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
             )}
             {view === 'months' && (
-              <div className="grid size-full grid-cols-3 grid-rows-4 p-0.5">
-                {Array.from({ length: 12 }, (_, i) => {
-                  const date = new Date(viewDate.getFullYear(), i, 1);
-                  return (
-                    <YearMonthButton
-                      key={i}
-                      className="h-full"
-                      onClick={() => {
-                        setViewDate(date);
-                        setView('days');
-                      }}
-                    >
-                      {date.toLocaleDateString(locale, { month: 'short' })}
-                    </YearMonthButton>
-                  );
-                })}
+              <div
+                role="grid"
+                aria-label={`Months in ${viewDate.getFullYear()}`}
+                className="grid size-full grid-cols-3 grid-rows-4 p-0.5"
+              >
+                {Array.from({ length: 4 }, (_, rowIdx) => (
+                  <div role="row" className="contents" key={rowIdx}>
+                    {Array.from({ length: 3 }, (_, colIdx) => {
+                      const i = rowIdx * 3 + colIdx;
+                      const date = new Date(viewDate.getFullYear(), i, 1);
+                      return (
+                        <YearMonthButton
+                          key={i}
+                          role="gridcell"
+                          className="h-full"
+                          onClick={() => {
+                            setViewDate(date);
+                            setView('days');
+                          }}
+                        >
+                          {date.toLocaleDateString(locale, { month: 'short' })}
+                        </YearMonthButton>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
             )}
           </div>
         )}
 
-        <div className="grid grid-cols-7">
-          {Array.from({ length: 7 }, (_, i) => {
-            const weekday = new Date(2024, 0, (i + startWeekOn) % 7);
-            return (
-              <div
-                key={i}
-                className="flex h-9 w-full min-w-9 items-center justify-center text-foreground-secondary text-sm"
-              >
-                {weekday.toLocaleDateString(locale, { weekday: 'narrow' })}
-              </div>
-            );
+        <div
+          role="grid"
+          aria-label={viewDate.toLocaleDateString(locale, {
+            month: 'long',
+            year: 'numeric',
           })}
-        </div>
-        {month.map((row, i) => (
-          <div className="grid grid-cols-7" key={i}>
-            {row.map((day, ii) => {
-              const hasValue = !!startDate && !!endDate;
-              const isStartDate = hasValue && isSameDay(day, startDate);
-              const isEndDate = hasValue && isSameDay(day, endDate);
-              const isSelected = isStartDate || isEndDate;
-
-              const isInRange =
-                hasValue &&
-                day > startDate &&
-                day < endDate &&
-                !isSameDay(day, startDate) &&
-                !isSameDay(day, endDate);
-
-              const isToday = isSameDay(day, new Date());
-
+        >
+          <div role="row" className="grid grid-cols-7">
+            {Array.from({ length: 7 }, (_, i) => {
+              const weekday = new Date(2024, 0, (i + startWeekOn) % 7);
               return (
-                <button
-                  type="button"
-                  key={ii}
-                  aria-label={format(day, 'yyyy-MM-dd')}
-                  data-other-month={!isSameMonth(day, viewDate) || undefined}
-                  data-start-date={isStartDate || undefined}
-                  data-end-date={isEndDate || undefined}
-                  data-selected={isSelected || undefined}
-                  data-in-range={isInRange || undefined}
-                  data-today={isToday || undefined}
-                  disabled={getIsDisabled(day)}
-                  className={cn(
-                    'group relative isolate flex h-9 w-full min-w-9 cursor-pointer items-center justify-center text-foreground outline-none disabled:pointer-events-none disabled:opacity-30'
-                  )}
-                  onClick={() => handleDaySelect(day)}
-                  onMouseEnter={() => handleDayHover(day)}
+                <div
+                  key={i}
+                  role="columnheader"
+                  aria-label={weekday.toLocaleDateString(locale, {
+                    weekday: 'long',
+                  })}
+                  className="flex h-9 w-full min-w-9 items-center justify-center text-foreground-secondary text-sm"
                 >
-                  {/* Date */}
-                  {/* Styles are in an element inside because there's a small margin around the squares but the hover needs to account for the entire square to avoid flashing of hovered items */}
-                  <div
-                    className={cn(
-                      // base
-                      'z-10 flex size-8 items-center justify-center rounded-lg border border-transparent font-medium text-foreground/80 text-sm tabular-nums ring-ring transition-shadow',
-                      // hover
-                      'group-hover:bg-foreground/5 group-hover:text-foreground',
-                      // selected
-                      'group-data-selected:bg-accent group-data-selected:text-accent-foreground group-hover:group-data-selected:text-accent-foreground',
-                      // other month
-                      'group-data-other-month:text-foreground-secondary',
-                      // focus
-                      'group-focus-visible:ring-(length:--ring-width)'
-                    )}
-                  >
-                    {day.getDate()}
-                  </div>
-                  {/* Today marker */}
-                  {isToday && (
-                    <div
-                      aria-hidden
-                      className={cn(
-                        'absolute bottom-1.5 left-1/2 z-20 h-0.5 w-1.5 -translate-x-1/2 rounded-md bg-foreground',
-                        isSelected && 'bg-accent-foreground'
-                      )}
-                    />
-                  )}
-                  {/* Date range background */}
-                  <div
-                    aria-hidden
-                    className={cn(
-                      'invisible absolute inset-x-0 inset-y-0.5 z-0 bg-background-secondary',
-                      'group-data-in-range:visible',
-                      'group-data-start-date:visible group-data-start-date:left-1/2',
-                      'group-data-end-date:visible group-data-end-date:right-1/2'
-                    )}
-                  />
-                </button>
+                  {weekday.toLocaleDateString(locale, { weekday: 'narrow' })}
+                </div>
               );
             })}
           </div>
-        ))}
+          {month.map((row, i) => (
+            <div role="row" className="grid grid-cols-7" key={i}>
+              {row.map((day, ii) => {
+                const hasValue = !!startDate && !!endDate;
+                const isStartDate = hasValue && isSameDay(day, startDate);
+                const isEndDate = hasValue && isSameDay(day, endDate);
+                const isSelected = isStartDate || isEndDate;
+
+                const isInRange =
+                  hasValue &&
+                  day > startDate &&
+                  day < endDate &&
+                  !isSameDay(day, startDate) &&
+                  !isSameDay(day, endDate);
+
+                const isToday = isSameDay(day, new Date());
+
+                return (
+                  <button
+                    type="button"
+                    role="gridcell"
+                    key={ii}
+                    aria-label={day.toLocaleDateString(locale, {
+                      dateStyle: 'full',
+                    })}
+                    aria-selected={isSelected || undefined}
+                    data-other-month={!isSameMonth(day, viewDate) || undefined}
+                    data-start-date={isStartDate || undefined}
+                    data-end-date={isEndDate || undefined}
+                    data-selected={isSelected || undefined}
+                    data-in-range={isInRange || undefined}
+                    data-today={isToday || undefined}
+                    disabled={getIsDisabled(day)}
+                    className={cn(
+                      'group relative isolate flex h-9 w-full min-w-9 cursor-pointer items-center justify-center text-foreground outline-none disabled:pointer-events-none disabled:opacity-30'
+                    )}
+                    onClick={() => handleDaySelect(day)}
+                    onMouseEnter={() => handleDayHover(day)}
+                  >
+                    {/* Date */}
+                    {/* Styles are in an element inside because there's a small margin around the squares but the hover needs to account for the entire square to avoid flashing of hovered items */}
+                    <div
+                      className={cn(
+                        // base
+                        'z-10 flex size-8 items-center justify-center rounded-lg border border-transparent font-medium text-foreground/80 text-sm tabular-nums ring-ring transition-shadow',
+                        // hover
+                        'group-hover:bg-foreground/5 group-hover:text-foreground',
+                        // selected
+                        'group-data-selected:bg-accent group-data-selected:text-accent-foreground group-hover:group-data-selected:text-accent-foreground',
+                        // other month
+                        'group-data-other-month:text-foreground-secondary',
+                        // focus
+                        'group-focus-visible:ring-(length:--ring-width)'
+                      )}
+                    >
+                      {day.getDate()}
+                    </div>
+                    {/* Today marker */}
+                    {isToday && (
+                      <div
+                        aria-hidden
+                        className={cn(
+                          'absolute bottom-1.5 left-1/2 z-20 h-0.5 w-1.5 -translate-x-1/2 rounded-md bg-foreground',
+                          isSelected && 'bg-accent-foreground'
+                        )}
+                      />
+                    )}
+                    {/* Date range background */}
+                    <div
+                      aria-hidden
+                      className={cn(
+                        'invisible absolute inset-x-0 inset-y-0.5 z-0 bg-background-secondary',
+                        'group-data-in-range:visible',
+                        'group-data-start-date:visible group-data-start-date:left-1/2',
+                        'group-data-end-date:visible group-data-end-date:right-1/2'
+                      )}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -346,12 +390,16 @@ const Calendar = ({
 interface CalendarHeaderProps {
   onPrevious: () => void;
   onNext: () => void;
+  previousLabel?: string;
+  nextLabel?: string;
   children: React.ReactNode;
 }
 
 const CalendarHeader = ({
   onPrevious,
   onNext,
+  previousLabel = 'Previous',
+  nextLabel = 'Next',
   children,
 }: CalendarHeaderProps) => {
   return (
@@ -359,12 +407,12 @@ const CalendarHeader = ({
       <IconButton
         variant="outline"
         onClick={onPrevious}
-        aria-label="Previous month"
+        aria-label={previousLabel}
       >
         <CaretLeftIcon />
       </IconButton>
       {children}
-      <IconButton variant="outline" onClick={onNext} aria-label="Next month">
+      <IconButton variant="outline" onClick={onNext} aria-label={nextLabel}>
         <CaretRightIcon />
       </IconButton>
     </div>
