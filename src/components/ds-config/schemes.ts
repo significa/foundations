@@ -100,6 +100,10 @@ export const SCHEMES: Scheme[] = [
       dark: 'oklch(25% 0.015 70)',
     },
     border: { light: 'oklch(86% 0.03 85)', dark: 'oklch(36% 0.02 70)' },
+    error: { light: 'oklch(58% 0.18 28)', dark: 'oklch(70% 0.17 28)' },
+    warning: { light: 'oklch(72% 0.15 75)', dark: 'oklch(80% 0.14 75)' },
+    success: { light: 'oklch(60% 0.13 130)', dark: 'oklch(72% 0.13 130)' },
+    info: { light: 'oklch(58% 0.13 220)', dark: 'oklch(72% 0.12 220)' },
   }),
 
   // Deep forest green palette.
@@ -120,6 +124,10 @@ export const SCHEMES: Scheme[] = [
       dark: 'oklch(22% 0.02 150)',
     },
     border: { light: 'oklch(86% 0.02 145)', dark: 'oklch(34% 0.025 150)' },
+    error: { light: 'oklch(58% 0.17 25)', dark: 'oklch(70% 0.17 25)' },
+    warning: { light: 'oklch(72% 0.14 80)', dark: 'oklch(80% 0.14 80)' },
+    success: { light: 'oklch(55% 0.14 145)', dark: 'oklch(75% 0.14 145)' },
+    info: { light: 'oklch(58% 0.12 200)', dark: 'oklch(72% 0.12 200)' },
   }),
 
   // Frosty cool blue/gray (Nord-inspired).
@@ -140,6 +148,10 @@ export const SCHEMES: Scheme[] = [
       dark: 'oklch(28% 0.015 245)',
     },
     border: { light: 'oklch(86% 0.01 240)', dark: 'oklch(40% 0.02 245)' },
+    error: { light: 'oklch(62% 0.17 18)', dark: 'oklch(72% 0.16 18)' },
+    warning: { light: 'oklch(72% 0.12 75)', dark: 'oklch(80% 0.12 75)' },
+    success: { light: 'oklch(65% 0.12 150)', dark: 'oklch(75% 0.12 150)' },
+    info: { light: 'oklch(63% 0.12 220)', dark: 'oklch(78% 0.10 220)' },
   }),
 
   // Cream/teal (Solarized-inspired). Blue accent in light, yellow in dark.
@@ -160,6 +172,10 @@ export const SCHEMES: Scheme[] = [
       dark: 'oklch(28% 0.04 230)',
     },
     border: { light: 'oklch(86% 0.03 90)', dark: 'oklch(40% 0.04 230)' },
+    error: { light: 'oklch(60% 0.18 25)', dark: 'oklch(70% 0.17 25)' },
+    warning: { light: 'oklch(72% 0.15 85)', dark: 'oklch(82% 0.14 85)' },
+    success: { light: 'oklch(65% 0.14 140)', dark: 'oklch(76% 0.14 140)' },
+    info: { light: 'oklch(58% 0.13 230)', dark: 'oklch(72% 0.12 230)' },
   }),
 
   // Soft rose / dusk purple (Rose Pine-inspired).
@@ -180,6 +196,10 @@ export const SCHEMES: Scheme[] = [
       dark: 'oklch(25% 0.02 290)',
     },
     border: { light: 'oklch(88% 0.02 30)', dark: 'oklch(36% 0.025 290)' },
+    error: { light: 'oklch(60% 0.17 18)', dark: 'oklch(72% 0.17 18)' },
+    warning: { light: 'oklch(75% 0.13 70)', dark: 'oklch(82% 0.13 70)' },
+    success: { light: 'oklch(62% 0.12 160)', dark: 'oklch(75% 0.12 160)' },
+    info: { light: 'oklch(60% 0.13 250)', dark: 'oklch(75% 0.12 250)' },
   }),
 
   // Vibrant purple/magenta (Dracula-inspired).
@@ -200,6 +220,10 @@ export const SCHEMES: Scheme[] = [
       dark: 'oklch(25% 0.03 285)',
     },
     border: { light: 'oklch(86% 0.02 290)', dark: 'oklch(38% 0.03 285)' },
+    error: { light: 'oklch(63% 0.20 12)', dark: 'oklch(72% 0.19 12)' },
+    warning: { light: 'oklch(78% 0.16 80)', dark: 'oklch(86% 0.15 80)' },
+    success: { light: 'oklch(70% 0.18 145)', dark: 'oklch(80% 0.18 145)' },
+    info: { light: 'oklch(72% 0.13 220)', dark: 'oklch(82% 0.12 220)' },
   }),
 ];
 

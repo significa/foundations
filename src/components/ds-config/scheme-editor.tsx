@@ -108,7 +108,7 @@ const SchemeEditor = ({
           onTokenChange={onTokenChange}
         />
       ))}
-      <div className="-mx-3 mt-1 border-border border-t pt-3">
+      <div className="-mx-3 mt-1 border-border border-t pt-3 pl-3">
         <span className="font-medium text-2xs text-foreground-secondary uppercase tracking-wider">
           Semantic
         </span>
