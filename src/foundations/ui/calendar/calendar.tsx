@@ -281,6 +281,7 @@ const Calendar = ({
             month: 'long',
             year: 'numeric',
           })}
+          className="pb-0.5"
         >
           <div role="row" className="grid grid-cols-7">
             {Array.from({ length: 7 }, (_, i) => {

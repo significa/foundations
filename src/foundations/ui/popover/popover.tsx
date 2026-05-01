@@ -216,7 +216,8 @@ const PopoverContent = ({
   children,
   ...props
 }: React.ComponentPropsWithRef<'div'>) => {
-  const { context, refs, getFloatingProps, modal } = usePopoverContext();
+  const { context, refs, getFloatingProps, modal, isPositioned } =
+    usePopoverContext();
 
   const ref = useMergeRefs([refs.setFloating, refProp]);
 
@@ -224,6 +225,7 @@ const PopoverContent = ({
     <PopoverPanel
       context={context}
       modal={modal}
+      isPositioned={isPositioned}
       ref={ref}
       className={cn(
         'z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-background p-3 font-medium text-foreground shadow-lg outline-none',
@@ -239,6 +241,7 @@ const PopoverContent = ({
 interface PopoverPanelProps extends React.ComponentPropsWithRef<'div'> {
   context: FloatingContext;
   modal?: boolean;
+  isPositioned?: boolean;
 }
 
 /**
@@ -252,6 +255,7 @@ const PopoverPanel = ({
   ref,
   context,
   modal,
+  isPositioned = true,
   className,
   style,
   ...props
@@ -262,6 +266,12 @@ const PopoverPanel = ({
   const mergedRef = useMergeRefs([ref, topLayerRef]);
 
   if (!isMounted) return null;
+
+  // Hide until floating-ui has computed the position. Otherwise the panel
+  // renders at (0, 0) on the first frame and FloatingFocusManager's autofocus
+  // makes the browser scroll the document toward that point before the real
+  // position is applied.
+  const hidden = !isPositioned || context.middlewareData.hide?.referenceHidden;
 
   return (
     <FloatingFocusManager context={context} modal={modal}>
@@ -281,9 +291,7 @@ const PopoverPanel = ({
           top: context.y ?? 0,
           left: context.x ?? 0,
           '--transform-origin': placementToTransformOrigin(context.placement),
-          visibility: context.middlewareData.hide?.referenceHidden
-            ? 'hidden'
-            : 'visible',
+          visibility: hidden ? 'hidden' : 'visible',
           ...style,
         }}
         {...props}

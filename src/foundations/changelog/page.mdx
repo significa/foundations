@@ -10,6 +10,61 @@ meta:
 
 ## May 2026
 
+### Fixed: `Popover` scrolling the page on open
+
+Floating UI returns `x` / `y` as `null` on the first render before positioning runs. The panel was therefore rendered at `top: 0, left: 0`, and `FloatingFocusManager`'s autofocus then made the browser scroll-into-view toward the document's top-left before floating-ui applied the real coordinates. Visible as a small upward jump every time the trigger was clicked while the page was scrolled. Affects every `Popover` consumer (`Dropdown`, `DatePicker`, `DSConfig`, etc.).
+
+Fix: hide the panel via `visibility: hidden` until floating-ui reports `isPositioned`. The panel still mounts (so it can be measured), but autofocus targets nothing focusable until the real position lands.
+
+```diff tsx
+  const PopoverContent = (...) => {
+-   const { context, refs, getFloatingProps, modal } = usePopoverContext();
++   const { context, refs, getFloatingProps, modal, isPositioned } =
++     usePopoverContext();
+    return (
+      <PopoverPanel
+        context={context}
+        modal={modal}
++       isPositioned={isPositioned}
+        ...
+      />
+    );
+  };
+
+- const PopoverPanel = ({ ref, context, modal, ... }) => {
++ const PopoverPanel = ({ ref, context, modal, isPositioned = true, ... }) => {
+    // ...
++   const hidden = !isPositioned || context.middlewareData.hide?.referenceHidden;
+    return (
+      <FloatingFocusManager context={context} modal={modal}>
+        <div
+          style={{
+            // ...
+-           visibility: context.middlewareData.hide?.referenceHidden ? 'hidden' : 'visible',
++           visibility: hidden ? 'hidden' : 'visible',
+          }}
+        />
+      </FloatingFocusManager>
+    );
+  };
+```
+
+### Fixed: `Calendar` last day row flush with panel edge
+
+When a `Calendar` was rendered inside a container that doesn't provide its own bottom padding (most visibly: `DatePicker` without shortcut items below — `Dropdown.Items` overrides Popover's `p-3` with `p-0`), the bottom day row sat directly against the panel border. The `CalendarHeader` had a built-in `p-1.5` that gave the top some breathing room; the day grid had no equivalent.
+
+Fix: add `pb-1.5` to the day grid container so the last row mirrors the header's spacing.
+
+```diff tsx
+  <div
+    role="grid"
+    aria-label={...}
++   className="pb-1.5"
+  >
+```
+
+Months and years views are unaffected — their absolute overlay already provides symmetric padding via `p-1` on the wrapper.
+
 ### Added: `Toggle` and `ToggleGroup`
 
 A two-state button primitive — and a group wrapper for related sets. `Toggle` reuses `Button`'s sizing tokens (`size`, `square`, `asChild`) and adds `pressed` / `defaultPressed` / `onPressedChange`. There's no `variant` prop: every toggle renders as a ghost-style affordance with a subtle filled tint when on. If you need a bordered frame, pass `className="border border-border"` at the call site.
