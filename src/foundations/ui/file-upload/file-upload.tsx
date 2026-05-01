@@ -18,6 +18,7 @@ import {
 } from 'react';
 
 import { Slot } from '@/foundations/components/slot/slot';
+import { Progress } from '@/foundations/ui/progress/progress';
 import { cn } from '@/lib/utils/classnames';
 
 type FileUploadStatus = 'idle' | 'uploading' | 'success' | 'error';
@@ -610,28 +611,13 @@ const FileUploadItemProgress = ({
   if (progress === undefined && !showWhenIdle) return null;
   if (status === 'success' && !showWhenIdle) return null;
 
-  const value = Math.max(0, Math.min(100, progress ?? 0));
-
   return (
-    <div
-      role="progressbar"
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={value}
-      className={cn(
-        'h-1 w-24 overflow-hidden rounded-full bg-foreground/10',
-        className
-      )}
+    <Progress
+      value={progress ?? 0}
+      size="sm"
+      className={cn('w-24', status === 'error' && 'text-error', className)}
       {...props}
-    >
-      <div
-        className={cn(
-          'h-full rounded-full bg-accent transition-[width] duration-150 ease-out',
-          status === 'error' && 'bg-error'
-        )}
-        style={{ width: `${value}%` }}
-      />
-    </div>
+    />
   );
 };
 

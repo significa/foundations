@@ -9,10 +9,22 @@ Some items will be impossible to do until there is decent baseline support for t
 - [ ] Remove TextareaResize in favour of `field-sizing: content` as soon as it's baseline.
 - [ ] Select VS Listbox. If styling selects is baseline we should try to see if Listbox can be replaced by more customisation in the native Select component.
 - [ ] Drag to dismiss drawer (at least on mobile).
-- [ ] EPIC: React Native. We have a lot of projects in React Native with seriously good design systems (reanimated instead of motion). Check our codebases and plan this.
-- [ ] check if the radii scale is good as is or if we should use something like fibonnaci or golden ratio.
-- [ ] IDEA: most times we copy the components and then scroll through all the lines finding places to edit the style. should we extract and move up in the component the style definition (classnames)? should we do it just for the style that's usually updated and leave the functional style inline? is this something that will make the components more complex for marginal gains?
+- [ ] EPIC: React Native (completely different route, but same codebase?). We have a lot of projects in React Native with seriously good design systems (reanimated instead of motion). Check our codebases and plan this.
 
 ## Missing components
 
-_None — `Table` ships the styled primitive, with a documented TanStack Table recipe for full data-table functionality. Heavy data-grid features (virtualization, pivot, range selection) are intentionally out of scope; reach for AG Grid / LyteNyte if you need them._
+- [ ] **Progress** — linear and circular variants. The pattern already exists inline in `FileUpload`; extract it to its own primitive and have FileUpload consume it.
+- [ ] **Number Input** — input with stepper buttons, keyboard increment/decrement, min/max/step. We hit this need regularly across apps.
+
+## Non-goals
+
+Things we have intentionally decided _not_ to build, so we don't re-litigate them. If you think one of these is wrong, open the conversation — but the bar is high.
+
+- **Headless / styled split.** Foundations is consumed by copy-paste; styles are simple enough to update in place. The trade-off is that classnames are scattered through the components, but that's the price of owning the surface area instead of relying on Radix or Base UI — a trade we think is worth it. Floating UI is our only meaningful dependency, by design.
+- **Tag input (chips inside the input).** Render chips outside the input instead. The "chips inside" pattern has too many edge cases around editing, keyboard navigation, and selection, and there is almost always a clearer pattern (input + chips above/below).
+- **Combobox as a dedicated primitive.** Our existing pattern of an Input rendered inside a Popover above a Listbox already covers searchable-select use cases. If the recipe needs to be more discoverable in the docs, that's a docs problem, not a primitive problem.
+- **Hover Card.** Use Tooltip for hint-style content, or compose Popover with hover triggers when you need richer content. A third primitive doesn't earn its slot.
+- **Context Menu, Menubar, Navigation Menu, Toolbar.** All compositional. Build them from the primitives we ship (Menu, Toggle, etc.). If roving-focus turns out to be the recurring pain, a `useRovingFocus` hook is the right unit — not a wrapper component.
+- **Alert Dialog.** Modal already covers this. Don't split.
+- **Aspect Ratio, Card.** Too trivial or too opinionated to earn a primitive slot.
+- **Tree, Resizable Panels, Scroll Area.** Niche or covered well by the platform / userland. Add only if a real project demands it.

@@ -1,0 +1,60 @@
+---
+title: Progress
+description: A determinate progress indicator for known-completion tasks. Linear and circular variants.
+preview: progress
+files:
+  - src/foundations/ui/progress/progress.tsx
+
+folder: UI
+---
+
+## API Reference
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    value: {
+      type: "number",
+      description: "The current value. Clamped to `[0, max]`.",
+    },
+    max: {
+      type: "number",
+      default: "100",
+      description: "The maximum value. Defaults to 100.",
+    },
+    variant: {
+      type: ['"linear"', '"circular"'],
+      default: '"linear"',
+    },
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+    },
+  }}
+/>
+
+## Variants
+
+<Preview slug="progress-variants" />
+
+## Sizes
+
+<Preview slug="progress-sizes" />
+
+## Color
+
+The fill color follows `currentColor`. Set a text color utility on the root to retint:
+
+```tsx
+<Progress value={50} className="text-error" />
+```
+
+This makes things like an error state in a file upload trivial — no extra prop needed.
+
+## Best Practices
+
+1. **Use Progress when you can report progress.** When the task length is known and reportable (uploads, multi-step workflows, downloads), Progress communicates more than a Spinner. When all you can say is "something is happening", reach for [Spinner](/ui/spinner) instead — Progress is the determinate primitive, Spinner is the indeterminate one.
+2. **Accessibility:**
+   - Renders `role="progressbar"` with `aria-valuemin`, `aria-valuemax`, and `aria-valuenow`.
+   - Provide `aria-label` (or `aria-labelledby`) when the surrounding context doesn't already label the bar.
