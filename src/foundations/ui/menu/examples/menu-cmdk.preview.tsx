@@ -71,7 +71,7 @@ export default function MenuCmdkPreview() {
       </Dialog.Trigger>
       <Dialog.Content
         catchFocus={false}
-        className="flex h-100 max-h-[70svh] w-full max-w-xl flex-col rounded-xl p-0"
+        className="flex h-100 max-h-[70svh] w-full max-w-[calc(100vw-(--spacing(8)))] flex-col rounded-xl p-0 md:max-w-xl"
       >
         <Menu open={open} onOpenChange={setOpen} modal={false}>
           <Menu.Trigger className="hidden" />

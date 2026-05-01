@@ -10,6 +10,57 @@ meta:
 
 ## May 2026
 
+### Fixed: `Popover` mobile behavior
+
+Two changes that affect every primitive built on `Popover` (`Tooltip`, `Listbox`, `Select`, `DatePicker`, anything with a floating panel).
+
+1. **Virtual keyboards no longer flip the popover and dismiss focused inputs.** `Popover` now pauses `autoUpdate` while a text-input descendant of the floating panel has focus. iOS fires `scroll` and `resize` events on `window.visualViewport` when the soft keyboard opens; those used to re-run `flip()` against the shrunken viewport, the panel re-rendered with a new placement, and any focused input inside it lost focus and dismissed the keyboard in a loop. The pause is implemented inside `whileElementsMounted` (so listeners are tied to floating-ui's lifecycle, no extra `useEffect`): `focusin` on the panel sets a flag, `focusout` clears it, and the `update()` callback short-circuits while it's set.
+
+2. **New `flipFallbackPlacements` option on `usePopoverFloating`.** Forwards directly to `flip()`'s `fallbackPlacements`. Useful when an upstream component (a nested submenu, a side-anchored popover) needs cross-axis fallbacks on narrow viewports — e.g. `['left-start', 'bottom-start', 'top-start']` lets a `right-start` panel fall back below the trigger when neither side fits. Default behavior unchanged when the option is omitted.
+
+```diff tsx
+// popover.tsx — usePopoverFloating
++ flipFallbackPlacements?: Placement[];
+
+- whileElementsMounted: (reference, floating, update) =>
+-   autoUpdate(reference, floating, update, { layoutShift: false }),
++ whileElementsMounted: (reference, floatingEl, update) => {
++   let paused = false;
++   const isTextInput = (n: EventTarget | null) =>
++     n instanceof HTMLElement &&
++     (n.tagName === 'INPUT' ||
++       n.tagName === 'TEXTAREA' ||
++       n.isContentEditable);
++   const onFocusIn = (e: FocusEvent) => {
++     if (isTextInput(e.target)) paused = true;
++   };
++   const onFocusOut = (e: FocusEvent) => {
++     if (isTextInput(e.target)) paused = false;
++   };
++   floatingEl.addEventListener('focusin', onFocusIn);
++   floatingEl.addEventListener('focusout', onFocusOut);
++
++   const cleanup = autoUpdate(
++     reference,
++     floatingEl,
++     () => {
++       if (paused) return;
++       update();
++     },
++     { layoutShift: false }
++   );
++
++   return () => {
++     cleanup();
++     floatingEl.removeEventListener('focusin', onFocusIn);
++     floatingEl.removeEventListener('focusout', onFocusOut);
++   };
++ },
+
+- flip({ padding: 8 }),
++ flip({ padding: 8, fallbackPlacements: flipFallbackPlacements }),
+```
+
 ### Changed: `Input.Group` lays out flush addons; `pointer-events-auto` ceremony dropped
 
 `Input.Group` no longer carries horizontal padding. The in-group input owns its own `px`, and `Input.Addon` sits flush at the group's edges with size-aware padding inherited from a new `InputGroupContext`. Action-button addons (password toggles, country pickers, NumberInput-style steppers) now have full edge-to-edge hit areas without the `-ml-*` / `-mr-*` workarounds. Static addons (icons, text) keep their visual position.

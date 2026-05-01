@@ -40,6 +40,11 @@ interface UsePopoverFloatingOptions {
   placement?: Placement;
   offset?: number;
   origin?: PopoverOrigin;
+  // Cross-axis fallbacks for `flip()`. Useful for nested menus on narrow
+  // viewports where neither side has horizontal room — e.g. ['left-start',
+  // 'bottom-start', 'top-start'] lets a `right-start` submenu fall back below
+  // the trigger.
+  flipFallbackPlacements?: Placement[];
   // FloatingTree integration — used by Menu for nested submenu coordination.
   nodeId?: string;
 }
@@ -50,6 +55,7 @@ const usePopoverFloating = ({
   placement = 'bottom',
   offset = 4,
   origin = 'trigger',
+  flipFallbackPlacements,
   nodeId,
 }: UsePopoverFloatingOptions) => {
   const [internalOpen, setInternalOpen] = useState(false);
@@ -68,12 +74,48 @@ const usePopoverFloating = ({
     placement,
     open,
     onOpenChange: setOpen,
-    whileElementsMounted: (reference, floating, update) =>
-      autoUpdate(reference, floating, update, {
-        layoutShift: false,
-      }),
+    // Pause `update()` while a text-input descendant of the floating element
+    // has focus. iOS fires scroll/resize on `window.visualViewport` when the
+    // soft keyboard opens — without this guard, those events trigger
+    // `flip()` to re-evaluate against the shrunken viewport, the panel
+    // re-renders with a new placement, and the focused input loses focus,
+    // dismissing the keyboard in a loop. The listeners live in
+    // `whileElementsMounted` so they're tied to floating-ui's lifecycle and
+    // don't need a separate `useEffect`.
+    whileElementsMounted: (reference, floatingEl, update) => {
+      let paused = false;
+      const isTextInput = (n: EventTarget | null) =>
+        n instanceof HTMLElement &&
+        (n.tagName === 'INPUT' ||
+          n.tagName === 'TEXTAREA' ||
+          n.isContentEditable);
+      const onFocusIn = (e: FocusEvent) => {
+        if (isTextInput(e.target)) paused = true;
+      };
+      const onFocusOut = (e: FocusEvent) => {
+        if (isTextInput(e.target)) paused = false;
+      };
+      floatingEl.addEventListener('focusin', onFocusIn);
+      floatingEl.addEventListener('focusout', onFocusOut);
+
+      const cleanup = autoUpdate(
+        reference,
+        floatingEl,
+        () => {
+          if (paused) return;
+          update();
+        },
+        { layoutShift: false }
+      );
+
+      return () => {
+        cleanup();
+        floatingEl.removeEventListener('focusin', onFocusIn);
+        floatingEl.removeEventListener('focusout', onFocusOut);
+      };
+    },
     middleware: [
-      flip({ padding: 8 }),
+      flip({ padding: 8, fallbackPlacements: flipFallbackPlacements }),
       shift({ padding: 8 }),
       offsetMiddleware(offset),
       size({

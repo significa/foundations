@@ -60,8 +60,12 @@ interface MenuContextType {
   elementsRef: React.RefObject<(HTMLElement | null)[]>;
   highlightedIndex: number | null;
   setHighlightedIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  searchInputRef: HTMLInputElement | null;
-  setSearchInputRef: (el: HTMLInputElement) => void;
+  // Ref so MenuItems can pass it to FloatingFocusManager's `initialFocus` —
+  // focusing the input directly avoids FFM's deferred tabbable scan, which
+  // on iOS races React's autoFocus and drops the soft keyboard.
+  searchInputRef: React.RefObject<HTMLInputElement | null>;
+  hasSearchInput: boolean;
+  setSearchInputEl: (el: HTMLInputElement | null) => void;
   items: Items;
   registerItem: (item: Item) => () => void;
   getItemProps: UseInteractionsReturn['getItemProps'];
@@ -140,9 +144,12 @@ const MenuRoot = ({
   const elementsRef = useRef<(HTMLElement | null)[]>([]);
   const [items, setItems] = useState<Items>({});
   const labelsRef = useRef<string[]>([]);
-  const [searchInputRef, setSearchInputRef] = useState<HTMLInputElement | null>(
-    null
-  );
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const [hasSearchInput, setHasSearchInput] = useState(false);
+  const setSearchInputEl = useCallback((el: HTMLInputElement | null) => {
+    searchInputRef.current = el;
+    setHasSearchInput(!!el);
+  }, []);
 
   useEffect(() => {
     labelsRef.current = Object.values(items).map((item) => item.label);
@@ -166,6 +173,13 @@ const MenuRoot = ({
     nodeId,
     placement: propPlacement ?? (isNested ? 'right-start' : 'bottom-start'),
     offset: isNested ? -4 : 4,
+    // On narrow viewports a 224px-wide submenu can't fit on either side of
+    // the trigger. Letting `flip` fall back to vertical placements puts it
+    // below (or above) the trigger inside the parent panel — same approach
+    // as base-ui's `fallbackAxisSideDirection`.
+    flipFallbackPlacements: isNested
+      ? ['left-start', 'bottom-start', 'top-start']
+      : undefined,
     ...props,
   });
 
@@ -193,7 +207,7 @@ const MenuRoot = ({
     activeIndex: highlightedIndex,
     nested: isNested,
     onNavigate: setHighlightedIndex,
-    virtual: !!searchInputRef,
+    virtual: hasSearchInput,
   });
 
   const typeahead = useTypeahead(floating.context, {
@@ -201,7 +215,7 @@ const MenuRoot = ({
     // or in nested submenus (their parent's typeahead handles letter keys at
     // the root level). Floating UI gates by `open` internally, so a closed
     // sibling menu won't hijack keystrokes.
-    enabled: !searchInputRef && !isNested,
+    enabled: !hasSearchInput && !isNested,
     listRef: labelsRef,
     activeIndex: highlightedIndex,
     onMatch: setHighlightedIndex,
@@ -262,7 +276,8 @@ const MenuRoot = ({
       highlightedIndex,
       setHighlightedIndex,
       searchInputRef,
-      setSearchInputRef,
+      hasSearchInput,
+      setSearchInputEl,
       items,
       registerItem,
       getItemProps: interactions.getItemProps,
@@ -271,7 +286,8 @@ const MenuRoot = ({
       parent,
       isNested,
       highlightedIndex,
-      searchInputRef,
+      hasSearchInput,
+      setSearchInputEl,
       items,
       registerItem,
       interactions.getItemProps,
@@ -339,7 +355,7 @@ const itemTriggerStyle = cva({
     'font-medium text-base text-foreground/80 outline-none',
     'first-of-type:mt-(--inset) last-of-type:mb-(--inset)',
     'data-disabled:pointer-events-none data-disabled:opacity-50',
-    'data-[state=open]:bg-background-secondary data-highlighted:bg-background-secondary',
+    'active:bg-background-secondary data-[state=open]:bg-background-secondary data-highlighted:bg-background-secondary',
   ],
 });
 
@@ -393,7 +409,8 @@ const MenuItems = ({
   ...props
 }: MenuItemsProps) => {
   const popover = usePopoverContext();
-  const { isNested, elementsRef } = useMenuContext();
+  const { isNested, elementsRef, searchInputRef, hasSearchInput } =
+    useMenuContext();
 
   const ref = useMergeRefs([popover.refs.setFloating, refProp]);
 
@@ -418,7 +435,9 @@ const MenuItems = ({
         context={popover.context}
         modal={popover.modal}
         isPositioned={popover.isPositioned}
-        initialFocus={isNested ? -1 : 0}
+        // Point FFM at the search input so it skips the tabbable scan and
+        // focuses the input directly — keeps iOS gesture context intact.
+        initialFocus={hasSearchInput ? searchInputRef : isNested ? -1 : 0}
         returnFocus={!isNested}
         animate={!isNested}
         className={cn(
@@ -442,8 +461,9 @@ const itemStyle = cva({
   ],
   variants: {
     variant: {
-      default: 'text-foreground/80 data-highlighted:bg-background-secondary',
-      destructive: 'text-error data-highlighted:bg-error/10',
+      default:
+        'text-foreground/80 active:bg-background-secondary data-highlighted:bg-background-secondary',
+      destructive: 'text-error active:bg-error/10 data-highlighted:bg-error/10',
     },
   },
   defaultVariants: { variant: 'default' },
@@ -516,8 +536,8 @@ const MenuItem = ({
     // input is present (rare — usually focus stays on the input in virtual
     // mode), forward subsequent keystrokes back to the input so typing keeps
     // working.
-    if (searchInputRef && e.key !== 'Enter') {
-      searchInputRef.focus();
+    if (searchInputRef.current && e.key !== 'Enter') {
+      searchInputRef.current.focus();
     }
   };
 
@@ -620,17 +640,17 @@ const MenuSearchInput = ({
     highlightedIndex,
     setHighlightedIndex,
     items,
-    setSearchInputRef,
+    setSearchInputEl,
     elementsRef,
   } = useMenuContext();
   const popoverCtx = usePopoverContext();
   const tree = useFloatingTree();
 
-  const ref = useMergeRefs([refProp, internalRef]);
-
-  useEffect(() => {
-    if (internalRef.current) setSearchInputRef(internalRef.current);
-  }, [setSearchInputRef]);
+  // Callback ref keeps the menu's searchInputRef in sync as the input mounts
+  // and unmounts. Using a callback ref (not a useEffect) means the menu's ref
+  // is set during commit, before FloatingFocusManager's rAF fires — so its
+  // `initialFocus` ref dereferences cleanly.
+  const ref = useMergeRefs([refProp, internalRef, setSearchInputEl]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);
