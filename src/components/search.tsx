@@ -155,7 +155,7 @@ const Search = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
-            <div className="flex-1 overflow-y-auto py-(--inset) scroll-py-(--inset)">
+            <div className="flex-1 scroll-py-(--inset) overflow-y-auto py-(--inset)">
               {isPagefindError ? (
                 <PagefindError />
               ) : (

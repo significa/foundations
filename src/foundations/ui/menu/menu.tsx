@@ -196,12 +196,12 @@ const MenuRoot = ({
     virtual: !!searchInputRef,
   });
 
-  const isSingleNodeMenu = tree?.nodesRef.current.length === 1;
   const typeahead = useTypeahead(floating.context, {
-    // Disable typeahead when a search input is present (the input handles
-    // filtering) or in nested menus / multi-node trees (avoids hijacking
-    // letter keys that should reach a parent's search).
-    enabled: !searchInputRef && !isNested && isSingleNodeMenu,
+    // Disable typeahead when a search input is present (it owns letter keys)
+    // or in nested submenus (their parent's typeahead handles letter keys at
+    // the root level). Floating UI gates by `open` internally, so a closed
+    // sibling menu won't hijack keystrokes.
+    enabled: !searchInputRef && !isNested,
     listRef: labelsRef,
     activeIndex: highlightedIndex,
     onMatch: setHighlightedIndex,
@@ -422,7 +422,7 @@ const MenuItems = ({
         returnFocus={!isNested}
         animate={!isNested}
         className={cn(
-          'z-50 max-h-(--max-height) w-56 overflow-auto rounded-xl border border-border bg-background font-medium text-foreground shadow-lg outline-none scroll-py-(--inset)',
+          'z-50 max-h-(--max-height) w-56 scroll-py-(--inset) overflow-auto rounded-xl border border-border bg-background font-medium text-foreground shadow-lg outline-none',
           className
         )}
         {...popover.getFloatingProps(props)}
@@ -469,14 +469,8 @@ const MenuItem = ({
 }: MenuItemProps) => {
   const itemId = useId();
   const innerRef = useRef<HTMLButtonElement | null>(null);
-  const {
-    registerItem,
-    highlightedIndex,
-    getItemProps,
-    items,
-    searchInputRef,
-    elementsRef,
-  } = useMenuContext();
+  const { registerItem, highlightedIndex, getItemProps, searchInputRef } =
+    useMenuContext();
   const popoverCtx = usePopoverContext();
   const tree = useFloatingTree();
   const stableOnSelect = useStableCallback(onSelect);
@@ -517,14 +511,12 @@ const MenuItem = ({
     onKeyDown?.(e);
     if (e.defaultPrevented) return;
 
-    if (e.key === 'Enter' && highlightedIndex !== null) {
-      // Look up the item by DOM order — `items` is a record and may be in
-      // registration order rather than rendered order.
-      const id = elementsRef.current[highlightedIndex]?.dataset.itemId;
-      if (id) items[id]?.onSelect?.(e);
-    } else if (searchInputRef) {
-      // Forward letter/text keys to the search input so users can keep typing
-      // after navigating with arrow keys.
+    // Native button Enter already triggers click → handleClick → onSelect, so
+    // we don't handle Enter here. If an item ends up focused while a search
+    // input is present (rare — usually focus stays on the input in virtual
+    // mode), forward subsequent keystrokes back to the input so typing keeps
+    // working.
+    if (searchInputRef && e.key !== 'Enter') {
       searchInputRef.focus();
     }
   };
