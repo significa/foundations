@@ -9,12 +9,12 @@ Some items will be impossible to do until there is decent baseline support for t
 - [ ] Remove TextareaResize in favour of `field-sizing: content` as soon as it's baseline.
 - [ ] Select VS Listbox. If styling selects is baseline we should try to see if Listbox can be replaced by more customisation in the native Select component.
 - [ ] Drag to dismiss drawer (at least on mobile).
-- [ ] Schemes: instead of just changing accent, allow for the DS panel to define complete themes. We could have a few presets and as a stretch-goal allow to create custom themes in the ds panel itself. Requires good and clever UX.
 - [ ] EPIC: React Native. We have a lot of projects in React Native with seriously good design systems (reanimated instead of motion). Check our codebases and plan this.
+- [ ] check if the radii scale is good as is or if we should use something like fibonnaci or golden ratio.
 
 ## Missing components
 
 - [ ] File upload
-- [ ] CMD K
+- [ ] CMD K (might be unnecessary as we built one for these docs with the components we already have. do benchmarking. check other libraries and see if it's a real necessity. this is a cool component to build)
 - [ ] Data Table
 - [ ] Menu - mainly because of nested menus (linear-style). Careful, lots of overlapping concern with existing Dropdown. Probably worth it to consider merging all of this into one, if possible
