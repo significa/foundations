@@ -537,7 +537,7 @@ const ListboxDivider = ({
   className,
   ...props
 }: Omit<React.ComponentPropsWithRef<'div'>, 'children'>) => {
-  return <Divider className={cn('my-1', className)} {...props} />;
+  return <Divider className={cn('my-(--inset)', className)} {...props} />;
 };
 
 /**

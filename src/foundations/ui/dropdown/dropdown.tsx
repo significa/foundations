@@ -331,7 +331,7 @@ const DropdownDivider = ({
   className,
   ...props
 }: React.ComponentPropsWithRef<'div'>) => {
-  return <Divider className={cn('my-1', className)} {...props} />;
+  return <Divider className={cn('my-(--inset)', className)} {...props} />;
 };
 
 const DropdownSearchInput = ({

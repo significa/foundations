@@ -1,7 +1,8 @@
 import {
-  COLOR_TOKENS,
   type ColorToken,
+  SCHEME_TOKENS,
   type Scheme,
+  SEMANTIC_TOKENS,
   TOKEN_LABELS,
   type TokenValues,
 } from './schemes';
@@ -53,6 +54,44 @@ type SchemeEditorProps = {
   ) => void;
 };
 
+type TokenRowProps = {
+  token: ColorToken;
+  scheme: Scheme;
+  overrides: Partial<Record<ColorToken, TokenValues>>;
+  onTokenChange: SchemeEditorProps['onTokenChange'];
+};
+
+const TokenRow = ({
+  token,
+  scheme,
+  overrides,
+  onTokenChange,
+}: TokenRowProps) => {
+  const values = overrides[token] ?? scheme.colors[token];
+  const label = TOKEN_LABELS[token];
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="font-medium text-2xs text-foreground-secondary">
+        {label}
+      </span>
+      <div className="flex gap-1.5">
+        <TokenInput
+          label={label}
+          side="light"
+          value={values.light}
+          onChange={(v) => onTokenChange(token, 'light', v)}
+        />
+        <TokenInput
+          label={label}
+          side="dark"
+          value={values.dark}
+          onChange={(v) => onTokenChange(token, 'dark', v)}
+        />
+      </div>
+    </div>
+  );
+};
+
 const SchemeEditor = ({
   scheme,
   overrides,
@@ -60,31 +99,29 @@ const SchemeEditor = ({
 }: SchemeEditorProps) => {
   return (
     <div className="flex flex-col gap-2.5 p-3">
-      {COLOR_TOKENS.map((token) => {
-        const values = overrides[token] ?? scheme.colors[token];
-        const label = TOKEN_LABELS[token];
-        return (
-          <div key={token} className="flex flex-col gap-1">
-            <span className="font-medium text-2xs text-foreground-secondary">
-              {label}
-            </span>
-            <div className="flex gap-1.5">
-              <TokenInput
-                label={label}
-                side="light"
-                value={values.light}
-                onChange={(v) => onTokenChange(token, 'light', v)}
-              />
-              <TokenInput
-                label={label}
-                side="dark"
-                value={values.dark}
-                onChange={(v) => onTokenChange(token, 'dark', v)}
-              />
-            </div>
-          </div>
-        );
-      })}
+      {SCHEME_TOKENS.map((token) => (
+        <TokenRow
+          key={token}
+          token={token}
+          scheme={scheme}
+          overrides={overrides}
+          onTokenChange={onTokenChange}
+        />
+      ))}
+      <div className="-mx-3 mt-1 border-border border-t pt-3">
+        <span className="font-medium text-2xs text-foreground-secondary uppercase tracking-wider">
+          Semantic
+        </span>
+      </div>
+      {SEMANTIC_TOKENS.map((token) => (
+        <TokenRow
+          key={token}
+          token={token}
+          scheme={scheme}
+          overrides={overrides}
+          onTokenChange={onTokenChange}
+        />
+      ))}
     </div>
   );
 };

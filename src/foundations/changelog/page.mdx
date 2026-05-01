@@ -10,6 +10,24 @@ meta:
 
 ## May 2026
 
+### Fixed: `Dropdown.Divider` and `Listbox.Divider` vertical spacing not tracking `--inset`
+
+`Dropdown.Item` and `Listbox.Option` already breathe inward with `--inset` (side margins, plus `mt`/`mb` on first/last). The dividers were hard-coded to `my-1`, so at `--radius: 0` items sat flush to the panel edge but a constant 8px gap remained around dividers. The divider's vertical spacing should derive from the same dial as the rest of the inset behaviour.
+
+Fix: switch the dividers' vertical margin to `my-(--inset)`.
+
+```diff tsx
+  const DropdownDivider = ({ className, ...props }) => {
+-   return <Divider className={cn('my-1', className)} {...props} />;
++   return <Divider className={cn('my-(--inset)', className)} {...props} />;
+  };
+
+  const ListboxDivider = ({ className, ...props }) => {
+-   return <Divider className={cn('my-1', className)} {...props} />;
++   return <Divider className={cn('my-(--inset)', className)} {...props} />;
+  };
+```
+
 ### Fixed: `Popover` scrolling the page on open
 
 Floating UI returns `x` / `y` as `null` on the first render before positioning runs. The panel was therefore rendered at `top: 0, left: 0`, and `FloatingFocusManager`'s autofocus then made the browser scroll-into-view toward the document's top-left before floating-ui applied the real coordinates. Visible as a small upward jump every time the trigger was clicked while the page was scrolled. Affects every `Popover` consumer (`Dropdown`, `DatePicker`, `DSConfig`, etc.).
