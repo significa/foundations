@@ -96,7 +96,10 @@ const usePopoverFloating = ({
 
   // When origin is an explicit [x, y], pin the floating element to that point
   // via Floating UI's virtual reference pattern. The trigger element stays the
-  // interaction reference (focus, dismiss); only positioning changes.
+  // interaction reference (focus, dismiss); only positioning changes. When the
+  // mode changes back to 'trigger' or 'pointer', reset the position reference
+  // so we don't reuse a stale virtual rect from a previous mode. For 'pointer',
+  // the trigger's onClick will set a fresh virtual rect on demand.
   useEffect(() => {
     if (Array.isArray(origin)) {
       const [x, y] = origin;
@@ -112,6 +115,8 @@ const usePopoverFloating = ({
           left: x,
         }),
       });
+    } else {
+      floating.refs.setPositionReference(null);
     }
   }, [origin, floating.refs]);
 
@@ -233,28 +238,28 @@ const PopoverTrigger = ({
       data-state={context.open ? 'open' : 'closed'}
       {...referenceProps}
       onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-        // Keyboard-triggered clicks have clientX/Y of 0; treat as falsy so we
-        // fall back to anchoring at the trigger element instead of (0, 0).
-        if (
-          context.origin === 'pointer' &&
-          !context.open &&
-          event.clientX &&
-          event.clientY
-        ) {
-          const x = event.clientX;
-          const y = event.clientY;
-          context.refs.setPositionReference({
-            getBoundingClientRect: () => ({
-              width: 0,
-              height: 0,
-              x,
-              y,
-              top: y,
-              right: x,
-              bottom: y,
-              left: x,
-            }),
-          });
+        if (context.origin === 'pointer' && !context.open) {
+          // Keyboard-triggered clicks have clientX/Y of 0. Set a virtual rect
+          // when we have real coords; otherwise clear any previous virtual rect
+          // so we don't reuse stale coordinates from an earlier click-open.
+          if (event.clientX && event.clientY) {
+            const x = event.clientX;
+            const y = event.clientY;
+            context.refs.setPositionReference({
+              getBoundingClientRect: () => ({
+                width: 0,
+                height: 0,
+                x,
+                y,
+                top: y,
+                right: x,
+                bottom: y,
+                left: x,
+              }),
+            });
+          } else {
+            context.refs.setPositionReference(null);
+          }
         }
         if (typeof referenceProps.onClick === 'function') {
           referenceProps.onClick(event);

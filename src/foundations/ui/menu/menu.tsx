@@ -631,6 +631,8 @@ const MenuSearchInput = ({
     setSearchInputRef,
     elementsRef,
   } = useMenuContext();
+  const popoverCtx = usePopoverContext();
+  const tree = useFloatingTree();
 
   const ref = useMergeRefs([refProp, internalRef]);
 
@@ -646,7 +648,18 @@ const MenuSearchInput = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && highlightedIndex !== null) {
       const id = elementsRef.current[highlightedIndex]?.dataset.itemId;
-      if (id) items[id]?.onSelect?.(e);
+      if (id && items[id]) {
+        items[id].onSelect?.(e);
+        // Mirror MenuItem.handleClick: close the whole tree on selection
+        // unless onSelect explicitly preventDefault'd.
+        if (!e.defaultPrevented) {
+          if (tree) {
+            tree.events.emit('click');
+          } else {
+            popoverCtx.setOpen(false);
+          }
+        }
+      }
     }
     onKeyDown?.(e);
   };

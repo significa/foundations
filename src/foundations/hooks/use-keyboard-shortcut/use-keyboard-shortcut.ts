@@ -134,6 +134,11 @@ export const useKeyboardShortcut = (
         }
 
         const expected = current.sequence[position];
+        if (!expected) {
+          // Empty sequence or sequence shrunk between renders — bail out.
+          reset();
+          return;
+        }
         if (keyEvent.key.toLowerCase() !== expected.toLowerCase()) {
           reset();
           return;
@@ -153,6 +158,15 @@ export const useKeyboardShortcut = (
       }
 
       if (!matches(keyEvent, current)) return;
+      // No-modifier shortcuts (`{ key: 'e' }`) would fire while the user is
+      // typing the same letter into an input. Skip in that case — modifier
+      // shortcuts (⌘K, /) are explicit enough to override anyway.
+      const hasModifier =
+        Boolean(current.mod) ||
+        Boolean(current.meta) ||
+        Boolean(current.ctrl) ||
+        Boolean(current.alt);
+      if (!hasModifier && isTypingTarget(keyEvent.target)) return;
       if (preventDefault) keyEvent.preventDefault();
       stableCallback(keyEvent);
     };
