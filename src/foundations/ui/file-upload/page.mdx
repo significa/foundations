@@ -1,0 +1,290 @@
+---
+title: File Upload
+description: A drag-and-drop file picker with validation, previews, and progress rendering.
+preview: file-upload
+files:
+  - src/foundations/ui/file-upload/file-upload.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+
+folder: UI
+---
+
+## Anatomy
+
+```tsx
+<FileUpload>
+  <FileUpload.Dropzone>
+    <FileUpload.Trigger />
+  </FileUpload.Dropzone>
+  <FileUpload.List>
+    {(files) =>
+      files.map((entry) => (
+        <FileUpload.Item key={entry.id} entry={entry}>
+          <FileUpload.ItemPreview />
+          <FileUpload.ItemName />
+          <FileUpload.ItemSize />
+          <FileUpload.ItemProgress />
+          <FileUpload.ItemRemove />
+        </FileUpload.Item>
+      ))
+    }
+  </FileUpload.List>
+</FileUpload>
+```
+
+## Features
+
+- **Drag, click, and keyboard** — all three input methods, no configuration needed
+- **Validation** — `accept`, `maxFiles`, `maxSize`, `minSize`, plus a custom `validate` function
+- **Image previews** — automatic object-URL thumbnails for images, MIME-grouped icons otherwise
+- **Progress rendering** — pass `progress` and `status` to each `Item`; the primitive renders the bar, you drive the value
+- **Form-friendly** — supports `name`, `required`, and `disabled` for submission as part of a form
+- **Compound API** — every part is replaceable, including the dropzone surface and trigger button
+
+## Scope
+
+This primitive owns **file selection and UI state**. It does not own **transport** — the actual upload (XHR / fetch / S3 / tus) is the consumer's job. This is intentional: every project's upload backend is different, and bundling one would add weight and friction without solving the real work. See the [Progress example](#with-progress) for the recommended pattern.
+
+## API Reference
+
+### FileUpload
+
+The root component. Manages selected and rejected file state, renders a hidden `<input type="file">`, and provides context to all subcomponents. Extends `<div>`.
+
+<PropsTable
+  definition={{
+    accept: {
+      type: "string",
+      description: "Comma-separated list of allowed MIME types or extensions (e.g. `image/*,.pdf`).",
+    },
+    multiple: {
+      type: "boolean",
+      description: "Whether multiple files can be selected.",
+      default: "true",
+    },
+    maxFiles: {
+      type: "number",
+      description: "Maximum number of files allowed in the accepted list.",
+    },
+    maxSize: {
+      type: "number",
+      description: "Maximum size per file in bytes.",
+    },
+    minSize: {
+      type: "number",
+      description: "Minimum size per file in bytes.",
+    },
+    disabled: {
+      type: "boolean",
+      description: "Disables the picker and all triggers.",
+    },
+    required: {
+      type: "boolean",
+      description: "Marks the underlying input as required for form submission.",
+    },
+    name: {
+      type: "string",
+      description: "Name of the underlying input for form submission.",
+    },
+    validate: {
+      type: "(file: File) => string | undefined",
+      description: "Custom validator. Return an error key to reject the file, or undefined to accept it.",
+    },
+    onFilesChange: {
+      type: "(files: File[]) => void",
+      description: "Called whenever the accepted file list changes (add, remove, clear).",
+    },
+    onAdd: {
+      type: "(entries: FileEntry[]) => void",
+      description: "Called only when new files are accepted. Use this to start uploads or other side effects — `onFilesChange` would also fire on remove/clear.",
+    },
+    onReject: {
+      type: "(rejections: RejectedFileEntry[]) => void",
+      description: "Called when files fail validation. Each entry includes the file and the error key (`invalid-type`, `too-large`, `too-small`, `too-many`, or any string returned by `validate`).",
+    },
+  }}
+/>
+
+### FileUpload.Dropzone
+
+The drop target. Handles drag and drop, click-to-open, and exposes drag state via `data-*` attributes. Extends `<div>`.
+
+| Attribute       | Values              | Meaning                                           |
+| --------------- | ------------------- | ------------------------------------------------- |
+| `data-dragging` | `true \| undefined` | A drag is currently over the dropzone.            |
+| `data-invalid`  | `true \| undefined` | The dragged content does not match `accept`.      |
+| `data-disabled` | `true \| undefined` | The upload is disabled.                           |
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### FileUpload.Trigger
+
+A button that opens the file picker. Stops click propagation so it can be safely nested inside a `Dropzone` without double-opening the picker. Extends `<button>`.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### FileUpload.List
+
+Renders the accepted file list. Uses a render-prop so the consumer can iterate and pass per-item props (status, progress, error). Extends `<ul>`.
+
+<PropsTable
+  definition={{
+    children: {
+      type: "(files: FileEntry[]) => ReactNode",
+      description: "Render function called with the current accepted files.",
+      required: true,
+    },
+    emptyFallback: {
+      type: "ReactNode",
+      description: "Rendered when there are no accepted files. Pass `null` to keep the list rendered but empty.",
+    },
+  }}
+/>
+
+### FileUpload.Item
+
+A single accepted file. Provides item context to subcomponents. Extends `<li>`.
+
+<PropsTable
+  definition={{
+    entry: {
+      type: "FileEntry",
+      description: "The file entry for this row.",
+      required: true,
+    },
+    status: {
+      type: '"idle" | "uploading" | "success" | "error"',
+      description: "Optional upload status, surfaced as `data-status`.",
+    },
+    progress: {
+      type: "number",
+      description: "Optional upload progress (0–100), used by `Item.Progress`.",
+    },
+    error: {
+      type: "string",
+      description: "Optional error string. When set, the row gets `data-error` for styling.",
+    },
+  }}
+/>
+
+### FileUpload.ItemPreview
+
+Renders an image thumbnail (via `URL.createObjectURL`) for image files, or a MIME-grouped icon otherwise. Object URLs are revoked on unmount. Extends `<div>`.
+
+### FileUpload.ItemName
+
+Renders the file's name with truncation and a tooltip. Extends `<span>`.
+
+### FileUpload.ItemSize
+
+Renders the file's size formatted as `B`, `KB`, `MB`, etc. Extends `<span>`.
+
+### FileUpload.ItemProgress
+
+Renders a progress bar reflecting the parent `Item`'s `progress` prop. Returns `null` when no `progress` is set unless `showWhenIdle` is true. Switches to the error color when `status === 'error'`. Extends `<div>`.
+
+<PropsTable
+  definition={{
+    showWhenIdle: {
+      type: "boolean",
+      description: "Render the bar even when no `progress` is set.",
+      default: "false",
+    },
+  }}
+/>
+
+### FileUpload.ItemRemove
+
+A button that removes the parent `Item` from the accepted list. Extends `<button>`.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### useFileUploadContext
+
+Hook for reading FileUpload state from any descendant. Useful for rendering rejection lists, syncing upload tracking, or building custom subcomponents.
+
+```tsx
+const { files, rejected, isDragging, remove, clear, open } = useFileUploadContext();
+```
+
+## Examples
+
+### Default
+
+Drag-and-drop with browse button, validation, image previews, and removable items.
+
+<Preview slug="file-upload" />
+
+### Without dropzone
+
+Use a `Trigger` on its own when a drop area would be visually heavy or out of place — for example, a single-image picker beside a preview.
+
+<Preview slug="file-upload-without-dropzone" />
+
+### With progress
+
+The recommended pattern for tracking real uploads: kick off transport from `onAdd`, store per-id state in the parent, and pass `status` + `progress` back to each `Item`. The primitive renders the bar; the consumer drives the value via XHR's `upload.onprogress` event. `fetch` does not expose upload progress reliably across browsers — use `XMLHttpRequest`.
+
+<Preview slug="file-upload-progress" />
+
+### Validation errors
+
+Shows rejected files alongside their reason. The `onReject` callback gives you the offending files and the error key (`invalid-type`, `too-large`, `too-small`, `too-many`, or your own from `validate`).
+
+<Preview slug="file-upload-errors" />
+
+## Wiring to a real backend
+
+The primitive deliberately stops at file selection. To wire it to a real upload endpoint:
+
+```tsx
+const upload = (file: File, onProgress: (n: number) => void) => {
+  return new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener("progress", (e) => {
+      if (e.lengthComputable) onProgress((e.loaded / e.total) * 100);
+    });
+    xhr.addEventListener("load", () =>
+      xhr.status >= 200 && xhr.status < 300 ? resolve() : reject()
+    );
+    xhr.addEventListener("error", () => reject());
+
+    const form = new FormData();
+    form.append("file", file);
+    xhr.open("POST", "/api/upload");
+    xhr.send(form);
+  });
+};
+```
+
+For S3, the same shape works against a pre-signed URL — replace the URL and use `PUT` with the file directly as the body. For resumable uploads (`tus`), a multi-GB workflow, or remote sources (Drive, Dropbox), reach for [Uppy](https://uppy.io) instead of extending this primitive.
+
+## Best Practices
+
+1. **Keep transport out of the component**. Track upload state in the parent and pass `progress` / `status` down. This keeps the primitive reusable across very different backends.
+2. **Use XHR, not fetch, for progress**. Browser support for `fetch` upload streams is still uneven in 2026.
+3. **Validate on both ends**. `accept` and `maxSize` only filter at the picker level — always validate on the server too.
+4. **Reset upload tracking on remove**. When a user removes a file mid-upload, abort the request (`xhr.abort()`) to avoid wasted bandwidth.
