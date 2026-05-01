@@ -96,10 +96,11 @@ const usePopoverFloating = ({
 
   // When origin is an explicit [x, y], pin the floating element to that point
   // via Floating UI's virtual reference pattern. The trigger element stays the
-  // interaction reference (focus, dismiss); only positioning changes. When the
-  // mode changes back to 'trigger' or 'pointer', reset the position reference
-  // so we don't reuse a stale virtual rect from a previous mode. For 'pointer',
-  // the trigger's onClick will set a fresh virtual rect on demand.
+  // interaction reference (focus, dismiss); only positioning changes. We don't
+  // reset to null in the 'trigger' / 'pointer' branches: setPositionReference
+  // is wired into Floating UI's lower-level setReference, and clearing it
+  // after the trigger's ref callback has already registered would break
+  // positioning entirely.
   useEffect(() => {
     if (Array.isArray(origin)) {
       const [x, y] = origin;
@@ -115,8 +116,6 @@ const usePopoverFloating = ({
           left: x,
         }),
       });
-    } else {
-      floating.refs.setPositionReference(null);
     }
   }, [origin, floating.refs]);
 
@@ -238,28 +237,29 @@ const PopoverTrigger = ({
       data-state={context.open ? 'open' : 'closed'}
       {...referenceProps}
       onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-        if (context.origin === 'pointer' && !context.open) {
-          // Keyboard-triggered clicks have clientX/Y of 0. Set a virtual rect
-          // when we have real coords; otherwise clear any previous virtual rect
-          // so we don't reuse stale coordinates from an earlier click-open.
-          if (event.clientX && event.clientY) {
-            const x = event.clientX;
-            const y = event.clientY;
-            context.refs.setPositionReference({
-              getBoundingClientRect: () => ({
-                width: 0,
-                height: 0,
-                x,
-                y,
-                top: y,
-                right: x,
-                bottom: y,
-                left: x,
-              }),
-            });
-          } else {
-            context.refs.setPositionReference(null);
-          }
+        // Pointer mode: capture the click coordinates and pin the floating
+        // panel there. Keyboard-triggered clicks have clientX/Y of 0 — we
+        // skip in that case and let positioning fall back to the trigger.
+        if (
+          context.origin === 'pointer' &&
+          !context.open &&
+          event.clientX &&
+          event.clientY
+        ) {
+          const x = event.clientX;
+          const y = event.clientY;
+          context.refs.setPositionReference({
+            getBoundingClientRect: () => ({
+              width: 0,
+              height: 0,
+              x,
+              y,
+              top: y,
+              right: x,
+              bottom: y,
+              left: x,
+            }),
+          });
         }
         if (typeof referenceProps.onClick === 'function') {
           referenceProps.onClick(event);
