@@ -1,0 +1,125 @@
+---
+title: Number Input
+description: An editable numeric input with stepper buttons, keyboard support, and pluggable formatting for locale-aware display.
+preview: number-input
+files:
+  - src/foundations/ui/number-input/number-input.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: Input
+    href: /ui/input
+
+folder: UI
+---
+
+## Anatomy
+
+```tsx
+// Default — root renders an Input.Group with steppers + field.
+<NumberInput value={n} onValueChange={setN} min={0} max={100} step={1} />
+
+// Custom layout — pass children to override.
+<NumberInput value={n} onValueChange={setN}>
+  <NumberInput.Decrement />
+  <NumberInput.Field />
+  <NumberInput.Increment />
+</NumberInput>
+```
+
+The root wraps everything in `Input.Group` and provides a default layout. Pass children when you need a different arrangement — drop a stepper, wrap the field with `Field.Control`, or splice in custom addons.
+
+## API Reference
+
+### NumberInput
+
+<PropsTable
+  definition={{
+    value: { type: "number", description: "Controlled value." },
+    defaultValue: { type: "number", description: "Default value (uncontrolled). Defaults to `min` if finite, otherwise `0`." },
+    onValueChange: { type: "(value: number) => void", description: "Called when the value commits — on blur, Enter, stepper click, or keyboard step." },
+    min: { type: "number", default: "-Infinity", description: "Lower bound, inclusive. Steppers disable at the bound only when finite." },
+    max: { type: "number", default: "+Infinity", description: "Upper bound, inclusive." },
+    step: { type: "number", default: "1", description: "Increment step. Determines display precision (e.g. `step={0.01}` rounds to 2 decimals)." },
+    disabled: { type: "boolean", default: "false" },
+    format: { type: "(n: number) => string", default: "String", description: "Format the committed value for display." },
+    parse: { type: "(s: string) => number", description: "Parse the user's typed value. Return `NaN` to reject (the field reverts on blur). Defaults to a `Number`-based parser that treats empty input as invalid." },
+  }}
+/>
+
+### NumberInput.Field
+
+Extends `Input`. Renders an `<input type="text" inputMode="decimal" role="spinbutton">` wired to the context. `value`, `defaultValue`, `onChange`, `type`, and `disabled` are owned by the root and can't be overridden here.
+
+### NumberInput.Decrement / NumberInput.Increment
+
+Extend the `button` element. Auto-disable when the value reaches a finite `min` / `max`. Default to a Phosphor `Minus` / `Plus` icon — pass children to override, or `asChild` to swap the entire element.
+
+## Behavior
+
+### Typing is unrestricted
+
+The field accepts any input — digits, signs, `.`, `,`, `e`, even garbage like `abc`. There is no per-keystroke filtering. **The user's input is parsed only on commit** (blur or Enter):
+
+- If `parse` returns a finite number, the value clamps to `[min, max]`, rounds to `step` precision, and commits.
+- If `parse` returns `NaN`, the field reverts to the last committed value.
+
+This matches the spirit of native `<input type="number">` (which also accepts `e` for scientific notation) and avoids fighting the user mid-edit.
+
+### Keyboard
+
+| Key             | Action                       |
+| --------------- | ---------------------------- |
+| `↑` / `↓`       | Step by `±step`              |
+| `Shift + ↑/↓`   | Step by `±step × 10`         |
+| `Page Up/Down`  | Step by `±step × 10`         |
+| `Home`          | Jump to `min` (if finite)    |
+| `End`           | Jump to `max` (if finite)    |
+| `Enter`         | Commit the current draft     |
+
+### Bounded vs unbounded
+
+`min` and `max` default to `±Infinity`. Bounds only become enforced (and steppers disable) when finite. Pass any combination — bounded above, bounded below, or both.
+
+<Preview slug="number-input-bounded" />
+
+## Inside a Field
+
+`Field.Control` wraps a single form control. Place it around `NumberInput.Field`, not the root — the root has no DOM and the steppers aren't form controls.
+
+<Preview slug="number-input-form" />
+
+## Locale-aware formatting
+
+Pass `format` and `parse` to swap how the value is shown and how user input is interpreted. Anything goes — `Intl.NumberFormat`, custom precision, currency, thousands separators. This example uses `de-DE` formatting (`1.234,56`):
+
+<Preview slug="number-input-locale" />
+
+```tsx
+const formatter = new Intl.NumberFormat("de-DE", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+<NumberInput
+  format={(n) => formatter.format(n)}
+  parse={(s) => Number(s.replace(/\./g, "").replace(",", "."))}
+  // ...
+/>;
+```
+
+## Async sync
+
+Common shape for ecommerce-style flows: commit locally on every change so the UI feels instant, debounce the server call in the background, and surface a status indicator as a sibling of the input. Keep the field interactive throughout — disabling mid-sync makes a snappy interaction feel laggy. Avoid placing the indicator _inside_ the input next to a centered value; it competes with the optical balance.
+
+<Preview slug="number-input-async" />
+
+## Best Practices
+
+1. **Don't fight the user.** No keystroke filtering, no auto-format mid-edit. Validate on blur. If a user wants to paste `1e3`, let them — it's a valid number.
+2. **Use `step` for precision, not decoration.** Setting `step={0.01}` doesn't just constrain the steppers — it also rounds committed values to 2 decimals. Pick a step that reflects the precision you actually want stored.
+3. **Bounded inputs deserve labels.** When `min`/`max` are enforced, communicate them: a `Field.Description` ("Between 1 and 99") goes a long way for users who don't notice the steppers disabling.
+4. **Accessibility:**
+   - The field renders `role="spinbutton"` with `aria-valuenow`, `aria-valuetext`, and (when finite) `aria-valuemin` / `aria-valuemax`.
+   - `aria-valuetext` is the formatted string (`"1.234,56"`), so screen readers announce the displayed value, not the raw number.
+   - Steppers ship with sensible default `aria-label`s — override per locale.
