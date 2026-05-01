@@ -10,6 +10,92 @@ meta:
 
 ## May 2026
 
+### `Dropdown` replaced by `Menu`, with nested submenu support
+
+`Dropdown` is gone. `Menu` takes its place with the same surface area for flat menus plus first-class support for **nested submenus** (`Menu.ItemTrigger` opens a submenu rendered as a child `<Menu>`). Hover-to-open with `safePolygon`, right/left-arrow nav between levels, and `FloatingTree` coordination so any item click closes the whole tree. Item styling now exposes a `variant` prop with a built-in `destructive` option.
+
+For consumers, the migration is mechanical — rename and you're done:
+
+```diff tsx
+- import { Dropdown } from "@/foundations/ui/dropdown/dropdown";
++ import { Menu } from "@/foundations/ui/menu/menu";
+
+- <Dropdown>
+-   <Dropdown.Trigger asChild>...</Dropdown.Trigger>
+-   <Dropdown.Items>
+-     <Dropdown.Section>
+-       <Dropdown.Heading>Actions</Dropdown.Heading>
+-       <Dropdown.Item onSelect={...}>Edit</Dropdown.Item>
+-       <Dropdown.Divider />
+-       <Dropdown.Item className="text-red-500">Delete</Dropdown.Item>
+-     </Dropdown.Section>
+-   </Dropdown.Items>
+- </Dropdown>
++ <Menu>
++   <Menu.Trigger asChild>...</Menu.Trigger>
++   <Menu.Items>
++     <Menu.Section>
++       <Menu.Heading>Actions</Menu.Heading>
++       <Menu.Item onSelect={...}>Edit</Menu.Item>
++       <Menu.Divider />
++       <Menu.Item variant="destructive">Delete</Menu.Item>
++     </Menu.Section>
++   </Menu.Items>
++ </Menu>
+```
+
+If you reach into the floating context, `useDropdownContext` is now `useMenuPopoverContext`:
+
+```diff ts
+- import { useDropdownContext } from "@/foundations/ui/dropdown/dropdown";
++ import { useMenuPopoverContext } from "@/foundations/ui/menu/menu";
+```
+
+For nested submenus:
+
+```tsx
+<Menu>
+  <Menu.Trigger asChild><Button>Open</Button></Menu.Trigger>
+  <Menu.Items>
+    <Menu.Item onSelect={...}>New file</Menu.Item>
+    <Menu>
+      <Menu.ItemTrigger>Share</Menu.ItemTrigger>
+      <Menu.Items>
+        <Menu.Item onSelect={...}>Copy link</Menu.Item>
+        <Menu.Item onSelect={...}>Email</Menu.Item>
+      </Menu.Items>
+    </Menu>
+  </Menu.Items>
+</Menu>
+```
+
+### `Popover` learned `origin` for cursor-anchored panels
+
+`Popover` (and therefore `Menu`) now accepts `origin: "trigger" | "pointer" | [number, number]`. `"pointer"` captures the click coordinates on the trigger and anchors the floating panel there instead of next to the trigger element. Passing an explicit `[clientX, clientY]` tuple lets you build right-click context menus without a separate primitive.
+
+```tsx
+// Open at click position
+<Popover origin="pointer">...</Popover>
+
+// Right-click context menu
+const [pos, setPos] = useState<[number, number] | null>(null);
+
+<div onContextMenu={(e) => { e.preventDefault(); setPos([e.clientX, e.clientY]); }}>
+  ...
+</div>
+<Menu open={!!pos} onOpenChange={(o) => !o && setPos(null)} origin={pos ?? 'trigger'}>
+  <Menu.Items>...</Menu.Items>
+</Menu>
+```
+
+### New: `useKeyboardShortcut` hook
+
+A small hook for global keyboard shortcuts. `mod: true` is the cross-platform modifier — ⌘ on macOS, Ctrl elsewhere — which is what you almost always want for app-level commands like ⌘K.
+
+```ts
+useKeyboardShortcut({ key: 'k', mod: true }, () => setOpen(true));
+```
+
 ### Fixed: `Dropdown.Divider` and `Listbox.Divider` vertical spacing not tracking `--inset`
 
 `Dropdown.Item` and `Listbox.Option` already breathe inward with `--inset` (side margins, plus `mt`/`mb` on first/last). The dividers were hard-coded to `my-1`, so at `--radius: 0` items sat flush to the panel edge but a constant 8px gap remained around dividers. The divider's vertical spacing should derive from the same dial as the rest of the inset behaviour.

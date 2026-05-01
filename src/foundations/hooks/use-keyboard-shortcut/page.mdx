@@ -1,0 +1,116 @@
+---
+title: useKeyboardShortcut
+description: A hook that listens for a global keyboard shortcut and invokes a callback.
+files:
+  - src/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut.ts
+dependencies:
+  - name: useStableCallback
+    href: /hooks/use-stable-callback
+
+folder: hooks
+---
+
+## Features
+
+- **Cross-platform** — `mod: true` matches ⌘ on macOS and Ctrl elsewhere
+- **Sequences** — `sequence: ['g', 'i']` for Vim/Linear-style multi-key shortcuts
+- **Stable callback** — your callback can read the latest state without retriggering the listener
+- **Scoped** — pass a `target` to scope the listener to an element instead of the whole document
+- **Toggleable** — `enabled: false` disables matching without unmounting
+
+## API Reference
+
+### Single shortcut
+
+A modifier-plus-key combination. Pass an object with `key` and optional modifier fields.
+
+<PropsTable
+  definition={{
+    key: {
+      type: "string",
+      required: true,
+      description: "The key to match. Compared case-insensitively against `event.key`.",
+    },
+    mod: {
+      type: "boolean",
+      description:
+        "Cross-platform modifier. When true, matches `meta` on macOS and `ctrl` everywhere else. Overrides `meta` and `ctrl` when set.",
+    },
+    meta: {
+      type: "boolean",
+      description: "Require the meta key (⌘ on macOS, Win on Windows).",
+    },
+    ctrl: {
+      type: "boolean",
+      description: "Require the ctrl key.",
+    },
+    shift: {
+      type: "boolean",
+      description: "Require the shift key.",
+    },
+    alt: {
+      type: "boolean",
+      description: "Require the alt/option key.",
+    },
+  }}
+/>
+
+### Sequence shortcut
+
+A series of keys typed in order. Pass an object with a `sequence` array. Sequences reset on a non-matching key, on any modifier, when focus is in an input/textarea/contenteditable, or after `sequenceTimeout` ms of inactivity.
+
+<PropsTable
+  definition={{
+    sequence: {
+      type: "string[]",
+      required: true,
+      description: "The keys to match in order, e.g. `['g', 'i']` for `g i`.",
+    },
+  }}
+/>
+
+### Options
+
+<PropsTable
+  definition={{
+    enabled: {
+      type: "boolean",
+      default: "true",
+      description: "Set to false to disable the listener without unmounting.",
+    },
+    preventDefault: {
+      type: "boolean",
+      default: "true",
+      description: "Whether to call `event.preventDefault()` on a match.",
+    },
+    target: {
+      type: "EventTarget | null",
+      description: "The element to listen on. Defaults to `document`.",
+    },
+    sequenceTimeout: {
+      type: "number",
+      default: "1000",
+      description: "Sequences only — milliseconds to wait between keys before resetting.",
+    },
+  }}
+/>
+
+## Examples
+
+### Cross-platform shortcut
+
+Open a panel with ⌘K on macOS and Ctrl+K elsewhere. The hook handles the match — pair it with `mod` whenever you wire up an app-level command.
+
+<Preview slug="use-keyboard-shortcut" />
+
+### Showing the right modifier in the UI
+
+`mod` resolves the shortcut at match time, but if you want to render the shortcut in the UI you need to detect the platform yourself. `navigator` is browser-only, so detect after hydration to stay SSR-safe — first paint shows the non-Mac version, then the Mac symbol swaps in.
+
+<Preview slug="use-keyboard-shortcut-platform" />
+
+### Multi-key sequence
+
+`g h`, `g i`, `g s` — the Linear/Vim/GitHub pattern. Pair each sequence with its destination.
+
+<Preview slug="use-keyboard-shortcut-sequence" />

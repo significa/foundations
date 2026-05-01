@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 
 import { DatePicker } from '@/foundations/ui/date-picker/date-picker';
-import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
+import { Menu } from '@/foundations/ui/menu/menu';
 
 export default function DatePickerShortcutsPreview() {
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
@@ -22,15 +22,15 @@ export default function DatePickerShortcutsPreview() {
           setDateRange(dates);
         }}
       >
-        <Dropdown.Divider />
-        <Dropdown.Item
+        <Menu.Divider />
+        <Menu.Item
           onSelect={() => {
             setDateRange([new Date(), new Date()]);
           }}
         >
           Today
-        </Dropdown.Item>
-        <Dropdown.Item
+        </Menu.Item>
+        <Menu.Item
           onSelect={() => {
             setDateRange([
               new Date(new Date().setDate(new Date().getDate() - 1)),
@@ -39,8 +39,8 @@ export default function DatePickerShortcutsPreview() {
           }}
         >
           Yesterday
-        </Dropdown.Item>
-        <Dropdown.Item
+        </Menu.Item>
+        <Menu.Item
           onSelect={() => {
             setDateRange([
               new Date(new Date().setDate(new Date().getDate() - 7)),
@@ -49,16 +49,16 @@ export default function DatePickerShortcutsPreview() {
           }}
         >
           Last 7 days
-        </Dropdown.Item>
-        <Dropdown.Divider />
-        <Dropdown.Item
-          className="text-red-500"
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item
+          variant="destructive"
           onSelect={() => {
             setDateRange(null);
           }}
         >
           Clear
-        </Dropdown.Item>
+        </Menu.Item>
       </DatePicker.Panel>
     </DatePicker>
   );

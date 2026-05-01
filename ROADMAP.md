@@ -11,10 +11,8 @@ Some items will be impossible to do until there is decent baseline support for t
 - [ ] Drag to dismiss drawer (at least on mobile).
 - [ ] EPIC: React Native. We have a lot of projects in React Native with seriously good design systems (reanimated instead of motion). Check our codebases and plan this.
 - [ ] check if the radii scale is good as is or if we should use something like fibonnaci or golden ratio.
+- [ ] IDEA: most times we copy the components and then scroll through all the lines finding places to edit the style. should we extract and move up in the component the style definition (classnames)? should we do it just for the style that's usually updated and leave the functional style inline? is this something that will make the components more complex for marginal gains?
 
 ## Missing components
 
-- [ ] File upload
-- [ ] CMD K (might be unnecessary as we built one for these docs with the components we already have. do benchmarking. check other libraries and see if it's a real necessity. this is a cool component to build)
 - [ ] Data Table
-- [ ] Menu - mainly because of nested menus (linear-style). Careful, lots of overlapping concern with existing Dropdown. Probably worth it to consider merging all of this into one, if possible

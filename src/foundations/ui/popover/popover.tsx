@@ -19,17 +19,29 @@ import {
   useTransitionStatus,
 } from '@floating-ui/react';
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
-import { createContext, use, useCallback, useMemo, useState } from 'react';
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { Slot } from '@/foundations/components/slot/slot';
 import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
 import { cn } from '@/lib/utils/classnames';
+
+type PopoverOrigin = 'trigger' | 'pointer' | [number, number];
 
 interface UsePopoverFloatingOptions {
   open?: boolean;
   onOpenChange?: UseFloatingOptions['onOpenChange'];
   placement?: Placement;
   offset?: number;
+  origin?: PopoverOrigin;
+  // FloatingTree integration — used by Menu for nested submenu coordination.
+  nodeId?: string;
 }
 
 const usePopoverFloating = ({
@@ -37,6 +49,8 @@ const usePopoverFloating = ({
   onOpenChange: propsOnOpenChange,
   placement = 'bottom',
   offset = 4,
+  origin = 'trigger',
+  nodeId,
 }: UsePopoverFloatingOptions) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = propsOpen ?? internalOpen;
@@ -50,6 +64,7 @@ const usePopoverFloating = ({
   );
 
   const floating = useFloating({
+    nodeId,
     placement,
     open,
     onOpenChange: setOpen,
@@ -79,13 +94,35 @@ const usePopoverFloating = ({
     ],
   });
 
+  // When origin is an explicit [x, y], pin the floating element to that point
+  // via Floating UI's virtual reference pattern. The trigger element stays the
+  // interaction reference (focus, dismiss); only positioning changes.
+  useEffect(() => {
+    if (Array.isArray(origin)) {
+      const [x, y] = origin;
+      floating.refs.setPositionReference({
+        getBoundingClientRect: () => ({
+          width: 0,
+          height: 0,
+          x,
+          y,
+          top: y,
+          right: x,
+          bottom: y,
+          left: x,
+        }),
+      });
+    }
+  }, [origin, floating.refs]);
+
   return useMemo(
     () => ({
       open,
       setOpen,
+      origin,
       ...floating,
     }),
-    [open, setOpen, floating]
+    [open, setOpen, origin, floating]
   );
 };
 
@@ -186,6 +223,7 @@ const PopoverTrigger = ({
   const Comp = asChild ? Slot : 'button';
 
   const ref = useMergeRefs([context.refs.setReference, refProp]);
+  const referenceProps = context.getReferenceProps(props);
 
   return (
     <Comp
@@ -193,7 +231,35 @@ const PopoverTrigger = ({
       type={asChild ? undefined : 'button'}
       className={cn(!asChild && 'disabled:opacity-40', className)}
       data-state={context.open ? 'open' : 'closed'}
-      {...context.getReferenceProps(props)}
+      {...referenceProps}
+      onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+        // Keyboard-triggered clicks have clientX/Y of 0; treat as falsy so we
+        // fall back to anchoring at the trigger element instead of (0, 0).
+        if (
+          context.origin === 'pointer' &&
+          !context.open &&
+          event.clientX &&
+          event.clientY
+        ) {
+          const x = event.clientX;
+          const y = event.clientY;
+          context.refs.setPositionReference({
+            getBoundingClientRect: () => ({
+              width: 0,
+              height: 0,
+              x,
+              y,
+              top: y,
+              right: x,
+              bottom: y,
+              left: x,
+            }),
+          });
+        }
+        if (typeof referenceProps.onClick === 'function') {
+          referenceProps.onClick(event);
+        }
+      }}
     >
       {children}
     </Comp>
@@ -242,6 +308,9 @@ interface PopoverPanelProps extends React.ComponentPropsWithRef<'div'> {
   context: FloatingContext;
   modal?: boolean;
   isPositioned?: boolean;
+  initialFocus?: number | React.RefObject<HTMLElement | null>;
+  returnFocus?: boolean;
+  animate?: boolean;
 }
 
 /**
@@ -256,11 +325,16 @@ const PopoverPanel = ({
   context,
   modal,
   isPositioned = true,
+  initialFocus,
+  returnFocus,
+  animate = true,
   className,
   style,
   ...props
 }: PopoverPanelProps) => {
-  const { isMounted, status } = useTransitionStatus(context, { duration: 150 });
+  const { isMounted, status } = useTransitionStatus(context, {
+    duration: animate ? 150 : 0,
+  });
   const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
 
   const mergedRef = useMergeRefs([ref, topLayerRef]);
@@ -274,16 +348,23 @@ const PopoverPanel = ({
   const hidden = !isPositioned || context.middlewareData.hide?.referenceHidden;
 
   return (
-    <FloatingFocusManager context={context} modal={modal}>
+    <FloatingFocusManager
+      context={context}
+      modal={modal}
+      initialFocus={initialFocus}
+      returnFocus={returnFocus}
+    >
       <div
         ref={mergedRef}
         data-state={['open', 'initial'].includes(status) ? 'open' : 'closed'}
         data-side={context.placement.split('-')[0]}
         className={cn(
-          'origin-(--transform-origin) transition duration-300 ease-out',
-          'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
-          'data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150',
-          'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
+          animate && [
+            'origin-(--transform-origin) transition duration-300 ease-out',
+            'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
+            'data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150',
+            'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
+          ],
           className
         )}
         style={{
@@ -424,6 +505,7 @@ const CompoundPopover = Object.assign(Popover, {
   Panel: PopoverPanel,
 });
 
+export type { PopoverOrigin };
 export {
   CompoundPopover as Popover,
   PopoverContext,

@@ -1,5 +1,5 @@
 import { Breadcrumb } from '@/foundations/ui/breadcrumb/breadcrumb';
-import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
+import { Menu } from '@/foundations/ui/menu/menu';
 
 export default function BreadcrumbCollapsedPreview() {
   return (
@@ -10,8 +10,8 @@ export default function BreadcrumbCollapsedPreview() {
         </Breadcrumb.Item>
         <Breadcrumb.Separator />
         <Breadcrumb.Item>
-          <Dropdown>
-            <Dropdown.Trigger asChild>
+          <Menu>
+            <Menu.Trigger asChild>
               <button
                 type="button"
                 aria-label="More breadcrumbs"
@@ -19,13 +19,13 @@ export default function BreadcrumbCollapsedPreview() {
               >
                 <Breadcrumb.Ellipsis />
               </button>
-            </Dropdown.Trigger>
-            <Dropdown.Items>
-              <Dropdown.Item>Components</Dropdown.Item>
-              <Dropdown.Item>Navigation</Dropdown.Item>
-              <Dropdown.Item>Lists</Dropdown.Item>
-            </Dropdown.Items>
-          </Dropdown>
+            </Menu.Trigger>
+            <Menu.Items>
+              <Menu.Item>Components</Menu.Item>
+              <Menu.Item>Navigation</Menu.Item>
+              <Menu.Item>Lists</Menu.Item>
+            </Menu.Items>
+          </Menu>
         </Breadcrumb.Item>
         <Breadcrumb.Separator />
         <Breadcrumb.Item>
