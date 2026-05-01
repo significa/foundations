@@ -15,4 +15,4 @@ Some items will be impossible to do until there is decent baseline support for t
 
 ## Missing components
 
-- [ ] Data Table
+_None — `Table` ships the styled primitive, with a documented TanStack Table recipe for full data-table functionality. Heavy data-grid features (virtualization, pivot, range selection) are intentionally out of scope; reach for AG Grid / LyteNyte if you need them._

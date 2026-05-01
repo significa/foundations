@@ -10,6 +10,10 @@ meta:
 
 ## May 2026
 
+### New: `Table` primitive
+
+A styled compound primitive for `<table>`/`<thead>`/`<tbody>`/`<tfoot>`/`<tr>`/`<th>`/`<td>`/`<caption>`, plus a `Table.SortableHead` helper that wires `aria-sort` and a caret affordance. State stays with the consumer — for sorting, filtering, selection, and pagination together, the docs ship a TanStack Table recipe. Virtualization, pivot, and column resize are intentionally out of scope; reach for AG Grid or LyteNyte when you need them.
+
 ### `Dropdown` replaced by `Menu`, with nested submenu support
 
 `Dropdown` is gone. `Menu` takes its place with the same surface area for flat menus plus first-class support for **nested submenus** (`Menu.ItemTrigger` opens a submenu rendered as a child `<Menu>`). Hover-to-open with `safePolygon`, right/left-arrow nav between levels, and `FloatingTree` coordination so any item click closes the whole tree. Item styling now exposes a `variant` prop with a built-in `destructive` option.
