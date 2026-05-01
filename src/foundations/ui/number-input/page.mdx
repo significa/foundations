@@ -42,6 +42,8 @@ The root wraps everything in `Input.Group` and provides a default layout. Pass c
     max: { type: "number", default: "+Infinity", description: "Upper bound, inclusive." },
     step: { type: "number", default: "1", description: "Increment step. Determines display precision (e.g. `step={0.01}` rounds to 2 decimals)." },
     disabled: { type: "boolean", default: "false" },
+    size: { type: ['"xs"', '"sm"', '"md"', '"lg"'], default: '"md"', description: "Forwarded to the underlying `Input.Group`." },
+    variant: { type: ['"default"', '"minimal"'], default: '"default"', description: "Forwarded to the underlying `Input.Group`." },
     format: { type: "(n: number) => string", default: "String", description: "Format the committed value for display." },
     parse: { type: "(s: string) => number", description: "Parse the user's typed value. Return `NaN` to reject (the field reverts on blur). Defaults to a `Number`-based parser that treats empty input as invalid." },
   }}
@@ -82,6 +84,10 @@ This matches the spirit of native `<input type="number">` (which also accepts `e
 `min` and `max` default to `±Infinity`. Bounds only become enforced (and steppers disable) when finite. Pass any combination — bounded above, bounded below, or both.
 
 <Preview slug="number-input-bounded" />
+
+### Sizes
+
+<Preview slug="number-input-sizes" />
 
 ## Inside a Field
 

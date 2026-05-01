@@ -10,6 +10,37 @@ meta:
 
 ## May 2026
 
+### Changed: `Input.Group` lays out flush addons; `pointer-events-auto` ceremony dropped
+
+`Input.Group` no longer carries horizontal padding. The in-group input owns its own `px`, and `Input.Addon` sits flush at the group's edges with size-aware padding inherited from a new `InputGroupContext`. Action-button addons (password toggles, country pickers, NumberInput-style steppers) now have full edge-to-edge hit areas without the `-ml-*` / `-mr-*` workarounds. Static addons (icons, text) keep their visual position.
+
+Two consumer-affecting changes:
+
+1. **`Input.Group` no longer auto-detects `size` / `variant` from a child `<Input>`.** Pass them on the group directly. This was already broken whenever the child input was wrapped (e.g. `NumberInput.Field`), so explicit-only is both simpler and more honest.
+2. **`Input.Addon` no longer defaults to `pointer-events-none`.** Interactive addons (buttons, `Tooltip.Trigger`, `Popover.Trigger`) now work without `className="pointer-events-auto"`. Click-to-focus on static addons (icons, text) is preserved via a target-closest heuristic — clicking a leading icon still focuses the input, while interactive descendants keep their own click semantics.
+
+```diff tsx
+// Move size/variant to the group:
+- <Input.Group>
+-   <Input size="sm" placeholder="…" />
+-   <Input.Addon>suffix</Input.Addon>
+- </Input.Group>
++ <Input.Group size="sm">
++   <Input placeholder="…" />
++   <Input.Addon>suffix</Input.Addon>
++ </Input.Group>
+
+// Drop `pointer-events-auto` on interactive addons:
+- <Input.Addon className="pointer-events-auto" asChild>
+-   <button>+351</button>
+- </Input.Addon>
++ <Input.Addon asChild>
++   <button>+351</button>
++ </Input.Addon>
+```
+
+Standalone `<Input>` is unchanged. `inputStyle` is unchanged, so consumers who reuse it (Textarea, OTPInput, DatePicker, Listbox, Select) need no update. `Select.Group` and `Select.Addon` (aliases of the input pair) inherit the new behavior automatically.
+
 ### New: `Table` primitive
 
 A styled compound primitive for `<table>`/`<thead>`/`<tbody>`/`<tfoot>`/`<tr>`/`<th>`/`<td>`/`<caption>`, plus a `Table.SortableHead` helper that wires `aria-sort` and a caret affordance. State stays with the consumer — for sorting, filtering, selection, and pagination together, the docs ship a TanStack Table recipe. Virtualization, pivot, and column resize are intentionally out of scope; reach for AG Grid or LyteNyte when you need them.

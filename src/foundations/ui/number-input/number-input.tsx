@@ -5,11 +5,16 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { Slot } from '@/foundations/components/slot/slot';
-import { Input } from '@/foundations/ui/input/input';
-import { cn } from '@/lib/utils/classnames';
+import {
+  Input,
+  type InputSize,
+  type InputVariant,
+} from '@/foundations/ui/input/input';
+import { cn, cva } from '@/lib/utils/classnames';
 
 interface NumberInputContextValue {
   value: number;
@@ -21,6 +26,7 @@ interface NumberInputContextValue {
   max: number;
   step: number;
   disabled: boolean;
+  size: InputSize;
   format: (n: number) => string;
   parse: (s: string) => number;
 }
@@ -75,6 +81,10 @@ interface NumberInputProps
   /** Increment step. Defaults to 1. */
   step?: number;
   disabled?: boolean;
+  /** Forwarded to the underlying `Input.Group`. Defaults to `md`. */
+  size?: InputSize;
+  /** Forwarded to the underlying `Input.Group`. Defaults to `default`. */
+  variant?: InputVariant;
   /** Format the committed value for display. Defaults to `String`. */
   format?: (n: number) => string;
   /**
@@ -98,6 +108,8 @@ const NumberInput = ({
   max = Number.POSITIVE_INFINITY,
   step = 1,
   disabled = false,
+  size = 'md',
+  variant = 'default',
   format = String,
   parse = defaultParse,
   className,
@@ -105,12 +117,12 @@ const NumberInput = ({
   ...rest
 }: NumberInputProps) => {
   const isControlled = propsValue !== undefined;
-  const [internalValue, setInternalValue] = useState<number>(
-    () => defaultValue ?? (Number.isFinite(min) ? min : 0)
-  );
-  const value = isControlled ? propsValue : internalValue;
-
   const precision = stepPrecision(step);
+  const [internalValue, setInternalValue] = useState<number>(() => {
+    const initial = defaultValue ?? (Number.isFinite(min) ? min : 0);
+    return round(clamp(initial, min, max), precision);
+  });
+  const value = isControlled ? propsValue : internalValue;
 
   const setValue = useCallback(
     (next: number): number => {
@@ -142,6 +154,7 @@ const NumberInput = ({
       max,
       step,
       disabled,
+      size,
       format,
       parse,
     }),
@@ -154,6 +167,7 @@ const NumberInput = ({
       max,
       step,
       disabled,
+      size,
       format,
       parse,
     ]
@@ -161,7 +175,12 @@ const NumberInput = ({
 
   return (
     <NumberInputContext value={ctx}>
-      <Input.Group className={className} {...rest}>
+      <Input.Group
+        size={size}
+        variant={variant}
+        className={className}
+        {...rest}
+      >
         {children ?? (
           <>
             <NumberInputDecrement />
@@ -192,12 +211,16 @@ const NumberInputField = ({
 
   const [draft, setDraft] = useState<string>(() => format(value));
 
-  // Mirror the committed value into the displayed draft. This catches stepper
-  // clicks, programmatic value changes, and any browser-specific focus quirks
-  // (Safari/Firefox don't focus buttons on click, so a focus gate would miss
-  // the stepper-while-field-focused case).
+  // Tracks whether the user has typed since the last commit. Gates the sync
+  // effect below so an inline `format` arrow on a parent re-render can't stomp
+  // typed-but-uncommitted text. Reset by every commit / step / jump path.
+  const dirtyRef = useRef(false);
+
+  // Mirror the committed value into the displayed draft. We can't simply
+  // depend on `value` alone — `format` may also need to re-run on a locale
+  // switch — but we must skip the sync while the user is mid-edit.
   useEffect(() => {
-    setDraft(format(value));
+    if (!dirtyRef.current) setDraft(format(value));
   }, [value, format]);
 
   const stepBy = (multiplier: number) => {
@@ -205,11 +228,13 @@ const NumberInputField = ({
     const base = Number.isFinite(parsed) ? parsed : value;
     const committed = setValue(base + step * multiplier);
     setDraft(format(committed));
+    dirtyRef.current = false;
   };
 
   const jumpTo = (target: number) => {
     const committed = setValue(target);
     setDraft(format(committed));
+    dirtyRef.current = false;
   };
 
   const commit = () => {
@@ -220,6 +245,7 @@ const NumberInputField = ({
     } else {
       setDraft(format(value));
     }
+    dirtyRef.current = false;
   };
 
   return (
@@ -234,7 +260,10 @@ const NumberInputField = ({
       aria-valuemax={Number.isFinite(max) ? max : undefined}
       value={draft}
       disabled={disabled}
-      onChange={(e) => setDraft(e.target.value)}
+      onChange={(e) => {
+        setDraft(e.target.value);
+        dirtyRef.current = true;
+      }}
       onBlur={(e) => {
         commit();
         onBlur?.(e);
@@ -283,8 +312,37 @@ const NumberInputField = ({
   );
 };
 
-const stepperStyle =
-  'inline-flex h-full aspect-square shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground-secondary outline-none ring-ring transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:ring-(length:--ring-width) disabled:pointer-events-none disabled:opacity-40';
+// xs/sm groups have no `py`, so the stepper can't inset vertically — it runs
+// flush and side-rounds (`rounded-l-lg` / `rounded-r-lg`) to trace the group's
+// outer curve at the edge. md/lg groups have `py-1`, so the stepper insets
+// horizontally with `mx-(--inset)` and rounds with the next-smaller token —
+// `rounded-{lg,xl}`. The radius scale is calibrated so each step equals
+// `--inset` (`--radius * 2`), keeping corners concentric across the dial.
+const stepperStyle = cva({
+  base: 'focus-visible:ring-(length:--ring-width) inline-flex aspect-square h-full shrink-0 cursor-pointer items-center justify-center self-stretch text-foreground-secondary outline-none ring-ring transition-colors hover:bg-foreground/5 hover:text-foreground disabled:pointer-events-none disabled:opacity-40',
+  variants: {
+    size: {
+      xs: '',
+      sm: '',
+      md: 'mx-(--inset) rounded-lg',
+      lg: 'mx-(--inset) rounded-xl',
+    },
+    side: {
+      decrement: '',
+      increment: '',
+    },
+  },
+  compoundVariants: [
+    { size: 'xs', side: 'decrement', class: 'rounded-l-lg' },
+    { size: 'xs', side: 'increment', class: 'rounded-r-lg' },
+    { size: 'sm', side: 'decrement', class: 'rounded-l-lg' },
+    { size: 'sm', side: 'increment', class: 'rounded-r-lg' },
+  ],
+  defaultVariants: {
+    size: 'md',
+    side: 'decrement',
+  },
+});
 
 interface NumberInputStepperProps
   extends React.ComponentPropsWithRef<'button'> {
@@ -301,7 +359,7 @@ const NumberInputDecrement = ({
   children,
   ...props
 }: NumberInputStepperProps) => {
-  const { decrement, value, min, disabled } = useNumberInputContext();
+  const { decrement, value, min, disabled, size } = useNumberInputContext();
   const isAtMin = Number.isFinite(min) && value <= min;
   const isDisabled = propDisabled || disabled || isAtMin;
   const Comp = asChild ? Slot : 'button';
@@ -317,7 +375,10 @@ const NumberInputDecrement = ({
         if (e.defaultPrevented) return;
         decrement();
       }}
-      className={cn(!asChild && stepperStyle, className)}
+      className={cn(
+        !asChild && stepperStyle({ size, side: 'decrement' }),
+        className
+      )}
       {...props}
     >
       {children ?? <MinusIcon className="size-4" />}
@@ -335,7 +396,7 @@ const NumberInputIncrement = ({
   children,
   ...props
 }: NumberInputStepperProps) => {
-  const { increment, value, max, disabled } = useNumberInputContext();
+  const { increment, value, max, disabled, size } = useNumberInputContext();
   const isAtMax = Number.isFinite(max) && value >= max;
   const isDisabled = propDisabled || disabled || isAtMax;
   const Comp = asChild ? Slot : 'button';
@@ -351,7 +412,10 @@ const NumberInputIncrement = ({
         if (e.defaultPrevented) return;
         increment();
       }}
-      className={cn(!asChild && stepperStyle, className)}
+      className={cn(
+        !asChild && stepperStyle({ size, side: 'increment' }),
+        className
+      )}
       {...props}
     >
       {children ?? <PlusIcon className="size-4" />}

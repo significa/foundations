@@ -57,13 +57,30 @@ Extends the `input` element.
 
 ### Input.Group
 
-Extends the `div` element.
+Extends the `div` element. Wraps an `Input` together with one or more `Input.Addon` siblings — useful for icon prefixes, text suffixes, password toggles, country pickers, etc.
 
-This component is used to wrap the input when you want to add a prefix or suffix (e.g.: search icon, currency symbol, etc.)
+The group owns the visual frame: border, height, focus ring, invalid/disabled state. Pass `size` and `variant` here, not on the inner `Input` — sizing inside the group is inherited from this context, so the inner `Input`'s own `size`/`variant` props are ignored.
+
+<PropsTable
+  definition={{
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+    },
+    variant: {
+      type: ['"default"', '"minimal"'],
+      default: '"default"',
+    },
+  }}
+/>
 
 ### Input.Addon
 
-Extends the `div` element.
+Extends the `div` element. Renders flush at the group's edges with size-aware padding inherited from `Input.Group`. Drop interactive content (a `<button>`, a `Tooltip.Trigger`, a `Popover.Trigger`) directly inside — no `pointer-events-auto` ceremony needed.
+
+Static addons (icons, text) are click-through to the input — clicking a leading lock icon focuses the input the way you'd expect. The addon detects whether the click target is interactive (`button`, `a`, `input`, `[role="button"]`, etc.) and only forwards focus when it isn't, so interactive content keeps its own click semantics.
+
+For component-as-addon composition (a popover trigger, a country picker, etc.), pass `asChild` and provide your own element. The addon's flex/sizing/padding classes are merged onto the child.
 
 <PropsTable
   definition={{
@@ -93,15 +110,19 @@ A more subtle variant with minimal styling.
 
 ### Disabled
 
-Example of a disabled input state.
+Example of a disabled input state. Inside a group, the disabled visual cascades to the wrapper via `:has(input:disabled)`, so addons dim with the input.
 
 <Preview slug="input-disabled" />
 
+<Preview slug="input-group-disabled" />
+
 ### Invalid
 
-Showing validation state with an invalid input.
+Showing validation state with an invalid input. Inside a group, the error border and ring carry across via `:has([data-invalid])` — works the same whether `invalid` is set on the inner `Input` or `aria-invalid` is injected by `Field.Control`.
 
 <Preview slug="input-invalid" />
+
+<Preview slug="input-group-invalid" />
 
 ### Icon
 
@@ -126,6 +147,12 @@ Combining an icon prefix with an interactive suffix.
 Example with clickable addon elements.
 
 <Preview slug="input-interactive-addon" />
+
+### Component as Addon
+
+Composing a `Menu.Trigger` (or any other compound primitive) as an addon via `asChild`. Demonstrates a phone field with a country picker — the trigger lives inside the input frame, the menu floats from it with keyboard nav and focus management.
+
+<Preview slug="input-component-addon" />
 
 ## Best Practices
 

@@ -10,11 +10,11 @@ export default function InputIcon() {
         </Input.Addon>
         <Input placeholder="Search something" />
       </Input.Group>
-      <Input.Group>
+      <Input.Group variant="minimal">
         <Input.Addon>
           <MagnifyingGlassIcon />
         </Input.Addon>
-        <Input variant="minimal" placeholder="Search something" />
+        <Input placeholder="Search something" />
       </Input.Group>
     </div>
   );
