@@ -1,5 +1,6 @@
 import { Button } from '@/foundations/ui/button/button';
 import { Dropdown } from '@/foundations/ui/dropdown/dropdown';
+import { Kbd } from '@/foundations/ui/kbd/kbd';
 
 export default function DropdownCustomItemsPreview() {
   return (
@@ -22,7 +23,7 @@ export default function DropdownCustomItemsPreview() {
         </Dropdown.Item>
         <Dropdown.Item className="flex items-center justify-between">
           <span>Custom Item 3</span>
-          <span className="text-foreground-secondary text-sm">⌘K</span>
+          <Kbd>K</Kbd>
         </Dropdown.Item>
       </Dropdown.Items>
     </Dropdown>

@@ -56,7 +56,7 @@ const dotsContainerStyle = cva({
 });
 
 const dotStyle = cva({
-  base: 'rounded-full bg-current animate-spinner-dot',
+  base: 'animate-spinner-dot rounded-full bg-current',
   variants: {
     size: {
       xs: 'size-px',
@@ -107,7 +107,7 @@ const barsContainerStyle = cva({
 });
 
 const barStyle = cva({
-  base: 'h-full origin-center bg-current animate-spinner-bar',
+  base: 'h-full origin-center animate-spinner-bar bg-current',
   variants: {
     size: {
       xs: 'w-px',

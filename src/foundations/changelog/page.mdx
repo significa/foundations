@@ -10,6 +10,110 @@ meta:
 
 ## May 2026
 
+### Added: `Toggle` and `ToggleGroup`
+
+A two-state button primitive — and a group wrapper for related sets. `Toggle` reuses `Button`'s sizing tokens (`size`, `square`, `asChild`) and adds `pressed` / `defaultPressed` / `onPressedChange`. There's no `variant` prop: every toggle renders as a ghost-style affordance with a subtle filled tint when on. If you need a bordered frame, pass `className="border border-border"` at the call site.
+
+`ToggleGroup` handles the toolbar pattern: roving `tabindex`, arrow-key navigation, and `type="single" | "multiple"` selection.
+
+```tsx
+<Toggle aria-label="Pin">
+  <PushPinIcon />
+</Toggle>
+
+<ToggleGroup type="multiple">
+  <ToggleGroup.Item value="bold" aria-label="Bold" square>
+    <TextBIcon />
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="italic" aria-label="Italic" square>
+    <TextItalicIcon />
+  </ToggleGroup.Item>
+</ToggleGroup>
+```
+
+### Changed: `Button` now styles `data-pressed` as pressed
+
+The base `buttonStyle` now reacts to `data-pressed` with a subtle filled tint (`bg-foreground/10`). This is what makes `Toggle` and `ToggleGroup.Item` look "on" without a separate stylesheet — and means consumers can opt any `Button` into the same pressed look by setting the attribute. `data-pressed` follows the library's convention of boolean state attributes (omitted when false), so a single selector covers both standalone and grouped toggles.
+
+```diff tsx
+  base: [
+    // ...
++   'data-pressed:bg-foreground/10 data-pressed:hover:bg-foreground/15',
+  ],
+```
+
+If you've never set a pressed-style attribute on a `Button`, this is invisible to you.
+
+### Changed: `buttonStyle` group merge is now orientation-aware
+
+The `in-data-ui-button-group:` corner/border-merge selectors used to assume a horizontal row — they always stripped the right-side border/corner from non-last items and the left-side from non-first items. With `ToggleGroup` shipping a vertical orientation, that logic produced the wrong visual (right borders dropped on a vertical stack instead of bottom borders).
+
+The selectors now branch on an ancestor `data-orientation="vertical"` attribute. `ButtonGroup` doesn't set the attribute, so it gets the horizontal rules by default — no behavior change. `ToggleGroup` already sets `data-orientation={orientation}` on its container, so vertical groups now merge along the correct axis.
+
+```diff tsx
+  base: [
+    // ...
+-   'in-data-ui-button-group:not-last:rounded-r-none in-data-ui-button-group:not-last:border-r-0',
+-   'in-data-ui-button-group:not-first:rounded-l-none in-data-ui-button-group:not-first:border-l-0',
++   // horizontal merge (default)
++   'in-data-ui-button-group:not-in-data-[orientation=vertical]:not-last:rounded-r-none',
++   'in-data-ui-button-group:not-in-data-[orientation=vertical]:not-last:border-r-0',
++   'in-data-ui-button-group:not-in-data-[orientation=vertical]:not-first:rounded-l-none',
++   'in-data-ui-button-group:not-in-data-[orientation=vertical]:not-first:border-l-0',
++   // vertical merge
++   'in-data-ui-button-group:in-data-[orientation=vertical]:not-last:rounded-b-none',
++   'in-data-ui-button-group:in-data-[orientation=vertical]:not-last:border-b-0',
++   'in-data-ui-button-group:in-data-[orientation=vertical]:not-first:rounded-t-none',
++   'in-data-ui-button-group:in-data-[orientation=vertical]:not-first:border-t-0',
+  ],
+```
+
+If you only use horizontal `ButtonGroup` / `ToggleGroup`, this is invisible. If you use vertical `ToggleGroup`, copy the new selectors into your `buttonStyle`.
+
+### Fixed: `Tooltip` breaking sibling-selector layouts
+
+`Tooltip.Content` rendered as a DOM sibling of its trigger because `<Tooltip>` itself is a context provider with no DOM wrapper. Inside a `Button.Group` / `ToggleGroup`, the rendered tooltip `<div>` would then become the new `:last-child` of the group — flipping `:not(:last-child)`-based styles on the previously-last button (the right border and right-rounded corners disappeared while the tooltip was open).
+
+Fix: portal `Tooltip.Content` to `<body>` via `<FloatingPortal>` (from `@floating-ui/react`). The DOM position changes; the visual top-layer stacking via `useTopLayer` is unaffected (the Popover API works regardless of DOM position).
+
+```diff tsx
++ import { FloatingPortal } from '@floating-ui/react';
+
+  if (!isMounted) return null;
+
+  return (
++   <FloatingPortal>
+      <div ref={ref} ...>
+        ...
+      </div>
++   </FloatingPortal>
+  );
+```
+
+If you targeted the tooltip element via `.trigger + [popover]` or similar sibling selectors (rare), update those — the tooltip is no longer a sibling of its trigger. Aria wiring (`aria-describedby`) and floating-ui's positioning are unaffected.
+
+### Fixed: `SegmentedControl` first-paint tab stop
+
+Items register via `useLayoutEffect`, so on SSR (and the first client render before the effect flushes) the internal `segments` array was empty. The selected item's `tabIndex={isSelected ? 0 : -1}` therefore evaluated to `-1` for every item until hydration completed — the group had no tab stop. Fix: derive the rendered selection by walking children directly when `segments` is empty, falling back to the explicit value once items register.
+
+```diff tsx
+- const selectedSegment = selectedValueProp ?? internalSelectedValue;
++ const explicitSelected = selectedValueProp ?? internalSelectedValue;
++ const selectedSegment = useMemo(() => {
++   if (explicitSelected !== undefined) return explicitSelected;
++   if (segments.length > 0) return segments[0];
++   // Pre-registration: first child's `value`.
++   let first: string | undefined;
++   Children.forEach(children, (child) => {
++     if (first !== undefined) return;
++     if (isValidElement<{ value?: unknown }>(child) && typeof child.props.value === 'string') {
++       first = child.props.value;
++     }
++   });
++   return first;
++ }, [explicitSelected, segments, children]);
+```
+
 ### Added: Spinner variants (`dots`, `bars`, `frames`)
 
 `Spinner` now takes a `variant` prop. The default is still `ring` (no behavior change for existing consumers — including `Button`'s loading state). Three new variants ship alongside it: `dots` (three pulsing dots), `bars` (three-bar equalizer), and `frames` (cycles through any character array, with a `SPINNER_FRAMES` preset export and a `frames`/`interval` prop pair for custom sets).

@@ -1,0 +1,176 @@
+---
+title: Toggle
+description: A two-state button. Use standalone for a single on/off action, or grouped for related toggles like a formatting toolbar.
+preview: toggle
+files:
+  - src/foundations/ui/toggle/toggle.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: composeRefs
+    href: /utils/compose-refs
+  - name: Button
+    href: /ui/button
+
+folder: UI
+---
+
+## Anatomy
+
+```tsx
+// Standalone
+<Toggle>...</Toggle>
+
+// Grouped
+<ToggleGroup>
+  <ToggleGroup.Item value="...">...</ToggleGroup.Item>
+</ToggleGroup>
+```
+
+## API Reference
+
+### Toggle
+
+A button with an `on`/`off` state. Reuses `Button`'s sizing tokens; the visual is a single ghost-style affordance with a subtle pressed tint. If you need a bordered frame, pass `className="border border-border"` at the call site.
+
+<PropsTable
+  definition={{
+    pressed: {
+      type: "boolean",
+      description: "The controlled pressed state.",
+    },
+    defaultPressed: {
+      type: "boolean",
+      default: "false",
+      description: "The initial pressed state when uncontrolled.",
+    },
+    onPressedChange: {
+      type: "(pressed: boolean) => void",
+      description: "Callback fired when the pressed state changes.",
+    },
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+    },
+    square: {
+      type: "boolean",
+      default: "false",
+    },
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### ToggleGroup
+
+A set of related toggles. `type="single"` enforces at most one pressed item; `type="multiple"` allows any combination.
+
+<PropsTable
+  definition={{
+    type: {
+      type: ['"single"', '"multiple"'],
+      required: true,
+      description: "Whether at most one item or any number of items can be pressed.",
+    },
+    value: {
+      type: "string | string[]",
+      description: "The controlled value. `string` for `single`, `string[]` for `multiple`.",
+    },
+    defaultValue: {
+      type: "string | string[]",
+      description: "The initial value when uncontrolled.",
+    },
+    onValueChange: {
+      type: "(value: string | undefined) => void  |  (value: string[]) => void",
+      description: "Callback fired when the value changes. Signature depends on `type`.",
+    },
+    orientation: {
+      type: ['"horizontal"', '"vertical"'],
+      default: '"horizontal"',
+      description: "Affects which arrow keys move focus between items.",
+    },
+    disabled: {
+      type: "boolean",
+      default: "false",
+      description: "Disables every item in the group.",
+    },
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+      description: "Default size for items. Each item can override.",
+    },
+  }}
+/>
+
+### ToggleGroup.Item
+
+<PropsTable
+  definition={{
+    value: {
+      type: "string",
+      required: true,
+      description: "Identifies this item in the group's value.",
+    },
+    disabled: {
+      type: "boolean",
+      default: "false",
+    },
+    size: {
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      description: "Overrides the group's `size` for this item.",
+    },
+    square: {
+      type: "boolean",
+    },
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+## Accessibility
+
+Toggles render as `<button>` with `aria-pressed`, following the [WAI-ARIA Button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/). Icon-only toggles must include an `aria-label`.
+
+`ToggleGroup` uses roving `tabindex`: the group is a single tab stop, and arrow keys move focus between items (`Home`/`End` jump to the ends). The container has `role="group"`.
+
+> **Don't change the label between states.** If a toggle's label flips with its state (e.g. `"Mute"` ↔ `"Unmute"`), drop `aria-pressed` and treat it as a regular `Button`. Otherwise screen readers announce the state twice.
+
+## Examples
+
+### Basic
+
+A standalone toggle. Click to flip the pressed state.
+
+<Preview slug="toggle" />
+
+### Sizes
+
+Toggles share `Button`'s `size` scale. Use `xs`/`sm` for dense toolbars, `md` (default) for typical inline use, `lg` when standing alone.
+
+<Preview slug="toggle-sizes" />
+
+### Single selection
+
+`type="single"` — at most one item pressed. Common for mutually-exclusive options like text alignment.
+
+<Preview slug="toggle-group" />
+
+### Multiple selection
+
+`type="multiple"` — any combination of items pressed. Common for independent options like text formatting.
+
+<Preview slug="toggle-group-multiple" />
+
+### Vertical orientation
+
+Pass `orientation="vertical"` to stack items. Arrow-key navigation switches to `ArrowUp` / `ArrowDown`, and the corner/border merge runs along the vertical axis.
+
+<Preview slug="toggle-group-vertical" />
+
+### Toolbar
+
+Compose `ToggleGroup` with `Tooltip` for a labelled icon toolbar. Multiple groups can sit side-by-side.
+
+<Preview slug="toggle-toolbar" />

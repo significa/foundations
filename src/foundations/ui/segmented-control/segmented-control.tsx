@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import {
+  Children,
   createContext,
+  isValidElement,
   use,
   useCallback,
   useId,
@@ -62,13 +64,32 @@ const SegmentedControl = ({
   >(defaultValue);
   const [segments, setSegments] = useState<string[]>([]);
 
-  const selectedSegment = selectedValueProp ?? internalSelectedValue;
+  const explicitSelected = selectedValueProp ?? internalSelectedValue;
+
+  // Items register via useLayoutEffect, so on SSR / first paint `segments` is
+  // empty. Walk children directly to derive the default selection — otherwise
+  // every item gets `tabIndex=-1` until hydration, breaking keyboard entry.
+  const selectedSegment = useMemo(() => {
+    if (explicitSelected !== undefined) return explicitSelected;
+    if (segments.length > 0) return segments[0];
+    let first: string | undefined;
+    Children.forEach(children, (child) => {
+      if (first !== undefined) return;
+      if (
+        isValidElement<{ value?: unknown }>(child) &&
+        typeof child.props.value === 'string'
+      ) {
+        first = child.props.value;
+      }
+    });
+    return first;
+  }, [explicitSelected, segments, children]);
 
   useLayoutEffect(() => {
-    if (selectedSegment === undefined && segments.length > 0) {
+    if (explicitSelected === undefined && segments.length > 0) {
       setInternalSelectedValue(segments[0]);
     }
-  }, [segments, selectedSegment]);
+  }, [segments, explicitSelected]);
 
   const setSelectedSegment = useCallback(
     (value: string) => {
