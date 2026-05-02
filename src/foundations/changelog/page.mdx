@@ -10,6 +10,31 @@ meta:
 
 ## May 2026
 
+### Fixed: `Tooltip` stacks above an open `Popover`
+
+A `Tooltip` rendered inside a `Popover` (or any `popover="manual"` container) used to render *behind* the popover instead of above it. Root cause was in `useTopLayer`: the hook ran in `useLayoutEffect`, but `<FloatingPortal>` doesn't have its target element in the DOM on the first render — the portal node is created in an effect, the element mounts on the *second* render, and by then the layout effect had already run with `ref.current === null`. Result: `showPopover()` was never called for the tooltip, so the tooltip wasn't in the top layer, and the popover (which *was*) painted above it.
+
+Two fixes:
+
+1. `useTopLayer` now returns a callback ref instead of a ref object, so the popover state is set whenever the element attaches — regardless of how many render passes the consumer's wrappers take. If you also need imperative access to the element, compose this ref with your own `useRef` via `composeRefs`.
+2. `Tooltip.Content` opts into `popover="hint"`. Per the Popover API, hints stack above other popovers without dismissing them — the right semantic for a tooltip.
+
+```diff ts
+- const ref = useTopLayer<HTMLDivElement>(isOpen);
++ const ref = useTopLayer<HTMLDivElement>(isOpen, 'hint'); // for tooltip-style elements
+```
+
+```diff tsx
+// If you previously read `ref.current` inside the hook's caller:
+- const ref = useTopLayer<HTMLDivElement>(true);
+- useEffect(() => { ref.current?.togglePopover(); }, []);
+- return <div ref={ref}>…</div>;
++ const elementRef = useRef<HTMLDivElement>(null);
++ const topLayerRef = useTopLayer<HTMLDivElement>(true);
++ useEffect(() => { elementRef.current?.togglePopover(); }, []);
++ return <div ref={composeRefs(elementRef, topLayerRef)}>…</div>;
+```
+
 ### Semantic typography tokens
 
 The single `--font-sans` token is gone. In its place: four semantic roles — `--font-body`, `--font-ui`, `--font-heading`, and `--font-mono`.

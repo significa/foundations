@@ -36,7 +36,9 @@ import { Slot } from '@/foundations/components/slot/slot';
 import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
 import { cn } from '@/lib/utils/classnames';
 
-// Let's keep an eye on popover="hint", it might be able to handle the tooltip logic natively
+// `popover="hint"` is the right type for tooltips: hints stack above any
+// `popover="manual"` already open (so a Tooltip inside a Popover floats above
+// the Popover), and don't dismiss other popovers when shown.
 // https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using#using_hint_popover_state
 
 const DEFAULT_DELAY_IN = 600;
@@ -248,7 +250,7 @@ const TooltipContent = ({
 
   const { isMounted, status } = useTransitionStatus(context, { duration: 0 });
 
-  const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
+  const topLayerRef = useTopLayer<HTMLDivElement>(isMounted, 'hint');
   const ref = useMergeRefs([refs.setFloating, refProp, topLayerRef]);
 
   if (!isMounted) return null;
