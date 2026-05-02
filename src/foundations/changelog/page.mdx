@@ -12,7 +12,7 @@ meta:
 
 ### Fixed: `Tooltip` stacks above an open `Popover`
 
-A `Tooltip` rendered inside a `Popover` (or any `popover="manual"` container) used to render *behind* the popover instead of above it. Root cause was in `useTopLayer`: the hook ran in `useLayoutEffect`, but `<FloatingPortal>` doesn't have its target element in the DOM on the first render — the portal node is created in an effect, the element mounts on the *second* render, and by then the layout effect had already run with `ref.current === null`. Result: `showPopover()` was never called for the tooltip, so the tooltip wasn't in the top layer, and the popover (which *was*) painted above it.
+A `Tooltip` rendered inside a `Popover` (or any `popover="manual"` container) used to render _behind_ the popover instead of above it. Root cause was in `useTopLayer`: the hook ran in `useLayoutEffect`, but `<FloatingPortal>` doesn't have its target element in the DOM on the first render — the portal node is created in an effect, the element mounts on the _second_ render, and by then the layout effect had already run with `ref.current === null`. Result: `showPopover()` was never called for the tooltip, so the tooltip wasn't in the top layer, and the popover (which _was_) painted above it.
 
 Two fixes:
 
@@ -35,19 +35,28 @@ Two fixes:
 + return <div ref={composeRefs(elementRef, topLayerRef)}>…</div>;
 ```
 
-### Semantic typography tokens
+### Changed: Semantic typography tokens
 
-The single `--font-sans` token is gone. In its place: four semantic roles — `--font-body`, `--font-ui`, `--font-heading`, and `--font-mono`.
+We introduce four semantic typography tokens covering the roles a brand actually pairs:
 
-`--font-body` is the canonical default. `--font-ui` (chrome — buttons, inputs, menus, badges, tooltips, modal/drawer titles) and `--font-heading` (h1–h6) both fall back to body, so brands that ship one face for everything still set one variable. Brands pairing a serif heading with a serif body and sans chrome — the editorial pattern — set all three. Markdown prose opts into `--font-body`; markdown headings opt into `--font-heading`; the body element uses `--font-ui`. Consumers using the old `font-sans` Tailwind utility need to swap to `font-body`.
+- `--font-ui` — UI chrome (buttons, inputs, menus, badges, tooltips, modal/drawer titles); the render default, applied via inheritance from `body`.
+- `--font-body` — body text (prose, paragraphs); opted into in strategic places like markdown.
+- `--font-heading` — h1–h6.
+- `--font-mono` — code, kbd, tabular numerics.
+
+`--font-ui` and `--font-heading` both default to `var(--font-body)`, so a brand shipping one face sets `--font-body` once and the rest cascades through. The editorial pattern (display heading + serif body + sans chrome) sets all three.
+
+The mechanism, without retrofitting every primitive: components pick up `--font-ui` automatically via inheritance, and prose/headings opt UP into their own tokens. When a brand differentiates them, the chrome font (the "standard" one) ends up most prevalent — exactly what you want when pairing a serif body with a sans for chrome.
+
+Consumers using the old `font-sans` Tailwind utility need to swap to `font-body`.
 
 ```diff css
 @theme {
-- --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, …;
-+ --font-body: "Inter", ui-sans-serif, system-ui, sans-serif, …;
+- --font-sans: ui-sans-serif, system-ui, sans-serif;
++ --font-body: ui-sans-serif, system-ui, sans-serif;
 + --font-ui: var(--font-body);
 + --font-heading: var(--font-body);
-  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-mono: ui-monospace, monospace;
 }
 ```
 
@@ -58,7 +67,7 @@ body {
 }
 ```
 
-### `isLoading` on search inputs
+### Added: `isLoading` on search inputs
 
 `Popover.SearchInput` now accepts an `isLoading` prop. When true, the leading magnifying-glass icon is replaced with a spinner. `Listbox.SearchInput` and `Menu.SearchInput` forward the prop, so the same flag works everywhere a search field is rendered. Useful for async-filtered lists where the user types and the options are fetched.
 
