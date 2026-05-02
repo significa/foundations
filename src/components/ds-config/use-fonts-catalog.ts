@@ -56,8 +56,13 @@ export const loadGoogleFont = (family: string) => {
   document.head.appendChild(link);
 };
 
-export const fallbackFor = (category: FontCategory): string => {
-  if (category === 'serif') return 'ui-serif, Georgia, serif';
-  if (category === 'monospace') return 'ui-monospace, Menlo, monospace';
-  return 'ui-sans-serif, system-ui, sans-serif';
+export const FONT_FALLBACKS: Record<FontCategory, string> = {
+  'sans-serif': 'ui-sans-serif, system-ui, sans-serif',
+  serif: 'ui-serif, Georgia, serif',
+  monospace: 'ui-monospace, Menlo, monospace',
+  display: 'ui-sans-serif, system-ui, sans-serif',
+  handwriting: 'ui-sans-serif, system-ui, sans-serif',
 };
+
+export const fallbackFor = (category: FontCategory): string =>
+  FONT_FALLBACKS[category];

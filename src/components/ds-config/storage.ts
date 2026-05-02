@@ -4,9 +4,10 @@ import {
   type TokenValues,
 } from './schemes';
 
-const STORAGE_KEY = 'foundations-ds-config';
+export const STORAGE_KEY = 'foundations-ds-config';
 
 export const RADIUS_DEFAULT = 2;
+export const RADIUS_STEP_REM = 0.0625;
 export const RING_DEFAULT = 4;
 
 export type FontCategory =
@@ -19,6 +20,15 @@ export type FontCategory =
 export type StoredFont = { family: string; category: FontCategory };
 
 export type FontSlot = 'heading' | 'body' | 'ui' | 'mono';
+
+export const FONT_SLOTS: FontSlot[] = ['heading', 'body', 'ui', 'mono'];
+
+export const FONT_VARS: Record<FontSlot, string> = {
+  heading: '--font-heading',
+  body: '--font-body',
+  ui: '--font-ui',
+  mono: '--font-mono',
+};
 
 export type StoredFonts = Record<FontSlot, StoredFont | null>;
 

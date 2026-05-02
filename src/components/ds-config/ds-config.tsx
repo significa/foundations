@@ -28,8 +28,11 @@ import {
 } from './schemes';
 import {
   EMPTY_FONTS,
+  FONT_SLOTS,
+  FONT_VARS,
   type FontSlot,
   RADIUS_DEFAULT,
+  RADIUS_STEP_REM,
   RING_DEFAULT,
   readStored,
   type StoredFont,
@@ -39,7 +42,6 @@ import {
 import { TypographyEditor } from './typography-editor';
 import { fallbackFor, loadGoogleFont } from './use-fonts-catalog';
 
-const RADIUS_STEP_REM = 0.0625;
 const RADIUS_MAX = 4;
 const RING_MIN = 2;
 const RING_MAX = 6;
@@ -68,14 +70,6 @@ const resolveToken = (
 
 const fontFamilyValue = (font: StoredFont) =>
   `'${font.family}', ${fallbackFor(font.category)}`;
-
-const FONT_SLOTS: FontSlot[] = ['heading', 'body', 'ui', 'mono'];
-const FONT_VAR: Record<FontSlot, string> = {
-  heading: '--font-heading',
-  body: '--font-body',
-  ui: '--font-ui',
-  mono: '--font-mono',
-};
 
 const DSConfig = () => {
   const stored = readStored();
@@ -122,9 +116,9 @@ const DSConfig = () => {
     for (const slot of FONT_SLOTS) {
       const font = fonts[slot];
       if (font) {
-        setRoot(FONT_VAR[slot], fontFamilyValue(font));
+        setRoot(FONT_VARS[slot], fontFamilyValue(font));
       } else {
-        removeRoot(FONT_VAR[slot]);
+        removeRoot(FONT_VARS[slot]);
       }
     }
   }, [scheme, overrides, radiusStep, ringWidth, fonts]);
@@ -210,7 +204,7 @@ const DSConfig = () => {
     for (const slot of FONT_SLOTS) {
       const font = fonts[slot];
       if (!font) continue;
-      tokenLines.push(`  ${FONT_VAR[slot]}: ${fontFamilyValue(font)};`);
+      tokenLines.push(`  ${FONT_VARS[slot]}: ${fontFamilyValue(font)};`);
     }
 
     if (tokenLines.length === 0) return '/* No customizations */';
