@@ -4,7 +4,7 @@ import {
   PencilSimpleIcon,
   SlidersHorizontalIcon,
 } from '@phosphor-icons/react/dist/ssr';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CopyButton } from '@/components/copy-button';
 import { IconButton } from '@/foundations/ui/button/button';
 import { Popover } from '@/foundations/ui/popover/popover';
@@ -248,7 +248,7 @@ const DSConfig = () => {
           <SlidersHorizontalIcon />
         </IconButton>
       </Popover.Trigger>
-      <Popover.Content className="w-80 p-0">
+      <Popover.Content className="w-80 p-0 pb-1">
         <div className="flex items-center gap-2 border-border border-b px-3 py-2">
           {isEditing && (
             <IconButton
@@ -401,13 +401,6 @@ const DSConfig = () => {
             </div>
           </div>
         )}
-
-        <div className="border-border border-t p-3">
-          <p className="text-foreground-secondary text-xs">
-            Copy the snippet and paste it into your project's CSS to apply this
-            configuration.
-          </p>
-        </div>
       </Popover.Content>
     </Popover>
   );
@@ -445,7 +438,7 @@ const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
   const isSystem = pairing.id === DEFAULT_PAIRING.id;
 
   return (
-    <Tooltip>
+    <Tooltip delayIn={1000}>
       <Tooltip.Trigger asChild>
         <button
           type="button"
@@ -453,8 +446,8 @@ const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
           aria-pressed={isActive}
           onClick={() => onSelect(pairing)}
           data-active={isActive || undefined}
-          className="focus-visible:ring-(length:--ring-width) flex h-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-md border border-border bg-background px-2 outline-none ring-ring transition hover:bg-background-secondary data-active:border-foreground"
-          style={{ opacity: isActive ? 1 : 0.6 }}
+          className="focus-visible:ring-(length:--ring-width) flex h-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-md border border-border bg-background px-2 outline-none ring-ring transition hover:bg-background-secondary"
+          style={{ opacity: isActive ? 1 : 0.5 }}
         >
           <span
             aria-hidden="true"
@@ -472,27 +465,27 @@ const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
         </button>
       </Tooltip.Trigger>
       <Tooltip.Content>
-        <div className="flex flex-col gap-1">
-          <span className="font-medium">{pairing.label}</span>
-          {isSystem ? (
-            <span className="text-foreground-secondary">
-              Inherits your defaults
-            </span>
-          ) : (
-            <div className="grid grid-cols-[auto_1fr] gap-x-2 text-foreground-secondary">
-              {setSlots.map((slot) => {
-                const f = pairing.fonts[slot];
-                if (!f) return null;
-                return (
-                  <Fragment key={slot}>
-                    <span>{SLOT_LABELS[slot]}</span>
-                    <span className="text-foreground">{f.family}</span>
-                  </Fragment>
-                );
-              })}
-            </div>
-          )}
-        </div>
+        {isSystem ? (
+          <span>Inherits your defaults</span>
+        ) : (
+          <div>
+            {setSlots.map((slot) => {
+              const f = pairing.fonts[slot];
+              if (!f) return null;
+              return (
+                <div
+                  key={slot}
+                  className="flex items-center justify-between gap-4"
+                >
+                  <span className="text-background">{f.family}</span>
+                  <span className="text-right text-background/50">
+                    {SLOT_LABELS[slot]}{' '}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </Tooltip.Content>
     </Tooltip>
   );
