@@ -10,6 +10,32 @@ meta:
 
 ## May 2026
 
+### Semantic typography tokens
+
+The single `--font-sans` token is gone. In its place: three semantic tokens — `--font-heading`, `--font-body`, and `--font-mono`. `--font-heading` falls back to `--font-body`, so brands that ship one face for everything still set one variable. Brands pairing a serif heading with a sans body now have the right opt-in: headings read `--font-heading`, everything else (Button, Badge, Input, Tooltip, Menu, modal/drawer titles) inherits body. Markdown headings (`h1`–`h6`) opt into `--font-heading`. Consumers using the old `font-sans` Tailwind utility need to swap to `font-body`.
+
+```diff css
+@theme {
+- --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, …;
++ --font-body: "Inter", ui-sans-serif, system-ui, sans-serif, …;
++ --font-heading: var(--font-body);
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}
+```
+
+```diff css
+body {
+- font-family: var(--font-sans);
++ font-family: var(--font-body);
+}
+```
+
+```diff css
+/* markdown.css — h1..h6 */
+- @apply mt-[2em] mb-[1em] font-semibold tracking-tight;
++ @apply mt-[2em] mb-[1em] font-heading font-semibold tracking-tight;
+```
+
 ### `isLoading` on search inputs
 
 `Popover.SearchInput` now accepts an `isLoading` prop. When true, the leading magnifying-glass icon is replaced with a spinner. `Listbox.SearchInput` and `Menu.SearchInput` forward the prop, so the same flag works everywhere a search field is rendered. Useful for async-filtered lists where the user types and the options are fetched.

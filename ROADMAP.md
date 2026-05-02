@@ -10,7 +10,6 @@ Some items will be impossible to do until there is decent baseline support for t
 - [ ] Select VS Listbox. If styling selects is baseline we should try to see if Listbox can be replaced by more customisation in the native Select component.
 - [ ] Drag to dismiss drawer (at least on mobile).
 - [ ] EPIC: React Native (completely different route, but same codebase?). We have a lot of projects in React Native with seriously good design systems (reanimated instead of motion). Check our codebases and plan this.
-- [ ] EPIC: Semantic typography tokens. Today we expose `--font-sans` and `--font-mono`, and most components inherit `font-family` from `body`. That's enough for a single brand sans, but real-world DS typography is _paired_ — a sophisticated serif like Playfair Display (made for big sizes — see "Display" in the name) should not be applied blindly to Badge, IconButton, or anything that uppercases or scales small. The path forward is explicit semantic tokens (`--font-heading`, `--font-body`, `--font-mono`, possibly `--font-display`) with components opting in: Badge, uppercase labels, and other UI chrome hardcode `var(--font-body)` (or a dedicated `--font-ui` token) so they never inherit a display font. Once that's in place, the DS panel typography chooser splits into 2–3 selectors. Surfaced while building the chooser — auditioning Playfair revealed exactly this problem. Typography is one of the things we care most about at Significa, and the DS primitives need to treat it with respect.
 
 ## Missing components
 
