@@ -5,6 +5,7 @@ Some items will be impossible to do until there is decent baseline support for t
 
 ## Improvements
 
+- [ ] Size scale calibration — Default `md` is biased toward marketing/e-commerce density; productivity-style projects consistently reach for `sm`. Investigated shifting the scale; every approach has a real cost. Main blocker now is mobile auto-zoom on inputs smaller than 16px. If we solve that we can proceed and shift everything
 - [ ] As soon as native CSS allows, drop `floating-ui` in favor of native platform solutions. We need everything floating-ui provides to be baseline (different anchoring positions, position fallback, focus trapping, etc.). This is the single most complex part of the code and we would gain a lot if we could make it simpler and leaned more into the platform.
 - [ ] Remove TextareaResize in favour of `field-sizing: content` as soon as it's baseline.
 - [ ] Select VS Listbox. If styling selects is baseline we should try to see if Listbox can be replaced by more customisation in the native Select component.
