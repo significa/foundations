@@ -13,7 +13,6 @@ const KNOWN_CATEGORIES: ReadonlySet<string> = new Set([
 const isFontCategory = (value: string): value is FontCategory =>
   KNOWN_CATEGORIES.has(value);
 
-const loaded = new Set<string>();
 let catalogPromise: Promise<FontMeta[]> | null = null;
 
 type CatalogRow = {
@@ -45,11 +44,15 @@ const familyToUrlParam = (family: string) =>
   encodeURIComponent(family).replace(/%20/g, '+');
 
 export const loadGoogleFont = (family: string) => {
-  if (loaded.has(family)) return;
-  loaded.add(family);
+  const href = `https://fonts.googleapis.com/css2?family=${familyToUrlParam(family)}:wght@400;500;600;700&display=swap`;
+  // Query the DOM rather than a module-level Set: Astro's ClientRouter swaps
+  // the page <head> on navigation and drops runtime-injected <link> tags. A
+  // Set would keep claiming a font is loaded when its <link> has already been
+  // removed, so subsequent pages would render in fallback fonts.
+  if (document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = `https://fonts.googleapis.com/css2?family=${familyToUrlParam(family)}:wght@400;500;600;700&display=swap`;
+  link.href = href;
   document.head.appendChild(link);
 };
 

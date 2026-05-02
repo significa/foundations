@@ -129,12 +129,17 @@ const DSConfig = () => {
     }
   }, [scheme, overrides, radiusStep, ringWidth, fonts]);
 
-  // Re-attach the <link> tags after Astro view transitions swap the document.
   useEffect(() => {
-    for (const slot of FONT_SLOTS) {
-      const font = fonts[slot];
-      if (font) loadGoogleFont(font.family);
-    }
+    const ensureFontsLoaded = () => {
+      for (const slot of FONT_SLOTS) {
+        const font = fonts[slot];
+        if (font) loadGoogleFont(font.family);
+      }
+    };
+    ensureFontsLoaded();
+    document.addEventListener('astro:after-swap', ensureFontsLoaded);
+    return () =>
+      document.removeEventListener('astro:after-swap', ensureFontsLoaded);
   }, [fonts]);
 
   useEffect(() => {
