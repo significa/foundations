@@ -10,6 +10,19 @@ meta:
 
 ## May 2026
 
+### `isLoading` on search inputs
+
+`Popover.SearchInput` now accepts an `isLoading` prop. When true, the leading magnifying-glass icon is replaced with a spinner. `Listbox.SearchInput` and `Menu.SearchInput` forward the prop, so the same flag works everywhere a search field is rendered. Useful for async-filtered lists where the user types and the options are fetched.
+
+```diff tsx
+<Listbox.SearchInput
+  placeholder="Search"
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
++ isLoading={isFetching}
+/>
+```
+
 ### Fixed: `Popover` mobile behavior
 
 Two changes that affect every primitive built on `Popover` (`Tooltip`, `Listbox`, `Select`, `DatePicker`, anything with a floating panel).

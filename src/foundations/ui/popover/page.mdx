@@ -9,6 +9,8 @@ dependencies:
     href: /components/slot
   - name: useTopLayer
     href: /hooks/use-top-layer
+  - name: Spinner
+    href: /ui/spinner
   - name: "@floating-ui/react"
     href: https://floating-ui.com/docs/react
 
@@ -111,6 +113,16 @@ Extends the `button` element.
 Extends the `input` element.
 
 A styled input with a search icon, useful for filtering content inside the popover.
+
+<PropsTable
+  definition={{
+    isLoading: {
+      type: "boolean",
+      description: "When true, replaces the leading magnifying-glass icon with a spinner. Useful for async-filtered content.",
+      default: "false",
+    },
+  }}
+/>
 
 ### Popover.Empty
 

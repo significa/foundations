@@ -9,11 +9,21 @@ const STORAGE_KEY = 'foundations-ds-config';
 export const RADIUS_DEFAULT = 2;
 export const RING_DEFAULT = 4;
 
+export type FontCategory =
+  | 'sans-serif'
+  | 'serif'
+  | 'monospace'
+  | 'display'
+  | 'handwriting';
+
+export type StoredFont = { family: string; category: FontCategory };
+
 export type StoredConfig = {
   schemeId: string;
   overrides: Partial<Record<ColorToken, TokenValues>>;
   radiusStep: number;
   ringWidth: number;
+  font: StoredFont | null;
 };
 
 export const DEFAULT_STORED_CONFIG: StoredConfig = {
@@ -21,6 +31,7 @@ export const DEFAULT_STORED_CONFIG: StoredConfig = {
   overrides: {},
   radiusStep: RADIUS_DEFAULT,
   ringWidth: RING_DEFAULT,
+  font: null,
 };
 
 // Pre-schemes shape: { accent: 'Blue', radiusStep, ringWidth }.
@@ -59,6 +70,7 @@ export const readStored = (): StoredConfig => {
         overrides: {},
         radiusStep: parsed.radiusStep ?? RADIUS_DEFAULT,
         ringWidth: parsed.ringWidth ?? RING_DEFAULT,
+        font: null,
       };
     }
     return { ...DEFAULT_STORED_CONFIG, ...(parsed as Partial<StoredConfig>) };

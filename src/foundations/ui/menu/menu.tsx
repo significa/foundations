@@ -629,12 +629,17 @@ const MenuDivider = ({
   return <Divider className={cn('my-(--inset)', className)} {...props} />;
 };
 
+interface MenuSearchInputProps extends React.ComponentPropsWithRef<'input'> {
+  isLoading?: boolean;
+}
+
 const MenuSearchInput = ({
   ref: refProp,
   onChange,
   onKeyDown,
+  isLoading,
   ...props
-}: React.ComponentPropsWithRef<'input'>) => {
+}: MenuSearchInputProps) => {
   const internalRef = useRef<HTMLInputElement | null>(null);
   const {
     highlightedIndex,
@@ -681,6 +686,7 @@ const MenuSearchInput = ({
       ref={ref}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
+      isLoading={isLoading}
       {...props}
     />
   );

@@ -30,6 +30,7 @@ import {
 
 import { Slot } from '@/foundations/components/slot/slot';
 import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
+import { Spinner } from '@/foundations/ui/spinner/spinner';
 import { cn } from '@/lib/utils/classnames';
 
 type PopoverOrigin = 'trigger' | 'pointer' | [number, number];
@@ -504,16 +505,25 @@ const PopoverClose = ({
   );
 };
 
+interface PopoverSearchInputProps extends React.ComponentPropsWithRef<'input'> {
+  isLoading?: boolean;
+}
+
 const PopoverSearchInput = ({
   className,
+  isLoading,
   ...props
-}: React.ComponentPropsWithRef<'input'>) => {
+}: PopoverSearchInputProps) => {
   return (
     <div className="relative flex items-center rounded-t-lg border-border border-b bg-transparent">
-      <MagnifyingGlassIcon
-        weight="bold"
-        className="absolute left-4 size-4 shrink-0 text-foreground"
-      />
+      {isLoading ? (
+        <Spinner size="sm" className="absolute left-4 text-foreground" />
+      ) : (
+        <MagnifyingGlassIcon
+          weight="bold"
+          className="absolute left-4 size-4 shrink-0 text-foreground"
+        />
+      )}
       <input
         className={cn(
           'h-10 w-full border-0 bg-transparent p-4 pl-10 font-medium text-base outline-none transition-colors placeholder:text-foreground-secondary focus:ring-0',

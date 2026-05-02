@@ -23,8 +23,11 @@ import {
   RADIUS_DEFAULT,
   RING_DEFAULT,
   readStored,
+  type StoredFont,
   writeStored,
 } from './storage';
+import { TypographyPicker } from './typography-picker';
+import { fallbackFor, loadGoogleFont } from './use-fonts-catalog';
 
 const RADIUS_STEP_REM = 0.0625;
 const RADIUS_MAX = 4;
@@ -62,6 +65,7 @@ const DSConfig = () => {
   >(stored.overrides);
   const [radiusStep, setRadiusStep] = useState(stored.radiusStep);
   const [ringWidth, setRingWidth] = useState(stored.ringWidth);
+  const [font, setFont] = useState<StoredFont | null>(stored.font);
   const [view, setView] = useState<'presets' | 'edit'>('presets');
 
   const scheme = useMemo(
@@ -90,7 +94,17 @@ const DSConfig = () => {
     } else {
       removeRoot('--ring-width');
     }
-  }, [scheme, overrides, radiusStep, ringWidth]);
+    if (font) {
+      document.body.style.fontFamily = `'${font.family}', ${fallbackFor(font.category)}`;
+    } else {
+      document.body.style.removeProperty('font-family');
+    }
+  }, [scheme, overrides, radiusStep, ringWidth, font]);
+
+  // Re-attach the <link> tag after Astro view transitions swap the document.
+  useEffect(() => {
+    if (font) loadGoogleFont(font.family);
+  }, [font]);
 
   useEffect(() => {
     apply();
@@ -99,8 +113,8 @@ const DSConfig = () => {
   }, [apply]);
 
   useEffect(() => {
-    writeStored({ schemeId, overrides, radiusStep, ringWidth });
-  }, [schemeId, overrides, radiusStep, ringWidth]);
+    writeStored({ schemeId, overrides, radiusStep, ringWidth, font });
+  }, [schemeId, overrides, radiusStep, ringWidth, font]);
 
   const handleTokenChange = (
     token: ColorToken,
@@ -126,23 +140,35 @@ const DSConfig = () => {
     setOverrides({});
     setRadiusStep(RADIUS_DEFAULT);
     setRingWidth(RING_DEFAULT);
+    setFont(null);
   };
 
   const generateCSSOverrides = () => {
-    const lines: string[] = [];
+    const tokenLines: string[] = [];
     for (const token of COLOR_TOKENS) {
       const current = resolveToken(scheme, overrides, token);
       if (valuesEqual(current, DEFAULT_SCHEME.colors[token])) continue;
-      lines.push(`  ${tokenVar(token)}: ${lightDark(current)};`);
+      tokenLines.push(`  ${tokenVar(token)}: ${lightDark(current)};`);
     }
     if (radiusStep !== RADIUS_DEFAULT) {
-      lines.push(`  --radius: ${radiusStep * RADIUS_STEP_REM}rem;`);
+      tokenLines.push(`  --radius: ${radiusStep * RADIUS_STEP_REM}rem;`);
     }
     if (ringWidth !== RING_DEFAULT) {
-      lines.push(`  --ring-width: ${ringWidth}px;`);
+      tokenLines.push(`  --ring-width: ${ringWidth}px;`);
     }
-    if (lines.length === 0) return '/* No customizations */';
-    return `\n${lines.join('\n')}\n`;
+
+    const blocks: string[] = [];
+    if (tokenLines.length > 0) {
+      blocks.push(`:root {\n${tokenLines.join('\n')}\n}`);
+    }
+    if (font) {
+      blocks.push(
+        `body {\n  font-family: '${font.family}', ${fallbackFor(font.category)};\n}`
+      );
+    }
+
+    if (blocks.length === 0) return '/* No customizations */';
+    return blocks.join('\n\n');
   };
 
   const editing = view === 'edit';
@@ -225,6 +251,11 @@ const DSConfig = () => {
               </div>
             </div>
 
+            <div className="flex flex-col gap-2 p-3">
+              <span className="font-medium text-xs">Typography</span>
+              <TypographyPicker value={font} onChange={setFont} />
+            </div>
+
             <div className="flex flex-col gap-3 p-3">
               <div className="flex items-center justify-between">
                 <span className="font-medium text-xs">Radius</span>
@@ -279,9 +310,8 @@ const DSConfig = () => {
 
         <div className="border-border border-t p-3">
           <p className="text-foreground-secondary text-xs">
-            Copy the snippet and paste it inside your project's{' '}
-            <code className="font-medium text-foreground">:root</code> to apply
-            this configuration.
+            Copy the snippet and paste it into your project's CSS to apply this
+            configuration.
           </p>
         </div>
       </Popover.Content>
