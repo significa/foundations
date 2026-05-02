@@ -26,9 +26,16 @@ const SLOTS: SlotConfig[] = [
   {
     slot: 'body',
     label: 'Body',
-    hint: 'Used for body text and UI chrome (buttons, badges, inputs).',
+    hint: 'Used for prose. Default for UI chrome unless UI is set.',
     placeholder: 'System default',
     nullLabel: 'System default',
+  },
+  {
+    slot: 'ui',
+    label: 'UI',
+    hint: 'Used for chrome (buttons, inputs, menus). Falls back to body.',
+    placeholder: 'Inherit body',
+    nullLabel: 'Inherit body',
   },
   {
     slot: 'mono',

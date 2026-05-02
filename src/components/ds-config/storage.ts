@@ -18,13 +18,14 @@ export type FontCategory =
 
 export type StoredFont = { family: string; category: FontCategory };
 
-export type FontSlot = 'heading' | 'body' | 'mono';
+export type FontSlot = 'heading' | 'body' | 'ui' | 'mono';
 
 export type StoredFonts = Record<FontSlot, StoredFont | null>;
 
 export const EMPTY_FONTS: StoredFonts = {
   heading: null,
   body: null,
+  ui: null,
   mono: null,
 };
 
@@ -105,7 +106,7 @@ export const readStored = (): StoredConfig => {
         overrides: parsed.overrides,
         radiusStep: parsed.radiusStep,
         ringWidth: parsed.ringWidth,
-        fonts: { heading: null, body: parsed.font, mono: null },
+        fonts: { ...EMPTY_FONTS, body: parsed.font },
       };
     }
     const next = parsed as Partial<StoredConfig>;

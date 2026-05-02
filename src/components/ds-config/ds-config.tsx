@@ -4,11 +4,12 @@ import {
   PencilSimpleIcon,
   SlidersHorizontalIcon,
 } from '@phosphor-icons/react/dist/ssr';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { CopyButton } from '@/components/copy-button';
 import { IconButton } from '@/foundations/ui/button/button';
 import { Popover } from '@/foundations/ui/popover/popover';
 import { Slider } from '@/foundations/ui/slider/slider';
+import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
 import {
   DEFAULT_PAIRING,
   findPairing,
@@ -68,10 +69,11 @@ const resolveToken = (
 const fontFamilyValue = (font: StoredFont) =>
   `'${font.family}', ${fallbackFor(font.category)}`;
 
-const FONT_SLOTS: FontSlot[] = ['heading', 'body', 'mono'];
+const FONT_SLOTS: FontSlot[] = ['heading', 'body', 'ui', 'mono'];
 const FONT_VAR: Record<FontSlot, string> = {
   heading: '--font-heading',
   body: '--font-body',
+  ui: '--font-ui',
   mono: '--font-mono',
 };
 
@@ -326,19 +328,21 @@ const DSConfig = () => {
                   <PencilSimpleIcon />
                 </IconButton>
               </div>
-              <div className="grid grid-cols-3 gap-1.5">
-                {PAIRINGS.map((p) => {
-                  const isActive = activePairing?.id === p.id;
-                  return (
-                    <PairingTile
-                      key={p.id}
-                      pairing={p}
-                      isActive={isActive}
-                      onSelect={handlePairingSelect}
-                    />
-                  );
-                })}
-              </div>
+              <Tooltip.Group>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {PAIRINGS.map((p) => {
+                    const isActive = activePairing?.id === p.id;
+                    return (
+                      <PairingTile
+                        key={p.id}
+                        pairing={p}
+                        isActive={isActive}
+                        onSelect={handlePairingSelect}
+                      />
+                    );
+                  })}
+                </div>
+              </Tooltip.Group>
             </div>
 
             <div className="flex flex-col gap-3 p-3">
@@ -410,53 +414,82 @@ type PairingTileProps = {
   onSelect: (pairing: Pairing) => void;
 };
 
+const SLOT_LABELS: Record<FontSlot, string> = {
+  heading: 'Heading',
+  body: 'Body',
+  ui: 'UI',
+  mono: 'Mono',
+};
+
 const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
   const headingFont = pairing.fonts.heading ?? pairing.fonts.body;
-  const bodyFont = pairing.fonts.body;
+  const uiFont = pairing.fonts.ui ?? pairing.fonts.body;
 
   // Lazy-load preview fonts only when the popover is open.
   useEffect(() => {
     if (headingFont) loadGoogleFont(headingFont.family);
-    if (bodyFont) loadGoogleFont(bodyFont.family);
-  }, [headingFont, bodyFont]);
+    if (uiFont) loadGoogleFont(uiFont.family);
+  }, [headingFont, uiFont]);
 
   const headingFamily = headingFont
     ? fontFamilyValue(headingFont)
     : 'var(--font-heading)';
-  const bodyFamily = bodyFont ? fontFamilyValue(bodyFont) : 'var(--font-body)';
+  const uiFamily = uiFont ? fontFamilyValue(uiFont) : 'var(--font-ui)';
 
-  const tooltip =
-    pairing.id === DEFAULT_PAIRING.id
-      ? pairing.label
-      : [pairing.fonts.heading?.family, pairing.fonts.body?.family]
-          .filter(Boolean)
-          .join(' / ') || pairing.label;
+  const setSlots = FONT_SLOTS.filter((slot) => pairing.fonts[slot] !== null);
+  const isSystem = pairing.id === DEFAULT_PAIRING.id;
 
   return (
-    <button
-      type="button"
-      aria-label={pairing.label}
-      aria-pressed={isActive}
-      onClick={() => onSelect(pairing)}
-      title={tooltip}
-      data-active={isActive || undefined}
-      className="focus-visible:ring-(length:--ring-width) flex h-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-md border border-border bg-background px-2 outline-none ring-ring transition hover:bg-background-secondary data-active:border-foreground"
-      style={{ opacity: isActive ? 1 : 0.6 }}
-    >
-      <span
-        aria-hidden="true"
-        className="font-semibold text-sm leading-none"
-        style={{ fontFamily: headingFamily }}
-      >
-        Aa
-      </span>
-      <span
-        className="text-2xs text-foreground-secondary leading-none"
-        style={{ fontFamily: bodyFamily }}
-      >
-        {pairing.label}
-      </span>
-    </button>
+    <Tooltip>
+      <Tooltip.Trigger asChild>
+        <button
+          type="button"
+          aria-label={pairing.label}
+          aria-pressed={isActive}
+          onClick={() => onSelect(pairing)}
+          data-active={isActive || undefined}
+          className="focus-visible:ring-(length:--ring-width) flex h-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-md border border-border bg-background px-2 outline-none ring-ring transition hover:bg-background-secondary data-active:border-foreground"
+          style={{ opacity: isActive ? 1 : 0.6 }}
+        >
+          <span
+            aria-hidden="true"
+            className="font-semibold text-sm leading-none"
+            style={{ fontFamily: headingFamily }}
+          >
+            Aa
+          </span>
+          <span
+            className="text-2xs text-foreground-secondary leading-none"
+            style={{ fontFamily: uiFamily }}
+          >
+            {pairing.label}
+          </span>
+        </button>
+      </Tooltip.Trigger>
+      <Tooltip.Content>
+        <div className="flex flex-col gap-1">
+          <span className="font-medium">{pairing.label}</span>
+          {isSystem ? (
+            <span className="text-foreground-secondary">
+              Inherits your defaults
+            </span>
+          ) : (
+            <div className="grid grid-cols-[auto_1fr] gap-x-2 text-foreground-secondary">
+              {setSlots.map((slot) => {
+                const f = pairing.fonts[slot];
+                if (!f) return null;
+                return (
+                  <Fragment key={slot}>
+                    <span>{SLOT_LABELS[slot]}</span>
+                    <span className="text-foreground">{f.family}</span>
+                  </Fragment>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </Tooltip.Content>
+    </Tooltip>
   );
 };
 

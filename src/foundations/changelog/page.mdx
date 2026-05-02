@@ -12,12 +12,15 @@ meta:
 
 ### Semantic typography tokens
 
-The single `--font-sans` token is gone. In its place: three semantic tokens — `--font-heading`, `--font-body`, and `--font-mono`. `--font-heading` falls back to `--font-body`, so brands that ship one face for everything still set one variable. Brands pairing a serif heading with a sans body now have the right opt-in: headings read `--font-heading`, everything else (Button, Badge, Input, Tooltip, Menu, modal/drawer titles) inherits body. Markdown headings (`h1`–`h6`) opt into `--font-heading`. Consumers using the old `font-sans` Tailwind utility need to swap to `font-body`.
+The single `--font-sans` token is gone. In its place: four semantic roles — `--font-body`, `--font-ui`, `--font-heading`, and `--font-mono`.
+
+`--font-body` is the canonical default. `--font-ui` (chrome — buttons, inputs, menus, badges, tooltips, modal/drawer titles) and `--font-heading` (h1–h6) both fall back to body, so brands that ship one face for everything still set one variable. Brands pairing a serif heading with a serif body and sans chrome — the editorial pattern — set all three. Markdown prose opts into `--font-body`; markdown headings opt into `--font-heading`; the body element uses `--font-ui`. Consumers using the old `font-sans` Tailwind utility need to swap to `font-body`.
 
 ```diff css
 @theme {
 - --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, …;
 + --font-body: "Inter", ui-sans-serif, system-ui, sans-serif, …;
++ --font-ui: var(--font-body);
 + --font-heading: var(--font-body);
   --font-mono: "Geist Mono", ui-monospace, monospace;
 }
@@ -26,14 +29,8 @@ The single `--font-sans` token is gone. In its place: three semantic tokens — 
 ```diff css
 body {
 - font-family: var(--font-sans);
-+ font-family: var(--font-body);
++ font-family: var(--font-ui);
 }
-```
-
-```diff css
-/* markdown.css — h1..h6 */
-- @apply mt-[2em] mb-[1em] font-semibold tracking-tight;
-+ @apply mt-[2em] mb-[1em] font-heading font-semibold tracking-tight;
 ```
 
 ### `isLoading` on search inputs
@@ -218,7 +215,7 @@ const [pos, setPos] = useState<[number, number] | null>(null);
 A small hook for global keyboard shortcuts. `mod: true` is the cross-platform modifier — ⌘ on macOS, Ctrl elsewhere — which is what you almost always want for app-level commands like ⌘K.
 
 ```ts
-useKeyboardShortcut({ key: 'k', mod: true }, () => setOpen(true));
+useKeyboardShortcut({ key: "k", mod: true }, () => setOpen(true));
 ```
 
 ### Fixed: `Dropdown.Divider` and `Listbox.Divider` vertical spacing not tracking `--inset`

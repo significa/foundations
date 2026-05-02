@@ -14,57 +14,76 @@ const font = (
   category,
 });
 
+const empty: StoredFonts = {
+  heading: null,
+  body: null,
+  ui: null,
+  mono: null,
+};
+
 export const DEFAULT_PAIRING_ID = 'default';
 
 export const PAIRINGS: Pairing[] = [
   {
     id: 'default',
     label: 'System',
-    fonts: { heading: null, body: null, mono: null },
+    fonts: { ...empty },
   },
+  // Full 3-font editorial: display serif headings, transitional serif body
+  // for prose, neo-grotesque sans for chrome. Magazine / publication mood.
   {
     id: 'editorial',
     label: 'Editorial',
     fonts: {
       heading: font('Playfair Display', 'serif'),
-      body: font('Inter', 'sans-serif'),
+      body: font('Source Serif 4', 'serif'),
+      ui: font('Inter', 'sans-serif'),
       mono: null,
     },
   },
+  // Warm humanist serif for prose + headings, clean sans chrome.
+  // Education, healthcare, anything wanting friendliness without losing voice.
   {
     id: 'humanist',
     label: 'Humanist',
     fonts: {
       heading: font('Lora', 'serif'),
-      body: font('Inter', 'sans-serif'),
+      body: font('Lora', 'serif'),
+      ui: font('Inter', 'sans-serif'),
       mono: null,
     },
   },
+  // Single-face modernist geometric sans. Swiss, clean, opinionated.
   {
-    id: 'geometric',
-    label: 'Geometric',
+    id: 'modernist',
+    label: 'Modernist',
     fonts: {
-      heading: font('Manrope', 'sans-serif'),
-      body: font('Manrope', 'sans-serif'),
+      heading: null,
+      body: font('Outfit', 'sans-serif'),
+      ui: null,
       mono: null,
     },
   },
+  // Industrial body + matching typewriter mono. Studio / agency / raw.
   {
-    id: 'tech',
-    label: 'Tech',
+    id: 'brutalist',
+    label: 'Brutalist',
     fonts: {
-      heading: font('Geist', 'sans-serif'),
+      heading: null,
+      body: font('Space Grotesk', 'sans-serif'),
+      ui: null,
+      mono: font('Space Mono', 'monospace'),
+    },
+  },
+  // Modern tech-brand: paired sans + mono designed as a family.
+  {
+    id: 'geist',
+    label: 'Geist',
+    fonts: {
+      heading: null,
       body: font('Geist', 'sans-serif'),
+      ui: null,
       mono: font('Geist Mono', 'monospace'),
-    },
-  },
-  {
-    id: 'plex',
-    label: 'Plex',
-    fonts: {
-      heading: font('IBM Plex Sans', 'sans-serif'),
-      body: font('IBM Plex Sans', 'sans-serif'),
-      mono: font('IBM Plex Mono', 'monospace'),
     },
   },
 ];
@@ -77,6 +96,7 @@ const sameFont = (a: StoredFont | null, b: StoredFont | null) =>
 export const fontsEqual = (a: StoredFonts, b: StoredFonts) =>
   sameFont(a.heading, b.heading) &&
   sameFont(a.body, b.body) &&
+  sameFont(a.ui, b.ui) &&
   sameFont(a.mono, b.mono);
 
 export const findPairing = (fonts: StoredFonts): Pairing | null =>
