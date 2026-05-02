@@ -2,8 +2,10 @@
 
 @layer base {
   [data-markdown] :not(:where([data-escape-markdown], [data-escape-markdown] *)) {
+    @apply font-body;
+
     &:is(h1, h2, h3, h4, h5, h6) {
-      @apply mt-[2em] mb-[1em] font-semibold tracking-tight [&_a]:no-underline;
+      @apply mt-[2em] mb-[1em] font-heading font-semibold tracking-tight [&_a]:no-underline;
     }
 
     &:is(h1) {

@@ -22,10 +22,16 @@ folder: hooks
       type: "boolean",
       description: "Whether the element should be pushed to the Top Layer. Defaults to true.",
     },
+    type: {
+      name: "type",
+      type: '"manual" | "hint"',
+      description:
+        'Popover semantics. `manual` (default) is an independent popover that stays open until closed. `hint` is a tooltip-style popover that always stacks above other popovers without dismissing them — use it for tooltips that should float above an already-open `popover="manual"` (e.g. an open dropdown panel).',
+    },
   }}
 />
 
-The hook returns a `RefObject<T | null>` that should be attached to the target HTML element.
+The hook returns a `RefCallback<T>` that should be attached to the target HTML element. If you also need imperative access to the element, compose this ref with your own `useRef` via `composeRefs`.
 
 ## Examples
 

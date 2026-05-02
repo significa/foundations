@@ -9,6 +9,13 @@ import { CopyButton } from '@/components/copy-button';
 import { IconButton } from '@/foundations/ui/button/button';
 import { Popover } from '@/foundations/ui/popover/popover';
 import { Slider } from '@/foundations/ui/slider/slider';
+import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
+import {
+  DEFAULT_PAIRING,
+  findPairing,
+  PAIRINGS,
+  type Pairing,
+} from './pairings';
 import { SchemeEditor } from './scheme-editor';
 import {
   COLOR_TOKENS,
@@ -20,19 +27,24 @@ import {
   type TokenValues,
 } from './schemes';
 import {
+  EMPTY_FONTS,
+  type FontSlot,
   RADIUS_DEFAULT,
   RING_DEFAULT,
   readStored,
   type StoredFont,
+  type StoredFonts,
   writeStored,
 } from './storage';
-import { TypographyPicker } from './typography-picker';
+import { TypographyEditor } from './typography-editor';
 import { fallbackFor, loadGoogleFont } from './use-fonts-catalog';
 
 const RADIUS_STEP_REM = 0.0625;
 const RADIUS_MAX = 4;
 const RING_MIN = 2;
 const RING_MAX = 6;
+
+type View = 'presets' | 'edit-colors' | 'edit-fonts';
 
 const setRoot = (prop: string, value: string) =>
   document.documentElement.style.setProperty(prop, value);
@@ -54,6 +66,17 @@ const resolveToken = (
   token: ColorToken
 ): TokenValues => overrides[token] ?? scheme.colors[token];
 
+const fontFamilyValue = (font: StoredFont) =>
+  `'${font.family}', ${fallbackFor(font.category)}`;
+
+const FONT_SLOTS: FontSlot[] = ['heading', 'body', 'ui', 'mono'];
+const FONT_VAR: Record<FontSlot, string> = {
+  heading: '--font-heading',
+  body: '--font-body',
+  ui: '--font-ui',
+  mono: '--font-mono',
+};
+
 const DSConfig = () => {
   const stored = readStored();
   const initialScheme =
@@ -65,13 +88,15 @@ const DSConfig = () => {
   >(stored.overrides);
   const [radiusStep, setRadiusStep] = useState(stored.radiusStep);
   const [ringWidth, setRingWidth] = useState(stored.ringWidth);
-  const [font, setFont] = useState<StoredFont | null>(stored.font);
-  const [view, setView] = useState<'presets' | 'edit'>('presets');
+  const [fonts, setFonts] = useState<StoredFonts>(stored.fonts);
+  const [view, setView] = useState<View>('presets');
 
   const scheme = useMemo(
     () => SCHEMES.find((s) => s.id === schemeId) ?? DEFAULT_SCHEME,
     [schemeId]
   );
+
+  const activePairing = useMemo(() => findPairing(fonts), [fonts]);
 
   const apply = useCallback(() => {
     for (const token of COLOR_TOKENS) {
@@ -94,17 +119,28 @@ const DSConfig = () => {
     } else {
       removeRoot('--ring-width');
     }
-    if (font) {
-      document.body.style.fontFamily = `'${font.family}', ${fallbackFor(font.category)}`;
-    } else {
-      document.body.style.removeProperty('font-family');
+    for (const slot of FONT_SLOTS) {
+      const font = fonts[slot];
+      if (font) {
+        setRoot(FONT_VAR[slot], fontFamilyValue(font));
+      } else {
+        removeRoot(FONT_VAR[slot]);
+      }
     }
-  }, [scheme, overrides, radiusStep, ringWidth, font]);
+  }, [scheme, overrides, radiusStep, ringWidth, fonts]);
 
-  // Re-attach the <link> tag after Astro view transitions swap the document.
   useEffect(() => {
-    if (font) loadGoogleFont(font.family);
-  }, [font]);
+    const ensureFontsLoaded = () => {
+      for (const slot of FONT_SLOTS) {
+        const font = fonts[slot];
+        if (font) loadGoogleFont(font.family);
+      }
+    };
+    ensureFontsLoaded();
+    document.addEventListener('astro:after-swap', ensureFontsLoaded);
+    return () =>
+      document.removeEventListener('astro:after-swap', ensureFontsLoaded);
+  }, [fonts]);
 
   useEffect(() => {
     apply();
@@ -113,8 +149,8 @@ const DSConfig = () => {
   }, [apply]);
 
   useEffect(() => {
-    writeStored({ schemeId, overrides, radiusStep, ringWidth, font });
-  }, [schemeId, overrides, radiusStep, ringWidth, font]);
+    writeStored({ schemeId, overrides, radiusStep, ringWidth, fonts });
+  }, [schemeId, overrides, radiusStep, ringWidth, fonts]);
 
   const handleTokenChange = (
     token: ColorToken,
@@ -133,14 +169,29 @@ const DSConfig = () => {
     });
   };
 
+  const handleFontChange = (slot: FontSlot, next: StoredFont | null) => {
+    if (next) loadGoogleFont(next.family);
+    setFonts((prev) => ({ ...prev, [slot]: next }));
+  };
+
+  const handlePairingSelect = (pairing: Pairing) => {
+    for (const slot of FONT_SLOTS) {
+      const font = pairing.fonts[slot];
+      if (font) loadGoogleFont(font.family);
+    }
+    setFonts(pairing.fonts);
+  };
+
   const handleResetOverrides = () => setOverrides({});
+
+  const handleResetFonts = () => setFonts(EMPTY_FONTS);
 
   const handleReset = () => {
     setSchemeId(DEFAULT_SCHEME_ID);
     setOverrides({});
     setRadiusStep(RADIUS_DEFAULT);
     setRingWidth(RING_DEFAULT);
-    setFont(null);
+    setFonts(EMPTY_FONTS);
   };
 
   const generateCSSOverrides = () => {
@@ -156,22 +207,35 @@ const DSConfig = () => {
     if (ringWidth !== RING_DEFAULT) {
       tokenLines.push(`  --ring-width: ${ringWidth}px;`);
     }
-
-    const blocks: string[] = [];
-    if (tokenLines.length > 0) {
-      blocks.push(`:root {\n${tokenLines.join('\n')}\n}`);
-    }
-    if (font) {
-      blocks.push(
-        `body {\n  font-family: '${font.family}', ${fallbackFor(font.category)};\n}`
-      );
+    for (const slot of FONT_SLOTS) {
+      const font = fonts[slot];
+      if (!font) continue;
+      tokenLines.push(`  ${FONT_VAR[slot]}: ${fontFamilyValue(font)};`);
     }
 
-    if (blocks.length === 0) return '/* No customizations */';
-    return blocks.join('\n\n');
+    if (tokenLines.length === 0) return '/* No customizations */';
+    return `:root {\n${tokenLines.join('\n')}\n}`;
   };
 
-  const editing = view === 'edit';
+  const headerLabel: Record<View, string> = {
+    presets: 'Design system',
+    'edit-colors': 'Edit colors',
+    'edit-fonts': 'Edit fonts',
+  };
+
+  const headerReset: Record<View, () => void> = {
+    presets: handleReset,
+    'edit-colors': handleResetOverrides,
+    'edit-fonts': handleResetFonts,
+  };
+
+  const headerResetLabel: Record<View, string> = {
+    presets: 'Reset to defaults',
+    'edit-colors': 'Reset overrides',
+    'edit-fonts': 'Reset fonts',
+  };
+
+  const isEditing = view !== 'presets';
 
   return (
     <Popover placement="bottom-end">
@@ -184,9 +248,9 @@ const DSConfig = () => {
           <SlidersHorizontalIcon />
         </IconButton>
       </Popover.Trigger>
-      <Popover.Content className="w-80 p-0">
+      <Popover.Content className="w-80 p-0 pb-1">
         <div className="flex items-center gap-2 border-border border-b px-3 py-2">
-          {editing && (
+          {isEditing && (
             <IconButton
               variant="ghost"
               size="xs"
@@ -197,26 +261,32 @@ const DSConfig = () => {
             </IconButton>
           )}
           <span className="flex-1 font-medium text-sm">
-            {editing ? 'Edit colors' : 'Design system'}
+            {headerLabel[view]}
           </span>
           <IconButton
             variant="ghost"
             size="xs"
-            aria-label={editing ? 'Reset overrides' : 'Reset to defaults'}
-            onClick={editing ? handleResetOverrides : handleReset}
+            aria-label={headerResetLabel[view]}
+            onClick={headerReset[view]}
           >
             <ArrowCounterClockwiseIcon />
           </IconButton>
           <CopyButton content={generateCSSOverrides()} />
         </div>
 
-        {editing ? (
+        {view === 'edit-colors' && (
           <SchemeEditor
             scheme={scheme}
             overrides={overrides}
             onTokenChange={handleTokenChange}
           />
-        ) : (
+        )}
+
+        {view === 'edit-fonts' && (
+          <TypographyEditor fonts={fonts} onFontChange={handleFontChange} />
+        )}
+
+        {view === 'presets' && (
           <div className="flex flex-col divide-y divide-border">
             <div className="flex flex-col gap-2 p-3">
               <div className="flex items-center justify-between">
@@ -225,7 +295,7 @@ const DSConfig = () => {
                   variant="ghost"
                   size="xs"
                   aria-label="Edit colors"
-                  onClick={() => setView('edit')}
+                  onClick={() => setView('edit-colors')}
                 >
                   <PencilSimpleIcon />
                 </IconButton>
@@ -252,8 +322,32 @@ const DSConfig = () => {
             </div>
 
             <div className="flex flex-col gap-2 p-3">
-              <span className="font-medium text-xs">Typography</span>
-              <TypographyPicker value={font} onChange={setFont} />
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-xs">Typography</span>
+                <IconButton
+                  variant="ghost"
+                  size="xs"
+                  aria-label="Edit fonts"
+                  onClick={() => setView('edit-fonts')}
+                >
+                  <PencilSimpleIcon />
+                </IconButton>
+              </div>
+              <Tooltip.Group>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {PAIRINGS.map((p) => {
+                    const isActive = activePairing?.id === p.id;
+                    return (
+                      <PairingTile
+                        key={p.id}
+                        pairing={p}
+                        isActive={isActive}
+                        onSelect={handlePairingSelect}
+                      />
+                    );
+                  })}
+                </div>
+              </Tooltip.Group>
             </div>
 
             <div className="flex flex-col gap-3 p-3">
@@ -307,15 +401,93 @@ const DSConfig = () => {
             </div>
           </div>
         )}
-
-        <div className="border-border border-t p-3">
-          <p className="text-foreground-secondary text-xs">
-            Copy the snippet and paste it into your project's CSS to apply this
-            configuration.
-          </p>
-        </div>
       </Popover.Content>
     </Popover>
+  );
+};
+
+type PairingTileProps = {
+  pairing: Pairing;
+  isActive: boolean;
+  onSelect: (pairing: Pairing) => void;
+};
+
+const SLOT_LABELS: Record<FontSlot, string> = {
+  heading: 'Heading',
+  body: 'Body',
+  ui: 'UI',
+  mono: 'Mono',
+};
+
+const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
+  const headingFont = pairing.fonts.heading ?? pairing.fonts.body;
+  const uiFont = pairing.fonts.ui ?? pairing.fonts.body;
+
+  // Lazy-load preview fonts only when the popover is open.
+  useEffect(() => {
+    if (headingFont) loadGoogleFont(headingFont.family);
+    if (uiFont) loadGoogleFont(uiFont.family);
+  }, [headingFont, uiFont]);
+
+  const headingFamily = headingFont
+    ? fontFamilyValue(headingFont)
+    : 'var(--font-heading)';
+  const uiFamily = uiFont ? fontFamilyValue(uiFont) : 'var(--font-ui)';
+
+  const setSlots = FONT_SLOTS.filter((slot) => pairing.fonts[slot] !== null);
+  const isSystem = pairing.id === DEFAULT_PAIRING.id;
+
+  return (
+    <Tooltip delayIn={1000}>
+      <Tooltip.Trigger asChild>
+        <button
+          type="button"
+          aria-label={pairing.label}
+          aria-pressed={isActive}
+          onClick={() => onSelect(pairing)}
+          data-active={isActive || undefined}
+          className="focus-visible:ring-(length:--ring-width) flex h-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-md border border-border bg-background px-2 outline-none ring-ring transition hover:bg-background-secondary"
+          style={{ opacity: isActive ? 1 : 0.5 }}
+        >
+          <span
+            aria-hidden="true"
+            className="font-semibold text-sm leading-none"
+            style={{ fontFamily: headingFamily }}
+          >
+            Aa
+          </span>
+          <span
+            className="text-2xs text-foreground-secondary leading-none"
+            style={{ fontFamily: uiFamily }}
+          >
+            {pairing.label}
+          </span>
+        </button>
+      </Tooltip.Trigger>
+      <Tooltip.Content>
+        {isSystem ? (
+          <span>Inherits your defaults</span>
+        ) : (
+          <div>
+            {setSlots.map((slot) => {
+              const f = pairing.fonts[slot];
+              if (!f) return null;
+              return (
+                <div
+                  key={slot}
+                  className="flex items-center justify-between gap-4"
+                >
+                  <span className="text-background">{f.family}</span>
+                  <span className="text-right text-background/50">
+                    {SLOT_LABELS[slot]}{' '}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Tooltip.Content>
+    </Tooltip>
   );
 };
 

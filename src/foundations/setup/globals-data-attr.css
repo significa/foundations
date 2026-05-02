@@ -132,7 +132,7 @@
 body {
   scrollbar-gutter: stable;
 
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
 
   background-color: var(--color-background);
   color: var(--color-foreground);

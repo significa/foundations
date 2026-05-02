@@ -1,20 +1,45 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Listbox } from '@/foundations/ui/listbox/listbox';
-import type { StoredFont } from './storage';
+import type { FontCategory, StoredFont } from './storage';
 import {
   type FontMeta,
   fetchCatalog,
   loadGoogleFont,
 } from './use-fonts-catalog';
 
-const FEATURED: FontMeta[] = [
-  { family: 'Inter', category: 'sans-serif' },
-  { family: 'Geist', category: 'sans-serif' },
-  { family: 'IBM Plex Sans', category: 'sans-serif' },
-  { family: 'Manrope', category: 'sans-serif' },
-  { family: 'Lora', category: 'serif' },
-  { family: 'Space Mono', category: 'monospace' },
+const FEATURED_BY_CATEGORY: Record<FontCategory, FontMeta[]> = {
+  'sans-serif': [
+    { family: 'Inter', category: 'sans-serif' },
+    { family: 'Geist', category: 'sans-serif' },
+    { family: 'IBM Plex Sans', category: 'sans-serif' },
+    { family: 'Manrope', category: 'sans-serif' },
+    { family: 'Outfit', category: 'sans-serif' },
+    { family: 'Work Sans', category: 'sans-serif' },
+  ],
+  serif: [
+    { family: 'Playfair Display', category: 'serif' },
+    { family: 'Lora', category: 'serif' },
+    { family: 'EB Garamond', category: 'serif' },
+    { family: 'Source Serif 4', category: 'serif' },
+  ],
+  monospace: [
+    { family: 'Geist Mono', category: 'monospace' },
+    { family: 'IBM Plex Mono', category: 'monospace' },
+    { family: 'JetBrains Mono', category: 'monospace' },
+    { family: 'Space Mono', category: 'monospace' },
+  ],
+  display: [
+    { family: 'Playfair Display', category: 'serif' },
+    { family: 'Bricolage Grotesque', category: 'sans-serif' },
+  ],
+  handwriting: [],
+};
+
+const DEFAULT_FEATURED: FontMeta[] = [
+  ...FEATURED_BY_CATEGORY['sans-serif'].slice(0, 3),
+  ...FEATURED_BY_CATEGORY.serif.slice(0, 2),
+  ...FEATURED_BY_CATEGORY.monospace.slice(0, 1),
 ];
 
 const MAX_RESULTS = 100;
@@ -22,23 +47,34 @@ const MAX_RESULTS = 100;
 interface TypographyPickerProps {
   value: StoredFont | null;
   onChange: (value: StoredFont | null) => void;
+  placeholder?: string;
+  nullLabel?: string;
+  /** When set, featured + filter results are scoped to this category. */
+  category?: FontCategory;
 }
 
-const TypographyPicker = ({ value, onChange }: TypographyPickerProps) => {
+const TypographyPicker = ({
+  value,
+  onChange,
+  placeholder = 'System default',
+  nullLabel = 'System default',
+  category,
+}: TypographyPickerProps) => {
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const featuredWithCurrent = useMemo<FontMeta[]>(() => {
-    if (!value) return FEATURED;
-    if (FEATURED.some((f) => f.family === value.family)) return FEATURED;
-    return [value, ...FEATURED];
-  }, [value]);
+  const featured = useMemo<FontMeta[]>(() => {
+    const base = category ? FEATURED_BY_CATEGORY[category] : DEFAULT_FEATURED;
+    if (!value) return base;
+    if (base.some((f) => f.family === value.family)) return base;
+    return [value, ...base];
+  }, [value, category]);
 
-  const [results, setResults] = useState<FontMeta[]>(featuredWithCurrent);
+  const [results, setResults] = useState<FontMeta[]>(featured);
 
   useEffect(() => {
     if (!search) {
-      setResults(featuredWithCurrent);
+      setResults(featured);
       setIsLoading(false);
       return;
     }
@@ -55,6 +91,7 @@ const TypographyPicker = ({ value, onChange }: TypographyPickerProps) => {
 
       setResults(
         catalog
+          .filter((font) => (category ? font.category === category : true))
           .filter((font) => font.family.toLowerCase().includes(query))
           .slice(0, MAX_RESULTS)
       );
@@ -66,7 +103,7 @@ const TypographyPicker = ({ value, onChange }: TypographyPickerProps) => {
       cancelled = true;
       window.clearTimeout(handle);
     };
-  }, [search, featuredWithCurrent]);
+  }, [search, featured, category]);
 
   const handleSelect = (next: StoredFont | null) => {
     if (next) loadGoogleFont(next.family);
@@ -79,7 +116,7 @@ const TypographyPicker = ({ value, onChange }: TypographyPickerProps) => {
       onChange={handleSelect}
       getIsSelected={(a, b) => (a?.family ?? null) === (b?.family ?? null)}
     >
-      <Listbox.Trigger placeholder="System default">
+      <Listbox.Trigger placeholder={placeholder}>
         {value?.family}
       </Listbox.Trigger>
       <Listbox.Options>
@@ -91,7 +128,7 @@ const TypographyPicker = ({ value, onChange }: TypographyPickerProps) => {
         />
         {!search && (
           <>
-            <Listbox.Option value={null}>System default</Listbox.Option>
+            <Listbox.Option value={null}>{nullLabel}</Listbox.Option>
             <Listbox.Divider />
           </>
         )}

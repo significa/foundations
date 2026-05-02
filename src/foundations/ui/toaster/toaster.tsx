@@ -5,8 +5,9 @@ import {
 } from '@phosphor-icons/react/dist/ssr';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { ComponentPropsWithoutRef } from 'react';
-import { useEffect, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
+import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
 import { cn } from '@/lib/utils/classnames';
 
 const DEFAULT_TOAST_DURATION_MS = 7000;
@@ -152,10 +153,11 @@ const toast = (toast: Omit<Toast, 'id'>) => {
 
 const Toaster = ({ className }: { className?: string }) => {
   const toasts = useToastStore();
-  const ref = useTopLayer<HTMLDivElement>(true);
+  const elementRef = useRef<HTMLDivElement>(null);
+  const topLayerRef = useTopLayer<HTMLDivElement>(true);
 
   useEffect(() => {
-    const element = ref.current;
+    const element = elementRef.current;
     if (!element) return;
 
     // Modals use the DOM top-layer (dialogs, drawers, etc.), where stacking order is
@@ -173,11 +175,11 @@ const Toaster = ({ className }: { className?: string }) => {
     return () => {
       window.removeEventListener('ui:modal-open', onModalOpen);
     };
-  }, [ref]);
+  }, []);
 
   return (
     <div
-      ref={ref}
+      ref={composeRefs(elementRef, topLayerRef)}
       data-toaster-provider
       className={cn(
         'fixed flex size-full flex-col items-end justify-end overflow-hidden bg-transparent px-4 py-3',
