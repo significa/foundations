@@ -43,7 +43,17 @@ export const fetchCatalog = (): Promise<FontMeta[]> => {
 const familyToUrlParam = (family: string) =>
   encodeURIComponent(family).replace(/%20/g, '+');
 
+// Families shipped locally via @font-face in src/styles/global.css. Loading
+// the same family from Google injects a second @font-face with different
+// metrics, which the browser will swap to once it arrives — visible as a
+// flash and a subtle width/spacing shift on the live page.
+const LOCAL_FONT_FAMILIES: ReadonlySet<string> = new Set([
+  'Inter',
+  'Geist Mono',
+]);
+
 export const loadGoogleFont = (family: string) => {
+  if (LOCAL_FONT_FAMILIES.has(family)) return;
   const href = `https://fonts.googleapis.com/css2?family=${familyToUrlParam(family)}:wght@400;500;600;700&display=swap`;
   // Query the DOM rather than a module-level Set: Astro's ClientRouter swaps
   // the page <head> on navigation and drops runtime-injected <link> tags. A
