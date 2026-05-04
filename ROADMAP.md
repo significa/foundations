@@ -14,7 +14,6 @@ Some items will be impossible to do until there is decent baseline support for t
 
 ## Missing components
 
-- [ ] **Progress** — linear and circular variants. The pattern already exists inline in `FileUpload`; extract it to its own primitive and have FileUpload consume it.
 
 ## Non-goals
 
