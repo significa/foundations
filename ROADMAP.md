@@ -15,7 +15,6 @@ Some items will be impossible to do until there is decent baseline support for t
 ## Missing components
 
 - [ ] **Progress** — linear and circular variants. The pattern already exists inline in `FileUpload`; extract it to its own primitive and have FileUpload consume it.
-- [ ] **Number Input** — input with stepper buttons, keyboard increment/decrement, min/max/step. We hit this need regularly across apps.
 
 ## Non-goals
 
