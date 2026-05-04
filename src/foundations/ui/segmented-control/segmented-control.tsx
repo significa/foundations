@@ -96,12 +96,11 @@ const SegmentedControl = ({
       setInternalSelectedValue(value);
       onChangeProp?.(value);
 
-      const itemId = getItemId(value);
-      if (itemId) {
-        document.getElementById(itemId)?.focus();
-      }
+      document
+        .getElementById(getItemId(id, value))
+        ?.focus({ preventScroll: true });
     },
-    [onChangeProp]
+    [id, onChangeProp]
   );
 
   const next = useCallback(() => {
@@ -171,8 +170,8 @@ interface SegmentedControlItemProps
   value: string;
 }
 
-const getItemId = (id: string | undefined) =>
-  id ? `segment-${id}` : undefined;
+const getItemId = (instanceId: string, value: string) =>
+  `${instanceId}-segment-${value}`;
 
 const SegmentedControlItem = ({
   children,
@@ -225,7 +224,7 @@ const SegmentedControlItem = ({
 
   return (
     <Comp
-      id={getItemId(value)}
+      id={getItemId(segmentsId, value)}
       type="button"
       className={cn(
         'relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground',
