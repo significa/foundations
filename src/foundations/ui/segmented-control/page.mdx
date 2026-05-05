@@ -1,0 +1,83 @@
+---
+title: Segmented Control
+description: A compact control for switching between a small set of mutually exclusive options with smooth animations and keyboard support.
+preview: segmented-control
+files:
+  - src/foundations/ui/segmented-control/segmented-control.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: motion
+    href: https://motion.dev
+
+folder: UI
+---
+
+## Features
+
+- **Smooth Animations**: Animated indicator transitions using Motion layout animations
+- **Keyboard Navigation**: Full keyboard support with arrow key navigation
+- **Controlled & Uncontrolled**: Flexible state management options
+- **ARIA Support**: Full accessibility implementation with radiogroup role
+- **Custom Styling**: Extensible styling through className props
+
+## Anatomy
+
+```tsx
+<SegmentedControl>
+  <SegmentedControl.Item value="..." />
+</SegmentedControl>
+```
+
+## API Reference
+
+### SegmentedControl
+
+The root container component that manages the state and behavior of the segmented control.
+
+<PropsTable
+  definition={{
+    defaultValue: {
+      type: "string",
+      description: "The value of the segment that should be active by default. Defaults to the first segment if omitted.",
+    },
+    value: {
+      type: "string",
+      description: "The controlled value of the active segment.",
+    },
+    onChange: {
+      type: "(value: string) => void",
+      description: "Callback fired when the active segment changes.",
+    },
+  }}
+/>
+
+### SegmentedControl.Item
+
+The individual segment button component.
+
+<PropsTable
+  definition={{
+    value: {
+      type: "string",
+      required: true,
+      description: "The value that identifies this segment. Used for selection state and keyboard navigation.",
+    },
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+## Accessibility
+
+The Segmented Control implements the [WAI-ARIA Radio Group Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/). The root has `role="radiogroup"` and each item has `role="radio"` with `aria-checked` reflecting the current selection. Arrow keys move focus and selection between segments.
+
+## Examples
+
+### Basic Usage
+
+A basic example of a segmented control.
+
+<Preview slug="segmented-control" />

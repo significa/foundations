@@ -1,0 +1,110 @@
+---
+title: Breadcrumb
+description: Hierarchical navigation showing the user's location within a site.
+preview: breadcrumb
+files:
+  - src/foundations/ui/breadcrumb/breadcrumb.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+
+folder: UI
+---
+
+## Anatomy
+
+```tsx
+<Breadcrumb>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link />
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator />
+    <Breadcrumb.Item>
+      <Breadcrumb.Ellipsis />
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator />
+    <Breadcrumb.Item>
+      <Breadcrumb.Page />
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb>
+```
+
+## API Reference
+
+### Breadcrumb
+
+Extends the `nav` element. Renders with `aria-label="breadcrumb"`.
+
+### Breadcrumb.List
+
+Extends the `ol` element. Ordered list — the order is meaningful and read out by screen readers.
+
+### Breadcrumb.Item
+
+Extends the `li` element.
+
+### Breadcrumb.Link
+
+Extends the `a` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Use to compose with a router-aware Link component.",
+    },
+  }}
+/>
+
+### Breadcrumb.Page
+
+Extends the `span` element. Represents the current page — not a navigable target. Renders with `aria-current="page"` per the [WAI-ARIA Breadcrumb pattern](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/).
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+    },
+  }}
+/>
+
+### Breadcrumb.Separator
+
+Extends the `li` element. Decorative — rendered with `role="presentation"` and `aria-hidden="true"`. Defaults to a chevron icon. Pass `children` to override (e.g., `/`, `>`, or any element).
+
+### Breadcrumb.Ellipsis
+
+Extends the `span` element. Decorative collapse indicator. Combine with a `Menu` (or any disclosure) to expand the hidden segments.
+
+## Examples
+
+### With an icon
+
+Replace the first segment's label with an icon (commonly a home glyph). Pair it with `aria-label` so the link still announces meaningfully.
+
+<Preview slug="breadcrumb-icon" />
+
+### Custom separator
+
+<Preview slug="breadcrumb-custom-separator" />
+
+### Collapsed with dropdown
+
+When the trail is too long, replace middle segments with `Breadcrumb.Ellipsis` inside a `Menu` so they remain reachable.
+
+<Preview slug="breadcrumb-collapsed" />
+
+## Best Practices
+
+1. **Usage**:
+   - The last item should be `Breadcrumb.Page`, not `Breadcrumb.Link` — it's the current location.
+   - Keep labels short. Truncate long names with `text-ellipsis` and a fixed `max-w-*` rather than wrapping mid-word.
+
+2. **Accessibility**:
+   - The `<nav aria-label="breadcrumb">` and ordered `<ol>` are required for screen readers to announce the trail correctly.
+   - Separators are decorative — never put meaningful content inside `Breadcrumb.Separator`.
+
+3. **Routing**:
+   - Use `asChild` on `Breadcrumb.Link` to compose with `next/link`, `<a is="astro-link">`, or any router-aware component.

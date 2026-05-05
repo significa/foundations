@@ -91,16 +91,16 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 ## Naming Conventions
 
-| Thing                  | Convention                        | Example                               |
-| ---------------------- | --------------------------------- | ------------------------------------- |
-| Files & folders        | `kebab-case`                      | `use-scroll-lock.ts`, `color-picker/` |
-| React components       | `PascalCase`                      | `ColorPicker`, `DialogContent`        |
-| Hooks                  | `camelCase`, `use` prefix         | `useScrollLock`, `useMatchMedia`      |
-| Utilities / functions  | `camelCase`                       | `composeRefs`, `clamp`                |
-| CVA style objects      | `<name>Style`                     | `buttonStyle`, `badgeStyle`           |
-| Context objects        | `<Name>Context`                   | `TooltipContext`                      |
-| Context consumer hooks | `use<Name>Context`                | `useTooltipContext`                   |
-| Sub-components         | Prefixed with parent              | `DialogContent`, `TooltipTrigger`     |
+| Thing                  | Convention                | Example                               |
+| ---------------------- | ------------------------- | ------------------------------------- |
+| Files & folders        | `kebab-case`              | `use-scroll-lock.ts`, `color-picker/` |
+| React components       | `PascalCase`              | `ColorPicker`, `DialogContent`        |
+| Hooks                  | `camelCase`, `use` prefix | `useScrollLock`, `useMatchMedia`      |
+| Utilities / functions  | `camelCase`               | `composeRefs`, `clamp`                |
+| CVA style objects      | `<name>Style`             | `buttonStyle`, `badgeStyle`           |
+| Context objects        | `<Name>Context`           | `TooltipContext`                      |
+| Context consumer hooks | `use<Name>Context`        | `useTooltipContext`                   |
+| Sub-components         | Prefixed with parent      | `DialogContent`, `TooltipTrigger`     |
 
 ---
 
@@ -149,13 +149,13 @@ Any component accepting `asChild` renders as its child element when the prop is 
 
 Communicate UI state through `data-*` attributes, not class toggling. The standard set:
 
-| Attribute        | Values                                       | Used for                                                                  |
-| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `data-state`     | `"open" \| "closed"`                         | Binary open/close (Disclosure, Popover trigger, Listbox trigger, Tooltip) |
-| `data-status`    | `"unmounted" \| "initial" \| "open" \| "closed"` | Transition state from `useElementTransition` (Modal, Drawer, Popover content) |
-| `data-selected`  | `true \| undefined`                          | Selected items (Tabs, Listbox option, Calendar day)                       |
-| `data-highlighted` | `true \| undefined`                        | Keyboard-highlighted items (Dropdown, Listbox)                            |
-| `data-disabled`  | `true \| undefined`                          | Disabled items                                                            |
+| Attribute          | Values                                           | Used for                                                                      |
+| ------------------ | ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| `data-state`       | `"open" \| "closed"`                             | Binary open/close (Disclosure, Popover trigger, Listbox trigger, Tooltip)     |
+| `data-status`      | `"unmounted" \| "initial" \| "open" \| "closed"` | Transition state from `useElementTransition` (Modal, Drawer, Popover content) |
+| `data-selected`    | `true \| undefined`                              | Selected items (Tabs, Listbox option, Calendar day)                           |
+| `data-highlighted` | `true \| undefined`                              | Keyboard-highlighted items (Dropdown, Listbox)                                |
+| `data-disabled`    | `true \| undefined`                              | Disabled items                                                                |
 
 Boolean states use `true` or `undefined` (omit the attribute when false) so selectors like `data-[selected]:...` work. String states use `data-[state=open]:...`.
 

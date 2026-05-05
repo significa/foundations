@@ -1,7 +1,17 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import Posthog from "@/components/posthog.astro";
+import { COLOR_TOKENS, DEFAULT_SCHEME_ID, SCHEMES } from "@/components/ds-config/schemes";
+import {
+  FONT_VARS,
+  RADIUS_DEFAULT,
+  RADIUS_STEP_REM,
+  RING_DEFAULT,
+  STORAGE_KEY as DS_CONFIG_STORAGE_KEY,
+} from "@/components/ds-config/storage";
+import { FONT_FALLBACKS } from "@/components/ds-config/use-fonts-catalog";
 import { Toaster } from "@/foundations/ui/toaster/toaster";
+import { THEME_STORAGE_KEY } from "@/lib/theme";
 
 import "@/styles/global.css";
 
@@ -22,6 +32,86 @@ const description =
 
 <html lang="en" transition:animate="none">
   <head>
+    {/* Apply the stored or system theme synchronously before paint to avoid a flash of light theme on dark-mode sessions. */}
+    <script is:inline define:vars={{ storageKey: THEME_STORAGE_KEY }}>
+      (() => {
+        try {
+          const stored = localStorage.getItem(storageKey);
+          const theme =
+            stored === "light" || stored === "dark"
+              ? stored
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          if (theme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+          }
+        } catch {}
+      })();
+    </script>
+
+    {
+      /* Apply stored DSConfig (scheme/radius/ring/fonts) synchronously to avoid a flash of default tokens before React hydrates. Mirrors apply() in ds-config.tsx. */
+    }
+    <script
+      is:inline
+      define:vars={{
+        storageKey: DS_CONFIG_STORAGE_KEY,
+        schemes: SCHEMES,
+        colorTokens: COLOR_TOKENS,
+        defaultSchemeId: DEFAULT_SCHEME_ID,
+        radiusDefault: RADIUS_DEFAULT,
+        radiusStepRem: RADIUS_STEP_REM,
+        ringDefault: RING_DEFAULT,
+        fontVars: FONT_VARS,
+        fontFallbacks: FONT_FALLBACKS,
+      }}
+    >
+      (() => {
+        try {
+          const raw = localStorage.getItem(storageKey);
+          if (!raw) return;
+          const cfg = JSON.parse(raw);
+          if (!cfg || typeof cfg !== "object" || !cfg.schemeId) return;
+          const scheme = schemes.find((s) => s.id === cfg.schemeId);
+          if (!scheme) return;
+          const root = document.documentElement;
+          const overrides = cfg.overrides || {};
+          const onDefault = scheme.id === defaultSchemeId;
+          for (const t of colorTokens) {
+            const o = overrides[t];
+            if (onDefault && !o) continue;
+            const v = o || scheme.colors[t];
+            if (!v) continue;
+            root.style.setProperty("--color-" + t, "light-dark(" + v.light + ", " + v.dark + ")");
+          }
+          if (typeof cfg.radiusStep === "number" && cfg.radiusStep !== radiusDefault) {
+            root.style.setProperty("--radius", cfg.radiusStep * radiusStepRem + "rem");
+          }
+          if (typeof cfg.ringWidth === "number" && cfg.ringWidth !== ringDefault) {
+            root.style.setProperty("--ring-width", cfg.ringWidth + "px");
+          }
+          const fonts = cfg.fonts || {};
+          for (const slot in fontVars) {
+            const f = fonts[slot];
+            if (!f || !f.family) continue;
+            const fallback = fontFallbacks[f.category] || fontFallbacks["sans-serif"];
+            root.style.setProperty(fontVars[slot], "'" + f.family + "', " + fallback);
+            const href =
+              "https://fonts.googleapis.com/css2?family=" +
+              encodeURIComponent(f.family).replace(/%20/g, "+") +
+              ":wght@400;500;600;700&display=swap";
+            if (!document.querySelector('link[rel="stylesheet"][href="' + href + '"]')) {
+              const l = document.createElement("link");
+              l.rel = "stylesheet";
+              l.href = href;
+              document.head.appendChild(l);
+            }
+          }
+        } catch {}
+      })();
+    </script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
 

@@ -48,6 +48,11 @@ const previewLoader = ({ pattern, base, generateId }: PreviewLoaderOptions) => {
     name: 'preview-loader',
     // TODO: watch files
     load: async ({ store, parseData }) => {
+      // Drop stale entries — the loader is set-only, so deleted preview files
+      // would otherwise linger in the persisted store and the build would try
+      // to render previews for files that no longer exist.
+      store.clear();
+
       const baseDir = resolve(base || '/src');
 
       for await (const match of glob(pattern, { cwd: baseDir })) {

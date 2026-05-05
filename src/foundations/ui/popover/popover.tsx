@@ -19,17 +19,35 @@ import {
   useTransitionStatus,
 } from '@floating-ui/react';
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
-import { createContext, use, useCallback, useMemo, useState } from 'react';
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { Slot } from '@/foundations/components/slot/slot';
 import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
+import { Spinner } from '@/foundations/ui/spinner/spinner';
 import { cn } from '@/lib/utils/classnames';
+
+type PopoverOrigin = 'trigger' | 'pointer' | [number, number];
 
 interface UsePopoverFloatingOptions {
   open?: boolean;
   onOpenChange?: UseFloatingOptions['onOpenChange'];
   placement?: Placement;
   offset?: number;
+  origin?: PopoverOrigin;
+  // Cross-axis fallbacks for `flip()`. Useful for nested menus on narrow
+  // viewports where neither side has horizontal room — e.g. ['left-start',
+  // 'bottom-start', 'top-start'] lets a `right-start` submenu fall back below
+  // the trigger.
+  flipFallbackPlacements?: Placement[];
+  // FloatingTree integration — used by Menu for nested submenu coordination.
+  nodeId?: string;
 }
 
 const usePopoverFloating = ({
@@ -37,6 +55,9 @@ const usePopoverFloating = ({
   onOpenChange: propsOnOpenChange,
   placement = 'bottom',
   offset = 4,
+  origin = 'trigger',
+  flipFallbackPlacements,
+  nodeId,
 }: UsePopoverFloatingOptions) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = propsOpen ?? internalOpen;
@@ -50,15 +71,52 @@ const usePopoverFloating = ({
   );
 
   const floating = useFloating({
+    nodeId,
     placement,
     open,
     onOpenChange: setOpen,
-    whileElementsMounted: (reference, floating, update) =>
-      autoUpdate(reference, floating, update, {
-        layoutShift: false,
-      }),
+    // Pause `update()` while a text-input descendant of the floating element
+    // has focus. iOS fires scroll/resize on `window.visualViewport` when the
+    // soft keyboard opens — without this guard, those events trigger
+    // `flip()` to re-evaluate against the shrunken viewport, the panel
+    // re-renders with a new placement, and the focused input loses focus,
+    // dismissing the keyboard in a loop. The listeners live in
+    // `whileElementsMounted` so they're tied to floating-ui's lifecycle and
+    // don't need a separate `useEffect`.
+    whileElementsMounted: (reference, floatingEl, update) => {
+      let paused = false;
+      const isTextInput = (n: EventTarget | null) =>
+        n instanceof HTMLElement &&
+        (n.tagName === 'INPUT' ||
+          n.tagName === 'TEXTAREA' ||
+          n.isContentEditable);
+      const onFocusIn = (e: FocusEvent) => {
+        if (isTextInput(e.target)) paused = true;
+      };
+      const onFocusOut = (e: FocusEvent) => {
+        if (isTextInput(e.target)) paused = false;
+      };
+      floatingEl.addEventListener('focusin', onFocusIn);
+      floatingEl.addEventListener('focusout', onFocusOut);
+
+      const cleanup = autoUpdate(
+        reference,
+        floatingEl,
+        () => {
+          if (paused) return;
+          update();
+        },
+        { layoutShift: false }
+      );
+
+      return () => {
+        cleanup();
+        floatingEl.removeEventListener('focusin', onFocusIn);
+        floatingEl.removeEventListener('focusout', onFocusOut);
+      };
+    },
     middleware: [
-      flip({ padding: 8 }),
+      flip({ padding: 8, fallbackPlacements: flipFallbackPlacements }),
       shift({ padding: 8 }),
       offsetMiddleware(offset),
       size({
@@ -79,13 +137,39 @@ const usePopoverFloating = ({
     ],
   });
 
+  // When origin is an explicit [x, y], pin the floating element to that point
+  // via Floating UI's virtual reference pattern. The trigger element stays the
+  // interaction reference (focus, dismiss); only positioning changes. We don't
+  // reset to null in the 'trigger' / 'pointer' branches: setPositionReference
+  // is wired into Floating UI's lower-level setReference, and clearing it
+  // after the trigger's ref callback has already registered would break
+  // positioning entirely.
+  useEffect(() => {
+    if (Array.isArray(origin)) {
+      const [x, y] = origin;
+      floating.refs.setPositionReference({
+        getBoundingClientRect: () => ({
+          width: 0,
+          height: 0,
+          x,
+          y,
+          top: y,
+          right: x,
+          bottom: y,
+          left: x,
+        }),
+      });
+    }
+  }, [origin, floating.refs]);
+
   return useMemo(
     () => ({
       open,
       setOpen,
+      origin,
       ...floating,
     }),
-    [open, setOpen, floating]
+    [open, setOpen, origin, floating]
   );
 };
 
@@ -186,6 +270,7 @@ const PopoverTrigger = ({
   const Comp = asChild ? Slot : 'button';
 
   const ref = useMergeRefs([context.refs.setReference, refProp]);
+  const referenceProps = context.getReferenceProps(props);
 
   return (
     <Comp
@@ -193,7 +278,36 @@ const PopoverTrigger = ({
       type={asChild ? undefined : 'button'}
       className={cn(!asChild && 'disabled:opacity-40', className)}
       data-state={context.open ? 'open' : 'closed'}
-      {...context.getReferenceProps(props)}
+      {...referenceProps}
+      onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+        // Pointer mode: capture the click coordinates and pin the floating
+        // panel there. Keyboard-triggered clicks have clientX/Y of 0 — we
+        // skip in that case and let positioning fall back to the trigger.
+        if (
+          context.origin === 'pointer' &&
+          !context.open &&
+          event.clientX &&
+          event.clientY
+        ) {
+          const x = event.clientX;
+          const y = event.clientY;
+          context.refs.setPositionReference({
+            getBoundingClientRect: () => ({
+              width: 0,
+              height: 0,
+              x,
+              y,
+              top: y,
+              right: x,
+              bottom: y,
+              left: x,
+            }),
+          });
+        }
+        if (typeof referenceProps.onClick === 'function') {
+          referenceProps.onClick(event);
+        }
+      }}
     >
       {children}
     </Comp>
@@ -216,7 +330,8 @@ const PopoverContent = ({
   children,
   ...props
 }: React.ComponentPropsWithRef<'div'>) => {
-  const { context, refs, getFloatingProps, modal } = usePopoverContext();
+  const { context, refs, getFloatingProps, modal, isPositioned } =
+    usePopoverContext();
 
   const ref = useMergeRefs([refs.setFloating, refProp]);
 
@@ -224,6 +339,7 @@ const PopoverContent = ({
     <PopoverPanel
       context={context}
       modal={modal}
+      isPositioned={isPositioned}
       ref={ref}
       className={cn(
         'z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-background p-3 font-medium text-foreground shadow-lg outline-none',
@@ -239,6 +355,10 @@ const PopoverContent = ({
 interface PopoverPanelProps extends React.ComponentPropsWithRef<'div'> {
   context: FloatingContext;
   modal?: boolean;
+  isPositioned?: boolean;
+  initialFocus?: number | React.RefObject<HTMLElement | null>;
+  returnFocus?: boolean;
+  animate?: boolean;
 }
 
 /**
@@ -252,28 +372,47 @@ const PopoverPanel = ({
   ref,
   context,
   modal,
+  isPositioned = true,
+  initialFocus,
+  returnFocus,
+  animate = true,
   className,
   style,
   ...props
 }: PopoverPanelProps) => {
-  const { isMounted, status } = useTransitionStatus(context, { duration: 150 });
+  const { isMounted, status } = useTransitionStatus(context, {
+    duration: animate ? 150 : 0,
+  });
   const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
 
   const mergedRef = useMergeRefs([ref, topLayerRef]);
 
   if (!isMounted) return null;
 
+  // Hide until floating-ui has computed the position. Otherwise the panel
+  // renders at (0, 0) on the first frame and FloatingFocusManager's autofocus
+  // makes the browser scroll the document toward that point before the real
+  // position is applied.
+  const hidden = !isPositioned || context.middlewareData.hide?.referenceHidden;
+
   return (
-    <FloatingFocusManager context={context} modal={modal}>
+    <FloatingFocusManager
+      context={context}
+      modal={modal}
+      initialFocus={initialFocus}
+      returnFocus={returnFocus}
+    >
       <div
         ref={mergedRef}
         data-state={['open', 'initial'].includes(status) ? 'open' : 'closed'}
         data-side={context.placement.split('-')[0]}
         className={cn(
-          'origin-(--transform-origin) transition duration-300 ease-out',
-          'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
-          'data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150',
-          'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
+          animate && [
+            'origin-(--transform-origin) transition duration-300 ease-out',
+            'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
+            'data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150',
+            'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
+          ],
           className
         )}
         style={{
@@ -281,9 +420,7 @@ const PopoverPanel = ({
           top: context.y ?? 0,
           left: context.x ?? 0,
           '--transform-origin': placementToTransformOrigin(context.placement),
-          visibility: context.middlewareData.hide?.referenceHidden
-            ? 'hidden'
-            : 'visible',
+          visibility: hidden ? 'hidden' : 'visible',
           ...style,
         }}
         {...props}
@@ -368,16 +505,25 @@ const PopoverClose = ({
   );
 };
 
+interface PopoverSearchInputProps extends React.ComponentPropsWithRef<'input'> {
+  isLoading?: boolean;
+}
+
 const PopoverSearchInput = ({
   className,
+  isLoading,
   ...props
-}: React.ComponentPropsWithRef<'input'>) => {
+}: PopoverSearchInputProps) => {
   return (
     <div className="relative flex items-center rounded-t-lg border-border border-b bg-transparent">
-      <MagnifyingGlassIcon
-        weight="bold"
-        className="absolute left-4 size-4 shrink-0 text-foreground"
-      />
+      {isLoading ? (
+        <Spinner size="sm" className="absolute left-4 text-foreground" />
+      ) : (
+        <MagnifyingGlassIcon
+          weight="bold"
+          className="absolute left-4 size-4 shrink-0 text-foreground"
+        />
+      )}
       <input
         className={cn(
           'h-10 w-full border-0 bg-transparent p-4 pl-10 font-medium text-base outline-none transition-colors placeholder:text-foreground-secondary focus:ring-0',
@@ -416,6 +562,7 @@ const CompoundPopover = Object.assign(Popover, {
   Panel: PopoverPanel,
 });
 
+export type { PopoverOrigin };
 export {
   CompoundPopover as Popover,
   PopoverContext,

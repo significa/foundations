@@ -3,11 +3,11 @@ import {
   WarningCircleIcon,
 } from '@phosphor-icons/react/dist/ssr';
 import { useCallback, useEffect, useState } from 'react';
+import { useKeyboardShortcut } from '@/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut';
 import { IconButton } from '@/foundations/ui/button/button';
 import { Dialog } from '@/foundations/ui/dialog/dialog';
-import { Spinner } from '@/foundations/ui/spinner/spinner';
+import { Menu } from '@/foundations/ui/menu/menu';
 import type { Pagefind } from '@/lib/types/pagefind';
-import { cn } from '@/lib/utils/classnames';
 
 const MAX_ITEMS_PER_GROUP = 7;
 
@@ -15,44 +15,23 @@ const HIGHLIGHTS: Result[] = [
   {
     group: 'Introduction',
     items: [
-      {
-        title: 'About',
-        href: '/about',
-      },
-      {
-        title: 'Setup',
-        href: '/setup',
-      },
+      { title: 'About', href: '/about' },
+      { title: 'Setup', href: '/setup' },
     ],
   },
   {
     group: 'UI',
     items: [
-      {
-        title: 'Button',
-        href: '/ui/button',
-      },
-      {
-        title: 'Dropdown',
-        href: '/ui/dropdown',
-      },
-      {
-        title: 'Input',
-        href: '/ui/input',
-      },
+      { title: 'Button', href: '/ui/button' },
+      { title: 'Menu', href: '/ui/menu' },
+      { title: 'Input', href: '/ui/input' },
     ],
   },
   {
     group: 'Components',
     items: [
-      {
-        title: 'InstanceCounter',
-        href: '/components/instance-counter',
-      },
-      {
-        title: 'Slot',
-        href: '/components/slot',
-      },
+      { title: 'InstanceCounter', href: '/components/instance-counter' },
+      { title: 'Slot', href: '/components/slot' },
     ],
   },
   {
@@ -62,31 +41,20 @@ const HIGHLIGHTS: Result[] = [
         title: 'useIntersectionObserver',
         href: '/hooks/use-intersection-observer',
       },
-      {
-        title: 'useScrollLock',
-        href: '/hooks/use-scroll-lock',
-      },
+      { title: 'useScrollLock', href: '/hooks/use-scroll-lock' },
     ],
   },
   {
     group: 'Guides',
     items: [
-      {
-        title: 'Accessible Forms',
-        href: '/guides/accessible-form',
-      },
-      {
-        title: 'Automated Tests',
-        href: '/guides/automated-tests',
-      },
+      { title: 'Accessible Forms', href: '/guides/accessible-form' },
+      { title: 'Automated Tests', href: '/guides/automated-tests' },
     ],
   },
 ];
 
-type Result = {
-  group: string;
-  items: { title: string; href: string }[];
-};
+type Item = { title: string; href: string };
+type Result = { group: string; items: Item[] };
 
 const Search = () => {
   const [pagefind, isPagefindError] = usePagefind();
@@ -94,12 +62,10 @@ const Search = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Result[]>(HIGHLIGHTS);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = useCallback(
     async (query: string) => {
-      if (!pagefind) return null;
-      setIsLoading(true);
+      if (!pagefind) return;
 
       const search = await pagefind.debouncedSearch(query);
 
@@ -120,67 +86,51 @@ const Search = () => {
 
       const groupedMatches = matches.reduce((acc, result) => {
         const group = result.folder || 'other';
-        const existingGroupIndex = acc.findIndex(
-          (item) => item.group === group
-        );
+        const existing = acc.findIndex((item) => item.group === group);
 
-        if (existingGroupIndex !== -1) {
-          acc[existingGroupIndex] = {
-            group: group,
-            items: [...acc[existingGroupIndex].items, result],
+        if (existing !== -1) {
+          acc[existing] = {
+            group,
+            items: [...acc[existing].items, result],
           };
-
-          return acc;
         } else {
-          acc.push({
-            group: group,
-            items: [result],
-          });
-
-          return acc;
+          acc.push({ group, items: [result] });
         }
+
+        return acc;
       }, [] as Result[]);
 
       setResults(groupedMatches);
-      setIsLoading(false);
     },
     [pagefind]
   );
 
-  // Perform search whenever the query changes
   useEffect(() => {
     if (query === '') {
       setResults(HIGHLIGHTS);
-      setIsLoading(false);
       return;
     }
 
-    setIsLoading(true);
     handleSearch(query);
   }, [query, handleSearch]);
 
-  // Listen for Cmd+K or Ctrl+K to open the search dialog
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setIsOpen(true);
-      }
-    };
+  useKeyboardShortcut({ key: 'k', mod: true }, () => setIsOpen(true));
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  const handleOpenChange = (next: boolean) => {
+    setIsOpen(next);
+    if (!next) {
+      setQuery('');
+      setResults(HIGHLIGHTS);
+    }
+  };
+
+  const handleSelect = (href: string) => {
+    setIsOpen(false);
+    window.location.href = href;
+  };
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(open) => {
-        setQuery('');
-        setResults(HIGHLIGHTS);
-        setIsOpen(open);
-      }}
-    >
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
         <IconButton
           size="sm"
@@ -194,86 +144,74 @@ const Search = () => {
 
       <Dialog.Content
         catchFocus={false}
-        className="flex h-100 max-h-[70svh] flex-col rounded-xl p-0"
+        className="flex h-100 max-h-[70svh] w-full max-w-xl flex-col rounded-xl p-0"
       >
-        <div
-          className={cn(
-            'sticky top-0 z-10 flex w-full items-center border-border border-b bg-background px-3.5 py-3'
-          )}
-        >
-          <div className="flex size-4 items-center justify-center overflow-hidden">
-            {isLoading ? (
-              <Spinner className="size-3" />
-            ) : (
-              <MagnifyingGlassIcon className="mt-0.5 size-4" />
-            )}
-          </div>
-          <input
-            type="text"
-            className="ml-2.5 w-full outline-none"
-            placeholder="Search..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col gap-4 overflow-y-auto p-2 pt-4 pb-1">
-          {isPagefindError ? (
-            <div className="text-foreground-secondary">
-              <div className="flex items-center justify-center gap-1 p-3.5 text-foreground-secondary text-sm">
-                <WarningCircleIcon />
-                Could not load Pagefind instance.
-              </div>
-              {import.meta.env.DEV && (
-                <div className="mt-4 space-y-1 text-balance text-center text-xs">
-                  <p>Generate a development Pagefind instance by running</p>
-                  <code className="mx-1 rounded-sm border bg-foreground/4 px-1 py-0.5 font-[0.95rem] leading-loose">
-                    pnpm dev:pagefind
-                  </code>
-                </div>
+        <Menu open={isOpen} onOpenChange={handleOpenChange} modal={false}>
+          <Menu.Trigger className="hidden" />
+          <Menu.Items inline className="flex h-full flex-col overflow-hidden">
+            <Menu.SearchInput
+              autoFocus
+              placeholder="Search..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <div className="flex-1 scroll-py-(--inset) overflow-y-auto py-(--inset)">
+              {isPagefindError ? (
+                <PagefindError />
+              ) : (
+                <>
+                  {results.map((result) => {
+                    const items = result.items.slice(0, MAX_ITEMS_PER_GROUP);
+                    if (items.length === 0) return null;
+
+                    return (
+                      <Menu.Section key={result.group}>
+                        <Menu.Heading className="capitalize">
+                          {result.group}
+                        </Menu.Heading>
+                        {items.map((item) => (
+                          <Menu.Item
+                            key={item.href}
+                            onSelect={() => handleSelect(item.href)}
+                          >
+                            {item.title}
+                          </Menu.Item>
+                        ))}
+                      </Menu.Section>
+                    );
+                  })}
+                  {!!query && results.every((g) => g.items.length === 0) && (
+                    <Menu.Empty>
+                      <WarningCircleIcon className="mr-1 inline-block align-text-bottom" />
+                      No results found.
+                    </Menu.Empty>
+                  )}
+                </>
               )}
             </div>
-          ) : (
-            <>
-              {results.map((result) => {
-                const clampedResults = [...result.items].splice(
-                  0,
-                  MAX_ITEMS_PER_GROUP
-                );
-                if (clampedResults.length === 0) return null;
-
-                return (
-                  <div key={result.group}>
-                    <h2 className="mb-2 px-2.5 text-foreground-secondary text-xs capitalize">
-                      {result.group}
-                    </h2>
-                    <div className="flex flex-col gap-0.5">
-                      {clampedResults.map((item) => (
-                        <a
-                          key={item.href}
-                          href={item.href}
-                          className="block rounded-lg px-2.5 py-1.5 text-sm ring-ring hover:bg-background-secondary focus-visible:outline-none focus-visible:ring-4"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {item.title}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-              {!!query && !isLoading && results.length === 0 && (
-                <div className="flex h-full items-center justify-center gap-1 p-3.5 text-foreground-secondary text-sm">
-                  <WarningCircleIcon />
-                  No results found.
-                </div>
-              )}
-            </>
-          )}
-        </div>
+          </Menu.Items>
+        </Menu>
       </Dialog.Content>
     </Dialog>
   );
 };
+
+const PagefindError = () => (
+  <div className="text-foreground-secondary">
+    <div className="flex items-center justify-center gap-1 p-3.5 text-foreground-secondary text-sm">
+      <WarningCircleIcon />
+      Could not load Pagefind instance.
+    </div>
+    {import.meta.env.DEV && (
+      <div className="mt-4 space-y-1 text-balance text-center text-xs">
+        <p>Generate a development Pagefind instance by running</p>
+        <code className="mx-1 rounded-sm border bg-foreground/4 px-1 py-0.5 font-[0.95rem] leading-loose">
+          pnpm dev:pagefind
+        </code>
+      </div>
+    )}
+  </div>
+);
 
 const usePagefind = () => {
   const [instance, setInstance] = useState<Pagefind | null>(null);

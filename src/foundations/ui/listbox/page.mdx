@@ -143,6 +143,16 @@ Extends the `input` element.
 
 A styled input with a search icon, useful for filtering options.
 
+<PropsTable
+  definition={{
+    isLoading: {
+      type: "boolean",
+      description: "When true, replaces the leading magnifying-glass icon with a spinner. Useful for async-filtered lists.",
+      default: "false",
+    },
+  }}
+/>
+
 ### Listbox.Empty
 
 A styled container for empty state messages.
@@ -185,6 +195,12 @@ Showing placeholder text when no value is selected.
 Filtering options with a search input.
 
 <Preview slug="listbox-search" />
+
+### Async Search
+
+Debounced search against an async data source. The `isLoading` prop on `Listbox.SearchInput` swaps the magnifying-glass icon for a spinner while results are in flight.
+
+<Preview slug="listbox-async" />
 
 ### Multiple Selection
 

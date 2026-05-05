@@ -40,7 +40,7 @@
   --radius-4xl: calc(var(--radius) * 16 * var(--radius-bump));
 
   /* Panel-item inset, derived from radius (collapses to flush items at --radius: 0) */
-  --inset: calc(var(--radius) * 2 * var(--radius-bump));
+  --inset: calc(var(--radius) * 1.5 * var(--radius-bump));
 
   /* Focus ring */
   --ring-width: 4px;
@@ -103,7 +103,7 @@
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
 
   background-color: var(--color-background);
   color: var(--color-foreground);

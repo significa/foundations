@@ -537,7 +537,7 @@ const ListboxDivider = ({
   className,
   ...props
 }: Omit<React.ComponentPropsWithRef<'div'>, 'children'>) => {
-  return <Divider className={cn('my-1', className)} {...props} />;
+  return <Divider className={cn('my-(--inset)', className)} {...props} />;
 };
 
 /**
@@ -546,12 +546,17 @@ const ListboxDivider = ({
  *
  * If this component is used, the `selection` placement will be ignored.
  */
+interface ListboxSearchInputProps extends React.ComponentPropsWithRef<'input'> {
+  isLoading?: boolean;
+}
+
 const ListboxSearchInput = ({
   ref,
   onKeyDown,
   onChange,
+  isLoading,
   ...props
-}: React.ComponentPropsWithRef<'input'>) => {
+}: ListboxSearchInputProps) => {
   const { highlightedIndex, setHighlightedIndex, handleSelect } =
     useListboxContext();
 
@@ -575,6 +580,7 @@ const ListboxSearchInput = ({
       ref={ref}
       onKeyDown={handleKeyDown}
       onChange={handleChange}
+      isLoading={isLoading}
       {...props}
     />
   );

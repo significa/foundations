@@ -2,22 +2,19 @@ import { CalendarIcon, CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr';
 import type { VariantProps } from 'cva';
 
 import { Calendar } from '@/foundations/ui/calendar/calendar';
-import {
-  Dropdown,
-  useDropdownContext,
-} from '@/foundations/ui/dropdown/dropdown';
 import { inputStyle } from '@/foundations/ui/input/input';
+import { Menu, useMenuPopoverContext } from '@/foundations/ui/menu/menu';
 import { cn } from '@/lib/utils/classnames';
 
 const DatePicker = ({
   children,
   ...props
-}: React.ComponentProps<typeof Dropdown>) => {
-  return <Dropdown {...props}>{children}</Dropdown>;
+}: React.ComponentProps<typeof Menu>) => {
+  return <Menu {...props}>{children}</Menu>;
 };
 
 interface DatePickerTriggerProps
-  extends React.ComponentProps<typeof Dropdown.Trigger> {
+  extends React.ComponentProps<typeof Menu.Trigger> {
   className?: string;
   children: React.ReactNode;
   variant?: VariantProps<typeof inputStyle>['variant'];
@@ -32,7 +29,7 @@ const DatePickerTrigger = ({
   ...props
 }: DatePickerTriggerProps) => {
   return (
-    <Dropdown.Trigger asChild {...props}>
+    <Menu.Trigger asChild {...props}>
       <button
         type="button"
         className={cn(
@@ -51,7 +48,7 @@ const DatePickerTrigger = ({
           className="absolute top-1/2 right-3 -translate-y-1/2 text-base text-foreground/80"
         />
       </button>
-    </Dropdown.Trigger>
+    </Menu.Trigger>
   );
 };
 
@@ -88,10 +85,10 @@ const DatePickerPanel = ({
   onDateChange,
   ...props
 }: DatePickerContentProps) => {
-  const { setOpen } = useDropdownContext();
+  const { setOpen } = useMenuPopoverContext();
 
   return (
-    <Dropdown.Items className={cn(className)}>
+    <Menu.Items className={cn(className)}>
       <Calendar
         {...props}
         mode={mode}
@@ -104,7 +101,7 @@ const DatePickerPanel = ({
         }}
       />
       {children}
-    </Dropdown.Items>
+    </Menu.Items>
   );
 };
 

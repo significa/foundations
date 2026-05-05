@@ -20,7 +20,7 @@ export default function InputIconAction() {
           type={showPassword ? 'text' : 'password'}
           placeholder="Your password here"
         />
-        <Input.Addon className="pointer-events-auto">
+        <Input.Addon asChild>
           <button
             type="button"
             className="cursor-pointer"

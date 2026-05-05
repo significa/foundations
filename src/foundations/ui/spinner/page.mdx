@@ -1,6 +1,6 @@
 ---
 title: Spinner
-description: A component to display a loading state.
+description: A component to display a loading state with several visual variants.
 preview: spinner
 files:
   - src/foundations/ui/spinner/spinner.tsx
@@ -14,12 +14,45 @@ Extends the `div` element.
 
 <PropsTable
   definition={{
+    variant: {
+      type: ['"ring"', '"dots"', '"bars"', '"frames"'],
+      default: '"ring"',
+      description: "The visual style of the loader.",
+    },
     size: {
-      type: ["xs", "sm", "md", "lg"],
-      default: "md",
+      type: ['"xs"', '"sm"', '"md"', '"lg"'],
+      default: '"md"',
+    },
+    frames: {
+      type: "readonly string[]",
+      description: "Only for variant=\"frames\". The characters to cycle through. Defaults to SPINNER_FRAMES.braille.",
+    },
+    interval: {
+      type: "number",
+      default: "80",
+      description: "Only for variant=\"frames\". Milliseconds between frames.",
     },
   }}
 />
+
+## Variants
+
+`ring`, `dots`, and `bars` are pure CSS. `frames` cycles through any array of characters via `setInterval`. All variants animate regardless of `prefers-reduced-motion` — a loading indicator communicates state, so freezing it would break the signal.
+
+<Preview slug="spinner-variants" />
+
+## Frame presets
+
+A handful of preset frame sets are exported as `SPINNER_FRAMES`. Pass any string array — the project's own emoji set, ASCII bars, whatever fits.
+
+```tsx
+import { Spinner, SPINNER_FRAMES } from "@/foundations/ui/spinner/spinner";
+
+<Spinner variant="frames" frames={SPINNER_FRAMES.moon} interval={120} />
+<Spinner variant="frames" frames={["—", "\\", "|", "/"]} />
+```
+
+<Preview slug="spinner-frames" />
 
 ## Examples
 
@@ -29,15 +62,18 @@ Extends the `div` element.
 
 ### Color
 
+The spinner inherits `currentColor`, so any text color utility works.
+
 <Preview slug="spinner-color" />
 
 ## Best Practices
 
 1. **Usage**:
-   - Use appropriate size for context
-   - Consider using Skeleton for content loading
-   - Maintain consistent colors with theme
+   - Use the default `ring` for buttons and tight inline contexts — it's pure CSS and cheap.
+   - Use `dots` or `bars` when the loader sits on its own (panel header, empty state).
+   - Use `frames` for terminal/CLI-flavored UIs or to match a specific brand voice.
+   - Consider Skeleton instead when you have layout to fill.
 
 2. **Accessibility**:
-   - Include aria-label for screen readers
-   - Consider reduced motion preferences
+   - All variants render with `role="progressbar"` and `aria-label="loading"`.
+   - Loading indicators animate regardless of `prefers-reduced-motion` — they communicate state, not decoration. If the surrounding page has many spinners visible at once, prefer `Skeleton` instead, which doesn't animate at all.

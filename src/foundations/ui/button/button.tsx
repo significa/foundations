@@ -11,9 +11,21 @@ const buttonStyle = cva({
     'transition enabled:cursor-pointer disabled:opacity-40',
     'active:not-in-data-ui-button-group:scale-98',
     'focus-visible:ring-(length:--ring-width) ring-ring focus-visible:outline-none',
-    // inside button group
-    'in-data-ui-button-group:not-last:rounded-r-none in-data-ui-button-group:not-last:border-r-0',
-    'in-data-ui-button-group:not-first:rounded-l-none in-data-ui-button-group:not-first:border-l-0',
+    // inside button group — horizontal merge (default; ToggleGroup may set
+    // data-orientation="vertical" on its container to flip the axis)
+    'in-data-ui-button-group:not-in-data-[orientation=vertical]:not-last:rounded-r-none',
+    'in-data-ui-button-group:not-in-data-[orientation=vertical]:not-last:border-r-0',
+    'in-data-ui-button-group:not-in-data-[orientation=vertical]:not-first:rounded-l-none',
+    'in-data-ui-button-group:not-in-data-[orientation=vertical]:not-first:border-l-0',
+    // inside button group — vertical merge
+    'in-data-ui-button-group:in-data-[orientation=vertical]:not-last:rounded-b-none',
+    'in-data-ui-button-group:in-data-[orientation=vertical]:not-last:border-b-0',
+    'in-data-ui-button-group:in-data-[orientation=vertical]:not-first:rounded-t-none',
+    'in-data-ui-button-group:in-data-[orientation=vertical]:not-first:border-t-0',
+    // pressed state — set via data-pressed by Toggle / ToggleGroup.Item.
+    // Subtle filled tint that layers over `ghost` and `outline` without flipping
+    // the text color; the higher selector specificity beats the variant background.
+    'data-pressed:bg-foreground/10 data-pressed:hover:bg-foreground/15',
   ],
   variants: {
     variant: {

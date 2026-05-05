@@ -8,6 +8,7 @@ import {
   autoUpdate,
   FloatingArrow,
   FloatingDelayGroup,
+  FloatingPortal,
   flip,
   hide,
   offset as offsetMiddleware,
@@ -35,7 +36,9 @@ import { Slot } from '@/foundations/components/slot/slot';
 import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
 import { cn } from '@/lib/utils/classnames';
 
-// Let's keep an eye on popover="hint", it might be able to handle the tooltip logic natively
+// `popover="hint"` is the right type for tooltips: hints stack above any
+// `popover="manual"` already open (so a Tooltip inside a Popover floats above
+// the Popover), and don't dismiss other popovers when shown.
 // https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using#using_hint_popover_state
 
 const DEFAULT_DELAY_IN = 600;
@@ -247,42 +250,49 @@ const TooltipContent = ({
 
   const { isMounted, status } = useTransitionStatus(context, { duration: 0 });
 
-  const topLayerRef = useTopLayer<HTMLDivElement>(isMounted);
+  const topLayerRef = useTopLayer<HTMLDivElement>(isMounted, 'hint');
   const ref = useMergeRefs([refs.setFloating, refProp, topLayerRef]);
 
   if (!isMounted) return null;
 
   return (
-    <div
-      ref={ref}
-      className={cn(
-        'wrap-break-word z-50 max-w-80 overflow-visible whitespace-normal rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md transition duration-300 ease-out',
-        'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
-        'data-[state=closed]:scale-95 data-[state=closed]:opacity-0',
-        'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
-        context.middlewareData.hide?.referenceHidden && 'hidden',
-        className
-      )}
-      data-state={status === 'open' ? 'open' : 'closed'}
-      data-side={context.placement.split('-')[0]}
-      style={{
-        position: context.strategy,
-        top: context.y ?? 0,
-        left: context.x ?? 0,
-        ...props.style,
-      }}
-      {...getFloatingProps(props)}
-    >
-      <FloatingArrow
-        ref={arrowRef}
-        context={context}
-        className="fill-foreground"
-        tipRadius={1}
-        height={ARROW_HEIGHT}
-        width={ARROW_WIDTH}
-      />
-      {children}
-    </div>
+    // Portal to <body> so the tooltip isn't a DOM sibling of its trigger —
+    // otherwise it breaks `:first-child`/`:last-child` selectors used by
+    // ButtonGroup/ToggleGroup to merge borders and corners between adjacent
+    // items. `useTopLayer` is orthogonal: portal moves the DOM position,
+    // top-layer/`popover="manual"` controls visual stacking.
+    <FloatingPortal>
+      <div
+        ref={ref}
+        className={cn(
+          'wrap-break-word z-50 max-w-80 overflow-visible whitespace-normal rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md transition duration-300 ease-out',
+          'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
+          'data-[state=closed]:scale-95 data-[state=closed]:opacity-0',
+          'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
+          context.middlewareData.hide?.referenceHidden && 'hidden',
+          className
+        )}
+        data-state={status === 'open' ? 'open' : 'closed'}
+        data-side={context.placement.split('-')[0]}
+        style={{
+          position: context.strategy,
+          top: context.y ?? 0,
+          left: context.x ?? 0,
+          ...props.style,
+        }}
+        {...getFloatingProps(props)}
+      >
+        <FloatingArrow
+          ref={arrowRef}
+          context={context}
+          className="fill-foreground"
+          tipRadius={1}
+          height={ARROW_HEIGHT}
+          width={ARROW_WIDTH}
+        />
+        {children}
+      </div>
+    </FloatingPortal>
   );
 };
 

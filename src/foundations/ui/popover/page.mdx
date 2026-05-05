@@ -9,6 +9,8 @@ dependencies:
     href: /components/slot
   - name: useTopLayer
     href: /hooks/use-top-layer
+  - name: Spinner
+    href: /ui/spinner
   - name: "@floating-ui/react"
     href: https://floating-ui.com/docs/react
 
@@ -60,6 +62,12 @@ folder: UI
       description: "The distance between the popover and its trigger.",
       default: "4",
     },
+    origin: {
+      type: '"trigger" | "pointer" | [number, number]',
+      description:
+        'How the popover is anchored. `"trigger"` (default) anchors to the trigger element. `"pointer"` captures the click coordinates on the trigger and anchors there. A `[clientX, clientY]` tuple anchors to that explicit point — useful for right-click context menus.',
+      default: '"trigger"',
+    },
     modal: {
       type: "boolean",
       description: "Whether to trap focus inside the popover.",
@@ -106,6 +114,16 @@ Extends the `input` element.
 
 A styled input with a search icon, useful for filtering content inside the popover.
 
+<PropsTable
+  definition={{
+    isLoading: {
+      type: "boolean",
+      description: "When true, replaces the leading magnifying-glass icon with a spinner. Useful for async-filtered content.",
+      default: "false",
+    },
+  }}
+/>
+
 ### Popover.Empty
 
 Extends the `div` element.
@@ -125,6 +143,12 @@ Basic usage of the popover component.
 Controlling the position of the popover relative to its trigger.
 
 <Preview slug="popover-placement" />
+
+### Anchored to the cursor
+
+Set `origin="pointer"` to open the popover at the position where the trigger was clicked instead of next to the trigger element. For right-click context menus, pass `origin={[clientX, clientY]}` directly.
+
+<Preview slug="popover-pointer" />
 
 ### Modal
 

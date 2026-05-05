@@ -10,13 +10,13 @@ export default function InputInteractiveAddon() {
   return (
     <div className="w-90">
       <Input.Group>
-        <Input.Addon className="pointer-events-auto" asChild>
+        <Input.Addon asChild>
           <button type="button" onClick={() => alert('interactive')}>
             +351
           </button>
         </Input.Addon>
         <Input ref={input} placeholder="000 000 000" />
-        <Input.Addon className="pointer-events-auto">
+        <Input.Addon>
           <Tooltip>
             <Tooltip.Trigger>
               <InfoIcon />

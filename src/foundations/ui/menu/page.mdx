@@ -1,0 +1,239 @@
+---
+title: Menu
+description: A floating menu of actions, with optional nested submenus.
+preview: menu
+files:
+  - src/foundations/ui/menu/menu.tsx
+dependencies:
+  - name: Popover
+    href: /ui/popover
+  - name: Divider
+    href: /ui/divider
+  - name: Slot
+    href: /components/slot
+  - name: useStableCallback
+    href: /hooks/use-stable-callback
+  - name: "@floating-ui/react"
+    href: https://floating-ui.com/docs/react
+
+folder: UI
+---
+
+## Features
+
+- **Smart Positioning**: Automatically adjusts position to stay in view
+- **Nested Submenus**: Linear-style hierarchical menus with hover-to-open
+- **Keyboard Navigation**: Arrow keys, type-ahead, right/left to expand and collapse submenus
+- **Search**: Built-in search input for filtering items
+- **Mouse Anchoring**: Open at the cursor position via the inherited `origin` prop, useful for right-click context menus
+- **Focus Management**: Traps focus within the menu when opened
+
+## Anatomy
+
+```tsx
+<Menu>
+  <Menu.Trigger />
+  <Menu.Items>
+    <Menu.SearchInput />
+    <Menu.Section>
+      <Menu.Heading />
+      <Menu.Item />
+      <Menu.Divider />
+    </Menu.Section>
+    <Menu>
+      <Menu.ItemTrigger />
+      <Menu.Items>
+        <Menu.Item />
+      </Menu.Items>
+    </Menu>
+    <Menu.Empty />
+  </Menu.Items>
+</Menu>
+```
+
+## API Reference
+
+### Menu
+
+Extends the [`Popover`](/ui/popover) component.
+
+<PropsTable
+  definition={{
+    modal: {
+      type: "boolean",
+      description: "Whether to trap focus inside the menu.",
+      default: "true",
+    },
+    placement: {
+      type: "Placement",
+      description: "The placement of the menu relative to its trigger. Defaults to `bottom-start` for root menus and `right-start` for nested submenus.",
+    },
+    origin: {
+      type: '"trigger" | "pointer" | [number, number]',
+      description: "How the menu is anchored. See `Popover` for details. Use `[clientX, clientY]` for right-click context menus.",
+      default: '"trigger"',
+    },
+    onOpenChange: {
+      type: "(open: boolean) => void",
+      description: "Callback fired when the menu opens or closes.",
+    },
+  }}
+/>
+
+### Menu.Trigger
+
+Extends the [`PopoverTrigger`](/ui/popover#popovertrigger) component.
+
+The button that opens the menu. For nested submenus, prefer `Menu.ItemTrigger`.
+
+### Menu.ItemTrigger
+
+A menu item that opens a nested submenu. Renders with a chevron and must be used inside a nested `<Menu>`.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to render the trigger as its child element.",
+    },
+  }}
+/>
+
+### Menu.Items
+
+Extends the [`PopoverContent`](/ui/popover#popovercontent) component.
+
+The floating panel containing the menu items. Rendered in a portal and positioned relative to the trigger.
+
+<PropsTable
+  definition={{
+    inline: {
+      type: "boolean",
+      description: "Render the items inline instead of in a floating panel. Useful when composing `Menu` inside a `Dialog` for a command-palette pattern. Keyboard navigation, search, and item registration still work.",
+      default: "false",
+    },
+  }}
+/>
+
+### Menu.Item
+
+Extends the `button` element.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to render the item as its child element.",
+    },
+    variant: {
+      type: '"default" | "destructive"',
+      description: "Visual style. Use `destructive` for actions like delete.",
+      default: '"default"',
+    },
+    onSelect: {
+      type: "(e: { preventDefault: () => void }) => void",
+      description: "Callback fired when the item is selected. Call `e.preventDefault()` to prevent the menu from closing.",
+    },
+  }}
+/>
+
+### Menu.Section
+
+Extends the `div` element.
+
+Groups related items together with an optional heading.
+
+### Menu.Heading
+
+Extends the `div` element.
+
+A heading for a section of items.
+
+### Menu.Divider
+
+A horizontal line to separate groups of items.
+
+### Menu.SearchInput
+
+Extends the [`PopoverSearchInput`](/ui/popover#popoversearchinput) component.
+
+A styled input with a search icon, useful for filtering items. Works alongside arrow-key navigation; pressing Enter selects the highlighted item.
+
+### Menu.Empty
+
+Extends the [`PopoverEmpty`](/ui/popover#popoverempty) component.
+
+A styled container for empty state messages.
+
+## Examples
+
+### Simple
+
+Basic usage with a list of items.
+
+<Preview slug="menu" />
+
+### With Sections
+
+Group related items with optional headings and a destructive variant.
+
+<Preview slug="menu-sections" />
+
+### With Icons
+
+Add icons to menu items.
+
+<Preview slug="menu-icons" />
+
+### Destructive
+
+Use the `destructive` variant for actions that require attention.
+
+<Preview slug="menu-destructive" />
+
+### Search
+
+Filter menu items with the built-in search input. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
+
+<Preview slug="menu-search" />
+
+### Nested submenu
+
+Render a `<Menu>` inside `<Menu.Items>` and use `<Menu.ItemTrigger>` as the inner menu's trigger. Hover or right-arrow opens the submenu, left-arrow or Escape closes it.
+
+<Preview slug="menu-nested" />
+
+### Complex menu
+
+Multiple submenus, sections, icons, and a destructive action — a sample of how the primitive scales to deeply nested action menus.
+
+<Preview slug="menu-complex" />
+
+### Command menu (⌘K-style)
+
+Compose `Menu` with `Dialog` for a centered command palette. `Menu.Items` accepts an `inline` prop that skips the floating panel — keyboard navigation, search, and item registration still work, but the items render as a regular block inside the Dialog.
+
+<Preview slug="menu-cmdk" />
+
+### Right-click context menu
+
+Combine `origin={[clientX, clientY]}` with an `onContextMenu` handler to build a context menu without any extra primitive.
+
+<Preview slug="menu-context" />
+
+## Best Practices
+
+1. **Content Organization**:
+   - Group related items into sections with headings
+   - Reserve the `destructive` variant for irreversible actions
+   - Keep item text concise and scannable
+
+2. **Nesting**:
+   - Avoid more than two levels of nesting — it's hard to navigate
+   - Place the most-used items at the top level
+   - Use sections instead of submenus when the count fits
+
+3. **Keyboard**:
+   - Arrow keys move highlight; Enter selects
+   - Right-arrow opens a submenu; Left-arrow / Escape closes it
+   - Type-ahead jumps to items by their first letter (root menus only)
