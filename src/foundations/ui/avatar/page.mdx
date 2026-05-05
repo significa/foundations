@@ -61,6 +61,12 @@ Extends the `div` element.
   }}
 />
 
+### Avatar.Group
+
+Renders direct `<Avatar>` children in an overlapping stack. Each non-leading avatar is cut by an SVG mask that follows the previous avatar's variant (`circle` / `square`) and size, leaving a transparent gap. Children that aren't `<Avatar>` are filtered out — wrap them only at the leaf level.
+
+Extends the `div` element. No custom props.
+
 ## Examples
 
 ### Simple
@@ -74,6 +80,14 @@ Extends the `div` element.
 ### Sizes
 
 <Preview slug="avatar-sizes" />
+
+### Avatar Group
+
+<Preview slug="avatar-group" />
+
+### Avatar Group (square)
+
+<Preview slug="avatar-group-square" />
 
 ### Broken Image
 
