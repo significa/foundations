@@ -31,7 +31,7 @@ export const Menu = ({ items, currentPath: initialPath }: MenuProps) => {
         <Disclosure key={item.title} defaultOpen className="mb-4">
           <Disclosure.Trigger
             className={cn(
-              'sticky top-0 mx-(--inset) flex w-[calc(100%-calc(var(--inset)*2))] cursor-pointer items-center justify-between bg-background px-3 py-2 font-medium text-foreground-secondary text-sm capitalize',
+              'sticky top-0 z-10 mx-(--inset) flex w-[calc(100%-calc(var(--inset)*2))] cursor-pointer items-center justify-between bg-background px-3 py-2 font-medium text-foreground-secondary text-sm capitalize',
               'before:absolute before:bottom-full before:left-0 before:h-4 before:w-full before:bg-background'
             )}
           >
