@@ -1,6 +1,6 @@
 import { UserIcon } from '@phosphor-icons/react/dist/ssr';
 import type { VariantProps } from 'cva';
-import { Children, Fragment, isValidElement, useId } from 'react';
+import { Children, cloneElement, isValidElement, useId } from 'react';
 import { cn, cva } from '@/lib/utils/classnames';
 
 const getInitials = (name: string | undefined) => {
@@ -97,13 +97,105 @@ const SIZE_MAP = {
   '3xl': 20,
 } as const satisfies Record<NonNullable<AvatarProps['size']>, number>;
 
-const MASK_SHAPE_PROPS = {
-  fill: 'black',
-  stroke: 'black',
-  style: {
-    strokeWidth: 'var(--overlap)',
-    transform: 'translate(var(--overlap), 0)',
-  },
+const OVERLAP_UNITS = 2;
+const CUTOUT_GAP_UNITS = 1;
+const SQUARE_RADIUS_UNITS = 1.5;
+
+const toPathNumber = (value: number) => {
+  return Number(value.toFixed(4));
+};
+
+const createCirclePath = ({
+  cx,
+  cy,
+  radius,
+}: {
+  cx: number;
+  cy: number;
+  radius: number;
+}) => {
+  const left = toPathNumber(cx - radius);
+  const right = toPathNumber(cx + radius);
+  const centerY = toPathNumber(cy);
+  const pathRadius = toPathNumber(radius);
+
+  return [
+    `M ${left} ${centerY}`,
+    `A ${pathRadius} ${pathRadius} 0 1 0 ${right} ${centerY}`,
+    `A ${pathRadius} ${pathRadius} 0 1 0 ${left} ${centerY}`,
+    'Z',
+  ].join(' ');
+};
+
+const createRoundedRectPath = ({
+  x,
+  y,
+  width,
+  height,
+  radius,
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  radius: number;
+}) => {
+  const right = x + width;
+  const bottom = y + height;
+  const pathRadius = Math.min(radius, width / 2, height / 2);
+
+  return [
+    `M ${toPathNumber(x + pathRadius)} ${toPathNumber(y)}`,
+    `H ${toPathNumber(right - pathRadius)}`,
+    `A ${toPathNumber(pathRadius)} ${toPathNumber(pathRadius)} 0 0 1 ${toPathNumber(right)} ${toPathNumber(y + pathRadius)}`,
+    `V ${toPathNumber(bottom - pathRadius)}`,
+    `A ${toPathNumber(pathRadius)} ${toPathNumber(pathRadius)} 0 0 1 ${toPathNumber(right - pathRadius)} ${toPathNumber(bottom)}`,
+    `H ${toPathNumber(x + pathRadius)}`,
+    `A ${toPathNumber(pathRadius)} ${toPathNumber(pathRadius)} 0 0 1 ${toPathNumber(x)} ${toPathNumber(bottom - pathRadius)}`,
+    `V ${toPathNumber(y + pathRadius)}`,
+    `A ${toPathNumber(pathRadius)} ${toPathNumber(pathRadius)} 0 0 1 ${toPathNumber(x + pathRadius)} ${toPathNumber(y)}`,
+    'Z',
+  ].join(' ');
+};
+
+const createAvatarCutoutPath = ({
+  previousVariant,
+  previousSize,
+  currentSize,
+}: {
+  previousVariant: NonNullable<AvatarProps['variant']>;
+  previousSize: NonNullable<AvatarProps['size']>;
+  currentSize: NonNullable<AvatarProps['size']>;
+}) => {
+  const previousUnits = SIZE_MAP[previousSize];
+  const currentUnits = SIZE_MAP[currentSize];
+  const gap = CUTOUT_GAP_UNITS / currentUnits;
+  const previousWidth = previousUnits / currentUnits;
+  const previousCenterX = (OVERLAP_UNITS - previousUnits / 2) / currentUnits;
+  const previousCenterY = 0.5;
+
+  const cutout =
+    previousVariant === 'circle'
+      ? createCirclePath({
+          cx: previousCenterX,
+          cy: previousCenterY,
+          radius: previousWidth / 2 + gap,
+        })
+      : createRoundedRectPath({
+          x: (OVERLAP_UNITS - previousUnits - CUTOUT_GAP_UNITS) / currentUnits,
+          y: (currentUnits - previousUnits) / 2 / currentUnits - gap,
+          width: (previousUnits + CUTOUT_GAP_UNITS * 2) / currentUnits,
+          height: (previousUnits + CUTOUT_GAP_UNITS * 2) / currentUnits,
+          radius: (SQUARE_RADIUS_UNITS + CUTOUT_GAP_UNITS) / currentUnits,
+        });
+
+  return `M 0 0 H 1 V 1 H 0 Z ${cutout}`;
+};
+
+const cloneAvatarForGroup = (child: React.ReactElement<AvatarProps>) => {
+  return cloneElement(child, {
+    className: cn(child.props.className, 'backdrop-blur-none'),
+  });
 };
 
 type AvatarGroupProps = React.ComponentPropsWithRef<'div'>;
@@ -114,8 +206,6 @@ const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
     (child): child is React.ReactElement<AvatarProps> =>
       isValidElement(child) && child.type === Avatar
   );
-
-  const toPercentage = (n: number) => `${n * 100}%`;
 
   return (
     <div
@@ -128,48 +218,41 @@ const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
       {items.map((child, i) => {
         const key = child.key ?? i;
         const previous = items[i - 1];
-        if (!previous) return <Fragment key={key}>{child}</Fragment>;
 
-        const maskId = `${id}-${i}`;
+        if (!previous) return cloneAvatarForGroup(child);
+
+        const clipPathId = `${id}-${i}`;
         const previousVariant = previous.props.variant ?? 'circle';
         const previousSize = previous.props.size ?? 'md';
         const currentSize = child.props.size ?? 'md';
-        const ratio = SIZE_MAP[previousSize] / SIZE_MAP[currentSize];
+        const cutoutPath = createAvatarCutoutPath({
+          currentSize,
+          previousSize,
+          previousVariant,
+        });
 
         return (
           <div
             key={key}
-            className="*:mask-(--mask) relative"
-            style={{ '--mask': `url(#${maskId})` }}
+            className="relative"
+            style={{
+              clipPath: `url(#${clipPathId})`,
+              WebkitClipPath: `url(#${clipPathId})`,
+            }}
           >
             <svg
-              width="100%"
-              height="100%"
-              className="absolute"
+              width="0"
+              height="0"
+              className="absolute size-0 overflow-hidden"
               aria-hidden="true"
+              focusable="false"
             >
-              <mask id={maskId}>
-                <rect width="100%" height="100%" fill="white" />
-                {previousVariant === 'circle' ? (
-                  <circle
-                    cx={toPercentage(-0.5 * ratio)}
-                    cy={toPercentage(0.5)}
-                    r={toPercentage(ratio / 2)}
-                    {...MASK_SHAPE_PROPS}
-                  />
-                ) : (
-                  <rect
-                    x={toPercentage(-ratio)}
-                    y={toPercentage(-0.5 * (ratio - 1))}
-                    width={toPercentage(ratio)}
-                    height={toPercentage(ratio)}
-                    rx="6"
-                    {...MASK_SHAPE_PROPS}
-                  />
-                )}
-              </mask>
+              <clipPath id={clipPathId} clipPathUnits="objectBoundingBox">
+                <path clipRule="evenodd" fillRule="evenodd" d={cutoutPath} />
+              </clipPath>
             </svg>
-            {child}
+
+            {cloneAvatarForGroup(child)}
           </div>
         );
       })}
