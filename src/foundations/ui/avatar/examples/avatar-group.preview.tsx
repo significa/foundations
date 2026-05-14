@@ -7,11 +7,11 @@ export default function AvatarGroupPreview() {
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
-      <Avatar size="2xl">
+      <Avatar>
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
-      <Avatar size="md">
+      <Avatar>
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>

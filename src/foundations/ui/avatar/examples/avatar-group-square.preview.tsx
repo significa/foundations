@@ -7,11 +7,11 @@ export default function AvatarGroupSquarePreview() {
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
-      <Avatar variant="square" size="2xl">
+      <Avatar variant="square">
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
-      <Avatar variant="square" size="md">
+      <Avatar variant="square">
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
