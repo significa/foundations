@@ -20,8 +20,8 @@
     "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check && pnpm check:deps"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.4",
-    "@astrojs/react": "^5.0.4",
+    "@astrojs/mdx": "^5.0.6",
+    "@astrojs/react": "^5.0.5",
     "@floating-ui/react": "^0.27.19",
     "@hookform/resolvers": "^5.2.2",
     "@phosphor-icons/react": "^2.1.10",
@@ -38,18 +38,18 @@
     "motion": "^12.38.0",
     "pagefind": "^1.5.2",
     "posthog-js": "^1.372.5",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "react-hook-form": "^7.74.0",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.4",
     "unified": "^11.0.5",
-    "zod": "^4.4.1"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.13",
+    "@biomejs/biome": "2.4.15",
     "@types/hast": "^3.0.4",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
