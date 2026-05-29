@@ -10,15 +10,15 @@ meta:
 
 ## May 2026
 
-### Changed: `Input` handles `file` and `time` natively
+### Changed: `Input` handles `file` and date/time natively
 
-`<Input type="file">` used to render the browser's chunky native `::file-selector-button` inside the input frame — a control-inside-a-control, with vertical alignment that disagreed across Chrome and Firefox. The selector button is now restyled to read as a flex-centered label inside the input. `<Input type="time">` used to render Chromium's clock icon and popover, which competed visually with primitives like `DatePicker`; the indicator is now suppressed in Chromium, matching Firefox and Safari which already render time inputs cleanly. Date / datetime-local / month / week aren't touched — Firefox doesn't expose a pseudo-element to hide their calendar button, so we let the native chrome through everywhere for consistency. Reach for `DatePicker` when you want a unified picker UI across browsers.
+`<Input type="file">` used to render the browser's chunky native `::file-selector-button` — a control-inside-a-control, with vertical alignment that disagreed across Chrome and Firefox. The selector button is now flex-centered inside the input frame and renders consistently across browsers. `<Input type="time">`, `type="date"`, `type="datetime-local"`, `type="month"`, and `type="week"` used to render Chromium's calendar/clock picker icon plus a native popover that competed visually with primitives like `DatePicker`; that indicator is now suppressed in Chromium (Safari already rendered without chrome). Firefox keeps its native calendar button on the date family because it doesn't expose a pseudo-element to hide it — reach for `DatePicker` when you want a unified picker UI across browsers.
 
 If your copy of `input.tsx` needs the same fix, splice these classes onto the input element (both standalone and inside `Input.Group`):
 
 ```diff ts
-+ 'file:mr-3 file:inline-flex file:h-full file:items-center file:cursor-pointer file:border-0 file:bg-transparent file:font-medium file:text-foreground',
-+ '[&[type=time]::-webkit-calendar-picker-indicator]:hidden',
++ 'file:mr-3 file:inline-flex file:h-full file:items-center file:cursor-pointer file:border-0 file:bg-transparent file:p-0 file:font-medium file:text-foreground',
++ '[&::-webkit-calendar-picker-indicator]:hidden',
 ```
 
 ### Fixed: `Tooltip` stacks above an open `Popover`

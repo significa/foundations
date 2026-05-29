@@ -164,7 +164,7 @@ The native `::file-selector-button` is restyled to read as inline text inside th
 
 ### Date & Time
 
-`type="time"` renders cleanly across browsers. `date`, `datetime-local`, `month`, and `week` show their browser-native calendar chrome (hiding it isn't possible in Firefox, so we let it through everywhere for consistency). Reach for [`DatePicker`](/ui/date-picker) when you want a unified picker UI.
+The browser's calendar/clock picker icon is suppressed in Chromium and absent by default in Safari, so `date`, `time`, `datetime-local`, `month`, and `week` render as a clean text frame in both. Firefox keeps its native calendar button on `date` / `datetime-local` / `month` / `week` (it doesn't expose a pseudo-element to hide it) — reach for [`DatePicker`](/ui/date-picker) when you need a unified picker UI across browsers.
 
 <Preview slug="input-date-time" />
 

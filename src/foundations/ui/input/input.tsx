@@ -39,8 +39,13 @@ const inputFrameSize = {
 };
 
 const inputElementStyles = [
-  'file:mr-3 file:inline-flex file:h-full file:items-center file:cursor-pointer file:border-0 file:bg-transparent file:font-medium file:text-foreground',
-  '[&[type=time]::-webkit-calendar-picker-indicator]:hidden [&[type=date],&[type=datetime-local],&[type=month],&[type=week]]:block',
+  'file:mr-3 file:inline-flex file:h-full file:items-center file:cursor-pointer file:border-0 file:bg-transparent file:p-0 file:font-medium file:text-foreground',
+  '[&::-webkit-calendar-picker-indicator]:hidden',
+  // Native date/time/file inputs have UA-enforced intrinsic heights that fight
+  // `py-(--inset)` from the md/lg sizes on iOS Safari, making them render
+  // taller than text inputs at the same size. Drop the vertical padding here —
+  // UA handles internal spacing for these types.
+  '[&[type=date],&[type=time],&[type=datetime-local],&[type=month],&[type=week],&[type=file]]:py-0',
 ];
 
 const inputHorizontalPaddingBySize = {
