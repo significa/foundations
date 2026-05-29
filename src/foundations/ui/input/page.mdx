@@ -164,7 +164,7 @@ The native `::file-selector-button` is restyled to read as inline text inside th
 
 ### Date & Time
 
-The native picker indicator is hidden by default for `date`, `time`, `datetime-local`, `month`, and `week`. The input still accepts keyboard entry. Drop a `CalendarIcon` / `ClockIcon` into an `Input.Addon` for a visual cue, or reach for [`DatePicker`](/ui/date-picker) when you want a full picker UI.
+`type="time"` renders cleanly across browsers. `date`, `datetime-local`, `month`, and `week` show their browser-native calendar chrome (hiding it isn't possible in Firefox, so we let it through everywhere for consistency). Reach for [`DatePicker`](/ui/date-picker) when you want a unified picker UI.
 
 <Preview slug="input-date-time" />
 

@@ -39,8 +39,8 @@ const inputFrameSize = {
 };
 
 const inputElementStyles = [
-  'file:mr-3 file:cursor-pointer file:border-0 file:bg-transparent file:font-medium file:text-foreground',
-  '[&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none',
+  'file:mr-3 file:inline-flex file:h-full file:items-center file:cursor-pointer file:border-0 file:bg-transparent file:font-medium file:text-foreground',
+  '[&[type=time]::-webkit-calendar-picker-indicator]:hidden [&[type=date],&[type=datetime-local],&[type=month],&[type=week]]:block',
 ];
 
 const inputHorizontalPaddingBySize = {
