@@ -21,7 +21,7 @@ export default function DatePickerDateTimePreview() {
           }}
         />
       </DatePicker>
-      <Input className="w-40" type="time" />
+      <Input className="w-28" type="time" step="1" />
     </div>
   );
 }

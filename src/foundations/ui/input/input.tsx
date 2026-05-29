@@ -38,6 +38,11 @@ const inputFrameSize = {
   lg: 'h-12 py-(--inset) rounded-2xl text-base',
 };
 
+const inputElementStyles = [
+  'file:mr-3 file:cursor-pointer file:border-0 file:bg-transparent file:font-medium file:text-foreground',
+  '[&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none',
+];
+
 const inputHorizontalPaddingBySize = {
   xs: 'gap-1 px-2',
   sm: 'gap-1 px-3',
@@ -50,7 +55,7 @@ const inputHorizontalPaddingBySize = {
 // input-like chrome (Textarea, OTPInput, DatePicker trigger, Listbox search,
 // Select).
 const inputStyle = cva({
-  base: inputFrameBase,
+  base: [...inputFrameBase, ...inputElementStyles],
   variants: {
     variant: inputFrameVariants,
     size: {
@@ -85,7 +90,10 @@ const inputGroupStyle = cva({
 // `px-{size}`. `[[data-input-addon]+&]:pl-*` matches when an addon precedes
 // the input; `[&:has(+[data-input-addon])]:pr-*` matches when one follows.
 const inputInGroupStyle = cva({
-  base: ['h-full w-full min-w-8 cursor-[inherit] outline-none'],
+  base: [
+    'h-full w-full min-w-8 cursor-[inherit] outline-none',
+    ...inputElementStyles,
+  ],
   variants: {
     size: {
       xs: 'px-2 [&:has(+[data-input-addon])]:pr-1 [[data-input-addon]+&]:pl-1',

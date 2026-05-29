@@ -10,6 +10,26 @@ meta:
 
 ## May 2026
 
+### Changed: `Input` tames native chrome for `file` and date/time types
+
+`<Input type="file">` used to render the browser's chunky native `::file-selector-button` inside the input frame — a control-inside-a-control. `<Input type="time">` (and its `date` / `datetime-local` / `month` / `week` siblings) rendered Chromium's calendar/clock icon plus a native popover, which competed visually with primitives like `DatePicker`. Both are now neutralized at the base: the file selector button reads as inline text inside the frame, and the calendar-picker indicator is hidden. Keyboard entry still works; the native popover is no longer reachable by mouse. For a visual cue, drop a `CalendarIcon` / `ClockIcon` into an `Input.Addon`. For a full picker UI, use `DatePicker`.
+
+If your copy of `input.tsx` needs the same fix, splice these classes onto the input element (both standalone and inside `Input.Group`):
+
+```diff ts
++ 'file:mr-3 file:cursor-pointer file:border-0 file:bg-transparent file:font-medium file:text-foreground',
++ '[&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none',
+```
+
+To opt back into the native picker per-instance:
+
+```tsx
+<Input
+  type="time"
+  className="[&::-webkit-calendar-picker-indicator]:block"
+/>
+```
+
 ### Fixed: `Tooltip` stacks above an open `Popover`
 
 A `Tooltip` rendered inside a `Popover` (or any `popover="manual"` container) used to render _behind_ the popover instead of above it. Root cause was in `useTopLayer`: the hook ran in `useLayoutEffect`, but `<FloatingPortal>` doesn't have its target element in the DOM on the first render — the portal node is created in an effect, the element mounts on the _second_ render, and by then the layout effect had already run with `ref.current === null`. Result: `showPopover()` was never called for the tooltip, so the tooltip wasn't in the top layer, and the popover (which _was_) painted above it.

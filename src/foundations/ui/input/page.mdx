@@ -30,6 +30,8 @@ folder: UI
 </Input.Group>
 ```
 
+`Input` is for text-like single-line controls: `text`, `email`, `password`, `search`, `tel`, `url`, `number`, `file`, and the date/time family (`date`, `time`, `datetime-local`, `month`, `week`). For the non-text-like input types, reach for the dedicated primitive: [Checkbox](/ui/checkbox), [Radio](/ui/radio), [Slider](/ui/slider) (for `range`), [ColorPicker](/ui/color-picker), [Switch](/ui/switch), [Toggle](/ui/toggle), [OTPInput](/ui/otp-input), or [DatePicker](/ui/date-picker) when you want a full picker UI rather than native entry.
+
 ## API Reference
 
 ### Input
@@ -153,6 +155,18 @@ Example with clickable addon elements.
 Composing a `Menu.Trigger` (or any other compound primitive) as an addon via `asChild`. Demonstrates a phone field with a country picker — the trigger lives inside the input frame, the menu floats from it with keyboard nav and focus management.
 
 <Preview slug="input-component-addon" />
+
+### File
+
+The native `::file-selector-button` is restyled to read as inline text inside the input frame — no native border, background, or chunky chrome.
+
+<Preview slug="input-file" />
+
+### Date & Time
+
+The native picker indicator is hidden by default for `date`, `time`, `datetime-local`, `month`, and `week`. The input still accepts keyboard entry. Drop a `CalendarIcon` / `ClockIcon` into an `Input.Addon` for a visual cue, or reach for [`DatePicker`](/ui/date-picker) when you want a full picker UI.
+
+<Preview slug="input-date-time" />
 
 ## Best Practices
 
