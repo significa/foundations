@@ -4,10 +4,6 @@ import { Slot } from '@/foundations/components/slot/slot';
 import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
 import { cn, cva } from '@/lib/utils/classnames';
 
-// Shared visual frame for both standalone `<Input>` and `<Input.Group>`: the
-// border, focus ring, invalid/disabled states, variant colors, height, and
-// border-radius. The two CVAs below specialize this with size variants that
-// either include or exclude horizontal padding (`px-*`) and `gap-*`.
 const inputFrameBase = [
   'w-full',
   'font-medium [&,&_*]:placeholder:text-foreground-secondary',
@@ -28,9 +24,6 @@ const inputFrameVariants = {
   ],
 };
 
-// Vertical inset uses `--inset` (= `--radius * 2`) so the group's vertical
-// breathing room scales with the radius dial — keeping addon/stepper corners
-// concentric across the dial, not just at the default `--radius`.
 const inputFrameSize = {
   xs: 'h-6 rounded-lg text-sm',
   sm: 'h-8 rounded-lg text-sm',
@@ -41,10 +34,6 @@ const inputFrameSize = {
 const inputElementStyles = [
   'file:mr-3 file:inline-flex file:h-full file:items-center file:cursor-pointer file:border-0 file:bg-transparent file:p-0 file:font-medium file:text-foreground',
   '[&::-webkit-calendar-picker-indicator]:hidden',
-  // Native date/time/file inputs have UA-enforced intrinsic heights that fight
-  // `py-(--inset)` from the md/lg sizes on iOS Safari, making them render
-  // taller than text inputs at the same size. Drop the vertical padding here —
-  // UA handles internal spacing for these types.
   '[&[type=date],&[type=time],&[type=datetime-local],&[type=month],&[type=week],&[type=file]]:py-0',
 ];
 
@@ -55,10 +44,6 @@ const inputHorizontalPaddingBySize = {
   lg: 'gap-2 px-5',
 };
 
-// Standalone <Input> — owns its own horizontal padding (text inset).
-// Also exported for primitives that style their own native control with
-// input-like chrome (Textarea, OTPInput, DatePicker trigger, Listbox search,
-// Select).
 const inputStyle = cva({
   base: [...inputFrameBase, ...inputElementStyles],
   variants: {
@@ -76,8 +61,6 @@ const inputStyle = cva({
   },
 });
 
-// Group wrapper — same frame, no horizontal padding. Addons own outer padding
-// at the edges; the in-group input owns its own text padding.
 const inputGroupStyle = cva({
   base: inputFrameBase,
   variants: {
@@ -90,10 +73,6 @@ const inputGroupStyle = cva({
   },
 });
 
-// Adjacent-to-addon: tighten the input's `px` by one step on the side that
-// touches an addon, so the addon-to-text gap doesn't read as a doubled
-// `px-{size}`. `[[data-input-addon]+&]:pl-*` matches when an addon precedes
-// the input; `[&:has(+[data-input-addon])]:pr-*` matches when one follows.
 const inputInGroupStyle = cva({
   base: [
     'h-full w-full min-w-8 cursor-[inherit] outline-none',
@@ -112,10 +91,6 @@ const inputInGroupStyle = cva({
   },
 });
 
-// Addons carry padding only on their outer edge (the side that touches the
-// group's border). The inner edge has none — the input's own `px-{size}`
-// provides the gap to its content. This prevents addon `px` and input `px`
-// from stacking and creating an oversized icon-to-text gap.
 const inputAddonStyle = cva({
   base: ['flex h-full shrink-0 items-center justify-center'],
   variants: {
@@ -141,9 +116,6 @@ interface InputGroupContextValue {
 
 const InputGroupContext = createContext<InputGroupContextValue | null>(null);
 
-// Inside a group, sizing is inherited from the group context (the group decides
-// the size, the input fills it). Standalone, the input picks size/variant from
-// its own props.
 const useInputStyle = (
   props: VariantProps<typeof inputStyle> & { className?: string }
 ) => {
@@ -226,11 +198,6 @@ const InputAddon = ({
   const Comp = asChild ? Slot : 'div';
   const internalRef = useRef<HTMLDivElement | null>(null);
 
-  // Static addons (icons, text) pass clicks through to focus the input — the
-  // expected behavior for "leading icon" / "currency prefix" patterns. If the
-  // click hit something interactive, let it handle the click instead. For
-  // `asChild`, Slot's prop merge gives the child's `onClick` precedence over
-  // ours, so interactive composed elements keep their own semantics.
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     onClick?.(e);
     if (e.defaultPrevented) return;
