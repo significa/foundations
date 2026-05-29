@@ -8,7 +8,6 @@ export default function InputDateTime() {
         <Input type="date" defaultValue="2026-05-29" />
         <Input type="time" defaultValue="10:30" />
       </div>
-      <Input type="datetime-local" defaultValue="2026-05-29T10:30" />
       <Input.Group>
         <Input.Addon>
           <CalendarIcon />
