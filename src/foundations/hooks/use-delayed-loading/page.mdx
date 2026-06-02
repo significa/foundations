@@ -1,0 +1,55 @@
+---
+title: useDelayedLoading
+description: >-
+  A hook that defers showing a loading indicator and guarantees a minimum display time, so spinners never flash
+files:
+  - src/foundations/hooks/use-delayed-loading/use-delayed-loading.ts
+
+folder: hooks
+---
+
+## Features
+
+- **Deferred display**: the loader only appears after a short delay, so fast work never triggers a spinner
+- **Minimum duration**: once shown, the loader stays visible long enough that it can't flash on and off
+- **Zero dependencies**: React only — drop it in next to any spinner, skeleton, or overlay
+- **Tunable**: both thresholds are options with sensible defaults
+
+## When to use it
+
+A loading indicator that appears and disappears within a frame or two reads as a glitch and, counter-intuitively, makes a product feel _slower_. `useDelayedLoading` prevents that: it withholds the loader until the wait is long enough to deserve one (the `delay`), and once a loader does appear it pins it in place for a floor (`minDuration`) so a request that resolves a moment later can't cause a flicker.
+
+It decides _when_ a loader shows, not _which_ one — pair it with a [Spinner](/ui/spinner), [Progress](/ui/progress), [Skeleton](/ui/skeleton), or overlay. For choosing the right indicator for a given wait, see the [Loading States](/guides/loading-states) guide.
+
+## API Reference
+
+<PropsTable
+  definition={{
+    isLoading: {
+      type: "boolean",
+      required: true,
+      description: "The raw loading state of your async work.",
+    },
+    "options.delay": {
+      type: "number",
+      default: "300",
+      description: "Milliseconds to wait before showing the loader. If loading finishes first, the loader never appears.",
+    },
+    "options.minDuration": {
+      type: "number",
+      default: "1000",
+      description:
+        "Once shown, the minimum milliseconds the loader stays visible — even if loading finishes immediately after.",
+    },
+  }}
+/>
+
+The hook returns a single `boolean` — `showLoading` — which is `true` only while the loader should be on screen.
+
+## Examples
+
+### Naive vs. delayed
+
+Trigger work of different lengths and compare a spinner bound directly to `isLoading` against one driven by `useDelayedLoading`. A quick request flashes the naive spinner but never shows the delayed one; a moderate request makes the delayed spinner appear late and linger past its minimum; a slow request shows both.
+
+<Preview slug="use-delayed-loading" />

@@ -1,0 +1,61 @@
+---
+title: "Loading States"
+description: "Match the loading indicator to the wait — when to show nothing, a spinner, a progress bar, or a skeleton, and how to keep any of them from flashing."
+dependencies:
+  - name: Spinner
+    href: /ui/spinner
+  - name: Progress
+    href: /ui/progress
+  - name: Skeleton
+    href: /ui/skeleton
+  - name: Avatar
+    href: /ui/avatar
+  - name: useDelayedLoading
+    href: /hooks/use-delayed-loading
+
+folder: Guides
+---
+
+## Overview
+
+Foundations ships every piece of a loading state — [Spinner](/ui/spinner) (indeterminate), [Progress](/ui/progress) (determinate), [Skeleton](/ui/skeleton) (content-shaped placeholder), and [useDelayedLoading](/hooks/use-delayed-loading) (anti-flash timing). The hard part isn't any one of them; it's knowing **which to reach for, and when**. This guide is the decision.
+
+## The wait-time ladder
+
+How long the user will wait determines what you show. The thresholds come from [Primer's loading guidance](https://primer.style/product/ui-patterns/loading/):
+
+| Expected wait | Indicator                                       |
+| ------------- | ----------------------------------------------- |
+| &lt; 1s       | **Nothing** — an indicator would only flash     |
+| 1–3s          | **Spinner** — indeterminate, "something's happening" |
+| 3–10s         | **Progress** — determinate, "this much is done" |
+| 10s+          | **Progress**, and let the user keep working     |
+
+The instinct to "always show a spinner so the user knows something happened" backfires below a second: a spinner that appears and vanishes within a couple of frames reads as a glitch and makes the product feel _slower_, not faster.
+
+## Two decisions
+
+Showing the right loading state is two separate calls, and you make both:
+
+1. **Which indicator** fits the expected wait — the ladder above.
+2. **When it's allowed on screen** — wrap its visibility in [`useDelayedLoading`](/hooks/use-delayed-loading) so it's deferred past a short delay and, once shown, held for a minimum. That's what guarantees a spinner _or_ a progress bar never flashes, no matter how fast the work resolves on a good connection.
+
+## Choosing an indicator by duration
+
+Each button simulates work of a different length. The demo picks the indicator the ladder prescribes and gates its visibility with `useDelayedLoading`. Note that the quick task shows nothing at all.
+
+<Preview slug="loading-states-ladder" />
+
+## Loading known content
+
+Duration isn't the only axis. When you already know the **shape** of what's loading — a card, a row, a profile — render a [Skeleton](/ui/skeleton) in that shape instead of a spinner. It preserves layout so nothing jumps when the real content arrives, and it communicates _what_ is coming, not just _that_ something is. Gate it with `useDelayedLoading` too, so a fast response doesn't flash a skeleton.
+
+<Preview slug="loading-states-skeleton" />
+
+## 10 seconds and beyond
+
+Past ten seconds, a blocking indicator is hostile. Keep a determinate [Progress](/ui/progress) so the wait stays legible, but stop blocking the UI: let the user move elsewhere while the work runs, and surface completion out-of-band (a toast, a badge, an updated row) rather than holding them on a frozen screen.
+
+## A note on motion
+
+`Spinner`, `Progress`, and `Skeleton` animate regardless of `prefers-reduced-motion` — a loading indicator communicates state, so freezing it would break the signal. See the [Spinner](/ui/spinner) page for the rationale.
