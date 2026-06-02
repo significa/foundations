@@ -48,6 +48,11 @@
     "unified": "^11.0.5",
     "zod": "^4.4.3"
   },
+  "pnpm": {
+    "overrides": {
+      "vite": "7.3.3"
+    }
+  },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
     "@types/hast": "^3.0.4",
