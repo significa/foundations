@@ -11,12 +11,13 @@ type DrawerSide = 'left' | 'right' | 'bottom' | 'left-bottom' | 'right-bottom';
 
 const drawerContentStyle = cva({
   base: [
-    '[--drawer-detach:calc(var(--radius)*3*var(--radius-bump))] [--drawer-p:--spacing(4)] [--drawer-stack:--spacing(8)]',
+    '[--drawer-detach:calc(var(--radius)*3*var(--radius-bump))] [--drawer-p:--spacing(4)] [--drawer-stack:--spacing(4)]',
     'overflow-x-hidden! flex w-full max-w-screen flex-col overflow-y-auto border border-border bg-background p-(--drawer-p) *:shrink-0',
     'has-[[data-modal-focus-catcher]:first-child+[data-drawer-header],[data-drawer-header]:first-child]:pt-0 has-[[data-drawer-actions]:last-child]:pb-0',
     'rounded-2xl',
+    'has-data-[status=open]:opacity-80 [&>:not(dialog)]:transition-opacity has-data-[status=open]:[&>:not(dialog)]:opacity-0',
     'backdrop:bg-black/20 in-data-[status=open]:backdrop:opacity-0 not-data-[status=open]:backdrop:opacity-0 backdrop:backdrop-blur-sm',
-    'transition-[translate,margin] ease-emphasized-decelerate not-data-[status=open]:ease-emphasized-accelerate',
+    'transition-[translate,margin,opacity] ease-emphasized-decelerate not-data-[status=open]:ease-emphasized-accelerate',
     'backdrop:transition-opacity backdrop:ease-in-out',
     'motion-reduce:transition-none motion-reduce:backdrop:transition-none',
     'duration-400 not-data-[status=open]:duration-250 not-data-[status=open]:backdrop:delay-150 not-data-[status=open]:backdrop:duration-200',
