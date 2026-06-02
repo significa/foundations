@@ -31,7 +31,7 @@ const DrawerControlled = () => {
           <Drawer.Title>Drawer Title</Drawer.Title>
         </Drawer.Header>
         <p>Drawer dangerous content goes here.</p>
-        <Drawer.Actions className="flex gap-2">
+        <Drawer.Actions>
           <Button
             className="grow"
             variant="destructive"

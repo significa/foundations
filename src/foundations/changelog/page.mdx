@@ -8,6 +8,79 @@ meta:
   order: 99
 ---
 
+## June 2026
+
+### Fixed: `Drawer.Content` rendered with a transparent panel
+
+`Drawer.Content` set its surface with `bg-background-high` — a token that doesn't
+exist in the setup theme. Tailwind emits no rule for an undefined token, so the
+panel had no background and the blurred backdrop showed straight through it. The
+surface now uses `bg-background`, matching every other overlay primitive (Dialog,
+Popover, Menu, Listbox). Apply this to your copy:
+
+```diff tsx
+- 'overflow-x-hidden! mx-auto flex w-full max-w-screen flex-col overflow-y-auto border border-border bg-background-high p-(--drawer-p) *:shrink-0',
++ 'overflow-x-hidden! flex w-full max-w-screen flex-col overflow-y-auto border border-border bg-background p-(--drawer-p) *:shrink-0',
+```
+
+### Added: `Drawer` placement via `side`
+
+`Drawer.Content` now accepts a `side` prop:
+`"left" | "right" | "bottom" | "left-bottom" | "right-bottom"` (default
+`"right-bottom"`, which matches the previous hard-coded behaviour, so no change is
+required). Single-edge values pin to that edge at every breakpoint; hyphenated
+values are `{desktop}-{mobile}` — a desktop-edge panel that becomes a bottom sheet
+on mobile. Placement is implemented as a `cva` `side` variant; copy the new
+`drawerContentStyle` object into your `drawer.tsx`.
+
+### Changed: `Drawer` detachment and corners follow `--radius`
+
+The drawer's roundness and its detachment from the window edge now derive from the
+global `--radius` dial (the same system `--inset` uses for panel items), instead of
+the hard-coded `rounded-t-xl` / flush edges. At `--radius: 0` the drawer is flush
+and square as before; as roundness increases it floats off the edge with matching
+rounded corners. The detachment magnitude is `calc(var(--radius) * 3 * var(--radius-bump))` —
+tune the multiplier to taste.
+
+### Fixed: nested modals no longer all close on Escape
+
+`Modal` intercepted Escape with an element `keydown` listener (plus a `window`
+fallback). When modals are nested in the DOM, that keydown bubbled through every
+ancestor dialog, so one Escape closed the whole stack. Fix: add
+`event.stopPropagation()` to the element `keydown` handler so it can't reach
+ancestor dialogs, and drop the `window` listener. The `keydown` `preventDefault()`
+must stay — Escape can otherwise push past a prevented `cancel` and close the dialog
+natively, dropping it from the top layer mid-transition.
+
+```diff ts
+  element.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && open) {
+      event.preventDefault();
++     event.stopPropagation();
+      setOpen(false);
+    }
+  }, { signal });
+```
+
+### Added: stacked drawers recede instead of compounding
+
+Drawers stack via the native `<dialog>` top-layer, but each painted its own
+backdrop so the dimming compounded. Now only the **outermost** backdrop shows: any
+drawer nested inside another open drawer hides its own backdrop
+(`in-data-[status=open]:backdrop:opacity-0`), and the single bottom layer dims the
+page for the whole stack — so the dim never flashes when you open or close a level.
+Covered drawers also shift inward via `margin` (`has-data-[status=open]:`) so the
+stack peeks out. It's pure CSS — no JavaScript, no stack bookkeeping — so it applies
+to drawers nested in the DOM. Margin, not transform: a transform on a drawer that
+DOM-contains another dialog would become that dialog's containing block and break
+its positioning. Relatedly, `Modal.Content` now composes a forwarded `ref` (it
+previously let a spread `ref` clobber its internal refs).
+
+```diff tsx
+- ref={composeRefs(dialogRef, transitionRef)}
++ ref={composeRefs(dialogRef, transitionRef, ref)}
+```
+
 ## May 2026
 
 ### Changed: `Input` handles `file` and date/time natively

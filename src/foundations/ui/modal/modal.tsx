@@ -41,7 +41,7 @@ const useDialogElement = (
     const element = ref.current;
     if (!element) return;
 
-    if (!element.open) {
+    if (open && !element.open) {
       // use native showModal() to ensure it receives focus when opened, and ESC closes it
       element.showModal();
     }
@@ -49,8 +49,9 @@ const useDialogElement = (
     const abortController = new AbortController();
     const { signal } = abortController;
 
-    // Prevent the default cancel event and use internal state to close the drawer instead
-    // This ensures drawer closing is synchronized with internal state, preventing layout shifts
+    // Prevent the native close and drive it through state instead, so the exit
+    // transition can run. The cancel event fires only on the topmost dialog and
+    // does not bubble.
     element.addEventListener(
       'cancel',
       (event: Event) => {
@@ -60,26 +61,15 @@ const useDialogElement = (
       { signal }
     );
 
-    // Prevent ESC from closing the dialog when the cancel event is prevented.
-    // Unsure if this is a browser bug or intended behavior — the ESC key can push through the cancel event for some reason
+    // ESC can push past a prevented cancel and close natively, dropping the
+    // dialog from the top layer mid-transition. stopPropagation keeps the
+    // keydown from reaching ancestor dialogs when modals are nested in the DOM.
     element.addEventListener(
       'keydown',
       (event: KeyboardEvent) => {
         if (event.key === 'Escape' && open) {
           event.preventDefault();
-          setOpen(false);
-        }
-      },
-      { signal }
-    );
-
-    // Prevent ESC from closing the dialog when it is inert.
-    // If the dialog is opened while inert, the focus goes to the window, which allows ESC to close the dialog unexpectedly.
-    window.addEventListener(
-      'keydown',
-      (event: KeyboardEvent) => {
-        if (event.key === 'Escape' && element.inert && open) {
-          event.preventDefault();
+          event.stopPropagation();
           setOpen(false);
         }
       },
@@ -188,6 +178,7 @@ const ModalContent = ({
   className,
   children,
   catchFocus = true,
+  ref,
   ...props
 }: ModalContentProps) => {
   const { open, labelId, descriptionId, setOpen } = useModalContext();
@@ -203,7 +194,7 @@ const ModalContent = ({
 
   return (
     <dialog
-      ref={composeRefs(dialogRef, transitionRef)}
+      ref={composeRefs(dialogRef, transitionRef, ref)}
       data-status={status}
       aria-labelledby={labelId}
       aria-describedby={descriptionId}

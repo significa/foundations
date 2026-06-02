@@ -13,9 +13,13 @@ folder: UI
 
 ## Features
 
-- **Modal Overlay**: Creates an accessible modal dialog with backdrop
-- **Focus Management**: Automatically traps focus within the dialog
-- **Flexible Positioning**: Center or top alignment options
+- **Edge Placement**: Anchors to any edge via `side`, with responsive
+  desktop-panel / mobile-sheet pairings built in
+- **Radius-aware**: Detachment and corner radius derive from the `--radius` dial —
+  flush and square at `--radius: 0`, floating and rounded as roundness increases
+- **Stackable**: Drawers open on top of one another using the native dialog
+  top-layer; covered drawers recede and their backdrops don't compound
+- **Focus Management**: Automatically traps focus within the dialog (via `Modal`)
 - **Controlled & Uncontrolled**: Supports both controlled and uncontrolled modes
 - **Customizable Actions**: Built-in support for common dialog actions
 
@@ -45,6 +49,18 @@ Extends the `Modal` component.
 ### Drawer.Content
 
 Extends the `Modal.Content` component.
+
+| Prop   | Type                                                            | Default          | Description                  |
+| ------ | --------------------------------------------------------------- | ---------------- | ---------------------------- |
+| `side` | `"left" \| "right" \| "bottom" \| "left-bottom" \| "right-bottom"` | `"right-bottom"` | Edge the drawer anchors to. |
+
+Single-edge values (`left`, `right`, `bottom`) pin to that edge at every
+breakpoint. Hyphenated values are `{desktop}-{mobile}`: `right-bottom` is a
+right-hand panel on desktop that becomes a bottom sheet on mobile.
+
+Detachment and corner radius are not props — they derive from the global
+`--radius` dial. At `--radius: 0` the drawer is flush to the edge and square; as
+roundness increases it floats away from the edge with matching rounded corners.
 
 ### Drawer.Trigger
 
@@ -84,14 +100,25 @@ Extends the `div` element.
 
 <Preview slug="drawer-controlled" />
 
+### Placement
+
+<Preview slug="drawer-side" />
+
+### Stacked
+
+<Preview slug="drawer-stacked" />
+
 ## Best Practices
 
-1. **Content Structure**:
-   - Always include a clear title that describes the purpose
-   - Keep content concise and focused
-   - Use appropriate action labels (avoid "OK/Cancel")
+1. **Placement**: Use `right-bottom` (the default) or `left-bottom` for content
+   panels so they read as a side panel on desktop and a reachable sheet on mobile.
+   Reserve single-edge values for cases that should not switch (e.g. a `left` nav
+   drawer on every breakpoint).
 
-2. **Performance**:
-   - Lazy load dialog content if needed
-   - Consider using dynamic imports for heavy content
-   - Clean up resources when dialog closes
+2. **Stacking**: Stacking works, but keep it shallow. A drawer that spawns another
+   drawer is best reserved for a genuine sub-flow; for linear steps, replace the
+   content of a single drawer instead.
+
+3. **Content**: Always include a `Drawer.Title` so the dialog has an accessible
+   name. Keep content focused and use descriptive action labels (avoid
+   "OK/Cancel").
