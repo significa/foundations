@@ -18,7 +18,7 @@ const DrawerContent = ({
     <Modal.Content
       className={cn(
         '[--drawer-p:--spacing(4)]',
-        'overflow-x-hidden! mx-auto flex w-full max-w-screen flex-col overflow-y-auto border border-border bg-background-high p-(--drawer-p) *:shrink-0',
+        'overflow-x-hidden! mx-auto flex w-full max-w-screen flex-col overflow-y-auto border border-border bg-background p-(--drawer-p) *:shrink-0',
         'has-[[data-modal-focus-catcher]:first-child+[data-drawer-header],[data-drawer-header]:first-child]:pt-0 has-[[data-drawer-actions]:last-child]:pb-0',
         'backdrop:bg-black/20 not-data-[status=open]:backdrop:opacity-0 backdrop:backdrop-blur-sm',
         // desktop
