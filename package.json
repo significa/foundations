@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
-    "@astrojs/react": "^5.0.5",
+    "@astrojs/react": "^5.0.7",
     "@floating-ui/react": "^0.27.19",
     "@hookform/resolvers": "^5.2.2",
     "@phosphor-icons/react": "^2.1.10",
@@ -29,7 +29,7 @@
     "@tanstack/react-table": "^8.21.3",
     "@types/chroma-js": "^3.1.2",
     "@types/node": "^25.6.0",
-    "@types/react": "^19.2.15",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "astro": "^6.2.1",
     "chroma-js": "^3.2.0",
@@ -38,8 +38,8 @@
     "motion": "^12.38.0",
     "pagefind": "^1.5.2",
     "posthog-js": "^1.372.5",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "react-hook-form": "^7.74.0",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
@@ -54,7 +54,7 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.15",
+    "@biomejs/biome": "2.4.16",
     "@types/hast": "^3.0.4",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
