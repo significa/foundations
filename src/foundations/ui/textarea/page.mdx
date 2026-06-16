@@ -7,8 +7,6 @@ files:
 dependencies:
   - name: inputStyle
     href: /ui/input
-  - name: composeRefs
-    href: /utils/compose-refs
 
 folder: UI
 ---
@@ -43,10 +41,11 @@ Extends the `textarea` element.
 
 <Preview slug="textarea-disabled" />
 
-### Resizable
+### Auto-resize
 
-This is a cross-browser solution for resizing the textarea.
-When `field-sizing: content` is supported, we can remove this component and just use the Textarea.
+Add the `field-sizing-content` class to grow the textarea to fit its content.
+Pair it with a `max-h-*` (and `overflow-auto`) class to cap the growth. Browsers
+without support fall back to a fixed-height textarea.
 
 <Preview slug="textarea-resize" />
 

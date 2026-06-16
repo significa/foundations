@@ -10,6 +10,23 @@ meta:
 
 ## June 2026
 
+### Removed: `Textarea.Resize`
+
+`Textarea.Resize` carried a JS auto-grow implementation (a `useEffect` measuring
+`scrollHeight`). Now that `field-sizing: content` is supported across all major
+engines (Chrome/Edge 123, Firefox 152, Safari/iOS 26.2), it's gone — auto-resize
+is a single class on the base `Textarea`. Add `field-sizing-content`, and pair it
+with a `max-h-*` (and `overflow-auto`) class to bound the growth, since
+`field-sizing: content` grows without a ceiling on its own. Browsers without
+support fall back to a fixed-height textarea. Update call sites:
+
+```diff tsx
+- <Textarea.Resize />
++ <Textarea className="field-sizing-content max-h-48 overflow-auto" />
+```
+
+The `composeRefs` dependency is no longer needed.
+
 ### Fixed: `Drawer.Content` rendered with a transparent panel
 
 `Drawer.Content` set its surface with `bg-background-high` — a token that doesn't

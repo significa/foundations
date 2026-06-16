@@ -1,8 +1,6 @@
 import type { VariantProps } from 'cva';
-import { useEffect, useRef, useState } from 'react';
 
 import { inputStyle } from '@/foundations/ui/input/input';
-import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
 import { cn } from '@/lib/utils/classnames';
 
 interface TextareaProps extends React.ComponentPropsWithRef<'textarea'> {
@@ -25,41 +23,4 @@ const Textarea = ({ className, invalid, variant, ...props }: TextareaProps) => {
   );
 };
 
-// as soon as `field-sizing: content` is supported, we can remove this component and just use the Textarea
-
-/**
- * A textarea that resizes as you type.
- */
-const TextareaResize = ({ ref, ...props }: TextareaProps) => {
-  const internalRef = useRef<HTMLTextAreaElement>(null);
-  const [internalValue, setInternalValue] = useState(props.value);
-
-  const value = props.value ?? internalValue;
-
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInternalValue(event.target.value);
-    props.onChange?.(event);
-  };
-
-  useEffect(() => {
-    if (internalRef.current) {
-      internalRef.current.style.height = 'auto';
-      internalRef.current.style.height = `${internalRef.current.scrollHeight}px`;
-    }
-  }, []);
-
-  return (
-    <Textarea
-      ref={composeRefs(ref, internalRef)}
-      {...props}
-      value={value}
-      onChange={handleChange}
-    />
-  );
-};
-
-const CompoundTextarea = Object.assign(Textarea, {
-  Resize: TextareaResize,
-});
-
-export { CompoundTextarea as Textarea };
+export { Textarea };
