@@ -7,14 +7,21 @@ import { Menu } from "@/components/menu";
 import { cn } from "@/lib/utils/classnames";
 import { getNavigationItems } from "@/lib/utils/navigation";
 
-type Props = HTMLAttributes<"div">;
+type Props = HTMLAttributes<"div"> & {
+  /** Drop the on-page nav column and widen the content area (e.g. galleries). */
+  wide?: boolean;
+};
+
+const { wide, ...rest } = Astro.props;
 
 const pages = await getCollection("pages");
 
 const items = await getNavigationItems(pages);
+
+const hasNav = Astro.slots.has("nav");
 ---
 
-<div {...Astro.props}>
+<div {...rest}>
   <Header transition:persist />
 
   <div class="mx-auto flex max-w-(--breakpoint-2xl)">
@@ -36,12 +43,14 @@ const items = await getNavigationItems(pages);
     </aside>
 
     <main class="w-full gap-8 px-4 lg:flex">
-      <nav
-        class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-6 pb-8 text-sm lg:block"
-      >
-        <slot name="nav" />
-      </nav>
-      <div class="mx-auto max-w-3xl flex-1 py-6 md:py-8">
+      {
+        hasNav && (
+          <nav class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-6 pb-8 text-sm lg:block">
+            <slot name="nav" />
+          </nav>
+        )
+      }
+      <div class={cn("mx-auto flex-1 py-6 md:py-8", wide ? "max-w-(--breakpoint-xl)" : "max-w-3xl")}>
         <slot />
       </div>
     </main>

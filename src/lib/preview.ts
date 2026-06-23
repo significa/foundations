@@ -7,12 +7,16 @@ import z from 'zod';
 const previewMetaSchema = z.object({
   layout: z.literal(['centered', 'fullscreen', 'padded']).optional(),
   mode: z.literal(['inline', 'iframe']).optional(),
+  // Frame size of the embedded preview. `block` is taller and enables the
+  // responsive viewport toggles — meant for full sections (Blocks).
+  size: z.literal(['default', 'block']).optional(),
 });
 
 type PreviewMeta = z.infer<typeof previewMetaSchema>;
 
 type PreviewLayout = NonNullable<PreviewMeta['layout']>;
 type PreviewMode = NonNullable<PreviewMeta['mode']>;
+type PreviewSize = NonNullable<PreviewMeta['size']>;
 
 type PreviewLoaderOptions = {
   pattern: `${string}.tsx`;
@@ -76,5 +80,5 @@ const previewLoader = ({ pattern, base, generateId }: PreviewLoaderOptions) => {
   } satisfies Loader;
 };
 
-export type { PreviewLayout, PreviewMeta, PreviewMode };
+export type { PreviewLayout, PreviewMeta, PreviewMode, PreviewSize };
 export { previewLoader, previewMetaSchema };

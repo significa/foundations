@@ -1,0 +1,57 @@
+---
+title: Line Chart
+description: A responsive multi-series line chart built on visx primitives, themed with the Foundations chart palette.
+preview: line-chart
+files:
+  - src/foundations/charts/line-chart/line-chart.tsx
+dependencies:
+  - name: Chart Container
+    href: /charts/chart-container
+folder: Charts
+meta:
+  order: 3
+---
+
+A line chart shares the structure of the [Area Chart](/charts/area-chart) without the
+filled area — better when comparing several series, since overlapping fills would
+muddy the read. Built on plain SVG with no dependencies; series colours come from the
+[Chart Container](/charts/chart-container) palette.
+
+## API Reference
+
+### LineChart
+
+<PropsTable
+  definition={{
+    data: {
+      type: "Record<string, number | string>[]",
+      required: true,
+    },
+    config: {
+      type: "ChartConfig",
+      required: true,
+    },
+    xKey: {
+      type: "string",
+      required: true,
+    },
+    className: {
+      type: "string",
+    },
+  }}
+/>
+
+Each key in `config` (other than `xKey`) renders as its own line. See
+[Chart Container](/charts/chart-container) for the `ChartConfig` shape.
+
+## Examples
+
+### Default
+
+<Preview slug="line-chart" />
+
+## Best Practices
+
+1. **Series**: lines tolerate more series than areas, but keep colours distinguishable.
+2. **Theming**: reference colours via `var(--color-<key>)` from the `--color-chart-*` palette.
+3. **Accessibility**: pair with a data table or summary for non-visual consumers.

@@ -1,0 +1,57 @@
+---
+title: Bar Chart
+description: A responsive grouped bar chart built on visx primitives, themed with the Foundations chart palette.
+preview: bar-chart
+files:
+  - src/foundations/charts/bar-chart/bar-chart.tsx
+dependencies:
+  - name: Chart Container
+    href: /charts/chart-container
+folder: Charts
+meta:
+  order: 2
+---
+
+A grouped bar chart for comparing discrete categories. Each category gets a band on
+the x axis (`scaleBand`), and every series in `config` is drawn as a bar within that
+band. Built on plain SVG with no dependencies; series colours come from the
+[Chart Container](/charts/chart-container) palette.
+
+## API Reference
+
+### BarChart
+
+<PropsTable
+  definition={{
+    data: {
+      type: "Record<string, number | string>[]",
+      required: true,
+    },
+    config: {
+      type: "ChartConfig",
+      required: true,
+    },
+    xKey: {
+      type: "string",
+      required: true,
+    },
+    className: {
+      type: "string",
+    },
+  }}
+/>
+
+Each key in `config` (other than `xKey`) renders as a grouped bar. See
+[Chart Container](/charts/chart-container) for the `ChartConfig` shape.
+
+## Examples
+
+### Default
+
+<Preview slug="bar-chart" />
+
+## Best Practices
+
+1. **Grouping**: two or three series per category stays readable; beyond that prefer small multiples.
+2. **Theming**: reference colours via `var(--color-<key>)` from the `--color-chart-*` palette.
+3. **Baseline**: bars must start at zero — do not crop the y axis.

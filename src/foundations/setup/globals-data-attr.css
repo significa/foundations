@@ -33,6 +33,14 @@
   --color-success: oklch(69.6% 0.17 162.48);
   --color-info: oklch(62.3% 0.214 259.815);
 
+  /* Categorical chart palette — reuses the semantic hues so charts read as part of
+     the theme. Slightly lifted in dark mode for contrast on the dark background. */
+  --color-chart-1: light-dark(oklch(62.3% 0.214 259.815), oklch(70% 0.18 259.815));
+  --color-chart-2: light-dark(oklch(69.6% 0.17 162.48), oklch(74% 0.15 162.48));
+  --color-chart-3: light-dark(oklch(79.5% 0.184 86.047), oklch(82% 0.17 86.047));
+  --color-chart-4: light-dark(oklch(63.7% 0.237 25.331), oklch(70% 0.2 25.331));
+  --color-chart-5: light-dark(oklch(60% 0.22 300), oklch(70% 0.19 300));
+
   /* Border radius — --radius is the dial; --radius-bump compensates squircles in supporting browsers (see @supports below) */
   --radius: 0.125rem;
   --radius-bump: 1;

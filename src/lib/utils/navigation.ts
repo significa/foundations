@@ -16,9 +16,11 @@ type NavigationItem = {
 const FOLDER_SORT_ORDER: Record<string, number> = {
   introduction: 0,
   ui: 1,
-  components: 2,
-  hooks: 3,
-  utils: 4,
+  blocks: 2,
+  components: 3,
+  charts: 4,
+  hooks: 5,
+  utils: 6,
 };
 
 const getNavigationItems = async (
@@ -59,6 +61,17 @@ const getNavigationItems = async (
       const orderB = b.order ?? 0;
 
       return orderA - orderB;
+    });
+  }
+
+  // Blocks has a gallery landing page (a standalone Astro route, not a `page.mdx`),
+  // so surface it as the first entry in the group.
+  const blocksGroup = items.find((item) => item.title === 'Blocks');
+  if (blocksGroup) {
+    blocksGroup.children.unshift({
+      id: 'blocks',
+      title: 'Overview',
+      href: '/blocks',
     });
   }
 

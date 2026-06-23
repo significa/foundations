@@ -1,0 +1,60 @@
+---
+title: Auth Form
+description: A ready-to-paste sign-in card composing Field, Input, Button, Checkbox, and Divider.
+preview: auth-form
+files:
+  - src/foundations/blocks/auth-form/auth-form.tsx
+dependencies:
+  - name: Field
+    href: /ui/field
+  - name: Input
+    href: /ui/input
+  - name: Button
+    href: /ui/button
+  - name: Checkbox
+    href: /ui/checkbox
+  - name: Divider
+    href: /ui/divider
+folder: Blocks
+meta:
+  order: 1
+---
+
+Blocks are full sections composed from Foundations primitives — copy the whole thing,
+then swap the markup and wire up your own submit handler. This sign-in card pulls
+together [Field](/ui/field), [Input](/ui/input), [Button](/ui/button),
+[Checkbox](/ui/checkbox), and [Divider](/ui/divider).
+
+It is intentionally presentational: there's no auth logic, no form library. Bring your
+own — `react-hook-form` + Zod pairs well with [Field](/ui/field)'s `invalid` prop.
+
+## Examples
+
+### Default
+
+<Preview slug="auth-form" />
+
+## API Reference
+
+### AuthForm
+
+Extends the `form` element.
+
+<PropsTable
+  definition={{
+    title: {
+      default: '"Sign in"',
+      type: "string",
+    },
+    description: {
+      default: '"Welcome back. Enter your details to continue."',
+      type: "string",
+    },
+  }}
+/>
+
+## Best Practices
+
+1. **Validation**: drive [Field](/ui/field)'s `invalid` prop from your validation source and surface errors with `Field.Error`.
+2. **Submission**: handle `onSubmit` and set the submit button's `isLoading` while the request is in flight.
+3. **Accessibility**: keep the `autoComplete` hints (`email`, `current-password`) so password managers work.

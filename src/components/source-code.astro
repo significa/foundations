@@ -20,8 +20,8 @@ const extension = path.extname(file).slice(1);
 function rewriteImports(code: string) {
   return (
     code
-      // Replace @/foundations/ui and @/foundations/components with @/components
-      .replace(/@\/foundations(\/ui|\/components)/g, "@/components")
+      // Replace @/foundations/ui, components, blocks and charts with @/components
+      .replace(/@\/foundations(\/ui|\/components|\/blocks|\/charts)/g, "@/components")
       // Replace @/foundations/utils with @/lib
       .replace(/@\/foundations\/utils/g, "@/lib")
       // Remove duplicate folder names (e.g. @/components/button/button to @/components/button)

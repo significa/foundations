@@ -1,0 +1,52 @@
+---
+title: Sidebar Layout
+description: A collapsible application shell — sidebar navigation, top bar, and content area — assembled from Foundations primitives.
+preview: sidebar-layout
+files:
+  - src/foundations/blocks/sidebar-layout/sidebar-layout.tsx
+dependencies:
+  - name: Avatar
+    href: /ui/avatar
+  - name: Button
+    href: /ui/button
+  - name: Divider
+    href: /ui/divider
+folder: Blocks
+meta:
+  order: 2
+---
+
+A full application shell: a collapsible sidebar with icon navigation, a top bar with
+actions, and a scrollable content area. Toggle the sidebar from the top bar. It composes
+[Avatar](/ui/avatar), [Button](/ui/button) / `IconButton`, and [Divider](/ui/divider),
+plus Phosphor icons.
+
+Use the viewport toggles above the preview to see how it adapts from desktop down to
+mobile, or open it full-screen.
+
+## Examples
+
+### Default
+
+<Preview slug="sidebar-layout" />
+
+## API Reference
+
+### SidebarLayout
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    title: {
+      default: '"Dashboard"',
+      type: "string",
+    },
+  }}
+/>
+
+## Best Practices
+
+1. **State**: the collapsed and active-item state is local `useState` — lift it to your router so the active item reflects the current route.
+2. **Navigation**: swap the `NAV_ITEMS` buttons for your router's links (e.g. `asChild` with an `<a>`), keeping the `data-active` styling.
+3. **Responsiveness**: below `md`, collapse the sidebar by default and overlay it as a [Drawer](/ui/drawer) rather than shrinking to icons.

@@ -1,0 +1,82 @@
+---
+title: Area Chart
+description: A responsive area chart built on visx primitives, themed with the Foundations chart palette.
+preview: area-chart
+files:
+  - src/foundations/charts/area-chart/area-chart.tsx
+dependencies:
+  - name: Chart Container
+    href: /charts/chart-container
+folder: Charts
+meta:
+  order: 1
+---
+
+Charts are hand-built on plain SVG — **zero runtime dependencies**, no charting library,
+no d3. The scales and path math live in the [Chart Container](/charts/chart-container),
+which every chart shares. You own the SVG outright: grid, axis labels, and tooltip are
+explicit. Series colours come from the
+[Chart Container](/charts/chart-container) palette (`--color-chart-1` … `--color-chart-5`),
+so charts stay on-theme in light and dark mode.
+
+## Anatomy
+
+```tsx
+<ChartContainer config={config}>
+  {({ width, height }) => (
+    <svg width={width} height={height}>
+      <AreaClosed /* … */ fill="var(--color-desktop)" />
+      <LinePath /* … */ stroke="var(--color-desktop)" />
+    </svg>
+  )}
+</ChartContainer>
+```
+
+## API Reference
+
+### AreaChart
+
+<PropsTable
+  definition={{
+    data: {
+      type: "Record<string, number | string>[]",
+      required: true,
+    },
+    config: {
+      type: "ChartConfig",
+      required: true,
+    },
+    xKey: {
+      type: "string",
+      required: true,
+    },
+    className: {
+      type: "string",
+    },
+  }}
+/>
+
+`config` maps each series key to a `{ label, color }`. Any key in `config` (other
+than `xKey`) is drawn as a stacked area + line. See
+[Chart Container](/charts/chart-container) for the `ChartConfig` shape and the
+palette tokens.
+
+## Examples
+
+### Default
+
+<Preview slug="area-chart" />
+
+## Best Practices
+
+1. **Data**:
+   - Keep the `xKey` categorical (months, days) — the x scale is a `scalePoint`.
+   - Limit to two or three series; areas overlap and read poorly beyond that.
+
+2. **Theming**:
+   - Reference colours via `var(--color-<key>)`, set from `config`, not literal hex.
+   - Stick to the `--color-chart-*` palette so dark mode swaps automatically.
+
+3. **Accessibility**:
+   - Pair the chart with a data table or summary for non-visual consumers.
+   - Ensure adjacent series colours are distinguishable.

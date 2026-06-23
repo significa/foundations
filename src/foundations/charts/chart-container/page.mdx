@@ -1,0 +1,128 @@
+---
+title: Chart Container
+description: The shared scaffolding every Foundations chart builds on — responsive sizing, the chart colour palette, a legend, and a themed tooltip surface.
+files:
+  - src/foundations/charts/chart-container/chart-container.tsx
+folder: Charts
+meta:
+  order: 0
+---
+
+Foundations charts are hand-built on plain SVG — **no charting library, no d3, zero
+runtime dependencies.** `ChartContainer` is the piece every chart shares: it measures
+its parent with a `ResizeObserver` so the SVG can be responsive, and it exposes each
+series colour as a `--color-<key>` CSS custom property so shapes reference
+`var(--color-desktop)` instead of hard-coded values. It also ships the small,
+dependency-free scale and path helpers the charts are drawn with.
+
+Copy this once; the [Area](/charts/area-chart), [Bar](/charts/bar-chart), and
+[Line](/charts/line-chart) charts all import from it.
+
+## Anatomy
+
+```tsx
+const config = {
+  desktop: { label: "Desktop", color: "var(--color-chart-1)" },
+  mobile: { label: "Mobile", color: "var(--color-chart-2)" },
+} satisfies ChartConfig;
+
+<ChartContainer config={config}>
+  {({ width, height }) => (
+    <svg width={width} height={height}>
+      {/* path d={buildSmoothPath(points)} stroke="var(--color-desktop)" */}
+    </svg>
+  )}
+</ChartContainer>;
+<ChartLegend config={config} />
+```
+
+## Helpers
+
+The container also exports the dependency-free maths the charts use, so you can build
+new chart types without reaching for a library:
+
+- **Scales** — `scaleLinear(domain, range)`, `scalePoint(domain, range)`, `scaleBand(domain, range, padding?)`, `niceTicks(min, max, count?)`
+- **Paths** — `buildLinePath(points)`, `buildSmoothPath(points)` (Catmull-Rom), `buildAreaPath(points, baselineY)`
+
+## Palette
+
+Series colours come from five OKLCH tokens defined in the
+[setup](/introduction/setup) theme, so charts stay on-theme and swap automatically in
+dark mode:
+
+```css
+--color-chart-1  --color-chart-2  --color-chart-3  --color-chart-4  --color-chart-5
+```
+
+Reference them through `config` (`color: "var(--color-chart-1)"`), never as literal
+hex.
+
+## API Reference
+
+### ChartContainer
+
+A responsive wrapper. Renders its children via a render prop that receives the
+measured pixel `width` and `height`. Defaults to a `16 / 9` aspect ratio — override
+with `className` (e.g. `aspect-square`, `h-64`).
+
+<PropsTable
+  definition={{
+    config: {
+      type: "ChartConfig",
+      required: true,
+    },
+    children: {
+      type: "(dimensions: { width: number; height: number }) => ReactNode",
+      required: true,
+    },
+    className: {
+      type: "string",
+    },
+  }}
+/>
+
+### ChartLegend
+
+Renders a swatch + label per series in `config`. Extends the `div` element.
+
+<PropsTable
+  definition={{
+    config: {
+      type: "ChartConfig",
+      required: true,
+    },
+  }}
+/>
+
+### ChartTooltipContent
+
+A themed tooltip surface. Pair it with `@visx/tooltip`'s `useTooltip` /
+`TooltipWithBounds` for positioning. Extends the `div` element.
+
+<PropsTable
+  definition={{
+    config: {
+      type: "ChartConfig",
+      required: true,
+    },
+    label: {
+      type: "ReactNode",
+    },
+    items: {
+      type: "{ key: string; value: ReactNode }[]",
+      required: true,
+    },
+  }}
+/>
+
+### ChartConfig
+
+```ts
+type ChartConfig = Record<
+  string,
+  {
+    label: string;
+    color?: string;
+  }
+>;
+```
