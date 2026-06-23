@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 interface UseDelayedLoadingOptions {
   delay?: number;
@@ -7,7 +7,7 @@ interface UseDelayedLoadingOptions {
 
 export const useDelayedLoading = (
   isLoading: boolean,
-  { delay = 300, minDuration = 1000 }: UseDelayedLoadingOptions = {}
+  { delay = 300, minDuration = 1000 }: UseDelayedLoadingOptions = {},
 ): boolean => {
   const [showLoading, setShowLoading] = useState(false);
   const shownAt = useRef<number | null>(null);

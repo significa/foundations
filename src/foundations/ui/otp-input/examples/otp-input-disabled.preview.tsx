@@ -1,4 +1,4 @@
-import { OTPInput } from '@/foundations/ui/otp-input/otp-input';
+import { OTPInput } from "@/foundations/ui/otp-input/otp-input";
 
 export default function OTPInputDisabledExample() {
   return (

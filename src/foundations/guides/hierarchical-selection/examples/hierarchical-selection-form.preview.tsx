@@ -1,56 +1,53 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from '@/foundations/ui/button/button';
-import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
-import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
-import { Field } from '@/foundations/ui/field/field';
-import { Input } from '@/foundations/ui/input/input';
-import { cn } from '@/lib/utils/classnames';
+import { Button } from "@/foundations/ui/button/button";
+import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
+import { Disclosure } from "@/foundations/ui/disclosure/disclosure";
+import { Field } from "@/foundations/ui/field/field";
+import { Input } from "@/foundations/ui/input/input";
+import { cn } from "@/lib/utils/classnames";
 
-import {
-  filterHierarchicalData,
-  type HierarchicalItem,
-} from '../hierarchical-data';
-import { useHierarchicalSelection } from '../use-hierarchical-selection';
+import { filterHierarchicalData, type HierarchicalItem } from "../hierarchical-data";
+import { useHierarchicalSelection } from "../use-hierarchical-selection";
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email').min(1, 'Email is required'),
-  countries: z.array(z.string()).min(1, 'Please select at least one country'),
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email").min(1, "Email is required"),
+  countries: z.array(z.string()).min(1, "Please select at least one country"),
 });
 
 type FormData = z.infer<typeof schema>;
 
 const sampleData: HierarchicalItem[] = [
   {
-    id: 'europe',
-    label: 'Europe',
+    id: "europe",
+    label: "Europe",
     children: [
-      { id: 'portugal', label: 'Portugal' },
-      { id: 'spain', label: 'Spain' },
-      { id: 'france', label: 'France' },
-      { id: 'germany', label: 'Germany' },
+      { id: "portugal", label: "Portugal" },
+      { id: "spain", label: "Spain" },
+      { id: "france", label: "France" },
+      { id: "germany", label: "Germany" },
     ],
   },
   {
-    id: 'asia',
-    label: 'Asia',
+    id: "asia",
+    label: "Asia",
     children: [
-      { id: 'south-korea', label: 'South Korea' },
-      { id: 'japan', label: 'Japan' },
-      { id: 'china', label: 'China' },
+      { id: "south-korea", label: "South Korea" },
+      { id: "japan", label: "Japan" },
+      { id: "china", label: "China" },
     ],
   },
   {
-    id: 'north-america',
-    label: 'North America',
+    id: "north-america",
+    label: "North America",
     children: [
-      { id: 'united-states', label: 'United States' },
-      { id: 'canada', label: 'Canada' },
-      { id: 'mexico', label: 'Mexico' },
+      { id: "united-states", label: "United States" },
+      { id: "canada", label: "Canada" },
+      { id: "mexico", label: "Mexico" },
     ],
   },
 ];
@@ -68,20 +65,14 @@ function HierarchicalSelectionField({
   data,
   error,
 }: HierarchicalSelectionFieldProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const {
-    toggleItem,
-    toggleParent,
-    toggleParentOpen,
-    getParentStatus,
-    isSelected,
-    isParentOpen,
-  } = useHierarchicalSelection({
-    defaultSelected: value,
-    defaultOpened: ['europe'],
-    onSelectionChange: onChange,
-  });
+  const { toggleItem, toggleParent, toggleParentOpen, getParentStatus, isSelected, isParentOpen } =
+    useHierarchicalSelection({
+      defaultSelected: value,
+      defaultOpened: ["europe"],
+      onSelectionChange: onChange,
+    });
 
   const filteredData = filterHierarchicalData(data, searchQuery);
 
@@ -96,14 +87,12 @@ function HierarchicalSelectionField({
 
       <div
         className={cn(
-          'max-h-64 space-y-1 overflow-y-auto rounded-md border p-3',
-          error && 'border-red-500'
+          "max-h-64 space-y-1 overflow-y-auto rounded-md border p-3",
+          error && "border-red-500",
         )}
       >
         {filteredData.length === 0 && searchQuery ? (
-          <p className="p-2 text-foreground-secondary text-sm">
-            No countries found
-          </p>
+          <p className="p-2 text-foreground-secondary text-sm">No countries found</p>
         ) : (
           filteredData.map((parent) => {
             const parentStatus = getParentStatus(parent);
@@ -118,9 +107,7 @@ function HierarchicalSelectionField({
                       indeterminate={parentStatus.indeterminate}
                       onChange={(e) => toggleParent(parent, e.target.checked)}
                     />
-                    <span className="cursor-pointer font-medium text-base">
-                      {parent.label}
-                    </span>
+                    <span className="cursor-pointer font-medium text-base">{parent.label}</span>
                   </label>
 
                   {!searchQuery && (
@@ -136,17 +123,12 @@ function HierarchicalSelectionField({
                 <Disclosure.Content>
                   <div className="mt-2 ml-6 space-y-2">
                     {parent.children?.map((child) => (
-                      <label
-                        key={child.id}
-                        className="flex cursor-pointer items-center gap-2"
-                      >
+                      <label key={child.id} className="flex cursor-pointer items-center gap-2">
                         <Checkbox
                           checked={isSelected(child.id)}
                           onChange={() => toggleItem(child.id)}
                         />
-                        <span className="cursor-pointer font-medium text-base">
-                          {child.label}
-                        </span>
+                        <span className="cursor-pointer font-medium text-base">{child.label}</span>
                       </label>
                     ))}
                   </div>
@@ -172,23 +154,23 @@ export default function HierarchicalSelectionForm() {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: '',
-      email: '',
-      countries: ['spain'],
+      name: "",
+      email: "",
+      countries: ["spain"],
     },
   });
 
-  const watchedCountries = watch('countries');
+  const watchedCountries = watch("countries");
 
   const onSubmit = async (data: FormData) => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     alert(
-      `Form submitted!\n\nName: ${data.name}\nEmail: ${data.email}\nCountries: ${data.countries.join(', ')}`
+      `Form submitted!\n\nName: ${data.name}\nEmail: ${data.email}\nCountries: ${data.countries.join(", ")}`,
     );
 
-    console.log('Form data:', data);
+    console.log("Form data:", data);
   };
 
   return (
@@ -200,7 +182,7 @@ export default function HierarchicalSelectionForm() {
           <Field invalid={!!errors.name}>
             <Field.Label>Name *</Field.Label>
             <Field.Control>
-              <Input {...register('name')} placeholder="Enter your name" />
+              <Input {...register("name")} placeholder="Enter your name" />
             </Field.Control>
             <Field.Error>{errors.name?.message}</Field.Error>
           </Field>
@@ -208,11 +190,7 @@ export default function HierarchicalSelectionForm() {
           <Field invalid={!!errors.email}>
             <Field.Label>Email *</Field.Label>
             <Field.Control>
-              <Input
-                type="email"
-                {...register('email')}
-                placeholder="Enter your email"
-              />
+              <Input type="email" {...register("email")} placeholder="Enter your email" />
             </Field.Control>
             <Field.Error>{errors.email?.message}</Field.Error>
           </Field>
@@ -243,20 +221,16 @@ export default function HierarchicalSelectionForm() {
             Selected countries ({watchedCountries.length}):
           </p>
           <p className="text-foreground-secondary text-sm">
-            {watchedCountries.length > 0 ? watchedCountries.join(', ') : 'None'}
+            {watchedCountries.length > 0 ? watchedCountries.join(", ") : "None"}
           </p>
         </div>
 
         <div className="flex gap-3">
           <Button type="submit" disabled={isSubmitting} className="min-w-30">
-            {isSubmitting ? 'Submitting...' : 'Submit'}
+            {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
 
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => window.location.reload()}
-          >
+          <Button type="button" variant="ghost" onClick={() => window.location.reload()}>
             Reset Form
           </Button>
         </div>

@@ -1,4 +1,4 @@
-import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipPreview() {
   return (

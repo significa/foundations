@@ -1,23 +1,21 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState } from "react";
 
-import { Listbox } from '@/foundations/ui/listbox/listbox';
+import { Listbox } from "@/foundations/ui/listbox/listbox";
 
 const people = [
-  { id: 1, name: 'Durward Reynolds' },
-  { id: 2, name: 'Kenton Towne' },
-  { id: 3, name: 'Therese Wunsch' },
-  { id: 4, name: 'Benedict Kessler' },
-  { id: 5, name: 'Katelyn Rohan' },
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
 ];
 
 export default function ListboxSearchPreview() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(people[0]);
 
   const filteredPeople = useMemo(() => {
-    return people.filter((person) =>
-      person.name.toLowerCase().includes(search.toLowerCase())
-    );
+    return people.filter((person) => person.name.toLowerCase().includes(search.toLowerCase()));
   }, [search]);
 
   return (
@@ -35,9 +33,7 @@ export default function ListboxSearchPreview() {
               {person.name}
             </Listbox.Option>
           ))}
-          {filteredPeople.length === 0 && (
-            <Listbox.Empty>No results</Listbox.Empty>
-          )}
+          {filteredPeople.length === 0 && <Listbox.Empty>No results</Listbox.Empty>}
         </Listbox.Options>
       </Listbox>
     </div>

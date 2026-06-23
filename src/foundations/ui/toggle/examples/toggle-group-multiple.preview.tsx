@@ -3,17 +3,13 @@ import {
   TextItalicIcon,
   TextStrikethroughIcon,
   TextUnderlineIcon,
-} from '@phosphor-icons/react/dist/ssr';
+} from "@phosphor-icons/react/dist/ssr";
 
-import { ToggleGroup } from '@/foundations/ui/toggle/toggle';
+import { ToggleGroup } from "@/foundations/ui/toggle/toggle";
 
 export default function ToggleGroupMultiplePreview() {
   return (
-    <ToggleGroup
-      type="multiple"
-      defaultValue={['bold']}
-      aria-label="Text formatting"
-    >
+    <ToggleGroup type="multiple" defaultValue={["bold"]} aria-label="Text formatting">
       <ToggleGroup.Item value="bold" square aria-label="Bold">
         <TextBIcon />
       </ToggleGroup.Item>

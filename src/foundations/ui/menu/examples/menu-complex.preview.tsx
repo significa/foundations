@@ -10,9 +10,9 @@ import {
   TagIcon,
   TrashIcon,
   UserIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { Button } from '@/foundations/ui/button/button';
-import { Menu } from '@/foundations/ui/menu/menu';
+} from "@phosphor-icons/react/dist/ssr";
+import { Button } from "@/foundations/ui/button/button";
+import { Menu } from "@/foundations/ui/menu/menu";
 
 export default function MenuComplexPreview() {
   return (

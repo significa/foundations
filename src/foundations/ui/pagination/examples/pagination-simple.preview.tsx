@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Pagination } from '@/foundations/ui/pagination/pagination';
+import { Pagination } from "@/foundations/ui/pagination/pagination";
 
 export default function PaginationSimplePreview() {
   const [page, setPage] = useState(1);
@@ -18,10 +18,7 @@ export default function PaginationSimplePreview() {
 
         {Array.from({ length: count }, (_, i) => i + 1).map((value) => (
           <Pagination.Item key={value}>
-            <Pagination.Link
-              isActive={value === page}
-              onClick={() => setPage(value)}
-            >
+            <Pagination.Link isActive={value === page} onClick={() => setPage(value)}>
               {value}
             </Pagination.Link>
           </Pagination.Item>

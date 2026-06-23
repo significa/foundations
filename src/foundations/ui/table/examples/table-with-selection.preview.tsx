@@ -1,29 +1,29 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
-import { Table } from '@/foundations/ui/table/table';
+import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
+import { Table } from "@/foundations/ui/table/table";
 
-export const meta = { layout: 'padded' } as const;
+export const meta = { layout: "padded" } as const;
 
 const tasks = [
-  { id: 't-1', title: 'Review PR #482', priority: 'High', assignee: 'Ana' },
+  { id: "t-1", title: "Review PR #482", priority: "High", assignee: "Ana" },
   {
-    id: 't-2',
-    title: 'Update onboarding copy',
-    priority: 'Low',
-    assignee: 'Bruno',
+    id: "t-2",
+    title: "Update onboarding copy",
+    priority: "Low",
+    assignee: "Bruno",
   },
   {
-    id: 't-3',
-    title: 'Fix flaky checkout test',
-    priority: 'High',
-    assignee: 'Carla',
+    id: "t-3",
+    title: "Fix flaky checkout test",
+    priority: "High",
+    assignee: "Carla",
   },
   {
-    id: 't-4',
-    title: 'Audit color tokens',
-    priority: 'Medium',
-    assignee: 'Diogo',
+    id: "t-4",
+    title: "Audit color tokens",
+    priority: "Medium",
+    assignee: "Diogo",
   },
 ];
 

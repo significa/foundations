@@ -6,43 +6,43 @@ import {
   GearIcon,
   HouseIcon,
   PencilSimpleIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { useMemo, useState } from 'react';
-import { Button } from '@/foundations/ui/button/button';
-import { Dialog } from '@/foundations/ui/dialog/dialog';
-import { Menu } from '@/foundations/ui/menu/menu';
+} from "@phosphor-icons/react/dist/ssr";
+import { useMemo, useState } from "react";
+import { Button } from "@/foundations/ui/button/button";
+import { Dialog } from "@/foundations/ui/dialog/dialog";
+import { Menu } from "@/foundations/ui/menu/menu";
 
 const ACTIONS: {
   group: string;
   items: { id: string; label: string; icon: React.ReactNode }[];
 }[] = [
   {
-    group: 'Actions',
+    group: "Actions",
     items: [
-      { id: 'edit', label: 'Edit', icon: <PencilSimpleIcon /> },
-      { id: 'duplicate', label: 'Duplicate', icon: <CopyIcon /> },
-      { id: 'archive', label: 'Archive', icon: <ArchiveIcon /> },
+      { id: "edit", label: "Edit", icon: <PencilSimpleIcon /> },
+      { id: "duplicate", label: "Duplicate", icon: <CopyIcon /> },
+      { id: "archive", label: "Archive", icon: <ArchiveIcon /> },
     ],
   },
   {
-    group: 'Navigation',
+    group: "Navigation",
     items: [
-      { id: 'home', label: 'Go home', icon: <HouseIcon /> },
-      { id: 'settings', label: 'Open settings', icon: <GearIcon /> },
+      { id: "home", label: "Go home", icon: <HouseIcon /> },
+      { id: "settings", label: "Open settings", icon: <GearIcon /> },
     ],
   },
   {
-    group: 'Help',
+    group: "Help",
     items: [
-      { id: 'docs', label: 'Documentation', icon: <BookOpenIcon /> },
-      { id: 'support', label: 'Contact support', icon: <EnvelopeIcon /> },
+      { id: "docs", label: "Documentation", icon: <BookOpenIcon /> },
+      { id: "support", label: "Contact support", icon: <EnvelopeIcon /> },
     ],
   },
 ];
 
 export default function MenuCmdkPreview() {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -55,7 +55,7 @@ export default function MenuCmdkPreview() {
 
   const close = () => {
     setOpen(false);
-    setQuery('');
+    setQuery("");
   };
 
   return (
@@ -63,7 +63,7 @@ export default function MenuCmdkPreview() {
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
-        if (!next) setQuery('');
+        if (!next) setQuery("");
       }}
     >
       <Dialog.Trigger asChild>
@@ -94,9 +94,7 @@ export default function MenuCmdkPreview() {
                   ))}
                 </Menu.Section>
               ))}
-              {filtered.length === 0 && (
-                <Menu.Empty>No matching commands</Menu.Empty>
-              )}
+              {filtered.length === 0 && <Menu.Empty>No matching commands</Menu.Empty>}
             </div>
           </Menu.Items>
         </Menu>

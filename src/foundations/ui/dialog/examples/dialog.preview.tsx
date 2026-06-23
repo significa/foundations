@@ -1,5 +1,5 @@
-import { Button } from '@/foundations/ui/button/button';
-import { Dialog } from '@/foundations/ui/dialog/dialog';
+import { Button } from "@/foundations/ui/button/button";
+import { Dialog } from "@/foundations/ui/dialog/dialog";
 
 export default function DialogPreview() {
   return (
@@ -9,9 +9,7 @@ export default function DialogPreview() {
       </Dialog.Trigger>
       <Dialog.Content className="w-80">
         <Dialog.Title>Unsaved changes</Dialog.Title>
-        <Dialog.Description>
-          Are you sure you want to leave this page?
-        </Dialog.Description>
+        <Dialog.Description>Are you sure you want to leave this page?</Dialog.Description>
         <Dialog.Actions>
           <Dialog.Close asChild>
             <Button>Confirm</Button>

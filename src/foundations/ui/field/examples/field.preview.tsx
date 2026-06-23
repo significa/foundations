@@ -1,5 +1,5 @@
-import { Field } from '@/foundations/ui/field/field';
-import { Input } from '@/foundations/ui/input/input';
+import { Field } from "@/foundations/ui/field/field";
+import { Input } from "@/foundations/ui/input/input";
 
 export default function FieldPreview() {
   return (
@@ -8,9 +8,7 @@ export default function FieldPreview() {
       <Field.Control>
         <Input type="email" placeholder="name@example.com" />
       </Field.Control>
-      <Field.Description>
-        We'll never share your email with anyone else.
-      </Field.Description>
+      <Field.Description>We'll never share your email with anyone else.</Field.Description>
     </Field>
   );
 }

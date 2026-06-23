@@ -1,6 +1,6 @@
-import { StarIcon } from '@phosphor-icons/react/dist/ssr';
+import { StarIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Toggle } from '@/foundations/ui/toggle/toggle';
+import { Toggle } from "@/foundations/ui/toggle/toggle";
 
 export default function ToggleSizesPreview() {
   return (

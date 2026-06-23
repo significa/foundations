@@ -1,5 +1,5 @@
-import { Button } from '@/foundations/ui/button/button';
-import { Dialog } from '@/foundations/ui/dialog/dialog';
+import { Button } from "@/foundations/ui/button/button";
+import { Dialog } from "@/foundations/ui/dialog/dialog";
 
 export default function DialogTallPreview() {
   return (
@@ -14,9 +14,8 @@ export default function DialogTallPreview() {
             .fill(null)
             .map((_, index) => (
               <p key={index} className="mb-4">
-                This is paragraph {index + 1}. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-                labore et dolore magna aliqua.
+                This is paragraph {index + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </p>
             ))}
         </div>

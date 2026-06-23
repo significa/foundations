@@ -1,14 +1,14 @@
 export const SCHEME_TOKENS = [
-  'background',
-  'background-secondary',
-  'foreground',
-  'foreground-secondary',
-  'accent',
-  'accent-foreground',
-  'border',
+  "background",
+  "background-secondary",
+  "foreground",
+  "foreground-secondary",
+  "accent",
+  "accent-foreground",
+  "border",
 ] as const;
 
-export const SEMANTIC_TOKENS = ['error', 'warning', 'success', 'info'] as const;
+export const SEMANTIC_TOKENS = ["error", "warning", "success", "info"] as const;
 
 export const COLOR_TOKENS = [...SCHEME_TOKENS, ...SEMANTIC_TOKENS] as const;
 
@@ -23,209 +23,214 @@ export type Scheme = {
 };
 
 export const TOKEN_LABELS: Record<ColorToken, string> = {
-  background: 'Background',
-  'background-secondary': 'Background secondary',
-  foreground: 'Foreground',
-  'foreground-secondary': 'Foreground secondary',
-  accent: 'Accent',
-  'accent-foreground': 'Accent foreground',
-  border: 'Border',
-  error: 'Error',
-  warning: 'Warning',
-  success: 'Success',
-  info: 'Info',
+  background: "Background",
+  "background-secondary": "Background secondary",
+  foreground: "Foreground",
+  "foreground-secondary": "Foreground secondary",
+  accent: "Accent",
+  "accent-foreground": "Accent foreground",
+  border: "Border",
+  error: "Error",
+  warning: "Warning",
+  success: "Success",
+  info: "Info",
 };
 
 // Semantic defaults match globals-data-attr.css:31-34. Single value, so light = dark.
-const SEMANTIC_DEFAULTS: Record<(typeof SEMANTIC_TOKENS)[number], TokenValues> =
-  {
-    error: {
-      light: 'oklch(63.7% 0.237 25.331)',
-      dark: 'oklch(63.7% 0.237 25.331)',
-    },
-    warning: {
-      light: 'oklch(79.5% 0.184 86.047)',
-      dark: 'oklch(79.5% 0.184 86.047)',
-    },
-    success: {
-      light: 'oklch(69.6% 0.17 162.48)',
-      dark: 'oklch(69.6% 0.17 162.48)',
-    },
-    info: {
-      light: 'oklch(62.3% 0.214 259.815)',
-      dark: 'oklch(62.3% 0.214 259.815)',
-    },
-  };
+const SEMANTIC_DEFAULTS: Record<(typeof SEMANTIC_TOKENS)[number], TokenValues> = {
+  error: {
+    light: "oklch(63.7% 0.237 25.331)",
+    dark: "oklch(63.7% 0.237 25.331)",
+  },
+  warning: {
+    light: "oklch(79.5% 0.184 86.047)",
+    dark: "oklch(79.5% 0.184 86.047)",
+  },
+  success: {
+    light: "oklch(69.6% 0.17 162.48)",
+    dark: "oklch(69.6% 0.17 162.48)",
+  },
+  info: {
+    light: "oklch(62.3% 0.214 259.815)",
+    dark: "oklch(62.3% 0.214 259.815)",
+  },
+};
 
 // Mirrors the values declared in src/foundations/setup/globals-data-attr.css.
 const DEFAULT_COLORS: Record<ColorToken, TokenValues> = {
-  background: { light: 'oklch(100% 0 0)', dark: 'oklch(12% 0 0)' },
-  'background-secondary': { light: 'oklch(96% 0 0)', dark: 'oklch(22% 0 0)' },
-  foreground: { light: 'oklch(0% 0 0)', dark: 'oklch(95% 0 0)' },
-  'foreground-secondary': { light: 'oklch(65% 0 0)', dark: 'oklch(53% 0 0)' },
-  accent: { light: 'oklch(0% 0 0)', dark: 'oklch(95% 0 0)' },
-  'accent-foreground': { light: 'oklch(100% 0 0)', dark: 'oklch(12% 0 0)' },
-  border: { light: 'oklch(94% 0 0)', dark: 'oklch(26% 0 0)' },
+  background: { light: "oklch(100% 0 0)", dark: "oklch(12% 0 0)" },
+  "background-secondary": { light: "oklch(96% 0 0)", dark: "oklch(22% 0 0)" },
+  foreground: { light: "oklch(0% 0 0)", dark: "oklch(95% 0 0)" },
+  "foreground-secondary": { light: "oklch(65% 0 0)", dark: "oklch(53% 0 0)" },
+  accent: { light: "oklch(0% 0 0)", dark: "oklch(95% 0 0)" },
+  "accent-foreground": { light: "oklch(100% 0 0)", dark: "oklch(12% 0 0)" },
+  border: { light: "oklch(94% 0 0)", dark: "oklch(26% 0 0)" },
   ...SEMANTIC_DEFAULTS,
 };
 
 const buildScheme = (
   id: string,
   label: string,
-  overrides: Partial<Record<ColorToken, TokenValues>>
+  overrides: Partial<Record<ColorToken, TokenValues>>,
 ): Scheme => ({
   id,
   label,
   colors: { ...DEFAULT_COLORS, ...overrides },
 });
 
+export const DEFAULT_SCHEME_ID = "default";
+
+export const DEFAULT_SCHEME: Scheme = buildScheme(DEFAULT_SCHEME_ID, "Default", {});
+
+// `colors` is a total Record<ColorToken, TokenValues>: every ColorToken is always
+// present. This narrows the indexed access that `noUncheckedIndexedAccess` widens.
+export const colorFor = (scheme: Scheme, token: ColorToken): TokenValues =>
+  scheme.colors[token] as TokenValues;
+
 export const SCHEMES: Scheme[] = [
-  buildScheme('default', 'Default', {}),
+  DEFAULT_SCHEME,
 
   // Warm cream + brown with burnt orange accent.
-  buildScheme('gruvbox', 'Gruvbox', {
-    background: { light: 'oklch(96% 0.025 85)', dark: 'oklch(25% 0.015 70)' },
-    'background-secondary': {
-      light: 'oklch(92% 0.03 85)',
-      dark: 'oklch(31% 0.02 70)',
+  buildScheme("gruvbox", "Gruvbox", {
+    background: { light: "oklch(96% 0.025 85)", dark: "oklch(25% 0.015 70)" },
+    "background-secondary": {
+      light: "oklch(92% 0.03 85)",
+      dark: "oklch(31% 0.02 70)",
     },
-    foreground: { light: 'oklch(35% 0.05 60)', dark: 'oklch(88% 0.04 85)' },
-    'foreground-secondary': {
-      light: 'oklch(55% 0.05 60)',
-      dark: 'oklch(68% 0.04 85)',
+    foreground: { light: "oklch(35% 0.05 60)", dark: "oklch(88% 0.04 85)" },
+    "foreground-secondary": {
+      light: "oklch(55% 0.05 60)",
+      dark: "oklch(68% 0.04 85)",
     },
-    accent: { light: 'oklch(58% 0.16 50)', dark: 'oklch(72% 0.14 60)' },
-    'accent-foreground': {
-      light: 'oklch(96% 0.025 85)',
-      dark: 'oklch(25% 0.015 70)',
+    accent: { light: "oklch(58% 0.16 50)", dark: "oklch(72% 0.14 60)" },
+    "accent-foreground": {
+      light: "oklch(96% 0.025 85)",
+      dark: "oklch(25% 0.015 70)",
     },
-    border: { light: 'oklch(86% 0.03 85)', dark: 'oklch(36% 0.02 70)' },
-    error: { light: 'oklch(58% 0.18 28)', dark: 'oklch(70% 0.17 28)' },
-    warning: { light: 'oklch(72% 0.15 75)', dark: 'oklch(80% 0.14 75)' },
-    success: { light: 'oklch(60% 0.13 130)', dark: 'oklch(72% 0.13 130)' },
-    info: { light: 'oklch(58% 0.13 220)', dark: 'oklch(72% 0.12 220)' },
+    border: { light: "oklch(86% 0.03 85)", dark: "oklch(36% 0.02 70)" },
+    error: { light: "oklch(58% 0.18 28)", dark: "oklch(70% 0.17 28)" },
+    warning: { light: "oklch(72% 0.15 75)", dark: "oklch(80% 0.14 75)" },
+    success: { light: "oklch(60% 0.13 130)", dark: "oklch(72% 0.13 130)" },
+    info: { light: "oklch(58% 0.13 220)", dark: "oklch(72% 0.12 220)" },
   }),
 
   // Deep forest green palette.
-  buildScheme('forest', 'Forest', {
-    background: { light: 'oklch(96% 0.015 145)', dark: 'oklch(22% 0.02 150)' },
-    'background-secondary': {
-      light: 'oklch(92% 0.02 145)',
-      dark: 'oklch(28% 0.025 150)',
+  buildScheme("forest", "Forest", {
+    background: { light: "oklch(96% 0.015 145)", dark: "oklch(22% 0.02 150)" },
+    "background-secondary": {
+      light: "oklch(92% 0.02 145)",
+      dark: "oklch(28% 0.025 150)",
     },
-    foreground: { light: 'oklch(28% 0.04 145)', dark: 'oklch(90% 0.025 130)' },
-    'foreground-secondary': {
-      light: 'oklch(50% 0.04 145)',
-      dark: 'oklch(70% 0.04 130)',
+    foreground: { light: "oklch(28% 0.04 145)", dark: "oklch(90% 0.025 130)" },
+    "foreground-secondary": {
+      light: "oklch(50% 0.04 145)",
+      dark: "oklch(70% 0.04 130)",
     },
-    accent: { light: 'oklch(48% 0.13 145)', dark: 'oklch(74% 0.13 145)' },
-    'accent-foreground': {
-      light: 'oklch(96% 0.015 145)',
-      dark: 'oklch(22% 0.02 150)',
+    accent: { light: "oklch(48% 0.13 145)", dark: "oklch(74% 0.13 145)" },
+    "accent-foreground": {
+      light: "oklch(96% 0.015 145)",
+      dark: "oklch(22% 0.02 150)",
     },
-    border: { light: 'oklch(86% 0.02 145)', dark: 'oklch(34% 0.025 150)' },
-    error: { light: 'oklch(58% 0.17 25)', dark: 'oklch(70% 0.17 25)' },
-    warning: { light: 'oklch(72% 0.14 80)', dark: 'oklch(80% 0.14 80)' },
-    success: { light: 'oklch(55% 0.14 145)', dark: 'oklch(75% 0.14 145)' },
-    info: { light: 'oklch(58% 0.12 200)', dark: 'oklch(72% 0.12 200)' },
+    border: { light: "oklch(86% 0.02 145)", dark: "oklch(34% 0.025 150)" },
+    error: { light: "oklch(58% 0.17 25)", dark: "oklch(70% 0.17 25)" },
+    warning: { light: "oklch(72% 0.14 80)", dark: "oklch(80% 0.14 80)" },
+    success: { light: "oklch(55% 0.14 145)", dark: "oklch(75% 0.14 145)" },
+    info: { light: "oklch(58% 0.12 200)", dark: "oklch(72% 0.12 200)" },
   }),
 
   // Frosty cool blue/gray (Nord-inspired).
-  buildScheme('nord', 'Nord', {
-    background: { light: 'oklch(97% 0.005 240)', dark: 'oklch(28% 0.015 245)' },
-    'background-secondary': {
-      light: 'oklch(93% 0.01 240)',
-      dark: 'oklch(34% 0.02 245)',
+  buildScheme("nord", "Nord", {
+    background: { light: "oklch(97% 0.005 240)", dark: "oklch(28% 0.015 245)" },
+    "background-secondary": {
+      light: "oklch(93% 0.01 240)",
+      dark: "oklch(34% 0.02 245)",
     },
-    foreground: { light: 'oklch(30% 0.03 245)', dark: 'oklch(90% 0.015 240)' },
-    'foreground-secondary': {
-      light: 'oklch(52% 0.03 245)',
-      dark: 'oklch(70% 0.025 240)',
+    foreground: { light: "oklch(30% 0.03 245)", dark: "oklch(90% 0.015 240)" },
+    "foreground-secondary": {
+      light: "oklch(52% 0.03 245)",
+      dark: "oklch(70% 0.025 240)",
     },
-    accent: { light: 'oklch(55% 0.12 230)', dark: 'oklch(78% 0.10 220)' },
-    'accent-foreground': {
-      light: 'oklch(97% 0.005 240)',
-      dark: 'oklch(28% 0.015 245)',
+    accent: { light: "oklch(55% 0.12 230)", dark: "oklch(78% 0.10 220)" },
+    "accent-foreground": {
+      light: "oklch(97% 0.005 240)",
+      dark: "oklch(28% 0.015 245)",
     },
-    border: { light: 'oklch(86% 0.01 240)', dark: 'oklch(40% 0.02 245)' },
-    error: { light: 'oklch(62% 0.17 18)', dark: 'oklch(72% 0.16 18)' },
-    warning: { light: 'oklch(72% 0.12 75)', dark: 'oklch(80% 0.12 75)' },
-    success: { light: 'oklch(65% 0.12 150)', dark: 'oklch(75% 0.12 150)' },
-    info: { light: 'oklch(63% 0.12 220)', dark: 'oklch(78% 0.10 220)' },
+    border: { light: "oklch(86% 0.01 240)", dark: "oklch(40% 0.02 245)" },
+    error: { light: "oklch(62% 0.17 18)", dark: "oklch(72% 0.16 18)" },
+    warning: { light: "oklch(72% 0.12 75)", dark: "oklch(80% 0.12 75)" },
+    success: { light: "oklch(65% 0.12 150)", dark: "oklch(75% 0.12 150)" },
+    info: { light: "oklch(63% 0.12 220)", dark: "oklch(78% 0.10 220)" },
   }),
 
   // Cream/teal (Solarized-inspired). Blue accent in light, yellow in dark.
-  buildScheme('solarized', 'Solarized', {
-    background: { light: 'oklch(96% 0.025 90)', dark: 'oklch(28% 0.04 230)' },
-    'background-secondary': {
-      light: 'oklch(92% 0.03 90)',
-      dark: 'oklch(34% 0.04 230)',
+  buildScheme("solarized", "Solarized", {
+    background: { light: "oklch(96% 0.025 90)", dark: "oklch(28% 0.04 230)" },
+    "background-secondary": {
+      light: "oklch(92% 0.03 90)",
+      dark: "oklch(34% 0.04 230)",
     },
-    foreground: { light: 'oklch(40% 0.04 220)', dark: 'oklch(75% 0.025 90)' },
-    'foreground-secondary': {
-      light: 'oklch(58% 0.04 220)',
-      dark: 'oklch(60% 0.03 90)',
+    foreground: { light: "oklch(40% 0.04 220)", dark: "oklch(75% 0.025 90)" },
+    "foreground-secondary": {
+      light: "oklch(58% 0.04 220)",
+      dark: "oklch(60% 0.03 90)",
     },
-    accent: { light: 'oklch(55% 0.13 230)', dark: 'oklch(80% 0.13 90)' },
-    'accent-foreground': {
-      light: 'oklch(96% 0.025 90)',
-      dark: 'oklch(28% 0.04 230)',
+    accent: { light: "oklch(55% 0.13 230)", dark: "oklch(80% 0.13 90)" },
+    "accent-foreground": {
+      light: "oklch(96% 0.025 90)",
+      dark: "oklch(28% 0.04 230)",
     },
-    border: { light: 'oklch(86% 0.03 90)', dark: 'oklch(40% 0.04 230)' },
-    error: { light: 'oklch(60% 0.18 25)', dark: 'oklch(70% 0.17 25)' },
-    warning: { light: 'oklch(72% 0.15 85)', dark: 'oklch(82% 0.14 85)' },
-    success: { light: 'oklch(65% 0.14 140)', dark: 'oklch(76% 0.14 140)' },
-    info: { light: 'oklch(58% 0.13 230)', dark: 'oklch(72% 0.12 230)' },
+    border: { light: "oklch(86% 0.03 90)", dark: "oklch(40% 0.04 230)" },
+    error: { light: "oklch(60% 0.18 25)", dark: "oklch(70% 0.17 25)" },
+    warning: { light: "oklch(72% 0.15 85)", dark: "oklch(82% 0.14 85)" },
+    success: { light: "oklch(65% 0.14 140)", dark: "oklch(76% 0.14 140)" },
+    info: { light: "oklch(58% 0.13 230)", dark: "oklch(72% 0.12 230)" },
   }),
 
   // Soft rose / dusk purple (Rose Pine-inspired).
-  buildScheme('rose', 'Rose', {
-    background: { light: 'oklch(96% 0.015 30)', dark: 'oklch(25% 0.02 290)' },
-    'background-secondary': {
-      light: 'oklch(92% 0.02 30)',
-      dark: 'oklch(31% 0.025 290)',
+  buildScheme("rose", "Rose", {
+    background: { light: "oklch(96% 0.015 30)", dark: "oklch(25% 0.02 290)" },
+    "background-secondary": {
+      light: "oklch(92% 0.02 30)",
+      dark: "oklch(31% 0.025 290)",
     },
-    foreground: { light: 'oklch(35% 0.04 280)', dark: 'oklch(90% 0.02 30)' },
-    'foreground-secondary': {
-      light: 'oklch(55% 0.04 280)',
-      dark: 'oklch(70% 0.04 30)',
+    foreground: { light: "oklch(35% 0.04 280)", dark: "oklch(90% 0.02 30)" },
+    "foreground-secondary": {
+      light: "oklch(55% 0.04 280)",
+      dark: "oklch(70% 0.04 30)",
     },
-    accent: { light: 'oklch(60% 0.13 25)', dark: 'oklch(78% 0.12 30)' },
-    'accent-foreground': {
-      light: 'oklch(96% 0.015 30)',
-      dark: 'oklch(25% 0.02 290)',
+    accent: { light: "oklch(60% 0.13 25)", dark: "oklch(78% 0.12 30)" },
+    "accent-foreground": {
+      light: "oklch(96% 0.015 30)",
+      dark: "oklch(25% 0.02 290)",
     },
-    border: { light: 'oklch(88% 0.02 30)', dark: 'oklch(36% 0.025 290)' },
-    error: { light: 'oklch(60% 0.17 18)', dark: 'oklch(72% 0.17 18)' },
-    warning: { light: 'oklch(75% 0.13 70)', dark: 'oklch(82% 0.13 70)' },
-    success: { light: 'oklch(62% 0.12 160)', dark: 'oklch(75% 0.12 160)' },
-    info: { light: 'oklch(60% 0.13 250)', dark: 'oklch(75% 0.12 250)' },
+    border: { light: "oklch(88% 0.02 30)", dark: "oklch(36% 0.025 290)" },
+    error: { light: "oklch(60% 0.17 18)", dark: "oklch(72% 0.17 18)" },
+    warning: { light: "oklch(75% 0.13 70)", dark: "oklch(82% 0.13 70)" },
+    success: { light: "oklch(62% 0.12 160)", dark: "oklch(75% 0.12 160)" },
+    info: { light: "oklch(60% 0.13 250)", dark: "oklch(75% 0.12 250)" },
   }),
 
   // Vibrant purple/magenta (Dracula-inspired).
-  buildScheme('dracula', 'Dracula', {
-    background: { light: 'oklch(96% 0.01 290)', dark: 'oklch(25% 0.03 285)' },
-    'background-secondary': {
-      light: 'oklch(92% 0.02 290)',
-      dark: 'oklch(31% 0.03 285)',
+  buildScheme("dracula", "Dracula", {
+    background: { light: "oklch(96% 0.01 290)", dark: "oklch(25% 0.03 285)" },
+    "background-secondary": {
+      light: "oklch(92% 0.02 290)",
+      dark: "oklch(31% 0.03 285)",
     },
-    foreground: { light: 'oklch(28% 0.05 290)', dark: 'oklch(92% 0.015 290)' },
-    'foreground-secondary': {
-      light: 'oklch(50% 0.04 290)',
-      dark: 'oklch(72% 0.03 290)',
+    foreground: { light: "oklch(28% 0.05 290)", dark: "oklch(92% 0.015 290)" },
+    "foreground-secondary": {
+      light: "oklch(50% 0.04 290)",
+      dark: "oklch(72% 0.03 290)",
     },
-    accent: { light: 'oklch(56% 0.20 295)', dark: 'oklch(74% 0.16 295)' },
-    'accent-foreground': {
-      light: 'oklch(96% 0.01 290)',
-      dark: 'oklch(25% 0.03 285)',
+    accent: { light: "oklch(56% 0.20 295)", dark: "oklch(74% 0.16 295)" },
+    "accent-foreground": {
+      light: "oklch(96% 0.01 290)",
+      dark: "oklch(25% 0.03 285)",
     },
-    border: { light: 'oklch(86% 0.02 290)', dark: 'oklch(38% 0.03 285)' },
-    error: { light: 'oklch(63% 0.20 12)', dark: 'oklch(72% 0.19 12)' },
-    warning: { light: 'oklch(78% 0.16 80)', dark: 'oklch(86% 0.15 80)' },
-    success: { light: 'oklch(70% 0.18 145)', dark: 'oklch(80% 0.18 145)' },
-    info: { light: 'oklch(72% 0.13 220)', dark: 'oklch(82% 0.12 220)' },
+    border: { light: "oklch(86% 0.02 290)", dark: "oklch(38% 0.03 285)" },
+    error: { light: "oklch(63% 0.20 12)", dark: "oklch(72% 0.19 12)" },
+    warning: { light: "oklch(78% 0.16 80)", dark: "oklch(86% 0.15 80)" },
+    success: { light: "oklch(70% 0.18 145)", dark: "oklch(80% 0.18 145)" },
+    info: { light: "oklch(72% 0.13 220)", dark: "oklch(82% 0.12 220)" },
   }),
 ];
-
-export const DEFAULT_SCHEME_ID = 'default';
-export const DEFAULT_SCHEME = SCHEMES[0];

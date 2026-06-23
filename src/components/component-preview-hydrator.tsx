@@ -16,7 +16,7 @@
  * component produce identical output, the swap is seamless — no spinners,
  * no loading states, no visible flash or layout shift.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 type ComponentPreviewProps = {
   file: string;
@@ -26,28 +26,27 @@ type ComponentPreviewProps = {
 // Eagerly collect all preview modules via Vite's glob import.
 // Each module is lazily loaded (code-split) — only the requested file is
 // actually fetched at runtime.
-const modules = import.meta.glob('/src/foundations/**/*.preview.tsx');
+const modules = import.meta.glob("/src/foundations/**/*.preview.tsx");
 
-const ComponentPreviewHydrator = ({
-  file,
-  children,
-}: ComponentPreviewProps) => {
+const ComponentPreviewHydrator = ({ file, children }: ComponentPreviewProps) => {
   // Starts as null (no module loaded yet), then holds the hydrated component once fetched.
   const [Component, setComponent] = useState<React.ComponentType | null>();
 
   useEffect(() => {
+    // Dynamically import only the preview module for the given file.
+    // This triggers the code-split chunk load for that specific preview.
+    const load = modules[file];
+    if (!load) {
+      console.error(`No preview module found for file: ${file}`);
+      return;
+    }
     try {
-      // Dynamically import only the preview module for the given file.
-      // This triggers the code-split chunk load for that specific preview.
-      modules[file]().then((mod) => {
+      load().then((mod) => {
         // @ts-expect-error - We know this will be a React component, but TypeScript can't infer it from the dynamic import.
         setComponent(() => mod.default);
       });
     } catch (error) {
-      console.error(
-        `Failed to hydrate preview component for file: ${file}`,
-        error
-      );
+      console.error(`Failed to hydrate preview component for file: ${file}`, error);
     }
   }, [file]);
 

@@ -1,12 +1,9 @@
-import { type RefCallback, useCallback, useRef } from 'react';
+import { type RefCallback, useCallback, useRef } from "react";
 
-type PopoverType = 'manual' | 'hint';
+type PopoverType = "manual" | "hint";
 
-const showAsPopover = <T extends HTMLElement>(
-  element: T,
-  type: PopoverType
-) => {
-  element.setAttribute('popover', type);
+const showAsPopover = <T extends HTMLElement>(element: T, type: PopoverType) => {
+  element.setAttribute("popover", type);
   try {
     element.showPopover();
   } catch {
@@ -20,7 +17,7 @@ const hideAsPopover = <T extends HTMLElement>(element: T) => {
   } catch {
     // already hidden / not connected — ignored
   }
-  element.removeAttribute('popover');
+  element.removeAttribute("popover");
 };
 
 /**
@@ -51,7 +48,7 @@ const hideAsPopover = <T extends HTMLElement>(element: T) => {
  */
 export const useTopLayer = <T extends HTMLElement>(
   active: boolean = true,
-  type: PopoverType = 'manual'
+  type: PopoverType = "manual",
 ): RefCallback<T> => {
   const previousRef = useRef<T | null>(null);
 
@@ -64,6 +61,6 @@ export const useTopLayer = <T extends HTMLElement>(
 
       if (element && active) showAsPopover(element, type);
     },
-    [active, type]
+    [active, type],
   );
 };

@@ -1,18 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Button } from '@/foundations/ui/button/button';
-import { Drawer } from '@/foundations/ui/drawer/drawer';
+import { Button } from "@/foundations/ui/button/button";
+import { Drawer } from "@/foundations/ui/drawer/drawer";
 
-const SIDES = [
-  'left',
-  'right',
-  'bottom',
-  'left-bottom',
-  'right-bottom',
-] as const;
+const SIDES = ["left", "right", "bottom", "left-bottom", "right-bottom"] as const;
 
 const DrawerSide = () => {
-  const [side, setSide] = useState<(typeof SIDES)[number]>('right-bottom');
+  const [side, setSide] = useState<(typeof SIDES)[number]>("right-bottom");
   const [open, setOpen] = useState(false);
 
   return (
@@ -36,8 +30,8 @@ const DrawerSide = () => {
             <Drawer.Title>side=&quot;{side}&quot;</Drawer.Title>
           </Drawer.Header>
           <Drawer.Description>
-            Hyphenated values pick a desktop edge and fall back to a bottom
-            sheet on mobile — resize the viewport to see the switch.
+            Hyphenated values pick a desktop edge and fall back to a bottom sheet on mobile — resize
+            the viewport to see the switch.
           </Drawer.Description>
           <Drawer.Actions>
             <Drawer.Close asChild>

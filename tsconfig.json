@@ -1,5 +1,5 @@
 {
-  "extends": "astro/tsconfigs/strict",
+  "extends": "@significa/tsconfig/astro",
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
@@ -7,7 +7,5 @@
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
-  },
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  }
 }

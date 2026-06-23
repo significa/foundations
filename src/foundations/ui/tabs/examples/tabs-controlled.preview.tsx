@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Tabs } from '@/foundations/ui/tabs/tabs';
+import { Tabs } from "@/foundations/ui/tabs/tabs";
 
 export default function TabsControlledPreview() {
   const [selectedIndex, setSelectedIndex] = useState(0);

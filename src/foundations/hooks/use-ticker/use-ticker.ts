@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 type Ticker = {
   start: () => void;
@@ -8,7 +8,7 @@ type Ticker = {
 
 type TickerCallback = (
   timestamp: number,
-  delta: number
+  delta: number,
   // biome-ignore lint/suspicious/noConfusingVoidType: intentional
 ) => void | undefined | boolean;
 
@@ -73,6 +73,6 @@ export const useTicker = (callback: TickerCallback): Ticker => {
         return !isRunning.current;
       },
     }),
-    [start, stop]
+    [start, stop],
   );
 };

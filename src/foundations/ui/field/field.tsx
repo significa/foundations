@@ -1,14 +1,6 @@
-import {
-  createContext,
-  use,
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useState,
-} from 'react';
-import { Slot } from '@/foundations/components/slot/slot';
-import { cn } from '@/lib/utils/classnames';
+import { createContext, use, useCallback, useEffect, useId, useMemo, useState } from "react";
+import { Slot } from "@/foundations/components/slot/slot";
+import { cn } from "@/lib/utils/classnames";
 
 interface FieldContextValue {
   controlId: string;
@@ -23,12 +15,12 @@ const FieldContext = createContext<FieldContextValue | null>(null);
 const useFieldContext = () => {
   const ctx = use(FieldContext);
   if (!ctx) {
-    throw new Error('Field components must be used within a <Field />');
+    throw new Error("Field components must be used within a <Field />");
   }
   return ctx;
 };
 
-interface FieldProps extends React.ComponentPropsWithRef<'div'> {
+interface FieldProps extends React.ComponentPropsWithRef<"div"> {
   /**
    * Marks the wrapped control as invalid. Wire this to your validation source
    * (RHF, Zod, server response, plain useState — Field doesn't care).
@@ -48,17 +40,17 @@ const Field = ({ invalid, className, children, ...props }: FieldProps) => {
     };
   }, []);
 
-  const describedBy = messageIds.length > 0 ? messageIds.join(' ') : undefined;
+  const describedBy = messageIds.length > 0 ? messageIds.join(" ") : undefined;
 
   const ctx = useMemo<FieldContextValue>(
     () => ({ controlId, labelId, describedBy, invalid, registerMessage }),
-    [controlId, labelId, describedBy, invalid, registerMessage]
+    [controlId, labelId, describedBy, invalid, registerMessage],
   );
 
   return (
     <FieldContext value={ctx}>
       <div
-        className={cn('flex flex-col gap-1.5', className)}
+        className={cn("flex flex-col gap-1.5", className)}
         data-invalid={invalid || undefined}
         {...props}
       >
@@ -68,16 +60,13 @@ const Field = ({ invalid, className, children, ...props }: FieldProps) => {
   );
 };
 
-const FieldLabel = ({
-  className,
-  ...props
-}: React.ComponentPropsWithRef<'label'>) => {
+const FieldLabel = ({ className, ...props }: React.ComponentPropsWithRef<"label">) => {
   const { controlId, labelId } = useFieldContext();
   return (
     <label
       htmlFor={controlId}
       id={labelId}
-      className={cn('font-medium text-base text-foreground', className)}
+      className={cn("font-medium text-base text-foreground", className)}
       {...props}
     />
   );
@@ -101,11 +90,7 @@ const FieldControl = ({ children }: FieldControlProps) => {
   );
 };
 
-const FieldDescription = ({
-  className,
-  children,
-  ...props
-}: React.ComponentPropsWithRef<'p'>) => {
+const FieldDescription = ({ className, children, ...props }: React.ComponentPropsWithRef<"p">) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
   const { registerMessage } = useFieldContext();
@@ -119,21 +104,13 @@ const FieldDescription = ({
   if (!hasContent) return null;
 
   return (
-    <p
-      id={id}
-      className={cn('text-foreground-secondary text-sm', className)}
-      {...props}
-    >
+    <p id={id} className={cn("text-foreground-secondary text-sm", className)} {...props}>
       {children}
     </p>
   );
 };
 
-const FieldError = ({
-  className,
-  children,
-  ...props
-}: React.ComponentPropsWithRef<'p'>) => {
+const FieldError = ({ className, children, ...props }: React.ComponentPropsWithRef<"p">) => {
   const generatedId = useId();
   const id = props.id ?? generatedId;
   const { registerMessage } = useFieldContext();
@@ -147,12 +124,7 @@ const FieldError = ({
   if (!hasContent) return null;
 
   return (
-    <p
-      id={id}
-      role="alert"
-      className={cn('text-error text-sm', className)}
-      {...props}
-    >
+    <p id={id} role="alert" className={cn("text-error text-sm", className)} {...props}>
       {children}
     </p>
   );

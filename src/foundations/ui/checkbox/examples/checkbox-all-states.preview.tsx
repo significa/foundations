@@ -1,6 +1,6 @@
-import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
+import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
 
-const labelClass = 'font-medium text-base text-foreground';
+const labelClass = "font-medium text-base text-foreground";
 
 export default function CheckboxAllStatesPreview() {
   return (

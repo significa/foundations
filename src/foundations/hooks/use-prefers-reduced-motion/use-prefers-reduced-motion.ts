@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-const QUERY = '(prefers-reduced-motion: no-preference)';
+const QUERY = "(prefers-reduced-motion: no-preference)";
 
 const usePrefersReducedMotion = (): boolean => {
-  const [prefersReducedMotion, setPrefersReducedMotion] =
-    useState<boolean>(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(false);
 
   useEffect(() => {
     const mediaQueryList = window.matchMedia(QUERY);
@@ -13,10 +12,10 @@ const usePrefersReducedMotion = (): boolean => {
       setPrefersReducedMotion(!event.matches);
     };
 
-    mediaQueryList.addEventListener('change', listener);
+    mediaQueryList.addEventListener("change", listener);
 
     return () => {
-      mediaQueryList.removeEventListener('change', listener);
+      mediaQueryList.removeEventListener("change", listener);
     };
   }, []);
 

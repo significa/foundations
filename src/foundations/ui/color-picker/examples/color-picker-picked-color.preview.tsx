@@ -1,9 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  ColorPicker,
-  type HSVA,
-} from '@/foundations/ui/color-picker/color-picker';
+import { ColorPicker, type HSVA } from "@/foundations/ui/color-picker/color-picker";
 
 export default function ColorPickerWithInitialColor() {
   const [color, setColor] = useState<HSVA>([210, 0.8, 0.9, 1]);

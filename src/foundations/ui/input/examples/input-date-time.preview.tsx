@@ -1,5 +1,5 @@
-import { CalendarIcon, ClockIcon } from '@phosphor-icons/react/dist/ssr';
-import { Input } from '@/foundations/ui/input/input';
+import { CalendarIcon, ClockIcon } from "@phosphor-icons/react/dist/ssr";
+import { Input } from "@/foundations/ui/input/input";
 
 export default function InputDateTime() {
   return (

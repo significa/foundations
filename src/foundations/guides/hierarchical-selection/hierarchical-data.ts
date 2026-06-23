@@ -18,9 +18,7 @@ export interface SelectionStatus {
 /**
  * Flattens a hierarchical data structure to get only leaf items (items without children)
  */
-export function flattenHierarchicalData(
-  items: HierarchicalItem[]
-): HierarchicalItem[] {
+export function flattenHierarchicalData(items: HierarchicalItem[]): HierarchicalItem[] {
   return items.reduce<HierarchicalItem[]>((acc, item) => {
     if (item.children) {
       acc.push(...flattenHierarchicalData(item.children));
@@ -54,7 +52,7 @@ export function getEnabledChildIds(item: HierarchicalItem): string[] {
  */
 export function getParentSelectionStatus(
   parentItem: HierarchicalItem,
-  selectedIds: Set<string>
+  selectedIds: Set<string>,
 ): SelectionStatus {
   if (parentItem.disabled) {
     return { checked: false, indeterminate: false };
@@ -66,9 +64,7 @@ export function getParentSelectionStatus(
     return { checked: false, indeterminate: false };
   }
 
-  const selectedChildCount = enabledChildIds.filter((id) =>
-    selectedIds.has(id)
-  ).length;
+  const selectedChildCount = enabledChildIds.filter((id) => selectedIds.has(id)).length;
 
   if (selectedChildCount === 0) {
     return { checked: false, indeterminate: false };
@@ -84,7 +80,7 @@ export function getParentSelectionStatus(
  */
 export function getSelectAllStatus(
   items: HierarchicalItem[],
-  selectedIds: Set<string>
+  selectedIds: Set<string>,
 ): SelectionStatus {
   const allEnabledIds = flattenHierarchicalData(items)
     .filter((item) => !item.disabled)
@@ -94,9 +90,7 @@ export function getSelectAllStatus(
     return { checked: false, indeterminate: false };
   }
 
-  const selectedEnabledCount = allEnabledIds.filter((id) =>
-    selectedIds.has(id)
-  ).length;
+  const selectedEnabledCount = allEnabledIds.filter((id) => selectedIds.has(id)).length;
 
   if (selectedEnabledCount === 0) {
     return { checked: false, indeterminate: false };
@@ -112,7 +106,7 @@ export function getSelectAllStatus(
  */
 export function filterHierarchicalData(
   items: HierarchicalItem[],
-  searchQuery: string
+  searchQuery: string,
 ): HierarchicalItem[] {
   if (!searchQuery.trim()) return items;
 
@@ -121,7 +115,7 @@ export function filterHierarchicalData(
   return items
     .map((item) => {
       const matchingChildren = item.children?.filter((child) =>
-        child.label.toLowerCase().includes(query)
+        child.label.toLowerCase().includes(query),
       );
 
       if (item.label.toLowerCase().includes(query)) {

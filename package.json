@@ -17,7 +17,8 @@
     "format": "biome format --write . && prettier --list-different --write \"**/*.astro\"",
     "lint": "biome lint --write --unsafe .",
     "check:deps": "node scripts/check-page-deps.mjs",
-    "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check && pnpm check:deps"
+    "knip": "knip",
+    "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check && pnpm check:deps && pnpm knip"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
@@ -37,7 +38,6 @@
     "date-fns": "^4.1.0",
     "motion": "^12.38.0",
     "pagefind": "^1.5.2",
-    "posthog-js": "^1.372.5",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.74.0",
@@ -55,10 +55,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
-    "@types/hast": "^3.0.4",
+    "@significa/biome-config": "0.2.0",
+    "@significa/tsconfig": "0.1.0",
+    "knip": "^6.18.0",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
-    "unist-util-visit": "^5.1.0"
+    "typescript": "6.0.3"
   }
 }

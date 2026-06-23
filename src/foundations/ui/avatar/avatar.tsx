@@ -1,48 +1,48 @@
-import { UserIcon } from '@phosphor-icons/react/dist/ssr';
-import type { VariantProps } from 'cva';
-import { Children, cloneElement, isValidElement, useId } from 'react';
-import { cn, cva } from '@/lib/utils/classnames';
+import { UserIcon } from "@phosphor-icons/react/dist/ssr";
+import type { VariantProps } from "cva";
+import { Children, cloneElement, isValidElement, useId } from "react";
+import { cn, cva } from "@/lib/utils/classnames";
 
 const getInitials = (name: string | undefined) => {
-  if (!name) return '';
+  if (!name) return "";
 
   if (name.length === 1 || name.length === 2) return name;
 
   return name
-    .split(' ')
+    .split(" ")
     .map((n) => n[0])
-    .join('');
+    .join("");
 };
 
 const avatarStyle = cva({
-  base: 'relative flex items-center justify-center overflow-hidden bg-foreground-secondary/10 font-semibold text-foreground/80 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm',
+  base: "relative flex items-center justify-center overflow-hidden bg-foreground-secondary/10 font-semibold text-foreground/80 shadow-[inset_0_0_0_1px_--alpha(var(--color-foreground)/8%)] backdrop-blur-sm",
   variants: {
     variant: {
-      circle: 'rounded-full',
-      square: 'rounded-md',
+      circle: "rounded-full",
+      square: "rounded-md",
     },
     size: {
-      '2xs': 'size-4 text-2xs',
-      xs: 'size-6 text-2xs',
-      sm: 'size-8 text-xs',
-      md: 'size-10 text-sm',
-      lg: 'size-12 text-base',
-      xl: 'size-14 text-lg',
-      '2xl': 'size-16 text-xl',
-      '3xl': 'size-20 text-3xl',
+      "2xs": "size-4 text-2xs",
+      xs: "size-6 text-2xs",
+      sm: "size-8 text-xs",
+      md: "size-10 text-sm",
+      lg: "size-12 text-base",
+      xl: "size-14 text-lg",
+      "2xl": "size-16 text-xl",
+      "3xl": "size-20 text-3xl",
     },
   },
 });
 
-interface AvatarProps extends React.ComponentPropsWithRef<'div'> {
-  size?: VariantProps<typeof avatarStyle>['size'];
-  variant?: VariantProps<typeof avatarStyle>['variant'];
+interface AvatarProps extends React.ComponentPropsWithRef<"div"> {
+  size?: VariantProps<typeof avatarStyle>["size"];
+  variant?: VariantProps<typeof avatarStyle>["variant"];
 }
 
 const Avatar = ({
   className,
-  variant = 'circle',
-  size = 'md',
+  variant = "circle",
+  size = "md",
   children,
   ...props
 }: AvatarProps) => {
@@ -53,14 +53,14 @@ const Avatar = ({
   );
 };
 
-interface AvatarImageProps extends React.ComponentPropsWithRef<'img'> {
+interface AvatarImageProps extends React.ComponentPropsWithRef<"img"> {
   src: string;
 }
 
 const AvatarImage = ({ className, src, ...props }: AvatarImageProps) => {
   return (
     <img
-      className={cn('absolute inset-0 z-1 object-cover', className)}
+      className={cn("absolute inset-0 z-1 object-cover", className)}
       src={src}
       alt=""
       {...props}
@@ -68,17 +68,13 @@ const AvatarImage = ({ className, src, ...props }: AvatarImageProps) => {
   );
 };
 
-interface AvatarFallbackProps extends React.ComponentPropsWithRef<'div'> {
+interface AvatarFallbackProps extends React.ComponentPropsWithRef<"div"> {
   children?: string;
 }
 
-const AvatarFallback = ({
-  className,
-  children,
-  ...props
-}: AvatarFallbackProps) => {
+const AvatarFallback = ({ className, children, ...props }: AvatarFallbackProps) => {
   return (
-    <div className={cn('opacity-80', className)} {...props}>
+    <div className={cn("opacity-80", className)} {...props}>
       {getInitials(children) || <UserIcon weight="bold" />}
     </div>
   );
@@ -87,15 +83,15 @@ const AvatarFallback = ({
 // Tailwind spacing units for each Avatar size variant; `2xs` (size-4) is 4 spacing units, etc.
 // Kept in sync with `avatarStyle.variants.size` via the `satisfies` constraint below.
 const SIZE_MAP = {
-  '2xs': 4,
+  "2xs": 4,
   xs: 6,
   sm: 8,
   md: 10,
   lg: 12,
   xl: 14,
-  '2xl': 16,
-  '3xl': 20,
-} as const satisfies Record<NonNullable<AvatarProps['size']>, number>;
+  "2xl": 16,
+  "3xl": 20,
+} as const satisfies Record<NonNullable<AvatarProps["size"]>, number>;
 
 const OVERLAP_UNITS = 2;
 const CUTOUT_GAP_UNITS = 1;
@@ -105,15 +101,7 @@ const toPathNumber = (value: number) => {
   return Number(value.toFixed(4));
 };
 
-const createCirclePath = ({
-  cx,
-  cy,
-  radius,
-}: {
-  cx: number;
-  cy: number;
-  radius: number;
-}) => {
+const createCirclePath = ({ cx, cy, radius }: { cx: number; cy: number; radius: number }) => {
   const left = toPathNumber(cx - radius);
   const right = toPathNumber(cx + radius);
   const centerY = toPathNumber(cy);
@@ -123,8 +111,8 @@ const createCirclePath = ({
     `M ${left} ${centerY}`,
     `A ${pathRadius} ${pathRadius} 0 1 0 ${right} ${centerY}`,
     `A ${pathRadius} ${pathRadius} 0 1 0 ${left} ${centerY}`,
-    'Z',
-  ].join(' ');
+    "Z",
+  ].join(" ");
 };
 
 const createRoundedRectPath = ({
@@ -154,8 +142,8 @@ const createRoundedRectPath = ({
     `A ${toPathNumber(pathRadius)} ${toPathNumber(pathRadius)} 0 0 1 ${toPathNumber(x)} ${toPathNumber(bottom - pathRadius)}`,
     `V ${toPathNumber(y + pathRadius)}`,
     `A ${toPathNumber(pathRadius)} ${toPathNumber(pathRadius)} 0 0 1 ${toPathNumber(x + pathRadius)} ${toPathNumber(y)}`,
-    'Z',
-  ].join(' ');
+    "Z",
+  ].join(" ");
 };
 
 const createAvatarCutoutPath = ({
@@ -163,9 +151,9 @@ const createAvatarCutoutPath = ({
   previousSize,
   currentSize,
 }: {
-  previousVariant: NonNullable<AvatarProps['variant']>;
-  previousSize: NonNullable<AvatarProps['size']>;
-  currentSize: NonNullable<AvatarProps['size']>;
+  previousVariant: NonNullable<AvatarProps["variant"]>;
+  previousSize: NonNullable<AvatarProps["size"]>;
+  currentSize: NonNullable<AvatarProps["size"]>;
 }) => {
   const previousUnits = SIZE_MAP[previousSize];
   const currentUnits = SIZE_MAP[currentSize];
@@ -175,7 +163,7 @@ const createAvatarCutoutPath = ({
   const previousCenterY = 0.5;
 
   const cutout =
-    previousVariant === 'circle'
+    previousVariant === "circle"
       ? createCirclePath({
           cx: previousCenterX,
           cy: previousCenterY,
@@ -194,24 +182,24 @@ const createAvatarCutoutPath = ({
 
 const cloneAvatarForGroup = (child: React.ReactElement<AvatarProps>) => {
   return cloneElement(child, {
-    className: cn(child.props.className, 'backdrop-blur-none'),
+    className: cn(child.props.className, "backdrop-blur-none"),
   });
 };
 
-type AvatarGroupProps = React.ComponentPropsWithRef<'div'>;
+type AvatarGroupProps = React.ComponentPropsWithRef<"div">;
 
 const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
   const id = useId();
   const items = Children.toArray(children).filter(
     (child): child is React.ReactElement<AvatarProps> =>
-      isValidElement(child) && child.type === Avatar
+      isValidElement(child) && child.type === Avatar,
   );
 
   return (
     <div
       className={cn(
-        'isolate flex items-center -space-x-(--overlap) [--overlap:--spacing(2)]',
-        className
+        "isolate flex items-center -space-x-(--overlap) [--overlap:--spacing(2)]",
+        className,
       )}
       {...props}
     >
@@ -222,9 +210,9 @@ const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
         if (!previous) return cloneAvatarForGroup(child);
 
         const clipPathId = `${id}-${i}`;
-        const previousVariant = previous.props.variant ?? 'circle';
-        const previousSize = previous.props.size ?? 'md';
-        const currentSize = child.props.size ?? 'md';
+        const previousVariant = previous.props.variant ?? "circle";
+        const previousSize = previous.props.size ?? "md";
+        const currentSize = child.props.size ?? "md";
         const cutoutPath = createAvatarCutoutPath({
           currentSize,
           previousSize,

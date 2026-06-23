@@ -1,18 +1,14 @@
-import {
-  CheckCircleIcon,
-  XCircleIcon,
-  XIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import type { ComponentPropsWithoutRef } from 'react';
-import { useEffect, useRef, useSyncExternalStore } from 'react';
-import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
-import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
-import { cn } from '@/lib/utils/classnames';
+import { CheckCircleIcon, XCircleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import type { ComponentPropsWithoutRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
+import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { cn } from "@/lib/utils/classnames";
 
 const DEFAULT_TOAST_DURATION_MS = 7000;
 
-type ToastVariant = 'default' | 'positive' | 'negative';
+type ToastVariant = "default" | "positive" | "negative";
 
 type Toast = {
   id: string;
@@ -25,7 +21,7 @@ type Toast = {
 type ToastStore = {
   toasts: Toast[];
   subscribe: (listener: () => void) => () => void;
-  add: (config: Omit<Toast, 'id'>) => void;
+  add: (config: Omit<Toast, "id">) => void;
   remove: (id: string) => void;
   pauseAll: () => void;
   resumeAll: () => void;
@@ -71,10 +67,7 @@ const createToastStore = (): ToastStore => {
 
       const duration = toastData.duration ?? DEFAULT_TOAST_DURATION_MS;
 
-      const timeout =
-        duration !== Infinity
-          ? setTimeout(() => this.remove(id), duration)
-          : null;
+      const timeout = duration !== Infinity ? setTimeout(() => this.remove(id), duration) : null;
 
       timers.set(id, {
         startTime: Date.now(),
@@ -110,10 +103,7 @@ const createToastStore = (): ToastStore => {
             timer.startTime = Date.now();
 
             if (timer.remainingTime !== Infinity) {
-              timer.timeoutId = setTimeout(
-                () => this.remove(id),
-                timer.remainingTime
-              );
+              timer.timeoutId = setTimeout(() => this.remove(id), timer.remainingTime);
             }
           } else {
             this.remove(id);
@@ -129,7 +119,7 @@ const createToastStore = (): ToastStore => {
 //
 // The main reason behind this is Astro's island architecture, where different parts of the UI can be rendered and hydrated independently,
 // leading to multiple instances of the toast store. In other frameworks, this is not necessary but also doesn't cause any issues.
-const STORE_KEY = '__significa_toast_store__';
+const STORE_KEY = "__significa_toast_store__";
 const toastStore: ToastStore =
   ((globalThis as Record<string, unknown>)[STORE_KEY] as ToastStore) ??
   (() => {
@@ -143,11 +133,11 @@ const useToastStore = () => {
   return useSyncExternalStore(
     toastStore.subscribe,
     () => toastStore.toasts,
-    () => toastStore.toasts
+    () => toastStore.toasts,
   );
 };
 
-const toast = (toast: Omit<Toast, 'id'>) => {
+const toast = (toast: Omit<Toast, "id">) => {
   toastStore.add(toast);
 };
 
@@ -170,10 +160,10 @@ const Toaster = ({ className }: { className?: string }) => {
       setTimeout(() => element?.togglePopover(), 0);
     };
 
-    window.addEventListener('ui:modal-open', onModalOpen);
+    window.addEventListener("ui:modal-open", onModalOpen);
 
     return () => {
-      window.removeEventListener('ui:modal-open', onModalOpen);
+      window.removeEventListener("ui:modal-open", onModalOpen);
     };
   }, []);
 
@@ -182,9 +172,9 @@ const Toaster = ({ className }: { className?: string }) => {
       ref={composeRefs(elementRef, topLayerRef)}
       data-toaster-provider
       className={cn(
-        'fixed flex size-full flex-col items-end justify-end overflow-hidden bg-transparent px-4 py-3',
-        'pointer-events-none',
-        className
+        "fixed flex size-full flex-col items-end justify-end overflow-hidden bg-transparent px-4 py-3",
+        "pointer-events-none",
+        className,
       )}
     >
       <AnimatePresence>
@@ -196,15 +186,12 @@ const Toaster = ({ className }: { className?: string }) => {
               onMouseLeave={() => toastStore.resumeAll()}
               style={{ zIndex: toasts.length - index }}
               initial={{ height: 0 }}
-              animate={{ height: 'auto' }}
+              animate={{ height: "auto" }}
               exit={{ height: 0 }}
-              transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+              transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
               className="pointer-events-auto box-border *:my-1.5"
             >
-              <ToasterItem
-                toast={toast}
-                onDismiss={() => toastStore.remove(toast.id)}
-              />
+              <ToasterItem toast={toast} onDismiss={() => toastStore.remove(toast.id)} />
             </motion.div>
           );
         })}
@@ -219,7 +206,7 @@ type ToasterItemProps = {
 };
 
 const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
-  const { title, description, variant = 'default' } = toast;
+  const { title, description, variant = "default" } = toast;
   const reduceMotion = useReducedMotion();
 
   const Icon = {
@@ -231,27 +218,22 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
   return (
     <motion.div
       className={cn(
-        'relative flex max-w-88 items-center gap-2 rounded-lg border p-3 pl-4 shadow-lg',
-        variant === 'default' && 'border-border bg-background',
-        variant === 'positive' &&
-          'border-success/20 bg-success/10 text-success',
-        variant === 'negative' && 'border-error/20 bg-error/10 text-error'
+        "relative flex max-w-88 items-center gap-2 rounded-lg border p-3 pl-4 shadow-lg",
+        variant === "default" && "border-border bg-background",
+        variant === "positive" && "border-success/20 bg-success/10 text-success",
+        variant === "negative" && "border-error/20 bg-error/10 text-error",
       )}
       role="status"
       aria-live="polite"
       initial={reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
       animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-      exit={
-        reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8, y: '-100%' }
-      }
-      transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+      exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8, y: "-100%" }}
+      transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
     >
       {Icon && <Icon weight="fill" className="size-5" />}
-      <div className={cn('pr-6 text-sm')}>
+      <div className={cn("pr-6 text-sm")}>
         <p className="font-medium">{title}</p>
-        {description && (
-          <p className="mt-0.5 text-pretty text-xs opacity-70">{description}</p>
-        )}
+        {description && <p className="mt-0.5 text-pretty text-xs opacity-70">{description}</p>}
       </div>
       <ToastCloseButton onClick={onDismiss} />
     </motion.div>
@@ -260,16 +242,16 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
 
 const ToastCloseButton = ({
   onClick,
-}: Omit<ComponentPropsWithoutRef<'button'>, 'children' | 'type'>) => {
+}: Omit<ComponentPropsWithoutRef<"button">, "children" | "type">) => {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label="Dismiss notification"
       className={cn(
-        'relative mb-auto flex size-6 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-sm border-inherit bg-inherit',
-        'focus-visible:ring-(length:--ring-width) ring-ring focus-visible:outline-none',
-        'after:absolute after:inset-0 after:bg-current after:opacity-0 hover:after:opacity-4 active:after:opacity-8'
+        "relative mb-auto flex size-6 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-sm border-inherit bg-inherit",
+        "focus-visible:ring-(length:--ring-width) ring-ring focus-visible:outline-none",
+        "after:absolute after:inset-0 after:bg-current after:opacity-0 hover:after:opacity-4 active:after:opacity-8",
       )}
     >
       <XIcon className="size-3 opacity-50" />

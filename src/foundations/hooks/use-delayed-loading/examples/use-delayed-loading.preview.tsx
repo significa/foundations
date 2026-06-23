@@ -1,25 +1,25 @@
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 
-import { useDelayedLoading } from '@/foundations/hooks/use-delayed-loading/use-delayed-loading';
-import { Button } from '@/foundations/ui/button/button';
-import { Spinner } from '@/foundations/ui/spinner/spinner';
-import type { PreviewMeta } from '@/lib/preview';
+import { useDelayedLoading } from "@/foundations/hooks/use-delayed-loading/use-delayed-loading";
+import { Button } from "@/foundations/ui/button/button";
+import { Spinner } from "@/foundations/ui/spinner/spinner";
+import type { PreviewMeta } from "@/lib/preview";
 
 const cases = [
   {
-    label: 'Load quick',
+    label: "Load quick",
     duration: 150,
-    caption: 'Naive flashes a spinner. Delayed shows nothing.',
+    caption: "Naive flashes a spinner. Delayed shows nothing.",
   },
   {
-    label: 'Load moderate',
+    label: "Load moderate",
     duration: 500,
-    caption: 'Naive shows for the whole wait. Delayed appears later and holds.',
+    caption: "Naive shows for the whole wait. Delayed appears later and holds.",
   },
   {
-    label: 'Load slow',
+    label: "Load slow",
     duration: 2500,
-    caption: 'Both show a spinner; the delayed one just starts later.',
+    caption: "Both show a spinner; the delayed one just starts later.",
   },
 ];
 
@@ -31,9 +31,7 @@ function Indicator({ label, active }: { label: string; active: boolean }) {
         {active ? (
           <Spinner />
         ) : (
-          <span className="text-foreground-secondary text-xs opacity-60">
-            idle
-          </span>
+          <span className="text-foreground-secondary text-xs opacity-60">idle</span>
         )}
       </div>
     </div>
@@ -85,7 +83,7 @@ function UseDelayedLoadingPreview() {
 }
 
 export const meta = {
-  layout: 'centered',
+  layout: "centered",
 } satisfies PreviewMeta;
 
 export default UseDelayedLoadingPreview;

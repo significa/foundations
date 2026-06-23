@@ -1,26 +1,16 @@
-import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
-import { cn } from '@/lib/utils/classnames';
+import { Disclosure } from "@/foundations/ui/disclosure/disclosure";
+import { cn } from "@/lib/utils/classnames";
 
-const AccordionGroup = ({
-  children,
-  className,
-}: React.ComponentProps<'div'>) => {
+const AccordionGroup = ({ children, className }: React.ComponentProps<"div">) => {
   return (
     <Disclosure.Group>
-      <div className={cn('rounded-lg border', className)}>{children}</div>
+      <div className={cn("rounded-lg border", className)}>{children}</div>
     </Disclosure.Group>
   );
 };
 
-const Accordion = ({
-  children,
-  className,
-}: React.ComponentProps<typeof Disclosure>) => {
-  return (
-    <Disclosure className={cn('border-b last:border-b-0', className)}>
-      {children}
-    </Disclosure>
-  );
+const Accordion = ({ children, className }: React.ComponentProps<typeof Disclosure>) => {
+  return <Disclosure className={cn("border-b last:border-b-0", className)}>{children}</Disclosure>;
 };
 
 const AccordionTrigger = ({
@@ -30,8 +20,8 @@ const AccordionTrigger = ({
   return (
     <Disclosure.Trigger
       className={cn(
-        'flex cursor-pointer items-center justify-between gap-4 px-3 py-2 transition-colors hover:bg-foreground/5',
-        className
+        "flex cursor-pointer items-center justify-between gap-4 px-3 py-2 transition-colors hover:bg-foreground/5",
+        className,
       )}
     >
       {children}
@@ -46,7 +36,7 @@ const AccordionContent = ({
 }: React.ComponentProps<typeof Disclosure.Content>) => {
   return (
     <Disclosure.Content>
-      <div className={cn('border-t px-3 py-2', className)}>{children}</div>
+      <div className={cn("border-t px-3 py-2", className)}>{children}</div>
     </Disclosure.Content>
   );
 };
@@ -55,36 +45,27 @@ export default function DisclosureStyledPreview() {
   return (
     <AccordionGroup>
       <Accordion>
-        <AccordionTrigger>
-          Did you know that butterflies taste with their feet?
-        </AccordionTrigger>
+        <AccordionTrigger>Did you know that butterflies taste with their feet?</AccordionTrigger>
         <AccordionContent>
-          Butterflies have taste receptors on their feet that help them identify
-          which plants to lay their eggs on. When they land on a plant, they can
-          taste it to determine if it&apos;s suitable food for their
-          caterpillars.
+          Butterflies have taste receptors on their feet that help them identify which plants to lay
+          their eggs on. When they land on a plant, they can taste it to determine if it&apos;s
+          suitable food for their caterpillars.
         </AccordionContent>
       </Accordion>
       <Accordion>
-        <AccordionTrigger>
-          Want to learn about tardigrade superpowers?
-        </AccordionTrigger>
+        <AccordionTrigger>Want to learn about tardigrade superpowers?</AccordionTrigger>
         <AccordionContent>
-          Tardigrades, also known as water bears, can survive in space! They can
-          withstand extreme temperatures, pressure, radiation, and can even
-          survive being completely dehydrated for years by entering a state of
-          cryptobiosis.
+          Tardigrades, also known as water bears, can survive in space! They can withstand extreme
+          temperatures, pressure, radiation, and can even survive being completely dehydrated for
+          years by entering a state of cryptobiosis.
         </AccordionContent>
       </Accordion>
       <Accordion>
-        <AccordionTrigger>
-          Have you heard about the immortal jellyfish?
-        </AccordionTrigger>
+        <AccordionTrigger>Have you heard about the immortal jellyfish?</AccordionTrigger>
         <AccordionContent>
-          The Turritopsis dohrnii jellyfish can technically live forever! When
-          stressed or injured, it can transform back into its juvenile stage
-          instead of dying, making it the only known animal capable of
-          biological immortality.
+          The Turritopsis dohrnii jellyfish can technically live forever! When stressed or injured,
+          it can transform back into its juvenile stage instead of dying, making it the only known
+          animal capable of biological immortality.
         </AccordionContent>
       </Accordion>
     </AccordionGroup>

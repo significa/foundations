@@ -1,6 +1,6 @@
-import { Spinner } from '@/foundations/ui/spinner/spinner';
+import { Spinner } from "@/foundations/ui/spinner/spinner";
 
-const variants = ['ring', 'dots', 'bars', 'frames'] as const;
+const variants = ["ring", "dots", "bars", "frames"] as const;
 
 export default function SpinnerVariantsPreview() {
   return (
@@ -10,9 +10,7 @@ export default function SpinnerVariantsPreview() {
           <div className="flex size-6 items-center justify-center">
             <Spinner variant={variant} />
           </div>
-          <span className="text-center text-foreground-secondary text-xs">
-            {variant}
-          </span>
+          <span className="text-center text-foreground-secondary text-xs">{variant}</span>
         </div>
       ))}
     </div>

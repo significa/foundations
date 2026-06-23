@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { Field } from '@/foundations/ui/field/field';
-import { Radio } from '@/foundations/ui/radio/radio';
+import { useState } from "react";
+import { Field } from "@/foundations/ui/field/field";
+import { Radio } from "@/foundations/ui/radio/radio";
 
 const plans = [
-  { value: 'free', label: 'Free', description: 'For personal projects.' },
-  { value: 'pro', label: 'Pro', description: '$12/mo. For small teams.' },
+  { value: "free", label: "Free", description: "For personal projects." },
+  { value: "pro", label: "Pro", description: "$12/mo. For small teams." },
   {
-    value: 'enterprise',
-    label: 'Enterprise',
-    description: 'Custom pricing. SSO and audit logs.',
+    value: "enterprise",
+    label: "Enterprise",
+    description: "Custom pricing. SSO and audit logs.",
   },
 ];
 
 export default function FieldRadioGroupPreview() {
-  const [plan, setPlan] = useState('free');
+  const [plan, setPlan] = useState("free");
 
   return (
     <fieldset className="flex w-72 flex-col gap-3">

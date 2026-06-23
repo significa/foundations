@@ -1,5 +1,5 @@
-import { Breadcrumb } from '@/foundations/ui/breadcrumb/breadcrumb';
-import { Menu } from '@/foundations/ui/menu/menu';
+import { Breadcrumb } from "@/foundations/ui/breadcrumb/breadcrumb";
+import { Menu } from "@/foundations/ui/menu/menu";
 
 export default function BreadcrumbCollapsedPreview() {
   return (

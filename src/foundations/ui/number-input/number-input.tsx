@@ -1,20 +1,8 @@
-import { MinusIcon, PlusIcon } from '@phosphor-icons/react/dist/ssr';
-import {
-  createContext,
-  use,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { Slot } from '@/foundations/components/slot/slot';
-import {
-  Input,
-  type InputSize,
-  type InputVariant,
-} from '@/foundations/ui/input/input';
-import { cn, cva } from '@/lib/utils/classnames';
+import { MinusIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
+import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Slot } from "@/foundations/components/slot/slot";
+import { Input, type InputSize, type InputVariant } from "@/foundations/ui/input/input";
+import { cn, cva } from "@/lib/utils/classnames";
 
 interface NumberInputContextValue {
   value: number;
@@ -36,16 +24,14 @@ const NumberInputContext = createContext<NumberInputContextValue | null>(null);
 const useNumberInputContext = () => {
   const ctx = use(NumberInputContext);
   if (!ctx) {
-    throw new Error(
-      'NumberInput components must be used within a <NumberInput />'
-    );
+    throw new Error("NumberInput components must be used within a <NumberInput />");
   }
   return ctx;
 };
 
 const stepPrecision = (step: number): number => {
   const s = String(step);
-  const i = s.indexOf('.');
+  const i = s.indexOf(".");
   return i === -1 ? 0 : s.length - i - 1;
 };
 
@@ -54,20 +40,19 @@ const round = (n: number, precision: number): number => {
   return Math.round(n * f) / f;
 };
 
-const clamp = (n: number, min: number, max: number): number =>
-  Math.min(Math.max(n, min), max);
+const clamp = (n: number, min: number, max: number): number => Math.min(Math.max(n, min), max);
 
 // Default parser: empty string is invalid (triggers revert), otherwise pass to
 // Number — which accepts integers, decimals, scientific notation, and signs.
 // Locale-aware parsing is up to the consumer via the `parse` prop.
 const defaultParse = (s: string): number => {
   const trimmed = s.trim();
-  if (trimmed === '') return Number.NaN;
+  if (trimmed === "") return Number.NaN;
   return Number(trimmed);
 };
 
 interface NumberInputProps
-  extends Omit<React.ComponentPropsWithRef<'div'>, 'onChange' | 'children'> {
+  extends Omit<React.ComponentPropsWithRef<"div">, "onChange" | "children"> {
   /** Controlled value. */
   value?: number;
   /** Default value (uncontrolled). Defaults to `min` if finite, otherwise 0. */
@@ -108,8 +93,8 @@ const NumberInput = ({
   max = Number.POSITIVE_INFINITY,
   step = 1,
   disabled = false,
-  size = 'md',
-  variant = 'default',
+  size = "md",
+  variant = "default",
   format = String,
   parse = defaultParse,
   className,
@@ -131,17 +116,17 @@ const NumberInput = ({
       onValueChange?.(committed);
       return committed;
     },
-    [isControlled, min, max, precision, onValueChange]
+    [isControlled, min, max, precision, onValueChange],
   );
 
   const increment = useCallback(
     (multiplier = 1) => setValue(value + step * multiplier),
-    [value, step, setValue]
+    [value, step, setValue],
   );
 
   const decrement = useCallback(
     (multiplier = 1) => setValue(value - step * multiplier),
-    [value, step, setValue]
+    [value, step, setValue],
   );
 
   const ctx = useMemo<NumberInputContextValue>(
@@ -158,29 +143,12 @@ const NumberInput = ({
       format,
       parse,
     }),
-    [
-      value,
-      setValue,
-      increment,
-      decrement,
-      min,
-      max,
-      step,
-      disabled,
-      size,
-      format,
-      parse,
-    ]
+    [value, setValue, increment, decrement, min, max, step, disabled, size, format, parse],
   );
 
   return (
     <NumberInputContext value={ctx}>
-      <Input.Group
-        size={size}
-        variant={variant}
-        className={className}
-        {...rest}
-      >
+      <Input.Group size={size} variant={variant} className={className} {...rest}>
         {children ?? (
           <>
             <NumberInputDecrement />
@@ -196,7 +164,7 @@ const NumberInput = ({
 interface NumberInputFieldProps
   extends Omit<
     React.ComponentPropsWithRef<typeof Input>,
-    'value' | 'defaultValue' | 'onChange' | 'type' | 'disabled'
+    "value" | "defaultValue" | "onChange" | "type" | "disabled"
   > {}
 
 const NumberInputField = ({
@@ -206,8 +174,7 @@ const NumberInputField = ({
   onKeyDown,
   ...props
 }: NumberInputFieldProps) => {
-  const { value, setValue, min, max, step, disabled, format, parse } =
-    useNumberInputContext();
+  const { value, setValue, min, max, step, disabled, format, parse } = useNumberInputContext();
 
   const [draft, setDraft] = useState<string>(() => format(value));
 
@@ -272,41 +239,41 @@ const NumberInputField = ({
         onKeyDown?.(e);
         if (e.defaultPrevented) return;
 
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
           commit();
           return;
         }
-        if (e.key === 'ArrowUp') {
+        if (e.key === "ArrowUp") {
           e.preventDefault();
           stepBy(e.shiftKey ? 10 : 1);
           return;
         }
-        if (e.key === 'ArrowDown') {
+        if (e.key === "ArrowDown") {
           e.preventDefault();
           stepBy(e.shiftKey ? -10 : -1);
           return;
         }
-        if (e.key === 'PageUp') {
+        if (e.key === "PageUp") {
           e.preventDefault();
           stepBy(10);
           return;
         }
-        if (e.key === 'PageDown') {
+        if (e.key === "PageDown") {
           e.preventDefault();
           stepBy(-10);
           return;
         }
-        if (e.key === 'Home' && Number.isFinite(min)) {
+        if (e.key === "Home" && Number.isFinite(min)) {
           e.preventDefault();
           jumpTo(min);
           return;
         }
-        if (e.key === 'End' && Number.isFinite(max)) {
+        if (e.key === "End" && Number.isFinite(max)) {
           e.preventDefault();
           jumpTo(max);
         }
       }}
-      className={cn('text-center tabular-nums', className)}
+      className={cn("text-center tabular-nums", className)}
       {...props}
     />
   );
@@ -319,33 +286,32 @@ const NumberInputField = ({
 // `rounded-{lg,xl}`. The radius scale is calibrated so each step equals
 // `--inset` (`--radius * 2`), keeping corners concentric across the dial.
 const stepperStyle = cva({
-  base: 'focus-visible:ring-(length:--ring-width) inline-flex aspect-square h-full shrink-0 cursor-pointer items-center justify-center self-stretch text-foreground-secondary outline-none ring-ring transition-colors hover:bg-foreground/5 hover:text-foreground disabled:pointer-events-none disabled:opacity-40',
+  base: "focus-visible:ring-(length:--ring-width) inline-flex aspect-square h-full shrink-0 cursor-pointer items-center justify-center self-stretch text-foreground-secondary outline-none ring-ring transition-colors hover:bg-foreground/5 hover:text-foreground disabled:pointer-events-none disabled:opacity-40",
   variants: {
     size: {
-      xs: '',
-      sm: '',
-      md: 'mx-(--inset) rounded-lg',
-      lg: 'mx-(--inset) rounded-xl',
+      xs: "",
+      sm: "",
+      md: "mx-(--inset) rounded-lg",
+      lg: "mx-(--inset) rounded-xl",
     },
     side: {
-      decrement: '',
-      increment: '',
+      decrement: "",
+      increment: "",
     },
   },
   compoundVariants: [
-    { size: 'xs', side: 'decrement', class: 'rounded-l-lg' },
-    { size: 'xs', side: 'increment', class: 'rounded-r-lg' },
-    { size: 'sm', side: 'decrement', class: 'rounded-l-lg' },
-    { size: 'sm', side: 'increment', class: 'rounded-r-lg' },
+    { size: "xs", side: "decrement", class: "rounded-l-lg" },
+    { size: "xs", side: "increment", class: "rounded-r-lg" },
+    { size: "sm", side: "decrement", class: "rounded-l-lg" },
+    { size: "sm", side: "increment", class: "rounded-r-lg" },
   ],
   defaultVariants: {
-    size: 'md',
-    side: 'decrement',
+    size: "md",
+    side: "decrement",
   },
 });
 
-interface NumberInputStepperProps
-  extends React.ComponentPropsWithRef<'button'> {
+interface NumberInputStepperProps extends React.ComponentPropsWithRef<"button"> {
   asChild?: boolean;
 }
 
@@ -355,19 +321,19 @@ const NumberInputDecrement = ({
   className,
   onClick,
   disabled: propDisabled,
-  'aria-label': ariaLabel = 'Decrement',
+  "aria-label": ariaLabel = "Decrement",
   children,
   ...props
 }: NumberInputStepperProps) => {
   const { decrement, value, min, disabled, size } = useNumberInputContext();
   const isAtMin = Number.isFinite(min) && value <= min;
   const isDisabled = propDisabled || disabled || isAtMin;
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
       ref={ref}
-      type={asChild ? undefined : 'button'}
+      type={asChild ? undefined : "button"}
       aria-label={ariaLabel}
       disabled={isDisabled}
       onClick={(e) => {
@@ -375,10 +341,7 @@ const NumberInputDecrement = ({
         if (e.defaultPrevented) return;
         decrement();
       }}
-      className={cn(
-        !asChild && stepperStyle({ size, side: 'decrement' }),
-        className
-      )}
+      className={cn(!asChild && stepperStyle({ size, side: "decrement" }), className)}
       {...props}
     >
       {children ?? <MinusIcon className="size-4" />}
@@ -392,19 +355,19 @@ const NumberInputIncrement = ({
   className,
   onClick,
   disabled: propDisabled,
-  'aria-label': ariaLabel = 'Increment',
+  "aria-label": ariaLabel = "Increment",
   children,
   ...props
 }: NumberInputStepperProps) => {
   const { increment, value, max, disabled, size } = useNumberInputContext();
   const isAtMax = Number.isFinite(max) && value >= max;
   const isDisabled = propDisabled || disabled || isAtMax;
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
       ref={ref}
-      type={asChild ? undefined : 'button'}
+      type={asChild ? undefined : "button"}
       aria-label={ariaLabel}
       disabled={isDisabled}
       onClick={(e) => {
@@ -412,10 +375,7 @@ const NumberInputIncrement = ({
         if (e.defaultPrevented) return;
         increment();
       }}
-      className={cn(
-        !asChild && stepperStyle({ size, side: 'increment' }),
-        className
-      )}
+      className={cn(!asChild && stepperStyle({ size, side: "increment" }), className)}
       {...props}
     >
       {children ?? <PlusIcon className="size-4" />}

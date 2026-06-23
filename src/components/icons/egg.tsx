@@ -1,4 +1,4 @@
-const Egg = (props: React.ComponentProps<'svg'>) => {
+const Egg = (props: React.ComponentProps<"svg">) => {
   return (
     <svg width="1em" height="1em" viewBox="0 0 29 29" fill="none" {...props}>
       <title>egg</title>

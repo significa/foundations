@@ -1,43 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { Listbox } from '@/foundations/ui/listbox/listbox';
+import { Listbox } from "@/foundations/ui/listbox/listbox";
 
 const FRUITS = [
-  'Apple',
-  'Apricot',
-  'Avocado',
-  'Banana',
-  'Blackberry',
-  'Blueberry',
-  'Cherry',
-  'Coconut',
-  'Date',
-  'Dragon Fruit',
-  'Elderberry',
-  'Fig',
-  'Grape',
-  'Grapefruit',
-  'Guava',
-  'Honeydew',
-  'Kiwi',
-  'Lemon',
-  'Lime',
-  'Mango',
-  'Nectarine',
-  'Orange',
-  'Papaya',
-  'Passion Fruit',
-  'Peach',
-  'Pear',
-  'Persimmon',
-  'Pineapple',
-  'Plum',
-  'Pomegranate',
-  'Quince',
-  'Raspberry',
-  'Strawberry',
-  'Tangerine',
-  'Watermelon',
+  "Apple",
+  "Apricot",
+  "Avocado",
+  "Banana",
+  "Blackberry",
+  "Blueberry",
+  "Cherry",
+  "Coconut",
+  "Date",
+  "Dragon Fruit",
+  "Elderberry",
+  "Fig",
+  "Grape",
+  "Grapefruit",
+  "Guava",
+  "Honeydew",
+  "Kiwi",
+  "Lemon",
+  "Lime",
+  "Mango",
+  "Nectarine",
+  "Orange",
+  "Papaya",
+  "Passion Fruit",
+  "Peach",
+  "Pear",
+  "Persimmon",
+  "Pineapple",
+  "Plum",
+  "Pomegranate",
+  "Quince",
+  "Raspberry",
+  "Strawberry",
+  "Tangerine",
+  "Watermelon",
 ];
 
 const fakeSearch = (query: string): Promise<string[]> =>
@@ -49,7 +49,7 @@ const fakeSearch = (query: string): Promise<string[]> =>
   });
 
 export default function ListboxAsyncPreview() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [results, setResults] = useState<string[]>(FRUITS);
   const [isLoading, setIsLoading] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -80,9 +80,7 @@ export default function ListboxAsyncPreview() {
               {fruit}
             </Listbox.Option>
           ))}
-          {!isLoading && results.length === 0 && (
-            <Listbox.Empty>No results</Listbox.Empty>
-          )}
+          {!isLoading && results.length === 0 && <Listbox.Empty>No results</Listbox.Empty>}
         </Listbox.Options>
       </Listbox>
     </div>

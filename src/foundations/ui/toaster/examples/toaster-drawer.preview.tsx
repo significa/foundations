@@ -1,6 +1,6 @@
-import { Button } from '@/foundations/ui/button/button';
-import { Drawer } from '@/foundations/ui/drawer/drawer';
-import { toast } from '@/foundations/ui/toaster/toaster';
+import { Button } from "@/foundations/ui/button/button";
+import { Drawer } from "@/foundations/ui/drawer/drawer";
+import { toast } from "@/foundations/ui/toaster/toaster";
 
 const ToasterDrawerPreview = () => {
   return (
@@ -11,7 +11,7 @@ const ToasterDrawerPreview = () => {
         variant="outline"
         onClick={() => {
           toast({
-            title: 'This is a toast notification!',
+            title: "This is a toast notification!",
           });
         }}
       >
@@ -33,7 +33,7 @@ const ToasterDrawerPreview = () => {
               variant="outline"
               onClick={() => {
                 toast({
-                  title: 'This is a toast notification!',
+                  title: "This is a toast notification!",
                 });
               }}
             >

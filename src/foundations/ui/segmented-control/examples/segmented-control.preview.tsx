@@ -1,10 +1,6 @@
-import {
-  CalendarIcon,
-  ListIcon,
-  SquaresFourIcon,
-} from '@phosphor-icons/react/dist/ssr';
+import { CalendarIcon, ListIcon, SquaresFourIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { SegmentedControl } from '@/foundations/ui/segmented-control/segmented-control';
+import { SegmentedControl } from "@/foundations/ui/segmented-control/segmented-control";
 
 export default function SegmentedControlPreview() {
   return (

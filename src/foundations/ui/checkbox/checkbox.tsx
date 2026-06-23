@@ -1,35 +1,29 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
-import { cva } from '@/lib/utils/classnames';
+import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { cva } from "@/lib/utils/classnames";
 
-interface CheckboxProps
-  extends Omit<React.ComponentPropsWithRef<'input'>, 'type'> {
+interface CheckboxProps extends Omit<React.ComponentPropsWithRef<"input">, "type"> {
   indeterminate?: boolean;
 }
 
 const checkboxStyle = cva({
   base: [
-    'focus-visible:ring-(length:--ring-width) relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-sm border border-border bg-background shadow-xs outline-none ring-ring transition enabled:cursor-pointer enabled:not-checked:hover:border-mix-border/8',
+    "focus-visible:ring-(length:--ring-width) relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-sm border border-border bg-background shadow-xs outline-none ring-ring transition enabled:cursor-pointer enabled:not-checked:hover:border-mix-border/8",
     // checked
-    'checked:enabled:hover:mix-with-accent-foreground checked:enabled:border-accent checked:enabled:bg-accent checked:enabled:hover:border-mix-accent/8',
+    "checked:enabled:hover:mix-with-accent-foreground checked:enabled:border-accent checked:enabled:bg-accent checked:enabled:hover:border-mix-accent/8",
     // indeterminate
-    'indeterminate:enabled:hover:mix-with-accent-foreground indeterminate:enabled:border-accent indeterminate:enabled:bg-accent indeterminate:enabled:hover:border-mix-accent/8',
+    "indeterminate:enabled:hover:mix-with-accent-foreground indeterminate:enabled:border-accent indeterminate:enabled:bg-accent indeterminate:enabled:hover:border-mix-accent/8",
     // checked checkmark
     "before:absolute before:text-accent-foreground checked:before:font-bold checked:before:text-xs checked:before:content-['✓']",
     // indeterminate dash
-    'indeterminate:before:h-0.5 indeterminate:before:w-1.5 indeterminate:before:bg-accent-foreground',
+    "indeterminate:before:h-0.5 indeterminate:before:w-1.5 indeterminate:before:bg-accent-foreground",
     // disabled
-    'disabled:cursor-not-allowed disabled:border-foreground/5 disabled:bg-foreground/10 disabled:indeterminate:before:bg-foreground/50 disabled:checked:before:text-foreground/50',
+    "disabled:cursor-not-allowed disabled:border-foreground/5 disabled:bg-foreground/10 disabled:indeterminate:before:bg-foreground/50 disabled:checked:before:text-foreground/50",
   ],
 });
 
-const Checkbox = ({
-  ref,
-  indeterminate,
-  className,
-  ...props
-}: CheckboxProps) => {
+const Checkbox = ({ ref, indeterminate, className, ...props }: CheckboxProps) => {
   const internalRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

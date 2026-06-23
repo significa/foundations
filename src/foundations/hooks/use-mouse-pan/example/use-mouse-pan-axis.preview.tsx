@@ -1,5 +1,5 @@
-import { useMousePan } from '@/foundations/hooks/use-mouse-pan/use-mouse-pan';
-import { cn } from '@/lib/utils/classnames';
+import { useMousePan } from "@/foundations/hooks/use-mouse-pan/use-mouse-pan";
+import { cn } from "@/lib/utils/classnames";
 
 const UseMousePanBothPreview = () => {
   const { ref } = useMousePan<HTMLDivElement>();
@@ -14,8 +14,8 @@ const UseMousePanBothPreview = () => {
           <li
             key={index}
             className={cn(
-              'no-select size-24 snap-center bg-foreground-secondary/10',
-              index % 2 === 0 && 'bg-foreground-secondary/30'
+              "no-select size-24 snap-center bg-foreground-secondary/10",
+              index % 2 === 0 && "bg-foreground-secondary/30",
             )}
           />
         ))}

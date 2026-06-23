@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Button } from '@/foundations/ui/button/button';
+import { Button } from "@/foundations/ui/button/button";
 
-import { Sequence } from '../sequence';
-import { eras as CONTENT } from './content';
+import { Sequence } from "../sequence";
+import { eras as CONTENT } from "./content";
 
 const SequencePreview = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -18,10 +18,7 @@ const SequencePreview = () => {
       <Sequence.Items className="flex gap-2 overflow-y-auto py-2">
         {CONTENT.map((item, index) => (
           <Sequence.Item key={index} asChild>
-            <Button
-              size="sm"
-              variant={selectedIndex === index ? 'primary' : 'outline'}
-            >
+            <Button size="sm" variant={selectedIndex === index ? "primary" : "outline"}>
               <item.icon size={16} className="-ml-1 shrink-0" />
               {item.title}
             </Button>
@@ -35,9 +32,7 @@ const SequencePreview = () => {
               <div className="font-mono text-foreground-secondary text-sm uppercase">
                 {item.title}
               </div>
-              <div className="text-pretty pr-8 font-medium text-xl">
-                {item.description}
-              </div>
+              <div className="text-pretty pr-8 font-medium text-xl">{item.description}</div>
             </div>
           </Sequence.Panel>
         ))}

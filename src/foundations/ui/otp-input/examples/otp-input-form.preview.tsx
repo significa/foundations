@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Button } from '@/foundations/ui/button/button';
-import { OTPInput } from '@/foundations/ui/otp-input/otp-input';
+import { Button } from "@/foundations/ui/button/button";
+import { OTPInput } from "@/foundations/ui/otp-input/otp-input";
 
 const LENGTH = 6;
 
 export default function OTPInputFormExample() {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState<string | null>(null);
   const [invalid, setInvalid] = useState(false);
 
@@ -17,7 +17,7 @@ export default function OTPInputFormExample() {
       return;
     }
     const data = new FormData(e.currentTarget);
-    setSubmitted(data.get('otp') as string);
+    setSubmitted(data.get("otp") as string);
   }
 
   function handleChange(v: string) {

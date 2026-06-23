@@ -1,4 +1,4 @@
-import { Avatar } from '@/foundations/ui/avatar/avatar';
+import { Avatar } from "@/foundations/ui/avatar/avatar";
 
 export default function AvatarGroupSquarePreview() {
   return (

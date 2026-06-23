@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from "motion/react";
 import {
   Children,
   createContext,
@@ -9,10 +9,10 @@ import {
   useLayoutEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
-import { Slot } from '@/foundations/components/slot/slot';
-import { cn } from '@/lib/utils/classnames';
+import { Slot } from "@/foundations/components/slot/slot";
+import { cn } from "@/lib/utils/classnames";
 
 let segmentedControlInstanceCounter = 0;
 
@@ -26,20 +26,16 @@ interface SegmentedControlContextValue {
   registerSegment: (id: string) => () => void;
 }
 
-const SegmentedControlContext =
-  createContext<SegmentedControlContextValue | null>(null);
+const SegmentedControlContext = createContext<SegmentedControlContextValue | null>(null);
 
 const useSegmentedControlContext = () => {
   const context = use(SegmentedControlContext);
   if (!context)
-    throw new Error(
-      'SegmentedControlContext must be used within a SegmentedControl component'
-    );
+    throw new Error("SegmentedControlContext must be used within a SegmentedControl component");
   return context;
 };
 
-interface SegmentedControlProps
-  extends Omit<React.ComponentPropsWithRef<'div'>, 'onChange'> {
+interface SegmentedControlProps extends Omit<React.ComponentPropsWithRef<"div">, "onChange"> {
   defaultValue?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -56,12 +52,10 @@ const SegmentedControl = ({
   ...props
 }: SegmentedControlProps) => {
   const reactId = useId();
-  const [id] = useState(
-    () => `${reactId}-${++segmentedControlInstanceCounter}`
+  const [id] = useState(() => `${reactId}-${++segmentedControlInstanceCounter}`);
+  const [internalSelectedValue, setInternalSelectedValue] = useState<string | undefined>(
+    defaultValue,
   );
-  const [internalSelectedValue, setInternalSelectedValue] = useState<
-    string | undefined
-  >(defaultValue);
   const [segments, setSegments] = useState<string[]>([]);
 
   const explicitSelected = selectedValueProp ?? internalSelectedValue;
@@ -75,10 +69,7 @@ const SegmentedControl = ({
     let first: string | undefined;
     Children.forEach(children, (child) => {
       if (first !== undefined) return;
-      if (
-        isValidElement<{ value?: unknown }>(child) &&
-        typeof child.props.value === 'string'
-      ) {
+      if (isValidElement<{ value?: unknown }>(child) && typeof child.props.value === "string") {
         first = child.props.value;
       }
     });
@@ -96,21 +87,19 @@ const SegmentedControl = ({
       setInternalSelectedValue(value);
       onChangeProp?.(value);
 
-      document
-        .getElementById(getItemId(id, value))
-        ?.focus({ preventScroll: true });
+      document.getElementById(getItemId(id, value))?.focus({ preventScroll: true });
     },
-    [id, onChangeProp]
+    [id, onChangeProp],
   );
 
   const next = useCallback(() => {
-    const index = segments.indexOf(selectedSegment ?? '');
+    const index = segments.indexOf(selectedSegment ?? "");
     const nextSegment = segments[(index + 1) % segments.length];
     if (nextSegment) setSelectedSegment(nextSegment);
   }, [segments, selectedSegment, setSelectedSegment]);
 
   const previous = useCallback(() => {
-    const index = segments.indexOf(selectedSegment ?? '');
+    const index = segments.indexOf(selectedSegment ?? "");
     const prevSegment = segments[index <= 0 ? segments.length - 1 : index - 1];
     if (prevSegment) setSelectedSegment(prevSegment);
   }, [segments, selectedSegment, setSelectedSegment]);
@@ -133,25 +122,14 @@ const SegmentedControl = ({
       previous,
       registerSegment,
     }),
-    [
-      id,
-      segments,
-      selectedSegment,
-      setSelectedSegment,
-      next,
-      previous,
-      registerSegment,
-    ]
+    [id, segments, selectedSegment, setSelectedSegment, next, previous, registerSegment],
   );
 
   return (
     <SegmentedControlContext value={ctx}>
       <div
         role="radiogroup"
-        className={cn(
-          'flex rounded-2xl bg-background-secondary p-1',
-          className
-        )}
+        className={cn("flex rounded-2xl bg-background-secondary p-1", className)}
         {...props}
       >
         {children}
@@ -161,17 +139,13 @@ const SegmentedControl = ({
 };
 
 interface SegmentedControlItemProps
-  extends Omit<
-    React.ComponentPropsWithRef<'button'>,
-    'id' | 'type' | 'disabled'
-  > {
+  extends Omit<React.ComponentPropsWithRef<"button">, "id" | "type" | "disabled"> {
   children: React.ReactNode;
   asChild?: boolean;
   value: string;
 }
 
-const getItemId = (instanceId: string, value: string) =>
-  `${instanceId}-segment-${value}`;
+const getItemId = (instanceId: string, value: string) => `${instanceId}-segment-${value}`;
 
 const SegmentedControlItem = ({
   children,
@@ -191,7 +165,7 @@ const SegmentedControlItem = ({
     previous,
   } = useSegmentedControlContext();
 
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? Slot : "button";
 
   useLayoutEffect(() => {
     return registerSegment(value);
@@ -199,15 +173,13 @@ const SegmentedControlItem = ({
 
   const isSelected = selectedSegment === value;
 
-  const handleKeyboardNavigation = (
-    e: React.KeyboardEvent<HTMLButtonElement>
-  ) => {
+  const handleKeyboardNavigation = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     const keyOrientationMap = {
-      next: 'ArrowRight',
-      prev: 'ArrowLeft',
+      next: "ArrowRight",
+      prev: "ArrowLeft",
     };
 
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       setSelectedSegment(value);
     }
 
@@ -227,9 +199,9 @@ const SegmentedControlItem = ({
       id={getItemId(segmentsId, value)}
       type="button"
       className={cn(
-        'relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground',
-        '[&>*:not([data-segment-indicator])]:z-10',
-        className
+        "relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground",
+        "[&>*:not([data-segment-indicator])]:z-10",
+        className,
       )}
       role="radio"
       aria-checked={isSelected}
@@ -252,14 +224,14 @@ const SegmentedControlItem = ({
       value={value}
       {...props}
     >
-      {typeof children === 'string' ? <span>{children}</span> : children}
+      {typeof children === "string" ? <span>{children}</span> : children}
       {isSelected && (
         <motion.span
           data-segment-indicator="true"
           layoutId={segmentsId}
           aria-hidden="true"
           className="absolute inset-0 z-0 rounded-xl bg-background"
-          transition={{ type: 'spring', duration: 0.3, bounce: 0.2 }}
+          transition={{ type: "spring", duration: 0.3, bounce: 0.2 }}
         />
       )}
     </Comp>

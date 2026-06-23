@@ -1,27 +1,27 @@
-import { FireIcon, LeafIcon, PizzaIcon } from '@phosphor-icons/react/dist/ssr';
+import { FireIcon, LeafIcon, PizzaIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Stack } from '@/foundations/components/stack/stack';
-import { Divider } from '@/foundations/ui/divider/divider';
-import { cn } from '@/lib/utils/classnames';
+import { Stack } from "@/foundations/components/stack/stack";
+import { Divider } from "@/foundations/ui/divider/divider";
+import { cn } from "@/lib/utils/classnames";
 
 const items = [
   {
-    title: 'Pizza Toppings',
+    title: "Pizza Toppings",
     icon: PizzaIcon,
     content:
-      'The perfect pizza starts with quality ingredients. From fresh mozzarella to hand-crushed tomatoes, every topping should be carefully selected and balanced.',
+      "The perfect pizza starts with quality ingredients. From fresh mozzarella to hand-crushed tomatoes, every topping should be carefully selected and balanced.",
   },
   {
-    title: 'Dough Secrets',
+    title: "Dough Secrets",
     icon: LeafIcon,
     content:
-      'The key to great pizza dough is patience. Let it ferment slowly in the fridge for 24-72 hours to develop complex flavors and the perfect texture.',
+      "The key to great pizza dough is patience. Let it ferment slowly in the fridge for 24-72 hours to develop complex flavors and the perfect texture.",
   },
   {
-    title: 'Baking Tips',
+    title: "Baking Tips",
     icon: FireIcon,
     content:
-      'A blazing hot oven is crucial for pizza perfection. Preheat your oven to its highest setting with a pizza stone inside for at least an hour before baking.',
+      "A blazing hot oven is crucial for pizza perfection. Preheat your oven to its highest setting with a pizza stone inside for at least an hour before baking.",
   },
 ];
 
@@ -40,9 +40,7 @@ const StackVsStickyPreview = () => {
                 </div>
                 <Divider />
               </Stack.Header>
-              <div className="pt-4 pb-12 text-foreground-secondary text-md">
-                {item.content}
-              </div>
+              <div className="pt-4 pb-12 text-foreground-secondary text-md">{item.content}</div>
             </Stack.Item>
           ))}
         </Stack>
@@ -55,10 +53,10 @@ const StackVsStickyPreview = () => {
             <div
               key={index}
               className={cn(
-                'sticky top-0 bg-background',
-                index === 0 && 'top-0',
-                index === 1 && 'top-12',
-                index === 2 && 'top-24'
+                "sticky top-0 bg-background",
+                index === 0 && "top-0",
+                index === 1 && "top-12",
+                index === 2 && "top-24",
               )}
             >
               <div className="h-12 bg-background px-4">
@@ -68,9 +66,7 @@ const StackVsStickyPreview = () => {
                 </div>
                 <Divider />
               </div>
-              <div className="pt-4 pb-12 text-foreground-secondary text-md">
-                {item.content}
-              </div>
+              <div className="pt-4 pb-12 text-foreground-secondary text-md">{item.content}</div>
             </div>
           ))}
         </div>

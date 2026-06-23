@@ -1,14 +1,14 @@
-import { Kbd } from '@/foundations/ui/kbd/kbd';
+import { Kbd } from "@/foundations/ui/kbd/kbd";
 
 export default function KbdInlinePreview() {
   return (
     <p className="text-foreground-secondary text-sm">
-      Press{' '}
+      Press{" "}
       <Kbd.Group>
         <Kbd>⇧</Kbd>
         <Kbd>⌘</Kbd>
         <Kbd>P</Kbd>
-      </Kbd.Group>{' '}
+      </Kbd.Group>{" "}
       to open the command palette, or <Kbd>Esc</Kbd> to close it.
     </p>
   );

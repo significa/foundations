@@ -3,29 +3,25 @@ import {
   ArrowLeftIcon,
   PencilSimpleIcon,
   SlidersHorizontalIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CopyButton } from '@/components/copy-button';
-import { IconButton } from '@/foundations/ui/button/button';
-import { Popover } from '@/foundations/ui/popover/popover';
-import { Slider } from '@/foundations/ui/slider/slider';
-import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
-import {
-  DEFAULT_PAIRING,
-  findPairing,
-  PAIRINGS,
-  type Pairing,
-} from './pairings';
-import { SchemeEditor } from './scheme-editor';
+} from "@phosphor-icons/react/dist/ssr";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { CopyButton } from "@/components/copy-button";
+import { IconButton } from "@/foundations/ui/button/button";
+import { Popover } from "@/foundations/ui/popover/popover";
+import { Slider } from "@/foundations/ui/slider/slider";
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import { DEFAULT_PAIRING, findPairing, PAIRINGS, type Pairing } from "./pairings";
+import { SchemeEditor } from "./scheme-editor";
 import {
   COLOR_TOKENS,
   type ColorToken,
+  colorFor,
   DEFAULT_SCHEME,
   DEFAULT_SCHEME_ID,
   SCHEMES,
   type Scheme,
   type TokenValues,
-} from './schemes';
+} from "./schemes";
 import {
   EMPTY_FONTS,
   FONT_SLOTS,
@@ -38,56 +34,51 @@ import {
   type StoredFont,
   type StoredFonts,
   writeStored,
-} from './storage';
-import { TypographyEditor } from './typography-editor';
-import { fallbackFor, loadGoogleFont } from './use-fonts-catalog';
+} from "./storage";
+import { TypographyEditor } from "./typography-editor";
+import { fallbackFor, loadGoogleFont } from "./use-fonts-catalog";
 
 const RADIUS_MAX = 4;
 const RING_MIN = 2;
 const RING_MAX = 6;
 
-type View = 'presets' | 'edit-colors' | 'edit-fonts';
+type View = "presets" | "edit-colors" | "edit-fonts";
 
 const setRoot = (prop: string, value: string) =>
   document.documentElement.style.setProperty(prop, value);
 
-const removeRoot = (prop: string) =>
-  document.documentElement.style.removeProperty(prop);
+const removeRoot = (prop: string) => document.documentElement.style.removeProperty(prop);
 
 const tokenVar = (token: ColorToken) => `--color-${token}`;
 
-const lightDark = ({ light, dark }: TokenValues) =>
-  `light-dark(${light}, ${dark})`;
+const lightDark = ({ light, dark }: TokenValues) => `light-dark(${light}, ${dark})`;
 
-const valuesEqual = (a: TokenValues, b: TokenValues) =>
-  a.light === b.light && a.dark === b.dark;
+const valuesEqual = (a: TokenValues, b: TokenValues) => a.light === b.light && a.dark === b.dark;
 
 const resolveToken = (
   scheme: Scheme,
   overrides: Partial<Record<ColorToken, TokenValues>>,
-  token: ColorToken
-): TokenValues => overrides[token] ?? scheme.colors[token];
+  token: ColorToken,
+): TokenValues => overrides[token] ?? colorFor(scheme, token);
 
-const fontFamilyValue = (font: StoredFont) =>
-  `'${font.family}', ${fallbackFor(font.category)}`;
+const fontFamilyValue = (font: StoredFont) => `'${font.family}', ${fallbackFor(font.category)}`;
 
 const DSConfig = () => {
   const stored = readStored();
-  const initialScheme =
-    SCHEMES.find((s) => s.id === stored.schemeId) ?? DEFAULT_SCHEME;
+  const initialScheme = SCHEMES.find((s) => s.id === stored.schemeId) ?? DEFAULT_SCHEME;
 
   const [schemeId, setSchemeId] = useState(initialScheme.id);
-  const [overrides, setOverrides] = useState<
-    Partial<Record<ColorToken, TokenValues>>
-  >(stored.overrides);
+  const [overrides, setOverrides] = useState<Partial<Record<ColorToken, TokenValues>>>(
+    stored.overrides,
+  );
   const [radiusStep, setRadiusStep] = useState(stored.radiusStep);
   const [ringWidth, setRingWidth] = useState(stored.ringWidth);
   const [fonts, setFonts] = useState<StoredFonts>(stored.fonts);
-  const [view, setView] = useState<View>('presets');
+  const [view, setView] = useState<View>("presets");
 
   const scheme = useMemo(
     () => SCHEMES.find((s) => s.id === schemeId) ?? DEFAULT_SCHEME,
-    [schemeId]
+    [schemeId],
   );
 
   const activePairing = useMemo(() => findPairing(fonts), [fonts]);
@@ -104,14 +95,14 @@ const DSConfig = () => {
       }
     }
     if (radiusStep !== RADIUS_DEFAULT) {
-      setRoot('--radius', `${radiusStep * RADIUS_STEP_REM}rem`);
+      setRoot("--radius", `${radiusStep * RADIUS_STEP_REM}rem`);
     } else {
-      removeRoot('--radius');
+      removeRoot("--radius");
     }
     if (ringWidth !== RING_DEFAULT) {
-      setRoot('--ring-width', `${ringWidth}px`);
+      setRoot("--ring-width", `${ringWidth}px`);
     } else {
-      removeRoot('--ring-width');
+      removeRoot("--ring-width");
     }
     for (const slot of FONT_SLOTS) {
       const font = fonts[slot];
@@ -131,31 +122,26 @@ const DSConfig = () => {
       }
     };
     ensureFontsLoaded();
-    document.addEventListener('astro:after-swap', ensureFontsLoaded);
-    return () =>
-      document.removeEventListener('astro:after-swap', ensureFontsLoaded);
+    document.addEventListener("astro:after-swap", ensureFontsLoaded);
+    return () => document.removeEventListener("astro:after-swap", ensureFontsLoaded);
   }, [fonts]);
 
   useEffect(() => {
     apply();
-    document.addEventListener('astro:after-swap', apply);
-    return () => document.removeEventListener('astro:after-swap', apply);
+    document.addEventListener("astro:after-swap", apply);
+    return () => document.removeEventListener("astro:after-swap", apply);
   }, [apply]);
 
   useEffect(() => {
     writeStored({ schemeId, overrides, radiusStep, ringWidth, fonts });
   }, [schemeId, overrides, radiusStep, ringWidth, fonts]);
 
-  const handleTokenChange = (
-    token: ColorToken,
-    side: 'light' | 'dark',
-    value: string
-  ) => {
+  const handleTokenChange = (token: ColorToken, side: "light" | "dark", value: string) => {
     setOverrides((prev) => {
-      const current = prev[token] ?? scheme.colors[token];
+      const current = prev[token] ?? colorFor(scheme, token);
       const updated: TokenValues = { ...current, [side]: value };
       // If the override now matches the scheme's value for this token, drop it.
-      if (valuesEqual(updated, scheme.colors[token])) {
+      if (valuesEqual(updated, colorFor(scheme, token))) {
         const { [token]: _, ...rest } = prev;
         return rest;
       }
@@ -192,7 +178,7 @@ const DSConfig = () => {
     const tokenLines: string[] = [];
     for (const token of COLOR_TOKENS) {
       const current = resolveToken(scheme, overrides, token);
-      if (valuesEqual(current, DEFAULT_SCHEME.colors[token])) continue;
+      if (valuesEqual(current, colorFor(DEFAULT_SCHEME, token))) continue;
       tokenLines.push(`  ${tokenVar(token)}: ${lightDark(current)};`);
     }
     if (radiusStep !== RADIUS_DEFAULT) {
@@ -207,38 +193,34 @@ const DSConfig = () => {
       tokenLines.push(`  ${FONT_VARS[slot]}: ${fontFamilyValue(font)};`);
     }
 
-    if (tokenLines.length === 0) return '/* No customizations */';
-    return `:root {\n${tokenLines.join('\n')}\n}`;
+    if (tokenLines.length === 0) return "/* No customizations */";
+    return `:root {\n${tokenLines.join("\n")}\n}`;
   };
 
   const headerLabel: Record<View, string> = {
-    presets: 'Design system',
-    'edit-colors': 'Edit colors',
-    'edit-fonts': 'Edit fonts',
+    presets: "Design system",
+    "edit-colors": "Edit colors",
+    "edit-fonts": "Edit fonts",
   };
 
   const headerReset: Record<View, () => void> = {
     presets: handleReset,
-    'edit-colors': handleResetOverrides,
-    'edit-fonts': handleResetFonts,
+    "edit-colors": handleResetOverrides,
+    "edit-fonts": handleResetFonts,
   };
 
   const headerResetLabel: Record<View, string> = {
-    presets: 'Reset to defaults',
-    'edit-colors': 'Reset overrides',
-    'edit-fonts': 'Reset fonts',
+    presets: "Reset to defaults",
+    "edit-colors": "Reset overrides",
+    "edit-fonts": "Reset fonts",
   };
 
-  const isEditing = view !== 'presets';
+  const isEditing = view !== "presets";
 
   return (
     <Popover placement="bottom-end">
       <Popover.Trigger asChild>
-        <IconButton
-          variant="ghost"
-          size="sm"
-          aria-label="Design system configuration"
-        >
+        <IconButton variant="ghost" size="sm" aria-label="Design system configuration">
           <SlidersHorizontalIcon />
         </IconButton>
       </Popover.Trigger>
@@ -249,14 +231,12 @@ const DSConfig = () => {
               variant="ghost"
               size="xs"
               aria-label="Back to presets"
-              onClick={() => setView('presets')}
+              onClick={() => setView("presets")}
             >
               <ArrowLeftIcon />
             </IconButton>
           )}
-          <span className="flex-1 font-medium text-sm">
-            {headerLabel[view]}
-          </span>
+          <span className="flex-1 font-medium text-sm">{headerLabel[view]}</span>
           <IconButton
             variant="ghost"
             size="xs"
@@ -268,19 +248,15 @@ const DSConfig = () => {
           <CopyButton content={generateCSSOverrides()} />
         </div>
 
-        {view === 'edit-colors' && (
-          <SchemeEditor
-            scheme={scheme}
-            overrides={overrides}
-            onTokenChange={handleTokenChange}
-          />
+        {view === "edit-colors" && (
+          <SchemeEditor scheme={scheme} overrides={overrides} onTokenChange={handleTokenChange} />
         )}
 
-        {view === 'edit-fonts' && (
+        {view === "edit-fonts" && (
           <TypographyEditor fonts={fonts} onFontChange={handleFontChange} />
         )}
 
-        {view === 'presets' && (
+        {view === "presets" && (
           <div className="flex flex-col divide-y divide-border">
             <div className="flex flex-col gap-2 p-3">
               <div className="flex items-center justify-between">
@@ -289,7 +265,7 @@ const DSConfig = () => {
                   variant="ghost"
                   size="xs"
                   aria-label="Edit colors"
-                  onClick={() => setView('edit-colors')}
+                  onClick={() => setView("edit-colors")}
                 >
                   <PencilSimpleIcon />
                 </IconButton>
@@ -322,7 +298,7 @@ const DSConfig = () => {
                   variant="ghost"
                   size="xs"
                   aria-label="Edit fonts"
-                  onClick={() => setView('edit-fonts')}
+                  onClick={() => setView("edit-fonts")}
                 >
                   <PencilSimpleIcon />
                 </IconButton>
@@ -362,10 +338,7 @@ const DSConfig = () => {
                 <Slider.Track>
                   <Slider.Range />
                 </Slider.Track>
-                <Slider.Thumb
-                  aria-label="Radius"
-                  aria-valuetext={`${radiusStep} pixels`}
-                />
+                <Slider.Thumb aria-label="Radius" aria-valuetext={`${radiusStep} pixels`} />
               </Slider>
             </div>
 
@@ -407,10 +380,10 @@ type PairingTileProps = {
 };
 
 const SLOT_LABELS: Record<FontSlot, string> = {
-  heading: 'Heading',
-  body: 'Body',
-  ui: 'UI',
-  mono: 'Mono',
+  heading: "Heading",
+  body: "Body",
+  ui: "UI",
+  mono: "Mono",
 };
 
 const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
@@ -423,10 +396,8 @@ const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
     if (uiFont) loadGoogleFont(uiFont.family);
   }, [headingFont, uiFont]);
 
-  const headingFamily = headingFont
-    ? fontFamilyValue(headingFont)
-    : 'var(--font-heading)';
-  const uiFamily = uiFont ? fontFamilyValue(uiFont) : 'var(--font-ui)';
+  const headingFamily = headingFont ? fontFamilyValue(headingFont) : "var(--font-heading)";
+  const uiFamily = uiFont ? fontFamilyValue(uiFont) : "var(--font-ui)";
 
   const setSlots = FONT_SLOTS.filter((slot) => pairing.fonts[slot] !== null);
   const isSystem = pairing.id === DEFAULT_PAIRING.id;
@@ -467,14 +438,9 @@ const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
               const f = pairing.fonts[slot];
               if (!f) return null;
               return (
-                <div
-                  key={slot}
-                  className="flex items-center justify-between gap-4"
-                >
+                <div key={slot} className="flex items-center justify-between gap-4">
                   <span className="text-background">{f.family}</span>
-                  <span className="text-right text-background/50">
-                    {SLOT_LABELS[slot]}{' '}
-                  </span>
+                  <span className="text-right text-background/50">{SLOT_LABELS[slot]} </span>
                 </div>
               );
             })}

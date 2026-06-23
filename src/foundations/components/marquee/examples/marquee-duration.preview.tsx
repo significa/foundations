@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Egg } from '@/components/icons/egg';
-import { Marquee } from '@/foundations/components/marquee/marquee';
+import { Egg } from "@/components/icons/egg";
+import { Marquee } from "@/foundations/components/marquee/marquee";
 
 const MarqueeDurationExample = () => {
   const [duration, setDuration] = useState(1000);
@@ -9,10 +9,7 @@ const MarqueeDurationExample = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <label
-          htmlFor="speed"
-          className="whitespace-nowrap font-medium text-base"
-        >
+        <label htmlFor="speed" className="whitespace-nowrap font-medium text-base">
           Duration <span className="text-foreground-secondary">(ms)</span>
         </label>
         <input

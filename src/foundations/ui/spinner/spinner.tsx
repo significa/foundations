@@ -1,37 +1,32 @@
-import type { VariantProps } from 'cva';
-import { useEffect, useState } from 'react';
+import type { VariantProps } from "cva";
+import { useEffect, useState } from "react";
 
-import { cva } from '@/lib/utils/classnames';
+import { cva } from "@/lib/utils/classnames";
 
-type SpinnerSize = 'xs' | 'sm' | 'md' | 'lg';
-type SpinnerVariant = 'ring' | 'dots' | 'bars' | 'frames';
+type SpinnerSize = "xs" | "sm" | "md" | "lg";
+type SpinnerVariant = "ring" | "dots" | "bars" | "frames";
 
-interface BaseSpinnerProps extends React.ComponentPropsWithRef<'div'> {
+interface BaseSpinnerProps extends React.ComponentPropsWithRef<"div"> {
   size?: SpinnerSize;
 }
 
 const ringStyle = cva({
   base: [
-    'relative animate-spin',
-    'before:absolute before:top-0 before:left-0 before:block before:size-full before:rounded-full before:border-current before:opacity-40',
-    'after:top-0 after:left-0 after:block after:size-full after:rounded-full after:border-transparent after:border-t-current after:border-r-current',
+    "relative animate-spin",
+    "before:absolute before:top-0 before:left-0 before:block before:size-full before:rounded-full before:border-current before:opacity-40",
+    "after:top-0 after:left-0 after:block after:size-full after:rounded-full after:border-transparent after:border-t-current after:border-r-current",
   ],
   variants: {
     size: {
-      xs: 'size-2 before:border after:border',
-      sm: 'size-3 before:border after:border',
-      md: 'size-4 before:border-2 after:border-2',
-      lg: 'size-5 before:border-2 after:border-2',
+      xs: "size-2 before:border after:border",
+      sm: "size-3 before:border after:border",
+      md: "size-4 before:border-2 after:border-2",
+      lg: "size-5 before:border-2 after:border-2",
     } satisfies Record<SpinnerSize, string>,
   },
 });
 
-const SpinnerRing = ({
-  ref,
-  className,
-  size = 'md',
-  ...props
-}: BaseSpinnerProps) => {
+const SpinnerRing = ({ ref, className, size = "md", ...props }: BaseSpinnerProps) => {
   return (
     <div
       ref={ref}
@@ -44,35 +39,30 @@ const SpinnerRing = ({
 };
 
 const dotsContainerStyle = cva({
-  base: 'inline-flex items-center',
+  base: "inline-flex items-center",
   variants: {
     size: {
-      xs: 'gap-0.5',
-      sm: 'gap-0.5',
-      md: 'gap-1',
-      lg: 'gap-1',
+      xs: "gap-0.5",
+      sm: "gap-0.5",
+      md: "gap-1",
+      lg: "gap-1",
     } satisfies Record<SpinnerSize, string>,
   },
 });
 
 const dotStyle = cva({
-  base: 'animate-spinner-dot rounded-full bg-current',
+  base: "animate-spinner-dot rounded-full bg-current",
   variants: {
     size: {
-      xs: 'size-px',
-      sm: 'size-0.5',
-      md: 'size-0.75',
-      lg: 'size-1',
+      xs: "size-px",
+      sm: "size-0.5",
+      md: "size-0.75",
+      lg: "size-1",
     } satisfies Record<SpinnerSize, string>,
   },
 });
 
-const SpinnerDots = ({
-  ref,
-  className,
-  size = 'md',
-  ...props
-}: BaseSpinnerProps) => {
+const SpinnerDots = ({ ref, className, size = "md", ...props }: BaseSpinnerProps) => {
   return (
     <div
       ref={ref}
@@ -82,48 +72,37 @@ const SpinnerDots = ({
       {...props}
     >
       <span className={dotStyle({ size })} />
-      <span
-        className={dotStyle({ size })}
-        style={{ animationDelay: '160ms' }}
-      />
-      <span
-        className={dotStyle({ size })}
-        style={{ animationDelay: '320ms' }}
-      />
+      <span className={dotStyle({ size })} style={{ animationDelay: "160ms" }} />
+      <span className={dotStyle({ size })} style={{ animationDelay: "320ms" }} />
     </div>
   );
 };
 
 const barsContainerStyle = cva({
-  base: 'inline-flex items-center',
+  base: "inline-flex items-center",
   variants: {
     size: {
-      xs: 'h-2 gap-0.5',
-      sm: 'h-3 gap-0.5',
-      md: 'h-4 gap-1',
-      lg: 'h-5 gap-1',
+      xs: "h-2 gap-0.5",
+      sm: "h-3 gap-0.5",
+      md: "h-4 gap-1",
+      lg: "h-5 gap-1",
     } satisfies Record<SpinnerSize, string>,
   },
 });
 
 const barStyle = cva({
-  base: 'h-full origin-center animate-spinner-bar bg-current',
+  base: "h-full origin-center animate-spinner-bar bg-current",
   variants: {
     size: {
-      xs: 'w-px',
-      sm: 'w-0.25',
-      md: 'w-0.5',
-      lg: 'w-0.75',
+      xs: "w-px",
+      sm: "w-0.25",
+      md: "w-0.5",
+      lg: "w-0.75",
     } satisfies Record<SpinnerSize, string>,
   },
 });
 
-const SpinnerBars = ({
-  ref,
-  className,
-  size = 'md',
-  ...props
-}: BaseSpinnerProps) => {
+const SpinnerBars = ({ ref, className, size = "md", ...props }: BaseSpinnerProps) => {
   return (
     <div
       ref={ref}
@@ -133,36 +112,30 @@ const SpinnerBars = ({
       {...props}
     >
       <span className={barStyle({ size })} />
-      <span
-        className={barStyle({ size })}
-        style={{ animationDelay: '120ms' }}
-      />
-      <span
-        className={barStyle({ size })}
-        style={{ animationDelay: '240ms' }}
-      />
+      <span className={barStyle({ size })} style={{ animationDelay: "120ms" }} />
+      <span className={barStyle({ size })} style={{ animationDelay: "240ms" }} />
     </div>
   );
 };
 
 export const SPINNER_FRAMES = {
-  braille: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'],
-  bounce: ['⠁', '⠂', '⠄', '⠂'],
-  moon: ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'],
-  sparkle: ['✶', '✸', '✹', '✺', '✹', '✷'],
-  dots: ['●', '◉', '◎', '○', '◌', '◦', '∘', '·'],
-  shades: ['█', '▓', '▒', '░', ' ', '░', '▒', '▓'],
-  pipe: ['|', '/', '-', '\\'],
+  braille: ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
+  bounce: ["⠁", "⠂", "⠄", "⠂"],
+  moon: ["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"],
+  sparkle: ["✶", "✸", "✹", "✺", "✹", "✷"],
+  dots: ["●", "◉", "◎", "○", "◌", "◦", "∘", "·"],
+  shades: ["█", "▓", "▒", "░", " ", "░", "▒", "▓"],
+  pipe: ["|", "/", "-", "\\"],
 } as const satisfies Record<string, readonly string[]>;
 
 const framesStyle = cva({
-  base: 'inline-flex items-center justify-center font-mono tabular-nums leading-none',
+  base: "inline-flex items-center justify-center font-mono tabular-nums leading-none",
   variants: {
     size: {
-      xs: 'size-2.5 text-2xs',
-      sm: 'size-3 text-xs',
-      md: 'size-4 text-base',
-      lg: 'size-5 text-xl',
+      xs: "size-2.5 text-2xs",
+      sm: "size-3 text-xs",
+      md: "size-4 text-base",
+      lg: "size-5 text-xl",
     } satisfies Record<SpinnerSize, string>,
   },
 });
@@ -177,7 +150,7 @@ interface SpinnerFramesProps extends BaseSpinnerProps {
 const SpinnerFrames = ({
   ref,
   className,
-  size = 'md',
+  size = "md",
   frames = SPINNER_FRAMES.braille,
   interval = 80,
   ...props
@@ -205,9 +178,7 @@ const SpinnerFrames = ({
   );
 };
 
-export interface SpinnerProps
-  extends BaseSpinnerProps,
-    VariantProps<typeof ringStyle> {
+export interface SpinnerProps extends BaseSpinnerProps, VariantProps<typeof ringStyle> {
   variant?: SpinnerVariant;
   /** Frames to cycle through when `variant="frames"`. */
   frames?: readonly string[];
@@ -215,16 +186,10 @@ export interface SpinnerProps
   interval?: number;
 }
 
-const Spinner = ({
-  variant = 'ring',
-  frames,
-  interval,
-  ...props
-}: SpinnerProps) => {
-  if (variant === 'dots') return <SpinnerDots {...props} />;
-  if (variant === 'bars') return <SpinnerBars {...props} />;
-  if (variant === 'frames')
-    return <SpinnerFrames frames={frames} interval={interval} {...props} />;
+const Spinner = ({ variant = "ring", frames, interval, ...props }: SpinnerProps) => {
+  if (variant === "dots") return <SpinnerDots {...props} />;
+  if (variant === "bars") return <SpinnerBars {...props} />;
+  if (variant === "frames") return <SpinnerFrames frames={frames} interval={interval} {...props} />;
   return <SpinnerRing {...props} />;
 };
 

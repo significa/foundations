@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { OTPInput } from '@/foundations/ui/otp-input/otp-input';
+import { useState } from "react";
+import { OTPInput } from "@/foundations/ui/otp-input/otp-input";
 
 export default function OTPInputPasswordManagerExample() {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const handleComplete = (v: string) => {
@@ -11,14 +11,9 @@ export default function OTPInputPasswordManagerExample() {
   };
 
   return (
-    <form
-      className="flex flex-col items-center gap-6"
-      onSubmit={(e) => e.preventDefault()}
-    >
+    <form className="flex flex-col items-center gap-6" onSubmit={(e) => e.preventDefault()}>
       <div className="flex flex-col items-center gap-1 text-center">
-        <p className="font-medium text-foreground text-sm">
-          Enter verification code
-        </p>
+        <p className="font-medium text-foreground text-sm">Enter verification code</p>
         <p className="text-foreground-secondary text-xs">
           Open 1Password and autofill the 6-digit code.
         </p>

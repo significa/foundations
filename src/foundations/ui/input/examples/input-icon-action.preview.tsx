@@ -1,11 +1,7 @@
-import {
-  EyeClosedIcon,
-  EyeIcon,
-  LockIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { useState } from 'react';
+import { EyeClosedIcon, EyeIcon, LockIcon } from "@phosphor-icons/react/dist/ssr";
+import { useState } from "react";
 
-import { Input } from '@/foundations/ui/input/input';
+import { Input } from "@/foundations/ui/input/input";
 
 export default function InputIconAction() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,10 +12,7 @@ export default function InputIconAction() {
         <Input.Addon>
           <LockIcon />
         </Input.Addon>
-        <Input
-          type={showPassword ? 'text' : 'password'}
-          placeholder="Your password here"
-        />
+        <Input type={showPassword ? "text" : "password"} placeholder="Your password here" />
         <Input.Addon asChild>
           <button
             type="button"

@@ -2,9 +2,9 @@ import {
   AlignBottomIcon,
   AlignCenterVerticalIcon,
   AlignTopIcon,
-} from '@phosphor-icons/react/dist/ssr';
+} from "@phosphor-icons/react/dist/ssr";
 
-import { ToggleGroup } from '@/foundations/ui/toggle/toggle';
+import { ToggleGroup } from "@/foundations/ui/toggle/toggle";
 
 export default function ToggleGroupVerticalPreview() {
   return (

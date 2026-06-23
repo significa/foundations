@@ -1,7 +1,7 @@
-import { MouseScrollIcon } from '@phosphor-icons/react/dist/ssr';
+import { MouseScrollIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Stack } from '@/foundations/components/stack/stack';
-import { Divider } from '@/foundations/ui/divider/divider';
+import { Stack } from "@/foundations/components/stack/stack";
+import { Divider } from "@/foundations/ui/divider/divider";
 
 const StackStickPositionPreview = () => {
   return (
@@ -23,8 +23,8 @@ const StackStickPositionPreview = () => {
                 <Divider />
               </Stack.Header>
               <div className="py-2 text-foreground-secondary">
-                This section demonstrates the default top sticky behavior where
-                headers stick to the top of the viewport as you scroll down.
+                This section demonstrates the default top sticky behavior where headers stick to the
+                top of the viewport as you scroll down.
               </div>
             </Stack.Item>
           ))}
@@ -40,9 +40,8 @@ const StackStickPositionPreview = () => {
                 <Divider />
               </Stack.Header>
               <div className="py-2 text-foreground-secondary">
-                This section shows how headers can stick to the bottom of the
-                viewport when using stick=bottom. This is useful for bottom-up
-                navigation patterns.
+                This section shows how headers can stick to the bottom of the viewport when using
+                stick=bottom. This is useful for bottom-up navigation patterns.
               </div>
             </Stack.Item>
           ))}

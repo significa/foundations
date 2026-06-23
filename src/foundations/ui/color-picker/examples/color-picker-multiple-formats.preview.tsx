@@ -1,10 +1,7 @@
-import chroma from 'chroma-js';
-import { useState } from 'react';
+import chroma from "chroma-js";
+import { useState } from "react";
 
-import {
-  ColorPicker,
-  type HSVA,
-} from '@/foundations/ui/color-picker/color-picker';
+import { ColorPicker, type HSVA } from "@/foundations/ui/color-picker/color-picker";
 
 export default function ColorPickerMultipleFormatsExample() {
   const [color, setColor] = useState<HSVA>([0, 1, 1, 1]);
@@ -27,9 +24,7 @@ export default function ColorPickerMultipleFormatsExample() {
             style={
               color
                 ? {
-                    '--bg-color': chroma
-                      .hsv(color[0], color[1], color[2])
-                      .css(),
+                    "--bg-color": chroma.hsv(color[0], color[1], color[2]).css(),
                   }
                 : {}
             }
@@ -48,8 +43,7 @@ export default function ColorPickerMultipleFormatsExample() {
 
             <span className="font-medium text-foreground-secondary">HSV</span>
             <code className="rounded bg-background-secondary px-1.5 py-0.5">
-              {Math.round(color[0])}, {Math.round(color[1] * 100)}%,{' '}
-              {Math.round(color[2] * 100)}%
+              {Math.round(color[0])}, {Math.round(color[1] * 100)}%, {Math.round(color[2] * 100)}%
             </code>
           </div>
         </div>

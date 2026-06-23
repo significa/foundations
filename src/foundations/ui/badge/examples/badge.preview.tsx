@@ -1,6 +1,6 @@
-import { PackageIcon } from '@phosphor-icons/react/dist/ssr';
+import { PackageIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Badge } from '@/foundations/ui/badge/badge';
+import { Badge } from "@/foundations/ui/badge/badge";
 
 export default function BadgePreview() {
   return (

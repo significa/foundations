@@ -1,6 +1,6 @@
-import { Progress } from '@/foundations/ui/progress/progress';
+import { Progress } from "@/foundations/ui/progress/progress";
 
-const sizes = ['xs', 'sm', 'md', 'lg'] as const;
+const sizes = ["xs", "sm", "md", "lg"] as const;
 
 export default function ProgressSizesExample() {
   return (

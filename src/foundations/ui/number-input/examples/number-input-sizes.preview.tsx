@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { NumberInput } from '@/foundations/ui/number-input/number-input';
+import { useState } from "react";
+import { NumberInput } from "@/foundations/ui/number-input/number-input";
 
-const sizes = ['xs', 'sm', 'md', 'lg'] as const;
+const sizes = ["xs", "sm", "md", "lg"] as const;
 
 export default function NumberInputSizesExample() {
   const [value, setValue] = useState(0);

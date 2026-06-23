@@ -1,12 +1,12 @@
-import { createContext, type ReactNode, use, useState } from 'react';
+import { createContext, type ReactNode, use, useState } from "react";
 
 import {
   InstanceCounterProvider,
   useInstanceCounter,
-} from '@/foundations/components/instance-counter/instance-counter';
-import { Button } from '@/foundations/ui/button/button';
+} from "@/foundations/components/instance-counter/instance-counter";
+import { Button } from "@/foundations/ui/button/button";
 
-const ITEMS = ['🥚', '🐣', '🐥', '🐓'];
+const ITEMS = ["🥚", "🐣", "🐥", "🐓"];
 
 const StepperContext = createContext(0);
 

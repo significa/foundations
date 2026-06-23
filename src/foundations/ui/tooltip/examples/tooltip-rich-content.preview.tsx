@@ -1,5 +1,5 @@
-import { Avatar } from '@/foundations/ui/avatar/avatar';
-import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
+import { Avatar } from "@/foundations/ui/avatar/avatar";
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function TooltipRichContentPreview() {
   return (
@@ -9,11 +9,7 @@ export default function TooltipRichContentPreview() {
       </Tooltip.Trigger>
       <Tooltip.Content>
         <div className="flex items-center gap-1.5">
-          <Avatar
-            variant="square"
-            size="sm"
-            className="-ml-1.5 backdrop-blur-none"
-          >
+          <Avatar variant="square" size="sm" className="-ml-1.5 backdrop-blur-none">
             <Avatar.Image src="https://github.com/pdrbrnd.png" />
             <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
           </Avatar>

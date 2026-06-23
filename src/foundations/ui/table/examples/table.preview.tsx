@@ -1,19 +1,19 @@
-import { Table } from '@/foundations/ui/table/table';
+import { Table } from "@/foundations/ui/table/table";
 
-export const meta = { layout: 'padded' } as const;
+export const meta = { layout: "padded" } as const;
 
 const invoices = [
-  { id: 'INV-001', client: 'Acme Corp', status: 'Paid', amount: 1250 },
-  { id: 'INV-002', client: 'Globex', status: 'Pending', amount: 480 },
-  { id: 'INV-003', client: 'Initech', status: 'Paid', amount: 3200 },
-  { id: 'INV-004', client: 'Umbrella', status: 'Overdue', amount: 920 },
-  { id: 'INV-005', client: 'Soylent', status: 'Pending', amount: 1675 },
+  { id: "INV-001", client: "Acme Corp", status: "Paid", amount: 1250 },
+  { id: "INV-002", client: "Globex", status: "Pending", amount: 480 },
+  { id: "INV-003", client: "Initech", status: "Paid", amount: 3200 },
+  { id: "INV-004", client: "Umbrella", status: "Overdue", amount: 920 },
+  { id: "INV-005", client: "Soylent", status: "Pending", amount: 1675 },
 ];
 
 const formatAmount = (value: number) =>
-  new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
   }).format(value);
 
 export default function TablePreview() {

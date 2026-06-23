@@ -1,5 +1,5 @@
-import { Button } from '@/foundations/ui/button/button';
-import { toast } from '@/foundations/ui/toaster/toaster';
+import { Button } from "@/foundations/ui/button/button";
+import { toast } from "@/foundations/ui/toaster/toaster";
 
 const ToasterDurationPreview = () => {
   return (
@@ -8,7 +8,7 @@ const ToasterDurationPreview = () => {
         type="button"
         size="sm"
         variant="outline"
-        onClick={() => toast({ title: 'This is a 7 second toast!' })}
+        onClick={() => toast({ title: "This is a 7 second toast!" })}
       >
         Default
       </Button>
@@ -16,9 +16,7 @@ const ToasterDurationPreview = () => {
         type="button"
         size="sm"
         variant="outline"
-        onClick={() =>
-          toast({ title: 'This is a 3 second toast!', duration: 3000 })
-        }
+        onClick={() => toast({ title: "This is a 3 second toast!", duration: 3000 })}
       >
         Short
       </Button>
@@ -28,8 +26,8 @@ const ToasterDurationPreview = () => {
         variant="outline"
         onClick={() =>
           toast({
-            title: 'This is an infinity toast!',
-            description: 'It will not disappear until you dismiss it.',
+            title: "This is an infinity toast!",
+            description: "It will not disappear until you dismiss it.",
             duration: Infinity,
           })
         }

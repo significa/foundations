@@ -1,8 +1,8 @@
-import { format } from 'date-fns';
-import { useState } from 'react';
+import { format } from "date-fns";
+import { useState } from "react";
 
-import { DatePicker } from '@/foundations/ui/date-picker/date-picker';
-import { Menu } from '@/foundations/ui/menu/menu';
+import { DatePicker } from "@/foundations/ui/date-picker/date-picker";
+import { Menu } from "@/foundations/ui/menu/menu";
 
 export default function DatePickerShortcutsPreview() {
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
@@ -11,7 +11,7 @@ export default function DatePickerShortcutsPreview() {
     <DatePicker placement="bottom-start">
       <DatePicker.Trigger className="w-80" placeholder="Select date range">
         {dateRange
-          ? `${format(dateRange[0], 'MM/dd/yyyy')} - ${format(dateRange[1], 'MM/dd/yyyy')}`
+          ? `${format(dateRange[0], "MM/dd/yyyy")} - ${format(dateRange[1], "MM/dd/yyyy")}`
           : undefined}
       </DatePicker.Trigger>
       <DatePicker.Panel
@@ -42,10 +42,7 @@ export default function DatePickerShortcutsPreview() {
         </Menu.Item>
         <Menu.Item
           onSelect={() => {
-            setDateRange([
-              new Date(new Date().setDate(new Date().getDate() - 7)),
-              new Date(),
-            ]);
+            setDateRange([new Date(new Date().setDate(new Date().getDate() - 7)), new Date()]);
           }}
         >
           Last 7 days
