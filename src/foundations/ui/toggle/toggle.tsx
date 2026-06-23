@@ -1,4 +1,4 @@
-import type { VariantProps } from 'cva';
+import type { VariantProps } from "cva";
 import {
   Children,
   createContext,
@@ -9,19 +9,16 @@ import {
   useMemo,
   useRef,
   useState,
-} from 'react';
-import { Slot } from '@/foundations/components/slot/slot';
-import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
-import { cn } from '@/lib/utils/classnames';
-import { buttonStyle } from '../button/button';
+} from "react";
+import { Slot } from "@/foundations/components/slot/slot";
+import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { cn } from "@/lib/utils/classnames";
+import { buttonStyle } from "../button/button";
 
-type ToggleStyleProps = Pick<
-  VariantProps<typeof buttonStyle>,
-  'size' | 'square'
->;
+type ToggleStyleProps = Pick<VariantProps<typeof buttonStyle>, "size" | "square">;
 
 interface ToggleProps
-  extends Omit<React.ComponentPropsWithRef<'button'>, 'onChange'>,
+  extends Omit<React.ComponentPropsWithRef<"button">, "onChange">,
     ToggleStyleProps {
   pressed?: boolean;
   defaultPressed?: boolean;
@@ -33,11 +30,11 @@ const Toggle = ({
   pressed: pressedProp,
   defaultPressed = false,
   onPressedChange,
-  size = 'md',
+  size = "md",
   square,
   asChild = false,
   className,
-  type = 'button',
+  type = "button",
   onClick,
   ref,
   children,
@@ -46,13 +43,13 @@ const Toggle = ({
   const [internalPressed, setInternalPressed] = useState(defaultPressed);
   const pressed = pressedProp ?? internalPressed;
 
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
       ref={ref}
       type={type}
-      className={cn(buttonStyle({ variant: 'ghost', size, square }), className)}
+      className={cn(buttonStyle({ variant: "ghost", size, square }), className)}
       aria-pressed={pressed}
       data-pressed={pressed || undefined}
       onClick={(e) => {
@@ -77,9 +74,9 @@ interface ToggleGroupContextValue {
   focusItem: (value: string) => void;
   registerItem: (value: string) => () => void;
   items: string[];
-  orientation: 'horizontal' | 'vertical';
+  orientation: "horizontal" | "vertical";
   disabled: boolean;
-  size: ToggleStyleProps['size'];
+  size: ToggleStyleProps["size"];
 }
 
 const ToggleGroupContext = createContext<ToggleGroupContextValue | null>(null);
@@ -87,29 +84,26 @@ const ToggleGroupContext = createContext<ToggleGroupContextValue | null>(null);
 const useToggleGroupContext = () => {
   const ctx = use(ToggleGroupContext);
   if (!ctx) {
-    throw new Error('ToggleGroup.Item must be used within a ToggleGroup');
+    throw new Error("ToggleGroup.Item must be used within a ToggleGroup");
   }
   return ctx;
 };
 
-type ToggleGroupBaseProps = Omit<
-  React.ComponentPropsWithRef<'div'>,
-  'onChange' | 'defaultValue'
-> &
-  Pick<ToggleStyleProps, 'size'> & {
-    orientation?: 'horizontal' | 'vertical';
+type ToggleGroupBaseProps = Omit<React.ComponentPropsWithRef<"div">, "onChange" | "defaultValue"> &
+  Pick<ToggleStyleProps, "size"> & {
+    orientation?: "horizontal" | "vertical";
     disabled?: boolean;
   };
 
 type ToggleGroupSingleProps = ToggleGroupBaseProps & {
-  type: 'single';
+  type: "single";
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string | undefined) => void;
 };
 
 type ToggleGroupMultipleProps = ToggleGroupBaseProps & {
-  type: 'multiple';
+  type: "multiple";
   value?: string[];
   defaultValue?: string[];
   onValueChange?: (value: string[]) => void;
@@ -118,7 +112,7 @@ type ToggleGroupMultipleProps = ToggleGroupBaseProps & {
 type ToggleGroupProps = ToggleGroupSingleProps | ToggleGroupMultipleProps;
 
 const ToggleGroup = (props: ToggleGroupProps) => {
-  return props.type === 'single' ? (
+  return props.type === "single" ? (
     <ToggleGroupSingle {...props} />
   ) : (
     <ToggleGroupMultiple {...props} />
@@ -142,7 +136,7 @@ const ToggleGroupSingle = ({
       if (valueProp === undefined) setInternal(next);
       onValueChange?.(next);
     },
-    [value, valueProp, onValueChange]
+    [value, valueProp, onValueChange],
   );
 
   return <ToggleGroupRoot {...rest} isPressed={isPressed} toggle={toggle} />;
@@ -161,13 +155,11 @@ const ToggleGroupMultiple = ({
   const isPressed = useCallback((v: string) => value.includes(v), [value]);
   const toggle = useCallback(
     (v: string) => {
-      const next = value.includes(v)
-        ? value.filter((x) => x !== v)
-        : [...value, v];
+      const next = value.includes(v) ? value.filter((x) => x !== v) : [...value, v];
       if (valueProp === undefined) setInternal(next);
       onValueChange?.(next);
     },
-    [value, valueProp, onValueChange]
+    [value, valueProp, onValueChange],
   );
 
   return <ToggleGroupRoot {...rest} isPressed={isPressed} toggle={toggle} />;
@@ -181,9 +173,9 @@ interface ToggleGroupRootProps extends ToggleGroupBaseProps {
 const ToggleGroupRoot = ({
   isPressed,
   toggle,
-  orientation = 'horizontal',
+  orientation = "horizontal",
   disabled = false,
-  size = 'md',
+  size = "md",
   className,
   children,
   ref,
@@ -202,7 +194,7 @@ const ToggleGroupRoot = ({
 
   const focusItem = useCallback((value: string) => {
     const el = containerRef.current?.querySelector<HTMLElement>(
-      `[data-toggle-group-value="${CSS.escape(value)}"]`
+      `[data-toggle-group-value="${CSS.escape(value)}"]`,
     );
     el?.focus();
   }, []);
@@ -220,10 +212,7 @@ const ToggleGroupRoot = ({
     // is the tab stop on the very first render.
     const childValues: string[] = [];
     Children.forEach(children, (child) => {
-      if (
-        isValidElement<{ value?: unknown }>(child) &&
-        typeof child.props.value === 'string'
-      ) {
+      if (isValidElement<{ value?: unknown }>(child) && typeof child.props.value === "string") {
         childValues.push(child.props.value);
       }
     });
@@ -259,7 +248,7 @@ const ToggleGroupRoot = ({
       orientation,
       disabled,
       size,
-    ]
+    ],
   );
 
   return (
@@ -270,9 +259,9 @@ const ToggleGroupRoot = ({
         role="group"
         data-orientation={orientation}
         className={cn(
-          'flex items-center *:focus-visible:z-2',
-          orientation === 'vertical' && 'flex-col',
-          className
+          "flex items-center *:focus-visible:z-2",
+          orientation === "vertical" && "flex-col",
+          className,
         )}
         data-ui-button-group
         {...divProps}
@@ -284,10 +273,7 @@ const ToggleGroupRoot = ({
 };
 
 interface ToggleGroupItemProps
-  extends Omit<
-      React.ComponentPropsWithRef<'button'>,
-      'value' | 'type' | 'disabled' | 'onChange'
-    >,
+  extends Omit<React.ComponentPropsWithRef<"button">, "value" | "type" | "disabled" | "onChange">,
     ToggleStyleProps {
   value: string;
   asChild?: boolean;
@@ -309,7 +295,7 @@ const ToggleGroupItem = ({
   ...props
 }: ToggleGroupItemProps) => {
   const ctx = useToggleGroupContext();
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? Slot : "button";
 
   useLayoutEffect(() => {
     return ctx.registerItem(value);
@@ -322,15 +308,10 @@ const ToggleGroupItem = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     const orientation = ctx.orientation;
-    const nextKey = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
-    const prevKey = orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
+    const nextKey = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
+    const prevKey = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
 
-    if (
-      e.key !== nextKey &&
-      e.key !== prevKey &&
-      e.key !== 'Home' &&
-      e.key !== 'End'
-    ) {
+    if (e.key !== nextKey && e.key !== prevKey && e.key !== "Home" && e.key !== "End") {
       return;
     }
 
@@ -340,10 +321,9 @@ const ToggleGroupItem = ({
 
     let nextIdx = idx;
     if (e.key === nextKey) nextIdx = (idx + 1) % ctx.items.length;
-    else if (e.key === prevKey)
-      nextIdx = (idx - 1 + ctx.items.length) % ctx.items.length;
-    else if (e.key === 'Home') nextIdx = 0;
-    else if (e.key === 'End') nextIdx = ctx.items.length - 1;
+    else if (e.key === prevKey) nextIdx = (idx - 1 + ctx.items.length) % ctx.items.length;
+    else if (e.key === "Home") nextIdx = 0;
+    else if (e.key === "End") nextIdx = ctx.items.length - 1;
 
     const nextValue = ctx.items[nextIdx];
     if (!nextValue) return;
@@ -357,7 +337,7 @@ const ToggleGroupItem = ({
       ref={ref}
       type="button"
       data-toggle-group-value={value}
-      className={cn(buttonStyle({ variant: 'ghost', size, square }), className)}
+      className={cn(buttonStyle({ variant: "ghost", size, square }), className)}
       aria-pressed={pressed}
       data-pressed={pressed || undefined}
       data-disabled={disabled || undefined}

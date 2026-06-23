@@ -1,6 +1,6 @@
 export const debounce = <T extends (...args: Parameters<T>) => void>(
   func: T,
-  intervalMs = 64
+  intervalMs = 64,
 ): ((...args: Parameters<T>) => void) => {
   let id: ReturnType<typeof setTimeout> | null;
 

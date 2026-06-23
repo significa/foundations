@@ -1,6 +1,6 @@
-import theme from 'tailwindcss/defaultTheme';
+import theme from "tailwindcss/defaultTheme";
 
-import { useMatchMedia } from '../use-match-media/use-match-media';
+import { useMatchMedia } from "../use-match-media/use-match-media";
 
 const breakpoints = theme?.screens as Record<string, string>;
 

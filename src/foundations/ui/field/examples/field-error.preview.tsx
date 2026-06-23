@@ -1,13 +1,11 @@
-import { useState } from 'react';
-import { Field } from '@/foundations/ui/field/field';
-import { Input } from '@/foundations/ui/input/input';
+import { useState } from "react";
+import { Field } from "@/foundations/ui/field/field";
+import { Input } from "@/foundations/ui/input/input";
 
 export default function FieldErrorPreview() {
-  const [value, setValue] = useState('not-an-email');
+  const [value, setValue] = useState("not-an-email");
   const error =
-    value.length > 0 && !value.includes('@')
-      ? 'Please enter a valid email address.'
-      : '';
+    value.length > 0 && !value.includes("@") ? "Please enter a valid email address." : "";
 
   return (
     <Field invalid={!!error} className="w-72">

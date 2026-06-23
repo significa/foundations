@@ -1,1 +1,1 @@
-export { DSConfig } from './ds-config';
+export { DSConfig } from "./ds-config";

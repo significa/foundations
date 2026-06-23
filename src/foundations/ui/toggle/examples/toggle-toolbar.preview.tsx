@@ -5,9 +5,9 @@ import {
   TextBIcon,
   TextItalicIcon,
   TextUnderlineIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { ToggleGroup } from '@/foundations/ui/toggle/toggle';
-import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
+} from "@phosphor-icons/react/dist/ssr";
+import { ToggleGroup } from "@/foundations/ui/toggle/toggle";
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function ToggleToolbarPreview() {
   return (
@@ -15,11 +15,11 @@ export default function ToggleToolbarPreview() {
       <div className="flex items-center gap-2">
         <ToggleGroup type="multiple" aria-label="Text formatting">
           {[
-            { value: 'bold', label: 'Bold', icon: <TextBIcon /> },
-            { value: 'italic', label: 'Italic', icon: <TextItalicIcon /> },
+            { value: "bold", label: "Bold", icon: <TextBIcon /> },
+            { value: "italic", label: "Italic", icon: <TextItalicIcon /> },
             {
-              value: 'underline',
-              label: 'Underline',
+              value: "underline",
+              label: "Underline",
               icon: <TextUnderlineIcon />,
             },
           ].map(({ value, label, icon }) => (
@@ -34,21 +34,17 @@ export default function ToggleToolbarPreview() {
           ))}
         </ToggleGroup>
 
-        <ToggleGroup
-          type="single"
-          defaultValue="left"
-          aria-label="Text alignment"
-        >
+        <ToggleGroup type="single" defaultValue="left" aria-label="Text alignment">
           {[
-            { value: 'left', label: 'Align left', icon: <TextAlignLeftIcon /> },
+            { value: "left", label: "Align left", icon: <TextAlignLeftIcon /> },
             {
-              value: 'center',
-              label: 'Align center',
+              value: "center",
+              label: "Align center",
               icon: <TextAlignCenterIcon />,
             },
             {
-              value: 'right',
-              label: 'Align right',
+              value: "right",
+              label: "Align right",
               icon: <TextAlignRightIcon />,
             },
           ].map(({ value, label, icon }) => (

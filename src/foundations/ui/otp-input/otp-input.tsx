@@ -1,27 +1,20 @@
-import type { VariantProps } from 'cva';
-import {
-  createContext,
-  use,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import type { VariantProps } from "cva";
+import { createContext, use, useCallback, useMemo, useRef, useState } from "react";
 import {
   InstanceCounterProvider,
   useInstanceCounter,
-} from '@/foundations/components/instance-counter/instance-counter';
-import { inputStyle } from '@/foundations/ui/input/input';
-import { composeRefs } from '@/foundations/utils/compose-refs/compose-refs';
-import { cn, compose, cva } from '@/lib/utils/classnames';
+} from "@/foundations/components/instance-counter/instance-counter";
+import { inputStyle } from "@/foundations/ui/input/input";
+import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { cn, compose, cva } from "@/lib/utils/classnames";
 
 const splitIntoSlots = (value: string, length: number): string[] =>
-  Array.from({ length }, (_, i) => value[i] ?? '');
+  Array.from({ length }, (_, i) => value[i] ?? "");
 
 interface OTPInputContextValue {
   values: string[];
-  size: NonNullable<VariantProps<typeof inputStyle>['size']>;
-  inputMode: React.HTMLAttributes<HTMLInputElement>['inputMode'];
+  size: NonNullable<VariantProps<typeof inputStyle>["size"]>;
+  inputMode: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   placeholder?: string;
   masked?: boolean;
   disabled?: boolean;
@@ -30,36 +23,26 @@ interface OTPInputContextValue {
   setCellRef: (index: number, el: HTMLInputElement | null) => void;
   focusCell: (index: number) => void;
   onCellChange: (index: number, value: string) => void;
-  onCellKeyDown: (
-    index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => void;
+  onCellKeyDown: (index: number, e: React.KeyboardEvent<HTMLInputElement>) => void;
   onCellFocus: (index: number) => void;
-  onCellPaste: (
-    index: number,
-    e: React.ClipboardEvent<HTMLInputElement>
-  ) => void;
+  onCellPaste: (index: number, e: React.ClipboardEvent<HTMLInputElement>) => void;
 }
 
 const OTPInputContext = createContext<OTPInputContextValue | null>(null);
 
 const useOTPInputContext = () => {
   const context = use(OTPInputContext);
-  if (!context)
-    throw new Error(
-      'OTPInputContext must be used within an OTPInput component'
-    );
+  if (!context) throw new Error("OTPInputContext must be used within an OTPInput component");
   return context;
 };
 
-interface OTPInputProps
-  extends Omit<React.ComponentPropsWithRef<'div'>, 'onChange'> {
+interface OTPInputProps extends Omit<React.ComponentPropsWithRef<"div">, "onChange"> {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
   onFill?: (value: string) => void;
-  size?: VariantProps<typeof inputStyle>['size'];
-  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
+  size?: VariantProps<typeof inputStyle>["size"];
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   placeholder?: string;
   masked?: boolean;
   disabled?: boolean;
@@ -70,11 +53,11 @@ const OTPInput = ({
   ref,
   id,
   value: valueProp,
-  defaultValue = '',
+  defaultValue = "",
   onChange,
   onFill,
-  size = 'md',
-  inputMode = 'numeric',
+  size = "md",
+  inputMode = "numeric",
   placeholder,
   masked,
   disabled,
@@ -87,13 +70,10 @@ const OTPInput = ({
   const [cellCount, setCellCount] = useState(0);
 
   const [internalValues, setInternalValues] = useState<string[]>(() =>
-    splitIntoSlots(defaultValue, cellCount)
+    splitIntoSlots(defaultValue, cellCount),
   );
 
-  const values =
-    valueProp !== undefined
-      ? splitIntoSlots(valueProp, cellCount)
-      : internalValues;
+  const values = valueProp !== undefined ? splitIntoSlots(valueProp, cellCount) : internalValues;
 
   // Ref kept in sync with the latest committed values so that focus handlers
   // — which fire synchronously before React re-renders — always see fresh data.
@@ -103,37 +83,34 @@ const OTPInput = ({
   const updateValues = useCallback(
     (nextValues: string[], bulk = false) => {
       valuesRef.current = nextValues;
-      const joined = nextValues.join('');
+      const joined = nextValues.join("");
       if (valueProp === undefined) setInternalValues(nextValues);
       onChange?.(joined);
       // Only fire onFill for bulk fills (paste / password manager),
       // not for character-by-character typing.
-      if (bulk && nextValues.every((v) => v !== '')) onFill?.(joined);
+      if (bulk && nextValues.every((v) => v !== "")) onFill?.(joined);
     },
-    [valueProp, onChange, onFill]
+    [valueProp, onChange, onFill],
   );
 
-  const setCellRef = useCallback(
-    (index: number, el: HTMLInputElement | null) => {
-      cellRefs.current[index] = el;
-    },
-    []
-  );
+  const setCellRef = useCallback((index: number, el: HTMLInputElement | null) => {
+    cellRefs.current[index] = el;
+  }, []);
 
   const focusCell = useCallback(
     (index: number) => {
       // Never skip past the first empty slot — fill cells in order.
-      const firstEmpty = valuesRef.current.indexOf('');
+      const firstEmpty = valuesRef.current.indexOf("");
       const lastAllowed = firstEmpty === -1 ? cellCount - 1 : firstEmpty;
       const target = Math.max(0, Math.min(index, lastAllowed));
       cellRefs.current[target]?.focus();
     },
-    [cellCount]
+    [cellCount],
   );
 
   const sanitize = useCallback(
-    (s: string) => (inputMode === 'numeric' ? s.replace(/\D/g, '') : s),
-    [inputMode]
+    (s: string) => (inputMode === "numeric" ? s.replace(/\D/g, "") : s),
+    [inputMode],
   );
 
   const onCellChange = useCallback(
@@ -145,7 +122,7 @@ const OTPInput = ({
         const nextValues = [...valuesRef.current];
         let lastFilled = index;
         for (let i = 0; i < clean.length && index + i < cellCount; i++) {
-          nextValues[index + i] = clean[i] ?? '';
+          nextValues[index + i] = clean[i] ?? "";
           lastFilled = index + i;
         }
         updateValues(nextValues, true);
@@ -160,18 +137,18 @@ const OTPInput = ({
       updateValues(nextValues);
       if (char) focusCell(index + 1);
     },
-    [updateValues, focusCell, cellCount, sanitize]
+    [updateValues, focusCell, cellCount, sanitize],
   );
 
   const onCellKeyDown = useCallback(
     (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'ArrowLeft') {
+      if (e.key === "ArrowLeft") {
         e.preventDefault();
         focusCell(index - 1);
-      } else if (e.key === 'ArrowRight') {
+      } else if (e.key === "ArrowRight") {
         e.preventDefault();
         focusCell(index + 1);
-      } else if (e.key === 'Backspace') {
+      } else if (e.key === "Backspace") {
         e.preventDefault();
         const clearIndex = valuesRef.current[index] ? index : index - 1;
         if (clearIndex >= 0) {
@@ -179,24 +156,24 @@ const OTPInput = ({
           // keeping the array left-packed so there are never gaps between filled cells.
           const nextValues = [...valuesRef.current];
           nextValues.splice(clearIndex, 1);
-          nextValues.push('');
+          nextValues.push("");
           updateValues(nextValues);
         }
         focusCell(index - 1);
-      } else if (e.key === 'Delete') {
+      } else if (e.key === "Delete") {
         e.preventDefault();
         const nextValues = [...valuesRef.current];
-        nextValues[index] = '';
+        nextValues[index] = "";
         updateValues(nextValues);
       }
     },
-    [updateValues, focusCell]
+    [updateValues, focusCell],
   );
 
   const onCellFocus = useCallback(
     (index: number) => {
       // Redirect clicks that land beyond the first empty slot.
-      const firstEmpty = valuesRef.current.indexOf('');
+      const firstEmpty = valuesRef.current.indexOf("");
       const lastAllowed = firstEmpty === -1 ? cellCount - 1 : firstEmpty;
       if (index > lastAllowed) {
         cellRefs.current[lastAllowed]?.focus();
@@ -204,29 +181,29 @@ const OTPInput = ({
       }
       cellRefs.current[index]?.select();
     },
-    [cellCount]
+    [cellCount],
   );
 
   const onCellPaste = useCallback(
     (index: number, e: React.ClipboardEvent<HTMLInputElement>) => {
       e.preventDefault();
-      const text = sanitize(e.clipboardData.getData('text').replace(/\s/g, ''));
+      const text = sanitize(e.clipboardData.getData("text").replace(/\s/g, ""));
       const nextValues = [...valuesRef.current];
       let lastFilled = index;
       for (let i = 0; i < text.length && index + i < cellCount; i++) {
-        nextValues[index + i] = text[i] ?? '';
+        nextValues[index + i] = text[i] ?? "";
         lastFilled = index + i;
       }
       updateValues(nextValues, true);
       focusCell(lastFilled + 1);
     },
-    [updateValues, focusCell, cellCount, sanitize]
+    [updateValues, focusCell, cellCount, sanitize],
   );
 
   const ctx = useMemo(
     () => ({
       values,
-      size: size ?? 'md',
+      size: size ?? "md",
       inputMode,
       placeholder,
       masked,
@@ -255,7 +232,7 @@ const OTPInput = ({
       onCellKeyDown,
       onCellFocus,
       onCellPaste,
-    ]
+    ],
   );
 
   return (
@@ -264,12 +241,10 @@ const OTPInput = ({
         ref={ref}
         data-invalid={invalid || undefined}
         data-disabled={disabled || undefined}
-        className={cn('flex items-center gap-2', className)}
+        className={cn("flex items-center gap-2", className)}
         {...props}
       >
-        <InstanceCounterProvider onChange={setCellCount}>
-          {children}
-        </InstanceCounterProvider>
+        <InstanceCounterProvider onChange={setCellCount}>{children}</InstanceCounterProvider>
       </div>
     </OTPInputContext>
   );
@@ -278,28 +253,28 @@ const OTPInput = ({
 const otpCellStyle = compose(
   inputStyle,
   cva({
-    base: 'shrink-0 px-0 text-center',
+    base: "shrink-0 px-0 text-center",
     variants: {
-      size: { xs: 'w-6', sm: 'w-8', md: 'w-10', lg: 'w-12' },
+      size: { xs: "w-6", sm: "w-8", md: "w-10", lg: "w-12" },
     },
-  })
+  }),
 );
 
 interface OTPInputCellProps
   extends Omit<
-    React.ComponentPropsWithRef<'input'>,
+    React.ComponentPropsWithRef<"input">,
     // All of these are managed by the root via context and cannot be overridden per-cell.
-    | 'value'
-    | 'type'
-    | 'inputMode'
-    | 'autoComplete'
-    | 'placeholder'
-    | 'disabled'
-    | 'maxLength'
-    | 'onChange'
-    | 'onKeyDown'
-    | 'onFocus'
-    | 'onPaste'
+    | "value"
+    | "type"
+    | "inputMode"
+    | "autoComplete"
+    | "placeholder"
+    | "disabled"
+    | "maxLength"
+    | "onChange"
+    | "onKeyDown"
+    | "onFocus"
+    | "onPaste"
   > {}
 
 const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
@@ -322,14 +297,14 @@ const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
 
   const internalRef = useCallback(
     (el: HTMLInputElement | null) => setCellRef(index, el),
-    [setCellRef, index]
+    [setCellRef, index],
   );
 
   return (
     <input
       ref={composeRefs(ref, internalRef)}
       id={index === 0 ? rootId : undefined}
-      type={masked ? 'password' : 'text'}
+      type={masked ? "password" : "text"}
       inputMode={inputMode}
       autoComplete="one-time-code"
       placeholder={placeholder}
@@ -337,7 +312,7 @@ const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
       // character alongside the newly typed one so onCellChange can read both
       // and extract just the latest via slice(-1).
       maxLength={2}
-      value={values[index] ?? ''}
+      value={values[index] ?? ""}
       disabled={disabled}
       data-invalid={invalid || undefined}
       aria-label={`Digit ${index + 1}`}
@@ -352,25 +327,21 @@ const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
 };
 
 interface OTPInputHiddenProps
-  extends Omit<React.ComponentPropsWithoutRef<'input'>, 'type' | 'value'> {}
+  extends Omit<React.ComponentPropsWithoutRef<"input">, "type" | "value"> {}
 
 const OTPInputHidden = ({ name, ...props }: OTPInputHiddenProps) => {
   const { values } = useOTPInputContext();
-  return <input type="hidden" name={name} value={values.join('')} {...props} />;
+  return <input type="hidden" name={name} value={values.join("")} {...props} />;
 };
 
 const OTPInputDivider = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithoutRef<'div'>) => {
+}: React.ComponentPropsWithoutRef<"div">) => {
   return (
-    <div
-      aria-hidden="true"
-      className={cn('text-foreground-secondary', className)}
-      {...props}
-    >
-      {children ?? '—'}
+    <div aria-hidden="true" className={cn("text-foreground-secondary", className)} {...props}>
+      {children ?? "—"}
     </div>
   );
 };

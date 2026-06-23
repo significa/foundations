@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { cn } from '@/lib/utils/classnames';
+import { cn } from "@/lib/utils/classnames";
 
-import { Sequence } from '../sequence';
-import { eras as CONTENT } from './content';
+import { Sequence } from "../sequence";
+import { eras as CONTENT } from "./content";
 
 const SequencePauseHover = () => {
   const [paused, setPaused] = useState(false);
@@ -19,11 +19,11 @@ const SequencePauseHover = () => {
           <Sequence.Item
             key={index}
             className={cn(
-              'relative shrink-0 cursor-pointer overflow-hidden rounded-lg border border-background-secondary px-4 py-1 text-sm',
-              'flex items-center gap-1.5 whitespace-nowrap',
-              'transition-colors hover:bg-background-secondary/30',
+              "relative shrink-0 cursor-pointer overflow-hidden rounded-lg border border-background-secondary px-4 py-1 text-sm",
+              "flex items-center gap-1.5 whitespace-nowrap",
+              "transition-colors hover:bg-background-secondary/30",
               'before:absolute before:inset-0 before:-z-10 before:bg-background-secondary before:content-[""]',
-              'before:origin-left before:scale-x-(--progress)'
+              "before:origin-left before:scale-x-(--progress)",
             )}
           >
             <item.icon size={16} className="-ml-1 shrink-0" />
@@ -38,9 +38,7 @@ const SequencePauseHover = () => {
               <div className="font-mono text-foreground-secondary text-sm uppercase">
                 {item.title}
               </div>
-              <div className="text-pretty pr-8 font-medium text-xl">
-                {item.description}
-              </div>
+              <div className="text-pretty pr-8 font-medium text-xl">{item.description}</div>
             </div>
           </Sequence.Panel>
         ))}

@@ -1,19 +1,16 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { useScrollLock } from '@/foundations/hooks/use-scroll-lock/use-scroll-lock';
-import { Button } from '@/foundations/ui/button/button';
+import { useScrollLock } from "@/foundations/hooks/use-scroll-lock/use-scroll-lock";
+import { Button } from "@/foundations/ui/button/button";
 
 const UseScrollLockTargetPreview = () => {
   const [isLocked, setIsLocked] = useState(false);
 
-  useScrollLock(isLocked, '#scroll-lock-target');
+  useScrollLock(isLocked, "#scroll-lock-target");
 
   return (
     <>
-      <main
-        id="scroll-lock-target"
-        className="absolute inset-0 overflow-y-auto"
-      >
+      <main id="scroll-lock-target" className="absolute inset-0 overflow-y-auto">
         <div className="h-500" />
       </main>
       <div
@@ -22,12 +19,8 @@ const UseScrollLockTargetPreview = () => {
       >
         Scroll me
       </div>
-      <Button
-        onClick={() => setIsLocked(!isLocked)}
-        className="absolute top-4 left-4"
-        size="sm"
-      >
-        {isLocked ? 'Unlock' : 'Lock'}
+      <Button onClick={() => setIsLocked(!isLocked)} className="absolute top-4 left-4" size="sm">
+        {isLocked ? "Unlock" : "Lock"}
       </Button>
     </>
   );

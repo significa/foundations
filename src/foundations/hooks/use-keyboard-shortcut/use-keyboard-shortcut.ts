@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { useStableCallback } from '@/foundations/hooks/use-stable-callback/use-stable-callback';
+import { useEffect, useRef } from "react";
+import { useStableCallback } from "@/foundations/hooks/use-stable-callback/use-stable-callback";
 
 export interface SingleKeyboardShortcut {
   key: string;
@@ -23,9 +23,7 @@ export interface SequenceKeyboardShortcut {
   sequence: string[];
 }
 
-export type KeyboardShortcut =
-  | SingleKeyboardShortcut
-  | SequenceKeyboardShortcut;
+export type KeyboardShortcut = SingleKeyboardShortcut | SequenceKeyboardShortcut;
 
 export interface UseKeyboardShortcutOptions {
   enabled?: boolean;
@@ -41,32 +39,22 @@ export interface UseKeyboardShortcutOptions {
 const DEFAULT_SEQUENCE_TIMEOUT = 1000;
 
 const isMac = () =>
-  typeof navigator !== 'undefined' &&
-  /Mac|iPad|iPhone|iPod/.test(navigator.userAgent);
+  typeof navigator !== "undefined" && /Mac|iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const isTypingTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
   const tag = target.tagName;
-  return tag === 'INPUT' || tag === 'TEXTAREA' || target.isContentEditable;
+  return tag === "INPUT" || tag === "TEXTAREA" || target.isContentEditable;
 };
 
-const isSequence = (s: KeyboardShortcut): s is SequenceKeyboardShortcut =>
-  'sequence' in s;
+const isSequence = (s: KeyboardShortcut): s is SequenceKeyboardShortcut => "sequence" in s;
 
 const matches = (event: KeyboardEvent, shortcut: SingleKeyboardShortcut) => {
   if (event.key.toLowerCase() !== shortcut.key.toLowerCase()) return false;
   const expectMeta =
-    shortcut.mod !== undefined
-      ? shortcut.mod
-        ? isMac()
-        : false
-      : Boolean(shortcut.meta);
+    shortcut.mod !== undefined ? (shortcut.mod ? isMac() : false) : Boolean(shortcut.meta);
   const expectCtrl =
-    shortcut.mod !== undefined
-      ? shortcut.mod
-        ? !isMac()
-        : false
-      : Boolean(shortcut.ctrl);
+    shortcut.mod !== undefined ? (shortcut.mod ? !isMac() : false) : Boolean(shortcut.ctrl);
   if (event.metaKey !== expectMeta) return false;
   if (event.ctrlKey !== expectCtrl) return false;
   if (event.shiftKey !== Boolean(shortcut.shift)) return false;
@@ -91,7 +79,7 @@ const matches = (event: KeyboardEvent, shortcut: SingleKeyboardShortcut) => {
 export const useKeyboardShortcut = (
   shortcut: KeyboardShortcut,
   callback: (event: KeyboardEvent) => void,
-  options: UseKeyboardShortcutOptions = {}
+  options: UseKeyboardShortcutOptions = {},
 ) => {
   const {
     enabled = true,
@@ -106,7 +94,7 @@ export const useKeyboardShortcut = (
   useEffect(() => {
     if (!enabled) return;
     const element: EventTarget | null =
-      target ?? (typeof document !== 'undefined' ? document : null);
+      target ?? (typeof document !== "undefined" ? document : null);
     if (!element) return;
 
     let position = 0;
@@ -171,9 +159,9 @@ export const useKeyboardShortcut = (
       stableCallback(keyEvent);
     };
 
-    element.addEventListener('keydown', handler);
+    element.addEventListener("keydown", handler);
     return () => {
-      element.removeEventListener('keydown', handler);
+      element.removeEventListener("keydown", handler);
       if (resetTimer) clearTimeout(resetTimer);
     };
   }, [enabled, preventDefault, target, sequenceTimeout, stableCallback]);

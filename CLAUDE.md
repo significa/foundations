@@ -62,22 +62,18 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 Biome config extends the shared `@significa/biome-config` preset (`biome.json`);
 the project file adds Astro exclusions, Tailwind class sorting, and a few rule
-tweaks. The preset's **lint** rules are adopted as-is, but the **formatter** is
-pinned back to the house style below (single quotes, 80-char, ES5 commas) via
-overrides in `biome.json`. Dropping those overrides and reformatting the codebase
-to the preset's defaults (double quotes, 100-char, trailing-all) is deferred to a
-separate, mechanical-only PR.
+tweaks. The preset defines the TS/TSX formatting below.
 
 ### Formatting rules
 
 |                 | `.ts` / `.tsx` files | `.astro` files |
 | --------------- | -------------------- | -------------- |
 | Tool            | Biome                | Prettier       |
-| Quotes          | Single               | Double         |
+| Quotes          | Double               | Double         |
 | Semicolons      | Always               | Always         |
-| Line width      | 80                   | 128            |
+| Line width      | 100                  | 128            |
 | Indent          | 2 spaces             | 2 spaces       |
-| Trailing commas | ES5                  | ES5            |
+| Trailing commas | All                  | ES5            |
 | JSX quotes      | Double               | Double         |
 
 ### Imports

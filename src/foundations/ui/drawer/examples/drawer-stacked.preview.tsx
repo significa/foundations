@@ -1,5 +1,5 @@
-import { Button } from '@/foundations/ui/button/button';
-import { Drawer } from '@/foundations/ui/drawer/drawer';
+import { Button } from "@/foundations/ui/button/button";
+import { Drawer } from "@/foundations/ui/drawer/drawer";
 
 const NestedDrawer = ({ depth }: { depth: number }) => {
   return (
@@ -12,8 +12,8 @@ const NestedDrawer = ({ depth }: { depth: number }) => {
           <Drawer.Title>Drawer {depth}</Drawer.Title>
         </Drawer.Header>
         <Drawer.Description>
-          Each drawer recedes behind the next, only the topmost backdrop dims
-          the page, and Escape closes one level at a time.
+          Each drawer recedes behind the next, only the topmost backdrop dims the page, and Escape
+          closes one level at a time.
         </Drawer.Description>
 
         <NestedDrawer depth={depth + 1} />

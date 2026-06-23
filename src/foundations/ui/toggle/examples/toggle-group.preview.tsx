@@ -3,9 +3,9 @@ import {
   TextAlignJustifyIcon,
   TextAlignLeftIcon,
   TextAlignRightIcon,
-} from '@phosphor-icons/react/dist/ssr';
+} from "@phosphor-icons/react/dist/ssr";
 
-import { ToggleGroup } from '@/foundations/ui/toggle/toggle';
+import { ToggleGroup } from "@/foundations/ui/toggle/toggle";
 
 export default function ToggleGroupPreview() {
   return (

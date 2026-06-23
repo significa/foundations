@@ -1,5 +1,5 @@
-import { Egg } from '@/components/icons/egg';
-import { Marquee } from '@/foundations/components/marquee/marquee';
+import { Egg } from "@/components/icons/egg";
+import { Marquee } from "@/foundations/components/marquee/marquee";
 
 const MarqueePreview = () => {
   return (

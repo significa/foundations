@@ -1,23 +1,23 @@
-import { useMemo, useState } from 'react';
-import { Button } from '@/foundations/ui/button/button';
-import { Menu } from '@/foundations/ui/menu/menu';
+import { useMemo, useState } from "react";
+import { Button } from "@/foundations/ui/button/button";
+import { Menu } from "@/foundations/ui/menu/menu";
 
 const FRUITS = [
-  'Apple',
-  'Banana',
-  'Blueberry',
-  'Cherry',
-  'Grape',
-  'Mango',
-  'Orange',
-  'Peach',
-  'Pineapple',
-  'Strawberry',
-  'Watermelon',
+  "Apple",
+  "Banana",
+  "Blueberry",
+  "Cherry",
+  "Grape",
+  "Mango",
+  "Orange",
+  "Peach",
+  "Pineapple",
+  "Strawberry",
+  "Watermelon",
 ];
 
 export default function MenuSearchPreview() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

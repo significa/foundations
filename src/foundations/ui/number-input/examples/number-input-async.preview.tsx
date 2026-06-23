@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { NumberInput } from '@/foundations/ui/number-input/number-input';
-import { Spinner } from '@/foundations/ui/spinner/spinner';
-import { debounce } from '@/foundations/utils/debounce/debounce';
-import { cn } from '@/lib/utils/classnames';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { NumberInput } from "@/foundations/ui/number-input/number-input";
+import { Spinner } from "@/foundations/ui/spinner/spinner";
+import { debounce } from "@/foundations/utils/debounce/debounce";
+import { cn } from "@/lib/utils/classnames";
 
 // Cart-style quantity selector: optimistic local update on every commit,
 // debounced server sync in the background. The field stays interactive while
@@ -23,7 +23,7 @@ export default function NumberInputAsyncExample() {
         // Only clear if this is the latest call.
         if (id === inFlight.current) setSyncing(false);
       }, 400),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -33,19 +33,11 @@ export default function NumberInputAsyncExample() {
   return (
     <div className="flex items-center gap-3">
       <div className="w-48">
-        <NumberInput
-          value={quantity}
-          onValueChange={setQuantity}
-          min={1}
-          max={99}
-        />
+        <NumberInput value={quantity} onValueChange={setQuantity} min={1} max={99} />
       </div>
       <Spinner
         size="sm"
-        className={cn(
-          'transition-opacity',
-          syncing ? 'opacity-100' : 'opacity-0'
-        )}
+        className={cn("transition-opacity", syncing ? "opacity-100" : "opacity-0")}
       />
     </div>
   );

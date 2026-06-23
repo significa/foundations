@@ -1,4 +1,4 @@
-import { Kbd } from '@/foundations/ui/kbd/kbd';
+import { Kbd } from "@/foundations/ui/kbd/kbd";
 
 export default function KbdSizesPreview() {
   return (

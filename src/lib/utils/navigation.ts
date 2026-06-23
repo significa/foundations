@@ -1,5 +1,5 @@
-import type { CollectionEntry } from 'astro:content';
-import { getPageCreateTime, getPageLastModifiedTime } from './content';
+import type { CollectionEntry } from "astro:content";
+import { getPageCreateTime, getPageLastModifiedTime } from "./content";
 
 type NavigationItem = {
   title: string;
@@ -22,12 +22,12 @@ const FOLDER_SORT_ORDER: Record<string, number> = {
 };
 
 const getNavigationItems = async (
-  collection: CollectionEntry<'pages'>[]
+  collection: CollectionEntry<"pages">[],
 ): Promise<NavigationItem[]> => {
   const items: NavigationItem[] = [];
 
   for (const entry of collection) {
-    const { title, folder = 'Pages', meta = {} } = entry.data;
+    const { title, folder = "Pages", meta = {} } = entry.data;
 
     const existingGroup = items.find((item) => item.title === folder);
 
@@ -63,10 +63,8 @@ const getNavigationItems = async (
   }
 
   return items.sort((a, b) => {
-    const orderA =
-      FOLDER_SORT_ORDER[a.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
-    const orderB =
-      FOLDER_SORT_ORDER[b.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
+    const orderA = FOLDER_SORT_ORDER[a.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
+    const orderB = FOLDER_SORT_ORDER[b.title.toLowerCase()] ?? Number.POSITIVE_INFINITY;
 
     return orderA - orderB;
   });

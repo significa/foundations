@@ -1,9 +1,9 @@
-import { CameraIcon } from '@phosphor-icons/react/dist/ssr';
-import { useEffect, useMemo, useState } from 'react';
+import { CameraIcon } from "@phosphor-icons/react/dist/ssr";
+import { useEffect, useMemo, useState } from "react";
 
-import { Avatar } from '@/foundations/ui/avatar/avatar';
-import { Button } from '@/foundations/ui/button/button';
-import { FileUpload } from '@/foundations/ui/file-upload/file-upload';
+import { Avatar } from "@/foundations/ui/avatar/avatar";
+import { Button } from "@/foundations/ui/button/button";
+import { FileUpload } from "@/foundations/ui/file-upload/file-upload";
 
 export default function FileUploadWithoutDropzonePreview() {
   const [file, setFile] = useState<File | null>(null);
@@ -33,12 +33,10 @@ export default function FileUploadWithoutDropzonePreview() {
         <div className="flex flex-col gap-1">
           <FileUpload.Trigger asChild>
             <Button variant="outline" size="sm">
-              {file ? 'Change avatar' : 'Upload avatar'}
+              {file ? "Change avatar" : "Upload avatar"}
             </Button>
           </FileUpload.Trigger>
-          <p className="text-foreground-secondary text-xs">
-            PNG or JPG, 5 MB max
-          </p>
+          <p className="text-foreground-secondary text-xs">PNG or JPG, 5 MB max</p>
         </div>
       </div>
     </FileUpload>

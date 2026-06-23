@@ -1,43 +1,39 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from "react";
 
-import { Listbox } from '@/foundations/ui/listbox/listbox';
-import type { FontCategory, StoredFont } from './storage';
-import {
-  type FontMeta,
-  fetchCatalog,
-  loadGoogleFont,
-} from './use-fonts-catalog';
+import { Listbox } from "@/foundations/ui/listbox/listbox";
+import type { FontCategory, StoredFont } from "./storage";
+import { type FontMeta, fetchCatalog, loadGoogleFont } from "./use-fonts-catalog";
 
 const FEATURED_BY_CATEGORY: Record<FontCategory, FontMeta[]> = {
-  'sans-serif': [
-    { family: 'Inter', category: 'sans-serif' },
-    { family: 'Geist', category: 'sans-serif' },
-    { family: 'IBM Plex Sans', category: 'sans-serif' },
-    { family: 'Manrope', category: 'sans-serif' },
-    { family: 'Outfit', category: 'sans-serif' },
-    { family: 'Work Sans', category: 'sans-serif' },
+  "sans-serif": [
+    { family: "Inter", category: "sans-serif" },
+    { family: "Geist", category: "sans-serif" },
+    { family: "IBM Plex Sans", category: "sans-serif" },
+    { family: "Manrope", category: "sans-serif" },
+    { family: "Outfit", category: "sans-serif" },
+    { family: "Work Sans", category: "sans-serif" },
   ],
   serif: [
-    { family: 'Playfair Display', category: 'serif' },
-    { family: 'Lora', category: 'serif' },
-    { family: 'EB Garamond', category: 'serif' },
-    { family: 'Source Serif 4', category: 'serif' },
+    { family: "Playfair Display", category: "serif" },
+    { family: "Lora", category: "serif" },
+    { family: "EB Garamond", category: "serif" },
+    { family: "Source Serif 4", category: "serif" },
   ],
   monospace: [
-    { family: 'Geist Mono', category: 'monospace' },
-    { family: 'IBM Plex Mono', category: 'monospace' },
-    { family: 'JetBrains Mono', category: 'monospace' },
-    { family: 'Space Mono', category: 'monospace' },
+    { family: "Geist Mono", category: "monospace" },
+    { family: "IBM Plex Mono", category: "monospace" },
+    { family: "JetBrains Mono", category: "monospace" },
+    { family: "Space Mono", category: "monospace" },
   ],
   display: [
-    { family: 'Playfair Display', category: 'serif' },
-    { family: 'Bricolage Grotesque', category: 'sans-serif' },
+    { family: "Playfair Display", category: "serif" },
+    { family: "Bricolage Grotesque", category: "sans-serif" },
   ],
   handwriting: [],
 };
 
 const DEFAULT_FEATURED: FontMeta[] = [
-  ...FEATURED_BY_CATEGORY['sans-serif'].slice(0, 3),
+  ...FEATURED_BY_CATEGORY["sans-serif"].slice(0, 3),
   ...FEATURED_BY_CATEGORY.serif.slice(0, 2),
   ...FEATURED_BY_CATEGORY.monospace.slice(0, 1),
 ];
@@ -56,11 +52,11 @@ interface TypographyPickerProps {
 const TypographyPicker = ({
   value,
   onChange,
-  placeholder = 'System default',
-  nullLabel = 'System default',
+  placeholder = "System default",
+  nullLabel = "System default",
   category,
 }: TypographyPickerProps) => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const featured = useMemo<FontMeta[]>(() => {
@@ -93,7 +89,7 @@ const TypographyPicker = ({
         catalog
           .filter((font) => (category ? font.category === category : true))
           .filter((font) => font.family.toLowerCase().includes(query))
-          .slice(0, MAX_RESULTS)
+          .slice(0, MAX_RESULTS),
       );
 
       setIsLoading(false);
@@ -116,9 +112,7 @@ const TypographyPicker = ({
       onChange={handleSelect}
       getIsSelected={(a, b) => (a?.family ?? null) === (b?.family ?? null)}
     >
-      <Listbox.Trigger placeholder={placeholder}>
-        {value?.family}
-      </Listbox.Trigger>
+      <Listbox.Trigger placeholder={placeholder}>{value?.family}</Listbox.Trigger>
       <Listbox.Options>
         <Listbox.SearchInput
           placeholder="Search fonts"

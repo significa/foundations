@@ -16,7 +16,7 @@
  * component produce identical output, the swap is seamless — no spinners,
  * no loading states, no visible flash or layout shift.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 type ComponentPreviewProps = {
   file: string;
@@ -26,12 +26,9 @@ type ComponentPreviewProps = {
 // Eagerly collect all preview modules via Vite's glob import.
 // Each module is lazily loaded (code-split) — only the requested file is
 // actually fetched at runtime.
-const modules = import.meta.glob('/src/foundations/**/*.preview.tsx');
+const modules = import.meta.glob("/src/foundations/**/*.preview.tsx");
 
-const ComponentPreviewHydrator = ({
-  file,
-  children,
-}: ComponentPreviewProps) => {
+const ComponentPreviewHydrator = ({ file, children }: ComponentPreviewProps) => {
   // Starts as null (no module loaded yet), then holds the hydrated component once fetched.
   const [Component, setComponent] = useState<React.ComponentType | null>();
 
@@ -49,10 +46,7 @@ const ComponentPreviewHydrator = ({
         setComponent(() => mod.default);
       });
     } catch (error) {
-      console.error(
-        `Failed to hydrate preview component for file: ${file}`,
-        error
-      );
+      console.error(`Failed to hydrate preview component for file: ${file}`, error);
     }
   }, [file]);
 

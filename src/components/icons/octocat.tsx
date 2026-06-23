@@ -1,4 +1,4 @@
-export const Octocat = (props: React.ComponentProps<'svg'>) => {
+export const Octocat = (props: React.ComponentProps<"svg">) => {
   return (
     <svg width="1em" height="1em" viewBox="0 0 438.549 438.549" {...props}>
       <title>Octocat</title>

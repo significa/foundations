@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 
-import { useDelayedLoading } from '@/foundations/hooks/use-delayed-loading/use-delayed-loading';
-import { Avatar } from '@/foundations/ui/avatar/avatar';
-import { Button } from '@/foundations/ui/button/button';
-import { Skeleton } from '@/foundations/ui/skeleton/skeleton';
-import type { PreviewMeta } from '@/lib/preview';
+import { useDelayedLoading } from "@/foundations/hooks/use-delayed-loading/use-delayed-loading";
+import { Avatar } from "@/foundations/ui/avatar/avatar";
+import { Button } from "@/foundations/ui/button/button";
+import { Skeleton } from "@/foundations/ui/skeleton/skeleton";
+import type { PreviewMeta } from "@/lib/preview";
 
 function LoadingStatesSkeletonPreview() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,18 +21,10 @@ function LoadingStatesSkeletonPreview() {
   return (
     <div className="flex flex-col items-center gap-6">
       <div className="flex gap-2">
-        <Button
-          variant="outline"
-          disabled={isLoading}
-          onClick={() => reload(1500)}
-        >
+        <Button variant="outline" disabled={isLoading} onClick={() => reload(1500)}>
           Reload (1.5s)
         </Button>
-        <Button
-          variant="outline"
-          disabled={isLoading}
-          onClick={() => reload(150)}
-        >
+        <Button variant="outline" disabled={isLoading} onClick={() => reload(150)}>
           Quick reload (150ms)
         </Button>
       </div>
@@ -53,25 +45,22 @@ function LoadingStatesSkeletonPreview() {
             </Avatar>
             <div className="flex flex-1 flex-col">
               <span className="font-medium text-sm">Ada Lovelace</span>
-              <span className="text-foreground-secondary text-xs">
-                Analytical Engine
-              </span>
+              <span className="text-foreground-secondary text-xs">Analytical Engine</span>
             </div>
           </div>
         )}
       </div>
 
       <p className="max-w-sm text-center text-foreground-secondary text-xs">
-        The skeleton mirrors the card's layout, so nothing shifts when content
-        arrives. A quick reload finishes before the delay, so the skeleton never
-        flashes.
+        The skeleton mirrors the card's layout, so nothing shifts when content arrives. A quick
+        reload finishes before the delay, so the skeleton never flashes.
       </p>
     </div>
   );
 }
 
 export const meta = {
-  layout: 'centered',
+  layout: "centered",
 } satisfies PreviewMeta;
 
 export default LoadingStatesSkeletonPreview;

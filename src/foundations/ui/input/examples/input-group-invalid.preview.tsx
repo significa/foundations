@@ -1,6 +1,6 @@
-import { WarningIcon } from '@phosphor-icons/react/dist/ssr';
+import { WarningIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Input } from '@/foundations/ui/input/input';
+import { Input } from "@/foundations/ui/input/input";
 
 export default function InputGroupInvalid() {
   return (
@@ -9,11 +9,7 @@ export default function InputGroupInvalid() {
         <Input.Addon>
           <WarningIcon />
         </Input.Addon>
-        <Input
-          placeholder="Type something..."
-          defaultValue="not-an-email"
-          invalid
-        />
+        <Input placeholder="Type something..." defaultValue="not-an-email" invalid />
       </Input.Group>
     </div>
   );

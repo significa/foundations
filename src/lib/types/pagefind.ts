@@ -247,7 +247,7 @@ export type Pagefind = {
   debouncedSearch: (
     query: string,
     options?: PagefindSearchOptions,
-    duration?: number
+    duration?: number,
   ) => Promise<PagefindSearchResults>;
   /**
    * Destroys the Pagefind instance.
@@ -264,10 +264,7 @@ export type Pagefind = {
   /**
    * Merges the given index into the current index.
    */
-  mergeIndex: (
-    indexPath: string,
-    options?: Record<string, unknown>
-  ) => Promise<void>;
+  mergeIndex: (indexPath: string, options?: Record<string, unknown>) => Promise<void>;
   /**
    * Configures the Pagefind instance with options.
    */
@@ -279,8 +276,5 @@ export type Pagefind = {
   /**
    * Searches the Pagefind index for the given term.
    */
-  search: (
-    term: string,
-    options?: PagefindSearchOptions
-  ) => Promise<PagefindSearchResults>;
+  search: (term: string, options?: PagefindSearchOptions) => Promise<PagefindSearchResults>;
 };

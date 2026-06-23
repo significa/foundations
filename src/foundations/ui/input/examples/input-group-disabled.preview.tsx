@@ -1,6 +1,6 @@
-import { LockIcon } from '@phosphor-icons/react/dist/ssr';
+import { LockIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Input } from '@/foundations/ui/input/input';
+import { Input } from "@/foundations/ui/input/input";
 
 export default function InputGroupDisabled() {
   return (

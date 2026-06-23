@@ -9,15 +9,6 @@
     "clientKind": "git",
     "useIgnoreFile": true
   },
-  "formatter": {
-    "lineWidth": 80
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "single",
-      "trailingCommas": "es5"
-    }
-  },
   "linter": {
     "rules": {
       "correctness": {

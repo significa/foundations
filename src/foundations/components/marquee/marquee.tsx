@@ -7,22 +7,22 @@ import {
   useMemo,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
-import { useIntersectionObserver } from '@/foundations/hooks/use-intersection-observer/use-intersection-observer';
-import { useTicker } from '@/foundations/hooks/use-ticker/use-ticker';
-import { cn } from '@/lib/utils/classnames';
+import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
+import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
+import { cn } from "@/lib/utils/classnames";
 
 type DurationProp = number | ((contentLength: number) => number);
 
-interface MarqueeProps extends ComponentPropsWithoutRef<'div'> {
-  direction?: 'left' | 'right' | 'up' | 'down';
+interface MarqueeProps extends ComponentPropsWithoutRef<"div"> {
+  direction?: "left" | "right" | "up" | "down";
   paused?: boolean;
   duration?: DurationProp;
 }
 
 export const Marquee = ({
-  direction: propDirection = 'left',
+  direction: propDirection = "left",
   paused = false,
   children,
   duration,
@@ -31,17 +31,15 @@ export const Marquee = ({
   ...props
 }: MarqueeProps) => {
   const [numClones, setNumClones] = useState<number>(1);
-  const [rootRef, { isIntersecting }] =
-    useIntersectionObserver<HTMLDivElement>();
+  const [rootRef, { isIntersecting }] = useIntersectionObserver<HTMLDivElement>();
 
   const progress = useRef(0);
   const contentLength = useRef(0);
   const deferredResizeHandler = useRef<() => void>(null);
 
   const getDuration = useMemo(() => {
-    if (typeof duration === 'number') return () => duration;
-    if (typeof duration === 'function')
-      return () => duration(contentLength.current);
+    if (typeof duration === "number") return () => duration;
+    if (typeof duration === "function") return () => duration(contentLength.current);
 
     // default duration to 50ms per pixel
     return () => contentLength.current * 50;
@@ -49,8 +47,8 @@ export const Marquee = ({
 
   const [axis, direction] = useMemo(() => {
     return [
-      propDirection === 'up' || propDirection === 'down' ? 'y' : 'x',
-      propDirection === 'up' || propDirection === 'left' ? 'normal' : 'reverse',
+      propDirection === "up" || propDirection === "down" ? "y" : "x",
+      propDirection === "up" || propDirection === "left" ? "normal" : "reverse",
     ];
   }, [propDirection]);
 
@@ -65,7 +63,7 @@ export const Marquee = ({
 
     progress.current = (progress.current + delta / getDuration()) % 1 || 0;
 
-    root.style.setProperty('--progress', progress.current.toString());
+    root.style.setProperty("--progress", progress.current.toString());
   });
 
   useEffect(() => {
@@ -80,30 +78,28 @@ export const Marquee = ({
     const root = rootRef.current;
     if (!root) return;
 
-    const content = [...root.children].filter(
-      (child) => !child.hasAttribute('data-clone')
-    );
+    const content = [...root.children].filter((child) => !child.hasAttribute("data-clone"));
 
     const getLength = (element: HTMLElement) => {
-      return element.getBoundingClientRect()[axis === 'x' ? 'width' : 'height'];
+      return element.getBoundingClientRect()[axis === "x" ? "width" : "height"];
     };
 
     const onResize = () => {
       const rootLength = getLength(root);
-      const gap = Number(getComputedStyle(root).gap.replace('px', ''));
+      const gap = Number(getComputedStyle(root).gap.replace("px", ""));
       const gapLength = Number.isNaN(gap) ? 0 : gap;
 
       contentLength.current = content.reduce(
         (acc, item) => acc + getLength(item as HTMLElement),
-        0
+        0,
       );
 
       const numClones = Math.ceil(rootLength / contentLength.current);
       setNumClones(numClones);
 
       root.style.setProperty(
-        '--content-length',
-        `${contentLength.current + gapLength * content.length}px`
+        "--content-length",
+        `${contentLength.current + gapLength * content.length}px`,
       );
     };
 
@@ -130,7 +126,7 @@ export const Marquee = ({
 
   const transformedChildren = useMemo(() => {
     return Children.map(children, (child) => {
-      if (typeof child === 'string' || typeof child === 'number') {
+      if (typeof child === "string" || typeof child === "number") {
         return <span className="inline-block">{child}</span>;
       }
 
@@ -146,15 +142,15 @@ export const Marquee = ({
       aria-atomic="false"
       {...props}
       className={cn(
-        'box-content flex w-max overflow-hidden will-change-transform',
-        '*:shrink-0 *:will-change-transform',
-        axis === 'x' && 'flex-row *:translate-x-(--translate)',
-        axis === 'y' && 'flex-col *:translate-y-(--translate)',
-        className
+        "box-content flex w-max overflow-hidden will-change-transform",
+        "*:shrink-0 *:will-change-transform",
+        axis === "x" && "flex-row *:translate-x-(--translate)",
+        axis === "y" && "flex-col *:translate-y-(--translate)",
+        className,
       )}
       style={{
         ...style,
-        '--translate': `calc((${direction === 'normal' ? '-1 * ' : '-1 + '}var(--progress,0)) * var(--content-length,0px))`,
+        "--translate": `calc((${direction === "normal" ? "-1 * " : "-1 + "}var(--progress,0)) * var(--content-length,0px))`,
       }}
     >
       {transformedChildren}
@@ -163,10 +159,10 @@ export const Marquee = ({
           // biome-ignore lint/suspicious/noExplicitAny: expected
           cloneElement(child as ReactElement<any>, {
             key: index,
-            'aria-hidden': 'true',
-            'data-clone': '',
-          })
-        )
+            "aria-hidden": "true",
+            "data-clone": "",
+          }),
+        ),
       )}
     </div>
   );

@@ -1,12 +1,8 @@
-import {
-  ArrowCounterClockwiseIcon,
-  PlayIcon,
-  SquareIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { useCallback, useEffect, useRef } from 'react';
+import { ArrowCounterClockwiseIcon, PlayIcon, SquareIcon } from "@phosphor-icons/react/dist/ssr";
+import { useCallback, useEffect, useRef } from "react";
 
-import { useTicker } from '@/foundations/hooks/use-ticker/use-ticker';
-import { Button } from '@/foundations/ui/button/button';
+import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
+import { Button } from "@/foundations/ui/button/button";
 
 const UseTickerCanvasAnimation = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -58,12 +54,8 @@ const UseTickerCanvasAnimation = () => {
   );
 };
 
-function renderFrame(
-  canvas: HTMLCanvasElement,
-  progress: number,
-  clearCanvas?: boolean
-) {
-  const context = canvas.getContext('2d');
+function renderFrame(canvas: HTMLCanvasElement, progress: number, clearCanvas?: boolean) {
+  const context = canvas.getContext("2d");
   if (!context) return;
 
   const angle = (progress * 0.002) % Math.PI;
@@ -79,19 +71,13 @@ function renderFrame(
   // cover canvas with white at 0.33 alpha to get the trailing effect
   context.beginPath();
   context.rect(0, 0, width, height);
-  context.fillStyle = 'rgba(255, 255, 255, 0.33)';
+  context.fillStyle = "rgba(255, 255, 255, 0.33)";
   context.fill();
 
   // draw circle
   context.beginPath();
-  context.arc(
-    0.5 * width,
-    radius + y * (height - 2 * radius),
-    radius,
-    0,
-    Math.PI * 2
-  );
-  context.fillStyle = '#222';
+  context.arc(0.5 * width, radius + y * (height - 2 * radius), radius, 0, Math.PI * 2);
+  context.fillStyle = "#222";
   context.fill();
 }
 

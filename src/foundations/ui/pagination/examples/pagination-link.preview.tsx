@@ -1,7 +1,4 @@
-import {
-  Pagination,
-  usePagination,
-} from '@/foundations/ui/pagination/pagination';
+import { Pagination, usePagination } from "@/foundations/ui/pagination/pagination";
 
 export default function PaginationLinkPreview() {
   // In a real app, derive `page` from the URL (search params or route).
@@ -23,7 +20,7 @@ export default function PaginationLinkPreview() {
         </Pagination.Item>
 
         {items.map((item) =>
-          item.type === 'page' ? (
+          item.type === "page" ? (
             <Pagination.Item key={item.key}>
               <Pagination.Link asChild isActive={item.selected}>
                 <a href={hrefFor(item.value)}>{item.value}</a>
@@ -33,7 +30,7 @@ export default function PaginationLinkPreview() {
             <Pagination.Item key={item.key}>
               <Pagination.Ellipsis />
             </Pagination.Item>
-          )
+          ),
         )}
 
         <Pagination.Item>

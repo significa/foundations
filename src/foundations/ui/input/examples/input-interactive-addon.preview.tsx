@@ -1,8 +1,8 @@
-import { InfoIcon } from '@phosphor-icons/react/dist/ssr';
-import { useRef } from 'react';
+import { InfoIcon } from "@phosphor-icons/react/dist/ssr";
+import { useRef } from "react";
 
-import { Input } from '@/foundations/ui/input/input';
-import { Tooltip } from '@/foundations/ui/tooltip/tooltip';
+import { Input } from "@/foundations/ui/input/input";
+import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
 
 export default function InputInteractiveAddon() {
   const input = useRef<HTMLInputElement>(null);
@@ -11,7 +11,7 @@ export default function InputInteractiveAddon() {
     <div className="w-90">
       <Input.Group>
         <Input.Addon asChild>
-          <button type="button" onClick={() => alert('interactive')}>
+          <button type="button" onClick={() => alert("interactive")}>
             +351
           </button>
         </Input.Addon>

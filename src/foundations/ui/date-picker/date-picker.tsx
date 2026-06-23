@@ -1,23 +1,19 @@
-import { CalendarIcon, CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr';
-import type { VariantProps } from 'cva';
+import { CalendarIcon, CaretUpDownIcon } from "@phosphor-icons/react/dist/ssr";
+import type { VariantProps } from "cva";
 
-import { Calendar } from '@/foundations/ui/calendar/calendar';
-import { inputStyle } from '@/foundations/ui/input/input';
-import { Menu, useMenuPopoverContext } from '@/foundations/ui/menu/menu';
-import { cn } from '@/lib/utils/classnames';
+import { Calendar } from "@/foundations/ui/calendar/calendar";
+import { inputStyle } from "@/foundations/ui/input/input";
+import { Menu, useMenuPopoverContext } from "@/foundations/ui/menu/menu";
+import { cn } from "@/lib/utils/classnames";
 
-const DatePicker = ({
-  children,
-  ...props
-}: React.ComponentProps<typeof Menu>) => {
+const DatePicker = ({ children, ...props }: React.ComponentProps<typeof Menu>) => {
   return <Menu {...props}>{children}</Menu>;
 };
 
-interface DatePickerTriggerProps
-  extends React.ComponentProps<typeof Menu.Trigger> {
+interface DatePickerTriggerProps extends React.ComponentProps<typeof Menu.Trigger> {
   className?: string;
   children: React.ReactNode;
-  variant?: VariantProps<typeof inputStyle>['variant'];
+  variant?: VariantProps<typeof inputStyle>["variant"];
   placeholder?: string;
 }
 
@@ -34,15 +30,13 @@ const DatePickerTrigger = ({
         type="button"
         className={cn(
           inputStyle({ variant }),
-          'flex items-center gap-1.5 enabled:cursor-pointer',
-          'relative w-full pr-10 pl-4',
-          className
+          "flex items-center gap-1.5 enabled:cursor-pointer",
+          "relative w-full pr-10 pl-4",
+          className,
         )}
       >
         <CalendarIcon className="shrink-0 text-foreground-secondary" />
-        {children ?? (
-          <span className="text-foreground-secondary">{placeholder}</span>
-        )}
+        {children ?? <span className="text-foreground-secondary">{placeholder}</span>}
         <CaretUpDownIcon
           weight="bold"
           className="absolute top-1/2 right-3 -translate-y-1/2 text-base text-foreground/80"
@@ -53,29 +47,24 @@ const DatePickerTrigger = ({
 };
 
 interface DatePickerContentCommonProps
-  extends Omit<
-    React.ComponentPropsWithRef<typeof Calendar>,
-    'mode' | 'value' | 'onDateChange'
-  > {
+  extends Omit<React.ComponentPropsWithRef<typeof Calendar>, "mode" | "value" | "onDateChange"> {
   className?: string;
   children?: React.ReactNode;
 }
 
 interface DatePickerContentSingleProps extends DatePickerContentCommonProps {
-  mode?: 'single';
+  mode?: "single";
   value: Date | null;
   onDateChange: (date: Date) => void;
 }
 
 interface DatePickerContentRangeProps extends DatePickerContentCommonProps {
-  mode: 'range';
+  mode: "range";
   value: [Date, Date] | null;
   onDateChange: (dates: [Date, Date]) => void;
 }
 
-type DatePickerContentProps =
-  | DatePickerContentSingleProps
-  | DatePickerContentRangeProps;
+type DatePickerContentProps = DatePickerContentSingleProps | DatePickerContentRangeProps;
 
 const DatePickerPanel = ({
   className,

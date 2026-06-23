@@ -1,5 +1,5 @@
-import { Button } from '@/foundations/ui/button/button';
-import { toast } from '@/foundations/ui/toaster/toaster';
+import { Button } from "@/foundations/ui/button/button";
+import { toast } from "@/foundations/ui/toaster/toaster";
 
 const ToasterPreview = () => {
   return (
@@ -10,7 +10,7 @@ const ToasterPreview = () => {
         variant="outline"
         onClick={() => {
           toast({
-            title: 'This is a toast notification!',
+            title: "This is a toast notification!",
           });
         }}
       >

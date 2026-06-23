@@ -8,7 +8,7 @@ import {
   useMemo,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
 interface InstanceCounterContextType {
   getIndex: (key: string) => number;
@@ -25,10 +25,7 @@ interface InstanceCounterProviderProps {
   onChange?: (length: number) => void;
 }
 
-const InstanceCounterProvider = ({
-  children,
-  onChange,
-}: InstanceCounterProviderProps) => {
+const InstanceCounterProvider = ({ children, onChange }: InstanceCounterProviderProps) => {
   const [seed, setSeed] = useState(0);
 
   const keys = useRef<string[]>([]);
@@ -45,7 +42,7 @@ const InstanceCounterProvider = ({
 
       return keys.current.length - 1;
     },
-    [seed]
+    [seed],
   );
 
   const invalidate = useCallback(() => {
@@ -68,9 +65,7 @@ const InstanceCounterProvider = ({
   }, [onChange]);
 
   return (
-    <InstanceCounterContext value={{ getIndex, invalidate }}>
-      {children}
-    </InstanceCounterContext>
+    <InstanceCounterContext value={{ getIndex, invalidate }}>{children}</InstanceCounterContext>
   );
 };
 
@@ -79,9 +74,7 @@ const useInstanceCounter = () => {
   const context = use(InstanceCounterContext);
 
   if (!context) {
-    throw new Error(
-      'useInstanceCounter must be used within an InstanceCounterProvider'
-    );
+    throw new Error("useInstanceCounter must be used within an InstanceCounterProvider");
   }
 
   const { getIndex, invalidate } = context;

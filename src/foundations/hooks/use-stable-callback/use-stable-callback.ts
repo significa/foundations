@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from "react";
 
 // biome-ignore lint/suspicious/noExplicitAny: expected
 type AnyFunction = (...args: any[]) => any;

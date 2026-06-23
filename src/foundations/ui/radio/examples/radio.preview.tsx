@@ -1,6 +1,6 @@
-import { Radio } from '@/foundations/ui/radio/radio';
+import { Radio } from "@/foundations/ui/radio/radio";
 
-const labelClass = 'font-medium text-base text-foreground';
+const labelClass = "font-medium text-base text-foreground";
 
 export default function RadioPreview() {
   return (

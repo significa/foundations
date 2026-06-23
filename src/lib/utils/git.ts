@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process';
+import { exec } from "node:child_process";
 
 const cache = {
   created: new Map<string, string>(),
@@ -13,17 +13,14 @@ const getGitCreateTime = async (filePath: string): Promise<string> => {
       return resolve(cached);
     }
 
-    exec(
-      `git log --diff-filter=A --follow --format="%cI" -1 "${filePath}"`,
-      (error, stdout) => {
-        if (error) {
-          return reject(error);
-        }
-
-        cache.created.set(filePath, stdout.trim());
-        return resolve(stdout.trim());
+    exec(`git log --diff-filter=A --follow --format="%cI" -1 "${filePath}"`, (error, stdout) => {
+      if (error) {
+        return reject(error);
       }
-    );
+
+      cache.created.set(filePath, stdout.trim());
+      return resolve(stdout.trim());
+    });
   });
 };
 

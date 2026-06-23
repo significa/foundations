@@ -1,10 +1,6 @@
-import {
-  CreditCardIcon,
-  GearIcon,
-  UsersIcon,
-} from '@phosphor-icons/react/dist/ssr';
+import { CreditCardIcon, GearIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Tabs } from '@/foundations/ui/tabs/tabs';
+import { Tabs } from "@/foundations/ui/tabs/tabs";
 
 export default function TabsVerticalPreview() {
   return (
@@ -30,15 +26,11 @@ export default function TabsVerticalPreview() {
         </Tabs.Panel>
         <Tabs.Panel>
           <h3 className="font-medium text-lg">Billing Panel</h3>
-          <p className="text-foreground-secondary">
-            Manage your billing information.
-          </p>
+          <p className="text-foreground-secondary">Manage your billing information.</p>
         </Tabs.Panel>
         <Tabs.Panel>
           <h3 className="font-medium text-lg">Settings Panel</h3>
-          <p className="text-foreground-secondary">
-            Configure your application settings.
-          </p>
+          <p className="text-foreground-secondary">Configure your application settings.</p>
         </Tabs.Panel>
       </Tabs.Panels>
     </Tabs>

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from "react";
 
 import {
   flattenHierarchicalData,
@@ -8,7 +8,7 @@ import {
   type HierarchicalItem,
   type HierarchicalSelectionState,
   type SelectionStatus,
-} from './hierarchical-data';
+} from "./hierarchical-data";
 
 export interface UseHierarchicalSelectionOptions {
   /** Initial selected item IDs */
@@ -55,14 +55,9 @@ export interface UseHierarchicalSelectionResult {
 }
 
 export function useHierarchicalSelection(
-  options: UseHierarchicalSelectionOptions = {}
+  options: UseHierarchicalSelectionOptions = {},
 ): UseHierarchicalSelectionResult {
-  const {
-    defaultSelected = [],
-    defaultOpened = [],
-    onSelectionChange,
-    onOpenChange,
-  } = options;
+  const { defaultSelected = [], defaultOpened = [], onSelectionChange, onOpenChange } = options;
 
   // Internal state
   const [state, setState] = useState<HierarchicalSelectionState>({
@@ -71,14 +66,8 @@ export function useHierarchicalSelection(
   });
 
   // Derived values
-  const selectedArray = useMemo(
-    () => Array.from(state.selectedIds),
-    [state.selectedIds]
-  );
-  const openedArray = useMemo(
-    () => Array.from(state.openParentIds),
-    [state.openParentIds]
-  );
+  const selectedArray = useMemo(() => Array.from(state.selectedIds), [state.selectedIds]);
+  const openedArray = useMemo(() => Array.from(state.openParentIds), [state.openParentIds]);
 
   // Update callbacks when arrays change
   const notifySelectionChange = useCallback(
@@ -86,7 +75,7 @@ export function useHierarchicalSelection(
       const newArray = Array.from(newSelectedIds);
       onSelectionChange?.(newArray);
     },
-    [onSelectionChange]
+    [onSelectionChange],
   );
 
   const notifyOpenChange = useCallback(
@@ -94,7 +83,7 @@ export function useHierarchicalSelection(
       const newArray = Array.from(newOpenIds);
       onOpenChange?.(newArray);
     },
-    [onOpenChange]
+    [onOpenChange],
   );
 
   // Selection methods
@@ -117,7 +106,7 @@ export function useHierarchicalSelection(
         };
       });
     },
-    [notifySelectionChange]
+    [notifySelectionChange],
   );
 
   const toggleParent = useCallback(
@@ -146,7 +135,7 @@ export function useHierarchicalSelection(
         };
       });
     },
-    [notifySelectionChange]
+    [notifySelectionChange],
   );
 
   const toggleAll = useCallback(
@@ -162,9 +151,7 @@ export function useHierarchicalSelection(
           newSelectedIds = new Set([...prev.selectedIds, ...allEnabledIds]);
         } else {
           newSelectedIds = new Set(
-            Array.from(prev.selectedIds).filter(
-              (id) => !allEnabledIds.includes(id)
-            )
+            Array.from(prev.selectedIds).filter((id) => !allEnabledIds.includes(id)),
           );
         }
 
@@ -176,7 +163,7 @@ export function useHierarchicalSelection(
         };
       });
     },
-    [notifySelectionChange]
+    [notifySelectionChange],
   );
 
   const toggleParentOpen = useCallback(
@@ -198,7 +185,7 @@ export function useHierarchicalSelection(
         };
       });
     },
-    [notifyOpenChange]
+    [notifyOpenChange],
   );
 
   const clearSelection = useCallback(() => {
@@ -225,7 +212,7 @@ export function useHierarchicalSelection(
         };
       });
     },
-    [notifySelectionChange]
+    [notifySelectionChange],
   );
 
   // Status methods
@@ -233,28 +220,28 @@ export function useHierarchicalSelection(
     (parentItem: HierarchicalItem): SelectionStatus => {
       return getParentSelectionStatus(parentItem, state.selectedIds);
     },
-    [state.selectedIds]
+    [state.selectedIds],
   );
 
   const getSelectAllStatusResult = useCallback(
     (items: HierarchicalItem[]): SelectionStatus => {
       return getSelectAllStatus(items, state.selectedIds);
     },
-    [state.selectedIds]
+    [state.selectedIds],
   );
 
   const isSelected = useCallback(
     (itemId: string): boolean => {
       return state.selectedIds.has(itemId);
     },
-    [state.selectedIds]
+    [state.selectedIds],
   );
 
   const isParentOpen = useCallback(
     (parentId: string): boolean => {
       return state.openParentIds.has(parentId);
     },
-    [state.openParentIds]
+    [state.openParentIds],
   );
 
   return {

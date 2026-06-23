@@ -5,18 +5,18 @@
  *
  * Run as part of `pnpm check`.
  */
-import { readdir, readFile } from 'node:fs/promises';
-import { dirname, join, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdir, readFile } from "node:fs/promises";
+import { dirname, join, relative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = resolve(fileURLToPath(import.meta.url), '../..');
-const FOUNDATIONS_DIR = 'src/foundations';
+const ROOT = resolve(fileURLToPath(import.meta.url), "../..");
+const FOUNDATIONS_DIR = "src/foundations";
 
 /**
  * Imports skipped because they're provided by the setup guide
  * (`src/foundations/setup/page.mdx`) — not consumer-facing dependencies.
  */
-const SETUP_PROVIDED_PREFIXES = ['@/lib/'];
+const SETUP_PROVIDED_PREFIXES = ["@/lib/"];
 
 /** Recursively find all files matching `name` under `dir`. */
 const findFiles = async (dir, name, results = []) => {
@@ -46,7 +46,7 @@ const parseFrontmatter = (content) => {
   const files = [];
   const filesBlock = fm.match(/^files:\s*\n((?:[ \t]+-[^\n]+\n?)+)/m);
   if (filesBlock) {
-    for (const line of filesBlock[1].split('\n')) {
+    for (const line of filesBlock[1].split("\n")) {
       const m = line.match(/^[ \t]+-\s+(.+?)\s*$/);
       if (m) files.push(m[1]);
     }
@@ -54,16 +54,14 @@ const parseFrontmatter = (content) => {
 
   // dependencies: list of { name, href } objects
   const dependencies = [];
-  const depsBlock = fm.match(
-    /^dependencies:\s*\n((?:[ \t]+(?:-\s+name|href):[^\n]+\n?)+)/m
-  );
+  const depsBlock = fm.match(/^dependencies:\s*\n((?:[ \t]+(?:-\s+name|href):[^\n]+\n?)+)/m);
   if (depsBlock) {
     // Each entry is `- name: X\n  href: Y` (allowing quoted values)
     const entryRegex =
       /-\s+name:\s+(?:"([^"]*)"|'([^']*)'|([^\n]+))\s*\n\s+href:\s+(?:"([^"]*)"|'([^']*)'|([^\n]+))/g;
     for (const m of depsBlock[1].matchAll(entryRegex)) {
-      const name = (m[1] ?? m[2] ?? m[3] ?? '').trim();
-      const href = (m[4] ?? m[5] ?? m[6] ?? '').trim();
+      const name = (m[1] ?? m[2] ?? m[3] ?? "").trim();
+      const href = (m[4] ?? m[5] ?? m[6] ?? "").trim();
       if (name && href) dependencies.push({ name, href });
     }
   }
@@ -85,8 +83,8 @@ const extractFoundationsImports = (content) => {
  * (matching the canonical `href` declared in `dependencies` frontmatter).
  */
 const importToCanonicalPath = (importPath) => {
-  const stripped = importPath.replace(/^@\/foundations\//, '');
-  const parts = stripped.split('/');
+  const stripped = importPath.replace(/^@\/foundations\//, "");
+  const parts = stripped.split("/");
   if (parts.length < 2) return null;
   return `${parts[0]}/${parts[1]}`;
 };
@@ -96,7 +94,7 @@ const isSkippableImport = (importPath) =>
 
 const main = async () => {
   const foundationsAbs = resolve(ROOT, FOUNDATIONS_DIR);
-  const pages = await findFiles(foundationsAbs, 'page.mdx');
+  const pages = await findFiles(foundationsAbs, "page.mdx");
 
   const errors = [];
 
@@ -104,30 +102,26 @@ const main = async () => {
     const pageDir = dirname(pagePath);
     const ownPath = relative(foundationsAbs, pageDir);
 
-    const content = await readFile(pagePath, 'utf-8');
+    const content = await readFile(pagePath, "utf-8");
     const { files, dependencies } = parseFrontmatter(content);
 
     const declared = new Set(
       dependencies
-        .filter((d) => d.href.startsWith('/'))
+        .filter((d) => d.href.startsWith("/"))
         // Normalize: strip leading slash, trailing slash, and any #anchor suffix
         // (some pages link to a specific utility function, e.g. /utils/math#clamp).
-        .map((d) =>
-          d.href.replace(/^\//, '').replace(/#.*$/, '').replace(/\/$/, '')
-        )
+        .map((d) => d.href.replace(/^\//, "").replace(/#.*$/, "").replace(/\/$/, "")),
     );
 
     const filesToScan =
-      files.length > 0
-        ? files
-        : [`${FOUNDATIONS_DIR}/${ownPath}/${ownPath.split('/').pop()}.tsx`];
+      files.length > 0 ? files : [`${FOUNDATIONS_DIR}/${ownPath}/${ownPath.split("/").pop()}.tsx`];
 
     const seen = new Set();
     for (const file of filesToScan) {
       const fileAbs = resolve(ROOT, file);
       let fileContent;
       try {
-        fileContent = await readFile(fileAbs, 'utf-8');
+        fileContent = await readFile(fileAbs, "utf-8");
       } catch {
         continue;
       }
@@ -146,17 +140,15 @@ const main = async () => {
       errors.push(
         `  ${relPage}\n    missing from frontmatter dependencies: ${undeclared
           .map((p) => `/${p}`)
-          .join(', ')}`
+          .join(", ")}`,
       );
     }
   }
 
   if (errors.length > 0) {
-    console.error('\nPage dependency drift detected:\n');
+    console.error("\nPage dependency drift detected:\n");
     for (const err of errors) console.error(err);
-    console.error(
-      '\nAdd the missing entries to each page.mdx `dependencies:` block.\n'
-    );
+    console.error("\nAdd the missing entries to each page.mdx `dependencies:` block.\n");
     process.exit(1);
   }
 

@@ -17,27 +17,20 @@ import {
   useMergeRefs,
   useRole,
   useTransitionStatus,
-} from '@floating-ui/react';
-import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr';
-import {
-  createContext,
-  use,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+} from "@floating-ui/react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
+import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
 
-import { Slot } from '@/foundations/components/slot/slot';
-import { useTopLayer } from '@/foundations/hooks/use-top-layer/use-top-layer';
-import { Spinner } from '@/foundations/ui/spinner/spinner';
-import { cn } from '@/lib/utils/classnames';
+import { Slot } from "@/foundations/components/slot/slot";
+import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
+import { Spinner } from "@/foundations/ui/spinner/spinner";
+import { cn } from "@/lib/utils/classnames";
 
-type PopoverOrigin = 'trigger' | 'pointer' | [number, number];
+type PopoverOrigin = "trigger" | "pointer" | [number, number];
 
 interface UsePopoverFloatingOptions {
   open?: boolean;
-  onOpenChange?: UseFloatingOptions['onOpenChange'];
+  onOpenChange?: UseFloatingOptions["onOpenChange"];
   placement?: Placement;
   offset?: number;
   origin?: PopoverOrigin;
@@ -53,21 +46,21 @@ interface UsePopoverFloatingOptions {
 const usePopoverFloating = ({
   open: propsOpen,
   onOpenChange: propsOnOpenChange,
-  placement = 'bottom',
+  placement = "bottom",
   offset = 4,
-  origin = 'trigger',
+  origin = "trigger",
   flipFallbackPlacements,
   nodeId,
 }: UsePopoverFloatingOptions) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = propsOpen ?? internalOpen;
 
-  const setOpen = useCallback<NonNullable<UseFloatingOptions['onOpenChange']>>(
+  const setOpen = useCallback<NonNullable<UseFloatingOptions["onOpenChange"]>>(
     (open, event, reason) => {
       setInternalOpen(open);
       propsOnOpenChange?.(open, event, reason);
     },
-    [propsOnOpenChange]
+    [propsOnOpenChange],
   );
 
   const floating = useFloating({
@@ -87,17 +80,15 @@ const usePopoverFloating = ({
       let paused = false;
       const isTextInput = (n: EventTarget | null) =>
         n instanceof HTMLElement &&
-        (n.tagName === 'INPUT' ||
-          n.tagName === 'TEXTAREA' ||
-          n.isContentEditable);
+        (n.tagName === "INPUT" || n.tagName === "TEXTAREA" || n.isContentEditable);
       const onFocusIn = (e: FocusEvent) => {
         if (isTextInput(e.target)) paused = true;
       };
       const onFocusOut = (e: FocusEvent) => {
         if (isTextInput(e.target)) paused = false;
       };
-      floatingEl.addEventListener('focusin', onFocusIn);
-      floatingEl.addEventListener('focusout', onFocusOut);
+      floatingEl.addEventListener("focusin", onFocusIn);
+      floatingEl.addEventListener("focusout", onFocusOut);
 
       const cleanup = autoUpdate(
         reference,
@@ -106,13 +97,13 @@ const usePopoverFloating = ({
           if (paused) return;
           update();
         },
-        { layoutShift: false }
+        { layoutShift: false },
       );
 
       return () => {
         cleanup();
-        floatingEl.removeEventListener('focusin', onFocusIn);
-        floatingEl.removeEventListener('focusout', onFocusOut);
+        floatingEl.removeEventListener("focusin", onFocusIn);
+        floatingEl.removeEventListener("focusout", onFocusOut);
       };
     },
     middleware: [
@@ -121,15 +112,9 @@ const usePopoverFloating = ({
       offsetMiddleware(offset),
       size({
         apply({ rects, elements, availableHeight }) {
-          elements.floating.style.setProperty(
-            '--max-height',
-            `${availableHeight}px`
-          );
+          elements.floating.style.setProperty("--max-height", `${availableHeight}px`);
 
-          elements.floating.style.setProperty(
-            '--width',
-            `${rects.reference.width}px`
-          );
+          elements.floating.style.setProperty("--width", `${rects.reference.width}px`);
         },
         padding: 4,
       }),
@@ -169,15 +154,13 @@ const usePopoverFloating = ({
       origin,
       ...floating,
     }),
-    [open, setOpen, origin, floating]
+    [open, setOpen, origin, floating],
   );
 };
 
 // Context
 
-interface ContextType
-  extends ReturnType<typeof usePopoverFloating>,
-    UseInteractionsReturn {
+interface ContextType extends ReturnType<typeof usePopoverFloating>, UseInteractionsReturn {
   modal: boolean;
 }
 
@@ -187,7 +170,7 @@ const usePopoverContext = () => {
   const context = use(PopoverContext);
 
   if (context == null) {
-    throw new Error('Popover components must be wrapped in <Popover />');
+    throw new Error("Popover components must be wrapped in <Popover />");
   }
 
   return context;
@@ -231,15 +214,13 @@ const Popover = ({ children, modal = false, ...props }: PopoverProps) => {
       ...interactions,
       modal,
     }),
-    [floating, interactions, modal]
+    [floating, interactions, modal],
   );
 
-  return (
-    <PopoverContext value={popoverContextValue}>{children}</PopoverContext>
-  );
+  return <PopoverContext value={popoverContextValue}>{children}</PopoverContext>;
 };
 
-interface PopoverTriggerProps extends React.ComponentPropsWithRef<'button'> {
+interface PopoverTriggerProps extends React.ComponentPropsWithRef<"button"> {
   asChild?: boolean;
 }
 
@@ -267,7 +248,7 @@ const PopoverTrigger = ({
   ...props
 }: PopoverTriggerProps) => {
   const context = usePopoverContext();
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? Slot : "button";
 
   const ref = useMergeRefs([context.refs.setReference, refProp]);
   const referenceProps = context.getReferenceProps(props);
@@ -275,20 +256,15 @@ const PopoverTrigger = ({
   return (
     <Comp
       ref={ref}
-      type={asChild ? undefined : 'button'}
-      className={cn(!asChild && 'disabled:opacity-40', className)}
-      data-state={context.open ? 'open' : 'closed'}
+      type={asChild ? undefined : "button"}
+      className={cn(!asChild && "disabled:opacity-40", className)}
+      data-state={context.open ? "open" : "closed"}
       {...referenceProps}
       onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
         // Pointer mode: capture the click coordinates and pin the floating
         // panel there. Keyboard-triggered clicks have clientX/Y of 0 — we
         // skip in that case and let positioning fall back to the trigger.
-        if (
-          context.origin === 'pointer' &&
-          !context.open &&
-          event.clientX &&
-          event.clientY
-        ) {
+        if (context.origin === "pointer" && !context.open && event.clientX && event.clientY) {
           const x = event.clientX;
           const y = event.clientY;
           context.refs.setPositionReference({
@@ -304,7 +280,7 @@ const PopoverTrigger = ({
             }),
           });
         }
-        if (typeof referenceProps.onClick === 'function') {
+        if (typeof referenceProps.onClick === "function") {
           referenceProps.onClick(event);
         }
       }}
@@ -329,9 +305,8 @@ const PopoverContent = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithRef<'div'>) => {
-  const { context, refs, getFloatingProps, modal, isPositioned } =
-    usePopoverContext();
+}: React.ComponentPropsWithRef<"div">) => {
+  const { context, refs, getFloatingProps, modal, isPositioned } = usePopoverContext();
 
   const ref = useMergeRefs([refs.setFloating, refProp]);
 
@@ -342,8 +317,8 @@ const PopoverContent = ({
       isPositioned={isPositioned}
       ref={ref}
       className={cn(
-        'z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-background p-3 font-medium text-foreground shadow-lg outline-none',
-        className
+        "z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-background p-3 font-medium text-foreground shadow-lg outline-none",
+        className,
       )}
       {...getFloatingProps(props)}
     >
@@ -352,7 +327,7 @@ const PopoverContent = ({
   );
 };
 
-interface PopoverPanelProps extends React.ComponentPropsWithRef<'div'> {
+interface PopoverPanelProps extends React.ComponentPropsWithRef<"div"> {
   context: FloatingContext;
   modal?: boolean;
   isPositioned?: boolean;
@@ -404,23 +379,23 @@ const PopoverPanel = ({
     >
       <div
         ref={mergedRef}
-        data-state={['open', 'initial'].includes(status) ? 'open' : 'closed'}
-        data-side={context.placement.split('-')[0]}
+        data-state={["open", "initial"].includes(status) ? "open" : "closed"}
+        data-side={context.placement.split("-")[0]}
         className={cn(
           animate && [
-            'origin-(--transform-origin) transition duration-300 ease-out',
-            'data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2',
-            'data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150',
-            'data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100',
+            "origin-(--transform-origin) transition duration-300 ease-out",
+            "data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2",
+            "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
+            "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
           ],
-          className
+          className,
         )}
         style={{
           position: context.strategy,
           top: context.y ?? 0,
           left: context.x ?? 0,
-          '--transform-origin': placementToTransformOrigin(context.placement),
-          visibility: hidden ? 'hidden' : 'visible',
+          "--transform-origin": placementToTransformOrigin(context.placement),
+          visibility: hidden ? "hidden" : "visible",
           ...style,
         }}
         {...props}
@@ -432,34 +407,34 @@ const PopoverPanel = ({
 // ugly and verbose but easy to reason about and maintain
 const placementToTransformOrigin = (placement: Placement) => {
   switch (placement) {
-    case 'top':
-      return 'bottom';
-    case 'bottom':
-      return 'top';
-    case 'left':
-      return 'right';
-    case 'right':
-      return 'left';
-    case 'top-start':
-      return 'bottom left';
-    case 'top-end':
-      return 'bottom right';
-    case 'bottom-start':
-      return 'top left';
-    case 'bottom-end':
-      return 'top right';
-    case 'left-start':
-      return 'right top';
-    case 'left-end':
-      return 'right bottom';
-    case 'right-start':
-      return 'left top';
-    case 'right-end':
-      return 'left bottom';
+    case "top":
+      return "bottom";
+    case "bottom":
+      return "top";
+    case "left":
+      return "right";
+    case "right":
+      return "left";
+    case "top-start":
+      return "bottom left";
+    case "top-end":
+      return "bottom right";
+    case "bottom-start":
+      return "top left";
+    case "bottom-end":
+      return "top right";
+    case "left-start":
+      return "right top";
+    case "left-end":
+      return "right bottom";
+    case "right-start":
+      return "left top";
+    case "right-end":
+      return "left bottom";
   }
 };
 
-interface PopoverCloseProps extends React.ComponentPropsWithRef<'button'> {
+interface PopoverCloseProps extends React.ComponentPropsWithRef<"button"> {
   asChild?: boolean;
 }
 
@@ -484,13 +459,9 @@ interface PopoverCloseProps extends React.ComponentPropsWithRef<'button'> {
  * </Popover>
  * ```
  */
-const PopoverClose = ({
-  asChild = false,
-  children,
-  ...props
-}: PopoverCloseProps) => {
+const PopoverClose = ({ asChild = false, children, ...props }: PopoverCloseProps) => {
   const { setOpen } = usePopoverContext();
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
@@ -505,15 +476,11 @@ const PopoverClose = ({
   );
 };
 
-interface PopoverSearchInputProps extends React.ComponentPropsWithRef<'input'> {
+interface PopoverSearchInputProps extends React.ComponentPropsWithRef<"input"> {
   isLoading?: boolean;
 }
 
-const PopoverSearchInput = ({
-  className,
-  isLoading,
-  ...props
-}: PopoverSearchInputProps) => {
+const PopoverSearchInput = ({ className, isLoading, ...props }: PopoverSearchInputProps) => {
   return (
     <div className="relative flex items-center rounded-t-lg border-border border-b bg-transparent">
       {isLoading ? (
@@ -526,8 +493,8 @@ const PopoverSearchInput = ({
       )}
       <input
         className={cn(
-          'h-10 w-full border-0 bg-transparent p-4 pl-10 font-medium text-base outline-none transition-colors placeholder:text-foreground-secondary focus:ring-0',
-          className
+          "h-10 w-full border-0 bg-transparent p-4 pl-10 font-medium text-base outline-none transition-colors placeholder:text-foreground-secondary focus:ring-0",
+          className,
         )}
         {...props}
       />
@@ -535,17 +502,10 @@ const PopoverSearchInput = ({
   );
 };
 
-const PopoverEmpty = ({
-  children,
-  className,
-  ...props
-}: React.ComponentPropsWithRef<'div'>) => {
+const PopoverEmpty = ({ children, className, ...props }: React.ComponentPropsWithRef<"div">) => {
   return (
     <div
-      className={cn(
-        'my-4 text-center text-base text-foreground-secondary',
-        className
-      )}
+      className={cn("my-4 text-center text-base text-foreground-secondary", className)}
       {...props}
     >
       {children}

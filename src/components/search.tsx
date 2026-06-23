@@ -1,54 +1,51 @@
-import {
-  MagnifyingGlassIcon,
-  WarningCircleIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { useCallback, useEffect, useState } from 'react';
-import { useKeyboardShortcut } from '@/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut';
-import { IconButton } from '@/foundations/ui/button/button';
-import { Dialog } from '@/foundations/ui/dialog/dialog';
-import { Menu } from '@/foundations/ui/menu/menu';
-import type { Pagefind } from '@/lib/types/pagefind';
+import { MagnifyingGlassIcon, WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
+import { useCallback, useEffect, useState } from "react";
+import { useKeyboardShortcut } from "@/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut";
+import { IconButton } from "@/foundations/ui/button/button";
+import { Dialog } from "@/foundations/ui/dialog/dialog";
+import { Menu } from "@/foundations/ui/menu/menu";
+import type { Pagefind } from "@/lib/types/pagefind";
 
 const MAX_ITEMS_PER_GROUP = 7;
 
 const HIGHLIGHTS: Result[] = [
   {
-    group: 'Introduction',
+    group: "Introduction",
     items: [
-      { title: 'About', href: '/about' },
-      { title: 'Setup', href: '/setup' },
+      { title: "About", href: "/about" },
+      { title: "Setup", href: "/setup" },
     ],
   },
   {
-    group: 'UI',
+    group: "UI",
     items: [
-      { title: 'Button', href: '/ui/button' },
-      { title: 'Menu', href: '/ui/menu' },
-      { title: 'Input', href: '/ui/input' },
+      { title: "Button", href: "/ui/button" },
+      { title: "Menu", href: "/ui/menu" },
+      { title: "Input", href: "/ui/input" },
     ],
   },
   {
-    group: 'Components',
+    group: "Components",
     items: [
-      { title: 'InstanceCounter', href: '/components/instance-counter' },
-      { title: 'Slot', href: '/components/slot' },
+      { title: "InstanceCounter", href: "/components/instance-counter" },
+      { title: "Slot", href: "/components/slot" },
     ],
   },
   {
-    group: 'Hooks',
+    group: "Hooks",
     items: [
       {
-        title: 'useIntersectionObserver',
-        href: '/hooks/use-intersection-observer',
+        title: "useIntersectionObserver",
+        href: "/hooks/use-intersection-observer",
       },
-      { title: 'useScrollLock', href: '/hooks/use-scroll-lock' },
+      { title: "useScrollLock", href: "/hooks/use-scroll-lock" },
     ],
   },
   {
-    group: 'Guides',
+    group: "Guides",
     items: [
-      { title: 'Accessible Forms', href: '/guides/accessible-form' },
-      { title: 'Automated Tests', href: '/guides/automated-tests' },
+      { title: "Accessible Forms", href: "/guides/accessible-form" },
+      { title: "Automated Tests", href: "/guides/automated-tests" },
     ],
   },
 ];
@@ -60,7 +57,7 @@ const Search = () => {
   const [pagefind, isPagefindError] = usePagefind();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState<Result[]>(HIGHLIGHTS);
 
   const handleSearch = useCallback(
@@ -77,15 +74,15 @@ const Search = () => {
           const data = await result.data();
 
           return {
-            title: data.meta.title ?? '',
+            title: data.meta.title ?? "",
             folder: data.meta.folder,
-            href: data.url.replace('.html', ''),
+            href: data.url.replace(".html", ""),
           };
-        })
+        }),
       );
 
       const groupedMatches = matches.reduce((acc, result) => {
-        const group = result.folder || 'other';
+        const group = result.folder || "other";
         const existing = acc.find((item) => item.group === group);
 
         if (existing) {
@@ -99,11 +96,11 @@ const Search = () => {
 
       setResults(groupedMatches);
     },
-    [pagefind]
+    [pagefind],
   );
 
   useEffect(() => {
-    if (query === '') {
+    if (query === "") {
       setResults(HIGHLIGHTS);
       return;
     }
@@ -111,12 +108,12 @@ const Search = () => {
     void handleSearch(query);
   }, [query, handleSearch]);
 
-  useKeyboardShortcut({ key: 'k', mod: true }, () => setIsOpen(true));
+  useKeyboardShortcut({ key: "k", mod: true }, () => setIsOpen(true));
 
   const handleOpenChange = (next: boolean) => {
     setIsOpen(next);
     if (!next) {
-      setQuery('');
+      setQuery("");
       setResults(HIGHLIGHTS);
     }
   };
@@ -129,12 +126,7 @@ const Search = () => {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
-        <IconButton
-          size="sm"
-          variant="ghost"
-          aria-label="Search"
-          className="pt-px"
-        >
+        <IconButton size="sm" variant="ghost" aria-label="Search" className="pt-px">
           <MagnifyingGlassIcon />
         </IconButton>
       </Dialog.Trigger>
@@ -163,14 +155,9 @@ const Search = () => {
 
                     return (
                       <Menu.Section key={result.group}>
-                        <Menu.Heading className="capitalize">
-                          {result.group}
-                        </Menu.Heading>
+                        <Menu.Heading className="capitalize">{result.group}</Menu.Heading>
                         {items.map((item) => (
-                          <Menu.Item
-                            key={item.href}
-                            onSelect={() => handleSelect(item.href)}
-                          >
+                          <Menu.Item key={item.href} onSelect={() => handleSelect(item.href)}>
                             {item.title}
                           </Menu.Item>
                         ))}
@@ -218,10 +205,10 @@ const usePagefind = () => {
     const loadPagefind = async () => {
       try {
         // @ts-expect-error - dynamic import not typed
-        const pagefind = await import('/pagefind/pagefind.js');
+        const pagefind = await import("/pagefind/pagefind.js");
         setInstance(pagefind);
       } catch (e) {
-        console.error('Failed to load Pagefind instance:', e);
+        console.error("Failed to load Pagefind instance:", e);
         setIsError(true);
       }
     };

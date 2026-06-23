@@ -1,25 +1,25 @@
-import { Checkbox } from '@/foundations/ui/checkbox/checkbox';
-import { Disclosure } from '@/foundations/ui/disclosure/disclosure';
+import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
+import { Disclosure } from "@/foundations/ui/disclosure/disclosure";
 
-import type { HierarchicalItem } from '../hierarchical-data';
-import { useHierarchicalSelection } from '../use-hierarchical-selection';
+import type { HierarchicalItem } from "../hierarchical-data";
+import { useHierarchicalSelection } from "../use-hierarchical-selection";
 
 const sampleData: HierarchicalItem[] = [
   {
-    id: 'europe',
-    label: 'Europe',
+    id: "europe",
+    label: "Europe",
     children: [
-      { id: 'portugal', label: 'Portugal' },
-      { id: 'spain', label: 'Spain' },
-      { id: 'france', label: 'France' },
+      { id: "portugal", label: "Portugal" },
+      { id: "spain", label: "Spain" },
+      { id: "france", label: "France" },
     ],
   },
   {
-    id: 'asia',
-    label: 'Asia',
+    id: "asia",
+    label: "Asia",
     children: [
-      { id: 'south-korea', label: 'South Korea' },
-      { id: 'japan', label: 'Japan' },
+      { id: "south-korea", label: "South Korea" },
+      { id: "japan", label: "Japan" },
     ],
   },
 ];
@@ -34,10 +34,10 @@ export default function BasicHierarchicalSelection() {
     isSelected,
     isParentOpen,
   } = useHierarchicalSelection({
-    defaultSelected: ['spain'],
-    defaultOpened: ['europe'],
+    defaultSelected: ["spain"],
+    defaultOpened: ["europe"],
     onSelectionChange: (selected) => {
-      console.log('Selected items:', selected);
+      console.log("Selected items:", selected);
     },
   });
 
@@ -45,7 +45,7 @@ export default function BasicHierarchicalSelection() {
     <div className="space-y-2">
       <div className="mb-4">
         <p className="text-foreground-secondary text-sm">
-          Selected: {selectedArray.join(', ') || 'None'}
+          Selected: {selectedArray.join(", ") || "None"}
         </p>
       </div>
 
@@ -63,9 +63,7 @@ export default function BasicHierarchicalSelection() {
                     indeterminate={parentStatus.indeterminate}
                     onChange={(e) => toggleParent(parent, e.target.checked)}
                   />
-                  <span className="cursor-pointer font-medium text-base">
-                    {parent.label}
-                  </span>
+                  <span className="cursor-pointer font-medium text-base">{parent.label}</span>
                 </label>
 
                 <Disclosure.Trigger
@@ -79,17 +77,12 @@ export default function BasicHierarchicalSelection() {
               <Disclosure.Content>
                 <div className="mt-2 ml-6 space-y-2">
                   {parent.children?.map((child) => (
-                    <label
-                      key={child.id}
-                      className="flex cursor-pointer items-center gap-2"
-                    >
+                    <label key={child.id} className="flex cursor-pointer items-center gap-2">
                       <Checkbox
                         checked={isSelected(child.id)}
                         onChange={() => toggleItem(child.id)}
                       />
-                      <span className="cursor-pointer font-medium text-base">
-                        {child.label}
-                      </span>
+                      <span className="cursor-pointer font-medium text-base">{child.label}</span>
                     </label>
                   ))}
                 </div>

@@ -3,11 +3,11 @@ import {
   PencilSimpleIcon,
   ScissorsIcon,
   TrashIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { useState } from 'react';
-import { Menu } from '@/foundations/ui/menu/menu';
+} from "@phosphor-icons/react/dist/ssr";
+import { useState } from "react";
+import { Menu } from "@/foundations/ui/menu/menu";
 
-export const meta = { layout: 'centered' } as const;
+export const meta = { layout: "centered" } as const;
 
 export default function MenuContextPreview() {
   const [pos, setPos] = useState<[number, number] | null>(null);
@@ -24,11 +24,7 @@ export default function MenuContextPreview() {
       >
         Right-click anywhere here
       </div>
-      <Menu
-        open={!!pos}
-        onOpenChange={(open) => !open && setPos(null)}
-        origin={pos ?? 'trigger'}
-      >
+      <Menu open={!!pos} onOpenChange={(open) => !open && setPos(null)} origin={pos ?? "trigger"}>
         <Menu.Trigger className="hidden" />
         <Menu.Items>
           <Menu.Item>

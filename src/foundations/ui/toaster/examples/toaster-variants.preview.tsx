@@ -1,5 +1,5 @@
-import { Button } from '@/foundations/ui/button/button';
-import { toast } from '@/foundations/ui/toaster/toaster';
+import { Button } from "@/foundations/ui/button/button";
+import { toast } from "@/foundations/ui/toaster/toaster";
 
 const ToasterVariantsPreview = () => {
   return (
@@ -8,9 +8,7 @@ const ToasterVariantsPreview = () => {
         type="button"
         size="sm"
         variant="outline"
-        onClick={() =>
-          toast({ title: 'This is a toast notification!', variant: 'default' })
-        }
+        onClick={() => toast({ title: "This is a toast notification!", variant: "default" })}
       >
         Default
       </Button>
@@ -20,8 +18,8 @@ const ToasterVariantsPreview = () => {
         variant="outline"
         onClick={() =>
           toast({
-            title: 'This is a positive toast notification!',
-            variant: 'positive',
+            title: "This is a positive toast notification!",
+            variant: "positive",
           })
         }
       >
@@ -33,8 +31,8 @@ const ToasterVariantsPreview = () => {
         variant="outline"
         onClick={() =>
           toast({
-            title: 'This is a negative toast notification!',
-            variant: 'negative',
+            title: "This is a negative toast notification!",
+            variant: "negative",
           })
         }
       >

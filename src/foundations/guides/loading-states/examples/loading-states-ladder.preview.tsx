@@ -1,39 +1,39 @@
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 
-import { useDelayedLoading } from '@/foundations/hooks/use-delayed-loading/use-delayed-loading';
-import { useTicker } from '@/foundations/hooks/use-ticker/use-ticker';
-import { Button } from '@/foundations/ui/button/button';
-import { Progress } from '@/foundations/ui/progress/progress';
-import { Spinner } from '@/foundations/ui/spinner/spinner';
-import type { PreviewMeta } from '@/lib/preview';
+import { useDelayedLoading } from "@/foundations/hooks/use-delayed-loading/use-delayed-loading";
+import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
+import { Button } from "@/foundations/ui/button/button";
+import { Progress } from "@/foundations/ui/progress/progress";
+import { Spinner } from "@/foundations/ui/spinner/spinner";
+import type { PreviewMeta } from "@/lib/preview";
 
-type Indicator = 'none' | 'spinner' | 'progress';
+type Indicator = "none" | "spinner" | "progress";
 
 // The wait-time ladder: pick an indicator from the expected duration.
 const indicatorFor = (expectedMs: number): Indicator =>
-  expectedMs < 1000 ? 'none' : expectedMs < 3000 ? 'spinner' : 'progress';
+  expectedMs < 1000 ? "none" : expectedMs < 3000 ? "spinner" : "progress";
 
 const cases = [
   {
-    label: 'Quick',
+    label: "Quick",
     duration: 200,
-    caption: 'Under 1s → show nothing. An indicator would only flash.',
+    caption: "Under 1s → show nothing. An indicator would only flash.",
   },
   {
-    label: 'Medium',
+    label: "Medium",
     duration: 2000,
-    caption: '1–3s → an indeterminate spinner.',
+    caption: "1–3s → an indeterminate spinner.",
   },
   {
-    label: 'Long',
+    label: "Long",
     duration: 6000,
-    caption: '3–10s → a determinate progress bar.',
+    caption: "3–10s → a determinate progress bar.",
   },
 ];
 
 function LoadingStatesLadderPreview() {
   const [isLoading, setIsLoading] = useState(false);
-  const [indicator, setIndicator] = useState<Indicator>('none');
+  const [indicator, setIndicator] = useState<Indicator>("none");
   const [value, setValue] = useState(0);
 
   const showLoading = useDelayedLoading(isLoading);
@@ -43,10 +43,7 @@ function LoadingStatesLadderPreview() {
   const duration = useRef(0);
 
   const ticker = useTicker(() => {
-    const pct = Math.min(
-      100,
-      ((performance.now() - startedAt.current) / duration.current) * 100
-    );
+    const pct = Math.min(100, ((performance.now() - startedAt.current) / duration.current) * 100);
     setValue(pct);
     if (pct >= 100) return false;
   });
@@ -59,7 +56,7 @@ function LoadingStatesLadderPreview() {
     setValue(0);
     setIsLoading(true);
 
-    if (next === 'progress') {
+    if (next === "progress") {
       startedAt.current = performance.now();
       duration.current = ms;
       ticker.start();
@@ -81,23 +78,20 @@ function LoadingStatesLadderPreview() {
             disabled={isLoading}
             onClick={() => load(c.duration)}
           >
-            {c.label} (
-            {c.duration < 1000 ? `${c.duration}ms` : `${c.duration / 1000}s`})
+            {c.label} ({c.duration < 1000 ? `${c.duration}ms` : `${c.duration / 1000}s`})
           </Button>
         ))}
       </div>
 
       <div className="flex h-8 w-64 items-center justify-center text-foreground-secondary text-sm">
-        {showLoading && indicator === 'spinner' && (
+        {showLoading && indicator === "spinner" && (
           <span className="flex items-center gap-2">
             <Spinner /> Loading…
           </span>
         )}
-        {showLoading && indicator === 'progress' && (
-          <Progress value={value} className="w-full" />
-        )}
-        {!(showLoading && indicator !== 'none') && (
-          <span className="opacity-60">{isLoading ? 'Working…' : 'Idle'}</span>
+        {showLoading && indicator === "progress" && <Progress value={value} className="w-full" />}
+        {!(showLoading && indicator !== "none") && (
+          <span className="opacity-60">{isLoading ? "Working…" : "Idle"}</span>
         )}
       </div>
 
@@ -113,7 +107,7 @@ function LoadingStatesLadderPreview() {
 }
 
 export const meta = {
-  layout: 'centered',
+  layout: "centered",
 } satisfies PreviewMeta;
 
 export default LoadingStatesLadderPreview;

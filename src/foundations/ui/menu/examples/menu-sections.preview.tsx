@@ -1,5 +1,5 @@
-import { Button } from '@/foundations/ui/button/button';
-import { Menu } from '@/foundations/ui/menu/menu';
+import { Button } from "@/foundations/ui/button/button";
+import { Menu } from "@/foundations/ui/menu/menu";
 
 export default function MenuSectionsPreview() {
   return (

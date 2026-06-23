@@ -1,11 +1,11 @@
-import { UploadSimpleIcon } from '@phosphor-icons/react/dist/ssr';
-import { useState } from 'react';
+import { UploadSimpleIcon } from "@phosphor-icons/react/dist/ssr";
+import { useState } from "react";
 
 import {
   type FileEntry,
   FileUpload,
   type FileUploadStatus,
-} from '@/foundations/ui/file-upload/file-upload';
+} from "@/foundations/ui/file-upload/file-upload";
 
 interface UploadState {
   status: FileUploadStatus;
@@ -28,7 +28,7 @@ interface UploadState {
  */
 const simulateUpload = (
   onProgress: (value: number) => void,
-  onDone: (success: boolean) => void
+  onDone: (success: boolean) => void,
 ) => {
   let progress = 0;
   const interval = setInterval(() => {
@@ -50,25 +50,25 @@ export default function FileUploadProgressPreview() {
     for (const entry of entries) {
       setUploads((prev) => ({
         ...prev,
-        [entry.id]: { status: 'uploading', progress: 0 },
+        [entry.id]: { status: "uploading", progress: 0 },
       }));
 
       simulateUpload(
         (progress) => {
           setUploads((prev) => ({
             ...prev,
-            [entry.id]: { status: 'uploading', progress },
+            [entry.id]: { status: "uploading", progress },
           }));
         },
         (success) => {
           setUploads((prev) => ({
             ...prev,
             [entry.id]: {
-              status: success ? 'success' : 'error',
+              status: success ? "success" : "error",
               progress: 100,
             },
           }));
-        }
+        },
       );
     }
   };
@@ -92,7 +92,7 @@ export default function FileUploadProgressPreview() {
                 entry={entry}
                 status={state?.status}
                 progress={state?.progress}
-                error={state?.status === 'error' ? 'Upload failed' : undefined}
+                error={state?.status === "error" ? "Upload failed" : undefined}
               >
                 <FileUpload.ItemPreview />
                 <div className="flex min-w-0 flex-1 flex-col gap-1">

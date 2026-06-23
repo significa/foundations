@@ -1,9 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Pagination,
-  usePagination,
-} from '@/foundations/ui/pagination/pagination';
+import { Pagination, usePagination } from "@/foundations/ui/pagination/pagination";
 
 export default function PaginationPreview() {
   const [page, setPage] = useState(1);
@@ -21,12 +18,9 @@ export default function PaginationPreview() {
         </Pagination.Item>
 
         {items.map((item) =>
-          item.type === 'page' ? (
+          item.type === "page" ? (
             <Pagination.Item key={item.key}>
-              <Pagination.Link
-                isActive={item.selected}
-                onClick={() => setPage(item.value)}
-              >
+              <Pagination.Link isActive={item.selected} onClick={() => setPage(item.value)}>
                 {item.value}
               </Pagination.Link>
             </Pagination.Item>
@@ -34,7 +28,7 @@ export default function PaginationPreview() {
             <Pagination.Item key={item.key}>
               <Pagination.Ellipsis />
             </Pagination.Item>
-          )
+          ),
         )}
 
         <Pagination.Item>

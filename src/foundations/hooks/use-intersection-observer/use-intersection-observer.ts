@@ -1,9 +1,6 @@
-import { type RefObject, useEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from "react";
 
-type IntersectionCallback = (
-  isIntersecting: boolean,
-  entry: IntersectionObserverEntry
-) => void;
+type IntersectionCallback = (isIntersecting: boolean, entry: IntersectionObserverEntry) => void;
 
 interface UseIntersectionObserverOptions {
   root?: RefObject<HTMLElement | null> | null;
@@ -12,12 +9,8 @@ interface UseIntersectionObserverOptions {
 }
 
 export const useIntersectionObserver = <T extends HTMLElement>(
-  {
-    threshold = 0,
-    root = null,
-    rootMargin = '0%',
-  }: UseIntersectionObserverOptions = {},
-  callback?: IntersectionCallback
+  { threshold = 0, root = null, rootMargin = "0%" }: UseIntersectionObserverOptions = {},
+  callback?: IntersectionCallback,
 ) => {
   const ref = useRef<T>(null);
   const [state, setState] = useState<{
@@ -47,7 +40,7 @@ export const useIntersectionObserver = <T extends HTMLElement>(
           }
         });
       },
-      { threshold, root: root?.current, rootMargin }
+      { threshold, root: root?.current, rootMargin },
     );
 
     observer.observe(element);

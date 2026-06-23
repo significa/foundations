@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 import {
   InstanceCounterProvider,
   useInstanceCounter,
-} from '@/foundations/components/instance-counter/instance-counter';
-import { Button } from '@/foundations/ui/button/button';
+} from "@/foundations/components/instance-counter/instance-counter";
+import { Button } from "@/foundations/ui/button/button";
 
 const Item = () => {
   const index = useInstanceCounter();
@@ -23,9 +23,7 @@ const InstanceCounterPreview = () => {
   return (
     <InstanceCounterProvider onChange={setLength}>
       <div className="flex min-h-88 flex-col gap-4">
-        <div className="text-foreground-secondary text-sm">
-          Number of Instances: {length}
-        </div>
+        <div className="text-foreground-secondary text-sm">Number of Instances: {length}</div>
         <Button size="sm" onClick={() => setMount(!mount)}>
           Trigger Tree Change
         </Button>

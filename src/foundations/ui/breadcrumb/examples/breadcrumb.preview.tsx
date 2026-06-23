@@ -1,4 +1,4 @@
-import { Breadcrumb } from '@/foundations/ui/breadcrumb/breadcrumb';
+import { Breadcrumb } from "@/foundations/ui/breadcrumb/breadcrumb";
 
 export default function BreadcrumbPreview() {
   return (

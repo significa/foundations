@@ -1,5 +1,5 @@
-import { Button } from '@/foundations/ui/button/button';
-import { Modal } from '@/foundations/ui/modal/modal';
+import { Button } from "@/foundations/ui/button/button";
+import { Modal } from "@/foundations/ui/modal/modal";
 
 const ModalPreview = () => {
   return (

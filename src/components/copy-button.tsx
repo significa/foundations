@@ -1,7 +1,7 @@
-import { CheckIcon, ClipboardIcon } from '@phosphor-icons/react/dist/ssr';
-import { useEffect, useRef, useState } from 'react';
-import { IconButton } from '@/foundations/ui/button/button';
-import { cn } from '@/lib/utils/classnames';
+import { CheckIcon, ClipboardIcon } from "@phosphor-icons/react/dist/ssr";
+import { useEffect, useRef, useState } from "react";
+import { IconButton } from "@/foundations/ui/button/button";
+import { cn } from "@/lib/utils/classnames";
 
 type CopyButtonProps = {
   className?: string;
@@ -13,10 +13,9 @@ const CopyButton = ({ className, ...props }: CopyButtonProps) => {
 
   const handleCopy = () => {
     const text =
-      'target' in props && props.target
-        ? ((document.querySelector(props.target) as HTMLElement)?.innerText ??
-          '')
-        : (props.content ?? '');
+      "target" in props && props.target
+        ? ((document.querySelector(props.target) as HTMLElement)?.innerText ?? "")
+        : (props.content ?? "");
 
     navigator.clipboard.writeText(text);
     setIsCopied(true);

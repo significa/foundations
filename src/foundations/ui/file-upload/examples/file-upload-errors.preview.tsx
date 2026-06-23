@@ -1,20 +1,17 @@
-import {
-  UploadSimpleIcon,
-  WarningCircleIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { useState } from 'react';
+import { UploadSimpleIcon, WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
+import { useState } from "react";
 
 import {
   FileUpload,
   formatBytes,
   type RejectedFileEntry,
-} from '@/foundations/ui/file-upload/file-upload';
+} from "@/foundations/ui/file-upload/file-upload";
 
 const ERROR_LABEL: Record<string, string> = {
-  'invalid-type': 'Wrong file type',
-  'too-large': 'File too large',
-  'too-small': 'File too small',
-  'too-many': 'Too many files',
+  "invalid-type": "Wrong file type",
+  "too-large": "File too large",
+  "too-small": "File too small",
+  "too-many": "Too many files",
 };
 
 const MAX_SIZE = 1_000_000;

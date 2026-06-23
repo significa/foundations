@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Button } from '@/foundations/ui/button/button';
+import { Button } from "@/foundations/ui/button/button";
 
 export default function ButtonExample() {
   const [isLoading, setIsLoading] = useState(false);

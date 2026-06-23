@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useKeyboardShortcut } from '@/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut';
-import { Kbd } from '@/foundations/ui/kbd/kbd';
+import { useEffect, useState } from "react";
+import { useKeyboardShortcut } from "@/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut";
+import { Kbd } from "@/foundations/ui/kbd/kbd";
 
 // Detect Mac on the client only — `navigator` doesn't exist during SSR, so
 // the first render assumes non-Mac and updates after hydration.
@@ -16,14 +16,14 @@ export default function UseKeyboardShortcutPlatformPreview() {
   const isMac = useIsMac();
   const [count, setCount] = useState(0);
 
-  useKeyboardShortcut({ key: 's', mod: true }, () => setCount((c) => c + 1));
+  useKeyboardShortcut({ key: "s", mod: true }, () => setCount((c) => c + 1));
 
   return (
     <div className="flex flex-col items-center gap-3 text-foreground-secondary text-sm">
       <p>
-        Press{' '}
+        Press{" "}
         <Kbd.Group>
-          <Kbd>{isMac ? '⌘' : 'Ctrl'}</Kbd>
+          <Kbd>{isMac ? "⌘" : "Ctrl"}</Kbd>
           <Kbd>S</Kbd>
         </Kbd.Group>
       </p>
