@@ -145,7 +145,7 @@ const OTPInput = ({
         const nextValues = [...valuesRef.current];
         let lastFilled = index;
         for (let i = 0; i < clean.length && index + i < cellCount; i++) {
-          nextValues[index + i] = clean[i];
+          nextValues[index + i] = clean[i] ?? '';
           lastFilled = index + i;
         }
         updateValues(nextValues, true);
@@ -214,7 +214,7 @@ const OTPInput = ({
       const nextValues = [...valuesRef.current];
       let lastFilled = index;
       for (let i = 0; i < text.length && index + i < cellCount; i++) {
-        nextValues[index + i] = text[i];
+        nextValues[index + i] = text[i] ?? '';
         lastFilled = index + i;
       }
       updateValues(nextValues, true);

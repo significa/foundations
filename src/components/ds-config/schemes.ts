@@ -79,8 +79,21 @@ const buildScheme = (
   colors: { ...DEFAULT_COLORS, ...overrides },
 });
 
+export const DEFAULT_SCHEME_ID = 'default';
+
+export const DEFAULT_SCHEME: Scheme = buildScheme(
+  DEFAULT_SCHEME_ID,
+  'Default',
+  {}
+);
+
+// `colors` is a total Record<ColorToken, TokenValues>: every ColorToken is always
+// present. This narrows the indexed access that `noUncheckedIndexedAccess` widens.
+export const colorFor = (scheme: Scheme, token: ColorToken): TokenValues =>
+  scheme.colors[token] as TokenValues;
+
 export const SCHEMES: Scheme[] = [
-  buildScheme('default', 'Default', {}),
+  DEFAULT_SCHEME,
 
   // Warm cream + brown with burnt orange accent.
   buildScheme('gruvbox', 'Gruvbox', {
@@ -226,6 +239,3 @@ export const SCHEMES: Scheme[] = [
     info: { light: 'oklch(72% 0.13 220)', dark: 'oklch(82% 0.12 220)' },
   }),
 ];
-
-export const DEFAULT_SCHEME_ID = 'default';
-export const DEFAULT_SCHEME = SCHEMES[0];

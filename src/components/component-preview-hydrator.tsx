@@ -36,10 +36,15 @@ const ComponentPreviewHydrator = ({
   const [Component, setComponent] = useState<React.ComponentType | null>();
 
   useEffect(() => {
+    // Dynamically import only the preview module for the given file.
+    // This triggers the code-split chunk load for that specific preview.
+    const load = modules[file];
+    if (!load) {
+      console.error(`No preview module found for file: ${file}`);
+      return;
+    }
     try {
-      // Dynamically import only the preview module for the given file.
-      // This triggers the code-split chunk load for that specific preview.
-      modules[file]().then((mod) => {
+      load().then((mod) => {
         // @ts-expect-error - We know this will be a React component, but TypeScript can't infer it from the dynamic import.
         setComponent(() => mod.default);
       });

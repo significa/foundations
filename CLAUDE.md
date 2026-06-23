@@ -6,7 +6,8 @@ Guidelines for agentic coding agents working in this repository.
 
 ## Commands
 
-All commands use **pnpm** (v10.32.1, Node ≥ 22.12.0).
+All commands use **pnpm** (v10.32.1). Node and pnpm are pinned via `mise.toml`
+(Node 24, pnpm 10) — run `mise install` after cloning.
 
 | Command             | Purpose                                                            |
 | ------------------- | ------------------------------------------------------------------ |
@@ -18,15 +19,17 @@ All commands use **pnpm** (v10.32.1, Node ≥ 22.12.0).
 | `pnpm lint`         | `biome lint --write --unsafe .`                                    |
 | `pnpm format`       | Biome format (non-Astro) + Prettier format (Astro)                 |
 | `pnpm types:check`  | `astro sync && tsc -noEmit`                                        |
+| `pnpm knip`         | Dead-code / unused-dependency detection                            |
 
 ### CI gate
 
-`pnpm check` runs four things in sequence:
+`pnpm check` runs five things in sequence:
 
 1. `biome ci` — lints and checks formatting for all non-Astro files
 2. `prettier --check "**/*.astro"` — checks formatting for Astro files
 3. `pnpm types:check` — full TypeScript type check
 4. `pnpm check:deps` — verifies every component's `page.mdx` declares the cross-Foundations imports it uses (see "Page dependency discipline" below)
+5. `pnpm knip` — flags unused files and unused/unlisted dependencies (config in `knip.ts`; unused-export reporting is off because the library surface is intentionally public)
 
 **Always run `pnpm check` after making changes.** Fix all errors before considering a task done.
 
@@ -38,8 +41,8 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 ## TypeScript
 
-- Config extends `astro/tsconfigs/strict` — the strictest Astro preset.
-- Path aliases: `@/*` → `src/*`, `~/*` → repo root.
+- Config extends `@significa/tsconfig/astro` (the shared Significa preset). On top of strict mode it enables `noUncheckedIndexedAccess`, `noUnusedLocals`/`noUnusedParameters`, and `verbatimModuleSyntax` — so indexed access is `T | undefined` (guard or narrow it; don't reach for `!`, which the lint forbids), and type-only imports must use `import type`.
+- Path aliases: `@/*` → `src/*`, `~/*` → repo root (set in `tsconfig.json`; `jsx`/`jsxImportSource` are overridden back to `react-jsx`/`react` since the preset defaults to `preserve`).
 - Use `import type` for all type-only imports.
 - Avoid `any`. If unavoidable, add a `// biome-ignore lint/suspicious/noExplicitAny: <reason>` comment.
 - Prefer `interface` for component props and object shapes; use `type` for unions, mapped types, and simple aliases.
@@ -56,6 +59,14 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 ---
 
 ## Code Style
+
+Biome config extends the shared `@significa/biome-config` preset (`biome.json`);
+the project file adds Astro exclusions, Tailwind class sorting, and a few rule
+tweaks. The preset's **lint** rules are adopted as-is, but the **formatter** is
+pinned back to the house style below (single quotes, 80-char, ES5 commas) via
+overrides in `biome.json`. Dropping those overrides and reformatting the codebase
+to the preset's defaults (double quotes, 100-char, trailing-all) is deferred to a
+separate, mechanical-only PR.
 
 ### Formatting rules
 

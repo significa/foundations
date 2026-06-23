@@ -42,7 +42,9 @@ const Stack = ({ stick = 'top', children, ...rest }: StackProps) => {
         heights.viewport = window.innerHeight;
 
         for (let index = 0; index < length; index++) {
-          heights.items[index] = items[index].getBoundingClientRect().height;
+          const item = items[index];
+          if (!item) continue;
+          heights.items[index] = item.getBoundingClientRect().height;
           heights.headers[index] =
             headers[index]?.getBoundingClientRect().height || 0;
           heights.contents[index] =
@@ -74,6 +76,8 @@ const Stack = ({ stick = 'top', children, ...rest }: StackProps) => {
         stick === 'top' ? computeAlignTopBottomMargins() : [];
 
       for (let index = 0; index < length; index++) {
+        const item = items[index];
+        if (!item) continue;
         const styles = {
           position: 'sticky' as const,
           top: undefined as string | undefined,
@@ -87,7 +91,7 @@ const Stack = ({ stick = 'top', children, ...rest }: StackProps) => {
 
         if (stick === 'top') {
           styles.top = px(preHeaderHeightSum);
-          styles.marginBottom = px(preComputedMarginBottoms[index]);
+          styles.marginBottom = px(preComputedMarginBottoms[index] ?? 0);
           styles.marginTop = px(
             -1 * (preComputedMarginBottoms[index - 1] || 0)
           );
@@ -108,7 +112,7 @@ const Stack = ({ stick = 'top', children, ...rest }: StackProps) => {
           );
         }
 
-        Object.assign(items[index].style, styles);
+        Object.assign(item.style, styles);
       }
 
       if (stick === 'bottom') {

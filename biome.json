@@ -1,7 +1,8 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+  "extends": ["@significa/biome-config"],
   "files": {
-    "includes": ["**", "!!**/dist", "!!**/.astro", "!!**/*.astro"]
+    "includes": ["!!**/dist", "!!**/.astro", "!!**/*.astro"]
   },
   "vcs": {
     "enabled": true,
@@ -9,20 +10,17 @@
     "useIgnoreFile": true
   },
   "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2,
     "lineWidth": 80
   },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "es5"
+    }
+  },
   "linter": {
-    "enabled": true,
     "rules": {
-      "recommended": true,
       "correctness": {
-        "noUnusedImports": {
-          "level": "error",
-          "fix": "safe"
-        },
         "noUnknownProperty": {
           "level": "error",
           "options": {
@@ -51,15 +49,6 @@
       }
     }
   },
-  "javascript": {
-    "formatter": {
-      "jsxQuoteStyle": "double",
-      "quoteStyle": "single",
-      "semicolons": "always",
-      "trailingCommas": "es5"
-    },
-    "globals": ["React"]
-  },
   "css": {
     "parser": {
       "tailwindDirectives": true
@@ -74,14 +63,6 @@
     },
     "linter": {
       "enabled": true
-    }
-  },
-  "assist": {
-    "enabled": true,
-    "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
     }
   },
   "overrides": [

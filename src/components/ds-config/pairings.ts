@@ -23,12 +23,14 @@ const empty: StoredFonts = {
 
 export const DEFAULT_PAIRING_ID = 'default';
 
+export const DEFAULT_PAIRING: Pairing = {
+  id: DEFAULT_PAIRING_ID,
+  label: 'System',
+  fonts: { ...empty },
+};
+
 export const PAIRINGS: Pairing[] = [
-  {
-    id: 'default',
-    label: 'System',
-    fonts: { ...empty },
-  },
+  DEFAULT_PAIRING,
   // Full 3-font editorial: display serif headings, transitional serif body
   // for prose, neo-grotesque sans for chrome. Magazine / publication mood.
   {
@@ -87,8 +89,6 @@ export const PAIRINGS: Pairing[] = [
     },
   },
 ];
-
-export const DEFAULT_PAIRING: Pairing = PAIRINGS[0];
 
 const sameFont = (a: StoredFont | null, b: StoredFont | null) =>
   (a?.family ?? null) === (b?.family ?? null);

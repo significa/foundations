@@ -77,7 +77,7 @@ const Search = () => {
           const data = await result.data();
 
           return {
-            title: data.meta.title,
+            title: data.meta.title ?? '',
             folder: data.meta.folder,
             href: data.url.replace('.html', ''),
           };
@@ -86,13 +86,10 @@ const Search = () => {
 
       const groupedMatches = matches.reduce((acc, result) => {
         const group = result.folder || 'other';
-        const existing = acc.findIndex((item) => item.group === group);
+        const existing = acc.find((item) => item.group === group);
 
-        if (existing !== -1) {
-          acc[existing] = {
-            group,
-            items: [...acc[existing].items, result],
-          };
+        if (existing) {
+          existing.items.push(result);
         } else {
           acc.push({ group, items: [result] });
         }
@@ -111,7 +108,7 @@ const Search = () => {
       return;
     }
 
-    handleSearch(query);
+    void handleSearch(query);
   }, [query, handleSearch]);
 
   useKeyboardShortcut({ key: 'k', mod: true }, () => setIsOpen(true));
@@ -229,7 +226,7 @@ const usePagefind = () => {
       }
     };
 
-    loadPagefind();
+    void loadPagefind();
   }, []);
 
   return [instance, isError] as const;

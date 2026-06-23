@@ -20,6 +20,7 @@ import { SchemeEditor } from './scheme-editor';
 import {
   COLOR_TOKENS,
   type ColorToken,
+  colorFor,
   DEFAULT_SCHEME,
   DEFAULT_SCHEME_ID,
   SCHEMES,
@@ -66,7 +67,7 @@ const resolveToken = (
   scheme: Scheme,
   overrides: Partial<Record<ColorToken, TokenValues>>,
   token: ColorToken
-): TokenValues => overrides[token] ?? scheme.colors[token];
+): TokenValues => overrides[token] ?? colorFor(scheme, token);
 
 const fontFamilyValue = (font: StoredFont) =>
   `'${font.family}', ${fallbackFor(font.category)}`;
@@ -152,10 +153,10 @@ const DSConfig = () => {
     value: string
   ) => {
     setOverrides((prev) => {
-      const current = prev[token] ?? scheme.colors[token];
+      const current = prev[token] ?? colorFor(scheme, token);
       const updated: TokenValues = { ...current, [side]: value };
       // If the override now matches the scheme's value for this token, drop it.
-      if (valuesEqual(updated, scheme.colors[token])) {
+      if (valuesEqual(updated, colorFor(scheme, token))) {
         const { [token]: _, ...rest } = prev;
         return rest;
       }
@@ -192,7 +193,7 @@ const DSConfig = () => {
     const tokenLines: string[] = [];
     for (const token of COLOR_TOKENS) {
       const current = resolveToken(scheme, overrides, token);
-      if (valuesEqual(current, DEFAULT_SCHEME.colors[token])) continue;
+      if (valuesEqual(current, colorFor(DEFAULT_SCHEME, token))) continue;
       tokenLines.push(`  ${tokenVar(token)}: ${lightDark(current)};`);
     }
     if (radiusStep !== RADIUS_DEFAULT) {

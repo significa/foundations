@@ -186,24 +186,22 @@ const useListboxFloating = <T,>({
 
   const handleSelect = useCallback(
     (index: number | null) => {
-      if (index === null || !options[index]) return;
+      if (index === null) return;
+      const option = options[index];
+      if (!option) return;
 
       // assuming that a `value` array means a multiselect (sorry tuples)
       const isMultiple = Array.isArray(value);
 
       if (isMultiple) {
-        const isSelected = value.some((v) =>
-          getIsSelected(options[index].value, v)
-        );
+        const isSelected = value.some((v) => getIsSelected(option.value, v));
 
         return isSelected
-          ? onChange(
-              value.filter((v) => !getIsSelected(options[index].value, v)) as T
-            )
-          : onChange([...value, options[index].value] as T);
+          ? onChange(value.filter((v) => !getIsSelected(option.value, v)) as T)
+          : onChange([...value, option.value] as T);
       }
 
-      onChange(options[index].value);
+      onChange(option.value);
       setOpen(false);
     },
     [onChange, options, value, getIsSelected]
