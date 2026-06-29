@@ -36,7 +36,7 @@
     "chroma-js": "^3.2.0",
     "cva": "1.0.0-beta.4",
     "date-fns": "^4.4.0",
-    "motion": "^12.40.0",
+    "motion": "^12.42.0",
     "pagefind": "^1.5.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
