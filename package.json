@@ -29,7 +29,7 @@
     "@tailwindcss/vite": "^4.3.1",
     "@tanstack/react-table": "^8.21.3",
     "@types/chroma-js": "^3.1.2",
-    "@types/node": "^24.13.2",
+    "@types/node": "^26.0.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "astro": "^7.0.0",
