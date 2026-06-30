@@ -10,6 +10,35 @@ meta:
 
 ## June 2026
 
+### Changed: `Table` no longer wraps itself in a scroll `div`; use `Table.Container`
+
+`Table` used to render an implicit `<div className="relative w-full overflow-x-auto">` around
+the `<table>`. Per the CSS Overflow spec, `overflow-x: auto` with `overflow-y: visible` forces
+`overflow-y` to compute to `auto`, so that hidden wrapper was itself a scroll container on both
+axes — but with no height constraint it never scrolled, yet it still claimed the sticky
+header's scroll context. A consumer's own `max-h-*` wrapper therefore couldn't drive a sticky
+header; it scrolled the whole block, header included. This was broken in every browser.
+
+`Table` now renders only the `<table>`. The scroll container is an explicit `Table.Container`
+part (a `div` with `relative w-full overflow-x-auto`, plus a `bordered` prop — default `true` —
+for the rounded card). Wrap your tables in it where you relied on horizontal overflow or the
+card border, and set any `max-h-*` for a sticky header on the container itself:
+
+```diff tsx
+- <Table>
+-   <Table.Header sticky>…</Table.Header>
+-   …
+- </Table>
++ <Table.Container className="max-h-72">
++   <Table>
++     <Table.Header sticky>…</Table.Header>
++     …
++   </Table>
++ </Table.Container>
+```
+
+A plain `<Table>` with no container is still valid for a table that flows inline with the page.
+
 ### Changed: `Switch` now exposes `role="switch"`
 
 `Switch` is a native `<input type="checkbox">`, so it announced as a checkbox to assistive

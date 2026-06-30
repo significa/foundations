@@ -18,23 +18,33 @@ const tableStyle = cva({
   },
 });
 
+interface TableContainerProps extends React.ComponentPropsWithRef<"div"> {
+  bordered?: boolean;
+}
+
+const TableContainer = ({ ref, className, bordered = true, ...props }: TableContainerProps) => {
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "relative w-full overflow-x-auto",
+        bordered && "rounded-lg border border-border shadow-xs",
+        className,
+      )}
+      {...props}
+    />
+  );
+};
+
 interface TableProps extends React.ComponentPropsWithRef<"table"> {
   density?: "sm" | "md";
 }
 
 const Table = ({ ref, className, density, ...props }: TableProps) => {
-  return (
-    <div className="relative w-full overflow-x-auto">
-      <table ref={ref} className={cn(tableStyle({ density }), className)} {...props} />
-    </div>
-  );
+  return <table ref={ref} className={cn(tableStyle({ density }), className)} {...props} />;
 };
 
 interface TableHeaderProps extends React.ComponentPropsWithRef<"thead"> {
-  /**
-   * Pin the header to the top of the nearest scroll container. The container
-   * must have a defined height for `position: sticky` to engage.
-   */
   sticky?: boolean;
 }
 
@@ -66,7 +76,7 @@ const TableFooter = ({ ref, className, ...props }: React.ComponentPropsWithRef<"
   return (
     <tfoot
       ref={ref}
-      className={cn("border-border border-t bg-foreground/[0.02] font-medium", className)}
+      className={cn("border-border border-t bg-foreground/2 font-medium", className)}
       {...props}
     />
   );
@@ -76,12 +86,7 @@ const TableRow = ({ ref, className, ...props }: React.ComponentPropsWithRef<"tr"
   return (
     <tr
       ref={ref}
-      className={cn(
-        "transition-colors",
-        "data-selected:bg-foreground/[0.04]",
-        "hover:bg-foreground/[0.02]",
-        className,
-      )}
+      className={cn("transition-colors", "data-selected:bg-accent/4", className)}
       {...props}
     />
   );
@@ -148,14 +153,7 @@ const TableCaption = ({ ref, className, ...props }: React.ComponentPropsWithRef<
 };
 
 interface TableSortableHeadProps extends Omit<TableHeadProps, "onClick"> {
-  /**
-   * Current sort direction for this column. `false` means unsorted.
-   */
   sort: "asc" | "desc" | false;
-  /**
-   * Called when the consumer clicks the header. Implement the
-   * `unsorted → asc → desc → unsorted` (or whichever) cycle yourself.
-   */
   onSort: (event?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -203,6 +201,7 @@ const TableSortableHead = ({
 };
 
 const CompoundTable = Object.assign(Table, {
+  Container: TableContainer,
   Header: TableHeader,
   Body: TableBody,
   Footer: TableFooter,

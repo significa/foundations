@@ -183,73 +183,79 @@ export default function TableDataTablePreview() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Table>
-        <Table.Header>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Table.Row key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                const align = (
-                  header.column.columnDef.meta as { align?: "start" | "center" | "end" } | undefined
-                )?.align;
-                const canSort = header.column.getCanSort();
-                const sort = header.column.getIsSorted();
+      <Table.Container>
+        <Table>
+          <Table.Header>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Table.Row key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  const align = (
+                    header.column.columnDef.meta as
+                      | { align?: "start" | "center" | "end" }
+                      | undefined
+                  )?.align;
+                  const canSort = header.column.getCanSort();
+                  const sort = header.column.getIsSorted();
 
-                if (canSort) {
+                  if (canSort) {
+                    return (
+                      <Table.SortableHead
+                        key={header.id}
+                        align={align}
+                        sort={sort === false ? false : sort}
+                        onSort={header.column.getToggleSortingHandler() ?? (() => {})}
+                        style={header.getSize() !== 150 ? { width: header.getSize() } : undefined}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </Table.SortableHead>
+                    );
+                  }
+
                   return (
-                    <Table.SortableHead
+                    <Table.Head
                       key={header.id}
                       align={align}
-                      sort={sort === false ? false : sort}
-                      onSort={header.column.getToggleSortingHandler() ?? (() => {})}
                       style={header.getSize() !== 150 ? { width: header.getSize() } : undefined}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
-                    </Table.SortableHead>
-                  );
-                }
-
-                return (
-                  <Table.Head
-                    key={header.id}
-                    align={align}
-                    style={header.getSize() !== 150 ? { width: header.getSize() } : undefined}
-                  >
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </Table.Head>
-                );
-              })}
-            </Table.Row>
-          ))}
-        </Table.Header>
-        <Table.Body>
-          {table.getRowModel().rows.length === 0 ? (
-            <Table.Row>
-              <Table.Cell
-                colSpan={columns.length}
-                align="center"
-                className="h-24 text-foreground-secondary"
-              >
-                No results.
-              </Table.Cell>
-            </Table.Row>
-          ) : (
-            table.getRowModel().rows.map((row) => (
-              <Table.Row key={row.id} data-selected={row.getIsSelected() || undefined}>
-                {row.getVisibleCells().map((cell) => {
-                  const align = (
-                    cell.column.columnDef.meta as { align?: "start" | "center" | "end" } | undefined
-                  )?.align;
-                  return (
-                    <Table.Cell key={cell.id} align={align}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </Table.Cell>
+                    </Table.Head>
                   );
                 })}
               </Table.Row>
-            ))
-          )}
-        </Table.Body>
-      </Table>
+            ))}
+          </Table.Header>
+          <Table.Body>
+            {table.getRowModel().rows.length === 0 ? (
+              <Table.Row>
+                <Table.Cell
+                  colSpan={columns.length}
+                  align="center"
+                  className="h-24 text-foreground-secondary"
+                >
+                  No results.
+                </Table.Cell>
+              </Table.Row>
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <Table.Row key={row.id} data-selected={row.getIsSelected() || undefined}>
+                  {row.getVisibleCells().map((cell) => {
+                    const align = (
+                      cell.column.columnDef.meta as
+                        | { align?: "start" | "center" | "end" }
+                        | undefined
+                    )?.align;
+                    return (
+                      <Table.Cell key={cell.id} align={align}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </Table.Cell>
+                    );
+                  })}
+                </Table.Row>
+              ))
+            )}
+          </Table.Body>
+        </Table>
+      </Table.Container>
 
       <div className="flex items-center justify-between gap-4">
         <p className="text-foreground-secondary text-sm">

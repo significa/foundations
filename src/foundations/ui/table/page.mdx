@@ -14,32 +14,48 @@ folder: UI
 ## Anatomy
 
 ```tsx
-<Table>
-  <Table.Caption />
-  <Table.Header>
-    <Table.Row>
-      <Table.Head />
-      <Table.SortableHead sort={false} onSort={() => {}} />
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell />
-    </Table.Row>
-  </Table.Body>
-  <Table.Footer />
-</Table>
+<Table.Container>
+  <Table>
+    <Table.Caption />
+    <Table.Header>
+      <Table.Row>
+        <Table.Head />
+        <Table.SortableHead sort={false} onSort={() => {}} />
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell />
+      </Table.Row>
+    </Table.Body>
+    <Table.Footer />
+  </Table>
+</Table.Container>
 ```
 
 The compound parts are purely structural — they map one-to-one onto the underlying HTML table elements (`<table>`, `<thead>`, `<tbody>`, `<tfoot>`, `<tr>`, `<th>`, `<td>`, `<caption>`). State for sorting, selection, filtering, and pagination lives with the consumer. For dashboards with non-trivial data, compose with [TanStack Table](https://tanstack.com/table/v8) — see the recipe below.
 
-`Table` wraps the rendered `<table>` in a `relative w-full overflow-x-auto` div so wide tables scroll horizontally on narrow viewports without extra ceremony.
+`Table` renders the bare `<table>` element. Wrap it in `Table.Container` when you want a bordered card, horizontal overflow on narrow viewports, or a sticky header — the container is the scroll context, so it owns the border, the rounding, and any height constraint. A plain `<Table>` with no container is perfectly valid for a table that should flow inline with the page.
 
 ## API Reference
 
+### Table.Container
+
+Optional `div` wrapper that becomes the table's scroll container — it handles horizontal overflow and, with a `max-h-*`, vertical scrolling for a sticky header. Pin a height **here**, not on an outer element, since `position: sticky` engages against the nearest scroll container. Extends the `div` element.
+
+<PropsTable
+  definition={{
+    bordered: {
+      default: "true",
+      type: "boolean",
+      description: "Wrap the table in a bordered card (rounded border + subtle shadow).",
+    },
+  }}
+/>
+
 ### Table
 
-Extends the `table` element. Renders inside an overflow-aware wrapper.
+Extends the `table` element. Renders the bare `<table>` — wrap it in `Table.Container` for borders, overflow, or sticky headers.
 
 <PropsTable
   definition={{
@@ -150,6 +166,12 @@ Header checkbox toggles all rows; selected rows get a `data-selected` attribute 
 
 <Preview slug="table-with-selection" />
 
+### Sticky header
+
+Wrap the table in `Table.Container` with a `max-h-*` and set `sticky` on `Table.Header`. The container is the scroll context, so the header pins to its top as the body scrolls.
+
+<Preview slug="table-sticky" />
+
 ### Data table (with TanStack Table)
 
 For sorting, filtering, selection, and pagination together, compose `Table` with [`@tanstack/react-table`](https://tanstack.com/table/v8). This is **not** a hard dependency of the primitive — you only need it when you want the engine.
@@ -186,7 +208,7 @@ The recipe:
    - For a row that acts as a header for its row (e.g. a name column in a record list), you can render `<Table.Head scope="row">` inside `Table.Body`.
 
 4. **Sticky headers**:
-   - `sticky` on `Table.Header` requires the table's scroll container to have a fixed height. The default wrapper around `<table>` only handles horizontal overflow — wrap it in your own `max-h-*` container for vertical sticky behavior.
+   - `sticky` on `Table.Header` pins to the nearest scroll container, which must have a bounded height for `position: sticky` to engage. Wrap the table in `Table.Container` and put the `max-h-*` on the container itself — not on an outer element, which would scroll the whole block (header included) instead of just the body.
 
 5. **Empty and loading states**:
    - Render a single full-width row with `colSpan={columns.length}` for "No results."
