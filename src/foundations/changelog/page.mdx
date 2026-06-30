@@ -10,6 +10,55 @@ meta:
 
 ## June 2026
 
+### Fixed: triggers could submit their enclosing form
+
+A bare `<button>` defaults to `type="submit"`, so several primitives submitted the
+surrounding `<form>` when clicked. `Modal.Trigger`, `Modal.Close`, and `Listbox.Option`
+were missing `type="button"` outright — apply this fix to your copies:
+
+```diff tsx
+// modal.tsx — ModalTrigger and ModalClose
+- <Component {...props} onClick={handleClick}>
++ <Component type={asChild ? undefined : "button"} {...props} onClick={handleClick}>
+
+// listbox.tsx — ListboxOption
+  <button
+    ref={ref}
++   type="button"
+    role="option"
+```
+
+The `Slot` primitive now also defaults `type="button"` for `asChild` triggers — but only
+when the rendered child is a native `<button>` with no explicit `type`. Non-button children
+(`<a>`, `<div role="button">`, custom components) and buttons with an explicit
+`type="submit"` are left untouched. This makes the `type={asChild ? undefined : "button"}`
+pattern form-safe even in `asChild` mode, so triggers (Popover, Tooltip, Tabs, Toggle,
+SegmentedControl, Disclosure, Button…) no longer rely on each call site getting `type` right.
+Update your `slot.tsx`:
+
+```diff tsx
+  if (isValidSlottableElement(element)) {
++   const typeDefault =
++     element.type === "button" &&
++     (element.props as { type?: unknown }).type === undefined &&
++     (props as { type?: unknown }).type === undefined
++       ? { type: "button" as const }
++       : {};
++
+    return cloneElement(element, {
+      ...props,
+      ...element.props,
++     ...typeDefault,
+      ref,
+      style: { ...props.style, ...element.props.style },
+      className: cn(element.props.className, props.className),
+    });
+  }
+```
+
+If you previously relied on an `asChild` trigger submitting a form via a bare `<button>`
+child, set `type="submit"` on that child explicitly.
+
 ### Removed: `Textarea.Resize`
 
 `Textarea.Resize` carried a JS auto-grow implementation (a `useEffect` measuring

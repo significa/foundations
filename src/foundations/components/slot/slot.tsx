@@ -22,9 +22,22 @@ export const Slot = ({
   const element = Children.only(children);
 
   if (isValidSlottableElement(element)) {
+    // A native <button> defaults to type="submit", which submits the enclosing
+    // form. Default it to "button" when the rendered element is a native button
+    // and neither the child nor the parent passed an explicit type. Injected
+    // after the spreads so an explicit type always wins; skipped entirely for
+    // non-button children (e.g. <a>) so we never leak a `type` attribute.
+    const typeDefault =
+      element.type === "button" &&
+      (element.props as { type?: unknown }).type === undefined &&
+      (props as { type?: unknown }).type === undefined
+        ? { type: "button" as const }
+        : {};
+
     return cloneElement(element, {
       ...props,
       ...element.props,
+      ...typeDefault,
       ref,
       style: {
         ...props.style,

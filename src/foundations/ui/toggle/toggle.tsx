@@ -48,7 +48,7 @@ const Toggle = ({
   return (
     <Comp
       ref={ref}
-      type={type}
+      type={asChild ? undefined : type}
       className={cn(buttonStyle({ variant: "ghost", size, square }), className)}
       aria-pressed={pressed}
       data-pressed={pressed || undefined}
@@ -335,7 +335,7 @@ const ToggleGroupItem = ({
   return (
     <Comp
       ref={ref}
-      type="button"
+      type={asChild ? undefined : "button"}
       data-toggle-group-value={value}
       className={cn(buttonStyle({ variant: "ghost", size, square }), className)}
       aria-pressed={pressed}

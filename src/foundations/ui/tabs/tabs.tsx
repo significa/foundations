@@ -246,7 +246,7 @@ const TabsItem = ({
   return (
     <Comp
       id={getItemId(id)}
-      type="button"
+      type={asChild ? undefined : "button"}
       className={cn(
         "focus-visible:ring-(length:--ring-width) relative flex cursor-pointer items-center justify-center gap-1.5 px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground data-selected:text-foreground",
         variant === "pill" && "rounded-xl",

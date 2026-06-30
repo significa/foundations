@@ -88,7 +88,7 @@ const Button = ({
         isLoading && "text-transparent transition-none",
       )}
       ref={ref}
-      type={type}
+      type={asChild ? undefined : type}
       {...props}
     >
       <Slottable asChild={asChild} child={children}>

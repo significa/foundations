@@ -197,7 +197,7 @@ const SegmentedControlItem = ({
   return (
     <Comp
       id={getItemId(segmentsId, value)}
-      type="button"
+      type={asChild ? undefined : "button"}
       className={cn(
         "relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground",
         "[&>*:not([data-segment-indicator])]:z-10",

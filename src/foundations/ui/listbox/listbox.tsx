@@ -473,6 +473,7 @@ const ListboxOption = <T,>({
   return (
     <button
       ref={ref}
+      type="button"
       role="option"
       aria-selected={isHighlighted && isSelected}
       data-selected={isSelected || undefined}

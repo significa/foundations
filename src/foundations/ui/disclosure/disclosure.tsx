@@ -102,7 +102,7 @@ const DisclosureTrigger = ({
 
   return (
     <Comp
-      type="button"
+      type={asChild ? undefined : "button"}
       onClick={(e) => {
         onClick?.(e);
 

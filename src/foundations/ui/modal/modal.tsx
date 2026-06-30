@@ -219,7 +219,7 @@ const ModalTrigger = ({ asChild, children, ...props }: ModalTriggerProps) => {
   const Component = asChild ? Slot : "button";
 
   return (
-    <Component {...props} onClick={handleClick}>
+    <Component type={asChild ? undefined : "button"} {...props} onClick={handleClick}>
       {children}
     </Component>
   );
@@ -242,7 +242,7 @@ const ModalClose = ({ asChild = false, children, ...props }: ModalCloseProps) =>
 
   const Component = asChild ? Slot : "button";
   return (
-    <Component {...props} onClick={handleClick}>
+    <Component type={asChild ? undefined : "button"} {...props} onClick={handleClick}>
       {children}
     </Component>
   );
