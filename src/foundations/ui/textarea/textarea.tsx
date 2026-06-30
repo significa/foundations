@@ -11,8 +11,8 @@ interface TextareaProps extends React.ComponentPropsWithRef<"textarea"> {
 const Textarea = ({ className, invalid, variant, ...props }: TextareaProps) => {
   return (
     <textarea
-      data-invalid={invalid}
-      aria-invalid={invalid}
+      data-invalid={invalid || undefined}
+      aria-invalid={invalid || undefined}
       className={cn(inputStyle({ variant }), "h-auto resize-none py-2 leading-snug", className)}
       {...props}
     />

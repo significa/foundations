@@ -12,7 +12,7 @@ interface SelectProps extends Omit<React.ComponentPropsWithRef<"select">, "size"
 const Select = ({ className, invalid, variant, size, ...props }: SelectProps) => {
   return (
     <select
-      data-invalid={invalid}
+      data-invalid={invalid || undefined}
       className={cn(
         useInputStyle({ variant, size }),
         "appearance-none bg-position-[right_--spacing(2)_center] bg-size-[1em] bg-no-repeat pr-10",

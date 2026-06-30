@@ -10,13 +10,14 @@ meta:
 
 ## June 2026
 
-### Fixed: `Input` rendered `invalid` styling permanently
+### Fixed: form controls rendered `invalid` styling permanently
 
-`Input` spread `data-invalid={invalid}` / `aria-invalid={invalid}` unconditionally. React
-renders a `false` value on these attributes as the literal string `"false"`, and the invalid
-styles key off attribute _presence_ (`[data-invalid]`, `:has([data-invalid])`) — so an
-`<Input invalid={false} />` still matched the selector and showed error styling, plus emitted
-a noisy `aria-invalid="false"`. Spread the attributes only when `invalid` is truthy:
+`Input`, `Textarea`, `Select`, and `Listbox` spread `data-invalid` / `aria-invalid`
+unconditionally. React renders a `false` value on these attributes as the literal string
+`"false"`, and the invalid styles key off attribute _presence_ (`[data-invalid]`,
+`:has([data-invalid])`) — so an `<Input invalid={false} />` still matched the selector and
+showed error styling, plus emitted a noisy `aria-invalid="false"`. Render the attributes only
+when `invalid` is truthy:
 
 ```diff tsx
 // input.tsx — Input
@@ -27,6 +28,22 @@ a noisy `aria-invalid="false"`. Spread the attributes only when `invalid` is tru
     className={cn(useInputStyle({ variant, size }), className)}
     {...props}
   />
+```
+
+```diff tsx
+// textarea.tsx — Textarea
+- data-invalid={invalid}
+- aria-invalid={invalid}
++ data-invalid={invalid || undefined}
++ aria-invalid={invalid || undefined}
+
+// select.tsx — Select
+- data-invalid={invalid}
++ data-invalid={invalid || undefined}
+
+// listbox.tsx — ListboxTrigger
+- data-invalid={ctx.invalid}
++ data-invalid={ctx.invalid || undefined}
 ```
 
 ### Fixed: triggers could submit their enclosing form

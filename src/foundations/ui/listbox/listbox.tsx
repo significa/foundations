@@ -317,7 +317,7 @@ const ListboxTrigger = ({
       className={className}
       disabled={ctx.disabled}
       data-state={ctx.context.open ? "open" : "closed"}
-      data-invalid={ctx.invalid}
+      data-invalid={ctx.invalid || undefined}
       {...ctx.getReferenceProps(props)}
     >
       {children}
