@@ -130,8 +130,7 @@ interface InputProps
 const Input = ({ className, invalid, size, variant, ...props }: InputProps) => {
   return (
     <input
-      data-invalid={invalid}
-      aria-invalid={invalid}
+      {...(invalid && { "data-invalid": true, "aria-invalid": true })}
       className={cn(useInputStyle({ variant, size }), className)}
       {...props}
     />

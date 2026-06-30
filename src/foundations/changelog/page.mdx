@@ -10,6 +10,25 @@ meta:
 
 ## June 2026
 
+### Fixed: `Input` rendered `invalid` styling permanently
+
+`Input` spread `data-invalid={invalid}` / `aria-invalid={invalid}` unconditionally. React
+renders a `false` value on these attributes as the literal string `"false"`, and the invalid
+styles key off attribute _presence_ (`[data-invalid]`, `:has([data-invalid])`) — so an
+`<Input invalid={false} />` still matched the selector and showed error styling, plus emitted
+a noisy `aria-invalid="false"`. Spread the attributes only when `invalid` is truthy:
+
+```diff tsx
+// input.tsx — Input
+  <input
+-   data-invalid={invalid}
+-   aria-invalid={invalid}
++   {...(invalid && { "data-invalid": true, "aria-invalid": true })}
+    className={cn(useInputStyle({ variant, size }), className)}
+    {...props}
+  />
+```
+
 ### Fixed: triggers could submit their enclosing form
 
 A bare `<button>` defaults to `type="submit"`, so several primitives submitted the
