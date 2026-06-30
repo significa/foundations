@@ -10,6 +10,21 @@ meta:
 
 ## June 2026
 
+### Changed: `Switch` now exposes `role="switch"`
+
+`Switch` is a native `<input type="checkbox">`, so it announced as a checkbox to assistive
+technology even though it's a binary on/off toggle. Adding `role="switch"` gives it the
+accurate role; `aria-checked` is still derived from the input's `checked` state, so no manual
+state management is needed and form submission/keyboard behavior is unchanged.
+
+```diff tsx
+// switch.tsx — Switch
+  <input
+    type="checkbox"
++   role="switch"
+    className={cn(
+```
+
 ### Fixed: form controls rendered `invalid` styling permanently
 
 `Input`, `Textarea`, `Select`, and `Listbox` spread `data-invalid` / `aria-invalid`

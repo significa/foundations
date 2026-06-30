@@ -4,6 +4,8 @@ const Switch = ({ className, ...props }: Omit<React.ComponentPropsWithRef<"input
   return (
     <input
       type="checkbox"
+      // biome-ignore lint/a11y/useAriaPropsForRole: native checkbox supplies the implicit aria-checked state
+      role="switch"
       className={cn(
         "appearance-none",
         "relative h-6 w-11 cursor-pointer rounded-xl bg-foreground/20 transition",
