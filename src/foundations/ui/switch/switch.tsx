@@ -8,9 +8,9 @@ const Switch = ({ className, ...props }: Omit<React.ComponentPropsWithRef<"input
       role="switch"
       className={cn(
         "appearance-none",
-        "relative h-6 w-11 cursor-pointer rounded-xl bg-foreground/20 transition",
+        "relative h-6 w-11 cursor-pointer rounded-full bg-foreground/20 transition",
         // circle
-        "before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-xl before:bg-background before:transition-transform before:duration-200 before:ease-emphasized-decelerate",
+        "before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-full before:bg-background before:transition-transform before:duration-200 before:ease-emphasized-decelerate",
         // disabled
         "disabled:before:opacity-30",
         // checked
@@ -18,7 +18,7 @@ const Switch = ({ className, ...props }: Omit<React.ComponentPropsWithRef<"input
         // focus
         "focus-visible:ring-(length:--ring-width) focus-visible:outline-none focus-visible:ring-ring",
         // stretch animation
-        "before:origin-left active:before:scale-x-110 active:before:rounded-[--spacing(2.25)] active:checked:before:origin-right",
+        "before:origin-left active:before:scale-x-110 active:checked:before:origin-right",
         className,
       )}
       {...props}

@@ -8,6 +8,32 @@ meta:
   order: 99
 ---
 
+## July 2026
+
+### Fixed: `Switch` looked square and distorted on press at small `--radius`
+
+`Switch` used `rounded-xl` on both its track and thumb. That class derives from the global
+`--radius` dial, so once `--radius` was lowered the switch rendered as a rounded square. The
+press feedback made it worse: an anisotropic `scale-x-110` combined with a hardcoded
+`rounded-[--spacing(2.25)]` sheared the near-square thumb into an oval blob.
+
+A switch is a structurally round control, like `Slider`, `Radio`, and `Spinner` — its shape
+carries the toggle metaphor and should not follow the surface-radius dial. Both the track and
+thumb are now `rounded-full`, which also lets the directional press-stretch drop its radius
+override: a capsule scaled on one axis stays a capsule. Update your copy:
+
+```diff tsx
+// switch.tsx — Switch
+-   "relative h-6 w-11 cursor-pointer rounded-xl bg-foreground/20 transition",
++   "relative h-6 w-11 cursor-pointer rounded-full bg-foreground/20 transition",
+    // circle
+-   "before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-xl ...",
++   "before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-full ...",
+    // stretch animation
+-   "before:origin-left active:before:scale-x-110 active:before:rounded-[--spacing(2.25)] active:checked:before:origin-right",
++   "before:origin-left active:before:scale-x-110 active:checked:before:origin-right",
+```
+
 ## June 2026
 
 ### Changed: `Table` no longer wraps itself in a scroll `div`; use `Table.Container`
