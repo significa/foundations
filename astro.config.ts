@@ -1,3 +1,4 @@
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
@@ -33,6 +34,11 @@ export default defineConfig({
     assetsInclude: "**/pagefind.js", // treat pagefind.js as an asset so it gets copied to the dist folder
   },
   markdown: {
+    // unified() instead of the default satteri() because satteri renders syntax-highlighted
+    // code blocks as Fragment set:html, bypassing the MDX `components={{ pre: CodeBlock }}`
+    // override. unified preserves the HAST element pipeline where component overrides work.
+    // TODO: look out for a fix for this and change back to satteri.
+    processor: unified(),
     syntaxHighlight: "shiki",
     shikiConfig: {
       themes,
