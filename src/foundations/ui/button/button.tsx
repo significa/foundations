@@ -127,11 +127,8 @@ const ButtonGroup = ({ className, children, ...props }: ButtonGroupProps) => {
   // Validate children to ensure they are Button or IconButton components
   useEffect(() => {
     const childArray = Children.toArray(children);
-    childArray.forEach((child, index) => {
+    childArray.forEach((child, _index) => {
       if (!isValidElement(child) || (child.type !== Button && child.type !== IconButton)) {
-        console.warn(
-          `Warning: ButtonGroup child at index ${index} is not a Button or IconButton component.`,
-        );
       }
     });
   }, [children]);

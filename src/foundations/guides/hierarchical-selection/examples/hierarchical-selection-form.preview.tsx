@@ -169,8 +169,6 @@ export default function HierarchicalSelectionForm() {
     alert(
       `Form submitted!\n\nName: ${data.name}\nEmail: ${data.email}\nCountries: ${data.countries.join(", ")}`,
     );
-
-    console.log("Form data:", data);
   };
 
   return (

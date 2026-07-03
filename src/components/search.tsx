@@ -207,8 +207,7 @@ const usePagefind = () => {
         // @ts-expect-error - dynamic import not typed
         const pagefind = await import("/pagefind/pagefind.js");
         setInstance(pagefind);
-      } catch (e) {
-        console.error("Failed to load Pagefind instance:", e);
+      } catch (_e) {
         setIsError(true);
       }
     };

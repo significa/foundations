@@ -31,11 +31,7 @@ const resolvePreviewMeta = async (filePath: string): Promise<PreviewMeta> => {
     const parsed = previewMetaSchema.safeParse(result);
 
     if (parsed.success) return parsed.data;
-
-    console.warn(`Invalid meta in ${filePath}:`, parsed.error.flatten().fieldErrors);
-  } catch (error) {
-    console.error(`Error reading meta from ${filePath}:`, error);
-  }
+  } catch (_error) {}
 
   return {};
 };

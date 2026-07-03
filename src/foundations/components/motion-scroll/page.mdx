@@ -1,0 +1,111 @@
+---
+title: Motion Scroll
+description: A component that animates its children based on scroll position using the Motion library's scroll and animate APIs.
+preview: motion-scroll
+files:
+  - src/foundations/components/motion-scroll/motion-scroll.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: useMatchMedia
+    href: /hooks/use-match-media
+  - name: composeRefs
+    href: /utils/compose-refs
+  - name: motion/react
+    href: https://motion.dev/docs/react-quick-start
+
+folder: components
+---
+
+## Features
+
+- **Scroll-driven animations**: Ties any CSS property animation directly to scroll progress — no timers, no manual listeners
+- **Reduced motion support**: Automatically skips animations when the user has enabled reduced motion
+- **Touchscreen opt-out**: By default, animations are disabled on touch devices; opt in with `touchscreen`
+- **Custom trigger and container**: Track a different element, or use a custom scroll container
+- **Lifecycle hooks**: React to scroll milestones with `onStart`, `onComplete`, and `onUpdate`
+- **Axis control**: Respond to horizontal or vertical scroll
+
+## Anatomy
+
+```tsx
+<MotionScroll keyframes={{ opacity: [0, 1] }}>{/* content */}</MotionScroll>
+```
+
+## API Reference
+
+<PropsTable
+  definition={{
+    keyframes: {
+      type: "DOMKeyframesDefinition",
+      description: "The animation keyframes to apply as scroll progresses.",
+      required: true,
+    },
+    offset: {
+      type: 'UseScrollOptions["offset"]',
+      description: "Scroll offset range that maps to the animation's start and end.",
+      default: '["start end", "end start"]',
+    },
+    ease: {
+      type: "Easing",
+      description: "Easing function applied to the animation.",
+      default: '"linear"',
+    },
+    axis: {
+      type: '"x" | "y"',
+      description: "Which scroll axis to track.",
+      default: '"y"',
+    },
+    trigger: {
+      type: "(element: HTMLElement) => Element",
+      description: "Returns the element whose scroll position drives the animation. Defaults to the component's own element.",
+    },
+    scroller: {
+      type: "(element: HTMLElement) => Element",
+      description: "Returns the scroll container to observe. Defaults to the nearest scrollable ancestor.",
+    },
+    hooks: {
+      type: "{ onStart?: () => void; onComplete?: () => void; onUpdate?: (progress: number) => void }",
+      description: "Callbacks fired at scroll milestones.",
+    },
+    touchscreen: {
+      type: "boolean",
+      description: "Enable animations on touch devices.",
+      default: "false",
+    },
+    asChild: {
+      type: "boolean",
+      description: "Merge props onto the child element instead of rendering a wrapper div.",
+    },
+  }}
+/>
+
+By default, animations are skipped on touch devices to avoid conflicts with native scroll momentum. Set `touchscreen` to opt in when the animation is explicitly designed for touch contexts.
+
+## Examples
+
+### Fade In
+
+Elements animate in as they enter the viewport.
+
+<Preview slug="motion-scroll" mode="iframe" layout="fullscreen" />
+
+### Parallax
+
+Animate an inner element at a different rate than the scroll container to create depth.
+
+<Preview slug="motion-scroll-parallax" mode="iframe" layout="fullscreen" />
+
+### Horizontal Scroll
+
+Use `axis="x"` with a custom `scroller` to drive animations from a horizontal scroll container.
+
+<Preview slug="motion-scroll-horizontal" mode="iframe" layout="fullscreen" />
+
+## Best Practices
+
+- **Animate `transform` and `opacity`, not layout properties**: properties like `width`, `height`, `top`, and `left` trigger layout recalculation on every scroll event. Stick to `x`, `y`, `scale`, `rotate`, and `opacity` — they run on the GPU and never cause reflow.
+
+- **Match `ease` to the animation intent**: `linear` (the default) is correct for effects that should map 1:1 to scroll position, like parallax. For reveal animations — where the element animates in once and stays — use an easing curve like `easeOut` so the motion feels intentional rather than mechanical.
+
+- **Leave `touchscreen` off unless the animation is built for it**: the default exists to avoid fighting native scroll momentum on touch devices. Only enable it when the animation is lightweight and won't interfere with the user's scroll intent.

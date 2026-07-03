@@ -22,9 +22,8 @@ export default function FieldWithRhfPreview() {
     mode: "onTouched",
   });
 
-  const onSubmit = handleSubmit(async (values) => {
+  const onSubmit = handleSubmit(async (_values) => {
     await new Promise((resolve) => setTimeout(resolve, 600));
-    console.log("submitted", values);
   });
 
   return (

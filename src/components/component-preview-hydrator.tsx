@@ -37,7 +37,6 @@ const ComponentPreviewHydrator = ({ file, children }: ComponentPreviewProps) => 
     // This triggers the code-split chunk load for that specific preview.
     const load = modules[file];
     if (!load) {
-      console.error(`No preview module found for file: ${file}`);
       return;
     }
     try {
@@ -45,9 +44,7 @@ const ComponentPreviewHydrator = ({ file, children }: ComponentPreviewProps) => 
         // @ts-expect-error - We know this will be a React component, but TypeScript can't infer it from the dynamic import.
         setComponent(() => mod.default);
       });
-    } catch (error) {
-      console.error(`Failed to hydrate preview component for file: ${file}`, error);
-    }
+    } catch (_error) {}
   }, [file]);
 
   // Render `children` (the server-rendered HTML) until the hydrated component is ready

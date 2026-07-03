@@ -36,9 +36,7 @@ export default function BasicHierarchicalSelection() {
   } = useHierarchicalSelection({
     defaultSelected: ["spain"],
     defaultOpened: ["europe"],
-    onSelectionChange: (selected) => {
-      console.log("Selected items:", selected);
-    },
+    onSelectionChange: (_selected) => {},
   });
 
   return (

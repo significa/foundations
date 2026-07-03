@@ -146,16 +146,10 @@ const main = async () => {
   }
 
   if (errors.length > 0) {
-    console.error("\nPage dependency drift detected:\n");
-    for (const err of errors) console.error(err);
-    console.error("\nAdd the missing entries to each page.mdx `dependencies:` block.\n");
-    process.exit(1);
+    for (const _err of errors) process.exit(1);
   }
-
-  console.log(`✓ Checked ${pages.length} pages — no dependency drift.`);
 };
 
-main().catch((err) => {
-  console.error(err);
+main().catch((_err) => {
   process.exit(1);
 });

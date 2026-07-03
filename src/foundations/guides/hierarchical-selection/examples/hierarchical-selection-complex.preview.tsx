@@ -73,9 +73,7 @@ export default function ComplexHierarchicalSelection() {
   } = useHierarchicalSelection({
     defaultSelected: ["portugal", "spain"],
     defaultOpened: ["europe"],
-    onSelectionChange: (selected) => {
-      console.log("Selected items:", selected);
-    },
+    onSelectionChange: (_selected) => {},
   });
 
   // Filter data based on search query

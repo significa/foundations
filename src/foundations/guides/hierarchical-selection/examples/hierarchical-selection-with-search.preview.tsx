@@ -56,9 +56,7 @@ export default function HierarchicalSelectionWithSearch() {
     isParentOpen,
   } = useHierarchicalSelection({
     defaultOpened: ["europe", "asia"],
-    onSelectionChange: (selected) => {
-      console.log("Selected items:", selected);
-    },
+    onSelectionChange: (_selected) => {},
   });
 
   // Filter data based on search query
