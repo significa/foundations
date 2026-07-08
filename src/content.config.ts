@@ -38,6 +38,7 @@ const pages = defineCollection({
       )
       .optional(),
     folder: z.string().optional(),
+    maxTocDepth: z.number().optional(),
     meta: z
       .object({
         order: z.number().optional(),
