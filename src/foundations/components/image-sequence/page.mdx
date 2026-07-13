@@ -1,0 +1,88 @@
+---
+title: Image Sequence
+description: A canvas-based component that renders image sequences driven by an external progress value.
+preview: image-sequence
+files:
+  - src/foundations/components/image-sequence/image-sequence.tsx
+dependencies:
+  - name: ImageMetadata
+    href: https://docs.astro.build/en/guides/images/#image-properties
+
+folder: components
+---
+
+## Features
+
+- **Canvas Rendering**: Draws frames onto a `<canvas>` element for efficient frame-by-frame playback
+- **Progressive Loading**: Loads frames in passes of decreasing density (`[16, 8, 4, 2, 1]`) so a rough preview appears quickly before full resolution fills in
+- **Deferred Start**: Waits for the window `load` event before fetching frames, avoiding competition with critical page assets
+- **External Control**: Exposes a `scrub(progress)` method via ref so the caller decides what drives the animation — scroll position, pointer, timeline, or anything else
+- **Cleanup**: Aborts in-flight frame loading on unmount or when `frames` changes
+
+## Usage
+
+Frames must be defined at module level — outside the component — so the array reference stays stable across renders and does not restart frame loading on every render.
+
+```tsx
+const frames = Object.values(
+  import.meta.glob<{ default: ImageMetadata }>("./path/to/frames/*.webp", { eager: true })
+).map((m) => m.default);
+
+const MyComponent = () => {
+  const sequenceRef = useRef<ImageSequenceRef>(null);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      sequenceRef.current?.scrub(progress);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return <ImageSequence frames={frames} ref={sequenceRef} />;
+};
+```
+
+## API Reference
+
+### ImageSequence
+
+<PropsTable
+  definition={{
+    frames: {
+      type: "ImageMetadata[]",
+      description: "The sequence frames to render. Must be defined at module level to keep the reference stable across renders.",
+      required: true,
+    },
+  }}
+/>
+
+Accepts all standard `<canvas>` props. Default styles are `width: 100%`, `height: 100%`, `object-fit: cover` — override via the `style` prop.
+
+### ImageSequenceRef
+
+```ts
+interface ImageSequenceRef {
+  scrub: (progress: number) => void;
+}
+```
+
+`scrub` takes a progress value between `0` and `1` and draws the corresponding frame onto the canvas.
+
+## Examples
+
+### Scroll-driven
+
+<Preview slug="image-sequence" />
+
+## Frame Sorting
+
+Frames are sorted numerically by the leading number in each filename before loading (e.g. `001-frame.webp`, `002-frame.webp`). Name your source files accordingly.
+
+## Limitations
+
+- Depends on `ImageMetadata` from Astro — the `width` and `height` properties are used to size the canvas at the native aspect ratio.
+- `import.meta.glob` patterns must be static string literals, so the glob cannot be passed as a prop. Define it in the consuming file and pass the resulting array as `frames`.
