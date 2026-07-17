@@ -14,33 +14,20 @@ import {
 } from "@/foundations/components/instance-counter/instance-counter";
 import { Slot } from "@/foundations/components/slot/slot";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { clamp } from "@/foundations/utils/math/clamp";
 import { cn } from "@/lib/utils/classnames";
+
+const KEYBOARD_ARROW_PX_STEP = 10;
 
 type Orientation = "horizontal" | "vertical";
 
-const getElementDimensionRange = (element: HTMLElement, orientation: Orientation) => {
-  const key = orientation === "horizontal" ? "width" : "height";
-  const previous = element.style[key];
-
-  element.style[key] = "0";
-  const min = element.getBoundingClientRect()[key];
-  element.style[key] = "100%";
-  const max = element.getBoundingClientRect()[key];
-
-  element.style[key] = previous;
-
-  return { min, max };
-};
-
-type ResizeHandler = (index: number) => {
+type ResizeHandler = {
   apply: (pxDelta: number) => void;
 };
 
 type ResizableContextValue = {
   orientation: Orientation;
   scope: React.RefObject<HTMLDivElement | null>;
-  createResizeHandler: ResizeHandler;
+  createResizeHandler: (index: number) => ResizeHandler;
 };
 
 const ResizableContext = createContext<ResizableContextValue | null>(null);
@@ -74,11 +61,11 @@ const Resizable = ({
     } as const;
   }, [orientation]);
 
-  const createResizeHandler: ResizeHandler = useCallback(
-    (index: number) => {
+  const createResizeHandler = useCallback(
+    (handleIndex: number) => {
       const root = scope.current;
-      const panelBefore = panels.current[index - 1];
-      const panelAfter = panels.current[index];
+      const panelBefore = panels.current[handleIndex - 1];
+      const panelAfter = panels.current[handleIndex];
 
       if (!root || !panelBefore || !panelAfter) {
         return { apply: () => undefined };
@@ -86,24 +73,42 @@ const Resizable = ({
 
       // sizes when drag started
       const rootCurrent = root[keys.sideOffset];
-      const panelBeforeCurrent = panelBefore[keys.sideOffset];
-      const panelAfterCurrent = panelAfter[keys.sideOffset];
+      const panelBeforeCurrent = panelBefore.getBoundingClientRect()[keys.side];
+      const panelAfterCurrent = panelAfter.getBoundingClientRect()[keys.side];
+
+      const calcPanelRange = (panel: HTMLElement, oppositePanel: HTMLElement) => {
+        const key = orientation === "horizontal" ? "width" : "height";
+        const previousStyles = {
+          panel: panel.style[key],
+          oppositePanel: oppositePanel.style[key],
+        };
+
+        panel.style[key] = "0rem";
+        oppositePanel.style[key] = "999rem";
+        const min = panel.getBoundingClientRect()[key];
+        panel.style[key] = "999rem";
+        oppositePanel.style[key] = "0rem";
+        const max = panel.getBoundingClientRect()[key];
+
+        panel.style[key] = previousStyles.panel;
+        oppositePanel.style[key] = previousStyles.oppositePanel;
+
+        return { min, max };
+      };
 
       // size range for each panel
-      const panelBeforeRange = getElementDimensionRange(panelBefore, orientation);
-      const panelAfterRange = getElementDimensionRange(panelAfter, orientation);
+      const panelBeforeRange = calcPanelRange(panelBefore, panelAfter);
+      const panelAfterRange = calcPanelRange(panelAfter, panelBefore);
 
       const apply = (pxDelta: number) => {
-        const panelBeforeNew = clamp(
-          panelBeforeRange.min,
-          panelBeforeCurrent + pxDelta,
-          panelBeforeRange.max,
-        );
-        const panelAfterNew = clamp(
-          panelAfterRange.min,
-          panelAfterCurrent - pxDelta,
-          panelAfterRange.max,
-        );
+        const panelBeforeNew = panelBeforeCurrent + pxDelta;
+        const panelAfterNew = panelAfterCurrent - pxDelta;
+
+        // check if new size is within range
+        if (panelBeforeNew < panelBeforeRange.min) return;
+        if (panelAfterNew < panelAfterRange.min) return;
+        if (panelBeforeNew > panelBeforeRange.max) return;
+        if (panelAfterNew > panelAfterRange.max) return;
 
         panelBefore.style[keys.side] = `${(panelBeforeNew / rootCurrent) * 100}%`;
         panelAfter.style[keys.side] = `${(panelAfterNew / rootCurrent) * 100}%`;
@@ -124,6 +129,7 @@ const Resizable = ({
     // Normalize panels widths: each panel gets fraction of the total width
     for (const panel of panels.current) {
       const size = panel[keys.sideOffset];
+
       setTimeout(() => {
         panel.style.width = `${(size / root.offsetWidth) * 100}%`;
       }, 0);
@@ -196,19 +202,18 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
   };
 
   const onKeydown: KeyboardEventHandler<HTMLDivElement> = (event) => {
-    const back = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
-    const forward = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
-
     const handler = createResizeHandler(index);
 
+    const back = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
+    const forward = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
     if (event.key === forward) {
       event.preventDefault();
-      return handler.apply(10);
+      return handler.apply(KEYBOARD_ARROW_PX_STEP);
     }
 
     if (event.key === back) {
       event.preventDefault();
-      return handler.apply(-10);
+      return handler.apply(-KEYBOARD_ARROW_PX_STEP);
     }
   };
 
