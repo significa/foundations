@@ -77,21 +77,20 @@ const Resizable = ({
       const panelAfterCurrent = panelAfter.getBoundingClientRect()[keys.side];
 
       const calcPanelRange = (panel: HTMLElement, oppositePanel: HTMLElement) => {
-        const key = orientation === "horizontal" ? "width" : "height";
         const previousStyles = {
-          panel: panel.style[key],
-          oppositePanel: oppositePanel.style[key],
+          panel: panel.style[keys.side],
+          oppositePanel: oppositePanel.style[keys.side],
         };
 
-        panel.style[key] = "0rem";
-        oppositePanel.style[key] = "999rem";
-        const min = panel.getBoundingClientRect()[key];
-        panel.style[key] = "999rem";
-        oppositePanel.style[key] = "0rem";
-        const max = panel.getBoundingClientRect()[key];
+        panel.style[keys.side] = "0rem";
+        oppositePanel.style[keys.side] = "999rem";
+        const min = panel.getBoundingClientRect()[keys.side];
+        panel.style[keys.side] = "999rem";
+        oppositePanel.style[keys.side] = "0rem";
+        const max = panel.getBoundingClientRect()[keys.side];
 
-        panel.style[key] = previousStyles.panel;
-        oppositePanel.style[key] = previousStyles.oppositePanel;
+        panel.style[keys.side] = previousStyles.panel;
+        oppositePanel.style[keys.side] = previousStyles.oppositePanel;
 
         return { min, max };
       };
@@ -116,7 +115,7 @@ const Resizable = ({
 
       return { apply };
     },
-    [keys, orientation],
+    [keys],
   );
 
   // init and memo panels
@@ -125,13 +124,14 @@ const Resizable = ({
     if (!root) return;
 
     panels.current = [...root.querySelectorAll<HTMLElement>("[data-ui-resizable-panel]")];
+    const rootSize = root.getBoundingClientRect()[keys.side];
 
     // Normalize panels widths: each panel gets fraction of the total width
     for (const panel of panels.current) {
-      const size = panel[keys.sideOffset];
+      const size = panel.getBoundingClientRect()[keys.side];
 
       setTimeout(() => {
-        panel.style.width = `${(size / root.offsetWidth) * 100}%`;
+        panel.style[keys.side] = `${(size / rootSize) * 100}%`;
       }, 0);
     }
   }, [keys]);
@@ -141,7 +141,7 @@ const Resizable = ({
       <div
         ref={composeRefs(ref, scope)}
         className={cn(
-          "flex overflow-hidden",
+          "flex min-h-0 min-w-0 overflow-hidden",
           orientation === "horizontal" ? "flex-row" : "flex-col",
           className,
         )}
@@ -157,7 +157,7 @@ type ResizablePanelProps = React.ComponentPropsWithRef<"div"> & {
   asChild?: boolean;
 };
 
-const ResizablePanel = ({ asChild, className, style, children, ...props }: ResizablePanelProps) => {
+const ResizablePanel = ({ asChild, className, children, ...props }: ResizablePanelProps) => {
   const index = useInstanceCounter();
 
   const Component = asChild ? Slot : "div";
@@ -188,12 +188,19 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
     const startOffset = event[clientOffset];
     const handler = createResizeHandler(index);
 
+    const prevCursor = document.body.style.cursor;
+    const prevUserSelect = document.body.style.userSelect;
+    document.body.style.cursor = orientation === "horizontal" ? "col-resize" : "row-resize";
+    document.body.style.userSelect = "none";
+
     const onDrag = ({ [clientOffset]: offset }: PointerEvent) => {
       const delta = offset - startOffset;
       handler.apply(delta);
     };
 
     const onDragEnd = () => {
+      document.body.style.cursor = prevCursor;
+      document.body.style.userSelect = prevUserSelect;
       window.removeEventListener("pointermove", onDrag);
     };
 

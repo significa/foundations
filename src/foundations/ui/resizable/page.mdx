@@ -10,21 +10,17 @@ dependencies:
     href: /components/slot
   - name: composeRefs
     href: /utils/compose-refs
-  - name: math/clamp
-    href: /utils/math/#clamp
+  - name: InstanceCounter
+    href: /components/instance-counter
 
 folder: UI
 ---
 
 ## Features
 
-- **Inferred Handles**: Just list panels — a drag handle is placed on the boundary between each pair automatically
-- **Percentage-based**: Sizes are percentages of the container, so layouts stay responsive
-- **Inferred Bounds**: Minimum and maximum sizes are inferred from the panel's css `min-width` / `min-height` and `max-width` / `max-height`
-- **Even by default**: Panels split the container equally; drag a boundary to redistribute
-- **Keyboard Support**: Handles are focusable and resizable with the arrow keys
-- **Horizontal & Vertical**: Lay panels out in a row or a column
-- **Nestable**: A panel can hold another `Resizable` for grid-like layouts
+- **Inferred bounds**: Minimum and maximum sizes are derived from the panel's CSS `min-width` / `min-height` and `max-width` / `max-height` — no props required
+- **Percentage-based sizing**: Panels are sized as percentages of the container so the layout adapts as the container changes
+- **Keyboard support**: Handles are focusable and accept arrow key input to nudge the boundary
 
 ## Anatomy
 
@@ -53,15 +49,6 @@ Extends the `div` element.
       default: '"horizontal"',
       description: "Axis along which panels are laid out and resized.",
     },
-    keyboardStep: {
-      type: "number",
-      default: "10",
-      description: "Percentage points a handle moves per arrow-key press.",
-    },
-    onResize: {
-      type: "(sizes: number[]) => void",
-      description: "Called with the new list of panel sizes (percentages) whenever they change.",
-    },
   }}
 />
 
@@ -85,8 +72,8 @@ drag redistributes between adjacent panels.
 
 The drag handle is inferred — you don't render it. Each panel except the first
 renders one on its leading edge. It is a `role="separator"` element that is focusable
-and resizable with the keyboard, and exposes `data-dragging` while a drag is in
-progress. To restyle it, edit the handle markup in your copy of `resizable.tsx`.
+and resizable with the keyboard. To restyle it, edit the handle markup in your copy
+of `resizable.tsx`.
 
 ## Examples
 
@@ -111,11 +98,10 @@ Put a `Resizable` inside a `Resizable.Panel` to build grid-like layouts.
 ## Accessibility
 
 - Each handle is a `role="separator"` element with `tabIndex={0}`, so it is reachable by keyboard.
-- `aria-orientation` reflects the separator itself — a horizontal layout is split by a vertical separator, and vice versa.
-- `aria-valuemin`, `aria-valuemax`, and `aria-valuenow` describe the leading panel's size within the pair it can span.
-- Arrow keys move the focused handle by `keyboardStep`; `Home` and `End` jump it to its minimum and maximum.
+- `aria-orientation` reflects the axis of the separator — a horizontal layout uses a vertical separator, and vice versa.
+- Arrow keys move the focused handle by 10px; the handle stops at the bounds derived from the adjacent panels' CSS constraints.
 
 ## Best Practices
 
 1. **Set a size on the container**: The container has no intrinsic size — give it a height (and width, if needed) so panels have space to fill.
-2. **Keep panel content resilient**: Panels can currently be dragged down to zero width, so make sure content degrades gracefully when a panel gets narrow.
+2. **Use CSS to constrain panels**: Set `min-width` / `min-height` on a panel to prevent it from being collapsed, and `max-width` / `max-height` to cap how large it can grow. The handle stops automatically at these boundaries.
