@@ -123,8 +123,12 @@ const Resizable = ({
     const root = scope.current;
     if (!root) return;
 
-    panels.current = [...root.querySelectorAll<HTMLElement>("[data-ui-resizable-panel]")];
     const rootSize = root.getBoundingClientRect()[keys.side];
+
+    panels.current = Array.from(root.children).filter(
+      (child): child is HTMLElement =>
+        child instanceof HTMLElement && child.hasAttribute("data-ui-resizable-panel"),
+    );
 
     // Normalize panels widths: each panel gets fraction of the total width
     for (const panel of panels.current) {
@@ -206,6 +210,7 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
 
     window.addEventListener("pointermove", onDrag);
     window.addEventListener("pointerup", onDragEnd, { once: true });
+    window.addEventListener("pointercancel", onDragEnd, { once: true });
   };
 
   const onKeydown: KeyboardEventHandler<HTMLDivElement> = (event) => {
@@ -229,10 +234,10 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
     <div
       // biome-ignore lint/a11y/useAriaPropsForRole: hr element does not support after pseudo element
       role="separator"
-      aria-orientation={orientation}
+      aria-orientation={orientation === "horizontal" ? "vertical" : "horizontal"}
       tabIndex={0}
       className={cn(
-        "relative border-border border-l",
+        "relative touch-none border-border",
         "hover:border-foreground/24 hover:border-dashed active:border-foreground/48 active:border-dashed",
         "after:absolute after:inset-0",
         orientation === "horizontal"
