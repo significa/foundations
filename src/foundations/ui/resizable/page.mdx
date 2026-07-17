@@ -1,0 +1,120 @@
+---
+title: Resizable
+description: >-
+  A container whose panels can be resized by dragging the handle on the boundary between them
+preview: resizable
+files:
+  - src/foundations/ui/resizable/resizable.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: composeRefs
+    href: /utils/compose-refs
+  - name: math/clamp
+    href: /utils/math/#clamp
+
+folder: UI
+---
+
+## Features
+
+- **Inferred Handles**: Just list panels — a drag handle is placed on the boundary between each pair automatically
+- **Percentage-based**: Sizes are percentages of the container, so layouts stay responsive
+- **Even by default**: Panels split the container equally; drag a boundary to redistribute
+- **Keyboard Support**: Handles are focusable and resizable with the arrow keys (plus `Home` / `End`)
+- **Horizontal & Vertical**: Lay panels out in a row or a column
+- **Nestable**: A panel can hold another `Resizable` for grid-like layouts
+
+## Anatomy
+
+```tsx
+<Resizable orientation="horizontal">
+  <Resizable.Panel />
+  <Resizable.Panel />
+</Resizable>
+```
+
+Panels must be **direct children** of `Resizable` — the container splits its space
+equally between them and assigns each its index. Every panel except the first renders
+a drag handle on its leading edge, so a boundary appears between each adjacent pair
+with no extra markup.
+
+## API Reference
+
+### Resizable
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    orientation: {
+      type: '"horizontal" | "vertical"',
+      default: '"horizontal"',
+      description: "Axis along which panels are laid out and resized.",
+    },
+    keyboardStep: {
+      type: "number",
+      default: "10",
+      description: "Percentage points a handle moves per arrow-key press.",
+    },
+    onResize: {
+      type: "(sizes: number[]) => void",
+      description: "Called with the new list of panel sizes (percentages) whenever they change.",
+    },
+  }}
+/>
+
+### Resizable.Panel
+
+Extends the `div` element.
+
+Panels split the container equally. Their sizes are tracked as percentages that a
+drag redistributes between adjacent panels.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+  }}
+/>
+
+### Handle
+
+The drag handle is inferred — you don't render it. Each panel except the first
+renders one on its leading edge. It is a `role="separator"` element that is focusable
+and resizable with the keyboard, and exposes `data-dragging` while a drag is in
+progress. To restyle it, edit the handle markup in your copy of `resizable.tsx`.
+
+## Examples
+
+### Horizontal
+
+The default: panels sit in a row, dragging the handle left and right.
+
+<Preview slug="resizable" />
+
+### Vertical
+
+Set `orientation="vertical"` to stack panels and drag the handle up and down.
+
+<Preview slug="resizable-vertical" />
+
+### Nested
+
+Put a `Resizable` inside a `Resizable.Panel` to build grid-like layouts.
+
+<Preview slug="resizable-nested" />
+
+## Accessibility
+
+- Each handle is a `role="separator"` element with `tabIndex={0}`, so it is reachable by keyboard.
+- `aria-orientation` reflects the separator itself — a horizontal layout is split by a vertical separator, and vice versa.
+- `aria-valuemin`, `aria-valuemax`, and `aria-valuenow` describe the leading panel's size within the pair it can span.
+- Arrow keys move the focused handle by `keyboardStep`; `Home` and `End` jump it to its minimum and maximum.
+
+## Best Practices
+
+1. **Set a size on the container**: The container has no intrinsic size — give it a height (and width, if needed) so panels have space to fill.
+2. **Keep panel content resilient**: Panels can currently be dragged down to zero width, so make sure content degrades gracefully when a panel gets narrow.
