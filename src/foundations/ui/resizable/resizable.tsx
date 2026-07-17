@@ -167,7 +167,7 @@ const ResizablePanel = ({ asChild, className, style, children, ...props }: Resiz
       {index !== 0 && <ResizableHandle index={index} />}
       <Component
         data-ui-resizable-panel=""
-        className={cn("w-full overflow-auto", className)}
+        className={cn("w-full grow overflow-auto", className)}
         {...props}
       >
         {children}

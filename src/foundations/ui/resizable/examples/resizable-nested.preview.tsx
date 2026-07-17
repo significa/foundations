@@ -1,10 +1,10 @@
 import { Resizable } from "@/foundations/ui/resizable/resizable";
 
-export const meta = { layout: "centered" } as const;
+export const meta = { layout: "fullscreen", mode: "iframe" } as const;
 
 export default function ResizableNestedPreview() {
   return (
-    <Resizable className="h-96 w-full max-w-2xl rounded-xl border border-border">
+    <Resizable className="h-screen w-screen">
       <Resizable.Panel className="grid place-items-center p-4">
         <span className="text-foreground-secondary text-sm">Sidebar</span>
       </Resizable.Panel>
