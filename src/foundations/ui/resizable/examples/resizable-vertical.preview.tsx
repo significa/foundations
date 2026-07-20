@@ -6,10 +6,10 @@ export default function ResizableVerticalPreview() {
   return (
     <Resizable orientation="vertical" className="h-screen w-screen">
       <Resizable.Panel className="grid place-items-center p-4">
-        <span className="text-foreground-secondary text-sm">Top</span>
+        <span className="text-foreground-secondary text-sm">Editor</span>
       </Resizable.Panel>
       <Resizable.Panel className="grid place-items-center p-4">
-        <span className="text-foreground-secondary text-sm">Bottom</span>
+        <span className="text-foreground-secondary text-sm">Terminal</span>
       </Resizable.Panel>
     </Resizable>
   );

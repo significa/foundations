@@ -9,10 +9,10 @@ export default function ResizablePreview() {
         <span className="text-foreground-secondary text-sm">Sidebar</span>
       </Resizable.Panel>
       <Resizable.Panel className="grid w-24 min-w-24 place-items-center p-4">
-        <span className="text-foreground-secondary text-sm">Content</span>
+        <span className="text-foreground-secondary text-sm">Editor</span>
       </Resizable.Panel>
       <Resizable.Panel className="grid place-items-center p-4">
-        <span className="text-foreground-secondary text-sm">Third</span>
+        <span className="text-foreground-secondary text-sm">Preview</span>
       </Resizable.Panel>
     </Resizable>
   );
