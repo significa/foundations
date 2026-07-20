@@ -105,6 +105,9 @@ const Resizable = ({
       const panelBeforeRange = calcPanelRange(panelBefore, panelAfter);
       const panelAfterRange = calcPanelRange(panelAfter, panelBefore);
 
+      // store how much we've moved so far (in px)
+      // so we can easily calculate the new size from the current size
+      // and thereby avoid size look-ups during apply (i.e. during drag)
       let cumulativeDelta = 0;
 
       const apply = (pxDelta: number) => {
