@@ -78,9 +78,11 @@ const Disclosure = ({
 
   return (
     <DisclosureContext value={{ open, setOpen, id }}>
-      <MotionConfig reducedMotion="user">
-        <div {...props}>{children}</div>
-      </MotionConfig>
+      <DisclosureGroupContext value={null}>
+        <MotionConfig reducedMotion="user">
+          <div {...props}>{children}</div>
+        </MotionConfig>
+      </DisclosureGroupContext>
     </DisclosureContext>
   );
 };
