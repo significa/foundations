@@ -21,6 +21,7 @@ folder: UI
 - **CSS-driven initial sizing**: Each panel's starting size is its computed CSS width (or height) at mount — set it with a `width` utility or any flex sizing class, no prop needed
 - **Inferred bounds**: Minimum and maximum sizes are derived from the panel's CSS `min-width` / `min-height` and `max-width` / `max-height` — no props required
 - **Percentage-based sizing**: Panels are sized as percentages of the container so the layout adapts as the container changes
+- **Persistent sizes**: Pass a `persist` key to save and restore panel sizes across visits via `localStorage`
 - **Keyboard support**: Handles are focusable and accept arrow key input to nudge the boundary
 
 ## Anatomy
@@ -48,6 +49,11 @@ Extends the `div` element.
       type: '"horizontal" | "vertical"',
       default: '"horizontal"',
       description: "Axis along which panels are laid out and resized.",
+    },
+    persist: {
+      type: "string",
+      description:
+        "Unique key used to save panel sizes to localStorage and restore them on the next visit. Must be unique per layout — if the panel count changes, stored sizes for unrecognised panels are ignored and those panels fall back to their CSS size.",
     },
   }}
 />
@@ -91,6 +97,12 @@ The default: panels sit in a row, dragging the handle left and right.
 Apply `min-width` / `max-width` (or `min-height` / `max-height` for vertical) directly on a panel. The handle stops automatically at those boundaries.
 
 <Preview slug="resizable-min-max" />
+
+### Persistent sizes
+
+Pass a unique `persist` key to save panel sizes to `localStorage`. Sizes are restored on the next visit — drag the handle and reload the page to see it in action.
+
+<Preview slug="resizable-persist" />
 
 ### Vertical
 
