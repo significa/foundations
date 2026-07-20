@@ -116,6 +116,12 @@ Put a `Resizable` inside a `Resizable.Panel` to build grid-like layouts.
 
 <Preview slug="resizable-nested" />
 
+### Collapsible panel
+
+Panel sizes are plain inline styles, so you can collapse a panel programmatically by holding a ref to it and setting its `width` (or `height`) directly. Set both adjacent panels to keep the layout consistent.
+
+<Preview slug="resizable-collapsible" />
+
 ## Accessibility
 
 - Each handle is a `role="separator"` element with `tabIndex={0}`, so it is reachable by keyboard.

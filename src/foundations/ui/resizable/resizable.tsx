@@ -27,9 +27,12 @@ type ResizeHandler = {
   apply: (pxDelta: number) => void;
 };
 
+type PanelOnResizeCallback = (size: number, setSize: (size: number) => void) => void;
+
 type ResizableContextValue = {
   orientation: Orientation;
   scope: React.RefObject<HTMLDivElement | null>;
+  registerPanelCallback: (index: number, callback: PanelOnResizeCallback) => () => void;
   createResizeHandler: (index: number) => ResizeHandler;
   persist: () => void;
 };
@@ -58,6 +61,15 @@ const Resizable = ({
 }: ResizableProps) => {
   const scope = useRef<HTMLDivElement>(null);
   const panels = useRef<HTMLElement[]>([]);
+  const panelCallbacks = useRef<(PanelOnResizeCallback | null)[]>([]);
+
+  const registerPanelCallback = useCallback((index: number, callback: PanelOnResizeCallback) => {
+    panelCallbacks.current[index] = callback;
+
+    return () => {
+      panelCallbacks.current[index] = null;
+    };
+  }, []);
 
   const keys = useMemo(() => {
     return {
@@ -70,8 +82,12 @@ const Resizable = ({
   const createResizeHandler = useCallback(
     (handleIndex: number) => {
       const root = scope.current;
-      const panelBefore = panels.current[handleIndex - 1];
-      const panelAfter = panels.current[handleIndex];
+      const panelBeforeIndex = handleIndex - 1;
+      const panelAfterIndex = handleIndex;
+      const panelBefore = panels.current[panelBeforeIndex];
+      const panelAfter = panels.current[panelAfterIndex];
+      const panelBeforeCallback = panelCallbacks.current[panelBeforeIndex];
+      const panelAfterCallback = panelCallbacks.current[panelAfterIndex];
 
       if (!root || !panelBefore || !panelAfter) {
         return { apply: () => undefined };
@@ -110,6 +126,13 @@ const Resizable = ({
       // and thereby avoid size look-ups during apply (i.e. during drag)
       let cumulativeDelta = 0;
 
+      const setPanelSize = (panel: HTMLElement, oppositePanel: HTMLElement, size: number) => {
+        const otherSize = panelBeforeCurrent + panelAfterCurrent - size;
+
+        panel.style[keys.side] = `${(size / rootCurrent) * 100}%`;
+        oppositePanel.style[keys.side] = `${(otherSize / rootCurrent) * 100}%`;
+      };
+
       const apply = (pxDelta: number) => {
         const panelBeforeNew = panelBeforeCurrent + cumulativeDelta + pxDelta;
         const panelAfterNew = panelAfterCurrent - (cumulativeDelta + pxDelta);
@@ -125,6 +148,13 @@ const Resizable = ({
 
         panelBefore.style[keys.side] = `${(panelBeforeNew / rootCurrent) * 100}%`;
         panelAfter.style[keys.side] = `${(panelAfterNew / rootCurrent) * 100}%`;
+
+        panelBeforeCallback?.(panelBeforeNew, (newSize) =>
+          setPanelSize(panelBefore, panelAfter, newSize),
+        );
+        panelAfterCallback?.(panelAfterNew, (newSize) =>
+          setPanelSize(panelAfter, panelBefore, newSize),
+        );
       };
 
       return { apply };
@@ -179,7 +209,9 @@ const Resizable = ({
   }, [keys, persistKey]);
 
   return (
-    <ResizableContext value={{ scope, orientation, createResizeHandler, persist }}>
+    <ResizableContext
+      value={{ scope, orientation, createResizeHandler, persist, registerPanelCallback }}
+    >
       <div
         ref={composeRefs(ref, scope)}
         className={cn(
@@ -197,10 +229,28 @@ const Resizable = ({
 
 type ResizablePanelProps = React.ComponentPropsWithRef<"div"> & {
   asChild?: boolean;
+  onResize?: PanelOnResizeCallback;
 };
 
-const ResizablePanel = ({ asChild, className, children, ...props }: ResizablePanelProps) => {
+const ResizablePanel = ({
+  asChild,
+  onResize,
+  className,
+  children,
+  ...props
+}: ResizablePanelProps) => {
   const index = useInstanceCounter();
+  const { registerPanelCallback } = useResizableContext();
+
+  useEffect(() => {
+    if (onResize) {
+      const unregister = registerPanelCallback(index, onResize);
+
+      return () => {
+        unregister();
+      };
+    }
+  }, [index, onResize, registerPanelCallback]);
 
   const Component = asChild ? Slot : "div";
   return (
