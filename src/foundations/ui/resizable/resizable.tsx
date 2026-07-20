@@ -99,15 +99,20 @@ const Resizable = ({
       const panelBeforeRange = calcPanelRange(panelBefore, panelAfter);
       const panelAfterRange = calcPanelRange(panelAfter, panelBefore);
 
+      let cumulativeDelta = 0;
+
       const apply = (pxDelta: number) => {
-        const panelBeforeNew = panelBeforeCurrent + pxDelta;
-        const panelAfterNew = panelAfterCurrent - pxDelta;
+        const panelBeforeNew = panelBeforeCurrent + cumulativeDelta + pxDelta;
+        const panelAfterNew = panelAfterCurrent - (cumulativeDelta + pxDelta);
 
         // check if new size is within range
         if (panelBeforeNew < panelBeforeRange.min) return;
         if (panelAfterNew < panelAfterRange.min) return;
         if (panelBeforeNew > panelBeforeRange.max) return;
         if (panelAfterNew > panelAfterRange.max) return;
+
+        // only update cumulativeDelta if new size is within range
+        cumulativeDelta += pxDelta;
 
         panelBefore.style[keys.side] = `${(panelBeforeNew / rootCurrent) * 100}%`;
         panelAfter.style[keys.side] = `${(panelAfterNew / rootCurrent) * 100}%`;
@@ -186,6 +191,7 @@ type ResizableHandleProps = {
 
 const ResizableHandle = ({ index }: ResizableHandleProps) => {
   const { orientation, createResizeHandler } = useResizableContext();
+  const keyHandleRef = useRef<ResizeHandler | null>(null);
 
   const onPointerDown: PointerEventHandler<HTMLDivElement> = (event) => {
     const clientOffset = orientation === "horizontal" ? "clientX" : "clientY";
@@ -197,9 +203,11 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
     document.body.style.cursor = orientation === "horizontal" ? "col-resize" : "row-resize";
     document.body.style.userSelect = "none";
 
+    let previousDelta = 0;
     const onDrag = ({ [clientOffset]: offset }: PointerEvent) => {
-      const delta = offset - startOffset;
-      handler.apply(delta);
+      const currentDelta = offset - startOffset - previousDelta;
+      previousDelta = offset - startOffset;
+      handler.apply(currentDelta);
     };
 
     const onDragEnd = () => {
@@ -213,8 +221,17 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
     window.addEventListener("pointercancel", onDragEnd, { once: true });
   };
 
+  const onFocus = () => {
+    keyHandleRef.current = createResizeHandler(index);
+  };
+
+  const onBlur = () => {
+    keyHandleRef.current = null;
+  };
+
   const onKeydown: KeyboardEventHandler<HTMLDivElement> = (event) => {
-    const handler = createResizeHandler(index);
+    const handler = keyHandleRef.current;
+    if (!handler) return;
 
     const back = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
     const forward = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
@@ -246,6 +263,8 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
           : "h-px w-full cursor-row-resize border-t after:-inset-y-2",
       )}
       onPointerDown={onPointerDown}
+      onFocus={onFocus}
+      onBlur={onBlur}
       onKeyDown={onKeydown}
     />
   );
