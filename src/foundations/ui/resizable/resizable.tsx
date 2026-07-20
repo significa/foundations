@@ -136,7 +136,11 @@ const Resizable = ({
       const id = panel.getAttribute("data-ui-resizable-panel");
       if (id !== null) sizes[id] = panel.style[keys.side];
     }
-    localStorage.setItem(getLocalstorageKey(persistKey), JSON.stringify(sizes));
+    try {
+      localStorage.setItem(getLocalstorageKey(persistKey), JSON.stringify(sizes));
+    } catch {
+      // ignore localStorage errors
+    }
   }, [persistKey, keys.side]);
 
   // init and memo panels
@@ -161,18 +165,13 @@ const Resizable = ({
     const rootSize = root.getBoundingClientRect()[keys.side];
     for (const panel of panels.current) {
       const panelId = panel.getAttribute("data-ui-resizable-panel") || "0";
+      const size = panel.getBoundingClientRect()[keys.side];
       const persistedSize = persistedSizes[panelId];
 
-      if (persistedSize) {
-        setTimeout(() => {
-          panel.style[keys.side] = persistedSize;
-        }, 0);
-      } else {
-        const size = panel.getBoundingClientRect()[keys.side];
-        setTimeout(() => {
-          panel.style[keys.side] = `${(size / rootSize) * 100}%`;
-        }, 0);
-      }
+      // defer applying the size so subsequent panel size look-ups are accurate to the initial sizes
+      window.requestAnimationFrame(() => {
+        panel.style[keys.side] = persistedSize ? persistedSize : `${(size / rootSize) * 100}%`;
+      });
     }
   }, [keys, persistKey]);
 
