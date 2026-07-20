@@ -18,6 +18,7 @@ folder: UI
 
 ## Features
 
+- **CSS-driven initial sizing**: Each panel's starting size is its computed CSS width (or height) at mount — set it with a `width` utility or any flex sizing class, no prop needed
 - **Inferred bounds**: Minimum and maximum sizes are derived from the panel's CSS `min-width` / `min-height` and `max-width` / `max-height` — no props required
 - **Percentage-based sizing**: Panels are sized as percentages of the container so the layout adapts as the container changes
 - **Keyboard support**: Handles are focusable and accept arrow key input to nudge the boundary
@@ -55,8 +56,11 @@ Extends the `div` element.
 
 Extends the `div` element.
 
-Panels split the container’s space. Their sizes are tracked as percentages that a
-drag redistributes between adjacent panels.
+Panels split the container’s space. On mount, each panel’s computed CSS size is read
+and locked in as a percentage of the container — that percentage then changes as the
+user drags. This means initial sizing is entirely CSS-driven: use a `width` class
+(e.g. `w-64`, `w-1/3`) to set the starting size of a panel, and the rest of the
+space is distributed to the other panels by flexbox before the lock-in happens.
 
 <PropsTable
   definition={{
