@@ -237,8 +237,9 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
       aria-orientation={orientation === "horizontal" ? "vertical" : "horizontal"}
       tabIndex={0}
       className={cn(
-        "relative touch-none border-border",
+        "relative touch-none border-border outline-none ring-ring",
         "hover:border-foreground/24 hover:border-dashed active:border-foreground/48 active:border-dashed",
+        "focus-visible:ring-(length:--ring-width)",
         "after:absolute after:inset-0",
         orientation === "horizontal"
           ? "h-full w-px cursor-col-resize border-l after:-inset-x-2"
