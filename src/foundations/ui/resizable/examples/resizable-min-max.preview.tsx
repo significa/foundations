@@ -8,6 +8,7 @@ export default function ResizableMinMaxPreview() {
       <Resizable.Panel className="grid min-w-32 max-w-64 place-items-center p-4">
         <span className="text-foreground-secondary text-sm">Sidebar</span>
       </Resizable.Panel>
+      <Resizable.Handle />
       <Resizable.Panel className="grid place-items-center p-4">
         <span className="text-foreground-secondary text-sm">Content</span>
       </Resizable.Panel>

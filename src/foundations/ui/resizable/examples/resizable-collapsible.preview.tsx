@@ -1,4 +1,4 @@
-import { SidebarIcon } from "@phosphor-icons/react";
+import { SidebarIcon } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
 import { Resizable } from "@/foundations/ui/resizable/resizable";
 
@@ -25,6 +25,7 @@ export default function ResizableCollapsiblePreview() {
           </span>
         </div>
       </Resizable.Panel>
+      <Resizable.Handle />
       <Resizable.Panel>
         <div className="grid h-full grow place-items-center p-4">
           <span className="text-foreground-secondary text-sm">Editor</span>

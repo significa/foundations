@@ -1,5 +1,6 @@
 import {
   createContext,
+  type FocusEventHandler,
   type KeyboardEventHandler,
   type PointerEventHandler,
   use,
@@ -33,7 +34,7 @@ type ResizableContextValue = {
   orientation: Orientation;
   scope: React.RefObject<HTMLDivElement | null>;
   registerPanelCallback: (index: number, callback: PanelOnResizeCallback) => () => void;
-  createResizeHandler: (index: number) => ResizeHandler;
+  createResizeHandler: (panelBefore: HTMLElement, panelAfter: HTMLElement) => ResizeHandler;
   persist: () => void;
 };
 
@@ -60,12 +61,10 @@ const Resizable = ({
   ...props
 }: ResizableProps) => {
   const scope = useRef<HTMLDivElement>(null);
-  const panels = useRef<HTMLElement[]>([]);
   const panelCallbacks = useRef<(PanelOnResizeCallback | null)[]>([]);
 
   const registerPanelCallback = useCallback((index: number, callback: PanelOnResizeCallback) => {
     panelCallbacks.current[index] = callback;
-
     return () => {
       panelCallbacks.current[index] = null;
     };
@@ -80,18 +79,24 @@ const Resizable = ({
   }, [orientation]);
 
   const createResizeHandler = useCallback(
-    (handleIndex: number) => {
+    (panelBefore: HTMLElement, panelAfter: HTMLElement) => {
       const root = scope.current;
-      const panelBeforeIndex = handleIndex - 1;
-      const panelAfterIndex = handleIndex;
-      const panelBefore = panels.current[panelBeforeIndex];
-      const panelAfter = panels.current[panelAfterIndex];
-      const panelBeforeCallback = panelCallbacks.current[panelBeforeIndex];
-      const panelAfterCallback = panelCallbacks.current[panelAfterIndex];
+      if (!root) return { apply: () => undefined };
 
-      if (!root || !panelBefore || !panelAfter) {
-        return { apply: () => undefined };
-      }
+      const panelBeforeIndex = parseInt(
+        panelBefore.getAttribute("data-ui-resizable-panel") ?? "",
+        10,
+      );
+      const panelAfterIndex = parseInt(
+        panelAfter.getAttribute("data-ui-resizable-panel") ?? "",
+        10,
+      );
+      const panelBeforeCallback = Number.isNaN(panelBeforeIndex)
+        ? null
+        : (panelCallbacks.current[panelBeforeIndex] ?? null);
+      const panelAfterCallback = Number.isNaN(panelAfterIndex)
+        ? null
+        : (panelCallbacks.current[panelAfterIndex] ?? null);
 
       // sizes when drag started
       const rootCurrent = root[keys.sideOffset];
@@ -128,7 +133,6 @@ const Resizable = ({
 
       const setPanelSize = (panel: HTMLElement, oppositePanel: HTMLElement, size: number) => {
         const otherSize = panelBeforeCurrent + panelAfterCurrent - size;
-
         panel.style[keys.side] = `${(size / rootCurrent) * 100}%`;
         oppositePanel.style[keys.side] = `${(otherSize / rootCurrent) * 100}%`;
       };
@@ -163,11 +167,13 @@ const Resizable = ({
   );
 
   const persist = useCallback(() => {
-    if (!persistKey) return;
+    if (!persistKey || !scope.current) return;
     const sizes: Record<string, string> = {};
-    for (const panel of panels.current) {
-      const id = panel.getAttribute("data-ui-resizable-panel");
-      if (id !== null) sizes[id] = panel.style[keys.side];
+    for (const child of scope.current.children) {
+      if (!(child instanceof HTMLElement) || !child.hasAttribute("data-ui-resizable-panel"))
+        continue;
+      const id = child.getAttribute("data-ui-resizable-panel");
+      if (id !== null) sizes[id] = child.style[keys.side];
     }
     try {
       localStorage.setItem(getLocalstorageKey(persistKey), JSON.stringify(sizes));
@@ -176,12 +182,12 @@ const Resizable = ({
     }
   }, [persistKey, keys.side]);
 
-  // init and memo panels
+  // normalize panel sizes on mount
   useEffect(() => {
     const root = scope.current;
     if (!root) return;
 
-    panels.current = Array.from(root.children).filter(
+    const panels = Array.from(root.children).filter(
       (child): child is HTMLElement =>
         child instanceof HTMLElement && child.hasAttribute("data-ui-resizable-panel"),
     );
@@ -194,9 +200,8 @@ const Resizable = ({
       // ignore malformed storage values
     }
 
-    // Normalize panels widths: each panel gets fraction of the total width
     const rootSize = root.getBoundingClientRect()[keys.side];
-    for (const panel of panels.current) {
+    for (const panel of panels) {
       const panelId = panel.getAttribute("data-ui-resizable-panel") || "0";
       const size = panel.getBoundingClientRect()[keys.side];
       const persistedSize = persistedSizes[panelId];
@@ -245,7 +250,6 @@ const ResizablePanel = ({
   useEffect(() => {
     if (onResize) {
       const unregister = registerPanelCallback(index, onResize);
-
       return () => {
         unregister();
       };
@@ -254,32 +258,58 @@ const ResizablePanel = ({
 
   const Component = asChild ? Slot : "div";
   return (
-    <>
-      {/* Every panel but the first owns the handle on its leading edge. */}
-      {index !== 0 && <ResizableHandle index={index} />}
-      <Component
-        data-ui-resizable-panel={index}
-        className={cn("min-h-0 w-full min-w-0 grow overflow-auto", className)}
-        {...props}
-      >
-        {children}
-      </Component>
-    </>
+    <Component
+      data-ui-resizable-panel={index}
+      className={cn("min-h-0 w-full min-w-0 grow overflow-auto", className)}
+      {...props}
+    >
+      {children}
+    </Component>
   );
 };
 
-type ResizableHandleProps = {
-  index: number;
-};
+type ResizableHandleProps = Omit<React.ComponentPropsWithRef<"div">, "children">;
 
-const ResizableHandle = ({ index }: ResizableHandleProps) => {
+const ResizableHandle = ({
+  className,
+  ref,
+  onPointerDown,
+  onKeyDown,
+  onFocus,
+  onBlur,
+  ...props
+}: ResizableHandleProps) => {
   const { orientation, createResizeHandler, persist } = useResizableContext();
+  const handleRef = useRef<HTMLDivElement>(null);
   const keyHandleRef = useRef<ResizeHandler | null>(null);
 
-  const onPointerDown: PointerEventHandler<HTMLDivElement> = (event) => {
+  const getAdjacentPanels = () => {
+    const el = handleRef.current;
+    if (!el) return { panelBefore: null, panelAfter: null };
+
+    let panelBefore = el.previousElementSibling as HTMLElement | null;
+    while (panelBefore && !panelBefore.hasAttribute("data-ui-resizable-panel")) {
+      panelBefore = panelBefore.previousElementSibling as HTMLElement | null;
+    }
+
+    let panelAfter = el.nextElementSibling as HTMLElement | null;
+    while (panelAfter && !panelAfter.hasAttribute("data-ui-resizable-panel")) {
+      panelAfter = panelAfter.nextElementSibling as HTMLElement | null;
+    }
+
+    return { panelBefore, panelAfter };
+  };
+
+  const handlePointerDown: PointerEventHandler<HTMLDivElement> = (event) => {
+    onPointerDown?.(event);
+    if (event.defaultPrevented) return;
+
+    const { panelBefore, panelAfter } = getAdjacentPanels();
+    if (!panelBefore || !panelAfter) return;
+
     const clientOffset = orientation === "horizontal" ? "clientX" : "clientY";
     const startOffset = event[clientOffset];
-    const handler = createResizeHandler(index);
+    const handler = createResizeHandler(panelBefore, panelAfter);
 
     const prevCursor = document.body.style.cursor;
     const prevUserSelect = document.body.style.userSelect;
@@ -305,16 +335,28 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
     window.addEventListener("pointercancel", onDragEnd, { once: true });
   };
 
-  const onFocus = () => {
-    keyHandleRef.current = createResizeHandler(index);
+  const handleFocus: FocusEventHandler<HTMLDivElement> = (e) => {
+    onFocus?.(e);
+    if (e.defaultPrevented) return;
+
+    if (keyHandleRef.current) return;
+    const { panelBefore, panelAfter } = getAdjacentPanels();
+    if (!panelBefore || !panelAfter) return;
+    keyHandleRef.current = createResizeHandler(panelBefore, panelAfter);
   };
 
-  const onBlur = () => {
+  const handleBlur: FocusEventHandler<HTMLDivElement> = (e) => {
+    onBlur?.(e);
+    if (e.defaultPrevented) return;
+
     persist();
     keyHandleRef.current = null;
   };
 
-  const onKeydown: KeyboardEventHandler<HTMLDivElement> = (event) => {
+  const handleKeydown: KeyboardEventHandler<HTMLDivElement> = (event) => {
+    onKeyDown?.(event);
+    if (event.defaultPrevented) return;
+
     const handler = keyHandleRef.current;
     if (!handler) return;
 
@@ -338,6 +380,7 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
       role="separator"
       aria-orientation={orientation === "horizontal" ? "vertical" : "horizontal"}
       tabIndex={0}
+      ref={composeRefs(ref, handleRef)}
       className={cn(
         "relative touch-none border-border outline-none ring-ring",
         "hover:border-foreground/24 hover:border-dashed active:border-foreground/48 active:border-dashed",
@@ -346,17 +389,25 @@ const ResizableHandle = ({ index }: ResizableHandleProps) => {
         orientation === "horizontal"
           ? "h-full w-px cursor-col-resize border-l after:-inset-x-2"
           : "h-px w-full cursor-row-resize border-t after:-inset-y-2",
+        className,
       )}
-      onPointerDown={onPointerDown}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      onKeyDown={onKeydown}
+      onPointerDown={handlePointerDown}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={handleKeydown}
+      {...props}
     />
   );
 };
 
 const CompoundResizable = Object.assign(Resizable, {
   Panel: ResizablePanel,
+  Handle: ResizableHandle,
 });
 
-export { CompoundResizable as Resizable, type ResizablePanelProps, type ResizableProps };
+export {
+  CompoundResizable as Resizable,
+  type ResizableHandleProps,
+  type ResizablePanelProps,
+  type ResizableProps,
+};

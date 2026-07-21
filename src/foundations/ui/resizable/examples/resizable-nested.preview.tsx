@@ -8,11 +8,13 @@ export default function ResizableNestedPreview() {
       <Resizable.Panel className="grid place-items-center p-4">
         <span className="text-foreground-secondary text-sm">Sidebar</span>
       </Resizable.Panel>
+      <Resizable.Handle />
       <Resizable.Panel>
         <Resizable orientation="vertical" className="h-full">
           <Resizable.Panel className="grid place-items-center p-4">
             <span className="text-foreground-secondary text-sm">Main</span>
           </Resizable.Panel>
+          <Resizable.Handle />
           <Resizable.Panel className="grid place-items-center p-4">
             <span className="text-foreground-secondary text-sm">Console</span>
           </Resizable.Panel>

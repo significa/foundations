@@ -11,6 +11,7 @@ export default function ResizablePersistPreview() {
       <Resizable.Panel className="grid place-items-center p-4">
         <span className="text-foreground-secondary text-sm">Sidebar</span>
       </Resizable.Panel>
+      <Resizable.Handle />
       <Resizable.Panel className="grid place-items-center p-4">
         <span className="text-foreground-secondary text-sm">Editor</span>
       </Resizable.Panel>
