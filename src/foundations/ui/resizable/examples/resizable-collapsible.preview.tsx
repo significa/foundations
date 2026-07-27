@@ -10,14 +10,8 @@ export default function ResizableCollapsiblePreview() {
   return (
     <Resizable className="h-72 w-200 max-w-2xl rounded-xl border border-border">
       <Resizable.Panel
-        onResize={(size, setSize) => {
-          if (size < 100) {
-            setSize(48);
-            setCollapsed(true);
-          } else {
-            setCollapsed(false);
-          }
-        }}
+        snap={(size) => (size < 100 ? 48 : size)}
+        onResize={(size) => setCollapsed(size < 100)}
       >
         <div className="grid h-full place-items-center p-4">
           <span className="text-foreground-secondary text-sm">

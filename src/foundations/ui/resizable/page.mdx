@@ -75,10 +75,15 @@ space is distributed to the other panels by flexbox before the lock-in happens.
       type: "boolean",
       description: "Whether to merge props onto the child element.",
     },
-    onResize: {
-      type: "(size: number, setSize: (size: number) => void) => void",
+    snap: {
+      type: "(size: number) => number",
       description:
-        "Called during drag and keyboard resize with the panel's current size in pixels. Use setSize to override the size imperatively — useful for snapping or collapsing behaviour.",
+        "Transform the panel's size during a resize: receives the pointer-tracked size in pixels and returns the size the panel should take. Runs every frame — return a fixed size to snap or collapse, or the size unchanged for a no-op.",
+    },
+    onResize: {
+      type: "(size: number) => void",
+      description:
+        "Read-only notification called during drag and keyboard resize with the panel's pointer-tracked size in pixels.",
     },
   }}
 />
@@ -126,7 +131,7 @@ Put a `Resizable` inside a `Resizable.Panel` to build grid-like layouts.
 
 ### Collapsible panel
 
-Use `onResize` to snap a panel to a collapsed size when it crosses a threshold. The callback fires during drag with the current size in pixels; call `setSize` to override it.
+Use `snap` to pin a panel to a collapsed size when it crosses a threshold — it returns the size the panel should take. Pair it with `onResize` to react to the change (here, swapping the label for an icon).
 
 <Preview slug="resizable-collapsible" />
 

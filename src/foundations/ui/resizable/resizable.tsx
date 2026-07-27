@@ -28,12 +28,18 @@ type ResizeHandler = {
   apply: (pxDelta: number) => void;
 };
 
-type PanelOnResizeCallback = (size: number, setSize: (size: number) => void) => void;
+type PanelCallbacks = {
+  // Transform the panel's size during a resize — return the size (px) it should
+  // take. Runs every frame, so it can pin/snap (e.g. collapse) the panel.
+  snap?: (size: number) => number;
+  // Read-only notification with the pointer-tracked size (px) during a resize.
+  onResize?: (size: number) => void;
+};
 
 type ResizableContextValue = {
   orientation: Orientation;
   scope: React.RefObject<HTMLDivElement | null>;
-  registerPanelCallback: (index: number, callback: PanelOnResizeCallback) => () => void;
+  registerPanelCallbacks: (index: number, callbacks: PanelCallbacks) => () => void;
   createResizeHandler: (panelBefore: HTMLElement, panelAfter: HTMLElement) => ResizeHandler;
   persist: () => void;
 };
@@ -61,10 +67,10 @@ const Resizable = ({
   ...props
 }: ResizableProps) => {
   const scope = useRef<HTMLDivElement>(null);
-  const panelCallbacks = useRef<(PanelOnResizeCallback | null)[]>([]);
+  const panelCallbacks = useRef<(PanelCallbacks | null)[]>([]);
 
-  const registerPanelCallback = useCallback((index: number, callback: PanelOnResizeCallback) => {
-    panelCallbacks.current[index] = callback;
+  const registerPanelCallbacks = useCallback((index: number, callbacks: PanelCallbacks) => {
+    panelCallbacks.current[index] = callbacks;
     return () => {
       panelCallbacks.current[index] = null;
     };
@@ -91,12 +97,10 @@ const Resizable = ({
         panelAfter.getAttribute("data-ui-resizable-panel") ?? "",
         10,
       );
-      const panelBeforeCallback = Number.isNaN(panelBeforeIndex)
-        ? null
-        : (panelCallbacks.current[panelBeforeIndex] ?? null);
-      const panelAfterCallback = Number.isNaN(panelAfterIndex)
-        ? null
-        : (panelCallbacks.current[panelAfterIndex] ?? null);
+      // read a panel's registered callbacks fresh each frame (the panel may
+      // re-register mid-drag when its snap/onResize identity changes)
+      const readCallbacks = (index: number) =>
+        Number.isNaN(index) ? null : (panelCallbacks.current[index] ?? null);
 
       // sizes when drag started
       const rootCurrent = root[keys.sideOffset];
@@ -131,11 +135,8 @@ const Resizable = ({
       // and thereby avoid size look-ups during apply (i.e. during drag)
       let cumulativeDelta = 0;
 
-      const setPanelSize = (panel: HTMLElement, oppositePanel: HTMLElement, size: number) => {
-        const otherSize = panelBeforeCurrent + panelAfterCurrent - size;
-        panel.style[keys.side] = `${(size / rootCurrent) * 100}%`;
-        oppositePanel.style[keys.side] = `${(otherSize / rootCurrent) * 100}%`;
-      };
+      // the space the two panels share stays constant during a drag
+      const combined = panelBeforeCurrent + panelAfterCurrent;
 
       const apply = (pxDelta: number) => {
         const panelBeforeNew = panelBeforeCurrent + cumulativeDelta + pxDelta;
@@ -150,15 +151,27 @@ const Resizable = ({
         // only update cumulativeDelta if new size is within range
         cumulativeDelta += pxDelta;
 
-        panelBefore.style[keys.side] = `${(panelBeforeNew / rootCurrent) * 100}%`;
-        panelAfter.style[keys.side] = `${(panelAfterNew / rootCurrent) * 100}%`;
+        const beforeCb = readCallbacks(panelBeforeIndex);
+        const afterCb = readCallbacks(panelAfterIndex);
 
-        panelBeforeCallback?.(panelBeforeNew, (newSize) =>
-          setPanelSize(panelBefore, panelAfter, newSize),
-        );
-        panelAfterCallback?.(panelAfterNew, (newSize) =>
-          setPanelSize(panelAfter, panelBefore, newSize),
-        );
+        // a snap transformer returns the size its panel should take; the other
+        // panel absorbs the difference so the pair still fills `combined`
+        let sizeBefore = panelBeforeNew;
+        let sizeAfter = panelAfterNew;
+        if (beforeCb?.snap) {
+          sizeBefore = beforeCb.snap(panelBeforeNew);
+          sizeAfter = combined - sizeBefore;
+        } else if (afterCb?.snap) {
+          sizeAfter = afterCb.snap(panelAfterNew);
+          sizeBefore = combined - sizeAfter;
+        }
+
+        panelBefore.style[keys.side] = `${(sizeBefore / rootCurrent) * 100}%`;
+        panelAfter.style[keys.side] = `${(sizeAfter / rootCurrent) * 100}%`;
+
+        // read-only notifications get the raw pointer-tracked size (pre-snap)
+        beforeCb?.onResize?.(panelBeforeNew);
+        afterCb?.onResize?.(panelAfterNew);
       };
 
       return { apply };
@@ -215,7 +228,7 @@ const Resizable = ({
 
   return (
     <ResizableContext
-      value={{ scope, orientation, createResizeHandler, persist, registerPanelCallback }}
+      value={{ scope, orientation, createResizeHandler, persist, registerPanelCallbacks }}
     >
       <div
         ref={composeRefs(ref, scope)}
@@ -234,27 +247,34 @@ const Resizable = ({
 
 type ResizablePanelProps = React.ComponentPropsWithRef<"div"> & {
   asChild?: boolean;
-  onResize?: PanelOnResizeCallback;
+  /**
+   * Transform the panel's size during a resize: receives the pointer-tracked
+   * size in px and returns the size the panel should take. Runs every frame, so
+   * it can snap or collapse the panel. Return the size unchanged for a no-op.
+   */
+  snap?: (size: number) => number;
+  /** Read-only notification fired during drag/keyboard resize with the size in px. */
+  onResize?: (size: number) => void;
 };
 
 const ResizablePanel = ({
   asChild,
+  snap,
   onResize,
   className,
   children,
   ...props
 }: ResizablePanelProps) => {
   const index = useInstanceCounter();
-  const { registerPanelCallback } = useResizableContext();
+  const { registerPanelCallbacks } = useResizableContext();
 
   useEffect(() => {
-    if (onResize) {
-      const unregister = registerPanelCallback(index, onResize);
-      return () => {
-        unregister();
-      };
-    }
-  }, [index, onResize, registerPanelCallback]);
+    if (!snap && !onResize) return;
+    const unregister = registerPanelCallbacks(index, { snap, onResize });
+    return () => {
+      unregister();
+    };
+  }, [index, snap, onResize, registerPanelCallbacks]);
 
   const Component = asChild ? Slot : "div";
   return (
