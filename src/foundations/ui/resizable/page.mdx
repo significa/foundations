@@ -1,0 +1,161 @@
+---
+title: Resizable
+description: >-
+  A container whose panels can be resized by dragging the handle on the boundary between them
+preview: resizable
+files:
+  - src/foundations/ui/resizable/resizable.tsx
+dependencies:
+  - name: Slot
+    href: /components/slot
+  - name: composeRefs
+    href: /utils/compose-refs
+  - name: math/clamp
+    href: /utils/math/#clamp
+
+folder: UI
+---
+
+## Features
+
+- **CSS-driven initial sizing**: Each panel's starting size is its computed CSS width (or height) at mount — set it with a `width` utility or any flex sizing class, no prop needed
+- **Inferred bounds**: Minimum and maximum sizes are derived from the panel's CSS `min-width` / `min-height` and `max-width` / `max-height` — no props required
+- **Percentage-based sizing**: Panels are sized as percentages of the container so the layout adapts as the container changes
+- **Persistent sizes**: Pass a `persist` key to save and restore panel sizes across visits via `localStorage`
+- **Keyboard support**: Handles are focusable and accept arrow key input to nudge the boundary
+
+## Anatomy
+
+```tsx
+<Resizable orientation="horizontal">
+  <Resizable.Panel />
+  <Resizable.Handle />
+  <Resizable.Panel />
+</Resizable>
+```
+
+Panels and handles must be **direct children** of `Resizable`. Place a `Resizable.Handle` between
+any two panels you want to be resizable — omit it to create a fixed boundary. Panels without a
+handle between them cannot be resized against each other.
+
+## API Reference
+
+### Resizable
+
+Extends the `div` element.
+
+<PropsTable
+  definition={{
+    orientation: {
+      type: '"horizontal" | "vertical"',
+      default: '"horizontal"',
+      description: "Axis along which panels are laid out and resized.",
+    },
+    persist: {
+      type: "string",
+      description:
+        "Unique key used to save panel sizes to localStorage and restore them on the next visit. Must be unique per layout — if the panel count changes, stored sizes for unrecognised panels are ignored and those panels fall back to their CSS size.",
+    },
+  }}
+/>
+
+### Resizable.Panel
+
+Extends the `div` element.
+
+Panels split the container’s space. On mount, each panel’s computed CSS size is read
+and locked in as a percentage of the container — that percentage then changes as the
+user drags. This means initial sizing is entirely CSS-driven: use a `width` class
+(e.g. `w-64`, `w-1/3`) to set the starting size of a panel, and the rest of the
+space is distributed to the other panels by flexbox before the lock-in happens.
+
+<PropsTable
+  definition={{
+    asChild: {
+      type: "boolean",
+      description: "Whether to merge props onto the child element.",
+    },
+    snap: {
+      type: "(size: number) => number",
+      description:
+        "Transform the panel's size during a resize: receives the pointer-tracked size in pixels and returns the size the panel should take. Runs every frame — return a fixed size to snap or collapse, or the size unchanged for a no-op.",
+    },
+    onResize: {
+      type: "(size: number) => void",
+      description:
+        "Read-only notification called during drag and keyboard resize with the panel's pointer-tracked size in pixels.",
+    },
+  }}
+/>
+
+A panel's `ref` exposes an imperative `ResizablePanelHandle` (not the DOM node) so you can
+set its size programmatically — a "reset" button, presets, or a button-driven collapse:
+
+```tsx
+const sidebar = useRef<ResizablePanelHandle>(null);
+// sidebar.current?.resize(300) — set the panel to 300px; the adjacent panel absorbs the difference
+```
+
+### Resizable.Handle
+
+Extends the `div` element.
+
+A draggable separator placed explicitly between panels. It finds its adjacent panels by DOM
+traversal, so it works correctly regardless of where it appears between two
+`Resizable.Panel` elements. It is a `role="separator"` element, focusable by keyboard, and
+accepts `className` and `ref` for customisation.
+
+## Examples
+
+### Horizontal
+
+The default: panels sit in a row, dragging the handle left and right.
+
+<Preview slug="resizable" />
+
+### Min / max size
+
+Apply `min-width` / `max-width` (or `min-height` / `max-height` for vertical) directly on a panel. The handle stops automatically at those boundaries.
+
+<Preview slug="resizable-min-max" />
+
+### Persistent sizes
+
+Pass a unique `persist` key to save panel sizes to `localStorage`. Sizes are restored on the next visit — drag the handle and reload the page to see it in action.
+
+<Preview slug="resizable-persist" />
+
+### Vertical
+
+Set `orientation="vertical"` to stack panels and drag the handle up and down.
+
+<Preview slug="resizable-vertical" />
+
+### Nested
+
+Put a `Resizable` inside a `Resizable.Panel` to build grid-like layouts.
+
+<Preview slug="resizable-nested" />
+
+### Collapsible panel
+
+Use `snap` to pin a panel to a collapsed size when it crosses a threshold — it returns the size the panel should take. Pair it with `onResize` to react to the change (here, swapping the label for an icon).
+
+<Preview slug="resizable-collapsible" />
+
+### Set size externally
+
+Grab a panel's `ref` to get a `ResizablePanelHandle` and call `resize(size)` to set its size in pixels from outside a drag — for presets, a reset button, or programmatic collapse.
+
+<Preview slug="resizable-set-size" />
+
+## Accessibility
+
+- Each handle is a `role="separator"` element with `tabIndex={0}`, so it is reachable by keyboard.
+- `aria-orientation` reflects the axis of the separator — a horizontal layout uses a vertical separator, and vice versa.
+- Arrow keys move the focused handle by 10px; the handle stops at the bounds derived from the adjacent panels' CSS constraints.
+
+## Best Practices
+
+1. **Set a size on the container**: The container has no intrinsic size — give it a height (and width, if needed) so panels have space to fill.
+2. **Use CSS to constrain panels**: Set `min-width` / `min-height` on a panel to prevent it from being collapsed, and `max-width` / `max-height` to cap how large it can grow. The handle stops automatically at these boundaries.
