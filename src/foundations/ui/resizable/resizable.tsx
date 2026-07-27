@@ -6,6 +6,7 @@ import {
   use,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
 } from "react";
@@ -40,6 +41,7 @@ type ResizableContextValue = {
   orientation: Orientation;
   scope: React.RefObject<HTMLDivElement | null>;
   registerPanelCallbacks: (index: number, callbacks: PanelCallbacks) => () => void;
+  resizePanel: (index: number, size: number) => void;
   createResizeHandler: (panelBefore: HTMLElement, panelAfter: HTMLElement) => ResizeHandler;
   persist: () => void;
 };
@@ -195,6 +197,44 @@ const Resizable = ({
     }
   }, [persistKey, keys.side]);
 
+  // Set a panel's size imperatively (outside a drag). The adjacent panel absorbs
+  // the difference so the pair still fills the space they share.
+  const resizePanel = useCallback(
+    (index: number, size: number) => {
+      const root = scope.current;
+      if (!root) return;
+
+      const panel = root.querySelector<HTMLElement>(`[data-ui-resizable-panel="${index}"]`);
+      if (!panel) return;
+
+      const findNeighbour = (dir: "next" | "previous") => {
+        let el = (
+          dir === "next" ? panel.nextElementSibling : panel.previousElementSibling
+        ) as HTMLElement | null;
+        while (el && !el.hasAttribute("data-ui-resizable-panel")) {
+          el = (
+            dir === "next" ? el.nextElementSibling : el.previousElementSibling
+          ) as HTMLElement | null;
+        }
+        return el;
+      };
+
+      const neighbour = findNeighbour("next") ?? findNeighbour("previous");
+      if (!neighbour) return;
+
+      const rootCurrent = root[keys.sideOffset];
+      const combined =
+        panel.getBoundingClientRect()[keys.side] + neighbour.getBoundingClientRect()[keys.side];
+      const clamped = Math.max(0, Math.min(size, combined));
+
+      panel.style[keys.side] = `${(clamped / rootCurrent) * 100}%`;
+      neighbour.style[keys.side] = `${((combined - clamped) / rootCurrent) * 100}%`;
+
+      persist();
+    },
+    [keys, persist],
+  );
+
   // normalize panel sizes on mount
   useEffect(() => {
     const root = scope.current;
@@ -228,7 +268,14 @@ const Resizable = ({
 
   return (
     <ResizableContext
-      value={{ scope, orientation, createResizeHandler, persist, registerPanelCallbacks }}
+      value={{
+        scope,
+        orientation,
+        createResizeHandler,
+        persist,
+        registerPanelCallbacks,
+        resizePanel,
+      }}
     >
       <div
         ref={composeRefs(ref, scope)}
@@ -245,7 +292,14 @@ const Resizable = ({
   );
 };
 
-type ResizablePanelProps = React.ComponentPropsWithRef<"div"> & {
+type ResizablePanelHandle = {
+  /** Set the panel's size in pixels. The adjacent panel absorbs the difference. */
+  resize: (size: number) => void;
+};
+
+type ResizablePanelProps = Omit<React.ComponentPropsWithRef<"div">, "ref"> & {
+  /** Imperative handle to set this panel's size programmatically. */
+  ref?: React.Ref<ResizablePanelHandle>;
   asChild?: boolean;
   /**
    * Transform the panel's size during a resize: receives the pointer-tracked
@@ -261,12 +315,19 @@ const ResizablePanel = ({
   asChild,
   snap,
   onResize,
+  ref,
   className,
   children,
   ...props
 }: ResizablePanelProps) => {
   const index = useInstanceCounter();
-  const { registerPanelCallbacks } = useResizableContext();
+  const { registerPanelCallbacks, resizePanel } = useResizableContext();
+
+  useImperativeHandle(
+    ref,
+    (): ResizablePanelHandle => ({ resize: (size) => resizePanel(index, size) }),
+    [index, resizePanel],
+  );
 
   useEffect(() => {
     if (!snap && !onResize) return;
@@ -428,6 +489,7 @@ const CompoundResizable = Object.assign(Resizable, {
 export {
   CompoundResizable as Resizable,
   type ResizableHandleProps,
+  type ResizablePanelHandle,
   type ResizablePanelProps,
   type ResizableProps,
 };

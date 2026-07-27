@@ -88,6 +88,14 @@ space is distributed to the other panels by flexbox before the lock-in happens.
   }}
 />
 
+A panel's `ref` exposes an imperative `ResizablePanelHandle` (not the DOM node) so you can
+set its size programmatically — a "reset" button, presets, or a button-driven collapse:
+
+```tsx
+const sidebar = useRef<ResizablePanelHandle>(null);
+// sidebar.current?.resize(300) — set the panel to 300px; the adjacent panel absorbs the difference
+```
+
 ### Resizable.Handle
 
 Extends the `div` element.
@@ -134,6 +142,12 @@ Put a `Resizable` inside a `Resizable.Panel` to build grid-like layouts.
 Use `snap` to pin a panel to a collapsed size when it crosses a threshold — it returns the size the panel should take. Pair it with `onResize` to react to the change (here, swapping the label for an icon).
 
 <Preview slug="resizable-collapsible" />
+
+### Set size externally
+
+Grab a panel's `ref` to get a `ResizablePanelHandle` and call `resize(size)` to set its size in pixels from outside a drag — for presets, a reset button, or programmatic collapse.
+
+<Preview slug="resizable-set-size" />
 
 ## Accessibility
 
