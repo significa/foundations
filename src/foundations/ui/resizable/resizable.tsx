@@ -8,6 +8,7 @@ import {
   useEffect,
   useId,
   useImperativeHandle,
+  useMemo,
   useRef,
 } from "react";
 import { Slot } from "@/foundations/components/slot/slot";
@@ -15,22 +16,74 @@ import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 import { clamp } from "@/foundations/utils/math/clamp";
 import { cn } from "@/lib/utils/classnames";
 
+// Constants
+
 // The number of pixels to move when using the keyboard to resize.
 const KEYBOARD_ARROW_PX_STEP = 10;
 
+// Attribute a panel tags itself with, so handles can find their neighbours by
+// DOM traversal and the root can restore sizes on mount.
+const PANEL_ATTR = "data-ui-resizable-panel";
+
+// localStorage key prefix for persisted panel sizes.
+const STORAGE_PREFIX = "foundations-resizable:";
+
+type Orientation = "horizontal" | "vertical";
+
+// Everything that depends on the axis in one table, so component code reads a
+// value instead of re-deriving it from an `orientation === "horizontal"` ternary.
+const AXIS = {
+  horizontal: {
+    size: "width",
+    clientAxis: "clientX",
+    cursor: "col-resize",
+    back: "ArrowLeft",
+    forward: "ArrowRight",
+  },
+  vertical: {
+    size: "height",
+    clientAxis: "clientY",
+    cursor: "row-resize",
+    back: "ArrowUp",
+    forward: "ArrowDown",
+  },
+} as const;
+
+// Utils
+
+const noop = () => undefined;
+
 const findAdjacentPanel = (from: Element, direction: "next" | "previous") => {
-  let element = (
-    direction === "next" ? from.nextElementSibling : from.previousElementSibling
-  ) as HTMLElement | null;
-  while (element && !element.hasAttribute("data-ui-resizable-panel")) {
-    element = (
-      direction === "next" ? element.nextElementSibling : element.previousElementSibling
-    ) as HTMLElement | null;
+  const step = (el: Element) =>
+    direction === "next" ? el.nextElementSibling : el.previousElementSibling;
+
+  let element = step(from) as HTMLElement | null;
+  while (element && !element.hasAttribute(PANEL_ATTR)) {
+    element = step(element) as HTMLElement | null;
   }
   return element;
 };
 
-type Orientation = "horizontal" | "vertical";
+// Measure a panel's min/max size in px by momentarily forcing it (and its
+// neighbor) to the extremes, letting CSS min/max constraints clamp the result.
+const measureRange = (panel: HTMLElement, opposite: HTMLElement, size: "width" | "height") => {
+  const previous = { panel: panel.style[size], opposite: opposite.style[size] };
+
+  panel.style[size] = "0rem";
+  opposite.style[size] = "999rem";
+  const min = panel.getBoundingClientRect()[size];
+
+  panel.style[size] = "999rem";
+  opposite.style[size] = "0rem";
+  const max = panel.getBoundingClientRect()[size];
+
+  panel.style[size] = previous.panel;
+  opposite.style[size] = previous.opposite;
+
+  return { min, max };
+};
+
+// Context
 
 type RegisteredPanel = {
   id: string;
@@ -58,9 +111,15 @@ const useResizableContext = () => {
   return context;
 };
 
+// Components
+
 type ResizableProps = Omit<React.ComponentPropsWithRef<"div">, "onResize"> & {
   orientation?: Orientation;
-  persist: string;
+  /**
+   * Unique key used to save panel sizes to localStorage and restore them on the
+   * next visit. Omit to disable persistence.
+   */
+  persist?: string;
   children: React.ReactNode;
 };
 
@@ -75,7 +134,7 @@ const Resizable = ({
   const scope = useRef<HTMLDivElement>(null);
   const panels = useRef<Map<HTMLElement, RegisteredPanel>>(new Map());
 
-  const persistKey = persistId ? `foundations-resizable:${persistId}` : null;
+  const persistKey = persistId ? `${STORAGE_PREFIX}${persistId}` : null;
 
   const registerPanel = useCallback((element: HTMLElement, panel: RegisteredPanel) => {
     panels.current.set(element, panel);
@@ -87,11 +146,11 @@ const Resizable = ({
     const root = scope.current;
     if (!persistKey || !root) return;
 
-    const side = orientation === "horizontal" ? "width" : "height";
+    const { size } = AXIS[orientation];
 
     const sizes: Record<string, string> = {};
     for (const [element, { id }] of panels.current.entries()) {
-      sizes[id] = element.style[side];
+      sizes[id] = element.style[size];
     }
 
     try {
@@ -100,52 +159,26 @@ const Resizable = ({
   }, [persistKey, orientation]);
 
   const createResizeHandler = useCallback(
-    (panelBefore: HTMLElement, panelAfter: HTMLElement) => {
+    (panelBefore: HTMLElement, panelAfter: HTMLElement): ResizeHandler => {
       const root = scope.current;
       if (!root || !panelBefore || !panelAfter) {
-        return {
-          move: () => undefined,
-          set: () => undefined,
-          commit: () => undefined,
-        };
+        return { move: noop, set: noop, commit: noop };
       }
 
-      const side = orientation === "horizontal" ? "width" : "height";
+      const { size } = AXIS[orientation];
 
       // sizes when resize started
-      const rootCurrent = root.getBoundingClientRect()[side];
-      const panelBeforeCurrent = panelBefore.getBoundingClientRect()[side];
-      const panelAfterCurrent = panelAfter.getBoundingClientRect()[side];
+      const rootCurrent = root.getBoundingClientRect()[size];
+      const panelBeforeCurrent = panelBefore.getBoundingClientRect()[size];
+      const panelAfterCurrent = panelAfter.getBoundingClientRect()[size];
 
-      // calculate the min/max range for each panel based on its CSS properties
-      const calcPanelRange = (panel: HTMLElement, oppositePanel: HTMLElement) => {
-        const previousStyles = {
-          panel: panel.style[side],
-          oppositePanel: oppositePanel.style[side],
-        };
+      // size range for each panel, derived from its CSS min/max constraints
+      const panelBeforeRange = measureRange(panelBefore, panelAfter, size);
+      const panelAfterRange = measureRange(panelAfter, panelBefore, size);
 
-        panel.style[side] = "0rem";
-        oppositePanel.style[side] = "999rem";
-        const min = panel.getBoundingClientRect()[side];
-        panel.style[side] = "999rem";
-        oppositePanel.style[side] = "0rem";
-        const max = panel.getBoundingClientRect()[side];
-
-        panel.style[side] = previousStyles.panel;
-        oppositePanel.style[side] = previousStyles.oppositePanel;
-
-        return { min, max };
-      };
-
-      // size range for each panel
-      const panelBeforeRange = calcPanelRange(panelBefore, panelAfter);
-      const panelAfterRange = calcPanelRange(panelAfter, panelBefore);
-
-      // methods
-      const panelBeforeSnap = panels.current.get(panelBefore)?.snap;
-      const panelAfterSnap = panels.current.get(panelAfter)?.snap;
-      const panelBeforeOnResize = panels.current.get(panelBefore)?.onResize;
-      const panelAfterOnResize = panels.current.get(panelAfter)?.onResize;
+      // per-panel transformers/notifications registered on the panels
+      const before = panels.current.get(panelBefore);
+      const after = panels.current.get(panelAfter);
 
       // store how much we've moved so far (in px)
       // so we can easily calculate the new size from the current size
@@ -157,8 +190,8 @@ const Resizable = ({
 
       // write the pair as percentages of the root; they always sum to `combined`
       const write = (sizeBefore: number) => {
-        panelBefore.style[side] = `${(sizeBefore / rootCurrent) * 100}%`;
-        panelAfter.style[side] = `${((combined - sizeBefore) / rootCurrent) * 100}%`;
+        panelBefore.style[size] = `${(sizeBefore / rootCurrent) * 100}%`;
+        panelAfter.style[size] = `${((combined - sizeBefore) / rootCurrent) * 100}%`;
       };
 
       const move = (pxDelta: number) => {
@@ -177,14 +210,14 @@ const Resizable = ({
         // a snap transformer returns the size its panel should take; the other
         // panel absorbs the difference (write derives it from `combined`)
         let sizeBefore = panelBeforeNew;
-        if (panelBeforeSnap) sizeBefore = panelBeforeSnap(panelBeforeNew);
-        else if (panelAfterSnap) sizeBefore = combined - panelAfterSnap(panelAfterNew);
+        if (before?.snap) sizeBefore = before.snap(panelBeforeNew);
+        else if (after?.snap) sizeBefore = combined - after.snap(panelAfterNew);
 
         write(sizeBefore);
 
         // read-only notifications get the raw pointer-tracked size (pre-snap)
-        panelBeforeOnResize?.(panelBeforeNew);
-        panelAfterOnResize?.(panelAfterNew);
+        before?.onResize?.(panelBeforeNew);
+        after?.onResize?.(panelAfterNew);
       };
 
       // set the leading panel to an absolute size, clamped to its range; no snap
@@ -203,7 +236,7 @@ const Resizable = ({
     const root = scope.current;
     if (!root) return;
 
-    const side = orientation === "horizontal" ? "width" : "height";
+    const { size } = AXIS[orientation];
 
     let persistedSizes: Record<string, string> = {};
     if (persistKey) {
@@ -213,21 +246,26 @@ const Resizable = ({
       } catch {} // ignore malformed storage values
     }
 
-    const rootSize = root.getBoundingClientRect()[side];
-    for (const panel of root.querySelectorAll<HTMLElement>("& > [data-ui-resizable-panel]")) {
-      const panelId = panel.getAttribute("data-ui-resizable-panel") || "unknown";
-      const size = panel.getBoundingClientRect()[side];
+    const rootSize = root.getBoundingClientRect()[size];
+    for (const panel of root.querySelectorAll<HTMLElement>(`& > [${PANEL_ATTR}]`)) {
+      const panelId = panel.getAttribute(PANEL_ATTR) || "unknown";
+      const panelSize = panel.getBoundingClientRect()[size];
       const persistedSize = persistedSizes[panelId];
 
       // defer applying the size so subsequent panel size look-ups are accurate to the initial sizes
       window.requestAnimationFrame(() => {
-        panel.style[side] = persistedSize ? persistedSize : `${(size / rootSize) * 100}%`;
+        panel.style[size] = persistedSize ? persistedSize : `${(panelSize / rootSize) * 100}%`;
       });
     }
   }, [orientation, persistKey]);
 
+  const context = useMemo<ResizableContextValue>(
+    () => ({ orientation, registerPanel, createResizeHandler }),
+    [orientation, registerPanel, createResizeHandler],
+  );
+
   return (
-    <ResizableContext value={{ orientation, registerPanel, createResizeHandler }}>
+    <ResizableContext value={context}>
       <div
         ref={composeRefs(ref, scope)}
         className={cn(
@@ -243,14 +281,14 @@ const Resizable = ({
   );
 };
 
-type ResizablePanelRef = {
+type ResizablePanelHandle = {
   /** Set the panel's size in pixels. The adjacent panel absorbs the difference. */
   resize: (size: number) => void;
 };
 
 type ResizablePanelProps = Omit<React.ComponentPropsWithRef<"div">, "ref"> & {
   /** Imperative handle to set this panel's size programmatically. */
-  ref?: React.Ref<ResizablePanelRef>;
+  ref?: React.Ref<ResizablePanelHandle>;
   asChild?: boolean;
   /**
    * Transform the panel's size during a resize: receives the pointer-tracked
@@ -295,11 +333,7 @@ const ResizablePanel = ({
     const element = ref.current;
     if (!element) return;
 
-    return registerPanel(element, {
-      id,
-      snap,
-      onResize,
-    });
+    return registerPanel(element, { id, snap, onResize });
   }, [registerPanel, id, snap, onResize]);
 
   const Component = asChild ? Slot : "div";
@@ -346,18 +380,18 @@ const ResizableHandle = ({
     const { panelBefore, panelAfter } = getAdjacentPanels();
     if (!panelBefore || !panelAfter) return;
 
-    const clientOffset = orientation === "horizontal" ? "clientX" : "clientY";
-    const startOffset = event[clientOffset];
+    const { clientAxis, cursor } = AXIS[orientation];
+    const startOffset = event[clientAxis];
 
     const handler = createResizeHandler(panelBefore, panelAfter);
 
     const prevCursor = document.body.style.cursor;
     const prevUserSelect = document.body.style.userSelect;
-    document.body.style.cursor = orientation === "horizontal" ? "col-resize" : "row-resize";
+    document.body.style.cursor = cursor;
     document.body.style.userSelect = "none";
 
     let previousDelta = 0;
-    const onDrag = ({ [clientOffset]: offset }: PointerEvent) => {
+    const onDrag = ({ [clientAxis]: offset }: PointerEvent) => {
       const currentDelta = offset - startOffset - previousDelta;
       previousDelta = offset - startOffset;
       handler.move(currentDelta);
@@ -401,8 +435,7 @@ const ResizableHandle = ({
     const handler = keyHandlerRef.current;
     if (!handler) return;
 
-    const back = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
-    const forward = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
+    const { back, forward } = AXIS[orientation];
 
     if (event.key === forward) {
       event.preventDefault();
@@ -450,6 +483,7 @@ const CompoundResizable = Object.assign(Resizable, {
 export {
   CompoundResizable as Resizable,
   type ResizableHandleProps,
+  type ResizablePanelHandle,
   type ResizablePanelProps,
   type ResizableProps,
 };
