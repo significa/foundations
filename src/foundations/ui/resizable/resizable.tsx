@@ -85,10 +85,12 @@ const measureRange = (panel: HTMLElement, opposite: HTMLElement, size: "width" |
 
 // Context
 
-type RegisteredPanel = {
-  id: string;
-  onResize?: (size: number) => void;
+// A panel only appears here if it opts into resize behavior; plain layout
+// panels never touch this map. Keyed by element, read by the shared resize
+// handler that a Handle drives.
+type PanelBehavior = {
   snap?: (size: number) => number;
+  onResize?: (size: number) => void;
 };
 
 type ResizeHandler = {
@@ -99,7 +101,7 @@ type ResizeHandler = {
 
 type ResizableContextValue = {
   orientation: Orientation;
-  registerPanel: (element: HTMLElement, panel: RegisteredPanel) => () => void;
+  behaviors: WeakMap<HTMLElement, PanelBehavior>;
   createResizeHandler: (beforePanel: HTMLElement, afterPanel: HTMLElement) => ResizeHandler;
 };
 
@@ -132,16 +134,12 @@ const Resizable = ({
   ...props
 }: ResizableProps) => {
   const scope = useRef<HTMLDivElement>(null);
-  const panels = useRef<Map<HTMLElement, RegisteredPanel>>(new Map());
+  const behaviors = useRef<WeakMap<HTMLElement, PanelBehavior>>(new WeakMap());
 
   const persistKey = persistId ? `${STORAGE_PREFIX}${persistId}` : null;
 
-  const registerPanel = useCallback((element: HTMLElement, panel: RegisteredPanel) => {
-    panels.current.set(element, panel);
-    return () => panels.current.delete(element);
-  }, []);
-
-  // Persist panel sizes to localStorage
+  // Persist panel sizes to localStorage, reading each panel's id off its
+  // `data-ui-resizable-panel` attribute (same source the restore effect uses).
   const persist = useCallback(() => {
     const root = scope.current;
     if (!persistKey || !root) return;
@@ -149,8 +147,9 @@ const Resizable = ({
     const { size } = AXIS[orientation];
 
     const sizes: Record<string, string> = {};
-    for (const [element, { id }] of panels.current.entries()) {
-      sizes[id] = element.style[size];
+    for (const panel of root.querySelectorAll<HTMLElement>(`& > [${PANEL_ATTR}]`)) {
+      const id = panel.getAttribute(PANEL_ATTR) || "unknown";
+      sizes[id] = panel.style[size];
     }
 
     try {
@@ -176,9 +175,9 @@ const Resizable = ({
       const panelBeforeRange = measureRange(panelBefore, panelAfter, size);
       const panelAfterRange = measureRange(panelAfter, panelBefore, size);
 
-      // per-panel transformers/notifications registered on the panels
-      const before = panels.current.get(panelBefore);
-      const after = panels.current.get(panelAfter);
+      // per-panel transformers/notifications (undefined for plain panels)
+      const before = behaviors.current.get(panelBefore);
+      const after = behaviors.current.get(panelAfter);
 
       // store how much we've moved so far (in px)
       // so we can easily calculate the new size from the current size
@@ -260,8 +259,8 @@ const Resizable = ({
   }, [orientation, persistKey]);
 
   const context = useMemo<ResizableContextValue>(
-    () => ({ orientation, registerPanel, createResizeHandler }),
-    [orientation, registerPanel, createResizeHandler],
+    () => ({ orientation, behaviors: behaviors.current, createResizeHandler }),
+    [orientation, createResizeHandler],
   );
 
   return (
@@ -309,7 +308,7 @@ const ResizablePanel = ({
   children,
   ...props
 }: ResizablePanelProps) => {
-  const { registerPanel, createResizeHandler } = useResizableContext();
+  const { behaviors, createResizeHandler } = useResizableContext();
   const id = useId();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -329,12 +328,16 @@ const ResizablePanel = ({
     },
   }));
 
+  // Only panels that opt into resize behavior publish anything to the parent.
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
+    if (!element || (!snap && !onResize)) return;
 
-    return registerPanel(element, { id, snap, onResize });
-  }, [registerPanel, id, snap, onResize]);
+    behaviors.set(element, { snap, onResize });
+    return () => {
+      behaviors.delete(element);
+    };
+  }, [behaviors, snap, onResize]);
 
   const Component = asChild ? Slot : "div";
   return (
