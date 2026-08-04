@@ -1,5 +1,5 @@
 import { useMotionValueEvent, useScroll } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import type { ImageSequenceRef } from "../image-sequence";
 import { ImageSequence } from "../image-sequence";
 
