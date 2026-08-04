@@ -4,9 +4,6 @@ description: A canvas-based component that renders image sequences driven by an 
 preview: image-sequence
 files:
   - src/foundations/components/image-sequence/image-sequence.tsx
-dependencies:
-  - name: ImageMetadata
-    href: https://docs.astro.build/en/guides/images/#image-properties
 
 folder: components
 ---
@@ -24,25 +21,28 @@ folder: components
 Frames must be defined at module level — outside the component — so the array reference stays stable across renders and does not restart frame loading on every render.
 
 ```tsx
-const frames = Object.values(
-  import.meta.glob<{ default: ImageMetadata }>("./path/to/frames/*.webp", { eager: true })
-).map((m) => m.default);
+const frames = ["/frame-0001.webp", "/frame-0002.webp", "/frame-0003.webp"];
 
 const MyComponent = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const sequenceRef = useRef<ImageSequenceRef>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
 
-  useEffect(() => {
-    const onScroll = () => {
-      const maxScroll = document.body.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      sequenceRef.current?.scrub(progress);
-    };
+  useMotionValueEvent(scrollYProgress, "change", (progress) => {
+    sequenceRef.current?.scrub(progress);
+  });
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return <ImageSequence frames={frames} ref={sequenceRef} />;
+  return (
+    <div ref={containerRef}>
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        <ImageSequence frames={frames} ref={sequenceRef} />
+      </div>
+      <div className="h-[400vh]" />
+    </div>
+  );
 };
 ```
 
@@ -53,8 +53,9 @@ const MyComponent = () => {
 <PropsTable
   definition={{
     frames: {
-      type: "ImageMetadata[]",
-      description: "The sequence frames to render. Must be defined at module level to keep the reference stable across renders.",
+      type: "string[]",
+      description:
+        "The sequence frames to render. Must be defined at module level to keep the reference stable across renders.",
       required: true,
     },
   }}
@@ -84,5 +85,4 @@ Frames are sorted numerically by the leading number in each filename before load
 
 ## Limitations
 
-- Depends on `ImageMetadata` from Astro — the `width` and `height` properties are used to size the canvas at the native aspect ratio.
 - `import.meta.glob` patterns must be static string literals, so the glob cannot be passed as a prop. Define it in the consuming file and pass the resulting array as `frames`.

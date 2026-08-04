@@ -1,14 +1,13 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import { useCallback, useEffect, useImperativeHandle, useRef } from "react";
-
-const clamp = (min: number, value: number, max: number) => Math.max(min, Math.min(value, max));
+import { clamp } from "@/foundations/utils/math/clamp";
 
 interface ImageSequenceRef {
   scrub: (progress: number) => void;
 }
 
 interface ImageSequenceProps extends ComponentPropsWithoutRef<"canvas"> {
-  frames: ImageMetadata[];
+  frames: string[];
   ref?: Ref<ImageSequenceRef>;
 }
 
@@ -16,8 +15,7 @@ const ImageSequence = ({ frames, ref, ...props }: ImageSequenceProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const framesRef = useRef<HTMLImageElement[]>([]);
 
-  const firstFrame = frames[0];
-  if (!firstFrame) throw new Error("[image-sequence]: frames must not be empty");
+  if (!frames.length) throw new Error("[image-sequence]: frames must not be empty");
 
   const scrub = useCallback((progress: number) => {
     const canvas = canvasRef.current;
@@ -38,24 +36,19 @@ const ImageSequence = ({ frames, ref, ...props }: ImageSequenceProps) => {
   useEffect(() => {
     framesRef.current = [];
 
-    const sources = frames
-      .map(({ src }) => src)
-      .sort((a, b) => {
-        const basenameA = a.split("/").pop();
-        const basenameB = b.split("/").pop();
-
-        const indexA = parseInt(basenameA?.split("-")[0] ?? "0", 10);
-        const indexB = parseInt(basenameB?.split("-")[0] ?? "0", 10);
-
-        return indexA - indexB;
-      });
-
     let abort: AbortController | undefined;
 
     const start = () => {
-      abort = progressivelyLoadFrames(sources, [16, 8, 4, 2, 1], (frame, index) => {
+      abort = progressivelyLoadFrames(frames, [16, 8, 4, 2, 1], (frame, index) => {
         framesRef.current[index] = frame;
-        if (index === 0) scrub(0);
+        if (index === 0) {
+          const canvas = canvasRef.current;
+          if (canvas) {
+            canvas.width = frame.naturalWidth;
+            canvas.height = frame.naturalHeight;
+          }
+          scrub(0);
+        }
       });
     };
 
@@ -74,8 +67,6 @@ const ImageSequence = ({ frames, ref, ...props }: ImageSequenceProps) => {
   return (
     <canvas
       ref={canvasRef}
-      width={firstFrame.width}
-      height={firstFrame.height}
       {...props}
       style={{ width: "100%", height: "100%", objectFit: "cover", ...props.style }}
     />
