@@ -1,4 +1,3 @@
-import { MotionConfig, motion } from "motion/react";
 import {
   Children,
   createContext,
@@ -36,12 +35,6 @@ const useTabsContext = () => {
   return context;
 };
 
-// Module-level counter combined with useId() to give each Tabs instance a
-// globally-unique layout scope. useId() alone collides across React trees (e.g.
-// across Astro view transitions), causing motion's layoutId to animate the
-// indicator between unrelated Tabs on different pages.
-let tabsInstanceCounter = 0;
-
 interface TabsProps extends Omit<React.ComponentPropsWithRef<"div">, "onChange"> {
   defaultIndex?: number;
   selectedIndex?: number;
@@ -60,8 +53,8 @@ const Tabs = ({
   children,
   ...props
 }: TabsProps) => {
-  const reactId = useId();
-  const [id] = useState(() => `${reactId}-${++tabsInstanceCounter}`);
+  // must be a valid CSS <dashed-ident>
+  const id = useId().replace(/[^\w-]/g, "");
   const [internalSelectedIndex, setInternalSelectedIndex] = useState(defaultIndex ?? 0);
   const [tabs, setTabs] = useState<string[]>([]);
 
@@ -136,9 +129,7 @@ const Tabs = ({
 
   return (
     <TabsContext value={ctx}>
-      <MotionConfig reducedMotion="user">
-        <div {...props}>{children}</div>
-      </MotionConfig>
+      <div {...props}>{children}</div>
     </TabsContext>
   );
 };
@@ -157,7 +148,7 @@ const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
       role="tablist"
       aria-orientation={orientation}
       className={cn(
-        "flex",
+        "relative isolate flex",
         variant === "pill" && "gap-1.5",
         orientation === "horizontal"
           ? variant === "pill"
@@ -173,6 +164,8 @@ const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
       {Children.map(children, (child, index) => (
         <ItemIndexContext value={index}>{child}</ItemIndexContext>
       ))}
+      {/* after the tabs, or it can't anchor to them */}
+      <TabsIndicator />
     </div>
   );
 };
@@ -183,6 +176,34 @@ interface TabsItemProps
   asChild?: boolean;
 }
 
+const getAnchorName = (tabsId: string, index: number) => `--tabs-${tabsId}-${index}`;
+
+// Named anchor() (not position-anchor) so the insets' computed value changes and transitions.
+// Firefox doesn't animate anchor() yet: https://bugzil.la/1924226
+const TabsIndicator = () => {
+  const { id, selectedIndex, variant, orientation } = useTabsContext();
+
+  return (
+    <span
+      data-tab-indicator=""
+      aria-hidden="true"
+      style={{ "--tab-anchor": getAnchorName(id, selectedIndex) }}
+      className={cn(
+        "pointer-events-none absolute z-0",
+        "transition-[top,right,bottom,left] duration-300 ease-spring motion-reduce:transition-none",
+        variant === "pill" && [
+          "rounded-xl bg-background-secondary",
+          "top-[anchor(var(--tab-anchor)_top)] right-[anchor(var(--tab-anchor)_right)] bottom-[anchor(var(--tab-anchor)_bottom)] left-[anchor(var(--tab-anchor)_left)]",
+        ],
+        variant === "underline" &&
+          (orientation === "horizontal"
+            ? "right-[anchor(var(--tab-anchor)_right)] bottom-[anchor(var(--tab-anchor)_bottom)] left-[anchor(var(--tab-anchor)_left)] h-0.5 bg-accent"
+            : "top-[anchor(var(--tab-anchor)_top)] right-[anchor(var(--tab-anchor)_right)] bottom-[anchor(var(--tab-anchor)_bottom)] w-0.5 bg-accent"),
+      )}
+    />
+  );
+};
+
 const getItemId = (id: string | undefined) => (id ? `tab${id}` : undefined);
 
 const TabsItem = ({
@@ -191,6 +212,7 @@ const TabsItem = ({
   onClick,
   onKeyDown,
   className,
+  style,
   ...props
 }: TabsItemProps) => {
   const id = useId();
@@ -248,10 +270,9 @@ const TabsItem = ({
       id={getItemId(id)}
       type={asChild ? undefined : "button"}
       className={cn(
-        "focus-visible:ring-(length:--ring-width) relative flex cursor-pointer items-center justify-center gap-1.5 px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground data-selected:text-foreground",
+        "focus-visible:ring-(length:--ring-width) relative z-10 flex cursor-pointer items-center justify-center gap-1.5 px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground data-selected:text-foreground",
         variant === "pill" && "rounded-xl",
         variant === "underline" && (orientation === "horizontal" ? "-mb-px" : "-mr-px"),
-        "[&>*:not([data-tab-indicator])]:z-10",
         className,
       )}
       role="tab"
@@ -259,6 +280,7 @@ const TabsItem = ({
       aria-selected={isSelected || undefined}
       data-selected={isSelected || undefined}
       tabIndex={isSelected ? 0 : -1}
+      style={{ anchorName: getAnchorName(tabsId, index), ...style }}
       onClick={(e) => {
         onClick?.(e);
 
@@ -276,22 +298,6 @@ const TabsItem = ({
       {...props}
     >
       {typeof children === "string" ? <span>{children}</span> : children}
-      {isSelected && (
-        <motion.span
-          data-tab-indicator="true"
-          layoutId={tabsId}
-          aria-hidden="true"
-          className={cn(
-            "absolute z-0",
-            variant === "pill" && "inset-0 rounded-xl bg-background-secondary",
-            variant === "underline" &&
-              (orientation === "horizontal"
-                ? "right-0 bottom-0 left-0 h-0.5 bg-accent"
-                : "top-0 right-0 bottom-0 w-0.5 bg-accent"),
-          )}
-          transition={{ type: "spring", duration: 0.3, bounce: 0.2 }}
-        />
-      )}
     </Comp>
   );
 };

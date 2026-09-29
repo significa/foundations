@@ -8,8 +8,6 @@ files:
 dependencies:
   - name: Slot
     href: /components/slot
-  - name: motion
-    href: https://motion.dev
 
 folder: UI
 ---
@@ -17,7 +15,7 @@ folder: UI
 ## Features
 
 - **Unstyled Core**: Minimal styling for maximum flexibility
-- **Smooth Animations**: Height transitions using Motion
+- **Smooth Animations**: CSS height transitions
 - **Group Support**: Optional grouping to create exclusive sections
 - **Controlled & Uncontrolled**: Supports both modes of operation
 - **Customizable Triggers**: Flexible trigger elements with optional chevron
@@ -75,7 +73,7 @@ Extends the `button` element.
 
 Extends the `div` element.
 
-The content that will be shown or hidden. Uses Motion for smooth height transitions.
+The content that will be shown or hidden. Stays mounted while closed.
 
 ### Disclosure.Chevron
 
@@ -163,14 +161,6 @@ const AccordionContent = ({ children, className }: React.ComponentProps<typeof D
 };
 ```
 
-## About the use of `motion`
-
-The usage of Motion in this component is temporary as it's not worth it to develop a custom solution when [calc-size](https://developer.mozilla.org/en-US/docs/Web/CSS/calc-size) is almost available.
-
-As most projects we do already include Motion, using it here is pretty much inconsequential.
-
-If you need a leaner approach, feel free to remove it.
-
 ## Best Practices
 
 1. **Content Organization**:
@@ -184,6 +174,6 @@ If you need a leaner approach, feel free to remove it.
    - Consider using `Disclosure.Group` on mobile
 
 3. **Performance**:
-   - Lazy load content if needed
+   - Content stays mounted while closed; lazy load heavy content yourself
    - Consider disabling animations on slower devices
    - Clean up resources when unmounting

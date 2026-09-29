@@ -17,10 +17,10 @@ const drawerContentStyle = cva({
     "rounded-2xl",
     "has-data-[status=open]:opacity-80 [&>:not(dialog)]:transition-opacity has-data-[status=open]:[&>:not(dialog)]:opacity-0",
     "backdrop:bg-black/20 in-data-[status=open]:backdrop:opacity-0 not-data-[status=open]:backdrop:opacity-0 backdrop:backdrop-blur-sm",
-    "transition-[translate,margin,opacity] ease-emphasized-decelerate not-data-[status=open]:ease-emphasized-accelerate",
-    "backdrop:transition-opacity backdrop:ease-in-out",
+    "transition-[translate,margin,opacity] ease-out",
+    "backdrop:transition-opacity backdrop:ease-out",
     "motion-reduce:transition-none motion-reduce:backdrop:transition-none",
-    "duration-400 not-data-[status=open]:duration-250 not-data-[status=open]:backdrop:delay-150 not-data-[status=open]:backdrop:duration-200",
+    "duration-300 not-data-[status=open]:duration-200 backdrop:duration-300 not-data-[status=open]:backdrop:duration-200",
   ],
   variants: {
     side: {

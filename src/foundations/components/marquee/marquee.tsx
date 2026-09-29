@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
+import { useMatchMedia } from "@/foundations/hooks/use-match-media/use-match-media";
 import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
 import { cn } from "@/lib/utils/classnames";
 
@@ -32,6 +33,7 @@ export const Marquee = ({
 }: MarqueeProps) => {
   const [numClones, setNumClones] = useState<number>(1);
   const [rootRef, { isIntersecting }] = useIntersectionObserver<HTMLDivElement>();
+  const prefersReducedMotion = useMatchMedia("(prefers-reduced-motion: reduce)");
 
   const progress = useRef(0);
   const contentLength = useRef(0);
@@ -67,12 +69,12 @@ export const Marquee = ({
   });
 
   useEffect(() => {
-    if (paused || !isIntersecting) {
+    if (paused || !isIntersecting || prefersReducedMotion) {
       ticker.stop();
     } else if (isIntersecting) {
       ticker.start();
     }
-  }, [ticker, paused, isIntersecting]);
+  }, [ticker, paused, isIntersecting, prefersReducedMotion]);
 
   useEffect(() => {
     const root = rootRef.current;

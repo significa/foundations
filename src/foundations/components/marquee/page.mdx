@@ -9,6 +9,8 @@ dependencies:
     href: /hooks/use-ticker
   - name: useIntersectionObserver
     href: /hooks/use-intersection-observer
+  - name: useMatchMedia
+    href: /hooks/use-match-media
 
 folder: components
 ---
@@ -20,6 +22,7 @@ folder: components
 - **Automatic Text Wrapping**: Text content is automatically wrapped in `<span>` elements to ensure proper rendering with CSS transforms
 - **Customizable Gap**: Supports flexible spacing between items using CSS gap property, allowing for consistent and adjustable spacing between content elements
 - **Intersection Observer**: Pauses animation when not in viewport
+- **Reduced Motion**: Stops when `prefers-reduced-motion: reduce` is set
 - **Flexible Duration Control**: Duration can be specified as:
   - A fixed number
   - A function that receives content length for fine-grained and responsive speed control

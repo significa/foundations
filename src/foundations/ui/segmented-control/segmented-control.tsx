@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import {
   Children,
   createContext,
@@ -13,8 +12,6 @@ import {
 
 import { Slot } from "@/foundations/components/slot/slot";
 import { cn } from "@/lib/utils/classnames";
-
-let segmentedControlInstanceCounter = 0;
 
 interface SegmentedControlContextValue {
   id: string;
@@ -51,8 +48,8 @@ const SegmentedControl = ({
   children,
   ...props
 }: SegmentedControlProps) => {
-  const reactId = useId();
-  const [id] = useState(() => `${reactId}-${++segmentedControlInstanceCounter}`);
+  // must be a valid CSS <dashed-ident>
+  const id = useId().replace(/[^\w-]/g, "");
   const [internalSelectedValue, setInternalSelectedValue] = useState<string | undefined>(
     defaultValue,
   );
@@ -129,10 +126,12 @@ const SegmentedControl = ({
     <SegmentedControlContext value={ctx}>
       <div
         role="radiogroup"
-        className={cn("flex rounded-2xl bg-background-secondary p-1", className)}
+        className={cn("relative isolate flex rounded-2xl bg-background-secondary p-1", className)}
         {...props}
       >
         {children}
+        {/* after the items, or it can't anchor to them */}
+        <SegmentedControlIndicator />
       </div>
     </SegmentedControlContext>
   );
@@ -147,12 +146,38 @@ interface SegmentedControlItemProps
 
 const getItemId = (instanceId: string, value: string) => `${instanceId}-segment-${value}`;
 
+// values are arbitrary strings, so escape them into a valid ident
+const getAnchorName = (instanceId: string, value: string) =>
+  `--segment-${instanceId}-${value.replace(/[^\w-]/gu, (char) => `\\${char.codePointAt(0)?.toString(16)} `)}`;
+
+// Named anchor() (not position-anchor) so the insets' computed value changes and transitions.
+// Firefox doesn't animate anchor() yet: https://bugzil.la/1924226
+const SegmentedControlIndicator = () => {
+  const { id, selectedSegment } = useSegmentedControlContext();
+
+  if (selectedSegment === undefined) return null;
+
+  return (
+    <span
+      data-segment-indicator=""
+      aria-hidden="true"
+      style={{ "--segment-anchor": getAnchorName(id, selectedSegment) }}
+      className={cn(
+        "pointer-events-none absolute z-0 rounded-xl bg-background",
+        "top-[anchor(var(--segment-anchor)_top)] right-[anchor(var(--segment-anchor)_right)] bottom-[anchor(var(--segment-anchor)_bottom)] left-[anchor(var(--segment-anchor)_left)]",
+        "transition-[top,right,bottom,left] duration-300 ease-spring motion-reduce:transition-none",
+      )}
+    />
+  );
+};
+
 const SegmentedControlItem = ({
   children,
   asChild,
   onClick,
   onKeyDown,
   className,
+  style,
   value,
   ...props
 }: SegmentedControlItemProps) => {
@@ -199,14 +224,14 @@ const SegmentedControlItem = ({
       id={getItemId(segmentsId, value)}
       type={asChild ? undefined : "button"}
       className={cn(
-        "relative flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground",
-        "[&>*:not([data-segment-indicator])]:z-10",
+        "relative z-10 flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground",
         className,
       )}
       role="radio"
       aria-checked={isSelected}
       data-selected={isSelected || undefined}
       tabIndex={isSelected ? 0 : -1}
+      style={{ anchorName: getAnchorName(segmentsId, value), ...style }}
       onClick={(e) => {
         onClick?.(e);
 
@@ -225,15 +250,6 @@ const SegmentedControlItem = ({
       {...props}
     >
       {typeof children === "string" ? <span>{children}</span> : children}
-      {isSelected && (
-        <motion.span
-          data-segment-indicator="true"
-          layoutId={segmentsId}
-          aria-hidden="true"
-          className="absolute inset-0 z-0 rounded-xl bg-background"
-          transition={{ type: "spring", duration: 0.3, bounce: 0.2 }}
-        />
-      )}
     </Comp>
   );
 };

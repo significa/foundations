@@ -10,7 +10,7 @@ const Switch = ({ className, ...props }: Omit<React.ComponentPropsWithRef<"input
         "appearance-none",
         "relative h-6 w-11 cursor-pointer rounded-full bg-foreground/20 transition",
         // circle
-        "before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-full before:bg-background before:transition-transform before:duration-200 before:ease-emphasized-decelerate",
+        "before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-full before:bg-background before:transition-transform before:duration-150 before:ease-in-out motion-reduce:before:transition-none",
         // disabled
         "disabled:before:opacity-30",
         // checked

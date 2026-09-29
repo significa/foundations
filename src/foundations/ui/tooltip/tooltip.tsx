@@ -106,7 +106,9 @@ const useTooltipFloating = ({
 
 // Context
 
-interface TooltipContextType extends ReturnType<typeof useTooltipFloating>, UseInteractionsReturn {}
+interface TooltipContextType extends ReturnType<typeof useTooltipFloating>, UseInteractionsReturn {
+  isInstantPhase: boolean;
+}
 
 const TooltipContext = createContext<TooltipContextType | null>(null);
 
@@ -143,7 +145,7 @@ const Tooltip = ({ children, ...props }: TooltipProps) => {
   const floating = useTooltipFloating(props);
 
   const ctx = floating.context;
-  const { delay: groupDelay } = useDelayGroup(ctx);
+  const { delay: groupDelay, isInstantPhase } = useDelayGroup(ctx);
 
   const hover = useHover(ctx, {
     enabled: !floating.disabled,
@@ -169,8 +171,9 @@ const Tooltip = ({ children, ...props }: TooltipProps) => {
     () => ({
       ...floating,
       ...interactions,
+      isInstantPhase,
     }),
-    [floating, interactions],
+    [floating, interactions, isInstantPhase],
   );
 
   return <TooltipContext value={tooltipContextValue}>{children}</TooltipContext>;
@@ -226,7 +229,7 @@ const TooltipContent = ({
   children,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
-  const { context, refs, arrowRef, getFloatingProps } = useTooltipContext();
+  const { context, refs, arrowRef, getFloatingProps, isInstantPhase } = useTooltipContext();
 
   const { isMounted, status } = useTransitionStatus(context, { duration: 0 });
 
@@ -245,10 +248,9 @@ const TooltipContent = ({
       <div
         ref={ref}
         className={cn(
-          "wrap-break-word z-50 max-w-80 overflow-visible whitespace-normal rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md transition duration-300 ease-out",
-          "data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2",
-          "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
-          "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
+          "wrap-break-word z-50 max-w-80 overflow-visible whitespace-normal rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md",
+          "transition-opacity duration-150 ease-out data-[state=closed]:opacity-0 motion-reduce:transition-none",
+          isInstantPhase && "transition-none",
           context.middlewareData.hide?.referenceHidden && "hidden",
           className,
         )}

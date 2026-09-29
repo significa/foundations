@@ -54,7 +54,10 @@ export const useElementTransition = <T extends HTMLElement>(
       setStatus("unmounted");
     };
 
-    nextFrame(() => {
+    const abortController = new AbortController();
+    const { signal } = abortController;
+
+    const cancelFrame = nextFrame(() => {
       const hasTransitions = element.getAnimations().length > 0;
 
       if (hasTransitions) {
@@ -66,17 +69,17 @@ export const useElementTransition = <T extends HTMLElement>(
           }
         };
 
-        element.addEventListener("transitionend", onTransitionEnd);
-        element.addEventListener("transitioncancel", onTransitionEnd);
-
-        return () => {
-          element.removeEventListener("transitionend", onTransitionEnd);
-          element.removeEventListener("transitioncancel", onTransitionEnd);
-        };
+        element.addEventListener("transitionend", onTransitionEnd, { signal });
+        element.addEventListener("transitioncancel", onTransitionEnd, { signal });
       } else {
         triggerUnmount();
       }
     });
+
+    return () => {
+      cancelFrame();
+      abortController.abort();
+    };
   }, [shouldMount, isMounted]);
 
   useLayoutEffect(() => {
