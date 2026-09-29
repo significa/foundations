@@ -12,6 +12,15 @@ meta:
 
 ## September 2026
 
+### Removed: `usePrefersReducedMotion`
+
+It only updated on change, so it always returned `false` on load. Use `useMatchMedia`:
+
+```diff tsx
+- const prefersReducedMotion = usePrefersReducedMotion();
++ const prefersReducedMotion = useMatchMedia("(prefers-reduced-motion: reduce)");
+```
+
 ### Fixed: spinner animations missing from `globals-prefers-schema.css`
 
 The `prefers-color-scheme` setup never defined `--animate-spinner-dot` / `--animate-spinner-bar`,
@@ -50,8 +59,7 @@ Components were retuned to match:
 | Switch           | Thumb 150ms `ease-in-out`                                                                |
 | Toaster          | Exit scales to 0.95 (was 0.8)                                                            |
 
-Popover, Tooltip, Switch, Disclosure's chevron, Skeleton, and Marquee now respect
-`prefers-reduced-motion`.
+Popover, Tooltip, Switch, Disclosure's chevron, and Marquee now respect `prefers-reduced-motion`.
 
 ### Changed: `Tabs` indicator uses CSS anchor positioning instead of `motion`
 
