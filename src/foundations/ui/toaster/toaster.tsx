@@ -1,7 +1,7 @@
 import { CheckCircleIcon, XCircleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useElementTransition } from "@/foundations/hooks/use-element-transition/use-element-transition";
 import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
 import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
 import { cn } from "@/lib/utils/classnames";
@@ -16,6 +16,7 @@ type Toast = {
   description?: string;
   duration?: number;
   variant?: ToastVariant;
+  leaving?: boolean;
 };
 
 type ToastStore = {
@@ -23,6 +24,7 @@ type ToastStore = {
   subscribe: (listener: () => void) => () => void;
   add: (config: Omit<Toast, "id">) => void;
   remove: (id: string) => void;
+  unmount: (id: string) => void;
   pauseAll: () => void;
   resumeAll: () => void;
 };
@@ -75,8 +77,9 @@ const createToastStore = (): ToastStore => {
         timeoutId: timeout,
       });
     },
+    // kept in the list until its exit transition ends, then `unmount` drops it
     remove(id) {
-      toasts = toasts.filter((toast) => toast.id !== id);
+      toasts = toasts.map((toast) => (toast.id === id ? { ...toast, leaving: true } : toast));
       notifyListeners();
 
       const timer = timers.get(id);
@@ -84,6 +87,10 @@ const createToastStore = (): ToastStore => {
         clearTimeout(timer.timeoutId);
       }
       timers.delete(id);
+    },
+    unmount(id) {
+      toasts = toasts.filter((toast) => toast.id !== id);
+      notifyListeners();
     },
     pauseAll() {
       timers.forEach((timer) => {
@@ -177,25 +184,38 @@ const Toaster = ({ className }: { className?: string }) => {
         className,
       )}
     >
-      <AnimatePresence>
-        {toasts.map((toast, index) => {
-          return (
-            <motion.div
-              key={toast.id}
-              onMouseEnter={() => toastStore.pauseAll()}
-              onMouseLeave={() => toastStore.resumeAll()}
-              style={{ zIndex: toasts.length - index }}
-              initial={{ height: 0 }}
-              animate={{ height: "auto" }}
-              exit={{ height: 0 }}
-              transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-              className="pointer-events-auto box-border *:my-1.5"
-            >
-              <ToasterItem toast={toast} onDismiss={() => toastStore.remove(toast.id)} />
-            </motion.div>
-          );
-        })}
-      </AnimatePresence>
+      {toasts.map((toast, index) => (
+        <ToasterRow key={toast.id} toast={toast} zIndex={toasts.length - index} />
+      ))}
+    </div>
+  );
+};
+
+const ToasterRow = ({ toast, zIndex }: { toast: Toast; zIndex: number }) => {
+  const { ref, isMounted, status } = useElementTransition<HTMLDivElement>(!toast.leaving);
+
+  useEffect(() => {
+    if (!isMounted) toastStore.unmount(toast.id);
+  }, [isMounted, toast.id]);
+
+  if (!isMounted) return null;
+
+  return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: hover only pauses the dismiss timers
+    <div
+      ref={ref}
+      data-status={status}
+      onMouseEnter={() => toastStore.pauseAll()}
+      onMouseLeave={() => toastStore.resumeAll()}
+      style={{ zIndex }}
+      className={cn(
+        "group/toast pointer-events-auto box-border grid *:my-1.5",
+        // minmax(0, …) so the row can collapse past the toast's padding and margins
+        "grid-rows-[minmax(0,1fr)] starting:grid-rows-[minmax(0,0fr)] data-[status=closed]:grid-rows-[minmax(0,0fr)]",
+        "transition-[grid-template-rows] duration-500 ease-spring",
+      )}
+    >
+      <ToasterItem toast={toast} onDismiss={() => toastStore.remove(toast.id)} />
     </div>
   );
 };
@@ -207,7 +227,6 @@ type ToasterItemProps = {
 
 const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
   const { title, description, variant = "default" } = toast;
-  const reduceMotion = useReducedMotion();
 
   const Icon = {
     default: null,
@@ -216,19 +235,18 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
   }[variant];
 
   return (
-    <motion.div
+    <div
       className={cn(
-        "relative flex max-w-88 items-center gap-2 rounded-lg border p-3 pl-4 shadow-lg",
+        "relative flex max-w-88 items-center gap-2 self-start rounded-lg border p-3 pl-4 shadow-lg",
+        "transition-[opacity,scale,translate] duration-500 ease-spring",
+        "starting:opacity-0 group-data-[status=closed]/toast:opacity-0",
+        "motion-safe:starting:scale-95 motion-safe:group-data-[status=closed]/toast:-translate-y-full motion-safe:group-data-[status=closed]/toast:scale-95",
         variant === "default" && "border-border bg-background",
         variant === "positive" && "border-success/20 bg-success/10 text-success",
         variant === "negative" && "border-error/20 bg-error/10 text-error",
       )}
       role="status"
       aria-live="polite"
-      initial={reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
-      animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-      exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: "-100%" }}
-      transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
     >
       {Icon && <Icon weight="fill" className="size-5" />}
       <div className={cn("pr-6 text-sm")}>
@@ -236,7 +254,7 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
         {description && <p className="mt-0.5 text-pretty text-xs opacity-70">{description}</p>}
       </div>
       <ToastCloseButton onClick={onDismiss} />
-    </motion.div>
+    </div>
   );
 };
 

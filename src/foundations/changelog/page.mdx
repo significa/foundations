@@ -12,6 +12,20 @@ meta:
 
 ## September 2026
 
+### Changed: `Toaster` animates with CSS instead of `motion`
+
+Same curves and timings (`ease-spring` at 500ms), now as CSS transitions. `remove` marks a toast as
+leaving and it's dropped after its exit transition, via `useElementTransition`, replacing
+`AnimatePresence`. The public `toast()` API is unchanged.
+
+```diff tsx
+// toaster.tsx — Toaster
+- <AnimatePresence>
+-   {toasts.map((toast) => <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} ... />)}
+- </AnimatePresence>
++ {toasts.map((toast, index) => <ToasterRow key={toast.id} toast={toast} zIndex={toasts.length - index} />)}
+```
+
 ### Removed: `usePrefersReducedMotion`
 
 It only updated on change, so it always returned `false` on load. Use `useMatchMedia`:
