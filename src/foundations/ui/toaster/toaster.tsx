@@ -227,7 +227,7 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
       aria-live="polite"
       initial={reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
       animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-      exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8, y: "-100%" }}
+      exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: "-100%" }}
       transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
     >
       {Icon && <Icon weight="fill" className="size-5" />}

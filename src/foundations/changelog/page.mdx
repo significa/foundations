@@ -12,6 +12,47 @@ meta:
 
 ## September 2026
 
+### Fixed: spinner animations missing from `globals-prefers-schema.css`
+
+The `prefers-color-scheme` setup never defined `--animate-spinner-dot` / `--animate-spinner-bar`,
+so dot and bar spinners didn't animate. Copy the "Spinner variants" block from the setup page into
+your `@theme`.
+
+### Changed: easing tokens
+
+`ease-emphasized-accelerate` and `ease-emphasized-decelerate` are removed. `ease-out` and
+`ease-in-out` are redefined with stronger curves, so existing uses of those classes will feel
+different. Bare `transition` now uses `ease`, and `ease-spring` is new. Update your `@theme`:
+
+```diff css
+- --ease-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+- --ease-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
++ --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* enter / exit */
++ --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* on-screen movement */
++ --ease-spring: linear(0, 0.095, 0.291, 0.498, 0.676, 0.81, 0.903, 0.961, 0.993, 1.009, 1.015, 1.015, 1.012, 1.009, 1.006, 1.004, 1.002, 1.001, 1);
++ --default-transition-timing-function: ease; /* hover / color */
+```
+
+Replace `ease-emphasized-decelerate` with `ease-out`, and `ease-emphasized-accelerate` with
+`ease-out` (exits shouldn't ease in).
+
+Components were retuned to match:
+
+| Component        | Change                                                                                   |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| Tabs             | Indicator uses `ease-spring`                                                             |
+| SegmentedControl | Indicator uses CSS anchor positioning + `ease-spring`; no longer depends on `motion`     |
+| Dialog           | 200ms `ease-out` in, 150ms out; transitions only `translate`/`scale`/`opacity`; backdrop matches |
+| Drawer           | 300ms in, 200ms out, `ease-out` both ways; backdrop matches the panel (no exit delay)   |
+| Popover          | 200ms in (was 300ms)                                                                     |
+| Tooltip          | Opacity only, 150ms; no animation when moving between tooltips in a `Tooltip.Group`     |
+| Disclosure       | Content and chevron both 200ms                                                           |
+| Switch           | Thumb 150ms `ease-in-out`                                                                |
+| Toaster          | Exit scales to 0.95 (was 0.8)                                                            |
+
+Popover, Tooltip, Switch, Disclosure's chevron, Skeleton, and Marquee now respect
+`prefers-reduced-motion`.
+
 ### Changed: `Tabs` indicator uses CSS anchor positioning instead of `motion`
 
 One indicator per tablist, anchored to the selected tab, replaces the per-tab `motion.span` with

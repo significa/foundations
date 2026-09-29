@@ -17,8 +17,8 @@ const DialogContent = ({ className, children, align = "center", ...props }: Dial
       className={cn(
         "m-auto w-full max-w-[calc(100vw-(--spacing(8)))] rounded-3xl border border-border bg-background p-4 shadow-lg md:max-w-md",
         "max-h-[calc(100svh-2rem)] overflow-y-auto backdrop:bg-black/20 backdrop:backdrop-blur-sm",
-        "transition-all duration-300 backdrop:transition-all motion-reduce:transition-none motion-reduce:backdrop:transition-none",
-        "not-data-[status=open]:translate-y-2 not-data-[status=open]:scale-95 not-data-[status=open]:opacity-0 not-data-[status=open]:duration-150 not-data-[status=open]:backdrop:opacity-0",
+        "transition-[translate,scale,opacity] duration-200 ease-out backdrop:transition-opacity backdrop:duration-200 backdrop:ease-out motion-reduce:transition-none motion-reduce:backdrop:transition-none",
+        "not-data-[status=open]:translate-y-2 not-data-[status=open]:scale-95 not-data-[status=open]:opacity-0 not-data-[status=open]:duration-150 not-data-[status=open]:backdrop:opacity-0 not-data-[status=open]:backdrop:duration-150",
         align === "top" && "mt-4",
         className,
       )}

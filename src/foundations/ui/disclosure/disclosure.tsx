@@ -132,7 +132,7 @@ const DisclosureContent = ({
       id={getContentId(id)}
       data-state={open ? "open" : "closed"}
       className={cn(
-        "grid grid-rows-[0fr] transition-[grid-template-rows,visibility] duration-250 ease-out motion-reduce:transition-none",
+        "grid grid-rows-[0fr] transition-[grid-template-rows,visibility] duration-200 ease-out motion-reduce:transition-none",
         "data-[state=closed]:invisible data-[state=open]:grid-rows-[1fr]",
       )}
     >
@@ -150,7 +150,7 @@ const DisclosureChevron = ({ className, ...props }: React.ComponentPropsWithRef<
     <span
       aria-hidden="true"
       className={cn(
-        "p-1 transition-transform duration-200 ease-out",
+        "p-1 transition-transform duration-200 ease-out motion-reduce:transition-none",
         open && "rotate-180",
         className,
       )}
