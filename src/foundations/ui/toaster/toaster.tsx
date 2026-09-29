@@ -16,11 +16,13 @@ type Toast = {
   description?: string;
   duration?: number;
   variant?: ToastVariant;
-  leaving?: boolean;
 };
 
+// `leaving` is internal, so it stays out of the `toast()` input
+type ToastEntry = Toast & { leaving?: boolean };
+
 type ToastStore = {
-  toasts: Toast[];
+  toasts: ToastEntry[];
   subscribe: (listener: () => void) => () => void;
   add: (config: Omit<Toast, "id">) => void;
   remove: (id: string) => void;
@@ -30,7 +32,7 @@ type ToastStore = {
 };
 
 const createToastStore = (): ToastStore => {
-  let toasts: Toast[] = [];
+  let toasts: ToastEntry[] = [];
   const listeners = new Set<() => void>();
 
   const timers = new Map<
@@ -191,7 +193,7 @@ const Toaster = ({ className }: { className?: string }) => {
   );
 };
 
-const ToasterRow = ({ toast, zIndex }: { toast: Toast; zIndex: number }) => {
+const ToasterRow = ({ toast, zIndex }: { toast: ToastEntry; zIndex: number }) => {
   const { ref, isMounted, status } = useElementTransition<HTMLDivElement>(!toast.leaving);
 
   useEffect(() => {

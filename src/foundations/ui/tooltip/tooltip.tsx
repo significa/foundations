@@ -249,7 +249,10 @@ const TooltipContent = ({
         ref={ref}
         className={cn(
           "wrap-break-word z-50 max-w-80 overflow-visible whitespace-normal rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md",
-          "transition-opacity duration-150 ease-out data-[state=closed]:opacity-0 motion-reduce:transition-none",
+          "transition duration-300 ease-out motion-reduce:transition-none",
+          "data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2",
+          "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
+          "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
           isInstantPhase && "transition-none",
           context.middlewareData.hide?.referenceHidden && "hidden",
           className,

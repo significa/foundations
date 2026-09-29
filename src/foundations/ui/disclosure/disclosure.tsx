@@ -136,7 +136,11 @@ const DisclosureContent = ({
         "data-[state=closed]:invisible data-[state=open]:grid-rows-[1fr]",
       )}
     >
-      <div className={cn("min-h-0 overflow-hidden", className)} {...props}>
+      <div
+        data-state={open ? "open" : "closed"}
+        className={cn("min-h-0 overflow-hidden", className)}
+        {...props}
+      >
         {children}
       </div>
     </div>

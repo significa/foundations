@@ -12,6 +12,48 @@ meta:
 
 ## September 2026
 
+### Fixed: `Disclosure.Content` styles targeting `data-state`
+
+`className` lands on the inner element, which had no `data-state`, so classes like
+`data-[state=open]:…` stopped matching. Add it to the inner element:
+
+```diff tsx
+// disclosure.tsx — DisclosureContent
+- <div className={cn("min-h-0 overflow-hidden", className)} {...props}>
++ <div data-state={open ? "open" : "closed"} className={cn("min-h-0 overflow-hidden", className)} {...props}>
+```
+
+### Fixed: `toast()` accepted the internal `leaving` flag
+
+`toast({ leaving: true })` type-checked and created a toast that exited immediately. The flag now
+lives on an internal type:
+
+```diff tsx
+// toaster.tsx
+  type Toast = {
+    ...
+-   leaving?: boolean;
+  };
++ type ToastEntry = Toast & { leaving?: boolean };
+```
+
+Use `ToastEntry` for the store's `toasts` and `ToasterRow`'s `toast` prop.
+
+### Fixed: `Tooltip` enter felt instant
+
+The 150ms opacity-only fade on the stronger `ease-out` curve was effectively ~50ms. The previous
+enter is restored: 300ms, 2px slide from the trigger side, scale from 0.95. Grouped tooltips still
+appear without animation.
+
+```diff tsx
+// tooltip.tsx — TooltipContent
+- "transition-opacity duration-150 ease-out data-[state=closed]:opacity-0 motion-reduce:transition-none",
++ "transition duration-300 ease-out motion-reduce:transition-none",
++ "data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2",
++ "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
++ "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
+```
+
 ### Changed: `Toaster` animates with CSS instead of `motion`
 
 Same curves and timings (`ease-spring` at 500ms), now as CSS transitions. `remove` marks a toast as
