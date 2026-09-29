@@ -10,6 +10,40 @@ meta:
   order: 99
 ---
 
+## September 2026
+
+### Changed: `Tabs` indicator uses CSS anchor positioning instead of `motion`
+
+One indicator per tablist, anchored to the selected tab, replaces the per-tab `motion.span` with
+`layoutId`. `Tabs` no longer depends on `motion`, and the module-level instance counter is gone.
+Firefox positions the indicator but doesn't animate it yet
+([bug 1924226](https://bugzil.la/1924226)).
+
+```diff tsx
+// tabs.tsx — TabsItem
+-  {isSelected && <motion.span layoutId={tabsId} ... />}
++  style={{ anchorName: getAnchorName(tabsId, index), ...style }}
+
+// tabs.tsx — TabsItems
++  <TabsIndicator />
+```
+
+### Changed: `Disclosure.Content` animates with CSS and stays mounted when closed
+
+The height animation is now a `grid-template-rows` transition instead of `motion`'s
+`AnimatePresence`. Closed content is `visibility: hidden` rather than unmounted, so effects inside
+it run while collapsed. `Disclosure.Content` takes plain `div` props instead of motion props.
+
+```diff tsx
+// disclosure.tsx — DisclosureContent
+- <AnimatePresence initial={false}>
+-   {open && <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} ... />}
+- </AnimatePresence>
++ <div data-state={open ? "open" : "closed"} className="grid grid-rows-[0fr] data-[state=open]:grid-rows-[1fr] ...">
++   <div className="min-h-0 overflow-hidden">{children}</div>
++ </div>
+```
+
 ## July 2026
 
 ### Fixed: `Switch` looked square and distorted on press at small `--radius`

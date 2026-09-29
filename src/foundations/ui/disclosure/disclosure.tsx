@@ -1,5 +1,4 @@
 import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
-import { AnimatePresence, type HTMLMotionProps, MotionConfig, motion } from "motion/react";
 import { createContext, use, useId, useState } from "react";
 
 import { Slot } from "@/foundations/components/slot/slot";
@@ -9,10 +8,6 @@ interface DisclosureGroupContext {
   open: string | null;
   setOpen: (id: string | null) => void;
 }
-
-// let's keep an eye on calc-size
-// https://developer.mozilla.org/en-US/docs/Web/CSS/calc-size
-// when it's generally available, we can avoid the use of `motion` in this component
 
 const DisclosureGroupContext = createContext<DisclosureGroupContext | null>(null);
 
@@ -79,9 +74,7 @@ const Disclosure = ({
   return (
     <DisclosureContext value={{ open, setOpen, id }}>
       <DisclosureGroupContext value={null}>
-        <MotionConfig reducedMotion="user">
-          <div {...props}>{children}</div>
-        </MotionConfig>
+        <div {...props}>{children}</div>
       </DisclosureGroupContext>
     </DisclosureContext>
   );
@@ -111,7 +104,7 @@ const DisclosureTrigger = ({
         if (!e.defaultPrevented) setOpen(!open);
       }}
       aria-expanded={open}
-      aria-controls={open ? getContentId(id) : undefined}
+      aria-controls={getContentId(id)}
       data-state={open ? "open" : "closed"}
       className={cn(
         "focus-visible:ring-(length:--ring-width) flex w-full items-center justify-between text-left outline-none ring-ring",
@@ -126,33 +119,27 @@ const DisclosureTrigger = ({
 
 const getContentId = (id: string) => `${id}-Disclosure-content`;
 
+// When interpolate-size / calc-size are Baseline, we can simply animate height: 0 to auto
 const DisclosureContent = ({
   children,
   className,
   ...props
-}: Omit<HTMLMotionProps<"div">, "id" | "children"> & {
-  className?: string;
-  children: React.ReactNode;
-}) => {
+}: Omit<React.ComponentPropsWithRef<"div">, "id">) => {
   const { open, id } = useDisclosureContext();
 
   return (
-    <AnimatePresence initial={false}>
-      {open && (
-        <motion.div
-          id={getContentId(id)}
-          className={cn("overflow-hidden", className)}
-          data-state={open ? "open" : "closed"}
-          transition={{ type: "spring", bounce: 0, visualDuration: 0.15 }}
-          initial={{ height: 0 }}
-          animate={{ height: "auto" }}
-          exit={{ height: 0 }}
-          {...props}
-        >
-          {children}
-        </motion.div>
+    <div
+      id={getContentId(id)}
+      data-state={open ? "open" : "closed"}
+      className={cn(
+        "grid grid-rows-[0fr] transition-[grid-template-rows,visibility] duration-250 ease-out motion-reduce:transition-none",
+        "data-[state=closed]:invisible data-[state=open]:grid-rows-[1fr]",
       )}
-    </AnimatePresence>
+    >
+      <div className={cn("min-h-0 overflow-hidden", className)} {...props}>
+        {children}
+      </div>
+    </div>
   );
 };
 
