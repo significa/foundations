@@ -12,6 +12,33 @@ meta:
 
 ## September 2026
 
+### Added: async toasts (`toast.promise`, `toast.update`, `toast.dismiss`)
+
+`toast()` now returns the toast's id. `toast.update(id, …)` changes a toast that's showing,
+`toast.dismiss(id)` closes it, and an `id` passed to `toast()` replaces the toast already showing
+under it instead of stacking. `toast.promise` builds on these: one toast that shows a new `loading`
+variant (a `Spinner`, no timeout) while the promise runs, then turns `positive` or `negative` in
+place. A toast that changes eases into its new colours and size, and its new icon and text
+fade in. Existing `toast()` calls work unchanged. To update your copy, replace `toaster.tsx` and add
+`Spinner` and the new [`useElementSize`](/hooks/use-element-size) if you don't have them.
+
+```diff tsx
+- toast({ title: "Saving…" });
+- await save();
+- toast({ title: "Saved", variant: "positive" });
++ toast.promise(save(), {
++   loading: { title: "Saving…" },
++   success: { title: "Saved" },
++   error: { title: "Couldn't save" },
++ });
+```
+
+### Fixed: `Toaster` timers started while hovered
+
+A toast added while the pointer was over the toaster started its dismiss timer anyway, and could
+vanish under the cursor. The store now remembers it's paused, and new or updated toasts wait for
+`resumeAll`. Replacing `toaster.tsx` brings this fix too.
+
 ### Changed: `Toaster` animates with CSS instead of `motion`
 
 Same curves and timings (`ease-spring` at 500ms), now as CSS transitions. `remove` marks a toast as
