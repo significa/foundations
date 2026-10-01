@@ -21,10 +21,22 @@ const readSize = (entry: ResizeObserverEntry, box: ResizeObserverBoxOptions): El
   }[box];
   const size = sizes?.[0];
 
-  // Older Safari only has `contentRect` (the content box)
-  if (!size) return { width: entry.contentRect.width, height: entry.contentRect.height };
+  // Older Safari has no box sizes: `contentRect` is the content box, and the layout size
+  // (`offset*`, rounded, unaffected by transforms) stands in for the border box
+  if (!size) {
+    const { target } = entry;
+    if (box === "border-box" && target instanceof HTMLElement) {
+      return { width: target.offsetWidth, height: target.offsetHeight };
+    }
+    return { width: entry.contentRect.width, height: entry.contentRect.height };
+  }
 
-  return { width: size.inlineSize, height: size.blockSize };
+  // box sizes are logical: in a vertical writing mode the inline axis is the vertical one
+  const vertical = !getComputedStyle(entry.target).writingMode.startsWith("horizontal");
+
+  return vertical
+    ? { width: size.blockSize, height: size.inlineSize }
+    : { width: size.inlineSize, height: size.blockSize };
 };
 
 export const useElementSize = <T extends HTMLElement>(
