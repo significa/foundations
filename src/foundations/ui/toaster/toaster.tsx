@@ -257,10 +257,20 @@ const Toaster = ({ className }: { className?: string }) => {
 
 const ToasterRow = ({ toast, zIndex }: { toast: ToastEntry; zIndex: number }) => {
   const { ref, isMounted, status } = useElementTransition<HTMLDivElement>(!toast.leaving);
+  const hoveredRef = useRef(false);
 
   useEffect(() => {
     if (!isMounted) toastStore.unmount(toast.id);
   }, [isMounted, toast.id]);
+
+  // A row removed from under the pointer (dismissed, or the whole Toaster unmounted) never gets
+  // its `mouseleave`, and the store outlives it: hand the pause back so timers don't stay frozen.
+  useEffect(
+    () => () => {
+      if (hoveredRef.current) toastStore.resumeAll();
+    },
+    [],
+  );
 
   if (!isMounted) return null;
 
@@ -269,8 +279,14 @@ const ToasterRow = ({ toast, zIndex }: { toast: ToastEntry; zIndex: number }) =>
     <div
       ref={ref}
       data-status={status}
-      onMouseEnter={() => toastStore.pauseAll()}
-      onMouseLeave={() => toastStore.resumeAll()}
+      onMouseEnter={() => {
+        hoveredRef.current = true;
+        toastStore.pauseAll();
+      }}
+      onMouseLeave={() => {
+        hoveredRef.current = false;
+        toastStore.resumeAll();
+      }}
       style={{ zIndex }}
       className={cn(
         "group/toast pointer-events-auto box-border grid *:my-1.5",
