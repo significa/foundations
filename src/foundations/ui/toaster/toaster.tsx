@@ -1,6 +1,7 @@
 import { CheckCircleIcon, XCircleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
 import type { ComponentPropsWithoutRef } from "react";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useElementSize } from "@/foundations/hooks/use-element-size/use-element-size";
 import { useElementTransition } from "@/foundations/hooks/use-element-transition/use-element-transition";
 import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
 import { Spinner } from "@/foundations/ui/spinner/spinner";
@@ -288,32 +289,12 @@ type ToasterItemProps = {
   onDismiss: () => void;
 };
 
-// The card's size follows its content, so a toast that changes (`update`, `promise`) grows or
-// shrinks into its new size instead of snapping. Undefined until first measured: the card enters
-// at its natural size.
-const useContentSize = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState<{ width: number; height: number }>();
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    const observer = new ResizeObserver(([entry]) => {
-      const box = entry?.borderBoxSize[0];
-      if (box) setSize({ width: box.inlineSize, height: box.blockSize });
-    });
-    observer.observe(element);
-
-    return () => observer.disconnect();
-  }, []);
-
-  return { ref, size };
-};
-
 const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
   const { title, description, variant = "default" } = toast;
-  const { ref, size } = useContentSize();
+  // The card follows its content's size, so a toast that changes (`update`, `promise`) grows or
+  // shrinks into its new size instead of snapping. Undefined until first measured: the card
+  // enters at its natural size.
+  const [ref, size] = useElementSize<HTMLDivElement>();
 
   const Icon = {
     default: null,

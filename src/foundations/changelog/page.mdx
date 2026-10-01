@@ -20,7 +20,7 @@ under it instead of stacking. `toast.promise` builds on these: one toast that sh
 variant (a `Spinner`, no timeout) while the promise runs, then turns `positive` or `negative` in
 place. A toast that changes eases into its new colours and size, and its new icon and text
 fade in. Existing `toast()` calls work unchanged. To update your copy, replace `toaster.tsx` and add
-`Spinner` if you don't have it.
+`Spinner` and the new [`useElementSize`](/hooks/use-element-size) if you don't have them.
 
 ```diff tsx
 - toast({ title: "Saving…" });
