@@ -1,0 +1,110 @@
+---
+title: useElementSize
+description: A hook that observes an element's size with ResizeObserver
+files:
+  - src/foundations/hooks/use-element-size/use-element-size.ts
+
+folder: hooks
+---
+
+## Features
+
+- **Live size**: Re-renders with the element's width and height whenever it resizes, and only when the values change
+- **Box choice**: Measure the border box (default), the content box, or device pixels
+- **Callback mode**: React to resizes without re-rendering, for writing styles or CSS variables directly
+
+## API Reference
+
+<PropsTable
+  definition={{
+    options: {
+      type: '{ box?: "border-box" | "content-box" | "device-pixel-content-box" }',
+      default: '{ box: "border-box" }',
+      description: "Which box to measure. Passed to ResizeObserver.observe.",
+    },
+    callback: {
+      type: "(size: { width: number, height: number }, entry: ResizeObserverEntry) => void",
+      description: "Called on every resize. When provided, the returned size is never updated.",
+    },
+  }}
+/>
+
+The hook returns a tuple containing:
+
+- `ref` (`RefObject<T>`): A ref to attach to the element you want to measure
+- `size` (`{ width: number, height: number } | undefined`): The element's size, `undefined` until
+  the first measurement (always on the server)
+
+**When a callback is provided**, `size` stays `undefined` and the component doesn't re-render on
+resize. Use it when the size feeds the DOM directly, such as a CSS variable or an inline style. It
+works like the callback in [`useIntersectionObserver`](/hooks/use-intersection-observer).
+
+The element must be rendered when the component mounts: the ref is read once, in an effect.
+
+Safari doesn't support `device-pixel-content-box`; `observe` throws there, so check
+support before passing it.
+
+## Examples
+
+### Basic
+
+Drag the corner to resize.
+
+<Preview slug="use-element-size-basic" />
+
+```tsx
+const [ref, size] = useElementSize<HTMLDivElement>();
+
+return <div ref={ref}>{size && `${size.width} × ${size.height}`}</div>;
+```
+
+### Animating to content size
+
+CSS can't transition `width` or `height` to or from `auto`. Measure the content instead, and give
+its container that size: when the content changes, the container eases into its new size. Since
+`size` is `undefined` until measured, the container starts at its natural size. The
+[Toaster](/ui/toaster) uses this when a toast is updated.
+
+<Preview slug="use-element-size-content" />
+
+```tsx
+const [ref, size] = useElementSize<HTMLDivElement>();
+
+return (
+  // `box-content`: the measured size is the content's, any border sits outside it
+  <div style={size} className="box-content overflow-hidden transition-[width,height]">
+    <div ref={ref} className="w-max max-w-72">
+      {content}
+    </div>
+  </div>
+);
+```
+
+### Writing a CSS variable
+
+With a callback, the size goes straight to the DOM and the component renders once. Here another
+element matches the panel's width through `--panel-width`.
+
+<Preview slug="use-element-size-callback" />
+
+```tsx
+const rootRef = useRef<HTMLDivElement>(null);
+
+const [ref] = useElementSize<HTMLDivElement>({}, ({ width }) => {
+  rootRef.current?.style.setProperty("--panel-width", `${width}px`);
+});
+```
+
+### Fitting items to the space
+
+For layouts that depend on how many things fit, which container queries can't count: show as
+many avatars as fit and collapse the rest into "+N". `content-box` leaves the padding out of the
+measurement.
+
+<Preview slug="use-element-size-fit" />
+
+```tsx
+const [ref, size] = useElementSize<HTMLDivElement>({ box: "content-box" });
+
+const slots = size ? Math.floor((size.width + GAP) / (AVATAR + GAP)) : 0;
+```

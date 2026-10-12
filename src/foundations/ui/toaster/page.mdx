@@ -13,6 +13,10 @@ dependencies:
     href: /utils/compose-refs
   - name: useElementTransition
     href: /hooks/use-element-transition
+  - name: Spinner
+    href: /ui/spinner
+  - name: useElementSize
+    href: /hooks/use-element-size
 
 folder: UI
 ---
@@ -46,6 +50,39 @@ import { toast } from "@/components/ui/toaster";
 toast({ title: "This is a toast message!" });
 ```
 
+`toast` returns the toast's id. Use it to change the toast while it's showing, or to close it:
+
+```tsx
+const id = toast({ title: "Uploading…", variant: "loading" });
+
+toast.update(id, { title: "Uploaded", variant: "positive" });
+toast.dismiss(id);
+```
+
+Passing your own `id` replaces the toast already showing under it instead of stacking a new one,
+which suits state that changes often (a connection status, a counter):
+
+```tsx
+toast({ id: "connection", title: "You're offline", duration: Infinity });
+```
+
+### Async
+
+`toast.promise` shows one toast for the whole task: `loading` while the promise is pending, then
+the same toast turns `positive` or `negative`. `success` and `error` can be functions of the
+result or the error. It returns the promise you passed, so you can still await it.
+
+```tsx
+toast.promise(saveOrder(), {
+  loading: { title: "Saving your order…" },
+  success: (order) => ({ title: `Order ${order.number} saved` }),
+  error: (error) => ({ title: "Couldn't save your order", description: String(error) }),
+});
+```
+
+A `loading` toast doesn't time out. Once it settles, it gets the default duration unless
+`success` or `error` set one.
+
 ## Example
 
 ### With Description
@@ -59,3 +96,7 @@ toast({ title: "This is a toast message!" });
 ### Duration
 
 <Preview slug="toaster-duration" />
+
+### Async
+
+<Preview slug="toaster-promise" />
