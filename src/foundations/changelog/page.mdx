@@ -26,11 +26,12 @@ Four fixes to apply to your copy of `otp-input.tsx`:
 -   splitIntoSlots(defaultValue, cellCount),
 - );
 - const values = valueProp !== undefined ? splitIntoSlots(valueProp, cellCount) : internalValues;
++ const [initialValue] = useState(defaultValue);
 + const [internalValues, setInternalValues] = useState<string[] | null>(null);
 + const values =
 +   valueProp !== undefined
 +     ? splitIntoSlots(valueProp, cellCount)
-+     : (internalValues ?? splitIntoSlots(defaultValue, cellCount));
++     : (internalValues ?? splitIntoSlots(initialValue, cellCount));
 
 - className={cn("flex items-center gap-2", className)}
 + className={cn("flex w-fit max-w-full items-center justify-between gap-2", className)}
@@ -57,19 +58,23 @@ Thread `autoComplete` from the root props through the context to the cell.
 
 The chevron was a black or white SVG in a background image, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now a Phosphor `CaretDownIcon` laid over the select, in `currentColor`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`.
 
-The `<select>` now sits in a `span`, and `className` goes on that `span`, so a width or margin moves the chevron with it. Classes that styled the `<select>` itself no longer reach it: padding, radius, font size or weight, height, `truncate`, cursor. Grep for `<Select className=` and check each; move those to `variant`/`size`, or onto the `select` in your copy. The select also gets `min-w-0`, so it shrinks below its widest option, and renders no chevron when `multiple`.
+The `<select>` now sits in a `span`, and `className`, `style` and `hidden` go on that `span`, so a width or margin moves the chevron with it and hiding the select hides the chevron too. Classes that styled the `<select>` itself no longer reach it: padding, radius, font size or weight, height, `truncate`, cursor. Grep for `<Select className=` and check each; move those to `variant`/`size`, or onto the `select` in your copy. The select also gets `min-w-0`, so it shrinks below its widest option, and renders no chevron when `multiple`.
 
 In `input.tsx`, the in-group left padding after an addon also matches an element wrapped one level down, so `Select.Group` keeps its spacing, and the group frame dims for a disabled select as it does for a disabled input.
 
 ```diff tsx
 + import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 
+- const Select = ({ className, invalid, variant, size, ...props }: SelectProps) => (
++ const Select = ({ className, style, hidden, invalid, variant, size, ...props }: SelectProps) => (
 - <select
 -   data-invalid={invalid || undefined}
 -   className={cn(useInputStyle({ variant, size }), "appearance-none bg-size-[1em] … pr-10", 'bg-[url(…)]', 'dark:bg-[url(…)]', className)}
 -   {...props}
 - />
 + <span
++   style={style}
++   hidden={hidden}
 +   className={cn(
 +     "relative flex w-full min-w-0 items-center self-stretch",
 +     size && (size === "xs" || size === "sm" ? "text-sm" : "text-base"),

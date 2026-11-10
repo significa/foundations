@@ -72,13 +72,14 @@ const OTPInput = ({
   const cellRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [cellCount, setCellCount] = useState(0);
 
-  // null until the first edit: cells register after mount, so defaultValue is split at render.
+  // null until the first edit: cells register after mount, so the initial defaultValue is split at render.
+  const [initialValue] = useState(defaultValue);
   const [internalValues, setInternalValues] = useState<string[] | null>(null);
 
   const values =
     valueProp !== undefined
       ? splitIntoSlots(valueProp, cellCount)
-      : (internalValues ?? splitIntoSlots(defaultValue, cellCount));
+      : (internalValues ?? splitIntoSlots(initialValue, cellCount));
 
   // Ref kept in sync with the latest committed values so that focus handlers
   // — which fire synchronously before React re-renders — always see fresh data.
