@@ -25,9 +25,9 @@ export default function ListboxSearchPreview() {
       <Listbox value={selectedPerson} onChange={setSelectedPerson}>
         <Listbox.Trigger>{selectedPerson?.name}</Listbox.Trigger>
         <Listbox.Options>
-          <Input.Group size="sm" className="mx-(--inset) mt-(--inset) w-auto shrink-0">
+          <Input.Group variant="flush">
             <Input.Addon>
-              <MagnifyingGlassIcon />
+              <MagnifyingGlassIcon weight="bold" />
             </Input.Addon>
             <Listbox.SearchInput
               placeholder="Search people"

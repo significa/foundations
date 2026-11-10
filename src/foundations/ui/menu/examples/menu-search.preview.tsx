@@ -33,9 +33,9 @@ export default function MenuSearchPreview() {
         <Button variant="outline">Pick a fruit</Button>
       </Menu.Trigger>
       <Menu.Items>
-        <Input.Group size="sm" className="mx-(--inset) mt-(--inset) w-auto">
+        <Input.Group variant="flush">
           <Input.Addon>
-            <MagnifyingGlassIcon />
+            <MagnifyingGlassIcon weight="bold" />
           </Input.Addon>
           <Menu.SearchInput
             placeholder="Search fruits..."

@@ -10,9 +10,9 @@ export default function PopoverEmptyPreview() {
         <Button variant="outline">Empty State</Button>
       </Popover.Trigger>
       <Popover.Content className="p-0">
-        <Input.Group size="sm" className="m-2 w-auto">
+        <Input.Group variant="flush">
           <Input.Addon>
-            <MagnifyingGlassIcon />
+            <MagnifyingGlassIcon weight="bold" />
           </Input.Addon>
           <Input placeholder="Search items..." aria-label="Search items" />
         </Input.Group>

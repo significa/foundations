@@ -72,8 +72,10 @@ export default function ListboxAsyncPreview() {
       <Listbox value={selected} onChange={setSelected}>
         <Listbox.Trigger placeholder="Pick a fruit">{selected}</Listbox.Trigger>
         <Listbox.Options>
-          <Input.Group size="sm" className="mx-(--inset) mt-(--inset) w-auto shrink-0">
-            <Input.Addon>{isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon />}</Input.Addon>
+          <Input.Group variant="flush">
+            <Input.Addon>
+              {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
+            </Input.Addon>
             <Listbox.SearchInput
               placeholder="Search fruits"
               aria-label="Search fruits"

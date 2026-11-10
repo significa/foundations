@@ -139,9 +139,9 @@ const Search = () => {
         <Menu open={isOpen} onOpenChange={handleOpenChange} modal={false}>
           <Menu.Trigger className="hidden" />
           <Menu.Items inline className="flex h-full flex-col overflow-hidden">
-            <Input.Group className="mx-(--inset) mt-(--inset) w-auto shrink-0">
+            <Input.Group variant="flush">
               <Input.Addon>
-                <MagnifyingGlassIcon />
+                <MagnifyingGlassIcon weight="bold" />
               </Input.Addon>
               <Menu.SearchInput
                 autoFocus
