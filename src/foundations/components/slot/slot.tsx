@@ -20,8 +20,7 @@ const isValidSlottableElement = (
   );
 };
 
-// Where both pass the same `on*` handler, both run: the child's first, then the slot's (as Radix
-// does), so the child can preventDefault to opt out of the component's behaviour.
+// Both pass the same `on*` handler: both run, the child's first, then the slot's (as in Radix).
 const composeEventHandlers = (
   slotProps: Record<string, unknown>,
   childProps: Record<string, unknown>,

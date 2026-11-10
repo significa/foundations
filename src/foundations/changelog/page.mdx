@@ -19,8 +19,7 @@ component's, an explicit `undefined` or `null` on the child erased the slot's pr
 `ref` replaced the child's. `Slottable` was worse: it cloned the child with the slot's props on top,
 so under `asChild` the child's own `onClick`, `className` and `style` were lost (`<Button asChild><a
 onClick className>` dropped both). Now handlers both sides pass are composed with all their
-arguments: the child's runs first, then the slot's, as in Radix, so the child can `preventDefault()`
-to opt out of the component's behaviour. `className` and `style` merge, both refs get the element,
+arguments: the child's runs first, then the slot's, as in Radix. `className` and `style` merge, both refs get the element,
 and `Slottable` renders its child through `Slot`. Replace your `slot.tsx`; it now imports
 `composeRefs`.
 
@@ -70,7 +69,9 @@ render, now running a parent callback ref's real cleanup each time (a top-layer 
 `Input.Addon` would hide and re-show). Every call site now memoises it: `Modal.Content`, `Toaster`
 (which was already hiding and re-showing its popover on every toast change), `Input.Addon`,
 `OTPInput.Cell`, `Slider.Thumb`, `Checkbox`, `ToggleGroup`, every `ColorPicker` part, and
-`MotionScroll`. Apply both changes together.
+`MotionScroll`. Apply both changes together. That re-show was also what kept a new toast above a
+popover opened after the toaster, so `Toaster` now re-enters the top layer explicitly when the
+number of toasts changes.
 
 ```diff tsx
   // compose-refs.ts
@@ -93,6 +94,12 @@ render, now running a parent callback ref's real cleanup each time (a top-layer 
 + <dialog ref={composedRef}
   // toaster.tsx (Toaster)
 + const ref = useMemo(() => composeRefs(elementRef, topLayerRef), [topLayerRef]);
++ useEffect(() => {
++   const element = elementRef.current;
++   if (!element?.matches(":popover-open") || toasts.length === 0) return;
++   element.hidePopover();
++   element.showPopover();
++ }, [toasts.length]);
   // input.tsx (InputAddon), slider.tsx (SliderThumb), checkbox.tsx
 + const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
   // otp-input.tsx (OTPInputCell): internalRef is a callback
