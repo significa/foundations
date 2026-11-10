@@ -364,7 +364,7 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
             {Icon ? (
               <Icon weight="fill" className="size-5" />
             ) : (
-              <Spinner size="lg" aria-hidden className="opacity-60" />
+              <Spinner size="lg" className="opacity-60" />
             )}
           </span>
         )}

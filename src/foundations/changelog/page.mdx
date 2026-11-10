@@ -12,6 +12,45 @@ meta:
 
 ## November 2026
 
+### Changed: `Spinner` ships one style, accessible and motion-safe
+
+`Spinner` used to hard-code `role="progressbar"` and an English `aria-label="loading"`, so a
+loading Button announced "loading" on top of its own label; it ignored `prefers-reduced-motion`;
+and as a block `div` it sat on the text baseline when inline (and was invalid inside a `<button>`).
+Apply these to your copy:
+
+- It renders a `span` with a fixed, vertically centred box, so a `ref` now resolves to an
+  `HTMLSpanElement` (was `HTMLDivElement`). Button's spinner wrapper is now `flex` so it centres
+  exactly.
+- It's `aria-hidden` by default. Pass `label` when the spinner is the only sign of the wait: it
+  renders as visually hidden text inside a `role="status"` (assistive tech may not announce it when
+  it first appears).
+- `Popover.SearchInput` (and so `Listbox.SearchInput` / `Menu.SearchInput`) sets
+  `aria-busy={isLoading || undefined}` on its input, since its spinner is now hidden.
+- Under reduced motion it pulses instead of rotating.
+
+The `variant` prop, `SPINNER_FRAMES`, and the `--animate-spinner-dot` / `--animate-spinner-bar`
+tokens are gone: every project copied all four styles and used one. Only the ring ships. If you use
+`dots`, `bars` or `frames`, replace your `spinner.tsx` with that recipe from the
+[Spinner page](/ui/spinner#other-styles): same API, keyframes included, so delete the two tokens and
+their keyframes from your globals. The frames recipe now steps in CSS instead of `setInterval`,
+which froze while the main thread was busy.
+
+```diff tsx
+- <Spinner variant="dots" />
++ <Spinner /> {/* spinner.tsx replaced by the dots recipe */}
+
+- <Spinner variant="frames" frames={SPINNER_FRAMES.moon} interval={120} />
++ <Spinner frames={["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"]} />
+
+- <Spinner aria-label="Loading results" />
++ <Spinner label="Loading results" />
+
+  // button.tsx
+- "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
++ "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2",
+```
+
 ### Fixed: `Slot` replaced the child's handlers and ref; `composeRefs` and `useStableCallback` bugs
 
 `Slot` spread the child's props over its own, so a child's `onClick` silently replaced the

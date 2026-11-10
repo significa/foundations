@@ -114,32 +114,6 @@
   /* leaving for good, e.g. a toast timing out; starts slowly by design, keep it short */
   --ease-in: cubic-bezier(0.3, 0, 0.8, 0.15);
   --default-transition-timing-function: ease; /* hover / color */
-
-  /* Spinner variants */
-  --animate-spinner-dot: spinner-dot 1.4s ease-in-out infinite both;
-  --animate-spinner-bar: spinner-bar 1.2s ease-in-out infinite both;
-
-  @keyframes spinner-dot {
-    0%,
-    80%,
-    100% {
-      opacity: 0.25;
-    }
-    40% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes spinner-bar {
-    0%,
-    40%,
-    100% {
-      transform: scaleY(0.4);
-    }
-    20% {
-      transform: scaleY(1);
-    }
-  }
 }
 
 [data-theme="dark"] {
