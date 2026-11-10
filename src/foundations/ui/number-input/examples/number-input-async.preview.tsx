@@ -37,6 +37,7 @@ export default function NumberInputAsyncExample() {
       </div>
       <Spinner
         size="sm"
+        label={syncing ? "Saving quantity" : undefined}
         className={cn("transition-opacity", syncing ? "opacity-100" : "opacity-0")}
       />
     </div>

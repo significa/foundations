@@ -29,7 +29,7 @@ function Indicator({ label, active }: { label: string; active: boolean }) {
       <span className="text-xs text-foreground-secondary">{label}</span>
       <div className="flex h-6 items-center">
         {active ? (
-          <Spinner />
+          <Spinner label="Loading" />
         ) : (
           <span className="text-xs text-foreground-secondary opacity-60">idle</span>
         )}
