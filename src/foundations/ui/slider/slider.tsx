@@ -262,6 +262,7 @@ const SliderThumb = ({ className, onChange, ref, ...props }: SliderThumbProps) =
   const { value, setValue, min, max, step, orientation, disabled } = useSliderContext();
 
   const internalRef = useRef<HTMLInputElement>(null);
+  const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -284,7 +285,7 @@ const SliderThumb = ({ className, onChange, ref, ...props }: SliderThumbProps) =
 
   return (
     <input
-      ref={composeRefs(ref, internalRef)}
+      ref={composedRef}
       type="range"
       min={min}
       max={max}

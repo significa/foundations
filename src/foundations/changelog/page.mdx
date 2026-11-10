@@ -15,22 +15,26 @@ meta:
 ### Fixed: `Slot` replaced the child's handlers and ref; `composeRefs` and `useStableCallback` bugs
 
 `Slot` spread the child's props over its own, so a child's `onClick` silently replaced the
-component's, an explicit `undefined` on the child erased the slot's prop, and the slot's `ref`
-replaced the child's. `Slottable` was worse: it cloned the child with the slot's props on top, so
-under `asChild` the child's own `onClick`, `className` and `style` were lost (`<Button asChild><a
-onClick className>` dropped both). Now handlers both sides pass are composed (the slot's first, the
-child's unless the slot's called `preventDefault()`), `className` and `style` merge, both refs get
-the element, and `Slottable` renders its child through `Slot`. Replace your `slot.tsx`; it now
-imports `composeRefs`.
+component's, an explicit `undefined` or `null` on the child erased the slot's prop, and the slot's
+`ref` replaced the child's. `Slottable` was worse: it cloned the child with the slot's props on top,
+so under `asChild` the child's own `onClick`, `className` and `style` were lost (`<Button asChild><a
+onClick className>` dropped both). Now handlers both sides pass are composed with all their
+arguments (the slot's first, the child's unless the slot's called `preventDefault()`), `className`
+and `style` merge, both refs get the element, and `Slottable` renders its child through `Slot`.
+Replace your `slot.tsx`; it now imports `composeRefs`.
+
+One behaviour to know: when the slot's handler cancels the native action, the child's handler of
+the same name is skipped. For example, an `onKeyDown` on a `Tabs` item child no longer runs for
+Arrow, Home and End. See the [Slot page](/components/slot) for the full list.
 
 ```diff tsx
 + const composeEventHandlers = (slotProps, childProps) => {
 +   // for each on* handler both pass:
-+   composed[name] = (event) => {
-+     const wasPrevented = isDefaultPrevented(event);
-+     slotHandler(event);
-+     if (!wasPrevented && isDefaultPrevented(event)) return;
-+     childHandler(event);
++   composed[name] = (...args) => {
++     const wasPrevented = isDefaultPrevented(args[0]);
++     slotHandler(...args);
++     if (!wasPrevented && isDefaultPrevented(args[0])) return;
++     childHandler(...args);
 +   };
 + };
 
@@ -39,7 +43,7 @@ imports `composeRefs`.
 +   const childRef = isValidSlottableElement(element) ? element.props.ref : undefined;
 +   const composedRef = useMemo(() => composeRefs(ref, childRef), [ref, childRef]);
 +   const childProps = Object.fromEntries(
-+     Object.entries(element.props).filter(([, value]) => value !== undefined),
++     Object.entries(element.props).filter(([, value]) => value != null),
 +   );
     return cloneElement(element, {
       ...props,
@@ -64,9 +68,14 @@ imports `composeRefs`.
 
 `composeRefs` dropped a React 19 callback ref's cleanup: the cleanup a ref returned never ran, and
 the ref was called with `null` instead. It now returns a cleanup that runs each ref's own cleanup,
-or, for refs without one, calls the callback with `null` or sets the object's `current` to `null`. It still returns a new callback per call, which makes React detach
-and re-attach every ref on each render: `Modal.Content` and `Toaster` now memoise it (the `Toaster`
-was hiding and re-showing its popover on every toast change).
+or, for refs without one, calls the callback with `null` or sets the object's `current` to `null`.
+
+It still returns a new callback per call, which makes React detach and re-attach every ref on each
+render, now running a parent callback ref's real cleanup each time (a top-layer ref passed to
+`Input.Addon` would hide and re-show). Every call site now memoises it: `Modal.Content`, `Toaster`
+(which was already hiding and re-showing its popover on every toast change), `Input.Addon`,
+`OTPInput.Cell`, `Slider.Thumb`, `Checkbox`, `ToggleGroup`, every `ColorPicker` part, and
+`MotionScroll`. Apply both changes together.
 
 ```diff tsx
   // compose-refs.ts
@@ -82,10 +91,23 @@ was hiding and re-showing its popover on every toast change).
 +   };
   }
 
-  // modal.tsx (ModalContent) and toaster.tsx (Toaster), before any early return
+  // every call site: memoise before any early return, then pass ref={composedRef}
+  // modal.tsx (ModalContent)
 + const composedRef = useMemo(() => composeRefs(dialogRef, transitionRef, ref), [dialogRef, transitionRef, ref]);
 - <dialog ref={composeRefs(dialogRef, transitionRef, ref)}
 + <dialog ref={composedRef}
+  // toaster.tsx (Toaster)
++ const ref = useMemo(() => composeRefs(elementRef, topLayerRef), [topLayerRef]);
+  // input.tsx (InputAddon), slider.tsx (SliderThumb), checkbox.tsx
++ const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
+  // otp-input.tsx (OTPInputCell): internalRef is a callback
++ const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref, internalRef]);
+  // toggle.tsx (ToggleGroupRoot)
++ const composedRef = useMemo(() => composeRefs(containerRef, ref), [ref]);
+  // color-picker.tsx (Draggable, Area, Hue, Saturation, Lightness, Alpha)
++ const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
+  // motion-scroll.tsx
++ const composedRef = useMemo(() => composeRefs(scope, propRef), [scope, propRef]);
 ```
 
 `useStableCallback` kept the previous callback when the new one was `undefined`, so a handler a
@@ -111,11 +133,16 @@ passing `disabled` alongside it dropped focus to `<body>`. A loading button now 
 `preventDefault()` (mouse, Enter, Space and implicit form submit all arrive as `click`). You no
 longer need `disabled={isLoading}`.
 
+Required update: `<Button asChild disabled>` no longer sets the native `disabled` attribute on its
+child, even when that child is a `<button>`. The child gets `aria-disabled` and the click guard
+instead, so it stays focusable. If you style or select it with `:disabled` or `[disabled]`, target
+`[aria-disabled="true"]` too, or put `disabled` on the child itself.
+
 A disabled `Button asChild` around an `<a>` still followed the link and ran its `onClick` (links
 ignore `disabled`); it's now guarded the same way and gets `aria-disabled`. `Button asChild` also
 dropped an explicit `type`, so `<Button asChild type="submit"><button>` rendered
 `type="button"`. Hover styles are gated with `not-disabled:` and `not-aria-disabled:` (`enabled:`
-never matches an `<a>`), and the spinner wrapper is `flex` so it centres instead of sitting on the
+never matches an `<a>`), press feedback with `not-aria-disabled:`, and the spinner wrapper is `flex` so it centres instead of sitting on the
 baseline. These rely on the `Slot` fix above.
 
 ```diff tsx
@@ -149,6 +176,10 @@ baseline. These rely on the `Slot` fix above.
 + "transition not-disabled:not-aria-disabled:cursor-pointer disabled:opacity-40 aria-disabled:not-aria-busy:opacity-40",
 - "hover:bg-accent/90"
 + "not-disabled:not-aria-disabled:hover:bg-accent/90"
+- "active:not-in-data-ui-button-group:scale-98"
++ "not-aria-disabled:active:not-in-data-ui-button-group:scale-98"
+- "in-data-ui-button-group:active:bg-accent/80"
++ "in-data-ui-button-group:not-aria-disabled:active:bg-accent/80"
 
   // spinner wrapper
 - "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",

@@ -35,19 +35,20 @@ const composeEventHandlers = (
   slotProps: Record<string, unknown>,
   childProps: Record<string, unknown>,
 ) => {
-  const composed: Record<string, (event: unknown) => void> = {};
+  const composed: Record<string, (...args: unknown[]) => void> = {};
 
   for (const [name, slotHandler] of Object.entries(slotProps)) {
     const childHandler = childProps[name];
     if (!/^on[A-Z]/.test(name)) continue;
     if (typeof slotHandler !== "function" || typeof childHandler !== "function") continue;
 
-    composed[name] = (event: unknown) => {
+    // Not every `on*` is a DOM event (`onOpenChange(open, event, reason)`): pass every argument on.
+    composed[name] = (...args: unknown[]) => {
       // Snapshot first: a preventDefault from a nested element earlier in the bubble path isn't the slot's.
-      const wasPrevented = isDefaultPrevented(event);
-      slotHandler(event);
-      if (!wasPrevented && isDefaultPrevented(event)) return;
-      childHandler(event);
+      const wasPrevented = isDefaultPrevented(args[0]);
+      slotHandler(...args);
+      if (!wasPrevented && isDefaultPrevented(args[0])) return;
+      childHandler(...args);
     };
   }
 
@@ -67,10 +68,10 @@ export const Slot = ({
     throw new Error("Slot needs a valid react element child");
   }
 
-  // An explicit `undefined` on the child (`onClick={cond ? fn : undefined}`) is no prop: dropped so
-  // it can't erase the slot's in the spread below.
+  // An explicit `undefined` or `null` on the child (`onClick={cond ? fn : undefined}`) is no prop:
+  // dropped so it can't erase the slot's in the spread below.
   const childProps = Object.fromEntries(
-    Object.entries(element.props).filter(([, value]) => value !== undefined),
+    Object.entries(element.props).filter(([, value]) => value != null),
   );
 
   // A native <button> defaults to type="submit", which submits the enclosing

@@ -1,5 +1,5 @@
 import type { VariantProps } from "cva";
-import { createContext, use, useRef } from "react";
+import { createContext, use, useMemo, useRef } from "react";
 import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cn, cva } from "#/lib/utils/classnames.ts";
@@ -183,6 +183,7 @@ const InputAddon = ({ ref, className, asChild, onClick, ...props }: InputAddonPr
   const ctx = use(InputGroupContext);
   const Comp = asChild ? Slot : "div";
   const internalRef = useRef<HTMLDivElement | null>(null);
+  const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     onClick?.(e);
@@ -204,7 +205,7 @@ const InputAddon = ({ ref, className, asChild, onClick, ...props }: InputAddonPr
     <Comp
       data-input-addon
       className={cn(inputAddonStyle({ size: ctx?.size }), className)}
-      ref={composeRefs(ref, internalRef)}
+      ref={composedRef}
       onClick={handleClick}
       {...props}
     />

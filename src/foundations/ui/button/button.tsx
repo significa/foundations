@@ -11,7 +11,7 @@ const buttonStyle = cva({
     // `not-disabled:`, not `enabled:`, which never matches an `asChild` <a>. A disabled link has
     // only aria-disabled, so it dims too; a loading button (aria-busy) doesn't.
     "transition not-disabled:not-aria-disabled:cursor-pointer disabled:opacity-40 aria-disabled:not-aria-busy:opacity-40",
-    "active:not-in-data-ui-button-group:scale-98",
+    "not-aria-disabled:active:not-in-data-ui-button-group:scale-98",
     "ring-ring focus-visible:ring-(length:--ring-width) focus-visible:outline-none",
     // inside button group — horizontal merge (default; ToggleGroup may set
     // data-orientation="vertical" on its container to flip the axis)
@@ -32,11 +32,11 @@ const buttonStyle = cva({
   variants: {
     variant: {
       primary:
-        "bg-accent [--button-text-color:var(--color-accent-foreground)] not-disabled:not-aria-disabled:hover:bg-accent/90 in-data-ui-button-group:active:bg-accent/80",
+        "bg-accent [--button-text-color:var(--color-accent-foreground)] not-disabled:not-aria-disabled:hover:bg-accent/90 in-data-ui-button-group:not-aria-disabled:active:bg-accent/80",
       outline:
-        "border border-border bg-background not-disabled:not-aria-disabled:hover:bg-foreground/2 not-in-data-ui-button-group:focus-visible:border-accent in-data-ui-button-group:active:bg-foreground/4",
+        "border border-border bg-background not-disabled:not-aria-disabled:hover:bg-foreground/2 not-in-data-ui-button-group:focus-visible:border-accent in-data-ui-button-group:not-aria-disabled:active:bg-foreground/4",
       ghost:
-        "border-none bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:active:bg-foreground/10",
+        "border-none bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:not-aria-disabled:active:bg-foreground/10",
       destructive:
         "bg-error ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-error/90",
     },
