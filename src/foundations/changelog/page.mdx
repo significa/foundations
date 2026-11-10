@@ -12,6 +12,43 @@ meta:
 
 ## November 2026
 
+### Breaking: `Tabs` pairs tabs and panels by `value`, not position
+
+Tabs used to pair `Tabs.Item` and `Tabs.Panel` by index. With conditional tabs that broke: hiding
+an earlier tab shifted the indices, which remounted the selected panel for a render (losing its
+local state), and a controlled index could point past the end, leaving no tab selected or
+reachable. Every `Tabs.Item` and `Tabs.Panel` now takes a required `value`, and the root takes
+`value` / `defaultValue` / `onValueChange` instead of `selectedIndex` / `defaultIndex` /
+`onChange`. There is no positional fallback. Without `defaultValue` the first tab is selected; if
+the selected tab goes away, an uncontrolled `Tabs` selects the first remaining one (without calling
+`onValueChange`), and a controlled one selects nothing until you update `value`, with the first
+tab still reachable by keyboard. Arrow keys now also take Home and End, `onValueChange` fires only
+when the tab changes, and string children are no longer wrapped in a `<span>`.
+
+```diff tsx
+- const [index, setIndex] = useState(0);
++ const [tab, setTab] = useState("account");
+
+- <Tabs selectedIndex={index} onChange={setIndex}>
++ <Tabs value={tab} onValueChange={setTab}>
+    <Tabs.Items>
+-     <Tabs.Item>Account</Tabs.Item>
+-     {canBill && <Tabs.Item>Billing</Tabs.Item>}
++     <Tabs.Item value="account">Account</Tabs.Item>
++     {canBill && <Tabs.Item value="billing">Billing</Tabs.Item>}
+    </Tabs.Items>
+    <Tabs.Panels>
+-     <Tabs.Panel>…</Tabs.Panel>
+-     {canBill && <Tabs.Panel>…</Tabs.Panel>}
++     <Tabs.Panel value="account">…</Tabs.Panel>
++     {canBill && <Tabs.Panel value="billing">…</Tabs.Panel>}
+    </Tabs.Panels>
+  </Tabs>
+
+- <Tabs defaultIndex={1}>
++ <Tabs defaultValue="billing">
+```
+
 ### Fixed: a disabled `Menu.Item asChild` link still activated
 
 An `<a>` ignores `disabled`, so Enter or a click on a disabled `Menu.Item asChild` ran the link's
