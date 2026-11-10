@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.6",
-    "@significa/ts-standards": "0.2.3",
+    "@significa/ts-standards": "0.2.4",
     "knip": "^6.44.2",
     "typescript": "6.0.3"
   }
