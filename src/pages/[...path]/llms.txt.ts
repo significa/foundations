@@ -1,16 +1,20 @@
 import { site } from "astro:config/server";
-import { type CollectionEntry, getCollection, getEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { APIRoute } from "astro";
 import z from "zod";
 import { getPageVersion } from "@/lib/utils/content";
+import type { MdxTree } from "@/lib/utils/markdown";
 import {
   code,
   createComponentResolver,
   defineComponent,
+  findComponentProps,
   link,
   markdown,
+  parseMdx,
 } from "@/lib/utils/markdown";
 
 type Page = CollectionEntry<"pages">;
@@ -105,18 +109,21 @@ const resolveComponents = createComponentResolver([
  * Every source file a page emits as code (repo-relative): `files`, `<SourceCode>`,
  * `<SetupCssTabs>` and `<Preview>` sources.
  */
-const getEmittedSourceFiles = async (page: Page) => {
-  const body = page.body || "";
-  const sourceCodeFiles = [...body.matchAll(/<SourceCode\s[^>]*file="([^"]+)"/g)].flatMap(
-    (m) => m[1] ?? [],
-  );
-  const setupCssFiles = body.includes("<SetupCssTabs")
-    ? [SETUP_CSS_FILES.prefersScheme, SETUP_CSS_FILES.dataAttr]
-    : [];
+const getEmittedSourceFiles = async (page: Page, tree: MdxTree) => {
+  const stringProp = (props: Record<string, unknown>, key: string) => {
+    const value = props[key];
+    return typeof value === "string" ? [value] : [];
+  };
 
-  const previewSlugs = [...body.matchAll(/<Preview\s[^>]*slug="([^"]+)"/g)].flatMap(
-    (m) => m[1] ?? [],
+  const sourceCodeFiles = findComponentProps(tree, "SourceCode").flatMap((p) =>
+    stringProp(p, "file"),
   );
+  const setupCssFiles =
+    findComponentProps(tree, "SetupCssTabs").length > 0
+      ? [SETUP_CSS_FILES.prefersScheme, SETUP_CSS_FILES.dataAttr]
+      : [];
+
+  const previewSlugs = findComponentProps(tree, "Preview").flatMap((p) => stringProp(p, "slug"));
   const previews = await Promise.all(previewSlugs.map((slug) => getEntry("previews", slug)));
   // Preview paths are stored with a leading slash
   const previewFiles = previews.flatMap((preview) =>
@@ -253,7 +260,10 @@ export const GET = (async ({ params }) => {
   }
 
   const pages = await getCollection("pages");
-  const emittedFiles = await getEmittedSourceFiles(page);
+  // One parse feeds the source-file list, the unresolved-tag check and the resolver
+  const body = page.body || "";
+  const tree = parseMdx(body);
+  const emittedFiles = await getEmittedSourceFiles(page, tree);
   const version = await getPageVersion(page, emittedFiles);
   const sha = version.sha ?? "unknown";
   const versionLine = [sha, version.date?.slice(0, 10)].filter(Boolean).join(" · ");
@@ -270,7 +280,7 @@ export const GET = (async ({ params }) => {
       : "",
     ...(await getDependencySection(page, pages, emittedFiles)),
     files.length > 0 ? markdown("## Source Code", "", files.join("\n\n")) : "",
-    await resolveComponents(page.body || "", page.id),
+    await resolveComponents(tree, body, page.id),
   ];
 
   const content = `${sections.filter(Boolean).join("\n\n")}\n`;

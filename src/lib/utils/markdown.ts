@@ -42,7 +42,34 @@ const defineComponent = <T extends z.ZodType>(definition: {
   return definition as ComponentDefinition<T>;
 };
 
-type AstNode = { type: string; name?: string | null; children?: AstNode[] };
+const parseMdx = (content: string) => unified().use(remarkParse).use(remarkMdx).parse(content);
+
+type MdxTree = ReturnType<typeof parseMdx>;
+
+type JsxAttribute = { type: string; name?: string; value?: string | { value: string } | null };
+
+type AstNode = {
+  type: string;
+  name?: string | null;
+  attributes?: JsxAttribute[];
+  children?: AstNode[];
+};
+
+/** Props of every `<name>` JSX element in the tree, at any depth; code and inline code aren't JSX nodes. */
+const findComponentProps = (root: AstNode, name: string) => {
+  const found: Record<string, unknown>[] = [];
+
+  const visit = (node: AstNode) => {
+    const isJsx = node.type === "mdxJsxFlowElement" || node.type === "mdxJsxTextElement";
+    if (isJsx && node.name === name) found.push(getRawProps(node.attributes ?? []));
+
+    for (const child of node.children ?? []) visit(child);
+  };
+
+  visit(root);
+
+  return found;
+};
 
 /** Capitalised JSX names the resolver won't replace; only top-level flow elements get replaced. */
 const findUnresolvedComponents = (root: AstNode, knownNames: string[]) => {
@@ -63,8 +90,6 @@ const findUnresolvedComponents = (root: AstNode, knownNames: string[]) => {
 
   return [...unresolved];
 };
-
-type JsxAttribute = { type: string; name?: string; value?: string | { value: string } | null };
 
 const getRawProps = (attributes: JsxAttribute[]) => {
   return Object.fromEntries(
@@ -97,9 +122,8 @@ const getRange = (node: PositionedNode) => {
 };
 
 const createComponentResolver = (components: ComponentDefinition<z.ZodType>[]) => {
-  return async (mdxContent: string, label: string) => {
-    const tree = unified().use(remarkParse).use(remarkMdx).parse(mdxContent);
-
+  // Takes the tree from `parseMdx(mdxContent)` so callers can share one parse
+  return async (tree: MdxTree, mdxContent: string, label: string) => {
     const unresolved = findUnresolvedComponents(
       tree,
       components.map((c) => c.name),
@@ -150,4 +174,13 @@ const createComponentResolver = (components: ComponentDefinition<z.ZodType>[]) =
   };
 };
 
-export { code, createComponentResolver, defineComponent, link, markdown };
+export type { MdxTree };
+export {
+  code,
+  createComponentResolver,
+  defineComponent,
+  findComponentProps,
+  link,
+  markdown,
+  parseMdx,
+};
