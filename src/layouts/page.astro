@@ -36,9 +36,7 @@ const items = await getNavigationItems(pages);
     </aside>
 
     <main class="w-full gap-8 px-4 lg:flex">
-      <nav
-        class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-6 pb-8 text-sm lg:block"
-      >
+      <nav class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-6 pb-8 text-sm lg:block">
         <slot name="nav" />
       </nav>
       <div class="mx-auto max-w-3xl flex-1 py-6 md:py-8">

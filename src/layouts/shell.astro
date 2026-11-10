@@ -50,9 +50,7 @@ const description =
       })();
     </script>
 
-    {
-      /* Apply stored DSConfig (scheme/radius/ring/fonts) synchronously to avoid a flash of default tokens before React hydrates. Mirrors apply() in ds-config.tsx. */
-    }
+    {/* Apply stored DSConfig (scheme/radius/ring/fonts) synchronously to avoid a flash of default tokens before React hydrates. Mirrors apply() in ds-config.tsx. */}
     <script
       is:inline
       define:vars={{
@@ -127,7 +125,8 @@ const description =
     <meta property="og:image" content="/opengraph-image.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image:type" content="image/png" />
     <meta name="twitter:image:width" content="2400" />
     <meta name="twitter:image:height" content="1260" />

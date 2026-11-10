@@ -28,29 +28,23 @@ const { class: className, collapsible = false, ...props } = Astro.props;
       "group-data-[collapsible=true]:max-h-64 group-data-[collapsible=true]:overflow-hidden group-data-[collapsible=true]:mask-[linear-gradient(0deg,transparent_0%,black_--spacing(32))]"
     )}
   >
-    {
-      Astro.slots.has("default") && (
-        <pre>
+    {Astro.slots.has("default") && <pre>
           <slot />
-        </pre>
-      )
-    }
+        </pre>}
     <slot name="pre" />
   </div>
   <CopyButton className="absolute top-2 right-2 opacity-80" client:idle target={`#${id} pre`} />
 
-  {
-    collapsible && (
-      <Button
-        data-id="code-block-expand"
-        size="sm"
-        variant="outline"
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
-      >
-        Expand
-      </Button>
-    )
-  }
+  {collapsible && (
+    <Button
+      data-id="code-block-expand"
+      size="sm"
+      variant="outline"
+      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
+    >
+      Expand
+    </Button>
+  )}
 </div>
 
 <style is:global>

@@ -33,31 +33,27 @@ const hasDescription = Object.values(definition).some(({ description }) => descr
       </tr>
     </thead>
     <tbody>
-      {
-        Object.entries(definition).map(([prop, { default: defaultValue, type, description, required }]) => {
-          const types = Array.isArray(type) ? type : [type];
+      {Object.entries(definition).map(([prop, { default: defaultValue, type, description, required }]) => {
+        const types = Array.isArray(type) ? type : [type];
 
-          return (
-            <tr class="border-border m-0 border-b">
-              <td class={cn(tdClassname, "flex items-center gap-1")}>
-                <code class={entryClassname}>
-                  {prop}
-                  {required && <span class="text-red-500"> *</span>}
-                </code>
-              </td>
-              <td class={tdClassname}>
-                {defaultValue !== undefined ? <code class={entryClassname}>{defaultValue}</code> : "-"}
-              </td>
-              <td class={cn(tdClassname, "flex flex-wrap gap-1")}>
-                {types.map((t) => (
-                  <code class={entryClassname}>{t}</code>
-                ))}
-              </td>
-              {hasDescription && <td class={tdClassname}>{description && <>{description}</>}</td>}
-            </tr>
-          );
-        })
-      }
+        return (
+          <tr class="border-border m-0 border-b">
+            <td class={cn(tdClassname, "flex items-center gap-1")}>
+              <code class={entryClassname}>
+                {prop}
+                {required && <span class="text-red-500"> *</span>}
+              </code>
+            </td>
+            <td class={tdClassname}>{defaultValue !== undefined ? <code class={entryClassname}>{defaultValue}</code> : "-"}</td>
+            <td class={cn(tdClassname, "flex flex-wrap gap-1")}>
+              {types.map((t) => (
+                <code class={entryClassname}>{t}</code>
+              ))}
+            </td>
+            {hasDescription && <td class={tdClassname}>{description && <>{description}</>}</td>}
+          </tr>
+        );
+      })}
     </tbody>
   </table>
 </div>
