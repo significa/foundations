@@ -10,12 +10,22 @@ interface SelectProps extends Omit<React.ComponentPropsWithRef<"select">, "size"
   size?: VariantProps<typeof inputStyle>["size"];
 }
 
-// className, style and hidden go on the wrapper, so the chevron moves and hides with the select.
-const Select = ({ className, style, hidden, invalid, variant, size, ...props }: SelectProps) => {
+// Layout props go on the wrapper, so the chevron moves, hides and flips with the select.
+const Select = ({
+  className,
+  style,
+  hidden,
+  dir,
+  invalid,
+  variant,
+  size,
+  ...props
+}: SelectProps) => {
   return (
     <span
       style={style}
       hidden={hidden}
+      dir={dir}
       className={cn(
         "relative flex w-full min-w-0 items-center self-stretch",
         // The chevron is sized in em; in a group it inherits the group's text size.

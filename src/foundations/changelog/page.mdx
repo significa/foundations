@@ -58,7 +58,7 @@ Thread `autoComplete` from the root props through the context to the cell.
 
 The chevron was a black or white SVG in a background image, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now a Phosphor `CaretDownIcon` laid over the select, in `currentColor`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`.
 
-The `<select>` now sits in a `span`, and `className`, `style` and `hidden` go on that `span`, so a width or margin moves the chevron with it and hiding the select hides the chevron too. Classes that styled the `<select>` itself no longer reach it: padding, radius, font size or weight, height, `truncate`, cursor. Grep for `<Select className=` and check each; move those to `variant`/`size`, or onto the `select` in your copy. The select also gets `min-w-0`, so it shrinks below its widest option, and renders no chevron when `multiple`.
+The `<select>` now sits in a `span`, and `className`, `style`, `hidden` and `dir` go on that `span`, so a width or margin moves the chevron with it, hiding the select hides the chevron, and `dir` flips both. Classes that styled the `<select>` itself no longer reach it: padding, radius, font size or weight, height, `truncate`, cursor. Grep for `<Select className=` and check each; move those to `variant`/`size`, or onto the `select` in your copy. The select also gets `min-w-0`, so it shrinks below its widest option, and renders no chevron when `multiple`.
 
 In `input.tsx`, the in-group left padding after an addon also matches an element wrapped one level down, so `Select.Group` keeps its spacing, and the group frame dims for a disabled select as it does for a disabled input.
 
@@ -66,7 +66,7 @@ In `input.tsx`, the in-group left padding after an addon also matches an element
 + import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 
 - const Select = ({ className, invalid, variant, size, ...props }: SelectProps) => (
-+ const Select = ({ className, style, hidden, invalid, variant, size, ...props }: SelectProps) => (
++ const Select = ({ className, style, hidden, dir, invalid, variant, size, ...props }: SelectProps) => (
 - <select
 -   data-invalid={invalid || undefined}
 -   className={cn(useInputStyle({ variant, size }), "appearance-none bg-size-[1em] … pr-10", 'bg-[url(…)]', 'dark:bg-[url(…)]', className)}
@@ -75,6 +75,7 @@ In `input.tsx`, the in-group left padding after an addon also matches an element
 + <span
 +   style={style}
 +   hidden={hidden}
++   dir={dir}
 +   className={cn(
 +     "relative flex w-full min-w-0 items-center self-stretch",
 +     size && (size === "xs" || size === "sm" ? "text-sm" : "text-base"),
