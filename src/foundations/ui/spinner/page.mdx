@@ -81,4 +81,4 @@ Steps through glyphs, terminal-style. The frames sit in a column behind a one-ro
 
 2. **Accessibility**:
    - Pass `label` (e.g. `"Loading results"`) when the spinner is the only sign of the wait: it renders as visually hidden text inside a `role="status"`. Assistive tech may not announce a status when it first appears, so for a wait that must be heard, announce it from a live region that is already on the page. Leave `label` out when the surrounding element already announces it, so screen readers don't hear "loading" twice.
-   - Under `prefers-reduced-motion` the ring stops rotating and pulses slowly instead: it still reads as busy, without the motion.
+   - Under `prefers-reduced-motion` the ring stops rotating and pulses slowly instead: it still reads as busy, without the motion. The pulse animates `opacity`, so a spinner you hide with `opacity-0` also needs `motion-reduce:invisible` (or unmount it instead).

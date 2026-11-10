@@ -38,7 +38,10 @@ export default function NumberInputAsyncExample() {
       <Spinner
         size="sm"
         label={syncing ? "Saving quantity" : undefined}
-        className={cn("transition-opacity", syncing ? "opacity-100" : "opacity-0")}
+        className={cn(
+          "transition-opacity",
+          syncing ? "opacity-100" : "opacity-0 motion-reduce:invisible",
+        )}
       />
     </div>
   );
