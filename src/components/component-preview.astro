@@ -27,7 +27,7 @@ const Component = (await module()).default;
       ? "flex h-full w-full flex-col items-center justify-center overflow-auto p-4"
       : layout === "padded"
         ? "h-full w-full overflow-auto p-4"
-        : "contents"
+        : "contents",
   )}
 >
   <ComponentPreviewHydrator file={file} client:visible>

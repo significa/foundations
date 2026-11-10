@@ -24,10 +24,10 @@ const items = await getNavigationItems(pages);
       data-pagefind-ignore="all"
       transition:persist
       class={cn(
-        "bg-background shrink-0",
+        "shrink-0 bg-background",
         // in mobile we use fixed positioning and control it in the Header component
         "fixed top-12 mt-px hidden h-[calc(100dvh-var(--spacing)*12)] w-full data-[mobile-menu-open=true]:block max-xl:z-200",
-        "md:top-14 md:h-[calc(100dvh-var(--spacing)*14)] xl:sticky xl:block xl:max-w-64 xl:border-r"
+        "md:top-14 md:h-[calc(100dvh-var(--spacing)*14)] xl:sticky xl:block xl:max-w-64 xl:border-r",
       )}
     >
       <div class="h-full overflow-y-auto overscroll-contain pt-2 pb-12 xl:pt-4">
@@ -36,7 +36,9 @@ const items = await getNavigationItems(pages);
     </aside>
 
     <main class="w-full gap-8 px-4 lg:flex">
-      <nav class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-6 pb-8 text-sm lg:block">
+      <nav
+        class="sticky top-14 order-last hidden h-[calc(100dvh-var(--spacing)*14)] w-50 shrink-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-6 pb-8 text-sm lg:block"
+      >
         <slot name="nav" />
       </nav>
       <div class="mx-auto max-w-3xl flex-1 py-6 md:py-8">

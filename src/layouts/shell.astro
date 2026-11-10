@@ -1,15 +1,15 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import Posthog from "#/components/posthog.astro";
 import { COLOR_TOKENS, DEFAULT_SCHEME_ID, SCHEMES } from "#/components/ds-config/schemes.ts";
 import {
+  STORAGE_KEY as DS_CONFIG_STORAGE_KEY,
   FONT_VARS,
   RADIUS_DEFAULT,
   RADIUS_STEP_REM,
   RING_DEFAULT,
-  STORAGE_KEY as DS_CONFIG_STORAGE_KEY,
 } from "#/components/ds-config/storage.ts";
 import { FONT_FALLBACKS } from "#/components/ds-config/use-fonts-catalog.ts";
+import Posthog from "#/components/posthog.astro";
 import { Toaster } from "#/foundations/ui/toaster/toaster.tsx";
 import { THEME_STORAGE_KEY } from "#/lib/theme.ts";
 
