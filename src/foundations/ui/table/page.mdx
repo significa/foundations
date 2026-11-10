@@ -33,7 +33,7 @@ folder: UI
 </Table.Container>
 ```
 
-The compound parts are purely structural — they map one-to-one onto the underlying HTML table elements (`<table>`, `<thead>`, `<tbody>`, `<tfoot>`, `<tr>`, `<th>`, `<td>`, `<caption>`). State for sorting, selection, filtering, and pagination lives with the consumer. For dashboards with non-trivial data, compose with [TanStack Table](https://tanstack.com/table/v8) — see the recipe below.
+The compound parts are purely structural — they map one-to-one onto the underlying HTML table elements (`<table>`, `<thead>`, `<tbody>`, `<tfoot>`, `<tr>`, `<th>`, `<td>`, `<caption>`). State for sorting, selection, filtering, and pagination lives with the consumer. For dashboards with non-trivial data, compose with [TanStack Table](https://tanstack.com/table/v9) — see the recipe below.
 
 `Table` renders the bare `<table>` element. Wrap it in `Table.Container` when you want a bordered card, horizontal overflow on narrow viewports, or a sticky header — the container is the scroll context, so it owns the border, the rounding, and any height constraint. A plain `<Table>` with no container is perfectly valid for a table that should flow inline with the page.
 
@@ -174,19 +174,20 @@ Wrap the table in `Table.Container` with a `max-h-*` and set `sticky` on `Table.
 
 ### Data table (with TanStack Table)
 
-For sorting, filtering, selection, and pagination together, compose `Table` with [`@tanstack/react-table`](https://tanstack.com/table/v8). This is **not** a hard dependency of the primitive — you only need it when you want the engine.
+For sorting, filtering, selection, and pagination together, compose `Table` with [`@tanstack/react-table`](https://tanstack.com/table/v9). This is **not** a hard dependency of the primitive — you only need it when you want the engine.
 
 ```bash
-pnpm add @tanstack/react-table
+pnpm add @tanstack/react-table@9
 ```
 
 The recipe:
 
-1. Define `ColumnDef<T>[]` — `accessorKey`, `header`, `cell`, optional `meta` for cell alignment.
-2. Call `useReactTable` with the row models you need (`getCoreRowModel`, `getSortedRowModel`, `getPaginationRowModel`).
-3. Map `table.getHeaderGroups()` into `Table.Head` / `Table.SortableHead` based on `column.getCanSort()`.
-4. Map `table.getRowModel().rows` into `Table.Row` / `Table.Cell`. Use `flexRender(cell.column.columnDef.cell, cell.getContext())` for the cell body.
-5. Wire `Pagination` to `table.getPageCount()`, `table.previousPage()`, and `table.nextPage()`.
+1. Register only the features you use with `tableFeatures` (`rowSortingFeature`, `rowSelectionFeature`, `rowPaginationFeature`, `columnSizingFeature`), plus their row models (`createSortedRowModel`, `createPaginatedRowModel`), the sort functions `"auto"` picks from, and a typed `columnMeta` for cell alignment.
+2. Define `ColumnDef<typeof features, T>[]` — `accessorKey`, `header`, `cell`, optional `meta.align`.
+3. Call `useTable({ features, data, columns })`. Read state from `table.state`.
+4. Map `table.getHeaderGroups()` into `Table.Head` / `Table.SortableHead` based on `column.getCanSort()`.
+5. Map `table.getRowModel().rows` into `Table.Row` / `Table.Cell`. Use `flexRender(cell.column.columnDef.cell, cell.getContext())` for the cell body.
+6. Wire `Pagination` to `table.getPageCount()`, `table.previousPage()`, and `table.nextPage()`.
 
 <Preview slug="table-data-table" />
 

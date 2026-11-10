@@ -12,6 +12,67 @@ meta:
 
 ## November 2026
 
+### Changed: data table recipe targets `@tanstack/react-table` 9
+
+The [data table recipe](/ui/table#data-table-with-tanstack-table) now uses TanStack Table 9. If you
+copied it, either stay on v8 or apply the changes below together with the upgrade. Fix to carry
+over: v9's `getIsSomePageRowsSelected()` stays `true` when every row is selected, so the select-all
+checkbox showed as indeterminate instead of checked; gate it on `!getIsAllPageRowsSelected()`.
+
+`useReactTable` becomes `useTable`, and you register only the features you use with
+`tableFeatures`. Row models move into it, and `"auto"` sorting only resolves sort functions you
+register there. Sizing, filtering, and visibility APIs now need their own features, so swap
+`getFilteredRowModel()` and `getVisibleCells()` for core APIs unless you register those. See the
+[migration guide](https://tanstack.com/table/v9/docs/framework/react/guide/migrating).
+
+```diff tsx
+- import { getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
++ import { columnSizingFeature, createPaginatedRowModel, createSortedRowModel, metaHelper, rowPaginationFeature,
++   rowSelectionFeature, rowSortingFeature, sortFn_alphanumeric, sortFn_text, tableFeatures, useTable } from "@tanstack/react-table";
+
++ const features = tableFeatures({
++   rowSortingFeature,
++   rowSelectionFeature,
++   rowPaginationFeature,
++   columnSizingFeature,
++   sortedRowModel: createSortedRowModel(),
++   paginatedRowModel: createPaginatedRowModel(),
++   sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
++   columnMeta: metaHelper<{ align?: "start" | "center" | "end" }>(),
++ });
+
+- const columns = useMemo<ColumnDef<Order>[]>(
++ const columns = useMemo<ColumnDef<typeof features, Order>[]>(
+
+  <Checkbox
+    checked={table.getIsAllPageRowsSelected()}
+-   indeterminate={table.getIsSomePageRowsSelected()}
++   indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
+
+- const table = useReactTable({
++ const table = useTable({
++   features,
+    data: orders,
+-   getCoreRowModel: getCoreRowModel(),
+-   getSortedRowModel: getSortedRowModel(),
+-   getPaginationRowModel: getPaginationRowModel(),
+-   initialState: { pagination: { pageSize: 5 } },
++   initialState: { pagination: { pageIndex: 0, pageSize: 5 } },
+  });
+
+- const pageIndex = table.getState().pagination.pageIndex;
++ const pageIndex = table.state.pagination.pageIndex;
+
+- const align = (header.column.columnDef.meta as { align?: "start" | "center" | "end" } | undefined)?.align;
++ const align = header.column.columnDef.meta?.align;
+
+- row.getVisibleCells().map((cell) => …)
++ row.getAllCells().map((cell) => …)
+
+- {table.getFilteredRowModel().rows.length}
++ {table.getCoreRowModel().rows.length}
+```
+
 ### Changed: `--ease-out-heavy` and `--ease-in`, drawer and toast timing
 
 Two new easing tokens. `ease-out` over a ~450px drawer slide jumps ~100px in the first frame, then
