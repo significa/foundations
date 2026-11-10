@@ -38,7 +38,20 @@ folder: UI
     isLoading: {
       type: "boolean",
       default: "false",
-      description: "Replaces the button content with a spinner",
+      description:
+        "Replaces the button content with a spinner and marks the button busy (`aria-busy`, `aria-disabled`). It stays focusable, and clicks, Enter, Space and form submits are ignored.",
+    },
+    disabled: {
+      type: "boolean",
+      default: "false",
+      description:
+        "Disables the button. Under `asChild` the child gets `aria-disabled` instead, and its clicks (and a link's navigation) are blocked.",
+    },
+    type: {
+      type: ['"button"', '"submit"', '"reset"'],
+      default: '"button"',
+      description:
+        "Under `asChild` an explicit type passes through to the child; a `<button>` child without one defaults to `\"button\"`.",
     },
     asChild: {
       type: "boolean",
@@ -76,6 +89,8 @@ Accepts all standard `div` props. No custom props required. Renders buttons side
 <Preview slug="button-variants" />
 
 ### Loading
+
+A loading button is busy, not disabled: it keeps focus and announces the busy state, while its clicks and form submits are ignored. There's no need to also pass `disabled`.
 
 <Preview slug="button-loading" />
 

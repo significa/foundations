@@ -1,5 +1,5 @@
 import type { VariantProps } from "cva";
-import { Children, Fragment, isValidElement, useEffect } from "react";
+import { Children, Fragment } from "react";
 import { Slot, Slottable } from "#/foundations/components/slot/slot.tsx";
 import { Divider } from "#/foundations/ui/divider/divider.tsx";
 import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
@@ -8,7 +8,9 @@ import { cn, cva } from "#/lib/utils/classnames.ts";
 const buttonStyle = cva({
   base: [
     "relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 font-medium whitespace-nowrap text-(--button-text-color) shadow-xs [--button-text-color:var(--color-foreground)]",
-    "transition enabled:cursor-pointer disabled:opacity-40",
+    // `not-disabled:`, not `enabled:`, which never matches an `asChild` <a>. A disabled link has
+    // only aria-disabled, so it dims too; a loading button (aria-busy) doesn't.
+    "transition not-disabled:not-aria-disabled:cursor-pointer disabled:opacity-40 aria-disabled:not-aria-busy:opacity-40",
     "active:not-in-data-ui-button-group:scale-98",
     "ring-ring focus-visible:ring-(length:--ring-width) focus-visible:outline-none",
     // inside button group — horizontal merge (default; ToggleGroup may set
@@ -25,18 +27,18 @@ const buttonStyle = cva({
     // pressed state — set via data-pressed by Toggle / ToggleGroup.Item.
     // Subtle filled tint that layers over `ghost` and `outline` without flipping
     // the text color; the higher selector specificity beats the variant background.
-    "data-pressed:bg-foreground/10 data-pressed:hover:bg-foreground/15",
+    "data-pressed:bg-foreground/10 data-pressed:not-disabled:not-aria-disabled:hover:bg-foreground/15",
   ],
   variants: {
     variant: {
       primary:
-        "bg-accent [--button-text-color:var(--color-accent-foreground)] hover:bg-accent/90 in-data-ui-button-group:active:bg-accent/80",
+        "bg-accent [--button-text-color:var(--color-accent-foreground)] not-disabled:not-aria-disabled:hover:bg-accent/90 in-data-ui-button-group:active:bg-accent/80",
       outline:
-        "border border-border bg-background hover:bg-foreground/2 not-in-data-ui-button-group:focus-visible:border-accent in-data-ui-button-group:active:bg-foreground/4",
+        "border border-border bg-background not-disabled:not-aria-disabled:hover:bg-foreground/2 not-in-data-ui-button-group:focus-visible:border-accent in-data-ui-button-group:active:bg-foreground/4",
       ghost:
-        "border-none bg-transparent shadow-none ring-0 hover:bg-foreground/5 in-data-ui-button-group:active:bg-foreground/10",
+        "border-none bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:active:bg-foreground/10",
       destructive:
-        "bg-error ring-error/50 [--button-text-color:var(--color-white)] hover:bg-error/90",
+        "bg-error ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-error/90",
     },
     size: {
       xs: "rounded-lg px-2 text-sm [--button-height:--spacing(6)]",
@@ -70,11 +72,23 @@ const Button = ({
   isLoading,
   size = "md",
   square,
-  type = "button",
+  type,
+  disabled,
+  onClick,
   ref,
   ...props
 }: ButtonProps) => {
   const Comp = asChild ? Slot : "button";
+
+  // Loading isn't `disabled`, which drops focus to <body>. Mouse, Enter, Space and implicit submit
+  // all arrive as `click`; preventDefault also stops the asChild child's onClick and a link's href.
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (isLoading || disabled) {
+      event.preventDefault();
+      return;
+    }
+    onClick?.(event);
+  };
 
   return (
     <Comp
@@ -88,8 +102,14 @@ const Button = ({
         isLoading && "text-transparent transition-none",
       )}
       ref={ref}
-      type={asChild ? undefined : type}
+      // Under `asChild` an explicit type passes through; Slot defaults a <button> child without one.
+      type={asChild ? type : (type ?? "button")}
+      // A link has no `disabled`; it would render as `disabled=""` on the <a>.
+      disabled={asChild ? undefined : disabled}
+      aria-disabled={isLoading || (asChild && disabled) || undefined}
+      aria-busy={isLoading || undefined}
       {...props}
+      onClick={handleClick}
     >
       <Slottable asChild={asChild} child={children}>
         {(child) => (
@@ -99,7 +119,7 @@ const Button = ({
               <span
                 data-button-spinner
                 className={cn(
-                  "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+                  "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2",
                   "text-(--button-text-color)",
                 )}
               >
@@ -124,15 +144,6 @@ const IconButton = ({ ref, ...props }: IconButtonProps) => {
 type ButtonGroupProps = React.ComponentPropsWithRef<"div">;
 
 const ButtonGroup = ({ className, children, ...props }: ButtonGroupProps) => {
-  // Validate children to ensure they are Button or IconButton components
-  useEffect(() => {
-    const childArray = Children.toArray(children);
-    childArray.forEach((child, _index) => {
-      if (!isValidElement(child) || (child.type !== Button && child.type !== IconButton)) {
-      }
-    });
-  }, [children]);
-
   return (
     <div
       className={cn("flex items-center *:focus-visible:z-2", className)}
