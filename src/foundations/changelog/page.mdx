@@ -10,6 +10,63 @@ meta:
   order: 99
 ---
 
+## November 2026
+
+### Changed: `--ease-out-large` and `--ease-in`, drawer and toast timing
+
+Two new easing tokens. `ease-out` over a ~450px drawer slide jumps ~100px in the first frame, then
+crawls; `ease-out-large`, a gentle spring-shaped curve, reads as travel. `ease-in` is for things
+leaving for good: they accelerate away, so keep it short. This replaces the September advice that
+exits never ease in; exits that can come back (popover, menu, tooltip, dialog) stay on `ease-out`.
+`ease-in` overrides Tailwind's default, so existing `ease-in` classes pick up the new curve. Add to
+your `@theme`:
+
+```diff css
++ /* critically damped spring (stiffness 580, damping 60, mass 1.35) from rest; drawers, sheets, side panels, both ways */
++ --ease-out-large: linear(0, 0.006 0.9%, 0.021 1.9%, 0.074 3.9%, 0.145 6%, 0.346 11.2%, 0.448 14%, 0.544 16.9%, 0.626 19.9%, 0.704 23.3%, 0.766 26.6%, 0.819 30.2%, 0.864 34.1%, 0.902 38.5%, 0.931 43.4%, 0.955 49%, 0.972 55.5%, 0.992 71.5%, 1);
++ /* leaving for good (dismissed toasts, deleted items); starts slowly by design, keep it short */
++ --ease-in: cubic-bezier(0.3, 0, 0.8, 0.15);
+```
+
+The full set: `ease-out` for small surfaces near their trigger, `ease-in-out` for moving while
+staying on screen, `ease-spring` for sliding indicators and the toast enter, `ease-out-large` for
+large surfaces crossing the screen, `ease-in` for permanent exits, and `ease` for hover and colour.
+
+Then update your copies:
+
+| Component | Change                                                                                     |
+| --------- | ------------------------------------------------------------------------------------------ |
+| Drawer    | Panel and backdrop `ease-out-large`, 450ms in, 370ms out (was `ease-out` 300/200)          |
+| Drawer    | Fix: closed panel now clears the detach margin, so no sliver shows at the start or end     |
+| Toaster   | Enter 400ms `ease-spring` (was 500ms); exit 200ms `ease-in` (was 500ms `ease-spring`)      |
+| Tooltip   | 150ms in (was 300ms); now fades out over 100ms instead of disappearing                     |
+
+```diff tsx
+// drawer.tsx
+- "transition-[translate,margin,opacity] ease-out",
+- "backdrop:transition-opacity backdrop:ease-out",
+- "duration-300 not-data-[status=open]:duration-200 backdrop:duration-300 not-data-[status=open]:backdrop:duration-200",
++ "transition-[translate,margin,opacity] ease-out-large",
++ "backdrop:transition-opacity backdrop:ease-out-large",
++ "duration-450 not-data-[status=open]:duration-370 backdrop:duration-450 not-data-[status=open]:backdrop:duration-370",
+// same per side: -translate-x-full and translate-y-full too
+- not-data-[status=open]:translate-x-full
++ not-data-[status=open]:translate-x-[calc(100%+var(--drawer-detach))]
+
+// toaster.tsx — row and card exit together, the row's transition end unmounts the toast
+- "transition-[grid-template-rows] duration-500 ease-spring",
++ "transition-[grid-template-rows] duration-400 ease-spring data-[status=closed]:duration-200 data-[status=closed]:ease-in",
+- "transition-[opacity,scale,translate,background-color,border-color,color] duration-500 ease-spring",
++ "transition-[opacity,scale,translate,background-color,border-color,color] duration-400 ease-spring",
++ "group-data-[status=closed]/toast:duration-200 group-data-[status=closed]/toast:ease-in",
+
+// tooltip.tsx
+- useTransitionStatus(context, { duration: 0 });
++ useTransitionStatus(context, { duration: isInstantPhase ? 0 : { close: 100 } });
+- "transition duration-300 ease-out motion-reduce:transition-none",
++ "transition duration-150 ease-out data-[state=closed]:duration-100 motion-reduce:transition-none",
+```
+
 ## September 2026
 
 ### Added: async toasts (`toast.promise`, `toast.update`, `toast.dismiss`)
