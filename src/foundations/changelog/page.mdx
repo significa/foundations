@@ -12,6 +12,117 @@ meta:
 
 ## November 2026
 
+### Fixed: a disabled `Menu.Item asChild` link still activated
+
+An `<a>` ignores `disabled`, so Enter or a click on a disabled `Menu.Item asChild` ran `onSelect`
+and followed the link. Enter in `Menu.SearchInput` could also select a disabled item, since typing
+highlights the first result. Disabled items now block the click, set `aria-disabled` (which list
+navigation also skips), and the search input won't select them. `Menu.Heading` also lined up with
+nothing; it now pads to the items' text edge.
+
+```diff tsx
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
++   if (disabled) {
++     e.preventDefault();
++     return;
++   }
+    onClick?.(e);
+
+    disabled={disabled || undefined}
++   aria-disabled={disabled || undefined}
+    data-disabled={disabled || undefined}
+
+  // Menu.SearchInput
+- if (id && items[id]) {
++ const isDisabled = element?.getAttribute("aria-disabled") === "true";
++ if (id && items[id] && !isDisabled) {
+
+  // Menu.Heading
+- "px-3.5 pt-3 pb-1 …"
++ "px-[calc(var(--inset)+--spacing(3))] pt-3 pb-1 …"
+```
+
+### Fixed: `Tabs` kept unmounted tabs registered
+
+`Tabs.Item` dropped the cleanup `registerTab` returns, so tabs registered twice under StrictMode
+and stayed registered after unmounting: arrow keys could land on a tab that no longer exists.
+Unselected tabs also omitted `aria-selected` instead of setting it to `false`.
+
+```diff tsx
+  useLayoutEffect(() => {
+-   registerTab(id);
++   return registerTab(id);
+  }, [id, registerTab]);
+
+- aria-selected={isSelected || undefined}
++ aria-selected={isSelected}
+```
+
+### Fixed: `Badge` rendered `div`s
+
+A `div` is invalid inside a `<p>` or `<button>`, which caused hydration errors. `Badge`,
+`Badge.Icon` and `Badge.Status` render `span`s now (refs and props are typed for `span`). The pill
+also stops wrapping its text out of its fixed height.
+
+```diff tsx
+- base: "inline-flex items-center gap-1 rounded-full leading-none font-semibold …",
++ base: "inline-flex shrink-0 items-center gap-1 rounded-full leading-none font-semibold whitespace-nowrap …",
+
+- interface BadgeProps extends React.ComponentPropsWithRef<"div"> {
++ interface BadgeProps extends React.ComponentPropsWithRef<"span"> {
+
+- const Comp = asChild ? Slot : "div";
++ const Comp = asChild ? Slot : "span";
+```
+
+### Fixed: `Avatar` showed a broken image, read its content twice, and overflowed initials
+
+A failed `Avatar.Image` stayed mounted, and Chrome drew its broken-image icon over the initials; it
+now unmounts on error (including an error before hydration), so the fallback shows. Screen readers
+got both the image's `alt` and the initials, and nothing named an initials-only avatar: a new `label`
+prop names the avatar (`role="img"`), and without it the avatar is `aria-hidden`. `Avatar.Image` no
+longer takes `alt`; move it to `label`, or drop it when the name is already text next to the avatar.
+Initials take the first and last word only ("Ana Maria da Silva" was "AMdS", now "AS").
+
+```diff tsx
+- <Avatar>
+-   <Avatar.Image src={user.photo} alt={user.name} />
++ <Avatar label={user.name}>
++   <Avatar.Image src={user.photo} />
+    <Avatar.Fallback>{user.name}</Avatar.Fallback>
+  </Avatar>
+
+- const AvatarImage = ({ className, src, ...props }: AvatarImageProps) => {
++ const AvatarImage = ({ ref, className, src, onError, ...props }: AvatarImageProps) => {
++   const [failedSrc, setFailedSrc] = useState<string>();
++   // …a ref that catches a failure before hydration (see source)
++   if (failedSrc === src) return null;
+
+- return name.split(" ").map((n) => n[0]).join("");
++ const words = name?.trim().split(/\s+/).filter(Boolean) ?? [];
++ // first word's initial + last word's initial
+```
+
+### Fixed: `Slider` range didn't meet the thumb
+
+The range filled `value × 100%` of the track, but the native thumb's centre travels the width
+minus its own size, so between the ends the range stopped short of or ran past the thumb. The
+range now ends at the thumb's centre. `Slider.Thumb` also wrote `--progress-track-factor` onto the
+root by hand on change, which the root's render already sets, and which showed the rejected value
+when a controlled parent clamped it; that code is gone (and with it the `composeRefs` dependency).
+
+```diff tsx
+  // Slider.Range
+- `calc(var(--progress-track-factor) * 100%)`
++ "calc(var(--thumb-size) / 4 + var(--progress-track-factor) * (100% - var(--thumb-size) / 2))"
+
+  // Slider.Thumb
+- const sliderElement = e.target.closest('[style*="--progress-track-factor"]') as HTMLElement;
+- if (sliderElement) {
+-   sliderElement.style.setProperty("--progress-track-factor", …);
+- }
+```
+
 ### Changed: data table recipe targets `@tanstack/react-table` 9
 
 The [data table recipe](/ui/table#data-table-with-tanstack-table) now uses TanStack Table 9. If you

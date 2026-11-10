@@ -4,7 +4,7 @@ import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const badgeStyle = cva({
-  base: "inline-flex items-center gap-1 rounded-full leading-none font-semibold ring-1 ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",
+  base: "inline-flex shrink-0 items-center gap-1 rounded-full leading-none font-semibold whitespace-nowrap ring-1 ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",
   variants: {
     variant: {
       neutral: "bg-background text-foreground/80 ring-foreground/10",
@@ -24,7 +24,7 @@ const badgeStyle = cva({
   },
 });
 
-interface BadgeProps extends React.ComponentPropsWithRef<"div"> {
+interface BadgeProps extends React.ComponentPropsWithRef<"span"> {
   variant?: VariantProps<typeof badgeStyle>["variant"];
   size?: VariantProps<typeof badgeStyle>["size"];
   asChild?: boolean;
@@ -39,7 +39,7 @@ const Badge = ({
   asChild,
   ...rest
 }: BadgeProps) => {
-  const Comp = asChild ? Slot : "div";
+  const Comp = asChild ? Slot : "span";
 
   return (
     <Comp ref={ref} className={cn(badgeStyle({ variant, size }), className)} {...rest}>
@@ -48,20 +48,20 @@ const Badge = ({
   );
 };
 
-const BadgeIcon = ({ children, className, ...rest }: React.ComponentPropsWithRef<"div">) => {
+const BadgeIcon = ({ children, className, ...rest }: React.ComponentPropsWithRef<"span">) => {
   return (
-    <div data-badge-icon className={cn("flex items-center justify-center", className)} {...rest}>
+    <span data-badge-icon className={cn("flex items-center justify-center", className)} {...rest}>
       {children}
-    </div>
+    </span>
   );
 };
 
 const BadgeStatus = ({
   className,
   ...rest
-}: Omit<React.ComponentPropsWithRef<"div">, "children">) => {
+}: Omit<React.ComponentPropsWithRef<"span">, "children">) => {
   return (
-    <div
+    <span
       className={cn("mx-0.5 size-1.5 rounded-full bg-current first:ml-0 last:mr-0", className)}
       {...rest}
     />

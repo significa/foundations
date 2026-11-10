@@ -1,7 +1,6 @@
-import { createContext, use, useCallback, useMemo, useRef, useState } from "react";
+import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import { Slot } from "#/foundations/components/slot/slot.tsx";
-import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cn, cva } from "#/lib/utils/classnames.ts";
 
 interface SliderContextValue {
@@ -185,9 +184,11 @@ const SliderRange = ({ className, asChild, ref, style, ...props }: SliderRangePr
   const { orientation } = useSliderContext();
   const Comp = asChild ? Slot : "div";
 
+  // Ends at the thumb's centre. The thumb travels the root minus its own size; 100% here is the
+  // track, inset a quarter thumb from each end, so that travel is 100% - thumb/2 from thumb/4.
   const rangeStyle = {
     [orientation === "horizontal" ? "width" : "height"]:
-      `calc(var(--progress-track-factor) * 100%)`,
+      "calc(var(--thumb-size) / 4 + var(--progress-track-factor) * (100% - var(--thumb-size) / 2))",
     ...style,
   };
 
@@ -261,30 +262,14 @@ type SliderThumbProps = Omit<React.ComponentPropsWithRef<"input">, "value" | "ty
 const SliderThumb = ({ className, onChange, ref, ...props }: SliderThumbProps) => {
   const { value, setValue, min, max, step, orientation, disabled } = useSliderContext();
 
-  const internalRef = useRef<HTMLInputElement>(null);
-
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = Number(e.target.value);
-      setValue(newValue);
-
-      // Update CSS variable for range visualization
-      const sliderElement = e.target.closest('[style*="--progress-track-factor"]') as HTMLElement;
-      if (sliderElement) {
-        sliderElement.style.setProperty(
-          "--progress-track-factor",
-          `${max === min ? 0 : (newValue - min) / (max - min)}`,
-        );
-      }
-
-      onChange?.(e);
-    },
-    [setValue, min, max, onChange],
-  );
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(Number(e.target.value));
+    onChange?.(e);
+  };
 
   return (
     <input
-      ref={composeRefs(ref, internalRef)}
+      ref={ref}
       type="range"
       min={min}
       max={max}

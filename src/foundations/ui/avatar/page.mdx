@@ -6,6 +6,10 @@ preview: avatar
 files:
   - src/foundations/ui/avatar/avatar.tsx
 
+dependencies:
+  - name: composeRefs
+    href: /utils/compose-refs
+
 folder: UI
 ---
 
@@ -22,10 +26,15 @@ folder: UI
 
 ### Avatar
 
-Extends the `div` element.
+Extends the `div` element. Pass `label` to name the avatar (`role="img"`). Without it the avatar is
+`aria-hidden`, which suits the common case where the name is already text next to it. The image
+and the initials are always hidden from assistive tech.
 
 <PropsTable
   definition={{
+    label: {
+      type: "string",
+    },
     size: {
       default: '"md"',
       type: ['"2xs"', '"xs"', '"sm"', '"md"', '"lg"', '"xl"', '"2xl"', '"3xl"'],
@@ -39,7 +48,8 @@ Extends the `div` element.
 
 ### Avatar.Image
 
-Extends the `img` element.
+Extends the `img` element, without `alt` (the avatar's `label` names it). Unmounts if the image
+fails to load, so the fallback shows.
 
 <PropsTable
   definition={{

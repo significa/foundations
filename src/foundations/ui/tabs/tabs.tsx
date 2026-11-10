@@ -232,7 +232,7 @@ const TabsItem = ({
   const Comp = asChild ? Slot : "button";
 
   useLayoutEffect(() => {
-    registerTab(id);
+    return registerTab(id);
   }, [id, registerTab]);
 
   // Match by id once registered; fall back to index for SSR / initial render.
@@ -277,7 +277,7 @@ const TabsItem = ({
       )}
       role="tab"
       aria-controls={getPanelId(id)}
-      aria-selected={isSelected || undefined}
+      aria-selected={isSelected}
       data-selected={isSelected || undefined}
       tabIndex={isSelected ? 0 : -1}
       style={{ anchorName: getAnchorName(tabsId, index), ...style }}
