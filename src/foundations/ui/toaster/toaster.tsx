@@ -21,8 +21,11 @@ type Toast = {
   variant?: ToastVariant;
 };
 
+// "user": closed by the user, exits fast; "auto": timed out or dismissed in code, eases away
+type ToastLeaving = "user" | "auto";
+
 // `leaving` is internal, so it stays out of the `toast()` input
-type ToastEntry = Toast & { leaving?: boolean };
+type ToastEntry = Toast & { leaving?: ToastLeaving };
 
 // pass an `id` to replace the toast showing under it, in place, instead of stacking a new one
 type ToastInput = Omit<Toast, "id"> & { id?: string };
@@ -32,7 +35,7 @@ type ToastStore = {
   subscribe: (listener: () => void) => () => void;
   add: (config: ToastInput) => string;
   update: (id: string, config: Partial<Omit<Toast, "id">>) => void;
-  remove: (id: string) => void;
+  remove: (id: string, reason?: ToastLeaving) => void;
   unmount: (id: string) => void;
   pauseAll: () => void;
   resumeAll: () => void;
@@ -117,8 +120,11 @@ const createToastStore = (): ToastStore => {
       startTimer(id, getDuration(next));
     },
     // kept in the list until its exit transition ends, then `unmount` drops it
-    remove(id) {
-      toasts = toasts.map((toast) => (toast.id === id ? { ...toast, leaving: true } : toast));
+    remove(id, reason = "auto") {
+      // already leaving keeps its first reason: a running transition doesn't pick up new timing
+      toasts = toasts.map((toast) =>
+        toast.id === id && !toast.leaving ? { ...toast, leaving: reason } : toast,
+      );
       notifyListeners();
       clearTimer(id);
     },
@@ -279,6 +285,7 @@ const ToasterRow = ({ toast, zIndex }: { toast: ToastEntry; zIndex: number }) =>
     <div
       ref={ref}
       data-status={status}
+      data-dismiss={toast.leaving}
       onMouseEnter={() => {
         hoveredRef.current = true;
         toastStore.pauseAll();
@@ -293,10 +300,10 @@ const ToasterRow = ({ toast, zIndex }: { toast: ToastEntry; zIndex: number }) =>
         // minmax(0, …) so the row can collapse past the toast's padding and margins
         "grid-rows-[minmax(0,1fr)] data-[status=closed]:grid-rows-[minmax(0,0fr)] starting:grid-rows-[minmax(0,0fr)]",
         // same timing as the card: this row's transition end is what unmounts it
-        "transition-[grid-template-rows] duration-400 ease-spring data-[status=closed]:duration-200 data-[status=closed]:ease-in",
+        "transition-[grid-template-rows] duration-400 ease-spring data-[dismiss=auto]:duration-200 data-[dismiss=auto]:ease-in data-[dismiss=user]:duration-150 data-[dismiss=user]:ease-out",
       )}
     >
-      <ToasterItem toast={toast} onDismiss={() => toastStore.remove(toast.id)} />
+      <ToasterItem toast={toast} onDismiss={() => toastStore.remove(toast.id, "user")} />
     </div>
   );
 };
@@ -333,7 +340,7 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
         // `box-content`: the measured size is the content's, the border sits outside it
         "relative box-content max-w-88 self-start overflow-hidden rounded-lg border shadow-lg",
         "transition-[opacity,scale,translate,background-color,border-color,color] duration-400 ease-spring",
-        "group-data-[status=closed]/toast:duration-200 group-data-[status=closed]/toast:ease-in",
+        "group-data-[dismiss=auto]/toast:duration-200 group-data-[dismiss=auto]/toast:ease-in group-data-[dismiss=user]/toast:duration-150 group-data-[dismiss=user]/toast:ease-out",
         "motion-safe:transition-[opacity,scale,translate,background-color,border-color,color,width,height]",
         "group-data-[status=closed]/toast:opacity-0 starting:opacity-0",
         "motion-safe:group-data-[status=closed]/toast:-translate-y-full motion-safe:group-data-[status=closed]/toast:scale-95 motion-safe:starting:scale-95",
