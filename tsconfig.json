@@ -1,10 +1,6 @@
 {
   "extends": "@significa/ts-standards/tsconfig/astro",
   "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"],
-      "~/*": ["./*"]
-    },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   }
