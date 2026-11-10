@@ -1,6 +1,6 @@
 ---
 title: Spinner
-description: A component to display a loading state with several visual variants.
+description: An indeterminate loading indicator. One style ships; dots, bars and frames are recipes to swap in.
 preview: spinner
 files:
   - src/foundations/ui/spinner/spinner.tsx
@@ -10,49 +10,21 @@ folder: UI
 
 ## API Reference
 
-Extends the `div` element.
+Extends the `span` element.
 
 <PropsTable
   definition={{
-    variant: {
-      type: ['"ring"', '"dots"', '"bars"', '"frames"'],
-      default: '"ring"',
-      description: "The visual style of the loader.",
-    },
     size: {
       type: ['"xs"', '"sm"', '"md"', '"lg"'],
       default: '"md"',
     },
-    frames: {
-      type: "readonly string[]",
-      description: "Only for variant=\"frames\". The characters to cycle through. Defaults to SPINNER_FRAMES.braille.",
-    },
-    interval: {
-      type: "number",
-      default: "80",
-      description: "Only for variant=\"frames\". Milliseconds between frames.",
+    label: {
+      type: "string",
+      description:
+        "Accessible name. With it, the spinner is a `role=\"status\"`; without it, it's `aria-hidden`. Omit it when the context already says it's busy (a loading Button, a toast).",
     },
   }}
 />
-
-## Variants
-
-`ring`, `dots`, and `bars` are pure CSS. `frames` cycles through any array of characters via `setInterval`. All variants animate regardless of `prefers-reduced-motion` — a loading indicator communicates state, so freezing it would break the signal.
-
-<Preview slug="spinner-variants" />
-
-## Frame presets
-
-A handful of preset frame sets are exported as `SPINNER_FRAMES`. Pass any string array — the project's own emoji set, ASCII bars, whatever fits.
-
-```tsx
-import { Spinner, SPINNER_FRAMES } from "#/foundations/ui/spinner/spinner.tsx";
-
-<Spinner variant="frames" frames={SPINNER_FRAMES.moon} interval={120} />
-<Spinner variant="frames" frames={["—", "\\", "|", "/"]} />
-```
-
-<Preview slug="spinner-frames" />
 
 ## Examples
 
@@ -66,14 +38,45 @@ The spinner inherits `currentColor`, so any text color utility works.
 
 <Preview slug="spinner-color" />
 
+## Other styles
+
+A project should keep **one** spinner style. `Spinner` ships the ring because that's what Button, Popover and Toaster use; if your project wants a different look, pick one recipe below and replace the contents of `spinner.tsx` with it. Each recipe has the same API (`size`, `label`, `className`) and carries its own keyframes in a React `<style>` tag, so there's nothing to add to your global CSS.
+
+### Dots
+
+Three dots fading in sequence. Opacity only, so it's the same under reduced motion.
+
+<SourceCode file="src/foundations/ui/spinner/examples/spinner-dots.tsx" />
+
+<Preview slug="spinner-dots" />
+
+### Bars
+
+Three bars growing in sequence. Under reduced motion they hold their height and fade instead.
+
+<SourceCode file="src/foundations/ui/spinner/examples/spinner-bars.tsx" />
+
+<Preview slug="spinner-bars" />
+
+### Frames
+
+Steps through glyphs, terminal-style. The frames sit in a column behind a one-row window and move with `translateY` and `steps()`, so the animation runs in CSS and doesn't freeze when the main thread is busy, as a `setInterval` would. Under reduced motion it holds the first frame and pulses. Braille is the default; pass any glyphs as `frames`, or change the default to your set.
+
+<SourceCode file="src/foundations/ui/spinner/examples/spinner-frames.tsx" />
+
+```tsx
+<Spinner frames={["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"]} />
+<Spinner frames={["|", "/", "-", "\\"]} />
+```
+
+<Preview slug="spinner-frames" />
+
 ## Best Practices
 
 1. **Usage**:
-   - Use the default `ring` for buttons and tight inline contexts — it's pure CSS and cheap.
-   - Use `dots` or `bars` when the loader sits on its own (panel header, empty state).
-   - Use `frames` for terminal/CLI-flavored UIs or to match a specific brand voice.
-   - Consider Skeleton instead when you have layout to fill.
+   - Reach for a spinner when all you can say is "something is happening" for a second or more. For known progress use [Progress](/ui/progress); when you know the shape of what's loading use [Skeleton](/ui/skeleton). See [Loading States](/guides/loading-states).
+   - The box is fixed and the spinner is vertically centred, so it can sit inline with text without shifting it.
 
 2. **Accessibility**:
-   - All variants render with `role="progressbar"` and `aria-label="loading"`.
-   - Loading indicators animate regardless of `prefers-reduced-motion` — they communicate state, not decoration. If the surrounding page has many spinners visible at once, prefer `Skeleton` instead, which only pulses gently.
+   - Pass `label` (e.g. `"Loading results"`) when the spinner is the only sign of the wait. Leave it out when the surrounding element already announces it, so screen readers don't hear "loading" twice.
+   - Under `prefers-reduced-motion` the ring stops rotating and pulses slowly instead: it still reads as busy, without the motion.

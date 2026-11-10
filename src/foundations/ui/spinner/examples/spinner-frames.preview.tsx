@@ -1,27 +1,18 @@
-import { SPINNER_FRAMES, Spinner } from "#/foundations/ui/spinner/spinner.tsx";
+import { Spinner } from "./spinner-frames.tsx";
 
-const presets: Array<{
-  name: keyof typeof SPINNER_FRAMES;
-  interval?: number;
-}> = [
-  { name: "braille" },
-  { name: "bounce", interval: 140 },
-  { name: "moon", interval: 120 },
-  { name: "sparkle", interval: 140 },
-  { name: "dots", interval: 120 },
-  { name: "shades", interval: 100 },
-  { name: "pipe" },
+const sets = [
+  { name: "braille", frames: undefined },
+  { name: "moon", frames: ["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"] },
+  { name: "pipe", frames: ["|", "/", "-", "\\"] },
 ];
 
-export default function SpinnerFramesPreview() {
+export default function SpinnerFramesExample() {
   return (
-    <div className="grid grid-cols-2 items-center gap-x-12 gap-y-8 sm:grid-cols-4">
-      {presets.map(({ name, interval }) => (
+    <div className="flex items-center gap-12">
+      {sets.map(({ name, frames }) => (
         <div key={name} className="flex flex-col items-center gap-4">
-          <div className="flex size-6 items-center justify-center">
-            <Spinner variant="frames" frames={SPINNER_FRAMES[name]} interval={interval} />
-          </div>
-          <span className="text-center text-xs text-foreground-secondary">{name}</span>
+          <Spinner size="lg" frames={frames} />
+          <span className="text-xs text-foreground-secondary">{name}</span>
         </div>
       ))}
     </div>
