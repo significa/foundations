@@ -1,77 +1,36 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.1/schema.json",
-  "extends": ["@significa/biome-config"],
+  "$schema": "https://biomejs.dev/schemas/2.6.6/schema.json",
+  "extends": ["@significa/ts-standards/biome"],
   "files": {
-    "includes": ["!!**/dist", "!!**/.astro", "!!**/*.astro"]
+    "includes": ["!!**/*.astro"]
   },
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
+  "tailwind": {
+    "stylesheet": "./src/styles/global.css"
+  },
   "linter": {
     "rules": {
-      "correctness": {
-        "noUnknownProperty": {
+      "a11y": {
+        "noLabelWithoutControl": {
           "level": "error",
-          "options": {
-            "ignore": ["corner-shape"]
-          }
-        }
-      },
-      "suspicious": {
-        "noArrayIndexKey": {
-          "level": "off"
+          "options": { "inputComponents": ["Checkbox"] }
         }
       },
       "nursery": {
-        "useSortedClasses": {
+        "useTailwindSortedClasses": {
           "level": "warn",
-          "fix": "safe",
-          "options": {
-            "attributes": ["classList"],
-            "functions": ["clsx", "cva", "tw", "tw.*"]
-          }
+          "fix": "safe"
         }
-      },
-      "a11y": {
-        "useMediaCaption": "off",
-        "noLabelWithoutControl": "off"
       }
     }
   },
   "css": {
-    "parser": {
-      "tailwindDirectives": true
-    },
     "formatter": {
-      "enabled": true,
-      "indentStyle": "space",
-      "indentWidth": 2,
-      "lineWidth": 128,
-      "lineEnding": "lf",
-      "quoteStyle": "double"
-    },
-    "linter": {
-      "enabled": true
+      "lineWidth": 128
     }
-  },
-  "overrides": [
-    {
-      "includes": ["**/*.astro"],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "useExhaustiveDependencies": "off",
-            "useHookAtTopLevel": "off",
-            "noUnusedImports": "off",
-            "noUnusedVariables": "off"
-          },
-          "style": {
-            "useFilenamingConvention": "off"
-          }
-        }
-      }
-    }
-  ]
+  }
 }
