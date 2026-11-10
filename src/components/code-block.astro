@@ -51,6 +51,7 @@ const { class: className, collapsible = false, ...props } = Astro.props;
   [data-code] {
     pre {
       display: flex;
+      /* biome-ignore lint/complexity/noImportantStyles: beats Shiki's inline background-color */
       background: transparent !important;
     }
   }

@@ -1,16 +1,14 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.6.6/schema.json",
   "extends": ["@significa/ts-standards/biome"],
-  "files": {
-    "includes": ["!!**/*.astro"]
-  },
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
   "tailwind": {
-    "stylesheet": "./src/styles/global.css"
+    "stylesheet": "./src/styles/global.css",
+    "attributes": ["class", "className", "class:list"]
   },
   "linter": {
     "rules": {
@@ -35,9 +33,34 @@
       }
     }
   },
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "enabled": true,
+      "indentScriptAndStyle": true,
+      "selfCloseVoidElements": "always"
+    }
+  },
   "css": {
     "formatter": {
       "lineWidth": 128
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "error",
+            "noUnusedVariables": "error"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/posthog.astro"],
+      "linter": { "enabled": false }
+    }
+  ]
 }
