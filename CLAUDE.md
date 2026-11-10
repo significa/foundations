@@ -6,8 +6,8 @@ Guidelines for agentic coding agents working in this repository.
 
 ## Commands
 
-All commands use **pnpm** (v10.32.1). Node and pnpm are pinned via `mise.toml`
-(Node 24, pnpm 10) — run `mise install` after cloning.
+All commands use **pnpm** (v10.34.9). Node and pnpm are pinned via `mise.toml`
+(Node 26, pnpm 10) — run `mise install` after cloning.
 
 | Command             | Purpose                                                            |
 | ------------------- | ------------------------------------------------------------------ |

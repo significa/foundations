@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.0.1-development",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24"
   },
-  "packageManager": "pnpm@10.32.1",
+  "packageManager": "pnpm@10.34.9",
   "scripts": {
     "dev": "astro dev",
     "dev:pagefind": "pnpm build && node ./scripts/pagefind.mjs --dev && pnpm dev",
@@ -21,46 +21,41 @@
     "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check && pnpm check:deps && pnpm knip"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.2.0",
-    "@astrojs/mdx": "^7.0.1",
-    "@astrojs/react": "^6.0.0",
-    "@floating-ui/react": "^0.27.19",
-    "@hookform/resolvers": "^5.4.0",
+    "@astrojs/markdown-remark": "^7.3.6",
+    "@astrojs/mdx": "^7.0.8",
+    "@astrojs/react": "^6.0.6",
+    "@floating-ui/react": "^0.27.20",
+    "@hookform/resolvers": "^5.9.2",
     "@phosphor-icons/react": "^2.1.10",
-    "@tailwindcss/vite": "^4.3.1",
+    "@tailwindcss/vite": "^4.3.5",
     "@tanstack/react-table": "^8.21.3",
-    "@types/chroma-js": "^3.1.2",
-    "@types/node": "^24.13.2",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "astro": "^7.0.5",
-    "chroma-js": "^3.2.0",
+    "@types/chroma-js": "^3.1.3",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "astro": "^7.4.8",
+    "chroma-js": "^3.3.0",
     "cva": "1.0.0-beta.4",
     "date-fns": "^4.4.0",
-    "motion": "^12.40.0",
-    "pagefind": "^1.5.2",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "react-hook-form": "^7.80.0",
+    "motion": "^12.43.0",
+    "pagefind": "^1.6.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-hook-form": "^7.91.0",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
-    "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.1",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.5",
     "unified": "^11.0.5",
-    "zod": "^4.4.3"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "^8.0.13"
-    }
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.6",
     "@significa/ts-standards": "0.2.2",
-    "knip": "^6.18.0",
-    "prettier": "^3.8.4",
+    "knip": "^6.44.2",
+    "prettier": "^3.9.10",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.8.0",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "6.0.3"
   }
 }
