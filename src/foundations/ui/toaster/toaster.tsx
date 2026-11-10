@@ -1,6 +1,6 @@
 import { CheckCircleIcon, XCircleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
 import type { ComponentPropsWithoutRef } from "react";
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { useElementSize } from "#/foundations/hooks/use-element-size/use-element-size.ts";
 import { useElementTransition } from "#/foundations/hooks/use-element-transition/use-element-transition.ts";
 import { useTopLayer } from "#/foundations/hooks/use-top-layer/use-top-layer.ts";
@@ -216,6 +216,8 @@ const Toaster = ({ className }: { className?: string }) => {
   const toasts = useToastStore();
   const elementRef = useRef<HTMLDivElement>(null);
   const topLayerRef = useTopLayer<HTMLDivElement>(true);
+  // Memoised: a new ref each render would hide and re-show the popover on every toast change.
+  const ref = useMemo(() => composeRefs(elementRef, topLayerRef), [topLayerRef]);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -238,9 +240,18 @@ const Toaster = ({ className }: { className?: string }) => {
     };
   }, []);
 
+  // Re-enter the top layer whenever toasts change (added, updated, settled), so they show above a
+  // popover opened since the toaster mounted (top-layer order is open order).
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element?.matches(":popover-open") || toasts.length === 0) return;
+    element.hidePopover();
+    element.showPopover();
+  }, [toasts]);
+
   return (
     <div
-      ref={composeRefs(elementRef, topLayerRef)}
+      ref={ref}
       data-toaster-provider
       className={cn(
         "fixed flex size-full flex-col items-end justify-end overflow-hidden bg-transparent px-4 py-3",

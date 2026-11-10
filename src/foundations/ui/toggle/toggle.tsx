@@ -191,6 +191,7 @@ const ToggleGroupRoot = ({
   }, []);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(containerRef, ref), [ref]);
 
   const focusItem = useCallback((value: string) => {
     const el = containerRef.current?.querySelector<HTMLElement>(
@@ -255,7 +256,7 @@ const ToggleGroupRoot = ({
     <ToggleGroupContext value={ctx}>
       {/* biome-ignore lint/a11y/useSemanticElements: <fieldset> is form-only semantics; this is a toolbar-style grouping. */}
       <div
-        ref={composeRefs(containerRef, ref)}
+        ref={composedRef}
         role="group"
         data-orientation={orientation}
         className={cn(

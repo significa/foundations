@@ -1,16 +1,14 @@
 import { useCallback, useEffect, useRef } from "react";
 
-// biome-ignore lint/suspicious/noExplicitAny: expected
-type AnyFunction = (...args: any[]) => any;
+// Every function's parameters are assignable to `never[]`.
+type AnyFunction = (...args: never[]) => unknown;
 
 export const useStableCallback = <T extends AnyFunction>(callback?: T) => {
   const callbackRef = useRef<T | undefined>(callback);
 
-  // Update the ref if the callback changes
+  // Unconditionally: a removed (undefined) callback must stop running.
   useEffect(() => {
-    if (callback) {
-      callbackRef.current = callback;
-    }
+    callbackRef.current = callback;
   }, [callback]);
 
   // Return a stable function that always calls the latest callback if it exists

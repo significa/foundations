@@ -6,7 +6,7 @@ import {
   useAnimate,
   useReducedMotion,
 } from "motion/react";
-import { type ComponentPropsWithRef, useEffect, useRef } from "react";
+import { type ComponentPropsWithRef, useEffect, useMemo, useRef } from "react";
 import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { useMatchMedia } from "#/foundations/hooks/use-match-media/use-match-media.ts";
 import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
@@ -46,6 +46,7 @@ const MotionScroll = ({
   ...rest
 }: MotionScrollProps) => {
   const [scope, animate] = useAnimate();
+  const composedRef = useMemo(() => composeRefs(scope, propRef), [scope, propRef]);
   const isReducedMotion = useReducedMotion();
   const isTouchscreen = useMatchMedia("(pointer: coarse)", true);
   const hooksRef = useRef(hooks);
@@ -105,7 +106,7 @@ const MotionScroll = ({
 
   const Component = asChild ? Slot : "div";
   return (
-    <Component ref={composeRefs(scope, propRef)} {...rest}>
+    <Component ref={composedRef} {...rest}>
       {children}
     </Component>
   );

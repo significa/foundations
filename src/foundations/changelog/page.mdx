@@ -12,6 +12,192 @@ meta:
 
 ## November 2026
 
+### Fixed: `Slot` replaced the child's handlers and ref; `composeRefs` and `useStableCallback` bugs
+
+`Slot` spread the child's props over its own, so a child's `onClick` silently replaced the
+component's, an explicit `undefined` or `null` on the child erased the slot's prop, and the slot's
+`ref` replaced the child's. `Slottable` was worse: it cloned the child with the slot's props on top,
+so under `asChild` the child's own `onClick`, `className` and `style` were lost (`<Button asChild><a
+onClick className>` dropped both). Now handlers both sides pass are composed with all their
+arguments: the child's runs first, then the slot's, as in Radix. `className` and `style` merge, both refs get the element,
+and `Slottable` renders its child through `Slot`. Replace your `slot.tsx`; it now imports
+`composeRefs`.
+
+```diff tsx
++ const composeEventHandlers = (slotProps, childProps) => {
++   // for each on* handler both pass:
++   composed[name] = (...args) => {
++     childHandler(...args);
++     slotHandler(...args);
++   };
++ };
+
+  export const Slot = ({ children, ref, ...props }) => {
+    const element = Children.only(children);
++   const childRef = isValidSlottableElement(element) ? element.props.ref : undefined;
++   const composedRef = useMemo(() => composeRefs(ref, childRef), [ref, childRef]);
++   const childProps = Object.fromEntries(
++     Object.entries(element.props).filter(([, value]) => value != null),
++   );
+    return cloneElement(element, {
+      ...props,
+-     ...element.props,
++     ...childProps,
+      ...typeDefault,
+-     ref,
++     ...composeEventHandlers(props, childProps),
++     ref: composedRef,
+      style: { ...props.style, ...element.props.style },
+      className: cn(element.props.className, props.className),
+    });
+  };
+
+  export const Slottable = ({ asChild, child, children, ...props }) => {
+-   return <>{asChild ? (isValidSlottableElement(child) ? cloneElement(child, props, children(child.props.children)) : null) : children(child)}</>;
++   if (!asChild) return children(child);
++   if (!isValidSlottableElement(child)) return null;
++   return <Slot {...props}>{cloneElement(child, undefined, children(child.props.children))}</Slot>;
+  };
+```
+
+`composeRefs` dropped a React 19 callback ref's cleanup: the cleanup a ref returned never ran, and
+the ref was called with `null` instead. It now returns a cleanup that runs each ref's own cleanup,
+or, for refs without one, calls the callback with `null` or sets the object's `current` to `null`.
+
+It still returns a new callback per call, which makes React detach and re-attach every ref on each
+render, now running a parent callback ref's real cleanup each time (a top-layer ref passed to
+`Input.Addon` would hide and re-show). Every call site now memoises it: `Modal.Content`, `Toaster`
+(which was already hiding and re-showing its popover on every toast change), `Input.Addon`,
+`OTPInput.Cell`, `Slider.Thumb`, `Checkbox`, `ToggleGroup`, every `ColorPicker` part, and
+`MotionScroll`. Apply both changes together. That re-show was also what kept a new toast above a
+popover opened after the toaster, so `Toaster` now re-enters the top layer explicitly whenever its
+toasts change.
+
+```diff tsx
+  // compose-refs.ts
+  export function composeRefs<T>(...refs: (Ref<T> | undefined)[]): RefCallback<T> {
+-   return (instance: T) => {
+-     refs.forEach((ref) => { /* set each ref */ });
+-   };
++   return (instance) => {
++     const cleanups = refs.map((ref) => setRef(ref, instance));
++     return () => {
++       for (const cleanup of cleanups) cleanup();
++     };
++   };
+  }
+
+  // every call site: memoise before any early return, then pass ref={composedRef}
+  // modal.tsx (ModalContent)
++ const composedRef = useMemo(() => composeRefs(dialogRef, transitionRef, ref), [dialogRef, transitionRef, ref]);
+- <dialog ref={composeRefs(dialogRef, transitionRef, ref)}
++ <dialog ref={composedRef}
+  // toaster.tsx (Toaster)
++ const ref = useMemo(() => composeRefs(elementRef, topLayerRef), [topLayerRef]);
++ useEffect(() => {
++   const element = elementRef.current;
++   if (!element?.matches(":popover-open") || toasts.length === 0) return;
++   element.hidePopover();
++   element.showPopover();
++ }, [toasts]);
+  // input.tsx (InputAddon), slider.tsx (SliderThumb), checkbox.tsx
++ const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
+  // otp-input.tsx (OTPInputCell): internalRef is a callback
++ const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref, internalRef]);
+  // toggle.tsx (ToggleGroupRoot)
++ const composedRef = useMemo(() => composeRefs(containerRef, ref), [ref]);
+  // color-picker.tsx (Draggable, Area, Hue, Saturation, Lightness, Alpha)
++ const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
+  // motion-scroll.tsx
++ const composedRef = useMemo(() => composeRefs(scope, propRef), [scope, propRef]);
+```
+
+`useStableCallback` kept the previous callback when the new one was `undefined`, so a handler a
+parent removed still ran (`Menu` `onSelect`, `useKeyboardShortcut`).
+
+```diff tsx
+- type AnyFunction = (...args: any[]) => any;
++ type AnyFunction = (...args: never[]) => unknown;
+
+  useEffect(() => {
+-   if (callback) {
+-     callbackRef.current = callback;
+-   }
++   callbackRef.current = callback;
+  }, [callback]);
+```
+
+### Fixed: `Button` loading and disabled states
+
+`isLoading` only hid the label: the button stayed clickable and nothing announced it as busy, and
+passing `disabled` alongside it dropped focus to `<body>`. A loading button now sets `aria-busy` and
+`aria-disabled`, stays focusable, and stops the click in the capture phase (`preventDefault()` and
+`stopPropagation()`), like a natively disabled `<button>`. Mouse, Enter, Space and implicit form
+submit all arrive as `click`, so none of them activate it. You no longer need `disabled={isLoading}`.
+
+Because the click is stopped before it reaches any `onClick`, an ancestor's `onClick` doesn't fire
+for a disabled or loading button either, just as with a native disabled `<button>`. If a parent
+listens for clicks from its buttons, it won't hear these.
+
+Required update: `<Button asChild disabled>` no longer sets the native `disabled` attribute on its
+child, even when that child is a `<button>`. The child gets `aria-disabled` and the capture-phase
+block instead, so it stays focusable. If you style or select it with `:disabled` or `[disabled]`, target
+`[aria-disabled="true"]` too, or put `disabled` on the child itself.
+
+Middle-click fires `auxclick` rather than `click`, so it's stopped in the capture phase too.
+`Button asChild` also dropped an explicit `type`, so `<Button asChild type="submit"><button>` rendered
+`type="button"`. Hover styles are gated with `not-disabled:` and `not-aria-disabled:` (`enabled:`
+never matches an `<a>`), press feedback with `not-aria-disabled:`, and the spinner wrapper is `flex` so it centres instead of sitting on the
+baseline. These rely on the `Slot` fix above.
+
+```diff tsx
+  const Button = ({
+-   type = "button",
++   type,
++   disabled,
++   onClickCapture,
++   onAuxClickCapture,
+    ...props
+  }) => {
++   // Like a native disabled <button>, no onClick runs (ancestors' included): stopped in capture.
++   const blockWhenDisabled = (event: React.SyntheticEvent) => {
++     if (!disabled && !isLoading) return;
++     event.preventDefault();
++     event.stopPropagation();
++   };
+
+    <Comp
+-     type={asChild ? undefined : type}
++     type={asChild ? type : (type ?? "button")}
++     disabled={asChild ? undefined : disabled}
++     aria-disabled={isLoading || (asChild && disabled) || undefined}
++     aria-busy={isLoading || undefined}
+      {...props}
++     onClickCapture={(event) => {
++       blockWhenDisabled(event);
++       onClickCapture?.(event);
++     }}
++     // onAuxClickCapture: the same, for middle-click
+    >
+
+  // buttonStyle: gate every hover the same way
+- "transition enabled:cursor-pointer disabled:opacity-40",
++ "transition not-disabled:not-aria-disabled:cursor-pointer disabled:opacity-40 aria-disabled:not-aria-busy:opacity-40",
+- "hover:bg-accent/90"
++ "not-disabled:not-aria-disabled:hover:bg-accent/90"
+- "active:not-in-data-ui-button-group:scale-98"
++ "not-aria-disabled:active:not-in-data-ui-button-group:scale-98"
+- "in-data-ui-button-group:active:bg-accent/80"
++ "in-data-ui-button-group:not-aria-disabled:active:bg-accent/80"
+
+  // spinner wrapper
+- "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
++ "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2",
+```
+
+`Button.Group`'s child-validation effect did nothing (an empty `if`) and is removed.
+
+
 ### Fixed: Modal focus return and dismissal, Dialog and Drawer text styles
 
 Apply these to your copies of `modal.tsx`, `dialog.tsx` and `drawer.tsx`.
