@@ -21,7 +21,7 @@ export default function SpinnerFramesPreview() {
           <div className="flex size-6 items-center justify-center">
             <Spinner variant="frames" frames={SPINNER_FRAMES[name]} interval={interval} />
           </div>
-          <span className="text-center text-foreground-secondary text-xs">{name}</span>
+          <span className="text-center text-xs text-foreground-secondary">{name}</span>
         </div>
       ))}
     </div>

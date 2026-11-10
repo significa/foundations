@@ -26,12 +26,12 @@ const cases = [
 function Indicator({ label, active }: { label: string; active: boolean }) {
   return (
     <div className="flex w-44 flex-col items-center gap-2 rounded-lg border border-border p-4">
-      <span className="text-foreground-secondary text-xs">{label}</span>
+      <span className="text-xs text-foreground-secondary">{label}</span>
       <div className="flex h-6 items-center">
         {active ? (
           <Spinner />
         ) : (
-          <span className="text-foreground-secondary text-xs opacity-60">idle</span>
+          <span className="text-xs text-foreground-secondary opacity-60">idle</span>
         )}
       </div>
     </div>
@@ -70,7 +70,7 @@ function UseDelayedLoadingPreview() {
         <Indicator label="useDelayedLoading" active={showLoading} />
       </div>
 
-      <ul className="max-w-sm space-y-1 text-center text-foreground-secondary text-xs">
+      <ul className="max-w-sm space-y-1 text-center text-xs text-foreground-secondary">
         {cases.map((c) => (
           <li key={c.label}>
             <strong className="text-foreground">{c.label}</strong> ({c.duration}

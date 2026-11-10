@@ -258,7 +258,7 @@ export default function TableDataTablePreview() {
       </Table.Container>
 
       <div className="flex items-center justify-between gap-4">
-        <p className="text-foreground-secondary text-sm">
+        <p className="text-sm text-foreground-secondary">
           {selectedCount} of {table.getFilteredRowModel().rows.length} selected
         </p>
 

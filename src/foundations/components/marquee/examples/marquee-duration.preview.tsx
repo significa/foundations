@@ -9,7 +9,7 @@ const MarqueeDurationExample = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <label htmlFor="speed" className="whitespace-nowrap font-medium text-base">
+        <label htmlFor="speed" className="text-base font-medium whitespace-nowrap">
           Duration <span className="text-foreground-secondary">(ms)</span>
         </label>
         <input

@@ -27,11 +27,11 @@ const MotionScrollPreview = () => {
           ease="easeOut"
           className="w-full max-w-md rounded-xl border border-border bg-background-secondary p-8"
         >
-          <p className="font-mono text-foreground-secondary text-xs uppercase tracking-widest">
+          <p className="font-mono text-xs tracking-widest text-foreground-secondary uppercase">
             0{index + 1}
           </p>
-          <h2 className="mt-2 font-semibold text-xl">{card.title}</h2>
-          <p className="mt-1 text-foreground-secondary text-sm">{card.description}</p>
+          <h2 className="mt-2 text-xl font-semibold">{card.title}</h2>
+          <p className="mt-1 text-sm text-foreground-secondary">{card.description}</p>
         </MotionScroll>
       ))}
     </div>

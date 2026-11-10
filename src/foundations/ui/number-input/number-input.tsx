@@ -286,7 +286,7 @@ const NumberInputField = ({
 // `rounded-{lg,xl}`. The radius scale is calibrated so each step equals
 // `--inset` (`--radius * 2`), keeping corners concentric across the dial.
 const stepperStyle = cva({
-  base: "focus-visible:ring-(length:--ring-width) inline-flex aspect-square h-full shrink-0 cursor-pointer items-center justify-center self-stretch text-foreground-secondary outline-none ring-ring transition-colors hover:bg-foreground/5 hover:text-foreground disabled:pointer-events-none disabled:opacity-40",
+  base: "inline-flex aspect-square h-full shrink-0 cursor-pointer items-center justify-center self-stretch text-foreground-secondary ring-ring transition-colors outline-none hover:bg-foreground/5 hover:text-foreground focus-visible:ring-(length:--ring-width) disabled:pointer-events-none disabled:opacity-40",
   variants: {
     size: {
       xs: "",

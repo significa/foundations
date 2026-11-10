@@ -31,7 +31,7 @@ const SequenceVertical = () => {
               key={index}
               value={index.toString()}
               className={cn(
-                "block h-8 text-left font-medium text-base",
+                "block h-8 text-left text-base font-medium",
                 "text-foreground-secondary data-[selected=true]:text-foreground",
                 "cursor-pointer hover:text-foreground/60 active:text-foreground/80",
               )}
@@ -43,7 +43,7 @@ const SequenceVertical = () => {
       </div>
       <Sequence.Panels className="min-h-64">
         {CONTENT.map((item, index) => (
-          <Sequence.Panel key={index} className="font-medium text-xl">
+          <Sequence.Panel key={index} className="text-xl font-medium">
             {item.description}
           </Sequence.Panel>
         ))}

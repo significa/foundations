@@ -81,7 +81,7 @@ export default function HierarchicalSelectionWithSearch() {
             indeterminate={selectAllStatus.indeterminate}
             onChange={(e) => toggleAll(sampleData, e.target.checked)}
           />
-          <span className="cursor-pointer font-medium text-base">All Countries</span>
+          <span className="cursor-pointer text-base font-medium">All Countries</span>
         </label>
       )}
 
@@ -89,7 +89,7 @@ export default function HierarchicalSelectionWithSearch() {
 
       {/* Results */}
       {filteredData.length === 0 && searchQuery ? (
-        <p className="p-2 text-foreground-secondary text-sm">No countries found</p>
+        <p className="p-2 text-sm text-foreground-secondary">No countries found</p>
       ) : (
         <div className="space-y-1">
           {filteredData.map((parent) => {
@@ -105,7 +105,7 @@ export default function HierarchicalSelectionWithSearch() {
                       indeterminate={parentStatus.indeterminate}
                       onChange={(e) => toggleParent(parent, e.target.checked)}
                     />
-                    <span className="cursor-pointer font-medium text-base">{parent.label}</span>
+                    <span className="cursor-pointer text-base font-medium">{parent.label}</span>
                   </label>
 
                   {!searchQuery && (
@@ -126,7 +126,7 @@ export default function HierarchicalSelectionWithSearch() {
                           checked={isSelected(child.id)}
                           onChange={() => toggleItem(child.id)}
                         />
-                        <span className="cursor-pointer font-medium text-base">{child.label}</span>
+                        <span className="cursor-pointer text-base font-medium">{child.label}</span>
                       </label>
                     ))}
                   </div>
@@ -139,8 +139,8 @@ export default function HierarchicalSelectionWithSearch() {
 
       {/* Selected items display */}
       <div className="mt-4 rounded bg-background-secondary p-3">
-        <p className="mb-1 font-medium text-sm">Selected countries:</p>
-        <p className="text-foreground-secondary text-sm">
+        <p className="mb-1 text-sm font-medium">Selected countries:</p>
+        <p className="text-sm text-foreground-secondary">
           {selectedArray.length > 0 ? selectedArray.join(", ") : "None"}
         </p>
       </div>

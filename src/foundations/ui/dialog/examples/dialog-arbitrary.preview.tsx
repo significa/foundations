@@ -17,20 +17,20 @@ export default function DialogArbitraryPreview() {
         </Dialog.Close>
         <div className="flex flex-col items-center rounded-2xl p-6">
           <div className="mb-4 size-24 rounded-full border border-border bg-background-secondary" />
-          <h2 className="font-semibold text-xl">John Doe</h2>
-          <p className="mb-4 text-foreground-secondary text-sm">Software Engineer</p>
+          <h2 className="text-xl font-semibold">John Doe</h2>
+          <p className="mb-4 text-sm text-foreground-secondary">Software Engineer</p>
           <div className="mb-6 flex space-x-4">
             <div className="text-center">
               <p className="font-semibold">1.2k</p>
-              <p className="text-foreground-secondary text-xs">Followers</p>
+              <p className="text-xs text-foreground-secondary">Followers</p>
             </div>
             <div className="text-center">
               <p className="font-semibold">3.4k</p>
-              <p className="text-foreground-secondary text-xs">Following</p>
+              <p className="text-xs text-foreground-secondary">Following</p>
             </div>
             <div className="text-center">
               <p className="font-semibold">567</p>
-              <p className="text-foreground-secondary text-xs">Posts</p>
+              <p className="text-xs text-foreground-secondary">Posts</p>
             </div>
           </div>
           <Button>Follow</Button>

@@ -10,7 +10,7 @@ export default function SpinnerVariantsPreview() {
           <div className="flex size-6 items-center justify-center">
             <Spinner variant={variant} />
           </div>
-          <span className="text-center text-foreground-secondary text-xs">{variant}</span>
+          <span className="text-center text-xs text-foreground-secondary">{variant}</span>
         </div>
       ))}
     </div>

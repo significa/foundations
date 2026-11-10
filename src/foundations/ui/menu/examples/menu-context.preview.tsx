@@ -16,7 +16,7 @@ export default function MenuContextPreview() {
     <>
       {/** biome-ignore lint/a11y/noStaticElementInteractions: demo */}
       <div
-        className="flex h-48 w-72 items-center justify-center rounded-xl border border-border border-dashed text-foreground-secondary text-sm"
+        className="flex h-48 w-72 items-center justify-center rounded-xl border border-dashed border-border text-sm text-foreground-secondary"
         onContextMenu={(e) => {
           e.preventDefault();
           setPos([e.clientX, e.clientY]);

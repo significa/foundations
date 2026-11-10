@@ -1,5 +1,5 @@
 {
-  "extends": "@significa/tsconfig/astro",
+  "extends": "@significa/ts-standards/tsconfig/astro",
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],

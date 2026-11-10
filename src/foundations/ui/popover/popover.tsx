@@ -384,7 +384,7 @@ const PopoverPanel = ({
         className={cn(
           animate && [
             "origin-(--transform-origin) transition duration-200 ease-out motion-reduce:transition-none",
-            "data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2",
+            "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
             "data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=closed]:duration-150",
             "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
           ],
@@ -482,7 +482,7 @@ interface PopoverSearchInputProps extends React.ComponentPropsWithRef<"input"> {
 
 const PopoverSearchInput = ({ className, isLoading, ...props }: PopoverSearchInputProps) => {
   return (
-    <div className="relative flex items-center rounded-t-lg border-border border-b bg-transparent">
+    <div className="relative flex items-center rounded-t-lg border-b border-border bg-transparent">
       {isLoading ? (
         <Spinner size="sm" className="absolute left-4 text-foreground" />
       ) : (
@@ -493,7 +493,7 @@ const PopoverSearchInput = ({ className, isLoading, ...props }: PopoverSearchInp
       )}
       <input
         className={cn(
-          "h-10 w-full border-0 bg-transparent p-4 pl-10 font-medium text-base outline-none transition-colors placeholder:text-foreground-secondary focus:ring-0",
+          "h-10 w-full border-0 bg-transparent p-4 pl-10 text-base font-medium transition-colors outline-none placeholder:text-foreground-secondary focus:ring-0",
           className,
         )}
         {...props}

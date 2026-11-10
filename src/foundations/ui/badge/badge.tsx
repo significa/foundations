@@ -4,7 +4,7 @@ import { Slot } from "@/foundations/components/slot/slot";
 import { cn, cva } from "@/lib/utils/classnames";
 
 const badgeStyle = cva({
-  base: "inline-flex items-center gap-1 rounded-full font-semibold leading-none ring-1 ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",
+  base: "inline-flex items-center gap-1 rounded-full leading-none font-semibold ring-1 ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",
   variants: {
     variant: {
       neutral: "bg-background text-foreground/80 ring-foreground/10",

@@ -21,15 +21,15 @@ export default function TabsVerticalPreview() {
       </Tabs.Items>
       <Tabs.Panels className="w-90">
         <Tabs.Panel>
-          <h3 className="font-medium text-lg">Users Panel</h3>
+          <h3 className="text-lg font-medium">Users Panel</h3>
           <p className="text-foreground-secondary">Manage your users here.</p>
         </Tabs.Panel>
         <Tabs.Panel>
-          <h3 className="font-medium text-lg">Billing Panel</h3>
+          <h3 className="text-lg font-medium">Billing Panel</h3>
           <p className="text-foreground-secondary">Manage your billing information.</p>
         </Tabs.Panel>
         <Tabs.Panel>
-          <h3 className="font-medium text-lg">Settings Panel</h3>
+          <h3 className="text-lg font-medium">Settings Panel</h3>
           <p className="text-foreground-secondary">Configure your application settings.</p>
         </Tabs.Panel>
       </Tabs.Panels>

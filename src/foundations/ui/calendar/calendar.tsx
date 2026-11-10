@@ -284,7 +284,7 @@ const Calendar = ({
                   aria-label={weekday.toLocaleDateString(locale, {
                     weekday: "long",
                   })}
-                  className="flex h-9 w-full min-w-9 items-center justify-center text-foreground-secondary text-sm"
+                  className="flex h-9 w-full min-w-9 items-center justify-center text-sm text-foreground-secondary"
                 >
                   {weekday.toLocaleDateString(locale, { weekday: "narrow" })}
                 </div>
@@ -335,7 +335,7 @@ const Calendar = ({
                     <div
                       className={cn(
                         // base
-                        "z-10 flex size-8 items-center justify-center rounded-lg border border-transparent font-medium text-foreground/80 text-sm tabular-nums ring-ring transition-shadow",
+                        "z-10 flex size-8 items-center justify-center rounded-lg border border-transparent text-sm font-medium text-foreground/80 tabular-nums ring-ring transition-shadow",
                         // hover
                         "group-hover:bg-foreground/5 group-hover:text-foreground",
                         // selected
@@ -395,7 +395,7 @@ const CalendarHeader = ({
   children,
 }: CalendarHeaderProps) => {
   return (
-    <div className="flex items-center justify-between p-1.5 font-medium text-sm">
+    <div className="flex items-center justify-between p-1.5 text-sm font-medium">
       <IconButton variant="outline" onClick={onPrevious} aria-label={previousLabel}>
         <CaretLeftIcon />
       </IconButton>
@@ -416,7 +416,7 @@ const HeaderTextButton = ({
     <button
       type="button"
       className={cn(
-        "focus-visible:ring-(length:--ring-width) cursor-pointer rounded-sm font-medium text-foreground/80 outline-none ring-ring transition hover:text-foreground focus-visible:text-foreground",
+        "cursor-pointer rounded-sm font-medium text-foreground/80 ring-ring transition outline-none hover:text-foreground focus-visible:text-foreground focus-visible:ring-(length:--ring-width)",
         className,
       )}
       {...props}
@@ -435,7 +435,7 @@ const YearMonthButton = ({
     <button
       type="button"
       className={cn(
-        "focus-visible:ring-(length:--ring-width) h-8 w-full cursor-pointer rounded-lg font-medium text-foreground/80 text-sm outline-none ring-ring transition hover:bg-foreground/5 hover:text-foreground focus-visible:text-foreground",
+        "h-8 w-full cursor-pointer rounded-lg text-sm font-medium text-foreground/80 ring-ring transition outline-none hover:bg-foreground/5 hover:text-foreground focus-visible:text-foreground focus-visible:ring-(length:--ring-width)",
         className,
       )}
       {...props}

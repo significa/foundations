@@ -33,7 +33,7 @@ const TokenInput = ({ value, onChange, side, label }: TokenInputProps) => {
         autoCorrect="off"
         aria-label={`${label} (${side})`}
         aria-invalid={!valid || undefined}
-        className="focus-visible:ring-(length:--ring-width) h-7 w-full rounded-md border border-border bg-background py-0 pr-7 pl-2 font-mono text-2xs outline-none ring-ring aria-invalid:border-error"
+        className="h-7 w-full rounded-md border border-border bg-background py-0 pr-7 pl-2 font-mono text-2xs ring-ring outline-none focus-visible:ring-(length:--ring-width) aria-invalid:border-error"
       />
       <span
         aria-hidden="true"
@@ -62,7 +62,7 @@ const TokenRow = ({ token, scheme, overrides, onTokenChange }: TokenRowProps) =>
   const label = TOKEN_LABELS[token];
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-medium text-2xs text-foreground-secondary">{label}</span>
+      <span className="text-2xs font-medium text-foreground-secondary">{label}</span>
       <div className="flex gap-1.5">
         <TokenInput
           label={label}
@@ -93,8 +93,8 @@ const SchemeEditor = ({ scheme, overrides, onTokenChange }: SchemeEditorProps) =
           onTokenChange={onTokenChange}
         />
       ))}
-      <div className="-mx-3 mt-1 border-border border-t pt-3 pl-3">
-        <span className="font-medium text-2xs text-foreground-secondary uppercase tracking-wider">
+      <div className="-mx-3 mt-1 border-t border-border pt-3 pl-3">
+        <span className="text-2xs font-medium tracking-wider text-foreground-secondary uppercase">
           Semantic
         </span>
       </div>

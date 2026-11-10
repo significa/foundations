@@ -16,7 +16,7 @@ function UseElementSizeCallbackPreview() {
     <div ref={rootRef} className="flex flex-col gap-2">
       <div
         ref={ref}
-        className="h-24 w-64 min-w-24 max-w-full resize-x overflow-auto rounded-md border border-border bg-foreground/5 p-3 text-sm"
+        className="h-24 w-64 max-w-full min-w-24 resize-x overflow-auto rounded-md border border-border bg-foreground/5 p-3 text-sm"
       >
         Drag the corner. Rendered {renders.current} time{renders.current === 1 ? "" : "s"}.
       </div>

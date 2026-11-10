@@ -23,7 +23,7 @@ const InstanceCounterPreview = () => {
   return (
     <InstanceCounterProvider onChange={setLength}>
       <div className="flex min-h-88 flex-col gap-4">
-        <div className="text-foreground-secondary text-sm">Number of Instances: {length}</div>
+        <div className="text-sm text-foreground-secondary">Number of Instances: {length}</div>
         <Button size="sm" onClick={() => setMount(!mount)}>
           Trigger Tree Change
         </Button>

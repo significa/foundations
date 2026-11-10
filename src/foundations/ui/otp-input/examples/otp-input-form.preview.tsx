@@ -38,7 +38,7 @@ export default function OTPInputFormExample() {
       </OTPInput>
       <Button type="submit">Verify</Button>
       {submitted !== null && (
-        <p className="text-foreground-secondary text-sm">
+        <p className="text-sm text-foreground-secondary">
           Submitted: <span className="text-foreground">{submitted}</span>
         </p>
       )}
