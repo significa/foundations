@@ -44,8 +44,9 @@ nothing; it now pads to the items' text edge.
 
 ### Fixed: `Tabs` kept unmounted tabs registered
 
-`Tabs.Item` dropped the cleanup `registerTab` returns, so tabs registered twice under StrictMode
-and stayed registered after unmounting: arrow keys could land on a tab that no longer exists.
+`Tabs.Item` dropped the cleanup `registerTab` returns. Under StrictMode every tab registered
+twice, and a tab removed while the `Tabs` stayed mounted stayed registered, so arrow keys could
+land on a tab that no longer exists.
 Unselected tabs also omitted `aria-selected` instead of setting it to `false`.
 
 ```diff tsx
@@ -78,9 +79,10 @@ also stops wrapping its text out of its fixed height.
 ### Fixed: `Avatar` showed a broken image, read its content twice, and overflowed initials
 
 A failed `Avatar.Image` stayed mounted, and Chrome drew its broken-image icon over the initials; it
-now unmounts on error (including an error before hydration), so the fallback shows. Screen readers
-got both the image's `alt` and the initials, and nothing named an initials-only avatar: a new `label`
-prop names the avatar (`role="img"`), and without it the avatar is `aria-hidden`. `Avatar.Image` no
+now unmounts on error, so the fallback shows. When you passed an `alt`, screen readers got both it
+and the initials, and nothing named an initials-only avatar: a new `label` prop (or `aria-label`)
+names the avatar (`role="img"`), and without it the avatar is `aria-hidden`; give grouped avatars a
+`label`, since a group rarely has names next to it. `Avatar.Image` no
 longer takes `alt`; move it to `label`, or drop it when the name is already text next to the avatar.
 Initials take the first and last word only ("Ana Maria da Silva" was "AMdS", now "AS").
 
@@ -93,10 +95,10 @@ Initials take the first and last word only ("Ana Maria da Silva" was "AMdS", now
   </Avatar>
 
 - const AvatarImage = ({ className, src, ...props }: AvatarImageProps) => {
-+ const AvatarImage = ({ ref, className, src, onError, ...props }: AvatarImageProps) => {
++ const AvatarImage = ({ className, src, onError, ...props }: AvatarImageProps) => {
 +   const [failedSrc, setFailedSrc] = useState<string>();
-+   // …a ref that catches a failure before hydration (see source)
 +   if (failedSrc === src) return null;
++   // <img … onError={(e) => { setFailedSrc(src); onError?.(e); }} {...props} alt="" />
 
 - return name.split(" ").map((n) => n[0]).join("");
 + const words = name?.trim().split(/\s+/).filter(Boolean) ?? [];

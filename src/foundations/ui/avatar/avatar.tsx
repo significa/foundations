@@ -1,15 +1,6 @@
 import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 import type { VariantProps } from "cva";
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  useCallback,
-  useId,
-  useMemo,
-  useState,
-} from "react";
-import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
+import { Children, cloneElement, isValidElement, useId, useState } from "react";
 import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const getInitials = (name: string | undefined) => {
@@ -57,10 +48,12 @@ const Avatar = ({
   variant = "circle",
   size = "md",
   label,
+  "aria-label": ariaLabel,
   children,
   ...props
 }: AvatarProps) => {
-  const a11yProps = label ? { role: "img", "aria-label": label } : { "aria-hidden": true };
+  const name = label ?? ariaLabel;
+  const a11yProps = name ? { role: "img", "aria-label": name } : { "aria-hidden": true };
 
   return (
     <div className={cn(avatarStyle({ variant, size }), className)} {...a11yProps} {...props}>
@@ -74,30 +67,15 @@ interface AvatarImageProps extends Omit<React.ComponentPropsWithRef<"img">, "alt
   src: string;
 }
 
-const AvatarImage = ({ ref, className, src, onError, ...props }: AvatarImageProps) => {
+const AvatarImage = ({ className, src, onError, ...props }: AvatarImageProps) => {
   // Keyed by src so a new src gets its own try.
   const [failedSrc, setFailedSrc] = useState<string>();
 
-  // An image that failed before hydration fired `error` before React listened. `decode()` only
-  // rejects for a broken image (an SVG without intrinsic size also reports `naturalWidth` 0).
-  const detectEarlyFailure = useCallback(
-    (image: HTMLImageElement | null) => {
-      if (!image?.complete || image.naturalWidth > 0) return;
-      image.decode().catch(() => setFailedSrc(src));
-    },
-    [src],
-  );
-  const composedRef = useMemo(
-    () => composeRefs(ref, detectEarlyFailure),
-    [ref, detectEarlyFailure],
-  );
-
-  // A failed image left mounted draws the browser's broken-image icon over the fallback.
+  // A failed image left mounted can draw the browser's broken-image icon over the fallback.
   if (failedSrc === src) return null;
 
   return (
     <img
-      ref={composedRef}
       className={cn("absolute inset-0 z-1 object-cover", className)}
       src={src}
       onError={(e) => {

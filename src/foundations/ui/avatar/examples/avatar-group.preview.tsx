@@ -3,15 +3,15 @@ import { Avatar } from "#/foundations/ui/avatar/avatar.tsx";
 export default function AvatarGroupPreview() {
   return (
     <Avatar.Group>
-      <Avatar>
+      <Avatar label="Pedro Brandão">
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
-      <Avatar>
+      <Avatar label="Pedro Brandão">
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
-      <Avatar>
+      <Avatar label="Pedro Brandão">
         <Avatar.Image src="https://github.com/pdrbrnd.png" />
         <Avatar.Fallback>Pedro Brandão</Avatar.Fallback>
       </Avatar>
