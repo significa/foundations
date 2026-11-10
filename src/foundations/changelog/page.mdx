@@ -60,7 +60,8 @@ example while a form has unsaved changes. `Modal.Close` and your own state still
 +     }, { signal });
 
       element.addEventListener("keydown", (event: KeyboardEvent) => {
-        if (event.key === "Escape" && open) {
+-       if (event.key === "Escape" && open) {
++       if (event.key === "Escape" && !event.isComposing && open) {
           event.preventDefault();
           event.stopPropagation();
 -         setOpen(false);
@@ -76,9 +77,14 @@ example while a form has unsaved changes. `Modal.Close` and your own state still
 -     const handleDialogClick = (event: MouseEvent) => {
 -       if ((event.target as HTMLElement).nodeName === "DIALOG") { … }
 -     };
+-     element.addEventListener("click", handleDialogClick);
+-     return () => {
+-       element.removeEventListener("click", handleDialogClick);
+-     };
++     // Only this dialog's own backdrop: a nested dialog's backdrop click bubbles here
 +     const isOnBackdrop = (event: MouseEvent) => {
-+       if (!(event.target instanceof HTMLDialogElement)) return false;
-+       const { top, left, width, height } = event.target.getBoundingClientRect();
++       if (event.target !== element) return false;
++       const { top, left, width, height } = element.getBoundingClientRect();
 +       return top > event.clientY || event.clientY > top + height ||
 +         left > event.clientX || event.clientX > left + width;
 +     };
@@ -93,6 +99,10 @@ example while a form has unsaved changes. `Modal.Close` and your own state still
 +     };
 +     element.addEventListener("pointerdown", handlePointerDown);
 +     element.addEventListener("click", handleClick);
++     return () => {
++       element.removeEventListener("pointerdown", handlePointerDown);
++       element.removeEventListener("click", handleClick);
++     };
 -   }, [setOpen, open]);
 +   }, [setOpen, open, keepOpen]);
 

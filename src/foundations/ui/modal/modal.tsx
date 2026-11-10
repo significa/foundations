@@ -80,7 +80,7 @@ const useDialogElement = (
     element.addEventListener(
       "keydown",
       (event: KeyboardEvent) => {
-        if (event.key === "Escape" && open) {
+        if (event.key === "Escape" && !event.isComposing && open) {
           event.preventDefault();
           event.stopPropagation();
           if (!keepOpen) setOpen(false);
@@ -98,10 +98,11 @@ const useDialogElement = (
     const element = ref.current;
     if (!element || !open || keepOpen) return;
 
-    // A click on the <dialog> itself, outside its box, is on the backdrop
+    // A click on this <dialog> itself, outside its box, is on its backdrop. Not any
+    // dialog: a nested dialog's backdrop click bubbles here and must not close this one.
     const isOnBackdrop = (event: MouseEvent) => {
-      if (!(event.target instanceof HTMLDialogElement)) return false;
-      const { top, left, width, height } = event.target.getBoundingClientRect();
+      if (event.target !== element) return false;
+      const { top, left, width, height } = element.getBoundingClientRect();
       return (
         top > event.clientY ||
         event.clientY > top + height ||
