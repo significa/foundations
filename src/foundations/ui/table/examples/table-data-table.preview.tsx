@@ -1,15 +1,13 @@
+import type { ColumnDef, RowSelectionState, SortingState } from "@tanstack/react-table";
 import {
-  type ColumnDef,
   columnSizingFeature,
   createPaginatedRowModel,
   createSortedRowModel,
   flexRender,
   metaHelper,
-  type RowSelectionState,
   rowPaginationFeature,
   rowSelectionFeature,
   rowSortingFeature,
-  type SortingState,
   sortFn_alphanumeric,
   sortFn_text,
   tableFeatures,

@@ -1,6 +1,6 @@
 ---
 title: Table
-description: Semantic table primitive. Compose with TanStack Table for sorting, selection, filtering, and pagination.
+description: Semantic table primitive. Compose with TanStack Table for sorting, selection, and pagination.
 preview: table
 files:
   - src/foundations/ui/table/table.tsx
@@ -174,7 +174,7 @@ Wrap the table in `Table.Container` with a `max-h-*` and set `sticky` on `Table.
 
 ### Data table (with TanStack Table)
 
-For sorting, filtering, selection, and pagination together, compose `Table` with [`@tanstack/react-table`](https://tanstack.com/table/v9). This is **not** a hard dependency of the primitive — you only need it when you want the engine.
+For sorting, selection, and pagination together, compose `Table` with [`@tanstack/react-table`](https://tanstack.com/table/v9). This is **not** a hard dependency of the primitive — you only need it when you want the engine.
 
 ```bash
 pnpm add @tanstack/react-table@9
