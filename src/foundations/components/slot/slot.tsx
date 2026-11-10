@@ -20,26 +20,16 @@ const isValidSlottableElement = (
   );
 };
 
-// Events a slot handler vetoed with `skipChildHandler`. Explicit, unlike checking
-// `defaultPrevented`, which an ancestor or nested element may already have set.
-const skippedEvents = new WeakSet<object>();
-
-/** Call from a slot's `on*` handler to stop the child's handler of the same name for this event. */
-export const skipChildHandler = (event: object) => {
-  skippedEvents.add(event);
-};
-
-const isObject = (value: unknown): value is object => {
-  return typeof value === "object" && value !== null;
-};
+// A slot handler returns this to skip the child's; preventDefault can't, it doesn't say who set it.
+export const SKIP_CHILD = Symbol("skip-child");
 
 // Where both pass the same `on*` handler, the slot's runs first, then the child's unless the slot's
-// called `skipChildHandler` (how a disabled or loading Button blocks an asChild link's onClick).
+// returned SKIP_CHILD (how a disabled or loading Button blocks an asChild link's onClick).
 const composeEventHandlers = (
   slotProps: Record<string, unknown>,
   childProps: Record<string, unknown>,
 ) => {
-  const composed: Record<string, (...args: unknown[]) => void> = {};
+  const composed: Record<string, (...args: unknown[]) => unknown> = {};
 
   for (const [name, slotHandler] of Object.entries(slotProps)) {
     const childHandler = childProps[name];
@@ -47,13 +37,10 @@ const composeEventHandlers = (
     if (typeof slotHandler !== "function" || typeof childHandler !== "function") continue;
 
     // Not every `on*` is a DOM event (`onOpenChange(open, event, reason)`): pass every argument on.
+    // Passing SKIP_CHILD up lets a Slot nested on the same element honour the veto too.
     composed[name] = (...args: unknown[]) => {
-      const event = args[0];
-      // React shares one event along the bubble path: a mark from a nested element isn't this slot's.
-      if (isObject(event)) skippedEvents.delete(event);
-      slotHandler(...args);
-      if (isObject(event) && skippedEvents.has(event)) return;
-      childHandler(...args);
+      if (slotHandler(...args) === SKIP_CHILD) return SKIP_CHILD;
+      return childHandler(...args);
     };
   }
 
