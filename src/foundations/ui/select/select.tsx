@@ -1,6 +1,11 @@
 import type { VariantProps } from "cva";
 
-import { Input, type inputStyle, useInputStyle } from "#/foundations/ui/input/input.tsx";
+import {
+  Input,
+  type inputStyle,
+  useInputGroupContext,
+  useInputStyle,
+} from "#/foundations/ui/input/input.tsx";
 import { cn, cva } from "#/lib/utils/classnames.ts";
 
 interface SelectProps extends Omit<React.ComponentPropsWithRef<"select">, "size"> {
@@ -29,14 +34,17 @@ const selectChevronStyle = cva({
 });
 
 const Select = ({ className, invalid, variant, size, ...props }: SelectProps) => {
+  // In a group the group's size wins, as it does for the input styles.
+  const chevronSize = useInputGroupContext()?.size ?? size;
   return (
     <select
       data-invalid={invalid || undefined}
       aria-invalid={invalid || undefined}
       className={cn(
         useInputStyle({ variant, size }),
-        "appearance-none",
-        !props.multiple && selectChevronStyle({ size }),
+        // Forced colours drop gradient images: keep the native indicator there.
+        "appearance-none forced-colors:appearance-auto",
+        !props.multiple && selectChevronStyle({ size: chevronSize }),
         className,
       )}
       {...props}

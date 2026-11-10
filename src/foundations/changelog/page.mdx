@@ -56,7 +56,7 @@ Thread `autoComplete` from the root props through the context to the cell.
 
 ### Fixed: `Select` chevron ignored the text colour
 
-The chevron was a black or white data-URL SVG, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now two diagonal strokes drawn with `currentColor` gradients on the `<select>` itself: it follows the text colour, the theme and the disabled opacity, mirrors under `rtl:`, is sized per `size`, and is left out for `multiple`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`. In `input.tsx`, the group frame now dims for a disabled select as it does for a disabled input.
+The chevron was a black or white data-URL SVG, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now two diagonal strokes drawn with `currentColor` gradients on the `<select>` itself: it follows the text colour, the theme and the disabled opacity, mirrors under `rtl:`, is sized per `size`, and is left out for `multiple`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`. Inside `Select.Group` the chevron takes the group's size, read with a new `useInputGroupContext` export from `input.tsx`. Under forced colours, which drop gradient images, the select falls back to its native indicator. In `input.tsx`, the group frame now dims for a disabled select as it does for a disabled input.
 
 ```diff tsx
 + const selectChevronStyle = cva({
@@ -75,6 +75,8 @@ The chevron was a black or white data-URL SVG, switched by the `dark:` variant, 
 +   defaultVariants: { size: "md" },
 + });
 
++ const chevronSize = useInputGroupContext()?.size ?? size;
+
   <select
     data-invalid={invalid || undefined}
 +   aria-invalid={invalid || undefined}
@@ -83,13 +85,18 @@ The chevron was a black or white data-URL SVG, switched by the `dark:` variant, 
 -     "appearance-none bg-size-[1em] bg-position-[right_--spacing(2)_center] bg-no-repeat pr-10",
 -     'bg-[url("data:image/svg+xml;base64,…")]',
 -     'dark:bg-[url("data:image/svg+xml;base64,…")]',
-+     "appearance-none",
-+     !props.multiple && selectChevronStyle({ size }),
++     "appearance-none forced-colors:appearance-auto",
++     !props.multiple && selectChevronStyle({ size: chevronSize }),
       className,
     )}
 ```
 
 ```diff tsx
+  // input.tsx
++ const useInputGroupContext = () => use(InputGroupContext);
+- export { CompoundInput as Input, inputStyle, useInputStyle };
++ export { CompoundInput as Input, inputStyle, useInputGroupContext, useInputStyle };
+
   // input.tsx, inputFrameBase
 - "[:disabled,:has(input:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled)]:opacity-50",
 + "[:disabled,:has(input:disabled,select:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled,select:disabled)]:opacity-50",

@@ -113,6 +113,9 @@ interface InputGroupContextValue {
 
 const InputGroupContext = createContext<InputGroupContextValue | null>(null);
 
+// null outside an Input.Group.
+const useInputGroupContext = () => use(InputGroupContext);
+
 const useInputStyle = (props: VariantProps<typeof inputStyle> & { className?: string }) => {
   const ctx = use(InputGroupContext);
   if (ctx) {
@@ -217,4 +220,4 @@ const CompoundInput = Object.assign(Input, {
 });
 
 export type { InputGroupProps, InputProps };
-export { CompoundInput as Input, inputStyle, useInputStyle };
+export { CompoundInput as Input, inputStyle, useInputGroupContext, useInputStyle };
