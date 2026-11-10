@@ -17,19 +17,18 @@ All commands use **pnpm** (v10.34.9). Node and pnpm are pinned via `mise.toml`
 | `pnpm preview`      | Serve the production build locally                                 |
 | `pnpm check`        | **CI gate** — must pass before merging (see below)                 |
 | `pnpm lint`         | `biome lint --write --unsafe .`                                    |
-| `pnpm format`       | Biome format (non-Astro) + Prettier format (Astro)                 |
+| `pnpm format`       | `biome format --write .`                                           |
 | `pnpm types:check`  | `astro sync && tsc -noEmit`                                        |
 | `pnpm knip`         | Dead-code / unused-dependency detection                            |
 
 ### CI gate
 
-`pnpm check` runs five things in sequence:
+`pnpm check` runs four things in sequence:
 
-1. `biome ci` — lints and checks formatting for all non-Astro files, Markdown included (the preset formats `.md`, so run `pnpm format` after editing docs like this one)
-2. `prettier --check "**/*.astro"` — checks formatting for Astro files
-3. `pnpm types:check` — full TypeScript type check
-4. `pnpm check:deps` — verifies every component's `page.mdx` declares the cross-Foundations imports it uses (see "Page dependency discipline" below)
-5. `pnpm knip` — flags unused files and unused/unlisted dependencies (config in `knip.ts`; unused-export reporting is off because the library surface is intentionally public)
+1. `biome ci` — lints and checks formatting for every file, `.astro` and Markdown included (the preset formats `.md`, so run `pnpm format` after editing docs like this one)
+2. `pnpm types:check` — full TypeScript type check
+3. `pnpm check:deps` — verifies every component's `page.mdx` declares the cross-Foundations imports it uses (see "Page dependency discipline" below)
+4. `pnpm knip` — flags unused files and unused/unlisted dependencies (config in `knip.ts`; unused-export reporting is off because the library surface is intentionally public)
 
 **Always run `pnpm check` after making changes.** Fix all errors before considering a task done.
 
@@ -62,37 +61,42 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 Biome config extends the shared `@significa/ts-standards/biome` preset (`biome.json`).
 Biome and `@significa/ts-standards` are pinned together; bump them as a pair. The
-project file only adds what's Foundations-specific: `.astro` files are excluded
-(Prettier owns their formatting; running both would fight), CSS line width is 128,
-and Tailwind class sorting is on. The preset defines the TS/TSX formatting below
+project file only adds what's Foundations-specific: full `.astro` support
+(`html.experimentalFullSupportEnabled` plus the HTML formatter, so Biome lints and
+formats templates, not just frontmatter), CSS line width is 128, and Tailwind class
+sorting is on. Biome is the only linter and formatter; there is no Prettier. The preset defines the TS/TSX formatting below
 and the strict rules (no `any`, no `!`, no `console.log`, no floating
 promises, kebab-case filenames).
 
 Lint suppressions live in the component file as a per-line `biome-ignore` with a
 specific reason, never in `biome.json` — consumers copy the file and run the same
-preset, so the suppression has to travel with it.
+preset, so the suppression has to travel with it. The one `biome.json` exception
+is the vendored PostHog loader (docs-site only), whose inline script ships verbatim.
 
 Tailwind classes are sorted by `nursery/useTailwindSortedClasses` (error, safe
-fix) in `className`, `cn`, `cva`, `clsx` and `tv`. `tailwind.stylesheet` points at
+fix) in `class`, `className`, `class:list`, `cn`, `cva`, `clsx` and `tv`. `tailwind.stylesheet` points at
 `src/styles/global.css` so custom theme values sort correctly; `pnpm lint` applies
 the fixes, and CI fails on unsorted classes.
 
 ### Formatting rules
 
-|                 | `.ts` / `.tsx` files | `.astro` files |
-| --------------- | -------------------- | -------------- |
-| Tool            | Biome                | Prettier       |
-| Quotes          | Double               | Double         |
-| Semicolons      | Always               | Always         |
-| Line width      | 100                  | 128            |
-| Indent          | 2 spaces             | 2 spaces       |
-| Trailing commas | All                  | ES5            |
-| JSX quotes      | Double               | Double         |
+Biome formats everything. `.astro` frontmatter and `<script>` bodies follow the
+TS rules; templates use Biome's HTML formatter at the same width, with
+`<script>`/`<style>` bodies indented and void elements self-closed (`<meta />`).
+
+| Setting         | Value          |
+| --------------- | -------------- |
+| Quotes          | Double         |
+| Semicolons      | Always         |
+| Line width      | 100 (CSS: 128) |
+| Indent          | 2 spaces       |
+| Trailing commas | All            |
+| JSX quotes      | Double         |
 
 ### Imports
 
 - Every relative and alias import names the real file, extension included: `./slot.tsx`, `#/foundations/ui/button/button.tsx`. Extensionless `#/` only resolves in Vite; TypeScript, esbuild and Node reject it. Biome's `useImportExtensions` fixes relative imports; `tsc` catches extensionless `#/` (TS2307).
-- Cross-directory imports use `#/…`; only same-directory imports are relative (`./x.tsx`). `../` is forbidden by Biome's `noRestrictedImports` (Biome skips `.astro` files, so keep to it by hand there).
+- Cross-directory imports use `#/…`; only same-directory imports are relative (`./x.tsx`). `../` is forbidden by Biome's `noRestrictedImports`, in `.astro` files too.
 - Biome's `organizeImports` runs automatically — do not manually sort imports.
 - Use `import type { Foo }` for type-only imports; never mix types and values in a single `import`.
 - Always import Phosphor icons from the SSR-safe subpath: `import { IconName } from '@phosphor-icons/react/dist/ssr'`. The root barrel uses a dynamic registry that breaks with Astro SSR and is unreliable under Vite HMR (intermittent `Cannot read properties of undefined (reading 'call')` errors). The `/dist/ssr` build is static ESM, fully tree-shakable, SSR-safe, and HMR-stable.

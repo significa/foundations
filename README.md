@@ -109,16 +109,16 @@ A preview file can optionally export a `meta` object to control how it is displa
 
 ## Commands
 
-| Command             | Description                                                          |
-| ------------------- | -------------------------------------------------------------------- |
-| `pnpm dev`          | Start the Astro development server                                   |
-| `pnpm dev:pagefind` | Build the site and start a dev server with Pagefind search working   |
-| `pnpm build`        | Build for production (includes Pagefind indexing via `postbuild`)    |
-| `pnpm preview`      | Preview the production build locally                                 |
-| `pnpm types:check`  | Run `astro sync` and TypeScript type checking                        |
-| `pnpm format`       | Auto-format all files (Biome for TS/TSX/CSS, Prettier for `.astro`)  |
-| `pnpm lint`         | Run Biome linter with auto-fix (including unsafe fixes)              |
-| `pnpm check`        | Full CI check: Biome CI + Prettier check on `.astro` + type checking |
+| Command             | Description                                                        |
+| ------------------- | ------------------------------------------------------------------ |
+| `pnpm dev`          | Start the Astro development server                                 |
+| `pnpm dev:pagefind` | Build the site and start a dev server with Pagefind search working |
+| `pnpm build`        | Build for production (includes Pagefind indexing via `postbuild`)  |
+| `pnpm preview`      | Preview the production build locally                               |
+| `pnpm types:check`  | Run `astro sync` and TypeScript type checking                      |
+| `pnpm format`       | Auto-format all files with Biome                                   |
+| `pnpm lint`         | Run Biome linter with auto-fix (including unsafe fixes)            |
+| `pnpm check`        | Full CI check: Biome CI, type checking, page deps and knip         |
 
 > **Note:** `pnpm dev` does not index Pagefind, so the search dialog will show a "Could not load Pagefind instance" message. Run `pnpm dev:pagefind` once to build the index — subsequent `pnpm dev` runs will pick it up from `public/pagefind/`.
 
@@ -140,9 +140,7 @@ A preview file can optionally export a `meta` object to control how it is displa
 
 ## Linting & Formatting
 
-This project uses **both** Biome and Prettier — by design, not by accident.
-
-**Biome does not yet support `.astro` files**. Prettier, with the [`prettier-plugin-astro`](https://github.com/withastro/prettier-plugin-astro) plugin, fills that gap. Once Biome adds support for `.astro` files, we should remove Prettier and consolidate on Biome for all formatting and linting needs.
+[Biome](https://biomejs.dev) is the only linter and formatter, `.astro` files included. Its Astro support (`html.experimentalFullSupportEnabled` in `biome.json`) is still marked experimental, so expect occasional formatting changes when Biome is bumped.
 
 ## License
 

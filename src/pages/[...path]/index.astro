@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
-import { ArrowSquareOutIcon, PackageIcon, PencilIcon, CalendarIcon } from "@phosphor-icons/react";
+import { ArrowSquareOutIcon, CalendarIcon, PackageIcon, PencilIcon } from "@phosphor-icons/react";
 import { format } from "date-fns";
 import CodeBlock from "#/components/code-block.astro";
 import Preview from "#/components/preview.astro";
@@ -35,20 +35,24 @@ const lastModified = await getPageLastModifiedTime(page);
 <Shell meta={{ title: page.data.title, description: page.data.description }}>
   <PageLayout data-pagefind-meta={`folder:${page.data.folder || "Other"}`}>
     <fragment slot="nav">
-      <h3 class="text-foreground-secondary mb-3 font-medium">On this page</h3>
-      <TableOfContents client:load headings={headings.filter(({ depth }) => depth <= (page.data.maxTocDepth ?? 3))} />
+      <h3 class="mb-3 font-medium text-foreground-secondary">On this page</h3>
+      <TableOfContents
+        client:load
+        headings={headings.filter(({ depth }) => depth <= (page.data.maxTocDepth ?? 3))}
+      />
       <hr class="my-6" />
-      <div class="text-foreground-secondary text-xs">
+      <div class="text-xs text-foreground-secondary">
         <a
-          class="hover:text-foreground mb-2 inline-flex items-center gap-1 font-medium transition"
+          class="mb-2 inline-flex items-center gap-1 font-medium transition hover:text-foreground"
           href={`${GITHUB_REPO_URL}/edit/main/${page.filePath}`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <PencilIcon /> Edit this page
+          <PencilIcon />
+          Edit this page
         </a>
         {lastModified && (
-          <p class="text-foreground-secondary flex items-center gap-1 text-xs">
+          <p class="flex items-center gap-1 text-xs text-foreground-secondary">
             <CalendarIcon />
             Edited {format(lastModified, "PPP")}
           </p>
@@ -59,7 +63,7 @@ const lastModified = await getPageLastModifiedTime(page);
     <section>
       <div class="mb-8">
         <h1 class="font-heading text-3xl font-bold tracking-tight">{page.data.title}</h1>
-        <p class="text-foreground-secondary mt-2 text-pretty">{page.data.description}</p>
+        <p class="mt-2 text-pretty text-foreground-secondary">{page.data.description}</p>
       </div>
     </section>
 
@@ -119,12 +123,12 @@ const lastModified = await getPageLastModifiedTime(page);
           return (
             <a
               class:list={[
-                "border-border hover:bg-foreground/3 focus-visible:bg-foreground/3 flex-1 rounded-lg border p-4 transition outline-none",
+                "flex-1 rounded-lg border border-border p-4 transition outline-none hover:bg-foreground/3 focus-visible:bg-foreground/3",
                 index > 0 && "text-right",
               ]}
               href={`/${page.id}`}
             >
-              <p class="text-foreground-secondary mb-1 text-xs">{["Previous", "Next"][index]}</p>
+              <p class="mb-1 text-xs text-foreground-secondary">{["Previous", "Next"][index]}</p>
               <p class="text-sm font-medium">{page.data.title}</p>
             </a>
           );

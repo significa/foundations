@@ -31,5 +31,10 @@ function rewriteImports(code: string) {
 ---
 
 <CodeBlock {...props}>
-  <Code slot="pre" code={rewriteImports(content)} lang={extension as CodeLanguage} themes={themes} />
+  <Code
+    slot="pre"
+    code={rewriteImports(content)}
+    lang={extension as CodeLanguage}
+    themes={themes}
+  />
 </CodeBlock>

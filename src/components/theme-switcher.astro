@@ -10,7 +10,7 @@ import { Button } from "#/foundations/ui/button/button.tsx";
 </Button>
 
 <script>
-  import { THEME_STORAGE_KEY, isTheme, type Theme } from "#/lib/theme.ts";
+  import { isTheme, THEME_STORAGE_KEY, type Theme } from "#/lib/theme.ts";
 
   function getStoredTheme(): Theme | null {
     const stored = localStorage.getItem(THEME_STORAGE_KEY);

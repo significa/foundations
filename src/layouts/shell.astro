@@ -1,15 +1,15 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import Posthog from "#/components/posthog.astro";
 import { COLOR_TOKENS, DEFAULT_SCHEME_ID, SCHEMES } from "#/components/ds-config/schemes.ts";
 import {
+  STORAGE_KEY as DS_CONFIG_STORAGE_KEY,
   FONT_VARS,
   RADIUS_DEFAULT,
   RADIUS_STEP_REM,
   RING_DEFAULT,
-  STORAGE_KEY as DS_CONFIG_STORAGE_KEY,
 } from "#/components/ds-config/storage.ts";
 import { FONT_FALLBACKS } from "#/components/ds-config/use-fonts-catalog.ts";
+import Posthog from "#/components/posthog.astro";
 import { Toaster } from "#/foundations/ui/toaster/toaster.tsx";
 import { THEME_STORAGE_KEY } from "#/lib/theme.ts";
 
@@ -81,25 +81,25 @@ const description =
             if (onDefault && !o) continue;
             const v = o || scheme.colors[t];
             if (!v) continue;
-            root.style.setProperty("--color-" + t, "light-dark(" + v.light + ", " + v.dark + ")");
+            root.style.setProperty(`--color-${t}`, `light-dark(${v.light}, ${v.dark})`);
           }
           if (typeof cfg.radiusStep === "number" && cfg.radiusStep !== radiusDefault) {
-            root.style.setProperty("--radius", cfg.radiusStep * radiusStepRem + "rem");
+            root.style.setProperty("--radius", `${cfg.radiusStep * radiusStepRem}rem`);
           }
           if (typeof cfg.ringWidth === "number" && cfg.ringWidth !== ringDefault) {
-            root.style.setProperty("--ring-width", cfg.ringWidth + "px");
+            root.style.setProperty("--ring-width", `${cfg.ringWidth}px`);
           }
           const fonts = cfg.fonts || {};
           for (const slot in fontVars) {
             const f = fonts[slot];
-            if (!f || !f.family) continue;
+            if (!f?.family) continue;
             const fallback = fontFallbacks[f.category] || fontFallbacks["sans-serif"];
-            root.style.setProperty(fontVars[slot], "'" + f.family + "', " + fallback);
+            root.style.setProperty(fontVars[slot], `'${f.family}', ${fallback}`);
             const href =
               "https://fonts.googleapis.com/css2?family=" +
               encodeURIComponent(f.family).replace(/%20/g, "+") +
               ":wght@400;500;600;700&display=swap";
-            if (!document.querySelector('link[rel="stylesheet"][href="' + href + '"]')) {
+            if (!document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
               const l = document.createElement("link");
               l.rel = "stylesheet";
               l.href = href;

@@ -9,9 +9,6 @@
       }
     }
   },
-  "prettier": {
-    "allowed": true
-  },
   "languages": {
     "CSS": {
       "formatter": { "language_server": { "name": "biome" } },
@@ -42,13 +39,11 @@
       }
     },
     "Astro": {
-      "formatter": {
-        "external": {
-          "command": "pnpm",
-          "arguments": ["exec", "prettier", "--stdin-filepath", "{buffer_path}"]
-        }
-      },
-      "format_on_save": "on"
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true
+      }
     }
   },
   "format_on_save": "on"

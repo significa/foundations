@@ -1,9 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { CopyButton } from "./copy-button.tsx";
 import { Button } from "#/foundations/ui/button/button.tsx";
 import { cn } from "#/lib/utils/classnames.ts";
 import { uid } from "#/lib/utils/uid.ts";
+import { CopyButton } from "./copy-button.tsx";
 
 type Props = Omit<HTMLAttributes<"div">, "id"> & {
   collapsible?: boolean;
@@ -17,7 +17,11 @@ const { class: className, collapsible = false, ...props } = Astro.props;
 <div
   id={id}
   data-code
-  class={cn("group relative my-4 size-full w-full overflow-hidden", "font-mono text-[0.9rem] font-medium", className)}
+  class={cn(
+    "group relative my-4 size-full w-full overflow-hidden",
+    "font-mono text-[0.9rem] font-medium",
+    className,
+  )}
   data-collapsible={collapsible}
   data-escape-markdown
   {...props}
@@ -25,12 +29,14 @@ const { class: className, collapsible = false, ...props } = Astro.props;
   <div
     class={cn(
       "size-full overflow-auto rounded-lg border p-4 *:w-fit",
-      "group-data-[collapsible=true]:max-h-64 group-data-[collapsible=true]:overflow-hidden group-data-[collapsible=true]:mask-[linear-gradient(0deg,transparent_0%,black_--spacing(32))]"
+      "group-data-[collapsible=true]:max-h-64 group-data-[collapsible=true]:overflow-hidden group-data-[collapsible=true]:mask-[linear-gradient(0deg,transparent_0%,black_--spacing(32))]",
     )}
   >
-    {Astro.slots.has("default") && <pre>
-          <slot />
-        </pre>}
+    {Astro.slots.has("default") && (
+      <pre>
+        <slot />
+      </pre>
+    )}
     <slot name="pre" />
   </div>
   <CopyButton className="absolute top-2 right-2 opacity-80" client:idle target={`#${id} pre`} />
@@ -40,7 +46,7 @@ const { class: className, collapsible = false, ...props } = Astro.props;
       data-id="code-block-expand"
       size="sm"
       variant="outline"
-      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
+      className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2"
     >
       Expand
     </Button>
@@ -51,6 +57,7 @@ const { class: className, collapsible = false, ...props } = Astro.props;
   [data-code] {
     pre {
       display: flex;
+      /* biome-ignore lint/complexity/noImportantStyles: beats Shiki's inline background-color */
       background: transparent !important;
     }
   }
@@ -70,7 +77,7 @@ const { class: className, collapsible = false, ...props } = Astro.props;
 
           toggle.remove();
         },
-        { once: true }
+        { once: true },
       );
     }
   });
