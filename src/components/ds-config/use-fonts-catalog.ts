@@ -21,7 +21,7 @@ type CatalogRow = {
 };
 
 export const fetchCatalog = (): Promise<FontMeta[]> => {
-  if (catalogPromise) return catalogPromise;
+  if (catalogPromise !== null) return catalogPromise;
   catalogPromise = fetch("https://api.fontsource.org/v1/fonts")
     .then((response) => response.json())
     .then((rows: CatalogRow[]) =>
