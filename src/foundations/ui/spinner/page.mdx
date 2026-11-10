@@ -21,7 +21,7 @@ Extends the `span` element.
     label: {
       type: "string",
       description:
-        "Accessible name. With it, the spinner is a `role=\"status\"`; without it, it's `aria-hidden`. Omit it when the context already says it's busy (a loading Button, a toast).",
+        "Visually hidden text that names the spinner as a `role=\"status\"`; without it, the spinner is `aria-hidden`. Assistive tech may not announce it when it first appears. Omit it when the context already says it's busy (a loading Button, a toast).",
     },
   }}
 />
@@ -40,7 +40,9 @@ The spinner inherits `currentColor`, so any text color utility works.
 
 ## Other styles
 
-A project should keep **one** spinner style. `Spinner` ships the ring because that's what Button, Popover and Toaster use; if your project wants a different look, pick one recipe below and replace the contents of `spinner.tsx` with it. Each recipe has the same API (`size`, `label`, `className`) and carries its own keyframes in a React `<style>` tag, so there's nothing to add to your global CSS.
+A project should keep **one** spinner style. `Spinner` ships the ring because that's what Button, Popover and Toaster use; if your project wants a different look, pick one recipe below and replace the contents of `spinner.tsx` with it. Each recipe has the same API (`size`, `label`, `className`) and carries its own keyframes in a React `<style>` tag, so there's nothing to add to your global CSS. React 19 hoists that `<style>` into the head and dedupes it by `href`, so any number of spinners share one copy; keep it in the component rather than lifting it out.
+
+The previews below import the recipe file; in a project, that file replaces `spinner.tsx`.
 
 ### Dots
 
@@ -78,5 +80,5 @@ Steps through glyphs, terminal-style. The frames sit in a column behind a one-ro
    - The box is fixed and the spinner is vertically centred, so it can sit inline with text without shifting it.
 
 2. **Accessibility**:
-   - Pass `label` (e.g. `"Loading results"`) when the spinner is the only sign of the wait. Leave it out when the surrounding element already announces it, so screen readers don't hear "loading" twice.
+   - Pass `label` (e.g. `"Loading results"`) when the spinner is the only sign of the wait: it renders as visually hidden text inside a `role="status"`. Assistive tech may not announce a status when it first appears, so for a wait that must be heard, announce it from a live region that is already on the page. Leave `label` out when the surrounding element already announces it, so screen readers don't hear "loading" twice.
    - Under `prefers-reduced-motion` the ring stops rotating and pulses slowly instead: it still reads as busy, without the motion.

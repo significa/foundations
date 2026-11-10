@@ -25,16 +25,21 @@ const spinnerStyle = cva({
 interface SpinnerProps
   extends Omit<React.ComponentPropsWithRef<"span">, "children">,
     VariantProps<typeof spinnerStyle> {
-  /** Accessible name, announced as a status. Omit when the context already says it's busy (e.g. a loading Button). */
+  /**
+   * Visually hidden text that names the spinner as a status. Assistive tech may not announce it
+   * when it first appears. Omit when the context already says it's busy (e.g. a loading Button).
+   */
   label?: string;
 }
 
 const Spinner = ({ className, size, label, ...props }: SpinnerProps) => {
-  const a11yProps = label
-    ? { role: "status", "aria-label": label }
-    : { "aria-hidden": true as const };
+  const a11yProps = label ? { role: "status" } : { "aria-hidden": true as const };
 
-  return <span className={spinnerStyle({ size, className })} {...a11yProps} {...props} />;
+  return (
+    <span className={spinnerStyle({ size, className })} {...a11yProps} {...props}>
+      {label && <span className="sr-only">{label}</span>}
+    </span>
+  );
 };
 
 export type { SpinnerProps };

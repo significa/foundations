@@ -30,24 +30,26 @@ const spinnerStyle = cva({
 interface SpinnerProps
   extends Omit<React.ComponentPropsWithRef<"span">, "children">,
     VariantProps<typeof spinnerStyle> {
-  /** Accessible name, announced as a status. Omit when the context already says it's busy (e.g. a loading Button). */
+  /**
+   * Visually hidden text that names the spinner as a status. Assistive tech may not announce it
+   * when it first appears. Omit when the context already says it's busy (e.g. a loading Button).
+   */
   label?: string;
   /** Glyphs to step through, one per frame. */
   frames?: readonly string[];
 }
 
 const Spinner = ({ className, size, label, frames = BRAILLE, ...props }: SpinnerProps) => {
-  const a11yProps = label
-    ? { role: "status", "aria-label": label }
-    : { "aria-hidden": true as const };
+  const a11yProps = label ? { role: "status" } : { "aria-hidden": true as const };
 
   return (
     <span className={spinnerStyle({ size, className })} {...a11yProps} {...props}>
       <style href="spinner-frames" precedence="default">
         {keyframes}
       </style>
-      {/* Reduced motion: hold the first frame and pulse instead */}
-      <span className="block h-[1em] overflow-hidden motion-reduce:animate-pulse">
+      {label && <span className="sr-only">{label}</span>}
+      {/* Reduced motion: hold the first frame and pulse instead. The glyphs are never read out */}
+      <span aria-hidden className="block h-[1em] overflow-hidden motion-reduce:animate-pulse">
         <span
           className="flex animate-[spinner-frames_1s_infinite] flex-col motion-reduce:animate-none"
           style={{

@@ -99,7 +99,6 @@ const Button = ({
               <span
                 data-button-spinner
                 className={cn(
-                  // flex: no line box, so the spinner is centred rather than sat on the baseline
                   "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2",
                   "text-(--button-text-color)",
                 )}
