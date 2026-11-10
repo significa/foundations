@@ -136,4 +136,6 @@ On a `className` conflict the Slot's utilities win (`cn(child, slot)`, resolved 
 
 The flip side of that veto: whenever the Slot's handler cancels the native action, the child's handler of the same name doesn't run either. Examples are `FileUpload.Dropzone`'s drag events, Arrow, Home and End on `Tabs`, `SegmentedControl`, `ToggleGroup` and `Sequence` items, and Space on a non-button `Popover` trigger. Handle those on a wrapper or inside the child instead.
 
+The veto only counts a `preventDefault()` made by the Slot's own handler. If the event was already cancelled before that handler ran (a parent's `onClickCapture`, a nested element's handler), the child's handler still runs, even under a disabled or loading `Button asChild`.
+
 `Slottable` renders its child through `Slot`, so the same rules apply under `asChild`.

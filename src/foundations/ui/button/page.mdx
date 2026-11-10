@@ -45,7 +45,7 @@ folder: UI
       type: "boolean",
       default: "false",
       description:
-        "Disables the button. Under `asChild` the child gets `aria-disabled` instead, and its clicks (and a link's navigation) are blocked.",
+        "Disables the button. Under `asChild` the child gets `aria-disabled` instead, and its clicks, middle-clicks and a link's navigation are blocked. A click that something else already cancelled (e.g. a parent's `onClickCapture`) still reaches the child's `onClick`.",
     },
     type: {
       type: ['"button"', '"submit"', '"reset"'],

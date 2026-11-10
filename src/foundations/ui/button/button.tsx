@@ -75,6 +75,7 @@ const Button = ({
   type,
   disabled,
   onClick,
+  onAuxClick,
   ref,
   ...props
 }: ButtonProps) => {
@@ -88,6 +89,15 @@ const Button = ({
       return;
     }
     onClick?.(event);
+  };
+
+  // Middle-click on an asChild link fires `auxclick`, not `click`.
+  const handleAuxClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (isLoading || disabled) {
+      event.preventDefault();
+      return;
+    }
+    onAuxClick?.(event);
   };
 
   return (
@@ -110,6 +120,7 @@ const Button = ({
       aria-busy={isLoading || undefined}
       {...props}
       onClick={handleClick}
+      onAuxClick={handleAuxClick}
     >
       <Slottable asChild={asChild} child={children}>
         {(child) => (

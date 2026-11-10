@@ -139,7 +139,9 @@ instead, so it stays focusable. If you style or select it with `:disabled` or `[
 `[aria-disabled="true"]` too, or put `disabled` on the child itself.
 
 A disabled `Button asChild` around an `<a>` still followed the link and ran its `onClick` (links
-ignore `disabled`); it's now guarded the same way and gets `aria-disabled`. `Button asChild` also
+ignore `disabled`); it's now guarded the same way and gets `aria-disabled`. Middle-click fires
+`auxclick` rather than `click`, so `onAuxClick` gets the same guard; otherwise a disabled or loading
+link still opened in a new tab. `Button asChild` also
 dropped an explicit `type`, so `<Button asChild type="submit"><button>` rendered
 `type="button"`. Hover styles are gated with `not-disabled:` and `not-aria-disabled:` (`enabled:`
 never matches an `<a>`), press feedback with `not-aria-disabled:`, and the spinner wrapper is `flex` so it centres instead of sitting on the
@@ -151,6 +153,7 @@ baseline. These rely on the `Slot` fix above.
 +   type,
 +   disabled,
 +   onClick,
++   onAuxClick,
     ...props
   }) => {
 +   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -160,6 +163,7 @@ baseline. These rely on the `Slot` fix above.
 +     }
 +     onClick?.(event);
 +   };
++   // handleAuxClick: the same guard around onAuxClick (middle-click)
 
     <Comp
 -     type={asChild ? undefined : type}
@@ -169,6 +173,7 @@ baseline. These rely on the `Slot` fix above.
 +     aria-busy={isLoading || undefined}
       {...props}
 +     onClick={handleClick}
++     onAuxClick={handleAuxClick}
     >
 
   // buttonStyle: gate every hover the same way
