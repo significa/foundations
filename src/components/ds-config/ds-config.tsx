@@ -225,7 +225,7 @@ const DSConfig = () => {
         </IconButton>
       </Popover.Trigger>
       <Popover.Content className="w-80 p-0 pb-1">
-        <div className="flex items-center gap-2 border-border border-b px-3 py-2">
+        <div className="flex items-center gap-2 border-b border-border px-3 py-2">
           {isEditing && (
             <IconButton
               variant="ghost"
@@ -236,7 +236,7 @@ const DSConfig = () => {
               <ArrowLeftIcon />
             </IconButton>
           )}
-          <span className="flex-1 font-medium text-sm">{headerLabel[view]}</span>
+          <span className="flex-1 text-sm font-medium">{headerLabel[view]}</span>
           <IconButton
             variant="ghost"
             size="xs"
@@ -260,7 +260,7 @@ const DSConfig = () => {
           <div className="flex flex-col divide-y divide-border">
             <div className="flex flex-col gap-2 p-3">
               <div className="flex items-center justify-between">
-                <span className="font-medium text-xs">Scheme</span>
+                <span className="text-xs font-medium">Scheme</span>
                 <IconButton
                   variant="ghost"
                   size="xs"
@@ -280,7 +280,7 @@ const DSConfig = () => {
                       aria-label={s.label}
                       aria-pressed={isActive}
                       onClick={() => setSchemeId(s.id)}
-                      className="focus-visible:ring-(length:--ring-width) size-6 cursor-pointer rounded-full outline-none ring-ring transition"
+                      className="size-6 cursor-pointer rounded-full ring-ring transition outline-none focus-visible:ring-(length:--ring-width)"
                       style={{
                         backgroundColor: lightDark(s.colors.accent),
                         opacity: isActive ? 1 : 0.5,
@@ -293,7 +293,7 @@ const DSConfig = () => {
 
             <div className="flex flex-col gap-2 p-3">
               <div className="flex items-center justify-between">
-                <span className="font-medium text-xs">Typography</span>
+                <span className="text-xs font-medium">Typography</span>
                 <IconButton
                   variant="ghost"
                   size="xs"
@@ -322,8 +322,8 @@ const DSConfig = () => {
 
             <div className="flex flex-col gap-3 p-3">
               <div className="flex items-center justify-between">
-                <span className="font-medium text-xs">Radius</span>
-                <span className="text-foreground-secondary text-xs tabular-nums">
+                <span className="text-xs font-medium">Radius</span>
+                <span className="text-xs text-foreground-secondary tabular-nums">
                   {radiusStep * RADIUS_STEP_REM}rem
                 </span>
               </div>
@@ -344,8 +344,8 @@ const DSConfig = () => {
 
             <div className="flex flex-col gap-3 p-3">
               <div className="flex items-center justify-between">
-                <span className="font-medium text-xs">Focus ring</span>
-                <span className="text-foreground-secondary text-xs tabular-nums">
+                <span className="text-xs font-medium">Focus ring</span>
+                <span className="text-xs text-foreground-secondary tabular-nums">
                   {ringWidth}px
                 </span>
               </div>
@@ -411,18 +411,18 @@ const PairingTile = ({ pairing, isActive, onSelect }: PairingTileProps) => {
           aria-pressed={isActive}
           onClick={() => onSelect(pairing)}
           data-active={isActive || undefined}
-          className="focus-visible:ring-(length:--ring-width) flex h-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-md border border-border bg-background px-2 outline-none ring-ring transition hover:bg-background-secondary"
+          className="flex h-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-md border border-border bg-background px-2 ring-ring transition outline-none hover:bg-background-secondary focus-visible:ring-(length:--ring-width)"
           style={{ opacity: isActive ? 1 : 0.5 }}
         >
           <span
             aria-hidden="true"
-            className="font-semibold text-sm leading-none"
+            className="text-sm leading-none font-semibold"
             style={{ fontFamily: headingFamily }}
           >
             Aa
           </span>
           <span
-            className="text-2xs text-foreground-secondary leading-none"
+            className="text-2xs leading-none text-foreground-secondary"
             style={{ fontFamily: uiFamily }}
           >
             {pairing.label}

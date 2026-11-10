@@ -251,9 +251,9 @@ const TooltipContent = ({
       <div
         ref={ref}
         className={cn(
-          "wrap-break-word z-50 max-w-80 overflow-visible whitespace-normal rounded-lg bg-foreground px-3 py-1.5 text-background text-xs drop-shadow-md",
+          "z-50 max-w-80 overflow-visible rounded-lg bg-foreground px-3 py-1.5 text-xs wrap-break-word whitespace-normal text-background drop-shadow-md",
           "transition duration-150 ease-out data-[state=closed]:duration-100 motion-reduce:transition-none",
-          "data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=top]:translate-y-2",
+          "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
           "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
           "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
           isInstantPhase && "transition-none",

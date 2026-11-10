@@ -16,7 +16,7 @@ const Switch = ({ className, ...props }: Omit<React.ComponentPropsWithRef<"input
         // checked
         "checked:bg-foreground checked:before:translate-x-full",
         // focus
-        "focus-visible:ring-(length:--ring-width) focus-visible:outline-none focus-visible:ring-ring",
+        "focus-visible:ring-(length:--ring-width) focus-visible:ring-ring focus-visible:outline-none",
         // stretch animation
         "before:origin-left active:before:scale-x-110 active:checked:before:origin-right",
         className,

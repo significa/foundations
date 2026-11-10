@@ -36,7 +36,7 @@ export default function FileUploadWithoutDropzonePreview() {
               {file ? "Change avatar" : "Upload avatar"}
             </Button>
           </FileUpload.Trigger>
-          <p className="text-foreground-secondary text-xs">PNG or JPG, 5 MB max</p>
+          <p className="text-xs text-foreground-secondary">PNG or JPG, 5 MB max</p>
         </div>
       </div>
     </FileUpload>

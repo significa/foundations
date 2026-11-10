@@ -2,7 +2,7 @@ import { Kbd } from "@/foundations/ui/kbd/kbd";
 
 export default function KbdInlinePreview() {
   return (
-    <p className="text-foreground-secondary text-sm">
+    <p className="text-sm text-foreground-secondary">
       Press{" "}
       <Kbd.Group>
         <Kbd>⇧</Kbd>

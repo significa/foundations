@@ -52,7 +52,7 @@ const TypographyEditor = ({ fonts, onFontChange }: TypographyEditorProps) => {
     <div className="flex flex-col gap-3 p-3">
       {SLOTS.map((cfg) => (
         <div key={cfg.slot} className="flex flex-col gap-1">
-          <span className="font-medium text-xs">{cfg.label}</span>
+          <span className="text-xs font-medium">{cfg.label}</span>
           <TypographyPicker
             value={fonts[cfg.slot]}
             onChange={(next) => onFontChange(cfg.slot, next)}

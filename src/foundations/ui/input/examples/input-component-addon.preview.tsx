@@ -32,7 +32,7 @@ export default function InputComponentAddon() {
                 type="button"
                 className="flex cursor-pointer items-center gap-1 text-foreground-secondary transition-colors hover:text-foreground"
               >
-                <span className="text-base tabular-nums leading-none">{country.dial}</span>
+                <span className="text-base leading-none tabular-nums">{country.dial}</span>
                 <CaretDownIcon className="size-3" />
               </button>
             </Menu.Trigger>
@@ -46,7 +46,7 @@ export default function InputComponentAddon() {
                 <span className="text-base leading-none">{c.flag}</span>
                 <span className="flex-1 truncate">{c.name}</span>
               </span>
-              <span className="text-foreground-secondary text-sm">{c.dial}</span>
+              <span className="text-sm text-foreground-secondary">{c.dial}</span>
             </Menu.Item>
           ))}
         </Menu.Items>

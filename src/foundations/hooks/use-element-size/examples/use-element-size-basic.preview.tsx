@@ -6,7 +6,7 @@ function UseElementSizeBasicPreview() {
   return (
     <div
       ref={ref}
-      className="flex h-32 w-64 min-w-32 max-w-full resize items-center justify-center overflow-auto rounded-md border border-border bg-foreground/5 text-sm tabular-nums"
+      className="flex h-32 w-64 max-w-full min-w-32 resize items-center justify-center overflow-auto rounded-md border border-border bg-foreground/5 text-sm tabular-nums"
     >
       {size ? `${Math.round(size.width)} × ${Math.round(size.height)}` : "Measuring…"}
     </div>

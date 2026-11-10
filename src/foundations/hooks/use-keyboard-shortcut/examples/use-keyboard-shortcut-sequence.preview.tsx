@@ -10,7 +10,7 @@ export default function UseKeyboardShortcutSequencePreview() {
   useKeyboardShortcut({ sequence: ["g", "s"] }, () => setWhere("Settings"));
 
   return (
-    <div className="flex flex-col items-center gap-3 text-foreground-secondary text-sm">
+    <div className="flex flex-col items-center gap-3 text-sm text-foreground-secondary">
       <p>
         Press <Kbd>g</Kbd> then <Kbd>h</Kbd>, <Kbd>i</Kbd>, or <Kbd>s</Kbd>
       </p>

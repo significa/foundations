@@ -125,7 +125,7 @@ export default function ComplexHierarchicalSelection() {
             indeterminate={selectAllStatus.indeterminate}
             onChange={(e) => toggleAll(sampleData, e.target.checked)}
           />
-          <span className="cursor-pointer font-medium text-base">All Countries</span>
+          <span className="cursor-pointer text-base font-medium">All Countries</span>
         </label>
       )}
 
@@ -133,7 +133,7 @@ export default function ComplexHierarchicalSelection() {
 
       {/* Results */}
       {filteredData.length === 0 && searchQuery ? (
-        <p className="p-2 text-foreground-secondary text-sm">No countries found</p>
+        <p className="p-2 text-sm text-foreground-secondary">No countries found</p>
       ) : (
         <div className="space-y-1">
           {filteredData.map((parent) => {
@@ -158,13 +158,13 @@ export default function ComplexHierarchicalSelection() {
                     />
                     <span
                       className={cn(
-                        "font-medium text-base",
+                        "text-base font-medium",
                         isParentDisabled ? "" : "cursor-pointer",
                       )}
                     >
                       {parent.label}
                       {isParentDisabled && (
-                        <span className="ml-2 text-foreground-secondary text-xs">(Disabled)</span>
+                        <span className="ml-2 text-xs text-foreground-secondary">(Disabled)</span>
                       )}
                     </span>
                   </label>
@@ -180,7 +180,7 @@ export default function ComplexHierarchicalSelection() {
                 </div>
 
                 <Disclosure.Content>
-                  <div className="mt-2 ml-6 space-y-2 border-border border-l-2 pl-4">
+                  <div className="mt-2 ml-6 space-y-2 border-l-2 border-border pl-4">
                     {parent.children?.map((child) => {
                       const isChildDisabled = child.disabled || isParentDisabled;
 
@@ -199,13 +199,13 @@ export default function ComplexHierarchicalSelection() {
                           />
                           <span
                             className={cn(
-                              "font-medium text-base",
+                              "text-base font-medium",
                               isChildDisabled ? "" : "cursor-pointer",
                             )}
                           >
                             {child.label}
                             {child.disabled && (
-                              <span className="ml-2 text-foreground-secondary text-xs">
+                              <span className="ml-2 text-xs text-foreground-secondary">
                                 (Disabled)
                               </span>
                             )}
@@ -224,15 +224,15 @@ export default function ComplexHierarchicalSelection() {
       {/* Status display */}
       <div className="mt-4 space-y-2 rounded bg-background-secondary p-3">
         <div>
-          <p className="mb-1 font-medium text-sm">Selected countries ({selectedArray.length}):</p>
-          <p className="text-foreground-secondary text-sm">
+          <p className="mb-1 text-sm font-medium">Selected countries ({selectedArray.length}):</p>
+          <p className="text-sm text-foreground-secondary">
             {selectedArray.length > 0 ? selectedArray.join(", ") : "None"}
           </p>
         </div>
 
         <div>
-          <p className="mb-1 font-medium text-sm">Opened regions ({openedArray.length}):</p>
-          <p className="text-foreground-secondary text-sm">
+          <p className="mb-1 text-sm font-medium">Opened regions ({openedArray.length}):</p>
+          <p className="text-sm text-foreground-secondary">
             {openedArray.length > 0 ? openedArray.join(", ") : "None"}
           </p>
         </div>

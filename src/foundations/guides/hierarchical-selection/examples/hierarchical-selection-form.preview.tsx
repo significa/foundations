@@ -92,7 +92,7 @@ function HierarchicalSelectionField({
         )}
       >
         {filteredData.length === 0 && searchQuery ? (
-          <p className="p-2 text-foreground-secondary text-sm">No countries found</p>
+          <p className="p-2 text-sm text-foreground-secondary">No countries found</p>
         ) : (
           filteredData.map((parent) => {
             const parentStatus = getParentStatus(parent);
@@ -107,7 +107,7 @@ function HierarchicalSelectionField({
                       indeterminate={parentStatus.indeterminate}
                       onChange={(e) => toggleParent(parent, e.target.checked)}
                     />
-                    <span className="cursor-pointer font-medium text-base">{parent.label}</span>
+                    <span className="cursor-pointer text-base font-medium">{parent.label}</span>
                   </label>
 
                   {!searchQuery && (
@@ -128,7 +128,7 @@ function HierarchicalSelectionField({
                           checked={isSelected(child.id)}
                           onChange={() => toggleItem(child.id)}
                         />
-                        <span className="cursor-pointer font-medium text-base">{child.label}</span>
+                        <span className="cursor-pointer text-base font-medium">{child.label}</span>
                       </label>
                     ))}
                   </div>
@@ -139,7 +139,7 @@ function HierarchicalSelectionField({
         )}
       </div>
 
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 }
@@ -174,7 +174,7 @@ export default function HierarchicalSelectionForm() {
   return (
     <div className="mx-auto w-full p-6">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <h2 className="font-semibold text-xl">Registration Form</h2>
+        <h2 className="text-xl font-semibold">Registration Form</h2>
 
         <div className="grid grid-cols-2 gap-4">
           <Field invalid={!!errors.name}>
@@ -215,10 +215,10 @@ export default function HierarchicalSelectionForm() {
         </Field>
 
         <div className="rounded bg-background-secondary p-3">
-          <p className="mb-1 font-medium text-sm">
+          <p className="mb-1 text-sm font-medium">
             Selected countries ({watchedCountries.length}):
           </p>
-          <p className="text-foreground-secondary text-sm">
+          <p className="text-sm text-foreground-secondary">
             {watchedCountries.length > 0 ? watchedCountries.join(", ") : "None"}
           </p>
         </div>

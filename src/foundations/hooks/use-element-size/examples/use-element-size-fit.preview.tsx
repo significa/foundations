@@ -15,7 +15,7 @@ function UseElementSizeFitPreview() {
   return (
     <div
       ref={ref}
-      className="flex w-80 min-w-16 max-w-full resize-x gap-1 overflow-hidden rounded-md border border-border p-2"
+      className="flex w-80 max-w-full min-w-16 resize-x gap-1 overflow-hidden rounded-md border border-border p-2"
     >
       {PEOPLE.slice(0, shown).map((initials) => (
         <span
@@ -26,7 +26,7 @@ function UseElementSizeFitPreview() {
         </span>
       ))}
       {size && hidden > 0 && (
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-background text-xs">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-xs text-background">
           +{hidden}
         </span>
       )}

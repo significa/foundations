@@ -291,7 +291,7 @@ const ToasterRow = ({ toast, zIndex }: { toast: ToastEntry; zIndex: number }) =>
       className={cn(
         "group/toast pointer-events-auto box-border grid *:my-1.5",
         // minmax(0, …) so the row can collapse past the toast's padding and margins
-        "grid-rows-[minmax(0,1fr)] starting:grid-rows-[minmax(0,0fr)] data-[status=closed]:grid-rows-[minmax(0,0fr)]",
+        "grid-rows-[minmax(0,1fr)] data-[status=closed]:grid-rows-[minmax(0,0fr)] starting:grid-rows-[minmax(0,0fr)]",
         // same timing as the card: this row's transition end is what unmounts it
         "transition-[grid-template-rows] duration-400 ease-spring data-[status=closed]:duration-200 data-[status=closed]:ease-in",
       )}
@@ -335,8 +335,8 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
         "transition-[opacity,scale,translate,background-color,border-color,color] duration-400 ease-spring",
         "group-data-[status=closed]/toast:duration-200 group-data-[status=closed]/toast:ease-in",
         "motion-safe:transition-[opacity,scale,translate,background-color,border-color,color,width,height]",
-        "starting:opacity-0 group-data-[status=closed]/toast:opacity-0",
-        "motion-safe:starting:scale-95 motion-safe:group-data-[status=closed]/toast:-translate-y-full motion-safe:group-data-[status=closed]/toast:scale-95",
+        "group-data-[status=closed]/toast:opacity-0 starting:opacity-0",
+        "motion-safe:group-data-[status=closed]/toast:-translate-y-full motion-safe:group-data-[status=closed]/toast:scale-95 motion-safe:starting:scale-95",
         (variant === "default" || variant === "loading") && "border-border bg-background",
         variant === "positive" && "border-success/20 bg-success/10 text-success",
         variant === "negative" && "border-error/20 bg-error/10 text-error",
@@ -362,7 +362,7 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
           className={cn("pr-6 text-sm", swapIn, "motion-safe:starting:scale-100")}
         >
           <p className="font-medium">{title}</p>
-          {description && <p className="mt-0.5 text-pretty text-xs opacity-70">{description}</p>}
+          {description && <p className="mt-0.5 text-xs text-pretty opacity-70">{description}</p>}
         </div>
         <ToastCloseButton onClick={onDismiss} />
       </div>
@@ -380,7 +380,7 @@ const ToastCloseButton = ({
       aria-label="Dismiss notification"
       className={cn(
         "relative mb-auto flex size-6 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-sm border-inherit bg-inherit",
-        "focus-visible:ring-(length:--ring-width) ring-ring focus-visible:outline-none",
+        "ring-ring focus-visible:ring-(length:--ring-width) focus-visible:outline-none",
         "after:absolute after:inset-0 after:bg-current after:opacity-0 hover:after:opacity-4 active:after:opacity-8",
       )}
     >

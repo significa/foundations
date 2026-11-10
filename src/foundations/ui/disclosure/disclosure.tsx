@@ -107,7 +107,7 @@ const DisclosureTrigger = ({
       aria-controls={getContentId(id)}
       data-state={open ? "open" : "closed"}
       className={cn(
-        "focus-visible:ring-(length:--ring-width) flex w-full items-center justify-between text-left outline-none ring-ring",
+        "flex w-full items-center justify-between text-left ring-ring outline-none focus-visible:ring-(length:--ring-width)",
         className,
       )}
       {...props}

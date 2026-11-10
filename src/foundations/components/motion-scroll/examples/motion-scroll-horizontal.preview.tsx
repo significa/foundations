@@ -18,7 +18,7 @@ const MotionScrollHorizontal = () => {
     <div className="flex h-screen items-center">
       <ul
         ref={ref}
-        className="flex h-full w-full cursor-grab select-none snap-x snap-mandatory items-center gap-12 overflow-x-auto px-[40vw] py-12 active:cursor-grabbing"
+        className="flex h-full w-full cursor-grab snap-x snap-mandatory items-center gap-12 overflow-x-auto px-[40vw] py-12 select-none active:cursor-grabbing"
       >
         {items.map((item) => (
           <MotionScroll
@@ -30,8 +30,8 @@ const MotionScrollHorizontal = () => {
             scroller={(el) => el.parentElement as Element}
           >
             <li className="flex size-40 shrink-0 snap-center flex-col justify-between rounded-xl border border-border bg-background-secondary p-5">
-              <span className="font-mono text-foreground-secondary text-xs">{item.index}</span>
-              <span className="font-semibold text-xl">{item.label}</span>
+              <span className="font-mono text-xs text-foreground-secondary">{item.index}</span>
+              <span className="text-xl font-semibold">{item.label}</span>
             </li>
           </MotionScroll>
         ))}

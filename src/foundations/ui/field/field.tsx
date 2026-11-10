@@ -66,7 +66,7 @@ const FieldLabel = ({ className, ...props }: React.ComponentPropsWithRef<"label"
     <label
       htmlFor={controlId}
       id={labelId}
-      className={cn("font-medium text-base text-foreground", className)}
+      className={cn("text-base font-medium text-foreground", className)}
       {...props}
     />
   );
@@ -104,7 +104,7 @@ const FieldDescription = ({ className, children, ...props }: React.ComponentProp
   if (!hasContent) return null;
 
   return (
-    <p id={id} className={cn("text-foreground-secondary text-sm", className)} {...props}>
+    <p id={id} className={cn("text-sm text-foreground-secondary", className)} {...props}>
       {children}
     </p>
   );
@@ -124,7 +124,7 @@ const FieldError = ({ className, children, ...props }: React.ComponentPropsWithR
   if (!hasContent) return null;
 
   return (
-    <p id={id} role="alert" className={cn("text-error text-sm", className)} {...props}>
+    <p id={id} role="alert" className={cn("text-sm text-error", className)} {...props}>
       {children}
     </p>
   );

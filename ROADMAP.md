@@ -14,7 +14,6 @@ Some items will be impossible to do until there is decent baseline support for t
 
 ## Missing components
 
-
 ## Non-goals
 
 Things we have intentionally decided _not_ to build, so we don't re-litigate them. If you think one of these is wrong, open the conversation — but the bar is high.

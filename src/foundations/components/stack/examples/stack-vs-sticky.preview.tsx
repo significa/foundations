@@ -29,7 +29,7 @@ const StackVsStickyPreview = () => {
   return (
     <div className="grid grid-cols-2 gap-8 pt-[50vh] pb-[100vh]">
       <div>
-        <h2 className="mb-8 px-4 font-medium text-lg">Stack Implementation</h2>
+        <h2 className="mb-8 px-4 text-lg font-medium">Stack Implementation</h2>
         <Stack stick="top">
           {items.map((item, index) => (
             <Stack.Item key={index} className="bg-background px-4">
@@ -40,14 +40,14 @@ const StackVsStickyPreview = () => {
                 </div>
                 <Divider />
               </Stack.Header>
-              <div className="pt-4 pb-12 text-foreground-secondary text-md">{item.content}</div>
+              <div className="text-md pt-4 pb-12 text-foreground-secondary">{item.content}</div>
             </Stack.Item>
           ))}
         </Stack>
       </div>
 
       <div>
-        <h2 className="mb-8 px-4 font-medium text-lg">Position: Sticky</h2>
+        <h2 className="mb-8 px-4 text-lg font-medium">Position: Sticky</h2>
         <div>
           {items.map((item, index) => (
             <div
@@ -66,7 +66,7 @@ const StackVsStickyPreview = () => {
                 </div>
                 <Divider />
               </div>
-              <div className="pt-4 pb-12 text-foreground-secondary text-md">{item.content}</div>
+              <div className="text-md pt-4 pb-12 text-foreground-secondary">{item.content}</div>
             </div>
           ))}
         </div>

@@ -153,10 +153,10 @@ const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
         orientation === "horizontal"
           ? variant === "pill"
             ? "items-center pb-4"
-            : "mb-4 items-center border-border border-b"
+            : "mb-4 items-center border-b border-border"
           : variant === "pill"
             ? "flex-col items-start pr-4"
-            : "mr-4 flex-col items-start border-border border-r",
+            : "mr-4 flex-col items-start border-r border-border",
         className,
       )}
       {...props}
@@ -270,7 +270,7 @@ const TabsItem = ({
       id={getItemId(id)}
       type={asChild ? undefined : "button"}
       className={cn(
-        "focus-visible:ring-(length:--ring-width) relative z-10 flex cursor-pointer items-center justify-center gap-1.5 px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground data-selected:text-foreground",
+        "relative z-10 flex cursor-pointer items-center justify-center gap-1.5 px-4 py-2 text-foreground/50 ring-ring transition outline-none hover:text-foreground focus-visible:ring-(length:--ring-width) data-selected:text-foreground",
         variant === "pill" && "rounded-xl",
         variant === "underline" && (orientation === "horizontal" ? "-mb-px" : "-mr-px"),
         className,
@@ -311,7 +311,7 @@ const TabsPanels = ({ children, className, ...props }: TabsPanelsProps) => {
 
   return (
     <div
-      className={cn("has-focus-visible:ring-(length:--ring-width) ring-ring transition", className)}
+      className={cn("ring-ring transition has-focus-visible:ring-(length:--ring-width)", className)}
       {...props}
     >
       {Children.map(children, (child, index) => (
