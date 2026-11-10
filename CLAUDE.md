@@ -60,17 +60,17 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 ## Code Style
 
-Biome config extends the shared `@significa/ts-standards/biome` preset (`biome.jsonc`).
+Biome config extends the shared `@significa/ts-standards/biome` preset (`biome.json`).
 Biome and `@significa/ts-standards` are pinned together; bump them as a pair. The
 project file only adds what's Foundations-specific: `.astro` files are excluded
 (Prettier owns their formatting; running both would fight), CSS line width is 128,
-`Checkbox` counts as a label control (temporary, see the comment in the file), and
+`Checkbox` counts as a label control (temporary, until ts-standards settles `noLabelWithoutControl`), and
 Tailwind class sorting is on. The preset defines the TS/TSX formatting
 below and the strict rules (no `any`, no `!`, no `console.log`, no floating
 promises, kebab-case filenames).
 
 Lint suppressions live in the component file as a per-line `biome-ignore` with a
-specific reason, never in `biome.jsonc` — consumers copy the file and run the same
+specific reason, never in `biome.json` — consumers copy the file and run the same
 preset, so the suppression has to travel with it.
 
 Tailwind classes are sorted by `nursery/useTailwindSortedClasses` (error, safe
