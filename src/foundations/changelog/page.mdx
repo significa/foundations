@@ -46,14 +46,25 @@ nothing; it now pads to the items' text edge.
 
 `Tabs.Item` dropped the cleanup `registerTab` returns. Under StrictMode every tab registered
 twice, and a tab removed while the `Tabs` stayed mounted stayed registered, so arrow keys could
-land on a tab that no longer exists.
-Unselected tabs also omitted `aria-selected` instead of setting it to `false`.
+land on a tab that no longer exists. With unregistering fixed, three things keep indices honest
+for conditional tabs (`{show && <Tabs.Item>}`): tabs register in DOM order, `Tabs.Items` and
+`Tabs.Panels` skip empty children when indexing, and an uncontrolled `Tabs` keeps the same tab
+selected when another comes or goes (or selects the last one if the selected tab went). Unselected
+tabs also omitted `aria-selected` instead of setting it to `false`.
 
 ```diff tsx
   useLayoutEffect(() => {
 -   registerTab(id);
 +   return registerTab(id);
   }, [id, registerTab]);
+
+- setTabs((prev) => [...prev, id]);
++ setTabs((prev) => sortByDomOrder([...prev, id]));
+
+- {Children.map(children, (child, index) => (
++ {mapElements(children, (child, index) => ( // indexes elements only
+
++ // see source: re-selects the previously selected tab when `tabs` changes (uncontrolled)
 
 - aria-selected={isSelected || undefined}
 + aria-selected={isSelected}
