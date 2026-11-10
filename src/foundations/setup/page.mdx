@@ -44,7 +44,7 @@ Foundations imports with a `#/` alias and real file extensions (`#/foundations/u
 }
 ```
 
-This assumes a bundler compiles your TypeScript: a project emitting with `tsc` can't use `#/` imports, since `rewriteRelativeImportExtensions` only rewrites relative specifiers. TypeScript needs `allowImportingTsExtensions` (which requires `noEmit`) to accept `.ts`/`.tsx` extensions. [@significa/ts-standards](https://github.com/significa/ts-standards) 0.2.3 or later already sets both; otherwise add them to `tsconfig.json`:
+This assumes a bundler compiles your TypeScript: a project emitting with `tsc` can't use `#/` imports, since `rewriteRelativeImportExtensions` only rewrites relative specifiers. TypeScript 6.0 or later resolves `#/` imports with `moduleResolution` set to `bundler` or `nodenext`, and needs `allowImportingTsExtensions` (which requires `noEmit`) to accept `.ts`/`.tsx` extensions. [@significa/ts-standards](https://github.com/significa/ts-standards) 0.2.3 or later already sets both; otherwise add them to `tsconfig.json`:
 
 ```json
 {
