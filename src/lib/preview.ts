@@ -14,6 +14,12 @@ type PreviewMeta = z.infer<typeof previewMetaSchema>;
 type PreviewLayout = NonNullable<PreviewMeta["layout"]>;
 type PreviewMode = NonNullable<PreviewMeta["mode"]>;
 
+const previewLayoutClass = {
+  centered: "flex h-full w-full flex-col items-center justify-center overflow-auto p-4",
+  padded: "h-full w-full overflow-auto p-4",
+  fullscreen: "contents",
+} satisfies Record<PreviewLayout, string>;
+
 type PreviewLoaderOptions = {
   pattern: `${string}.tsx`;
   base?: string;
@@ -70,4 +76,4 @@ const previewLoader = ({ pattern, base, generateId }: PreviewLoaderOptions) => {
 };
 
 export type { PreviewLayout, PreviewMeta, PreviewMode };
-export { previewLoader, previewMetaSchema };
+export { previewLayoutClass, previewLoader, previewMetaSchema };

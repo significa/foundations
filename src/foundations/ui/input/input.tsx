@@ -1,5 +1,5 @@
 import type { VariantProps } from "cva";
-import { createContext, use, useRef } from "react";
+import { createContext, use, useMemo, useRef } from "react";
 import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cn, cva } from "#/lib/utils/classnames.ts";
@@ -11,7 +11,7 @@ const inputFrameBase = [
   "transition",
   "flex items-center",
   "[:focus-visible,:has(:focus-visible)]:ring-(length:--ring-width) ring-ring [:focus-visible,:has(:focus-visible)]:border-accent [:focus-visible,:has(:focus-visible)]:text-foreground",
-  "[:disabled,:has(input:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled)]:opacity-50",
+  "[:disabled,:has(input:disabled,select:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled,select:disabled)]:opacity-50",
   "[[data-invalid],:has([data-invalid])]:border-error! [[data-invalid],:has([data-invalid])]:ring-error/20 [[data-invalid],:has([data-invalid])]:hover:border-error",
 ];
 
@@ -113,6 +113,9 @@ interface InputGroupContextValue {
 
 const InputGroupContext = createContext<InputGroupContextValue | null>(null);
 
+// null outside an Input.Group.
+const useInputGroupContext = () => use(InputGroupContext);
+
 const useInputStyle = (props: VariantProps<typeof inputStyle> & { className?: string }) => {
   const ctx = use(InputGroupContext);
   if (ctx) {
@@ -183,6 +186,7 @@ const InputAddon = ({ ref, className, asChild, onClick, ...props }: InputAddonPr
   const ctx = use(InputGroupContext);
   const Comp = asChild ? Slot : "div";
   const internalRef = useRef<HTMLDivElement | null>(null);
+  const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     onClick?.(e);
@@ -204,7 +208,7 @@ const InputAddon = ({ ref, className, asChild, onClick, ...props }: InputAddonPr
     <Comp
       data-input-addon
       className={cn(inputAddonStyle({ size: ctx?.size }), className)}
-      ref={composeRefs(ref, internalRef)}
+      ref={composedRef}
       onClick={handleClick}
       {...props}
     />
@@ -217,4 +221,4 @@ const CompoundInput = Object.assign(Input, {
 });
 
 export type { InputGroupProps, InputProps };
-export { CompoundInput as Input, inputStyle, useInputStyle };
+export { CompoundInput as Input, inputStyle, useInputGroupContext, useInputStyle };

@@ -6,3 +6,15 @@ files:
 
 folder: utils
 ---
+
+## Usage
+
+```tsx
+const ref = useMemo(() => composeRefs(internalRef, props.ref), [props.ref]);
+
+return <div ref={ref} />;
+```
+
+Every ref receives the element. On detach, a callback ref's React 19 cleanup runs if it returned one; otherwise it's called with `null`, and an object ref's `current` is set to `null`.
+
+`composeRefs` returns a new callback on each call. Memoise it where the element re-renders often: a new ref makes React detach and re-attach every ref on each render.

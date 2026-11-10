@@ -58,4 +58,4 @@ Past ten seconds, a blocking indicator is hostile. Keep a determinate [Progress]
 
 ## A note on motion
 
-`Spinner`, `Progress`, and `Skeleton` animate regardless of `prefers-reduced-motion` — a loading indicator communicates state, so freezing it would break the signal. See the [Spinner](/ui/spinner) page for the rationale.
+A loading indicator communicates state, so it keeps signalling under `prefers-reduced-motion` — a frozen one reads as stuck — but nothing travels: `Spinner` swaps its rotation for a slow pulse, and `Skeleton` only ever pulses. See the [Spinner](/ui/spinner) page.

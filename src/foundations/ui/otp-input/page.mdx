@@ -68,7 +68,13 @@ Extends the `div` element.
     },
     masked: {
       type: "boolean",
-      description: "Whether to mask the entered values like a password field.",
+      description: "Whether to hide the entered characters behind discs. Cells stay `type=\"text\"`.",
+    },
+    autoComplete: {
+      type: "string",
+      default: '"one-time-code"',
+      description:
+        'The autocomplete hint applied to all cells. Keep `"one-time-code"` for SMS and authenticator codes; use `"off"` for a PIN.',
     },
     disabled: {
       type: "boolean",
@@ -87,7 +93,9 @@ Extends the `input` element, omitting `type` and `value` which are managed inter
 
 ### OTPInput.Cell
 
-Extends the `input` element.
+Extends the `input` element. Each cell is labelled `Digit 1`, `Digit 2`, … by default; pass `aria-label` to override it (see [Localising the cell labels](#localising-the-cell-labels)).
+
+Cells are square and shrink to fit a narrow container. The root is as wide as its cells; give it `w-full` to spread them across the container.
 
 ### OTPInput.Divider
 
@@ -119,7 +127,7 @@ A single character shown in empty cells via the native `placeholder` attribute.
 
 ### Masked
 
-Switches each cell to `type="password"` so entered characters are hidden.
+Hides the entered characters behind discs with `-webkit-text-security`, on a `type="text"` input. A `type="password"` field would make password managers offer to save the PIN as a password. Pair it with `autoComplete="off"` for a PIN, so the browser doesn't offer one-time codes either. The masking is visual only: screen readers still read the digits and announce a text field, where `type="password"` would announce a password field and hide them.
 
 <Preview slug="otp-input-masked" />
 
@@ -146,3 +154,15 @@ Use `OTPInput.Hidden` inside a `<form>` to expose the value as a named field for
 ### Password Manager
 
 <Preview slug="otp-input-password-manager" />
+
+### Localising the cell labels
+
+The default `Digit n` labels are English. Pass your own `aria-label` to each cell, with the cell's position:
+
+```tsx
+<OTPInput>
+  {Array.from({ length: 6 }, (_, i) => (
+    <OTPInput.Cell key={i} aria-label={t("otp.digit", { position: i + 1 })} />
+  ))}
+</OTPInput>
+```

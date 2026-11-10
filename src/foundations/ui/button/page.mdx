@@ -38,7 +38,20 @@ folder: UI
     isLoading: {
       type: "boolean",
       default: "false",
-      description: "Replaces the button content with a spinner",
+      description:
+        "Replaces the button content with a spinner and marks the button busy (`aria-busy`, `aria-disabled`). It stays focusable, and clicks, Enter, Space and form submits are ignored.",
+    },
+    disabled: {
+      type: "boolean",
+      default: "false",
+      description:
+        "Disables the button. Under `asChild` the child gets `aria-disabled` instead, and clicks are stopped before any `onClick` runs.",
+    },
+    type: {
+      type: ['"button"', '"submit"', '"reset"'],
+      default: '"button"',
+      description:
+        "Under `asChild` an explicit type passes through to the child; a `<button>` child without one defaults to `\"button\"`.",
     },
     asChild: {
       type: "boolean",
@@ -77,6 +90,8 @@ Accepts all standard `div` props. No custom props required. Renders buttons side
 
 ### Loading
 
+A loading button is busy, not disabled: it keeps focus and announces the busy state, while its clicks and form submits are ignored. There's no need to also pass `disabled`.
+
 <Preview slug="button-loading" />
 
 ### Icons
@@ -90,6 +105,10 @@ Accepts all standard `div` props. No custom props required. Renders buttons side
 ### disabled
 
 <Preview slug="button-disabled" />
+
+A loading button, or a disabled one under `asChild`, is marked with `aria-disabled` rather than `disabled`, so it stays focusable and has to block clicks itself. It stops them in the capture phase, so no `onClick` runs, an ancestor's included (a parent `div`'s `onClick` doesn't fire), just as a natively disabled `<button>` fires no click events.
+
+An anchor can't be disabled. For a disabled link, render it without `href` or as a button.
 
 ### As Link
 

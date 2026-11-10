@@ -120,6 +120,18 @@ Common shape for ecommerce-style flows: commit locally on every change so the UI
 
 <Preview slug="number-input-async" />
 
+## Localising the stepper labels
+
+The default layout renders steppers with English labels. To localise them, pass children and give each stepper its own `aria-label`:
+
+```tsx
+<NumberInput value={n} onValueChange={setN}>
+  <NumberInput.Decrement aria-label={t("quantity.decrease")} />
+  <NumberInput.Field />
+  <NumberInput.Increment aria-label={t("quantity.increase")} />
+</NumberInput>
+```
+
 ## Best Practices
 
 1. **Don't fight the user.** No keystroke filtering, no auto-format mid-edit. Validate on blur. If a user wants to paste `1e3`, let them — it's a valid number.
@@ -128,4 +140,4 @@ Common shape for ecommerce-style flows: commit locally on every change so the UI
 4. **Accessibility:**
    - The field renders `role="spinbutton"` with `aria-valuenow`, `aria-valuetext`, and (when finite) `aria-valuemin` / `aria-valuemax`.
    - `aria-valuetext` is the formatted string (`"1.234,56"`), so screen readers announce the displayed value, not the raw number.
-   - Steppers ship with sensible default `aria-label`s — override per locale.
+   - Steppers default to the English `aria-label`s `Decrement` and `Increment`. See [Localising the stepper labels](#localising-the-stepper-labels).

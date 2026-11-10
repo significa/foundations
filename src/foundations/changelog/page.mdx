@@ -138,6 +138,469 @@ when a controlled parent clamped it; that code is gone (and with it the `compose
 - }
 ```
 
+### Fixed: `OTPInput` ignored `defaultValue`, overflowed narrow containers, and `masked` woke password managers
+
+Four fixes to apply to your copy of `otp-input.tsx`:
+
+- `defaultValue` never showed: it was split into cells in `useState`'s initialiser, before any cell had registered. The value is now derived at render until the first edit.
+- Cells had fixed widths and overflowed containers narrower than the code. They now shrink and stay square, and the root is `w-fit max-w-full`: as wide as its cells, not the container. Cells keep their size at normal widths, but anything you put on the root (`justify-center`, a background, a border) no longer spans the container; pass `w-full` to get the old box back.
+- `masked` used `type="password"` with `autocomplete="one-time-code"`, so password managers offered to save a PIN as a password. Cells stay `type="text"` and draw discs with `-webkit-text-security` (all current browsers), and a new `autoComplete` prop (default `"one-time-code"`) lets a PIN pass `"off"`. The masking is visual only: screen readers read the digits and announce a text field.
+- Cells now set `aria-invalid` with `invalid`, like `Input`.
+
+```diff tsx
+- const [internalValues, setInternalValues] = useState<string[]>(() =>
+-   splitIntoSlots(defaultValue, cellCount),
+- );
+- const values = valueProp !== undefined ? splitIntoSlots(valueProp, cellCount) : internalValues;
++ const [initialValue] = useState(defaultValue);
++ const [internalValues, setInternalValues] = useState<string[] | null>(null);
++ const values =
++   valueProp !== undefined
++     ? splitIntoSlots(valueProp, cellCount)
++     : (internalValues ?? splitIntoSlots(initialValue, cellCount));
+
+- className={cn("flex items-center gap-2", className)}
++ className={cn("flex w-fit max-w-full items-center justify-between gap-2", className)}
+
+- base: "shrink-0 px-0 text-center",
++ base: "aspect-square h-auto min-w-0 shrink px-0 py-0 text-center",
+  variants: {
+    size: { xs: "w-6", sm: "w-8", md: "w-10", lg: "w-12" },
++   masked: { true: "[-webkit-text-security:disc]" },
+  },
+
+- type={masked ? "password" : "text"}
+- autoComplete="one-time-code"
++ type="text"
++ autoComplete={autoComplete}
++ aria-invalid={invalid || undefined}
+- className={cn(otpCellStyle({ size }), className)}
++ className={cn(otpCellStyle({ size, masked }), className)}
+```
+
+Thread `autoComplete` from the root props through the context to the cell.
+
+### Fixed: `Select` chevron ignored the text colour
+
+The chevron was a black or white data-URL SVG, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now two diagonal strokes drawn with `currentColor` gradients on the `<select>` itself: it follows the text colour, the theme and the disabled opacity, mirrors under `rtl:`, is sized per `size`, and is left out for `multiple`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`. Inside `Select.Group` the chevron takes the group's size, read with a new `useInputGroupContext` export from `input.tsx`. Under forced colours, which drop gradient images, the select falls back to its native indicator. In `input.tsx`, the group frame now dims for a disabled select as it does for a disabled input.
+
+```diff tsx
++ const selectChevronStyle = cva({
++   base: [
++     "bg-no-repeat",
++     "bg-[image:linear-gradient(45deg,transparent_calc(50%-0.75px),currentColor_calc(50%-0.75px),currentColor_calc(50%+0.75px),transparent_calc(50%+0.75px)),linear-gradient(135deg,transparent_calc(50%-0.75px),currentColor_calc(50%-0.75px),currentColor_calc(50%+0.75px),transparent_calc(50%+0.75px))]",
++   ],
++   variants: {
++     size: {
++       xs: "bg-size-[4px_4px] bg-position-[calc(100%-12px)_center,calc(100%-8px)_center] pe-6 rtl:bg-position-[8px_center,12px_center]",
++       sm: "bg-size-[4px_4px] bg-position-[calc(100%-16px)_center,calc(100%-12px)_center] pe-8 rtl:bg-position-[12px_center,16px_center]",
++       md: "bg-size-[5px_5px] bg-position-[calc(100%-21px)_center,calc(100%-16px)_center] pe-10 rtl:bg-position-[16px_center,21px_center]",
++       lg: "bg-size-[6px_6px] bg-position-[calc(100%-26px)_center,calc(100%-20px)_center] pe-12 rtl:bg-position-[20px_center,26px_center]",
++     },
++   },
++   defaultVariants: { size: "md" },
++ });
+
++ const chevronSize = useInputGroupContext()?.size ?? size;
+
+  <select
+    data-invalid={invalid || undefined}
++   aria-invalid={invalid || undefined}
+    className={cn(
+      useInputStyle({ variant, size }),
+-     "appearance-none bg-size-[1em] bg-position-[right_--spacing(2)_center] bg-no-repeat pr-10",
+-     'bg-[url("data:image/svg+xml;base64,…")]',
+-     'dark:bg-[url("data:image/svg+xml;base64,…")]',
++     "appearance-none forced-colors:appearance-auto",
++     !props.multiple && selectChevronStyle({ size: chevronSize }),
+      className,
+    )}
+```
+
+```diff tsx
+  // input.tsx
++ const useInputGroupContext = () => use(InputGroupContext);
+- export { CompoundInput as Input, inputStyle, useInputStyle };
++ export { CompoundInput as Input, inputStyle, useInputGroupContext, useInputStyle };
+
+  // input.tsx, inputFrameBase
+- "[:disabled,:has(input:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled)]:opacity-50",
++ "[:disabled,:has(input:disabled,select:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled,select:disabled)]:opacity-50",
+```
+
+### Changed: `Spinner` ships one style, accessible and motion-safe
+
+`Spinner` used to hard-code `role="progressbar"` and an English `aria-label="loading"`, so a
+loading Button announced "loading" on top of its own label; it ignored `prefers-reduced-motion`;
+and as a block `div` it sat on the text baseline when inline (and was invalid inside a `<button>`).
+Apply these to your copy:
+
+- It renders a `span` with a fixed, vertically centred box, so a `ref` now resolves to an
+  `HTMLSpanElement` (was `HTMLDivElement`). Button's spinner wrapper is now `flex` so it centres
+  exactly.
+- It's `aria-hidden` by default. Pass `label` when the spinner is the only sign of the wait: it
+  renders as visually hidden text inside a `role="status"` (assistive tech may not announce it when
+  it first appears).
+- `Popover.SearchInput` (and so `Listbox.SearchInput` / `Menu.SearchInput`) sets
+  `aria-busy={isLoading || undefined}` on its input, since its spinner is now hidden.
+- Under reduced motion it pulses instead of rotating.
+
+The `variant` prop, `SPINNER_FRAMES`, and the `--animate-spinner-dot` / `--animate-spinner-bar`
+tokens are gone: every project copied all four styles and used one. Only the ring ships. If you use
+`dots`, `bars` or `frames`, replace your `spinner.tsx` with that recipe from the
+[Spinner page](/ui/spinner#other-styles): same API, keyframes included, so delete the two tokens and
+their keyframes from your globals. The frames recipe now steps in CSS instead of `setInterval`,
+which froze while the main thread was busy.
+
+```diff tsx
+- <Spinner variant="dots" />
++ <Spinner /> {/* spinner.tsx replaced by the dots recipe */}
+
+- <Spinner variant="frames" frames={SPINNER_FRAMES.moon} interval={120} />
++ <Spinner frames={["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"]} />
+
+- <Spinner aria-label="Loading results" />
++ <Spinner label="Loading results" />
+
+  // button.tsx
+- "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
++ "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2",
+```
+
+### Fixed: `Slot` replaced the child's handlers and ref; `composeRefs` and `useStableCallback` bugs
+
+`Slot` spread the child's props over its own, so a child's `onClick` silently replaced the
+component's, an explicit `undefined` or `null` on the child erased the slot's prop, and the slot's
+`ref` replaced the child's. `Slottable` was worse: it cloned the child with the slot's props on top,
+so under `asChild` the child's own `onClick`, `className` and `style` were lost (`<Button asChild><a
+onClick className>` dropped both). Now handlers both sides pass are composed with all their
+arguments: the child's runs first, then the slot's, as in Radix. `className` and `style` merge, both refs get the element,
+and `Slottable` renders its child through `Slot`. Replace your `slot.tsx`; it now imports
+`composeRefs`.
+
+```diff tsx
++ const composeEventHandlers = (slotProps, childProps) => {
++   // for each on* handler both pass:
++   composed[name] = (...args) => {
++     childHandler(...args);
++     slotHandler(...args);
++   };
++ };
+
+  export const Slot = ({ children, ref, ...props }) => {
+    const element = Children.only(children);
++   const childRef = isValidSlottableElement(element) ? element.props.ref : undefined;
++   const composedRef = useMemo(() => composeRefs(ref, childRef), [ref, childRef]);
++   const childProps = Object.fromEntries(
++     Object.entries(element.props).filter(([, value]) => value != null),
++   );
+    return cloneElement(element, {
+      ...props,
+-     ...element.props,
++     ...childProps,
+      ...typeDefault,
+-     ref,
++     ...composeEventHandlers(props, childProps),
++     ref: composedRef,
+      style: { ...props.style, ...element.props.style },
+      className: cn(element.props.className, props.className),
+    });
+  };
+
+  export const Slottable = ({ asChild, child, children, ...props }) => {
+-   return <>{asChild ? (isValidSlottableElement(child) ? cloneElement(child, props, children(child.props.children)) : null) : children(child)}</>;
++   if (!asChild) return children(child);
++   if (!isValidSlottableElement(child)) return null;
++   return <Slot {...props}>{cloneElement(child, undefined, children(child.props.children))}</Slot>;
+  };
+```
+
+`composeRefs` dropped a React 19 callback ref's cleanup: the cleanup a ref returned never ran, and
+the ref was called with `null` instead. It now returns a cleanup that runs each ref's own cleanup,
+or, for refs without one, calls the callback with `null` or sets the object's `current` to `null`.
+
+It still returns a new callback per call, which makes React detach and re-attach every ref on each
+render, now running a parent callback ref's real cleanup each time (a top-layer ref passed to
+`Input.Addon` would hide and re-show). Every call site now memoises it: `Modal.Content`, `Toaster`
+(which was already hiding and re-showing its popover on every toast change), `Input.Addon`,
+`OTPInput.Cell`, `Slider.Thumb`, `Checkbox`, `ToggleGroup`, every `ColorPicker` part, and
+`MotionScroll`. Apply both changes together. That re-show was also what kept a new toast above a
+popover opened after the toaster, so `Toaster` now re-enters the top layer explicitly whenever its
+toasts change.
+
+```diff tsx
+  // compose-refs.ts
+  export function composeRefs<T>(...refs: (Ref<T> | undefined)[]): RefCallback<T> {
+-   return (instance: T) => {
+-     refs.forEach((ref) => { /* set each ref */ });
+-   };
++   return (instance) => {
++     const cleanups = refs.map((ref) => setRef(ref, instance));
++     return () => {
++       for (const cleanup of cleanups) cleanup();
++     };
++   };
+  }
+
+  // every call site: memoise before any early return, then pass ref={composedRef}
+  // modal.tsx (ModalContent)
++ const composedRef = useMemo(() => composeRefs(dialogRef, transitionRef, ref), [dialogRef, transitionRef, ref]);
+- <dialog ref={composeRefs(dialogRef, transitionRef, ref)}
++ <dialog ref={composedRef}
+  // toaster.tsx (Toaster)
++ const ref = useMemo(() => composeRefs(elementRef, topLayerRef), [topLayerRef]);
++ useEffect(() => {
++   const element = elementRef.current;
++   if (!element?.matches(":popover-open") || toasts.length === 0) return;
++   element.hidePopover();
++   element.showPopover();
++ }, [toasts]);
+  // input.tsx (InputAddon), slider.tsx (SliderThumb), checkbox.tsx
++ const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
+  // otp-input.tsx (OTPInputCell): internalRef is a callback
++ const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref, internalRef]);
+  // toggle.tsx (ToggleGroupRoot)
++ const composedRef = useMemo(() => composeRefs(containerRef, ref), [ref]);
+  // color-picker.tsx (Draggable, Area, Hue, Saturation, Lightness, Alpha)
++ const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
+  // motion-scroll.tsx
++ const composedRef = useMemo(() => composeRefs(scope, propRef), [scope, propRef]);
+```
+
+`useStableCallback` kept the previous callback when the new one was `undefined`, so a handler a
+parent removed still ran (`Menu` `onSelect`, `useKeyboardShortcut`).
+
+```diff tsx
+- type AnyFunction = (...args: any[]) => any;
++ type AnyFunction = (...args: never[]) => unknown;
+
+  useEffect(() => {
+-   if (callback) {
+-     callbackRef.current = callback;
+-   }
++   callbackRef.current = callback;
+  }, [callback]);
+```
+
+### Fixed: `Button` loading and disabled states
+
+`isLoading` only hid the label: the button stayed clickable and nothing announced it as busy, and
+passing `disabled` alongside it dropped focus to `<body>`. A loading button now sets `aria-busy` and
+`aria-disabled`, stays focusable, and stops the click in the capture phase (`preventDefault()` and
+`stopPropagation()`), like a natively disabled `<button>`. Mouse, Enter, Space and implicit form
+submit all arrive as `click`, so none of them activate it. You no longer need `disabled={isLoading}`.
+
+Because the click is stopped before it reaches any `onClick`, an ancestor's `onClick` doesn't fire
+for a disabled or loading button either, just as with a native disabled `<button>`. If a parent
+listens for clicks from its buttons, it won't hear these.
+
+Required update: `<Button asChild disabled>` no longer sets the native `disabled` attribute on its
+child, even when that child is a `<button>`. The child gets `aria-disabled` and the capture-phase
+block instead, so it stays focusable. If you style or select it with `:disabled` or `[disabled]`, target
+`[aria-disabled="true"]` too, or put `disabled` on the child itself.
+
+Middle-click fires `auxclick` rather than `click`, so it's stopped in the capture phase too.
+`Button asChild` also dropped an explicit `type`, so `<Button asChild type="submit"><button>` rendered
+`type="button"`. Hover styles are gated with `not-disabled:` and `not-aria-disabled:` (`enabled:`
+never matches an `<a>`), press feedback with `not-aria-disabled:`, and the spinner wrapper is `flex` so it centres instead of sitting on the
+baseline. These rely on the `Slot` fix above.
+
+```diff tsx
+  const Button = ({
+-   type = "button",
++   type,
++   disabled,
++   onClickCapture,
++   onAuxClickCapture,
+    ...props
+  }) => {
++   // Like a native disabled <button>, no onClick runs (ancestors' included): stopped in capture.
++   const blockWhenDisabled = (event: React.SyntheticEvent) => {
++     if (!disabled && !isLoading) return;
++     event.preventDefault();
++     event.stopPropagation();
++   };
+
+    <Comp
+-     type={asChild ? undefined : type}
++     type={asChild ? type : (type ?? "button")}
++     disabled={asChild ? undefined : disabled}
++     aria-disabled={isLoading || (asChild && disabled) || undefined}
++     aria-busy={isLoading || undefined}
+      {...props}
++     onClickCapture={(event) => {
++       blockWhenDisabled(event);
++       onClickCapture?.(event);
++     }}
++     // onAuxClickCapture: the same, for middle-click
+    >
+
+  // buttonStyle: gate every hover the same way
+- "transition enabled:cursor-pointer disabled:opacity-40",
++ "transition not-disabled:not-aria-disabled:cursor-pointer disabled:opacity-40 aria-disabled:not-aria-busy:opacity-40",
+- "hover:bg-accent/90"
++ "not-disabled:not-aria-disabled:hover:bg-accent/90"
+- "active:not-in-data-ui-button-group:scale-98"
++ "not-aria-disabled:active:not-in-data-ui-button-group:scale-98"
+- "in-data-ui-button-group:active:bg-accent/80"
++ "in-data-ui-button-group:not-aria-disabled:active:bg-accent/80"
+
+  // spinner wrapper
+- "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
++ "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2",
+```
+
+`Button.Group`'s child-validation effect did nothing (an empty `if`) and is removed.
+
+
+### Fixed: Modal focus return and dismissal, Dialog and Drawer text styles
+
+Apply these to your copies of `modal.tsx`, `dialog.tsx` and `drawer.tsx`.
+
+- **Focus returns to the opener.** Modal removes the `<dialog>` after its exit transition without
+  calling `close()`, so the browser never restored focus: after Cancel, Esc or a backdrop click it
+  fell to `<body>`. Modal now remembers what had focus at `showModal()` and focuses it again once
+  the dialog leaves the page.
+- **State follows a browser-initiated close.** A `close` listener calls `onOpenChange(false)` when
+  the browser closes the dialog on its own (a close request it won't let us cancel), only while
+  `open`, so a close you made isn't reported twice.
+- **Light dismiss needs the press to start on the backdrop.** Selecting text inside the dialog and
+  releasing outside it no longer closes it.
+- **Dialog and Drawer set their own text styles.** Content inherited the UA's `CanvasText` colour
+  and the alignment and size of wherever it was rendered (a centred, coloured or small-text
+  container). Both now set `text-start text-base text-foreground`.
+
+New: `dismissible` on `Modal` (and so `Dialog` and `Drawer`) blocks Esc and backdrop dismiss when set to `false`, for
+example while a form has unsaved changes. `Modal.Close` and your own state still close it.
+
+```diff tsx
+  const useDialogElement = (
+    open: boolean,
+    setOpen: (isOpen: boolean) => void,
++   dismissible: boolean,
++   isMounted: boolean,
+  ) => {
+    const ref = useRef<HTMLDialogElement>(null);
++   const openerRef = useRef<Element | null>(null);
+
+    useLayoutEffect(() => {
+      if (open && !element.open) {
++       openerRef.current = document.activeElement;
+        element.showModal();
+      }
+
+      element.addEventListener("cancel", (event: Event) => {
++       if (!event.cancelable) return;
+        event.preventDefault();
+-       setOpen(false);
++       if (dismissible) setOpen(false);
+      }, { signal });
+
++     element.addEventListener("close", () => {
++       if (open) setOpen(false);
++     }, { signal });
+
+      element.addEventListener("keydown", (event: KeyboardEvent) => {
+-       if (event.key === "Escape" && open) {
++       if (event.key === "Escape" && !event.isComposing && open) {
+          event.preventDefault();
+          event.stopPropagation();
+-         setOpen(false);
++         if (dismissible) setOpen(false);
+        }
+      }, { signal });
+-   }, [open, setOpen]);
++   }, [open, setOpen, dismissible]);
+
+    useEffect(() => {
+-     if (!element || !open) return;
++     if (!element || !open || !dismissible) return;
+-     const handleDialogClick = (event: MouseEvent) => {
+-       if ((event.target as HTMLElement).nodeName === "DIALOG") { … }
+-     };
+-     element.addEventListener("click", handleDialogClick);
+-     return () => {
+-       element.removeEventListener("click", handleDialogClick);
+-     };
++     // Only this dialog's own backdrop: a nested dialog's backdrop click bubbles here
++     const isOnBackdrop = (event: MouseEvent) => {
++       if (event.target !== element) return false;
++       const { top, left, width, height } = element.getBoundingClientRect();
++       return top > event.clientY || event.clientY > top + height ||
++         left > event.clientX || event.clientX > left + width;
++     };
++     let pressedOnBackdrop = false;
++     const handlePointerDown = (event: PointerEvent) => {
++       pressedOnBackdrop = isOnBackdrop(event);
++     };
++     const handleClick = (event: MouseEvent) => {
++       if (!pressedOnBackdrop || !isOnBackdrop(event)) return;
++       event.stopPropagation();
++       setOpen(false);
++     };
++     element.addEventListener("pointerdown", handlePointerDown);
++     element.addEventListener("click", handleClick);
++     return () => {
++       element.removeEventListener("pointerdown", handlePointerDown);
++       element.removeEventListener("click", handleClick);
++     };
+-   }, [setOpen, open]);
++   }, [setOpen, open, dismissible]);
+
++   useEffect(() => {
++     if (!isMounted) return;
++     return () => {
++       const opener = openerRef.current;
++       if (opener instanceof HTMLElement) opener.focus();
++     };
++   }, [isMounted]);
+  };
+
+  const ModalContext = createContext<{
+    open: boolean;
++   dismissible: boolean;
+    …
+  } | null>(null);
+
+  interface ModalProps {
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
++   dismissible?: boolean;
+    children: React.ReactNode;
+  }
+
+- const Modal = ({ open: propsOpen, onOpenChange, children }: ModalProps) => {
++ const Modal = ({ open: propsOpen, onOpenChange, dismissible = true, children }: ModalProps) => {
+    const ctx = useMemo(
+      () => ({
+        open,
+        setOpen,
++       dismissible,
+        …
+      }),
+-     [descriptionId, labelId, open, setOpen],
++     [descriptionId, labelId, open, setOpen, dismissible],
+    );
+
+  const ModalContent = (…) => {
+-   const { open, labelId, descriptionId, setOpen } = useModalContext();
+-   const dialogRef = useDialogElement(open, setOpen);
+-   const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
++   const { open, dismissible, labelId, descriptionId, setOpen } = useModalContext();
++   const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
++   const dialogRef = useDialogElement(open, setOpen, dismissible, isMounted);
+```
+
+```diff tsx
+  // dialog.tsx (Dialog.Content)
+- "… rounded-3xl border border-border bg-background p-4 shadow-lg md:max-w-md",
++ "… rounded-3xl border border-border bg-background p-4 text-start text-base text-foreground shadow-lg md:max-w-md",
+
+  // drawer.tsx (drawerContentStyle base)
+- "… border border-border bg-background p-(--drawer-p) *:shrink-0",
++ "… border border-border bg-background p-(--drawer-p) text-start text-base text-foreground *:shrink-0",
+```
+
 ### Changed: data table recipe targets `@tanstack/react-table` 9
 
 The [data table recipe](/ui/table#data-table-with-tanstack-table) now uses TanStack Table 9. If you
