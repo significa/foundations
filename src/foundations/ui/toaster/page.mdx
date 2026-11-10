@@ -100,3 +100,10 @@ A `loading` toast doesn't time out. Once it settles, it gets the default duratio
 ### Async
 
 <Preview slug="toaster-promise" />
+
+### Above a modal
+
+Modals and drawers open in the top layer. The Toaster re-enters it on `ui:modal-open`, so a toast
+fired from inside a drawer still shows above it.
+
+<Preview slug="toaster-drawer" />

@@ -12,6 +12,147 @@ meta:
 
 ## November 2026
 
+### Fixed: a disabled `Menu.Item asChild` link still activated
+
+An `<a>` ignores `disabled`, so Enter or a click on a disabled `Menu.Item asChild` ran the link's
+`onClick` and `onSelect` and followed the link. Enter in `Menu.SearchInput` could also select a
+disabled item, since typing highlights the first result. Disabled items now stop clicks and
+middle-clicks in the capture phase (`preventDefault()` and `stopPropagation()`), as `Button` does,
+so no `onClick` runs, the child's included; they set `aria-disabled` (which list navigation also
+skips), and the search input won't select them. `Menu.Heading` also lined up with nothing; it now
+pads to the items' text edge.
+
+```diff tsx
+  const MenuItem = ({
+    onClick,
++   onClickCapture,
++   onAuxClickCapture,
+    …
+  }) => {
++   const blockWhenDisabled = (event: React.SyntheticEvent) => {
++     if (!disabled) return;
++     event.preventDefault();
++     event.stopPropagation();
++   };
+
+    <Comp
+      disabled={disabled || undefined}
++     aria-disabled={disabled || undefined}
+      data-disabled={disabled || undefined}
+      {...getItemProps({ … })}
++     onClickCapture={(event) => {
++       blockWhenDisabled(event);
++       onClickCapture?.(event);
++     }}
++     // onAuxClickCapture: the same, for middle-click
+    >
+
+  // Menu.SearchInput
+- if (id && items[id]) {
++ const isDisabled = element?.getAttribute("aria-disabled") === "true";
++ if (id && items[id] && !isDisabled) {
+
+  // Menu.Heading
+- "px-3.5 pt-3 pb-1 …"
++ "px-[calc(var(--inset)+--spacing(3))] pt-3 pb-1 …"
+```
+
+### Fixed: `Tabs` kept unmounted tabs registered
+
+`Tabs.Item` dropped the cleanup `registerTab` returns. Under StrictMode every tab registered
+twice, and a tab removed while the `Tabs` stayed mounted stayed registered, so arrow keys could
+land on a tab that no longer exists. With unregistering fixed, three things keep indices honest
+for conditional tabs (`{show && <Tabs.Item>}`): tabs register in DOM order, `Tabs.Items` and
+`Tabs.Panels` skip empty children when indexing, and an uncontrolled `Tabs` keeps the same tab
+selected when another comes or goes (or selects the last one if the selected tab went). Unselected
+tabs also omitted `aria-selected` instead of setting it to `false`.
+
+```diff tsx
+  useLayoutEffect(() => {
+-   registerTab(id);
++   return registerTab(id);
+  }, [id, registerTab]);
+
+- setTabs((prev) => [...prev, id]);
++ setTabs((prev) => sortByDomOrder([...prev, id]));
+
+- {Children.map(children, (child, index) => (
++ {mapElements(children, (child, index) => ( // indexes elements only
+
++ // see source: re-selects the previously selected tab when `tabs` changes (uncontrolled)
+
+- aria-selected={isSelected || undefined}
++ aria-selected={isSelected}
+```
+
+### Fixed: `Badge` rendered `div`s
+
+A `div` is invalid inside a `<p>` or `<button>`, which caused hydration errors. `Badge`,
+`Badge.Icon` and `Badge.Status` render `span`s now (refs and props are typed for `span`). The pill
+also stops wrapping its text out of its fixed height.
+
+```diff tsx
+- base: "inline-flex items-center gap-1 rounded-full leading-none font-semibold …",
++ base: "inline-flex shrink-0 items-center gap-1 rounded-full leading-none font-semibold whitespace-nowrap …",
+
+- interface BadgeProps extends React.ComponentPropsWithRef<"div"> {
++ interface BadgeProps extends React.ComponentPropsWithRef<"span"> {
+
+- const Comp = asChild ? Slot : "div";
++ const Comp = asChild ? Slot : "span";
+```
+
+### Fixed: `Avatar` showed a broken image, read its content twice, and overflowed initials
+
+A failed `Avatar.Image` stayed mounted, and Chrome drew its broken-image icon over the initials; it
+now unmounts on error, including one that fired before hydration, so the fallback shows. When you
+passed an `alt`, screen readers got both it and the initials, and nothing named an initials-only
+avatar: a new `label` prop (or `aria-label`) names the avatar (`role="img"`), and without it the
+avatar is `aria-hidden`; give grouped avatars a `label`, since a group rarely has names next to it.
+`Avatar.Image` no longer takes `alt`; move it to `label`, or drop it when the name is already text
+next to the avatar.
+Initials take the first and last word only ("Ana Maria da Silva" was "AMdS", now "AS").
+
+```diff tsx
+- <Avatar>
+-   <Avatar.Image src={user.photo} alt={user.name} />
++ <Avatar label={user.name}>
++   <Avatar.Image src={user.photo} />
+    <Avatar.Fallback>{user.name}</Avatar.Fallback>
+  </Avatar>
+
+- const AvatarImage = ({ className, src, ...props }: AvatarImageProps) => {
++ const AvatarImage = ({ ref, className, src, onError, ...props }: AvatarImageProps) => {
++   const [failedSrc, setFailedSrc] = useState<string>();
++   // …a ref that catches a failure before hydration (see source)
++   if (failedSrc === src) return null;
++   // <img ref={composedRef} … onError={(e) => { setFailedSrc(src); onError?.(e); }} {...props} alt="" />
+
+- return name.split(" ").map((n) => n[0]).join("");
++ const words = name?.trim().split(/\s+/).filter(Boolean) ?? [];
++ // first word's initial + last word's initial
+```
+
+### Fixed: `Slider` range didn't meet the thumb
+
+The range filled `value × 100%` of the track, but the native thumb's centre travels the width
+minus its own size, so between the ends the range stopped short of or ran past the thumb. The
+range now ends at the thumb's centre. `Slider.Thumb` also wrote `--progress-track-factor` onto the
+root by hand on change, which the root's render already sets, and which showed the rejected value
+when a controlled parent clamped it; that code is gone (and with it the `composeRefs` dependency).
+
+```diff tsx
+  // Slider.Range
+- `calc(var(--progress-track-factor) * 100%)`
++ "calc(var(--thumb-size) / 4 + var(--progress-track-factor) * (100% - var(--thumb-size) / 2))"
+
+  // Slider.Thumb
+- const sliderElement = e.target.closest('[style*="--progress-track-factor"]') as HTMLElement;
+- if (sliderElement) {
+-   sliderElement.style.setProperty("--progress-track-factor", …);
+- }
+```
+
 ### Fixed: `OTPInput` ignored `defaultValue`, overflowed narrow containers, and `masked` woke password managers
 
 Four fixes to apply to your copy of `otp-input.tsx`:

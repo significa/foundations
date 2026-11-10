@@ -1,11 +1,13 @@
 import {
   Children,
   createContext,
+  isValidElement,
   use,
   useCallback,
   useId,
   useLayoutEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -84,7 +86,8 @@ const Tabs = ({
   }, [tabs.length, selectedIndex, setSelectedIndex]);
 
   const registerTab = useCallback((id: string) => {
-    setTabs((prev) => [...prev, id]);
+    // A tab shown again registers last; keep the list in DOM order so indices match.
+    setTabs((prev) => sortByDomOrder([...prev, id]));
 
     return () => {
       setTabs((prev) => prev.filter((prevId) => prevId !== id));
@@ -92,6 +95,20 @@ const Tabs = ({
   }, []);
 
   const selectedTab = useMemo(() => tabs[selectedIndex], [tabs, selectedIndex]);
+
+  // When tabs come or go, keep the same tab selected, or the last one if it went (uncontrolled
+  // only). Runs before the ref below updates, so it still holds the previously selected tab.
+  const selectedTabRef = useRef<string | undefined>(undefined);
+  useLayoutEffect(() => {
+    if (selectedIndexProp !== undefined || tabs.length === 0) return;
+    const index = selectedTabRef.current ? tabs.indexOf(selectedTabRef.current) : -1;
+    setInternalSelectedIndex((current) =>
+      index === -1 ? Math.min(current, tabs.length - 1) : index,
+    );
+  }, [tabs, selectedIndexProp]);
+  useLayoutEffect(() => {
+    selectedTabRef.current = selectedTab;
+  }, [selectedTab]);
 
   const setSelectedTab = useCallback(
     (id: string) => {
@@ -161,7 +178,7 @@ const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
       )}
       {...props}
     >
-      {Children.map(children, (child, index) => (
+      {mapElements(children, (child, index) => (
         <ItemIndexContext value={index}>{child}</ItemIndexContext>
       ))}
       {/* after the tabs, or it can't anchor to them */}
@@ -206,6 +223,25 @@ const TabsIndicator = () => {
 
 const getItemId = (id: string | undefined) => (id ? `tab${id}` : undefined);
 
+const sortByDomOrder = (ids: string[]) =>
+  ids.toSorted((a, b) => {
+    const elementA = document.getElementById(getItemId(a) ?? "");
+    const elementB = document.getElementById(getItemId(b) ?? "");
+    if (!elementA || !elementB) return 0;
+    return elementA.compareDocumentPosition(elementB) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+  });
+
+// Children.map counts `{show && <Tab />}` holes; skip them so indices match the registered tabs.
+const mapElements = (
+  children: React.ReactNode,
+  render: (child: React.ReactElement, index: number) => React.ReactNode,
+) => {
+  let index = 0;
+  return Children.map(children, (child) =>
+    isValidElement(child) ? render(child, index++) : child,
+  );
+};
+
 const TabsItem = ({
   children,
   asChild,
@@ -232,7 +268,7 @@ const TabsItem = ({
   const Comp = asChild ? Slot : "button";
 
   useLayoutEffect(() => {
-    registerTab(id);
+    return registerTab(id);
   }, [id, registerTab]);
 
   // Match by id once registered; fall back to index for SSR / initial render.
@@ -277,7 +313,7 @@ const TabsItem = ({
       )}
       role="tab"
       aria-controls={getPanelId(id)}
-      aria-selected={isSelected || undefined}
+      aria-selected={isSelected}
       data-selected={isSelected || undefined}
       tabIndex={isSelected ? 0 : -1}
       style={{ anchorName: getAnchorName(tabsId, index), ...style }}
@@ -314,7 +350,7 @@ const TabsPanels = ({ children, className, ...props }: TabsPanelsProps) => {
       className={cn("ring-ring transition has-focus-visible:ring-(length:--ring-width)", className)}
       {...props}
     >
-      {Children.map(children, (child, index) => (
+      {mapElements(children, (child, index) => (
         <PanelIndexContext value={index}>
           <PanelIdContext value={tabs[index]}>{child}</PanelIdContext>
         </PanelIndexContext>

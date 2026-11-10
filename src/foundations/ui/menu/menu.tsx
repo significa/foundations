@@ -449,6 +449,8 @@ const MenuItem = ({
   disabled,
   variant,
   onClick,
+  onClickCapture,
+  onAuxClickCapture,
   onSelect,
   onKeyDown,
   asChild,
@@ -477,6 +479,13 @@ const MenuItem = ({
       onSelect: stableOnSelect,
     });
   }, [registerItem, itemId, stableOnSelect]);
+
+  // An `asChild` anchor ignores `disabled`, so block its clicks in capture: no onClick runs.
+  const blockWhenDisabled = (event: React.SyntheticEvent) => {
+    if (!disabled) return;
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(e);
@@ -516,6 +525,8 @@ const MenuItem = ({
       data-highlighted={isHighlighted || undefined}
       tabIndex={isHighlighted ? 0 : -1}
       disabled={disabled || undefined}
+      // Also makes Floating UI's list navigation skip the item.
+      aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={itemStyle({ variant, className })}
       {...getItemProps({
@@ -523,6 +534,14 @@ const MenuItem = ({
         onKeyDown: handleKeyDown,
         onClick: handleClick,
       })}
+      onClickCapture={(event) => {
+        blockWhenDisabled(event);
+        onClickCapture?.(event);
+      }}
+      onAuxClickCapture={(event) => {
+        blockWhenDisabled(event);
+        onAuxClickCapture?.(event);
+      }}
     >
       {children}
     </Comp>
@@ -570,7 +589,10 @@ const MenuHeading = ({
   return (
     <div
       id={id}
-      className={cn("px-3.5 pt-3 pb-1 text-sm font-medium text-foreground-secondary", className)}
+      className={cn(
+        "px-[calc(var(--inset)+--spacing(3))] pt-3 pb-1 text-sm font-medium text-foreground-secondary",
+        className,
+      )}
       {...props}
     >
       {children}
@@ -612,8 +634,11 @@ const MenuSearchInput = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && highlightedIndex !== null) {
-      const id = elementsRef.current[highlightedIndex]?.dataset.itemId;
-      if (id && items[id]) {
+      const element = elementsRef.current[highlightedIndex];
+      const id = element?.dataset.itemId;
+      // Typing highlights the first result, which may be disabled.
+      const isDisabled = element?.getAttribute("aria-disabled") === "true";
+      if (id && items[id] && !isDisabled) {
         items[id].onSelect?.(e);
         // Mirror MenuItem.handleClick: close the whole tree on selection
         // unless onSelect explicitly preventDefault'd.

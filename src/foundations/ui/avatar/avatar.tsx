@@ -1,17 +1,25 @@
 import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 import type { VariantProps } from "cva";
-import { Children, cloneElement, isValidElement, useId } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useId,
+  useMemo,
+  useState,
+} from "react";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const getInitials = (name: string | undefined) => {
-  if (!name) return "";
+  const words = name?.trim().split(/\s+/).filter(Boolean) ?? [];
+  const first = words.at(0) ?? "";
+  const last = words.length > 1 ? (words.at(-1) ?? "") : "";
 
-  if (name.length === 1 || name.length === 2) return name;
+  if (!last) return first.length <= 2 ? first : first.charAt(0);
 
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("");
+  return first.charAt(0) + last.charAt(0);
 };
 
 const avatarStyle = cva({
@@ -37,33 +45,69 @@ const avatarStyle = cva({
 interface AvatarProps extends React.ComponentPropsWithRef<"div"> {
   size?: VariantProps<typeof avatarStyle>["size"];
   variant?: VariantProps<typeof avatarStyle>["variant"];
+  /**
+   * Names the avatar for assistive tech. Omit it when the name is already text next to the
+   * avatar: the avatar is then hidden from assistive tech.
+   */
+  label?: string;
 }
 
 const Avatar = ({
   className,
   variant = "circle",
   size = "md",
+  label,
+  "aria-label": ariaLabel,
   children,
   ...props
 }: AvatarProps) => {
+  const name = label ?? ariaLabel;
+  const a11yProps = name ? { role: "img", "aria-label": name } : { "aria-hidden": true };
+
   return (
-    <div className={cn(avatarStyle({ variant, size }), className)} {...props}>
+    <div className={cn(avatarStyle({ variant, size }), className)} {...a11yProps} {...props}>
       {children}
     </div>
   );
 };
 
-interface AvatarImageProps extends React.ComponentPropsWithRef<"img"> {
+// No `alt`: the Avatar's `label` names it.
+interface AvatarImageProps extends Omit<React.ComponentPropsWithRef<"img">, "alt"> {
   src: string;
 }
 
-const AvatarImage = ({ className, src, ...props }: AvatarImageProps) => {
+const AvatarImage = ({ ref, className, src, onError, ...props }: AvatarImageProps) => {
+  // Keyed by src so a new src gets its own try.
+  const [failedSrc, setFailedSrc] = useState<string>();
+
+  // An image that failed before hydration fired `error` before React listened. `decode()` only
+  // rejects a broken image (a loaded SVG without intrinsic size may report `naturalWidth` 0 too).
+  const detectEarlyFailure = useCallback(
+    (image: HTMLImageElement | null) => {
+      if (!image?.complete || image.naturalWidth > 0) return;
+      image.decode().catch(() => setFailedSrc(src));
+    },
+    [src],
+  );
+  const composedRef = useMemo(
+    () => composeRefs(ref, detectEarlyFailure),
+    [ref, detectEarlyFailure],
+  );
+
+  // A failed image left mounted can draw the browser's broken-image icon over the fallback.
+  if (failedSrc === src) return null;
+
   return (
     <img
+      ref={composedRef}
       className={cn("absolute inset-0 z-1 object-cover", className)}
       src={src}
-      alt=""
+      onError={(e) => {
+        setFailedSrc(src);
+        onError?.(e);
+      }}
       {...props}
+      alt=""
     />
   );
 };
@@ -74,7 +118,7 @@ interface AvatarFallbackProps extends React.ComponentPropsWithRef<"div"> {
 
 const AvatarFallback = ({ className, children, ...props }: AvatarFallbackProps) => {
   return (
-    <div className={cn("opacity-80", className)} {...props}>
+    <div className={cn("opacity-80", className)} {...props} aria-hidden>
       {getInitials(children) || <UserIcon weight="bold" />}
     </div>
   );
