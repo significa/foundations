@@ -20,17 +20,21 @@ const isValidSlottableElement = (
   );
 };
 
-const isDefaultPrevented = (event: unknown) => {
-  return (
-    typeof event === "object" &&
-    event !== null &&
-    "defaultPrevented" in event &&
-    event.defaultPrevented === true
-  );
+// Events a slot handler vetoed with `skipChildHandler`. Explicit, unlike checking
+// `defaultPrevented`, which an ancestor or nested element may already have set.
+const skippedEvents = new WeakSet<object>();
+
+/** Call from a slot's `on*` handler to stop the child's handler of the same name for this event. */
+export const skipChildHandler = (event: object) => {
+  skippedEvents.add(event);
 };
 
-// Where both pass the same `on*` handler, the slot's runs first and the child's runs unless the
-// slot's called preventDefault (how a component blocks activation, e.g. a loading Button).
+const isSkipped = (event: unknown) => {
+  return typeof event === "object" && event !== null && skippedEvents.has(event);
+};
+
+// Where both pass the same `on*` handler, the slot's runs first, then the child's unless the slot's
+// called `skipChildHandler` (how a disabled or loading Button blocks an asChild link's onClick).
 const composeEventHandlers = (
   slotProps: Record<string, unknown>,
   childProps: Record<string, unknown>,
@@ -44,10 +48,8 @@ const composeEventHandlers = (
 
     // Not every `on*` is a DOM event (`onOpenChange(open, event, reason)`): pass every argument on.
     composed[name] = (...args: unknown[]) => {
-      // Snapshot first: a preventDefault from a nested element earlier in the bubble path isn't the slot's.
-      const wasPrevented = isDefaultPrevented(args[0]);
       slotHandler(...args);
-      if (!wasPrevented && isDefaultPrevented(args[0])) return;
+      if (isSkipped(args[0])) return;
       childHandler(...args);
     };
   }

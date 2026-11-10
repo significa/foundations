@@ -21,7 +21,7 @@ folder: components
 ## Features
 
 - **Prop Merging**: Merges the Slot's props onto its child element; the child's own props win, except where they're explicitly `undefined` or `null`
-- **Event Handler Composition**: When both pass the same `on*` handler, both run: the Slot's first, then the child's unless the Slot's handler called `event.preventDefault()`
+- **Event Handler Composition**: When both pass the same `on*` handler, both run: the Slot's first, then the child's unless the Slot's handler called `skipChildHandler(event)`
 - **Style Composition**: Combines styles from both Slot and child element; the child's wins per property
 - **ClassName Merging**: Intelligently merges classNames using the `cn` utility
 - **Ref Composition**: The Slot's `ref` and the child's own `ref` both receive the element
@@ -130,12 +130,21 @@ The Slot component uses React's `cloneElement` to merge props onto its child ele
 - Ref composition
 - Type safety
 
-The child's props take precedence over the Slot's, but event handlers, `className`, `style` and `ref` are combined rather than replaced, so the child keeps its own behaviour and the Slot keeps its own. A component can still block the child's handler (and the element's default action) by calling `event.preventDefault()` in its own handler: this is how a loading or disabled `Button asChild` stops a link from running its `onClick` or navigating.
+The child's props take precedence over the Slot's, but event handlers, `className`, `style` and `ref` are combined rather than replaced, so the child keeps its own behaviour and the Slot keeps its own. A component can block the child's handler for one event by calling `skipChildHandler(event)` in its own handler: this is how a loading or disabled `Button asChild` stops a link from running its `onClick`, alongside `event.preventDefault()` to stop it navigating. Calling `preventDefault()` alone doesn't skip the child's handler, so a click an ancestor already cancelled can't change what runs.
+
+```tsx
+import { skipChildHandler } from "#/foundations/components/slot/slot.tsx";
+
+const handleClick = (event: React.MouseEvent) => {
+  if (disabled) {
+    event.preventDefault();
+    skipChildHandler(event);
+    return;
+  }
+  onClick?.(event);
+};
+```
 
 On a `className` conflict the Slot's utilities win (`cn(child, slot)`, resolved by tailwind-merge); for `style` and every other prop the child wins. A child prop set to `undefined` or `null` counts as not set.
-
-The flip side of that veto: whenever the Slot's handler cancels the native action, the child's handler of the same name doesn't run either. Examples are `FileUpload.Dropzone`'s drag events, Arrow, Home and End on `Tabs`, `SegmentedControl`, `ToggleGroup` and `Sequence` items, and Space on a non-button `Popover` trigger. Handle those on a wrapper or inside the child instead.
-
-The veto only counts a `preventDefault()` made by the Slot's own handler. If the event was already cancelled before that handler ran (a parent's `onClickCapture`, a nested element's handler), the child's handler still runs, even under a disabled or loading `Button asChild`.
 
 `Slottable` renders its child through `Slot`, so the same rules apply under `asChild`.

@@ -19,21 +19,23 @@ component's, an explicit `undefined` or `null` on the child erased the slot's pr
 `ref` replaced the child's. `Slottable` was worse: it cloned the child with the slot's props on top,
 so under `asChild` the child's own `onClick`, `className` and `style` were lost (`<Button asChild><a
 onClick className>` dropped both). Now handlers both sides pass are composed with all their
-arguments (the slot's first, the child's unless the slot's called `preventDefault()`), `className`
-and `style` merge, both refs get the element, and `Slottable` renders its child through `Slot`.
-Replace your `slot.tsx`; it now imports `composeRefs`.
-
-One behaviour to know: when the slot's handler cancels the native action, the child's handler of
-the same name is skipped. For example, an `onKeyDown` on a `Tabs` item child no longer runs for
-Arrow, Home and End. See the [Slot page](/components/slot) for the full list.
+arguments: the slot's runs first, then the child's, unless the slot's handler called the new
+`skipChildHandler(event)`. That's an explicit call rather than a `defaultPrevented` check, so a
+click an ancestor already cancelled can't change what runs. `className` and `style` merge, both
+refs get the element, and `Slottable` renders its child through `Slot`. Replace your `slot.tsx`; it
+now imports `composeRefs`.
 
 ```diff tsx
++ const skippedEvents = new WeakSet<object>();
++ export const skipChildHandler = (event: object) => {
++   skippedEvents.add(event);
++ };
++
 + const composeEventHandlers = (slotProps, childProps) => {
 +   // for each on* handler both pass:
 +   composed[name] = (...args) => {
-+     const wasPrevented = isDefaultPrevented(args[0]);
 +     slotHandler(...args);
-+     if (!wasPrevented && isDefaultPrevented(args[0])) return;
++     if (isSkipped(args[0])) return;
 +     childHandler(...args);
 +   };
 + };
@@ -130,7 +132,7 @@ parent removed still ran (`Menu` `onSelect`, `useKeyboardShortcut`).
 `isLoading` only hid the label: the button stayed clickable and nothing announced it as busy, and
 passing `disabled` alongside it dropped focus to `<body>`. A loading button now sets `aria-busy` and
 `aria-disabled`, stays focusable, and blocks activation in its click handler with
-`preventDefault()` (mouse, Enter, Space and implicit form submit all arrive as `click`). You no
+`preventDefault()` and `skipChildHandler()` (mouse, Enter, Space and implicit form submit all arrive as `click`). You no
 longer need `disabled={isLoading}`.
 
 Required update: `<Button asChild disabled>` no longer sets the native `disabled` attribute on its
@@ -159,6 +161,7 @@ baseline. These rely on the `Slot` fix above.
 +   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 +     if (isLoading || disabled) {
 +       event.preventDefault();
++       skipChildHandler(event);
 +       return;
 +     }
 +     onClick?.(event);

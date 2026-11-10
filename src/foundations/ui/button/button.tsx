@@ -1,6 +1,6 @@
 import type { VariantProps } from "cva";
 import { Children, Fragment } from "react";
-import { Slot, Slottable } from "#/foundations/components/slot/slot.tsx";
+import { Slot, Slottable, skipChildHandler } from "#/foundations/components/slot/slot.tsx";
 import { Divider } from "#/foundations/ui/divider/divider.tsx";
 import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
 import { cn, cva } from "#/lib/utils/classnames.ts";
@@ -82,10 +82,12 @@ const Button = ({
   const Comp = asChild ? Slot : "button";
 
   // Loading isn't `disabled`, which drops focus to <body>. Mouse, Enter, Space and implicit submit
-  // all arrive as `click`; preventDefault also stops the asChild child's onClick and a link's href.
+  // all arrive as `click`. preventDefault stops a link's href and a submit; skipChildHandler stops
+  // the asChild child's own onClick.
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (isLoading || disabled) {
       event.preventDefault();
+      skipChildHandler(event);
       return;
     }
     onClick?.(event);
@@ -95,6 +97,7 @@ const Button = ({
   const handleAuxClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (isLoading || disabled) {
       event.preventDefault();
+      skipChildHandler(event);
       return;
     }
     onAuxClick?.(event);
