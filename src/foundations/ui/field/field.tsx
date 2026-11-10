@@ -63,7 +63,6 @@ const Field = ({ invalid, className, children, ...props }: FieldProps) => {
 const FieldLabel = ({ className, ...props }: React.ComponentPropsWithRef<"label">) => {
   const { controlId, labelId } = useFieldContext();
   return (
-    // biome-ignore lint/a11y/noLabelWithoutControl: text arrives via props.children; the control is wired by htmlFor
     <label
       htmlFor={controlId}
       id={labelId}

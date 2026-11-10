@@ -14,12 +14,6 @@
   },
   "linter": {
     "rules": {
-      "a11y": {
-        "noLabelWithoutControl": {
-          "level": "error",
-          "options": { "inputComponents": ["Checkbox"] }
-        }
-      },
       "nursery": {
         "useTailwindSortedClasses": {
           "level": "error",

@@ -14,9 +14,9 @@ meta:
 
 ### Changed: Foundations targets `@significa/ts-standards`
 
-Every component now lints and type-checks under [`@significa/ts-standards`](https://github.com/significa/ts-standards),
-which replaces `@significa/biome-config` and `@significa/tsconfig`. If your project uses it, two
-copies need a small update; behaviour is unchanged.
+Copies now lint and compile under [`@significa/ts-standards`](https://github.com/significa/ts-standards)
+0.2.2, which replaces `@significa/biome-config` and `@significa/tsconfig`. If your project uses it,
+one copy needs a small update; behaviour is unchanged.
 
 `useElementTransition` failed `noImplicitReturns`. Return on every path of the layout effect:
 
@@ -35,16 +35,6 @@ copies need a small update; behaviour is unchanged.
 +   setStatus("initial");
 +   return nextFrame(() => { flushSync(() => setStatus("open")); }, 2);
   }, [shouldMount]);
-```
-
-`Field.Label` gets its text through props, so `noLabelWithoutControl` can't see it and the
-preset fails the copy. Add the ignore on the element:
-
-```diff tsx
-  return (
-+   // biome-ignore lint/a11y/noLabelWithoutControl: text arrives via props.children; the control is wired by htmlFor
-    <label htmlFor={controlId} id={labelId} ... />
-  );
 ```
 
 ## September 2026

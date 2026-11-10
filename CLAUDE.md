@@ -64,9 +64,8 @@ Biome config extends the shared `@significa/ts-standards/biome` preset (`biome.j
 Biome and `@significa/ts-standards` are pinned together; bump them as a pair. The
 project file only adds what's Foundations-specific: `.astro` files are excluded
 (Prettier owns their formatting; running both would fight), CSS line width is 128,
-`Checkbox` counts as a label control (temporary, until ts-standards settles `noLabelWithoutControl`), and
-Tailwind class sorting is on. The preset defines the TS/TSX formatting
-below and the strict rules (no `any`, no `!`, no `console.log`, no floating
+and Tailwind class sorting is on. The preset defines the TS/TSX formatting below
+and the strict rules (no `any`, no `!`, no `console.log`, no floating
 promises, kebab-case filenames).
 
 Lint suppressions live in the component file as a per-line `biome-ignore` with a
