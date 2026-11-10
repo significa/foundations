@@ -1,7 +1,7 @@
 import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
-import { link, markdown } from "@/lib/utils/markdown";
-import { getNavigationItems } from "@/lib/utils/navigation";
+import { link, markdown } from "#/lib/utils/markdown.ts";
+import { getNavigationItems } from "#/lib/utils/navigation.ts";
 
 export const GET: APIRoute = async () => {
   const pages = await getCollection("pages");
@@ -20,6 +20,7 @@ export const GET: APIRoute = async () => {
       `1. Fetch ${link("/setup/llms.txt", "/setup/llms.txt")} first: global CSS and the \`cn\`/\`cva\` helpers every component needs.`,
       "2. Each page lists its dependencies, including transitive ones, in the order to copy them (leaves first).",
       "3. Each page has a version stamp. Keep the provenance comment it asks for (`// Adapted from Foundations <path>@<sha>`) at the top of every copied file.",
+      "4. Foundations source imports with the `#/` alias and file extensions (`#/foundations/<category>/<name>/<name>.tsx`). When copying, rewrite those paths to your project's layout and keep the extensions.",
       "",
       markdown(
         ...items.map((item) => {
