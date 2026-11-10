@@ -29,8 +29,8 @@ export const skipChildHandler = (event: object) => {
   skippedEvents.add(event);
 };
 
-const isSkipped = (event: unknown) => {
-  return typeof event === "object" && event !== null && skippedEvents.has(event);
+const isObject = (value: unknown): value is object => {
+  return typeof value === "object" && value !== null;
 };
 
 // Where both pass the same `on*` handler, the slot's runs first, then the child's unless the slot's
@@ -48,8 +48,11 @@ const composeEventHandlers = (
 
     // Not every `on*` is a DOM event (`onOpenChange(open, event, reason)`): pass every argument on.
     composed[name] = (...args: unknown[]) => {
+      const event = args[0];
+      // React shares one event along the bubble path: a mark from a nested element isn't this slot's.
+      if (isObject(event)) skippedEvents.delete(event);
       slotHandler(...args);
-      if (isSkipped(args[0])) return;
+      if (isObject(event) && skippedEvents.has(event)) return;
       childHandler(...args);
     };
   }

@@ -34,8 +34,9 @@ now imports `composeRefs`.
 + const composeEventHandlers = (slotProps, childProps) => {
 +   // for each on* handler both pass:
 +   composed[name] = (...args) => {
++     skippedEvents.delete(event); // a nested element's mark isn't this slot's
 +     slotHandler(...args);
-+     if (isSkipped(args[0])) return;
++     if (skippedEvents.has(event)) return;
 +     childHandler(...args);
 +   };
 + };
