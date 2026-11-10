@@ -53,7 +53,7 @@ const TableHeader = ({ ref, className, sticky, ...props }: TableHeaderProps) => 
     <thead
       ref={ref}
       className={cn(
-        "[&_tr]:border-border [&_tr]:border-b",
+        "[&_tr]:border-b [&_tr]:border-border",
         sticky && "sticky top-0 z-10 bg-background",
         className,
       )}
@@ -66,7 +66,7 @@ const TableBody = ({ ref, className, ...props }: React.ComponentPropsWithRef<"tb
   return (
     <tbody
       ref={ref}
-      className={cn("[&_tr:last-child]:border-0 [&_tr]:border-border [&_tr]:border-b", className)}
+      className={cn("[&_tr]:border-b [&_tr]:border-border [&_tr:last-child]:border-0", className)}
       {...props}
     />
   );
@@ -76,7 +76,7 @@ const TableFooter = ({ ref, className, ...props }: React.ComponentPropsWithRef<"
   return (
     <tfoot
       ref={ref}
-      className={cn("border-border border-t bg-foreground/2 font-medium", className)}
+      className={cn("border-t border-border bg-foreground/2 font-medium", className)}
       {...props}
     />
   );
@@ -146,7 +146,7 @@ const TableCaption = ({ ref, className, ...props }: React.ComponentPropsWithRef<
   return (
     <caption
       ref={ref}
-      className={cn("mt-4 text-foreground-secondary text-sm", className)}
+      className={cn("mt-4 text-sm text-foreground-secondary", className)}
       {...props}
     />
   );
@@ -182,8 +182,8 @@ const TableSortableHead = ({
           "group/sort flex h-10 w-full items-center gap-1.5 px-(--table-cell-px) py-0",
           "cursor-pointer text-start font-medium text-foreground-secondary",
           "transition-colors hover:text-foreground",
-          "focus-visible:ring-(length:--ring-width) outline-none ring-ring",
-          "data-[align=end]:justify-end data-[align=center]:justify-center",
+          "ring-ring outline-none focus-visible:ring-(length:--ring-width)",
+          "data-[align=center]:justify-center data-[align=end]:justify-end",
         )}
         data-align={props.align}
       >

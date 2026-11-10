@@ -12,7 +12,7 @@ const BreadcrumbList = ({ ref, className, ...props }: React.ComponentPropsWithRe
     <ol
       ref={ref}
       className={cn(
-        "wrap-break-word flex flex-wrap items-center gap-1.5 text-foreground-secondary sm:gap-2.5",
+        "flex flex-wrap items-center gap-1.5 wrap-break-word text-foreground-secondary sm:gap-2.5",
         className,
       )}
       {...props}
@@ -35,7 +35,7 @@ const BreadcrumbLink = ({ ref, className, asChild, ...props }: BreadcrumbLinkPro
     <Comp
       ref={ref}
       className={cn(
-        "focus-visible:ring-(length:--ring-width) rounded-xs outline-none ring-ring transition hover:text-foreground",
+        "rounded-xs ring-ring transition outline-none hover:text-foreground focus-visible:ring-(length:--ring-width)",
         className,
       )}
       {...props}

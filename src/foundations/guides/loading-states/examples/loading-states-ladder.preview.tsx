@@ -45,7 +45,7 @@ function LoadingStatesLadderPreview() {
   const ticker = useTicker(() => {
     const pct = Math.min(100, ((performance.now() - startedAt.current) / duration.current) * 100);
     setValue(pct);
-    if (pct >= 100) return false;
+    return pct < 100;
   });
 
   const load = (ms: number) => {
@@ -83,7 +83,7 @@ function LoadingStatesLadderPreview() {
         ))}
       </div>
 
-      <div className="flex h-8 w-64 items-center justify-center text-foreground-secondary text-sm">
+      <div className="flex h-8 w-64 items-center justify-center text-sm text-foreground-secondary">
         {showLoading && indicator === "spinner" && (
           <span className="flex items-center gap-2">
             <Spinner /> Loading…
@@ -95,7 +95,7 @@ function LoadingStatesLadderPreview() {
         )}
       </div>
 
-      <ul className="max-w-sm space-y-1 text-center text-foreground-secondary text-xs">
+      <ul className="max-w-sm space-y-1 text-center text-xs text-foreground-secondary">
         {cases.map((c) => (
           <li key={c.label}>
             <strong className="text-foreground">{c.label}</strong>: {c.caption}

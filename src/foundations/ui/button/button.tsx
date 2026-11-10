@@ -7,10 +7,10 @@ import { Divider } from "../divider/divider";
 
 const buttonStyle = cva({
   base: [
-    "relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 whitespace-nowrap font-medium text-(--button-text-color) shadow-xs [--button-text-color:var(--color-foreground)]",
+    "relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 font-medium whitespace-nowrap text-(--button-text-color) shadow-xs [--button-text-color:var(--color-foreground)]",
     "transition enabled:cursor-pointer disabled:opacity-40",
     "active:not-in-data-ui-button-group:scale-98",
-    "focus-visible:ring-(length:--ring-width) ring-ring focus-visible:outline-none",
+    "ring-ring focus-visible:ring-(length:--ring-width) focus-visible:outline-none",
     // inside button group — horizontal merge (default; ToggleGroup may set
     // data-orientation="vertical" on its container to flip the axis)
     "in-data-ui-button-group:not-in-data-[orientation=vertical]:not-last:rounded-r-none",

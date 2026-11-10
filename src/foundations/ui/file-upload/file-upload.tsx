@@ -369,7 +369,7 @@ const FileUploadDropzone = ({
         }
       }}
       className={cn(
-        "relative flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-border border-dashed p-6 text-center transition-colors",
+        "relative flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border p-6 text-center transition-colors",
         "cursor-pointer hover:bg-foreground/2",
         "data-dragging:border-accent data-dragging:bg-accent/5",
         "data-invalid:border-error data-invalid:bg-error/5",
@@ -538,7 +538,7 @@ const FileUploadItemName = ({ className, ...props }: React.ComponentPropsWithRef
 const FileUploadItemSize = ({ className, ...props }: React.ComponentPropsWithRef<"span">) => {
   const { entry } = useItemContext();
   return (
-    <span className={cn("shrink-0 text-foreground-secondary text-xs", className)} {...props}>
+    <span className={cn("shrink-0 text-xs text-foreground-secondary", className)} {...props}>
       {formatBytes(entry.file.size)}
     </span>
   );
@@ -594,7 +594,7 @@ const FileUploadItemRemove = ({
       }}
       className={cn(
         !asChild &&
-          "focus-visible:ring-(length:--ring-width) flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground-secondary outline-none ring-ring transition-colors hover:bg-foreground/5 hover:text-foreground",
+          "flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground-secondary ring-ring transition-colors outline-none hover:bg-foreground/5 hover:text-foreground focus-visible:ring-(length:--ring-width)",
         className,
       )}
       {...props}

@@ -14,7 +14,7 @@ export default function FileUploadPreview() {
             browse
           </FileUpload.Trigger>
         </div>
-        <p className="text-foreground-secondary text-xs">Up to 5 files, 5 MB each</p>
+        <p className="text-xs text-foreground-secondary">Up to 5 files, 5 MB each</p>
       </FileUpload.Dropzone>
 
       <FileUpload.List className="mt-3">

@@ -15,7 +15,7 @@ const MotionScrollParallax = () => {
           key={index}
           keyframes={{ y: [60 * index, -60 * index] }}
           offset={["start end", "end start"]}
-          className="my-[50vh] flex size-40 items-center justify-center rounded-lg border border-border bg-background-secondary text-foreground-secondary text-sm"
+          className="my-[50vh] flex size-40 items-center justify-center rounded-lg border border-border bg-background-secondary text-sm text-foreground-secondary"
         >
           {index + 1}x
         </MotionScroll>

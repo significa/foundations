@@ -44,14 +44,14 @@ function LoadingStatesSkeletonPreview() {
               <Avatar.Fallback>Ada Lovelace</Avatar.Fallback>
             </Avatar>
             <div className="flex flex-1 flex-col">
-              <span className="font-medium text-sm">Ada Lovelace</span>
-              <span className="text-foreground-secondary text-xs">Analytical Engine</span>
+              <span className="text-sm font-medium">Ada Lovelace</span>
+              <span className="text-xs text-foreground-secondary">Analytical Engine</span>
             </div>
           </div>
         )}
       </div>
 
-      <p className="max-w-sm text-center text-foreground-secondary text-xs">
+      <p className="max-w-sm text-center text-xs text-foreground-secondary">
         The skeleton mirrors the card's layout, so nothing shifts when content arrives. A quick
         reload finishes before the delay, so the skeleton never flashes.
       </p>

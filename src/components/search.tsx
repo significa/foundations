@@ -182,14 +182,14 @@ const Search = () => {
 
 const PagefindError = () => (
   <div className="text-foreground-secondary">
-    <div className="flex items-center justify-center gap-1 p-3.5 text-foreground-secondary text-sm">
+    <div className="flex items-center justify-center gap-1 p-3.5 text-sm text-foreground-secondary">
       <WarningCircleIcon />
       Could not load Pagefind instance.
     </div>
     {import.meta.env.DEV && (
-      <div className="mt-4 space-y-1 text-balance text-center text-xs">
+      <div className="mt-4 space-y-1 text-center text-xs text-balance">
         <p>Generate a development Pagefind instance by running</p>
-        <code className="mx-1 rounded-sm border bg-foreground/4 px-1 py-0.5 font-[0.95rem] leading-loose">
+        <code className="mx-1 rounded-sm border bg-foreground/4 px-1 py-0.5 leading-loose font-[0.95rem]">
           pnpm dev:pagefind
         </code>
       </div>

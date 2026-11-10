@@ -9,8 +9,8 @@ export default function PopoverModalPreview() {
       </Popover.Trigger>
       <Popover.Content className="flex flex-col gap-4">
         <div>
-          <h3 className="mb-1 font-medium text-sm">This is a modal popover</h3>
-          <p className="text-foreground-secondary text-sm">
+          <h3 className="mb-1 text-sm font-medium">This is a modal popover</h3>
+          <p className="text-sm text-foreground-secondary">
             It will trap focus inside. Very useful for popovers with advanced interactions inside
             (like forms)
           </p>

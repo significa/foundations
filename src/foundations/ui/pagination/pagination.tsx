@@ -7,10 +7,10 @@ import { cn, cva } from "@/lib/utils/classnames";
 const paginationLinkStyle = cva({
   base: [
     "inline-flex h-(--pagination-height) min-w-(--pagination-height) shrink-0 items-center justify-center px-2",
-    "rounded-lg font-medium text-foreground-secondary text-sm",
+    "rounded-lg text-sm font-medium text-foreground-secondary",
     "transition enabled:cursor-pointer disabled:opacity-40",
     "hover:bg-foreground/5 hover:text-foreground",
-    "focus-visible:ring-(length:--ring-width) outline-none ring-ring",
+    "ring-ring outline-none focus-visible:ring-(length:--ring-width)",
     "data-selected:bg-accent data-selected:text-accent-foreground data-selected:hover:bg-accent/90",
   ],
   variants: {

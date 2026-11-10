@@ -335,11 +335,11 @@ const MenuTrigger = ({
 
 const itemTriggerStyle = cva({
   base: [
-    "relative mx-(--inset) flex w-[calc(100%-calc(var(--inset)*2))] cursor-pointer select-none items-center gap-1.5 rounded-lg px-3 py-1.5",
-    "font-medium text-base text-foreground/80 outline-none",
+    "relative mx-(--inset) flex w-[calc(100%-calc(var(--inset)*2))] cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 select-none",
+    "text-base font-medium text-foreground/80 outline-none",
     "first-of-type:mt-(--inset) last-of-type:mb-(--inset)",
     "data-disabled:pointer-events-none data-disabled:opacity-50",
-    "active:bg-background-secondary data-[state=open]:bg-background-secondary data-highlighted:bg-background-secondary",
+    "active:bg-background-secondary data-highlighted:bg-background-secondary data-[state=open]:bg-background-secondary",
   ],
 });
 
@@ -421,8 +421,8 @@ const MenuItems = ({ ref: refProp, children, className, inline, ...props }: Menu
 
 const itemStyle = cva({
   base: [
-    "relative mx-(--inset) flex w-[calc(100%-calc(var(--inset)*2))] cursor-pointer select-none items-center gap-1.5 rounded-lg px-3 py-1.5",
-    "font-medium text-base outline-none",
+    "relative mx-(--inset) flex w-[calc(100%-calc(var(--inset)*2))] cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 select-none",
+    "text-base font-medium outline-none",
     "first-of-type:mt-(--inset) last-of-type:mb-(--inset)",
     "data-disabled:pointer-events-none data-disabled:opacity-50",
   ],
@@ -570,7 +570,7 @@ const MenuHeading = ({
   return (
     <div
       id={id}
-      className={cn("px-3.5 pt-3 pb-1 font-medium text-foreground-secondary text-sm", className)}
+      className={cn("px-3.5 pt-3 pb-1 text-sm font-medium text-foreground-secondary", className)}
       {...props}
     >
       {children}

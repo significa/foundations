@@ -17,7 +17,7 @@ export default function FieldRadioGroupPreview() {
 
   return (
     <fieldset className="flex w-72 flex-col gap-3">
-      <legend className="font-medium text-base">Plan</legend>
+      <legend className="text-base font-medium">Plan</legend>
       {plans.map((p) => (
         <Field key={p.value} className="flex-row items-center gap-3">
           <Field.Control>

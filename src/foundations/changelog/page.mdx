@@ -10,6 +10,33 @@ meta:
   order: 99
 ---
 
+## November 2026
+
+### Changed: Foundations targets `@significa/ts-standards`
+
+Copies now lint and compile under [`@significa/ts-standards`](https://github.com/significa/ts-standards)
+0.2.2, which replaces `@significa/biome-config` and `@significa/tsconfig`. If your project uses it,
+one copy needs a small update; behaviour is unchanged.
+
+`useElementTransition` failed `noImplicitReturns`. Return on every path of the layout effect:
+
+```diff tsx
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+-   if (shouldMount) {
+-     setStatus("initial");
+-     return nextFrame(() => { flushSync(() => setStatus("open")); }, 2);
+-   }
+-   setStatus("closed");
++   if (!shouldMount) {
++     setStatus("closed");
++     return;
++   }
++   setStatus("initial");
++   return nextFrame(() => { flushSync(() => setStatus("open")); }, 2);
+  }, [shouldMount]);
+```
+
 ## September 2026
 
 ### Added: async toasts (`toast.promise`, `toast.update`, `toast.dismiss`)

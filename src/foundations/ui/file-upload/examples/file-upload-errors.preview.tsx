@@ -30,8 +30,8 @@ export default function FileUploadErrorsPreview() {
     >
       <FileUpload.Dropzone>
         <UploadSimpleIcon className="size-6 text-foreground-secondary" />
-        <p className="font-medium text-sm">PNG or JPG only</p>
-        <p className="text-foreground-secondary text-xs">
+        <p className="text-sm font-medium">PNG or JPG only</p>
+        <p className="text-xs text-foreground-secondary">
           Up to 3 files, {formatBytes(MAX_SIZE)} each
         </p>
       </FileUpload.Dropzone>
@@ -41,7 +41,7 @@ export default function FileUploadErrorsPreview() {
           {errors.map((rejection) => (
             <li
               key={rejection.id}
-              className="flex items-center gap-2 rounded-lg bg-error/10 px-3 py-2 text-error text-sm"
+              className="flex items-center gap-2 rounded-lg bg-error/10 px-3 py-2 text-sm text-error"
             >
               <WarningCircleIcon className="size-4 shrink-0" />
               <span className="flex-1 truncate">{rejection.file.name}</span>

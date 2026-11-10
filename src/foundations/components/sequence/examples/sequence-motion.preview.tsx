@@ -44,7 +44,7 @@ const SequenceMotion = () => {
                 <Sequence.Panel forceMount>
                   <div className="flex h-full min-h-64 flex-col justify-between rounded-lg border border-border p-4">
                     <motion.div
-                      className="font-mono text-foreground-secondary text-sm uppercase"
+                      className="font-mono text-sm text-foreground-secondary uppercase"
                       initial={{ opacity: 0, y: "50%" }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{
@@ -56,7 +56,7 @@ const SequenceMotion = () => {
                       {item.title}
                     </motion.div>
                     <motion.div
-                      className="text-pretty pr-8 font-medium text-xl"
+                      className="pr-8 text-xl font-medium text-pretty"
                       initial={{ opacity: 0, y: "50%" }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{

@@ -224,7 +224,7 @@ const SegmentedControlItem = ({
       id={getItemId(segmentsId, value)}
       type={asChild ? undefined : "button"}
       className={cn(
-        "relative z-10 flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 outline-none ring-ring transition hover:text-foreground focus-visible:ring-4 data-selected:text-foreground",
+        "relative z-10 flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-foreground/50 ring-ring transition outline-none hover:text-foreground focus-visible:ring-4 data-selected:text-foreground",
         className,
       )}
       role="radio"

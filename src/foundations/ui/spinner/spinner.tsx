@@ -129,7 +129,7 @@ export const SPINNER_FRAMES = {
 } as const satisfies Record<string, readonly string[]>;
 
 const framesStyle = cva({
-  base: "inline-flex items-center justify-center font-mono tabular-nums leading-none",
+  base: "inline-flex items-center justify-center font-mono leading-none tabular-nums",
   variants: {
     size: {
       xs: "size-2.5 text-2xs",
