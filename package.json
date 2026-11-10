@@ -17,11 +17,11 @@
     "preview": "astro preview",
     "astro": "astro",
     "types:check": "astro sync && tsc -noEmit",
-    "format": "biome format --write . && prettier --list-different --write \"**/*.astro\"",
+    "format": "biome format --write .",
     "lint": "biome lint --write --unsafe .",
     "check:deps": "node scripts/check-page-deps.mjs",
     "knip": "knip",
-    "check": "biome ci && prettier --check  \"**/*.astro\" && pnpm types:check && pnpm check:deps && pnpm knip"
+    "check": "biome ci && pnpm types:check && pnpm check:deps && pnpm knip"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.6",
@@ -56,9 +56,6 @@
     "@biomejs/biome": "2.6.6",
     "@significa/ts-standards": "0.2.3",
     "knip": "^6.44.2",
-    "prettier": "^3.9.10",
-    "prettier-plugin-astro": "^1.1.2",
-    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "6.0.3"
   }
 }

@@ -17,7 +17,7 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "biome.enabled": true,
   "typescript.preferences.importModuleSpecifierEnding": "js"
