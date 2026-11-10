@@ -56,52 +56,40 @@ Thread `autoComplete` from the root props through the context to the cell.
 
 ### Fixed: `Select` chevron ignored the text colour
 
-The chevron was a black or white SVG in a background image, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now a Phosphor `CaretDownIcon` laid over the select, in `currentColor`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`.
-
-The `<select>` now sits in a `span`, and `className`, `style`, `hidden` and `dir` go on that `span`, so a width or margin moves the chevron with it, hiding the select hides the chevron, and `dir` flips both. Classes that styled the `<select>` itself no longer reach it: padding, radius, font size or weight, height, `truncate`, cursor. Grep for `<Select className=` and check each; move those to `variant`/`size`, or onto the `select` in your copy. The select also gets `min-w-0`, so it shrinks below its widest option, and renders no chevron when `multiple`.
-
-In `input.tsx`, the in-group left padding after an addon also matches an element wrapped one level down, so `Select.Group` keeps its spacing, and the group frame dims for a disabled select as it does for a disabled input.
+The chevron was a black or white data-URL SVG, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now two diagonal strokes drawn with `currentColor` gradients on the `<select>` itself: it follows the text colour, the theme and the disabled opacity, mirrors under `rtl:`, is sized per `size`, and is left out for `multiple`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`. In `input.tsx`, the group frame now dims for a disabled select as it does for a disabled input.
 
 ```diff tsx
-+ import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
++ const selectChevronStyle = cva({
++   base: [
++     "bg-no-repeat",
++     "bg-[image:linear-gradient(45deg,transparent_calc(50%-0.75px),currentColor_calc(50%-0.75px),currentColor_calc(50%+0.75px),transparent_calc(50%+0.75px)),linear-gradient(135deg,transparent_calc(50%-0.75px),currentColor_calc(50%-0.75px),currentColor_calc(50%+0.75px),transparent_calc(50%+0.75px))]",
++   ],
++   variants: {
++     size: {
++       xs: "bg-size-[4px_4px] bg-position-[calc(100%-12px)_center,calc(100%-8px)_center] pe-6 rtl:bg-position-[8px_center,12px_center]",
++       sm: "bg-size-[4px_4px] bg-position-[calc(100%-16px)_center,calc(100%-12px)_center] pe-8 rtl:bg-position-[12px_center,16px_center]",
++       md: "bg-size-[5px_5px] bg-position-[calc(100%-21px)_center,calc(100%-16px)_center] pe-10 rtl:bg-position-[16px_center,21px_center]",
++       lg: "bg-size-[6px_6px] bg-position-[calc(100%-26px)_center,calc(100%-20px)_center] pe-12 rtl:bg-position-[20px_center,26px_center]",
++     },
++   },
++   defaultVariants: { size: "md" },
++ });
 
-- const Select = ({ className, invalid, variant, size, ...props }: SelectProps) => (
-+ const Select = ({ className, style, hidden, dir, invalid, variant, size, ...props }: SelectProps) => (
-- <select
--   data-invalid={invalid || undefined}
--   className={cn(useInputStyle({ variant, size }), "appearance-none bg-size-[1em] … pr-10", 'bg-[url(…)]', 'dark:bg-[url(…)]', className)}
--   {...props}
-- />
-+ <span
-+   style={style}
-+   hidden={hidden}
-+   dir={dir}
-+   className={cn(
-+     "relative flex w-full min-w-0 items-center self-stretch",
-+     size && (size === "xs" || size === "sm" ? "text-sm" : "text-base"),
-+     className,
-+   )}
-+ >
-+   <select
-+     data-invalid={invalid || undefined}
-+     aria-invalid={invalid || undefined}
-+     className={cn(useInputStyle({ variant, size }), "peer min-w-0 appearance-none", !props.multiple && "pe-10")}
-+     {...props}
-+   />
-+   {!props.multiple && (
-+     <CaretDownIcon
-+       aria-hidden="true"
-+       className="pointer-events-none absolute end-2 top-1/2 -translate-y-1/2 not-in-data-ui-input-group:peer-disabled:opacity-50"
-+     />
-+   )}
-+ </span>
+  <select
+    data-invalid={invalid || undefined}
++   aria-invalid={invalid || undefined}
+    className={cn(
+      useInputStyle({ variant, size }),
+-     "appearance-none bg-size-[1em] bg-position-[right_--spacing(2)_center] bg-no-repeat pr-10",
+-     'bg-[url("data:image/svg+xml;base64,…")]',
+-     'dark:bg-[url("data:image/svg+xml;base64,…")]',
++     "appearance-none",
++     !props.multiple && selectChevronStyle({ size }),
+      className,
+    )}
 ```
 
 ```diff tsx
-  // input.tsx, inputInGroupStyle (same change for every size)
-- md: "px-4 [&:has(+[data-input-addon])]:pr-3 [[data-input-addon]+&]:pl-3",
-+ md: "px-4 [&:has(+[data-input-addon])]:pr-3 [[data-input-addon]+&,[data-input-addon]+*>&]:pl-3",
-
   // input.tsx, inputFrameBase
 - "[:disabled,:has(input:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled)]:opacity-50",
 + "[:disabled,:has(input:disabled,select:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled,select:disabled)]:opacity-50",
