@@ -12,7 +12,7 @@ type DrawerSide = "left" | "right" | "bottom" | "left-bottom" | "right-bottom";
 const drawerContentStyle = cva({
   base: [
     "[--drawer-detach:calc(var(--radius)*3*var(--radius-bump))] [--drawer-p:--spacing(4)] [--drawer-stack:--spacing(4)]",
-    "flex w-full max-w-screen flex-col overflow-x-hidden! overflow-y-auto border border-border bg-background p-(--drawer-p) *:shrink-0",
+    "flex w-full max-w-screen flex-col overflow-x-hidden! overflow-y-auto border border-border bg-background p-(--drawer-p) text-start text-base text-foreground *:shrink-0",
     "has-[[data-drawer-actions]:last-child]:pb-0 has-[[data-modal-focus-catcher]:first-child+[data-drawer-header],[data-drawer-header]:first-child]:pt-0",
     "rounded-2xl",
     "has-data-[status=open]:opacity-80 [&>:not(dialog)]:transition-opacity has-data-[status=open]:[&>:not(dialog)]:opacity-0",
