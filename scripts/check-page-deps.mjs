@@ -148,7 +148,13 @@ const checkItem = async (pagePath, itemDirs) => {
 };
 
 const main = async () => {
-  const pages = (await listFiles(FOUNDATIONS_DIR)).filter((file) => file.endsWith("/page.mdx"));
+  const pages = (await listFiles(FOUNDATIONS_DIR)).filter((file) =>
+    file.endsWith(`${sep}page.mdx`),
+  );
+  if (pages.length === 0) {
+    process.stderr.write(`No page.mdx files found under ${relative(ROOT, FOUNDATIONS_DIR)}\n`);
+    process.exit(1);
+  }
   const itemDirs = new Set(pages.map((page) => dirname(page)));
 
   const errors = (await Promise.all(pages.map((page) => checkItem(page, itemDirs)))).flat();
