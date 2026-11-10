@@ -105,7 +105,7 @@
     0.992 71.5%,
     1
   );
-  /* leaving for good (dismissed toasts, deleted items); starts slowly by design, keep it short */
+  /* leaving for good, e.g. a toast timing out; starts slowly by design, keep it short */
   --ease-in: cubic-bezier(0.3, 0, 0.8, 0.15);
   --default-transition-timing-function: ease; /* hover / color */
 
