@@ -41,7 +41,7 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 ## TypeScript
 
-- Config extends `@significa/tsconfig/astro` (the shared Significa preset). On top of strict mode it enables `noUncheckedIndexedAccess`, `noUnusedLocals`/`noUnusedParameters`, and `verbatimModuleSyntax` — so indexed access is `T | undefined` (guard or narrow it; don't reach for `!`, which the lint forbids), and type-only imports must use `import type`.
+- Config extends `@significa/ts-standards/tsconfig/astro` (the shared Significa preset). On top of strict mode it enables `noUncheckedIndexedAccess`, `noImplicitReturns`, `noUnusedLocals`/`noUnusedParameters`, and `verbatimModuleSyntax` — so indexed access is `T | undefined` (guard or narrow it; don't reach for `!`, which the lint forbids), every path of a function that returns a value must return (common in `useEffect` cleanups: use an early bare `return;`), and type-only imports must use `import type`. `exactOptionalPropertyTypes` is off.
 - Path aliases: `@/*` → `src/*`, `~/*` → repo root (set in `tsconfig.json`; `jsx`/`jsxImportSource` are overridden back to `react-jsx`/`react` since the preset defaults to `preserve`).
 - Use `import type` for all type-only imports.
 - Avoid `any`. If unavoidable, add a `// biome-ignore lint/suspicious/noExplicitAny: <reason>` comment.
@@ -60,9 +60,22 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 ## Code Style
 
-Biome config extends the shared `@significa/biome-config` preset (`biome.json`);
-the project file adds Astro exclusions, Tailwind class sorting, and a few rule
-tweaks. The preset defines the TS/TSX formatting below.
+Biome config extends the shared `@significa/ts-standards/biome` preset (`biome.json`).
+Biome and `@significa/ts-standards` are pinned together; bump them as a pair. The
+project file only adds what's Foundations-specific: `.astro` files are excluded
+(Prettier formats them), CSS line width is 128, `Checkbox` counts as a label
+control, and Tailwind class sorting is on. The preset defines the TS/TSX formatting
+below and the strict rules (no `any`, no `!`, no `console.log`, no floating
+promises, kebab-case filenames).
+
+Lint suppressions live in the component file as a per-line `biome-ignore` with a
+specific reason, never in `biome.json` — consumers copy the file and run the same
+preset, so the suppression has to travel with it.
+
+Tailwind classes are sorted by `nursery/useTailwindSortedClasses` (warning, safe
+fix) in `className`, `cn`, `cva`, `clsx` and `tv`. `tailwind.stylesheet` points at
+`src/styles/global.css` so custom theme values sort correctly; `pnpm lint` applies
+the fixes.
 
 ### Formatting rules
 
@@ -88,6 +101,7 @@ tweaks. The preset defines the TS/TSX formatting below.
 - Use **named exports only**. No default exports, except in `*.preview.tsx` files.
 - Export components at the bottom of the file: `export { ComponentName }`.
 - For compound components, use `Object.assign` then re-export under the clean name:
+
   ```ts
   const CompoundDialog = Object.assign(Dialog, { Content: DialogContent, Trigger: DialogTrigger });
   export { CompoundDialog as Dialog };
