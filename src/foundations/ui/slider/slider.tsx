@@ -70,6 +70,7 @@ const Slider = ({
   orientation = "horizontal",
   disabled = false,
   className,
+  style,
   asChild,
   children,
   ref,
@@ -117,6 +118,7 @@ const Slider = ({
         className={cn(sliderStyle({ orientation, disabled }), className)}
         style={{
           "--progress-track-factor": `${progressFactor}`,
+          ...style,
         }}
         tabIndex={-1}
         {...props}
