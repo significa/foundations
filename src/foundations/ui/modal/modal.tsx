@@ -16,8 +16,14 @@ import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cn } from "#/lib/utils/classnames.ts";
 
 // Hook to manage native <dialog> element behavior
-const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => {
+const useDialogElement = (
+  open: boolean,
+  setOpen: (isOpen: boolean) => void,
+  dismissible: boolean,
+  isMounted: boolean,
+) => {
   const ref = useRef<HTMLDialogElement>(null);
+  const openerRef = useRef<Element | null>(null);
 
   // Emit modal-open or modal-close custom event when the dialog is opened or closed,
   // so other components can react to it
@@ -36,6 +42,7 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
     if (!element) return;
 
     if (open && !element.open) {
+      openerRef.current = document.activeElement;
       // use native showModal() to ensure it receives focus when opened, and ESC closes it
       element.showModal();
     }
@@ -45,12 +52,24 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
 
     // Prevent the native close and drive it through state instead, so the exit
     // transition can run. The cancel event fires only on the topmost dialog and
-    // does not bubble.
+    // does not bubble. An uncancelable cancel (close watchers: a repeated close
+    // request without user activation) closes anyway; the close listener follows it.
     element.addEventListener(
       "cancel",
       (event: Event) => {
+        if (!event.cancelable) return;
         event.preventDefault();
-        setOpen(false);
+        if (dismissible) setOpen(false);
+      },
+      { signal },
+    );
+
+    // The browser closed the dialog itself: keep state in step. Only while open,
+    // so a close we already made doesn't call onOpenChange(false) twice.
+    element.addEventListener(
+      "close",
+      () => {
+        if (open) setOpen(false);
       },
       { signal },
     );
@@ -61,10 +80,10 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
     element.addEventListener(
       "keydown",
       (event: KeyboardEvent) => {
-        if (event.key === "Escape" && open) {
+        if (event.key === "Escape" && !event.isComposing && open) {
           event.preventDefault();
           event.stopPropagation();
-          setOpen(false);
+          if (dismissible) setOpen(false);
         }
       },
       { signal },
@@ -73,42 +92,62 @@ const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => 
     return () => {
       abortController.abort();
     };
-  }, [open, setOpen]);
+  }, [open, setOpen, dismissible]);
 
   useEffect(() => {
     const element = ref.current;
-    if (!element || !open) return;
+    if (!element || !open || !dismissible) return;
 
-    const handleDialogClick = (event: MouseEvent) => {
-      // if the click is on the backdrop, close the drawer
-      if ((event.target as HTMLElement).nodeName === "DIALOG") {
-        const dialog = event.target as HTMLDialogElement;
-        const { top, left, width, height } = dialog.getBoundingClientRect();
-        const isOutsideModal =
-          top > event.clientY ||
-          event.clientY > top + height ||
-          left > event.clientX ||
-          event.clientX > left + width;
-
-        if (isOutsideModal) {
-          event.stopPropagation();
-          setOpen(false);
-        }
-      }
+    // A click on this <dialog> itself, outside its box, is on its backdrop. Not any
+    // dialog: a nested dialog's backdrop click bubbles here and must not close this one.
+    const isOnBackdrop = (event: MouseEvent) => {
+      if (event.target !== element) return false;
+      const { top, left, width, height } = element.getBoundingClientRect();
+      return (
+        top > event.clientY ||
+        event.clientY > top + height ||
+        left > event.clientX ||
+        event.clientX > left + width
+      );
     };
 
-    element.addEventListener("click", handleDialogClick);
+    // The press must start on the backdrop too: a text selection released outside isn't a dismiss
+    let pressedOnBackdrop = false;
+    const handlePointerDown = (event: PointerEvent) => {
+      pressedOnBackdrop = isOnBackdrop(event);
+    };
+    const handleClick = (event: MouseEvent) => {
+      if (!pressedOnBackdrop || !isOnBackdrop(event)) return;
+      event.stopPropagation();
+      setOpen(false);
+    };
+
+    element.addEventListener("pointerdown", handlePointerDown);
+    element.addEventListener("click", handleClick);
 
     return () => {
-      element.removeEventListener("click", handleDialogClick);
+      element.removeEventListener("pointerdown", handlePointerDown);
+      element.removeEventListener("click", handleClick);
     };
-  }, [setOpen, open]);
+  }, [setOpen, open, dismissible]);
+
+  // The dialog is removed after its exit transition without close(), so the
+  // browser never returns focus to the opener: do it when it leaves the page.
+  useEffect(() => {
+    if (!isMounted) return;
+
+    return () => {
+      const opener = openerRef.current;
+      if (opener instanceof HTMLElement) opener.focus();
+    };
+  }, [isMounted]);
 
   return ref;
 };
 
 const ModalContext = createContext<{
   open: boolean;
+  dismissible: boolean;
   labelId?: string;
   descriptionId?: string;
   setOpen: (open: boolean) => void;
@@ -129,10 +168,11 @@ const useModalContext = () => {
 interface ModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  dismissible?: boolean;
   children: React.ReactNode;
 }
 
-const Modal = ({ open: propsOpen, onOpenChange, children }: ModalProps) => {
+const Modal = ({ open: propsOpen, onOpenChange, dismissible = true, children }: ModalProps) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const [labelId, setLabelId] = useState<string | undefined>(undefined);
   const [descriptionId, setDescriptionId] = useState<string | undefined>(undefined);
@@ -151,12 +191,13 @@ const Modal = ({ open: propsOpen, onOpenChange, children }: ModalProps) => {
     () => ({
       open,
       setOpen,
+      dismissible,
       labelId,
       setLabelId,
       descriptionId,
       setDescriptionId,
     }),
-    [descriptionId, labelId, open, setOpen],
+    [descriptionId, labelId, open, setOpen, dismissible],
   );
 
   return <ModalContext value={ctx}>{children}</ModalContext>;
@@ -173,16 +214,20 @@ const ModalContent = ({
   ref,
   ...props
 }: ModalContentProps) => {
-  const { open, labelId, descriptionId, setOpen } = useModalContext();
-  const dialogRef = useDialogElement(open, setOpen);
-
+  const { open, dismissible, labelId, descriptionId, setOpen } = useModalContext();
   const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
+  const dialogRef = useDialogElement(open, setOpen, dismissible, isMounted);
+  // Memoised: a new ref each render would detach and re-attach the dialog's refs on every render.
+  const composedRef = useMemo(
+    () => composeRefs(dialogRef, transitionRef, ref),
+    [dialogRef, transitionRef, ref],
+  );
 
-  if (!isMounted) return;
+  if (!isMounted) return null;
 
   return (
     <dialog
-      ref={composeRefs(dialogRef, transitionRef, ref)}
+      ref={composedRef}
       data-status={status}
       aria-labelledby={labelId}
       aria-describedby={descriptionId}
@@ -232,8 +277,8 @@ interface ModalCloseProps extends React.ComponentPropsWithRef<"button"> {
 const ModalClose = ({ asChild = false, children, ...props }: ModalCloseProps) => {
   const { setOpen } = useModalContext();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    props.onClick?.(event as React.MouseEvent<HTMLButtonElement>);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    props.onClick?.(event);
 
     if (!event.defaultPrevented) {
       setOpen(false);

@@ -311,10 +311,11 @@ const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
     (el: HTMLInputElement | null) => setCellRef(index, el),
     [setCellRef, index],
   );
+  const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref, internalRef]);
 
   return (
     <input
-      ref={composeRefs(ref, internalRef)}
+      ref={composedRef}
       id={index === 0 ? rootId : undefined}
       type="text"
       inputMode={inputMode}

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cva } from "#/lib/utils/classnames.ts";
@@ -25,6 +25,7 @@ const checkboxStyle = cva({
 
 const Checkbox = ({ ref, indeterminate, className, ...props }: CheckboxProps) => {
   const internalRef = useRef<HTMLInputElement>(null);
+  const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
 
   useEffect(() => {
     if (internalRef.current) {
@@ -33,12 +34,7 @@ const Checkbox = ({ ref, indeterminate, className, ...props }: CheckboxProps) =>
   }, [indeterminate]);
 
   return (
-    <input
-      type="checkbox"
-      ref={composeRefs(ref, internalRef)}
-      className={checkboxStyle({ className })}
-      {...props}
-    />
+    <input type="checkbox" ref={composedRef} className={checkboxStyle({ className })} {...props} />
   );
 };
 

@@ -492,6 +492,8 @@ const PopoverSearchInput = ({ className, isLoading, ...props }: PopoverSearchInp
         />
       )}
       <input
+        // The spinner is aria-hidden; the focused input carries the busy state
+        aria-busy={isLoading || undefined}
         className={cn(
           "h-10 w-full border-0 bg-transparent p-4 pl-10 text-base font-medium transition-colors outline-none placeholder:text-foreground-secondary focus:ring-0",
           className,
