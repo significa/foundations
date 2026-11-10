@@ -240,14 +240,14 @@ const Toaster = ({ className }: { className?: string }) => {
     };
   }, []);
 
-  // Re-enter the top layer when toasts come or go, so a new toast shows above a popover opened
-  // since the toaster mounted (top-layer order is open order).
+  // Re-enter the top layer whenever toasts change (added, updated, settled), so they show above a
+  // popover opened since the toaster mounted (top-layer order is open order).
   useEffect(() => {
     const element = elementRef.current;
     if (!element?.matches(":popover-open") || toasts.length === 0) return;
     element.hidePopover();
     element.showPopover();
-  }, [toasts.length]);
+  }, [toasts]);
 
   return (
     <div

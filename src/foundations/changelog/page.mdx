@@ -70,8 +70,8 @@ render, now running a parent callback ref's real cleanup each time (a top-layer 
 (which was already hiding and re-showing its popover on every toast change), `Input.Addon`,
 `OTPInput.Cell`, `Slider.Thumb`, `Checkbox`, `ToggleGroup`, every `ColorPicker` part, and
 `MotionScroll`. Apply both changes together. That re-show was also what kept a new toast above a
-popover opened after the toaster, so `Toaster` now re-enters the top layer explicitly when the
-number of toasts changes.
+popover opened after the toaster, so `Toaster` now re-enters the top layer explicitly whenever its
+toasts change.
 
 ```diff tsx
   // compose-refs.ts
@@ -99,7 +99,7 @@ number of toasts changes.
 +   if (!element?.matches(":popover-open") || toasts.length === 0) return;
 +   element.hidePopover();
 +   element.showPopover();
-+ }, [toasts.length]);
++ }, [toasts]);
   // input.tsx (InputAddon), slider.tsx (SliderThumb), checkbox.tsx
 + const composedRef = useMemo(() => composeRefs(ref, internalRef), [ref]);
   // otp-input.tsx (OTPInputCell): internalRef is a callback
