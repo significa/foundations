@@ -20,16 +20,13 @@ const isValidSlottableElement = (
   );
 };
 
-// A slot handler returns this to skip the child's; preventDefault can't, it doesn't say who set it.
-export const SKIP_CHILD = Symbol("skip-child");
-
-// Where both pass the same `on*` handler, the slot's runs first, then the child's unless the slot's
-// returned SKIP_CHILD (how a disabled or loading Button blocks an asChild link's onClick).
+// Where both pass the same `on*` handler, both run: the child's first, then the slot's (as Radix
+// does), so the child can preventDefault to opt out of the component's behaviour.
 const composeEventHandlers = (
   slotProps: Record<string, unknown>,
   childProps: Record<string, unknown>,
 ) => {
-  const composed: Record<string, (...args: unknown[]) => unknown> = {};
+  const composed: Record<string, (...args: unknown[]) => void> = {};
 
   for (const [name, slotHandler] of Object.entries(slotProps)) {
     const childHandler = childProps[name];
@@ -37,10 +34,9 @@ const composeEventHandlers = (
     if (typeof slotHandler !== "function" || typeof childHandler !== "function") continue;
 
     // Not every `on*` is a DOM event (`onOpenChange(open, event, reason)`): pass every argument on.
-    // Passing SKIP_CHILD up lets a Slot nested on the same element honour the veto too.
     composed[name] = (...args: unknown[]) => {
-      if (slotHandler(...args) === SKIP_CHILD) return SKIP_CHILD;
-      return childHandler(...args);
+      childHandler(...args);
+      slotHandler(...args);
     };
   }
 

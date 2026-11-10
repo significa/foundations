@@ -19,20 +19,17 @@ component's, an explicit `undefined` or `null` on the child erased the slot's pr
 `ref` replaced the child's. `Slottable` was worse: it cloned the child with the slot's props on top,
 so under `asChild` the child's own `onClick`, `className` and `style` were lost (`<Button asChild><a
 onClick className>` dropped both). Now handlers both sides pass are composed with all their
-arguments: the slot's runs first, then the child's, unless the slot's handler returned the new
-`SKIP_CHILD`. That's an explicit return rather than a `defaultPrevented` check, which a click an
-ancestor already cancelled would defeat. `className` and `style` merge, both
-refs get the element, and `Slottable` renders its child through `Slot`. Replace your `slot.tsx`; it
-now imports `composeRefs`.
+arguments: the child's runs first, then the slot's, as in Radix, so the child can `preventDefault()`
+to opt out of the component's behaviour. `className` and `style` merge, both refs get the element,
+and `Slottable` renders its child through `Slot`. Replace your `slot.tsx`; it now imports
+`composeRefs`.
 
 ```diff tsx
-+ export const SKIP_CHILD = Symbol("skip-child");
-+
 + const composeEventHandlers = (slotProps, childProps) => {
 +   // for each on* handler both pass:
 +   composed[name] = (...args) => {
-+     if (slotHandler(...args) === SKIP_CHILD) return SKIP_CHILD;
-+     return childHandler(...args);
++     childHandler(...args);
++     slotHandler(...args);
 +   };
 + };
 
@@ -127,20 +124,21 @@ parent removed still ran (`Menu` `onSelect`, `useKeyboardShortcut`).
 
 `isLoading` only hid the label: the button stayed clickable and nothing announced it as busy, and
 passing `disabled` alongside it dropped focus to `<body>`. A loading button now sets `aria-busy` and
-`aria-disabled`, stays focusable, and blocks activation in its click handler with
-`preventDefault()`, returning `SKIP_CHILD` so an `asChild` child's `onClick` is skipped (mouse, Enter, Space and implicit form submit all arrive as `click`). You no
-longer need `disabled={isLoading}`.
+`aria-disabled`, stays focusable, and stops the click in the capture phase (`preventDefault()` and
+`stopPropagation()`), like a natively disabled `<button>`. Mouse, Enter, Space and implicit form
+submit all arrive as `click`, so none of them activate it. You no longer need `disabled={isLoading}`.
+
+Because the click is stopped before it reaches any `onClick`, an ancestor's `onClick` doesn't fire
+for a disabled or loading button either, just as with a native disabled `<button>`. If a parent
+listens for clicks from its buttons, it won't hear these.
 
 Required update: `<Button asChild disabled>` no longer sets the native `disabled` attribute on its
-child, even when that child is a `<button>`. The child gets `aria-disabled` and the click guard
-instead, so it stays focusable. If you style or select it with `:disabled` or `[disabled]`, target
+child, even when that child is a `<button>`. The child gets `aria-disabled` and the capture-phase
+block instead, so it stays focusable. If you style or select it with `:disabled` or `[disabled]`, target
 `[aria-disabled="true"]` too, or put `disabled` on the child itself.
 
-A disabled `Button asChild` around an `<a>` still followed the link and ran its `onClick` (links
-ignore `disabled`); it's now guarded the same way and gets `aria-disabled`. Middle-click fires
-`auxclick` rather than `click`, so `onAuxClick` gets the same guard; otherwise a disabled or loading
-link still opened in a new tab. `Button asChild` also
-dropped an explicit `type`, so `<Button asChild type="submit"><button>` rendered
+Middle-click fires `auxclick` rather than `click`, so it's stopped in the capture phase too.
+`Button asChild` also dropped an explicit `type`, so `<Button asChild type="submit"><button>` rendered
 `type="button"`. Hover styles are gated with `not-disabled:` and `not-aria-disabled:` (`enabled:`
 never matches an `<a>`), press feedback with `not-aria-disabled:`, and the spinner wrapper is `flex` so it centres instead of sitting on the
 baseline. These rely on the `Slot` fix above.
@@ -150,18 +148,16 @@ baseline. These rely on the `Slot` fix above.
 -   type = "button",
 +   type,
 +   disabled,
-+   onClick,
-+   onAuxClick,
++   onClickCapture,
++   onAuxClickCapture,
     ...props
   }) => {
-+   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-+     if (isLoading || disabled) {
-+       event.preventDefault();
-+       return SKIP_CHILD;
-+     }
-+     return onClick?.(event);
++   // Like a native disabled <button>, no onClick runs (ancestors' included): stopped in capture.
++   const blockWhenDisabled = (event: React.SyntheticEvent) => {
++     if (!disabled && !isLoading) return;
++     event.preventDefault();
++     event.stopPropagation();
 +   };
-+   // handleAuxClick: the same guard around onAuxClick (middle-click)
 
     <Comp
 -     type={asChild ? undefined : type}
@@ -170,8 +166,11 @@ baseline. These rely on the `Slot` fix above.
 +     aria-disabled={isLoading || (asChild && disabled) || undefined}
 +     aria-busy={isLoading || undefined}
       {...props}
-+     onClick={handleClick}
-+     onAuxClick={handleAuxClick}
++     onClickCapture={(event) => {
++       blockWhenDisabled(event);
++       onClickCapture?.(event);
++     }}
++     // onAuxClickCapture: the same, for middle-click
     >
 
   // buttonStyle: gate every hover the same way

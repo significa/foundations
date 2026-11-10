@@ -45,7 +45,7 @@ folder: UI
       type: "boolean",
       default: "false",
       description:
-        "Disables the button. Under `asChild` the child gets `aria-disabled` instead, and its clicks, middle-clicks and a link's navigation are blocked.",
+        "Disables the button. Under `asChild` the child gets `aria-disabled` instead, and clicks are stopped before any `onClick` runs.",
     },
     type: {
       type: ['"button"', '"submit"', '"reset"'],
@@ -105,6 +105,10 @@ A loading button is busy, not disabled: it keeps focus and announces the busy st
 ### disabled
 
 <Preview slug="button-disabled" />
+
+A loading button, or a disabled one under `asChild`, is marked with `aria-disabled` rather than `disabled`, so it stays focusable and has to block clicks itself. It stops them in the capture phase, so no `onClick` runs, an ancestor's included (a parent `div`'s `onClick` doesn't fire), just as a natively disabled `<button>` fires no click events.
+
+An anchor can't be disabled. For a disabled link, render it without `href` or as a button.
 
 ### As Link
 
