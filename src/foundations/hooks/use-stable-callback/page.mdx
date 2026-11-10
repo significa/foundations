@@ -13,13 +13,13 @@ folder: hooks
 <PropsTable
   definition={{
     callback: {
-      type: "T extends (...args: any[]) => any",
+      type: "T extends (...args: never[]) => unknown",
       description: "The function to stabilize.",
     },
   }}
 />
 
-The hook returns a stable function that will always call the latest version of the provided callback.
+The hook returns a stable function that will always call the latest version of the provided callback. If the callback becomes `undefined`, the stable function does nothing.
 
 ## Examples
 

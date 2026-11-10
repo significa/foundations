@@ -177,12 +177,17 @@ const ModalContent = ({
   const dialogRef = useDialogElement(open, setOpen);
 
   const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
+  // Memoised: a new ref each render would detach and re-attach the dialog's refs on every render.
+  const composedRef = useMemo(
+    () => composeRefs(dialogRef, transitionRef, ref),
+    [dialogRef, transitionRef, ref],
+  );
 
   if (!isMounted) return;
 
   return (
     <dialog
-      ref={composeRefs(dialogRef, transitionRef, ref)}
+      ref={composedRef}
       data-status={status}
       aria-labelledby={labelId}
       aria-describedby={descriptionId}
