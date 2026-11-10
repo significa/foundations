@@ -85,15 +85,16 @@ export const useElementTransition = <T extends HTMLElement>(
   useLayoutEffect(() => {
     if (!ref.current) return;
 
-    if (shouldMount) {
-      setStatus("initial");
-
-      return nextFrame(() => {
-        flushSync(() => setStatus("open"));
-      }, 2); // firefox needs a second frame for the initial transition to work
+    if (!shouldMount) {
+      setStatus("closed");
+      return;
     }
 
-    setStatus("closed");
+    setStatus("initial");
+
+    return nextFrame(() => {
+      flushSync(() => setStatus("open"));
+    }, 2); // firefox needs a second frame for the initial transition to work
   }, [shouldMount]);
 
   return { ref, isMounted, status };
