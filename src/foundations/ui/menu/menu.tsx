@@ -449,6 +449,8 @@ const MenuItem = ({
   disabled,
   variant,
   onClick,
+  onClickCapture,
+  onAuxClickCapture,
   onSelect,
   onKeyDown,
   asChild,
@@ -478,13 +480,14 @@ const MenuItem = ({
     });
   }, [registerItem, itemId, stableOnSelect]);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // An `asChild` anchor ignores `disabled`: Enter or a click would still follow the link.
-    if (disabled) {
-      e.preventDefault();
-      return;
-    }
+  // An `asChild` anchor ignores `disabled`, so block its clicks in capture: no onClick runs.
+  const blockWhenDisabled = (event: React.SyntheticEvent) => {
+    if (!disabled) return;
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(e);
     if (e.defaultPrevented) return;
 
@@ -531,6 +534,14 @@ const MenuItem = ({
         onKeyDown: handleKeyDown,
         onClick: handleClick,
       })}
+      onClickCapture={(event) => {
+        blockWhenDisabled(event);
+        onClickCapture?.(event);
+      }}
+      onAuxClickCapture={(event) => {
+        blockWhenDisabled(event);
+        onAuxClickCapture?.(event);
+      }}
     >
       {children}
     </Comp>

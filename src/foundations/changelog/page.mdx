@@ -14,23 +14,38 @@ meta:
 
 ### Fixed: a disabled `Menu.Item asChild` link still activated
 
-An `<a>` ignores `disabled`, so Enter or a click on a disabled `Menu.Item asChild` ran `onSelect`
-and followed the link. Enter in `Menu.SearchInput` could also select a disabled item, since typing
-highlights the first result. Disabled items now block the click, set `aria-disabled` (which list
-navigation also skips), and the search input won't select them. `Menu.Heading` also lined up with
-nothing; it now pads to the items' text edge.
+An `<a>` ignores `disabled`, so Enter or a click on a disabled `Menu.Item asChild` ran the link's
+`onClick` and `onSelect` and followed the link. Enter in `Menu.SearchInput` could also select a
+disabled item, since typing highlights the first result. Disabled items now stop clicks and
+middle-clicks in the capture phase (`preventDefault()` and `stopPropagation()`), as `Button` does,
+so no `onClick` runs, the child's included; they set `aria-disabled` (which list navigation also
+skips), and the search input won't select them. `Menu.Heading` also lined up with nothing; it now
+pads to the items' text edge.
 
 ```diff tsx
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-+   if (disabled) {
-+     e.preventDefault();
-+     return;
-+   }
-    onClick?.(e);
+  const MenuItem = ({
+    onClick,
++   onClickCapture,
++   onAuxClickCapture,
+    …
+  }) => {
++   const blockWhenDisabled = (event: React.SyntheticEvent) => {
++     if (!disabled) return;
++     event.preventDefault();
++     event.stopPropagation();
++   };
 
-    disabled={disabled || undefined}
-+   aria-disabled={disabled || undefined}
-    data-disabled={disabled || undefined}
+    <Comp
+      disabled={disabled || undefined}
++     aria-disabled={disabled || undefined}
+      data-disabled={disabled || undefined}
+      {...getItemProps({ … })}
++     onClickCapture={(event) => {
++       blockWhenDisabled(event);
++       onClickCapture?.(event);
++     }}
++     // onAuxClickCapture: the same, for middle-click
+    >
 
   // Menu.SearchInput
 - if (id && items[id]) {
