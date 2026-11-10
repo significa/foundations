@@ -17,11 +17,8 @@ meta:
 Two new easing tokens. `ease-out` over a ~450px drawer slide jumps ~100px in the first frame, then
 crawls. Large surfaces move as if they had mass: they can't reach full speed in the first frame or
 stop dead, so `ease-out-heavy`, a gentle spring-shaped curve, reads as travel. `ease-in` is for things
-leaving for good that the user didn't cause, like a toast timing out: they accelerate away, so keep
-it short. An exit the user triggers (clicking a toast's close button) should respond in the first
-frame, so it uses `ease-out` at ~150ms even when it's permanent. Exits that can come back (popover,
-menu, tooltip, dialog) also stay on `ease-out`. This narrows the September advice that exits never
-ease in.
+leaving for good: they accelerate away, so keep it short. This replaces the September advice that
+exits never ease in; exits that can come back (popover, menu, tooltip, dialog) stay on `ease-out`.
 `ease-in` overrides Tailwind's default, so existing `ease-in` classes pick up the new curve. It's the
 same curve as the `--ease-emphasized-accelerate` removed in September, so if you kept that token you
 can alias it (`--ease-in: var(--ease-emphasized-accelerate)`) instead. Add to your `@theme`:
@@ -31,13 +28,13 @@ can alias it (`--ease-in: var(--ease-emphasized-accelerate)`) instead. Add to yo
 +    so they neither reach full speed on the first frame nor stop dead. Critically damped spring (stiffness 580,
 +    damping 60, mass 1.35) from rest */
 + --ease-out-heavy: linear(0, 0.006 0.9%, 0.021 1.9%, 0.074 3.9%, 0.145 6%, 0.346 11.2%, 0.448 14%, 0.544 16.9%, 0.626 19.9%, 0.704 23.3%, 0.766 26.6%, 0.819 30.2%, 0.864 34.1%, 0.902 38.5%, 0.931 43.4%, 0.955 49%, 0.972 55.5%, 0.992 71.5%, 1);
-+ /* leaving for good when the user didn't cause it, e.g. a toast timing out; starts slowly by design, keep it short */
++ /* leaving for good (dismissed toasts, deleted items); starts slowly by design, keep it short */
 + --ease-in: cubic-bezier(0.3, 0, 0.8, 0.15);
 ```
 
 The full set: `ease-out` for small surfaces near their trigger, `ease-in-out` for moving while
 staying on screen, `ease-spring` for sliding indicators and the toast enter, `ease-out-heavy` for
-large surfaces crossing the screen, `ease-in` for permanent exits the user didn't cause, and `ease` for hover and colour.
+large surfaces crossing the screen, `ease-in` for permanent exits, and `ease` for hover and colour.
 A big surface that stays in place (a large dialog or overlay scaling or fading in place) still uses
 `ease-out`; `ease-out-heavy` is for surfaces that travel across the screen.
 
@@ -47,7 +44,7 @@ Then update your copies:
 | --------- | ------------------------------------------------------------------------------------------ |
 | Drawer    | Panel and backdrop `ease-out-heavy`, 450ms in, 370ms out (was `ease-out` 300/200)          |
 | Drawer    | Fix: closed panel now clears the detach margin, so no sliver shows at the start or end     |
-| Toaster   | Enter 400ms `ease-spring` (was 500ms). Exit was 500ms `ease-spring`; now 150ms `ease-out` when closed by the user, 200ms `ease-in` on timeout or `toast.dismiss` |
+| Toaster   | Enter 400ms `ease-spring` (was 500ms); exit 200ms `ease-in` (was 500ms `ease-spring`)      |
 | Tooltip   | 150ms in (was 300ms); now fades out over 100ms instead of disappearing                     |
 
 ```diff tsx
@@ -62,24 +59,12 @@ Then update your copies:
 - not-data-[status=open]:translate-x-full
 + not-data-[status=open]:translate-x-[calc(100%+var(--drawer-detach))]
 
-// toaster.tsx — the store records why a toast leaves; row and card exit together, the row's
-// transition end unmounts the toast
-- type ToastEntry = Toast & { leaving?: boolean };
-+ type ToastEntry = Toast & { leaving?: "user" | "auto" };
-- remove(id) {
--   toasts = toasts.map((toast) => (toast.id === id ? { ...toast, leaving: true } : toast));
-+ remove(id, reason = "auto") {
-+   toasts = toasts.map((toast) =>
-+     toast.id === id && !toast.leaving ? { ...toast, leaving: reason } : toast,
-+   );
-- <ToasterItem toast={toast} onDismiss={() => toastStore.remove(toast.id)} />
-+ <ToasterItem toast={toast} onDismiss={() => toastStore.remove(toast.id, "user")} />
-+ data-dismiss={toast.leaving}
+// toaster.tsx — row and card exit together, the row's transition end unmounts the toast
 - "transition-[grid-template-rows] duration-500 ease-spring",
-+ "transition-[grid-template-rows] duration-400 ease-spring data-[dismiss=auto]:duration-200 data-[dismiss=auto]:ease-in data-[dismiss=user]:duration-150 data-[dismiss=user]:ease-out",
++ "transition-[grid-template-rows] duration-400 ease-spring data-[status=closed]:duration-200 data-[status=closed]:ease-in",
 - "transition-[opacity,scale,translate,background-color,border-color,color] duration-500 ease-spring",
 + "transition-[opacity,scale,translate,background-color,border-color,color] duration-400 ease-spring",
-+ "group-data-[dismiss=auto]/toast:duration-200 group-data-[dismiss=auto]/toast:ease-in group-data-[dismiss=user]/toast:duration-150 group-data-[dismiss=user]/toast:ease-out",
++ "group-data-[status=closed]/toast:duration-200 group-data-[status=closed]/toast:ease-in",
 
 // tooltip.tsx
 - useTransitionStatus(context, { duration: 0 });
