@@ -20,7 +20,11 @@ const ModalKeepOpenPreview = () => {
             Once you type, Esc and the backdrop no longer close this.
           </Modal.Description>
         </div>
-        <Textarea value={note} onChange={(event) => setNote(event.target.value)} />
+        <Textarea
+          aria-label="Note"
+          value={note}
+          onChange={(event) => setNote(event.target.value)}
+        />
         <div className="flex gap-2">
           <Modal.Close asChild onClick={() => setNote("")}>
             <Button>Save</Button>
