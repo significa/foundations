@@ -30,8 +30,8 @@ export default function UseTailwindBreakpointPreview() {
     >
       <div className="flex h-full items-center justify-center rounded-lg bg-white/50 p-4">
         <div className="text-center">
-          <p className="font-semibold text-gray-800 text-lg">{getDeviceText()}</p>
-          <p className="mt-2 text-gray-600 text-sm">
+          <p className="text-lg font-semibold text-gray-800">{getDeviceText()}</p>
+          <p className="mt-2 text-sm text-gray-600">
             Resize your browser to see the background change!
           </p>
         </div>

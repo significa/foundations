@@ -19,7 +19,7 @@ export default function UseKeyboardShortcutPlatformPreview() {
   useKeyboardShortcut({ key: "s", mod: true }, () => setCount((c) => c + 1));
 
   return (
-    <div className="flex flex-col items-center gap-3 text-foreground-secondary text-sm">
+    <div className="flex flex-col items-center gap-3 text-sm text-foreground-secondary">
       <p>
         Press{" "}
         <Kbd.Group>

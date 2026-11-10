@@ -38,7 +38,7 @@ const StackPreview = () => {
               <Divider />
             </Stack.Header>
 
-            <div className="w-2/3 pt-4 pb-12 text-foreground-secondary text-md">{item.content}</div>
+            <div className="text-md w-2/3 pt-4 pb-12 text-foreground-secondary">{item.content}</div>
           </Stack.Item>
         ))}
       </Stack>

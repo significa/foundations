@@ -76,7 +76,7 @@ const Carousel = ({ children }: { children: ReactNode }) => {
               style={{ "--num-items": numItems }}
             >
               {Children.map(children, (child) => (
-                <li className="aspect-3/2 w-full select-none snap-center overflow-hidden rounded-sm">
+                <li className="aspect-3/2 w-full snap-center overflow-hidden rounded-sm select-none">
                   {child}
                 </li>
               ))}
@@ -101,7 +101,7 @@ const Carousel = ({ children }: { children: ReactNode }) => {
             >
               →
             </Button>
-            <div className="ml-auto font-medium text-sm">
+            <div className="ml-auto text-sm font-medium">
               {activeIndex + 1} / {numItems}
             </div>
           </div>
@@ -131,10 +131,10 @@ const CarouselItem = ({
   return (
     <div
       ref={ref}
-      className="flex size-full items-end bg-center bg-cover"
+      className="flex size-full items-end bg-cover bg-center"
       style={{ backgroundImage: `url(${image})` }}
     >
-      <div className="w-full bg-linear-to-t from-foreground/85 to-transparent p-6 pt-32 pr-12 font-medium text-md">
+      <div className="text-md w-full bg-linear-to-t from-foreground/85 to-transparent p-6 pt-32 pr-12 font-medium">
         <div
           className={cn(
             "text-background",

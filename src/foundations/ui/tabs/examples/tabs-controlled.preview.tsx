@@ -8,7 +8,7 @@ export default function TabsControlledPreview() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <span className="text-foreground-secondary text-sm">Current tab:</span>
+        <span className="text-sm text-foreground-secondary">Current tab:</span>
         <span className="font-medium">{selectedIndex}</span>
         <button
           type="button"

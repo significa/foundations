@@ -8,7 +8,7 @@ const MarqueePauseHoverExample = () => {
 
   return (
     <div className="space-y-4">
-      <div className="font-medium text-base">Hover to pause</div>
+      <div className="text-base font-medium">Hover to pause</div>
       <Marquee
         paused={isPaused}
         className="h-[2.5em] w-96 items-center gap-2 rounded border border-border px-2 text-foreground-secondary"

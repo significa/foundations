@@ -13,8 +13,8 @@ export default function OTPInputPasswordManagerExample() {
   return (
     <form className="flex flex-col items-center gap-6" onSubmit={(e) => e.preventDefault()}>
       <div className="flex flex-col items-center gap-1 text-center">
-        <p className="font-medium text-foreground text-sm">Enter verification code</p>
-        <p className="text-foreground-secondary text-xs">
+        <p className="text-sm font-medium text-foreground">Enter verification code</p>
+        <p className="text-xs text-foreground-secondary">
           Open 1Password and autofill the 6-digit code.
         </p>
       </div>
@@ -30,7 +30,7 @@ export default function OTPInputPasswordManagerExample() {
       </OTPInput>
 
       {submitted && (
-        <p className="text-foreground-secondary text-xs">
+        <p className="text-xs text-foreground-secondary">
           Filled: <span className="font-mono text-foreground">{value}</span>
         </p>
       )}

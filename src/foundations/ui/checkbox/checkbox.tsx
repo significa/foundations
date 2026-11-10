@@ -9,17 +9,17 @@ interface CheckboxProps extends Omit<React.ComponentPropsWithRef<"input">, "type
 
 const checkboxStyle = cva({
   base: [
-    "focus-visible:ring-(length:--ring-width) relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-sm border border-border bg-background shadow-xs outline-none ring-ring transition enabled:cursor-pointer enabled:not-checked:hover:border-mix-border/8",
+    "relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-sm border border-border bg-background shadow-xs ring-ring transition outline-none focus-visible:ring-(length:--ring-width) enabled:cursor-pointer enabled:not-checked:hover:border-mix-border/8",
     // checked
-    "checked:enabled:hover:mix-with-accent-foreground checked:enabled:border-accent checked:enabled:bg-accent checked:enabled:hover:border-mix-accent/8",
+    "checked:enabled:border-accent checked:enabled:bg-accent checked:enabled:hover:border-mix-accent/8 checked:enabled:hover:mix-with-accent-foreground",
     // indeterminate
-    "indeterminate:enabled:hover:mix-with-accent-foreground indeterminate:enabled:border-accent indeterminate:enabled:bg-accent indeterminate:enabled:hover:border-mix-accent/8",
+    "indeterminate:enabled:border-accent indeterminate:enabled:bg-accent indeterminate:enabled:hover:border-mix-accent/8 indeterminate:enabled:hover:mix-with-accent-foreground",
     // checked checkmark
-    "before:absolute before:text-accent-foreground checked:before:font-bold checked:before:text-xs checked:before:content-['✓']",
+    "before:absolute before:text-accent-foreground checked:before:text-xs checked:before:font-bold checked:before:content-['✓']",
     // indeterminate dash
     "indeterminate:before:h-0.5 indeterminate:before:w-1.5 indeterminate:before:bg-accent-foreground",
     // disabled
-    "disabled:cursor-not-allowed disabled:border-foreground/5 disabled:bg-foreground/10 disabled:indeterminate:before:bg-foreground/50 disabled:checked:before:text-foreground/50",
+    "disabled:cursor-not-allowed disabled:border-foreground/5 disabled:bg-foreground/10 disabled:checked:before:text-foreground/50 disabled:indeterminate:before:bg-foreground/50",
   ],
 });
 

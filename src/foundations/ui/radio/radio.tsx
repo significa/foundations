@@ -2,9 +2,9 @@ import { cva } from "@/lib/utils/classnames";
 
 const radioStyle = cva({
   base: [
-    "focus-visible:ring-(length:--ring-width) relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-full border border-border bg-background shadow-xs outline-none ring-ring transition enabled:cursor-pointer enabled:not-checked:hover:border-mix-border/8",
+    "relative flex size-5 shrink-0 appearance-none items-center justify-center rounded-full border border-border bg-background shadow-xs ring-ring transition outline-none focus-visible:ring-(length:--ring-width) enabled:cursor-pointer enabled:not-checked:hover:border-mix-border/8",
     // checked
-    "checked:enabled:hover:mix-with-accent-foreground checked:enabled:border-accent checked:enabled:bg-accent checked:enabled:hover:border-mix-accent/8",
+    "checked:enabled:border-accent checked:enabled:bg-accent checked:enabled:hover:border-mix-accent/8 checked:enabled:hover:mix-with-accent-foreground",
     // checked circle
     "checked:before:absolute checked:before:h-1.5 checked:before:w-1.5 checked:before:rounded-full checked:before:bg-accent-foreground",
     // disabled

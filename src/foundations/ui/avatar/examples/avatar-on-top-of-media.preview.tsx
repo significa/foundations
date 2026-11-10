@@ -3,7 +3,7 @@ import { Avatar } from "@/foundations/ui/avatar/avatar";
 export default function AvatarOnTopOfMediaPreview() {
   return (
     <div
-      className="relative size-32 overflow-hidden rounded-lg bg-center bg-cover"
+      className="relative size-32 overflow-hidden rounded-lg bg-cover bg-center"
       style={{
         backgroundImage: "url(https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80)",
       }}

@@ -42,7 +42,7 @@ export default function BasicHierarchicalSelection() {
   return (
     <div className="space-y-2">
       <div className="mb-4">
-        <p className="text-foreground-secondary text-sm">
+        <p className="text-sm text-foreground-secondary">
           Selected: {selectedArray.join(", ") || "None"}
         </p>
       </div>
@@ -61,7 +61,7 @@ export default function BasicHierarchicalSelection() {
                     indeterminate={parentStatus.indeterminate}
                     onChange={(e) => toggleParent(parent, e.target.checked)}
                   />
-                  <span className="cursor-pointer font-medium text-base">{parent.label}</span>
+                  <span className="cursor-pointer text-base font-medium">{parent.label}</span>
                 </label>
 
                 <Disclosure.Trigger
@@ -80,7 +80,7 @@ export default function BasicHierarchicalSelection() {
                         checked={isSelected(child.id)}
                         onChange={() => toggleItem(child.id)}
                       />
-                      <span className="cursor-pointer font-medium text-base">{child.label}</span>
+                      <span className="cursor-pointer text-base font-medium">{child.label}</span>
                     </label>
                   ))}
                 </div>
