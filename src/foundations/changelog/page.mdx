@@ -12,6 +12,121 @@ meta:
 
 ## November 2026
 
+### Fixed: Modal focus return and dismissal, Dialog and Drawer text styles
+
+Apply these to your copies of `modal.tsx`, `dialog.tsx` and `drawer.tsx`.
+
+- **Focus returns to the opener.** Modal removes the `<dialog>` after its exit transition without
+  calling `close()`, so the browser never restored focus: after Cancel, Esc or a backdrop click it
+  fell to `<body>`. Modal now remembers what had focus at `showModal()` and focuses it again once
+  the dialog leaves the page.
+- **State follows a browser-initiated close.** A `close` listener calls `onOpenChange(false)` when
+  the browser closes the dialog on its own (a close request it won't let us cancel), only while
+  `open`, so a close you made isn't reported twice.
+- **Light dismiss needs the press to start on the backdrop.** Selecting text inside the dialog and
+  releasing outside it no longer closes it.
+- **Dialog and Drawer set their own text styles.** Content inherited the UA's `CanvasText` colour
+  and the alignment and size of wherever it was rendered (a centred, coloured or small-text
+  container). Both now set `text-start text-base text-foreground`.
+
+New: `keepOpen` on `Modal` (and so `Dialog` and `Drawer`) blocks Esc and backdrop dismiss, for
+example while a form has unsaved changes. `Modal.Close` and your own state still close it.
+
+```diff tsx
+  const useDialogElement = (
+    open: boolean,
+    setOpen: (isOpen: boolean) => void,
++   keepOpen: boolean,
++   isMounted: boolean,
+  ) => {
+    const ref = useRef<HTMLDialogElement>(null);
++   const openerRef = useRef<Element | null>(null);
+
+    useLayoutEffect(() => {
+      if (open && !element.open) {
++       openerRef.current = document.activeElement;
+        element.showModal();
+      }
+
+      element.addEventListener("cancel", (event: Event) => {
++       if (!event.cancelable) return;
+        event.preventDefault();
+-       setOpen(false);
++       if (!keepOpen) setOpen(false);
+      }, { signal });
+
++     element.addEventListener("close", () => {
++       if (open) setOpen(false);
++     }, { signal });
+
+      element.addEventListener("keydown", (event: KeyboardEvent) => {
+        if (event.key === "Escape" && open) {
+          event.preventDefault();
+          event.stopPropagation();
+-         setOpen(false);
++         if (!keepOpen) setOpen(false);
+        }
+      }, { signal });
+-   }, [open, setOpen]);
++   }, [open, setOpen, keepOpen]);
+
+    useEffect(() => {
+-     if (!element || !open) return;
++     if (!element || !open || keepOpen) return;
+-     const handleDialogClick = (event: MouseEvent) => {
+-       if ((event.target as HTMLElement).nodeName === "DIALOG") { … }
+-     };
++     const isOnBackdrop = (event: MouseEvent) => {
++       if (!(event.target instanceof HTMLDialogElement)) return false;
++       const { top, left, width, height } = event.target.getBoundingClientRect();
++       return top > event.clientY || event.clientY > top + height ||
++         left > event.clientX || event.clientX > left + width;
++     };
++     let pressedOnBackdrop = false;
++     const handlePointerDown = (event: PointerEvent) => {
++       pressedOnBackdrop = isOnBackdrop(event);
++     };
++     const handleClick = (event: MouseEvent) => {
++       if (!pressedOnBackdrop || !isOnBackdrop(event)) return;
++       event.stopPropagation();
++       setOpen(false);
++     };
++     element.addEventListener("pointerdown", handlePointerDown);
++     element.addEventListener("click", handleClick);
+-   }, [setOpen, open]);
++   }, [setOpen, open, keepOpen]);
+
++   useEffect(() => {
++     if (!isMounted) return;
++     return () => {
++       const opener = openerRef.current;
++       if (opener instanceof HTMLElement) opener.focus();
++     };
++   }, [isMounted]);
+  };
+
+- const Modal = ({ open: propsOpen, onOpenChange, children }: ModalProps) => {
++ const Modal = ({ open: propsOpen, onOpenChange, keepOpen = false, children }: ModalProps) => {
+
+  const ModalContent = (…) => {
+-   const { open, labelId, descriptionId, setOpen } = useModalContext();
+-   const dialogRef = useDialogElement(open, setOpen);
+-   const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
++   const { open, keepOpen, labelId, descriptionId, setOpen } = useModalContext();
++   const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
++   const dialogRef = useDialogElement(open, setOpen, keepOpen, isMounted);
+```
+
+```diff tsx
+  // dialog.tsx (Dialog.Content)
+- "… rounded-3xl border border-border bg-background p-4 shadow-lg md:max-w-md",
++ "… rounded-3xl border border-border bg-background p-4 text-start text-base text-foreground shadow-lg md:max-w-md",
+
+  // drawer.tsx (drawerContentStyle base)
+- "… border border-border bg-background p-(--drawer-p) *:shrink-0",
++ "… border border-border bg-background p-(--drawer-p) text-start text-base text-foreground *:shrink-0",
+```
+
 ### Changed: data table recipe targets `@tanstack/react-table` 9
 
 The [data table recipe](/ui/table#data-table-with-tanstack-table) now uses TanStack Table 9. If you
