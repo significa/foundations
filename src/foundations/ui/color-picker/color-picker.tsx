@@ -89,6 +89,7 @@ const Draggable = ({
   ...props
 }: DraggableProps) => {
   const internalRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
   const isSelecting = useRef(false);
 
   const handleStart = (
@@ -178,7 +179,7 @@ const Draggable = ({
 
   return (
     <div
-      ref={composeRefs(internalRef, ref)}
+      ref={composedRef}
       onMouseDown={handleStart}
       onTouchStart={handleStart}
       onKeyDown={handleKeyDown}
@@ -233,6 +234,7 @@ const ColorPickerArea = ({ className, ref, ...props }: React.ComponentPropsWithR
   } = useColorPickerContext();
 
   const internalRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
 
   const onMove = ([x, y]: [number, number]) => {
     const rect = internalRef.current?.getBoundingClientRect();
@@ -258,7 +260,7 @@ const ColorPickerArea = ({ className, ref, ...props }: React.ComponentPropsWithR
 
   return (
     <Draggable
-      ref={composeRefs(internalRef, ref)}
+      ref={composedRef}
       onMove={onMove}
       keyMap={keyMap}
       disabled={disabled}
@@ -288,6 +290,7 @@ const ColorPickerHue = ({ className, ref, ...props }: React.ComponentPropsWithRe
   } = useColorPickerContext();
 
   const internalRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
 
   const onMove = ([x]: [number, number]) => {
     const rect = internalRef.current?.getBoundingClientRect();
@@ -313,7 +316,7 @@ const ColorPickerHue = ({ className, ref, ...props }: React.ComponentPropsWithRe
 
   return (
     <Draggable
-      ref={composeRefs(internalRef, ref)}
+      ref={composedRef}
       onMove={onMove}
       keyMap={keyMap}
       disabled={disabled}
@@ -346,6 +349,7 @@ const ColorPickerSaturation = ({
   } = useColorPickerContext();
 
   const internalRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
 
   const onMove = ([x]: [number, number]) => {
     const rect = internalRef.current?.getBoundingClientRect();
@@ -370,7 +374,7 @@ const ColorPickerSaturation = ({
 
   return (
     <Draggable
-      ref={composeRefs(internalRef, ref)}
+      ref={composedRef}
       onMove={onMove}
       keyMap={keyMap}
       disabled={disabled}
@@ -398,6 +402,7 @@ const ColorPickerLightness = ({ className, ref, ...props }: React.ComponentProps
   } = useColorPickerContext();
 
   const internalRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
 
   const onMove = ([x]: [number, number]) => {
     const rect = internalRef.current?.getBoundingClientRect();
@@ -422,7 +427,7 @@ const ColorPickerLightness = ({ className, ref, ...props }: React.ComponentProps
 
   return (
     <Draggable
-      ref={composeRefs(internalRef, ref)}
+      ref={composedRef}
       onMove={onMove}
       keyMap={keyMap}
       disabled={disabled}
@@ -450,6 +455,7 @@ const ColorPickerAlpha = ({ className, ref, ...props }: React.ComponentPropsWith
   } = useColorPickerContext();
 
   const internalRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(internalRef, ref), [ref]);
 
   const onMove = ([x]: [number, number]) => {
     const rect = internalRef.current?.getBoundingClientRect();
@@ -475,7 +481,7 @@ const ColorPickerAlpha = ({ className, ref, ...props }: React.ComponentPropsWith
 
   return (
     <Draggable
-      ref={composeRefs(internalRef, ref)}
+      ref={composedRef}
       onMove={onMove}
       keyMap={keyMap}
       disabled={disabled}
