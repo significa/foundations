@@ -136,6 +136,23 @@ Then update your copies:
 + "transition duration-150 ease-out data-[state=closed]:duration-100 motion-reduce:transition-none",
 ```
 
+### Changed: imports use `#/` with file extensions
+
+Source you copy from now on imports through a `#/` alias and names the real file, e.g.
+`#/foundations/ui/button/button.tsx`. Extensionless aliases only resolve in Vite; TypeScript 6+,
+esbuild and Node need the extension. This pairs with `@significa/ts-standards` 0.2.3, which turns
+on Biome's `useImportExtensions` and already sets `allowImportingTsExtensions`.
+
+Set it up once: add `"imports": { "#/*": "./src/*" }` to `package.json`, and if you don't use
+ts-standards ≥0.2.3, enable `allowImportingTsExtensions` and `noEmit` in `tsconfig.json` (see
+[Setup](/setup)). Existing copies don't need to change; rewrite paths to your own layout as usual,
+keeping the extension.
+
+```diff tsx
+- import { cn } from "@/lib/utils/classnames";
++ import { cn } from "#/lib/utils/classnames.ts";
+```
+
 ### Changed: Foundations targets `@significa/ts-standards`
 
 Copies now lint and compile under [`@significa/ts-standards`](https://github.com/significa/ts-standards)

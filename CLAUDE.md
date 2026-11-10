@@ -42,7 +42,7 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 ## TypeScript
 
 - Config extends `@significa/ts-standards/tsconfig/astro` (the shared Significa preset). On top of strict mode it enables `noUncheckedIndexedAccess`, `noImplicitReturns`, `noUnusedLocals`/`noUnusedParameters`, and `verbatimModuleSyntax` — so indexed access is `T | undefined` (guard or narrow it; don't reach for `!`, which the lint forbids), every path of a function that returns a value must return (common in `useEffect` cleanups: use an early bare `return;`), and type-only imports must use `import type`. `exactOptionalPropertyTypes` is off.
-- Path aliases: `@/*` → `src/*`, `~/*` → repo root (set in `tsconfig.json`; `jsx`/`jsxImportSource` are overridden back to `react-jsx`/`react` since the preset defaults to `preserve`).
+- The only alias is `#/*` → `src/*`, a Node subpath import in `package.json` (`"imports": { "#/*": "./src/*" }`). There are no tsconfig `paths`. `tsconfig.json` only overrides `jsx`/`jsxImportSource` back to `react-jsx`/`react` since the preset defaults to `preserve`.
 - Use `import type` for all type-only imports.
 - Avoid `any`. If unavoidable, add a `// biome-ignore lint/suspicious/noExplicitAny: <reason>` comment.
 - Prefer `interface` for component props and object shapes; use `type` for unions, mapped types, and simple aliases.
@@ -91,10 +91,12 @@ the fixes, and CI fails on unsorted classes.
 
 ### Imports
 
+- Every relative and alias import names the real file, extension included: `./slot.tsx`, `#/foundations/ui/button/button.tsx`. Extensionless `#/` only resolves in Vite; TypeScript, esbuild and Node reject it. Biome's `useImportExtensions` fixes relative imports; `tsc` catches extensionless `#/` (TS2307).
+- Cross-directory imports use `#/…`; only same-directory imports are relative (`./x.tsx`). `../` is forbidden by Biome's `noRestrictedImports` (Biome skips `.astro` files, so keep to it by hand there).
 - Biome's `organizeImports` runs automatically — do not manually sort imports.
 - Use `import type { Foo }` for type-only imports; never mix types and values in a single `import`.
 - Always import Phosphor icons from the SSR-safe subpath: `import { IconName } from '@phosphor-icons/react/dist/ssr'`. The root barrel uses a dynamic registry that breaks with Astro SSR and is unreliable under Vite HMR (intermittent `Cannot read properties of undefined (reading 'call')` errors). The `/dist/ssr` build is static ESM, fully tree-shakable, SSR-safe, and HMR-stable.
-- Import `cn` and `cva` from `@/lib/utils/classnames`, not directly from their packages.
+- Import `cn` and `cva` from `#/lib/utils/classnames.ts`, not directly from their packages.
 
 ### Exports
 
@@ -139,7 +141,7 @@ the fixes, and CI fails on unsorted classes.
 
 ### Variants with CVA
 
-All variant-based styling uses `cva` (imported from `@/lib/utils/classnames`):
+All variant-based styling uses `cva` (imported from `#/lib/utils/classnames.ts`):
 
 ```ts
 const buttonStyle = cva({
@@ -152,7 +154,7 @@ const buttonStyle = cva({
 });
 ```
 
-Use `cn(...)` (also from `@/lib/utils/classnames`) for conditional/merged class names.
+Use `cn(...)` (also from `#/lib/utils/classnames.ts`) for conditional/merged class names.
 
 CVA style objects are exported only when there's a real composition use case for them — either another primitive in the library extends them (e.g., `IconButton` extends `buttonStyle`, `OTPInput` extends `inputStyle`) or consumers building related primitives need to. Otherwise, keep them private to the file. Don't widen exports for the sake of consistency.
 
@@ -161,7 +163,7 @@ CVA style objects are exported only when there's a real composition use case for
 Polymorphic rendering uses the project's own `Slot` primitive (no Radix dependency):
 
 ```ts
-import { Slot } from "@/foundations/components/slot/slot";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
 ```
 
 Any component accepting `asChild` renders as its child element when the prop is true, merging all props.
@@ -220,7 +222,7 @@ src/foundations/<category>/<name>/
 
 ### Page dependency discipline
 
-Every `page.mdx` must declare under `dependencies:` every cross-Foundations import its source files use. The CI script `scripts/check-page-deps.mjs` (run via `pnpm check:deps`) walks each component's source and fails if any `@/foundations/...` import isn't declared. This keeps the docs honest about what a consumer will actually drag in when they copy a component.
+Every `page.mdx` must declare under `dependencies:` every cross-Foundations import its source files use. The CI script `scripts/check-page-deps.mjs` (run via `pnpm check:deps`) resolves every `#/`, `./` and `../` import in each component's source (everything in its directory except `examples/`, plus its `files:` list), attributes it to the item whose `page.mdx` owns that file, and fails if a different item isn't declared. It also fails on imports of missing files or of code outside `src/foundations/`. This keeps the docs honest about what a consumer will actually drag in when they copy a component.
 
 Format:
 
@@ -236,7 +238,7 @@ dependencies:
 
 Internal hrefs are paths under `src/foundations/` (e.g., `/ui/popover` → `src/foundations/ui/popover/`). Anchors and trailing slashes are stripped during the check — `/utils/math#clamp` and `/utils/math` both match a `utils/math` import. External hrefs (starting with `https://`) are not validated.
 
-Imports from `@/lib/...` (utilities provided by the setup guide) are skipped automatically.
+Imports from `#/lib/...` (utilities provided by the setup guide) are skipped automatically.
 
 ### llms.txt output
 
