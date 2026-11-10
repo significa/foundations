@@ -87,8 +87,10 @@
     1.001,
     1
   );
-  /* critically damped spring (stiffness 580, damping 60, mass 1.35) from rest; drawers, sheets, side panels, both ways */
-  --ease-out-large: linear(
+  /* surfaces travelling across the screen (drawers, sheets, side panels), both ways: they move as if they had mass,
+     so they neither reach full speed on the first frame nor stop dead. Critically damped spring (stiffness 580,
+     damping 60, mass 1.35) from rest */
+  --ease-out-heavy: linear(
     0,
     0.006 0.9%,
     0.021 1.9%,
