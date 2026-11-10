@@ -77,7 +77,10 @@ picked, and the first tab stays reachable by keyboard.
 
 ### Tabs.Items
 
-The container for tab buttons. Provides proper ARIA attributes and keyboard navigation.
+The container for tab buttons. Provides proper ARIA attributes and keyboard navigation. Render
+each `Tabs.Item` as a direct child (conditionals and `.map()` are fine). `Tabs.Items` reads their
+values to keep a tab reachable when the selected one isn't rendered, and it doesn't look inside
+fragments.
 
 <PropsTable
   definition={{
@@ -91,7 +94,8 @@ The container for tab buttons. Provides proper ARIA attributes and keyboard navi
 ### Tabs.Item
 
 The individual tab button component. With `asChild`, render a `button` or a link: they activate
-on Enter (and a button on Space) natively.
+on Enter (and a button on Space) natively. Don't give the child its own `id`; the tab's generated
+id links it to its panel.
 
 <PropsTable
   definition={{
