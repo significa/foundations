@@ -17,25 +17,25 @@ const drawerContentStyle = cva({
     "rounded-2xl",
     "has-data-[status=open]:opacity-80 [&>:not(dialog)]:transition-opacity has-data-[status=open]:[&>:not(dialog)]:opacity-0",
     "backdrop:bg-black/20 backdrop:backdrop-blur-sm not-data-[status=open]:backdrop:opacity-0 in-data-[status=open]:backdrop:opacity-0",
-    "transition-[translate,margin,opacity] ease-out",
-    "backdrop:transition-opacity backdrop:ease-out",
+    "transition-[translate,margin,opacity] ease-out-heavy",
+    "backdrop:transition-opacity backdrop:ease-out-heavy",
     "motion-reduce:transition-none motion-reduce:backdrop:transition-none",
-    "duration-300 not-data-[status=open]:duration-200 backdrop:duration-300 not-data-[status=open]:backdrop:duration-200",
+    "duration-450 not-data-[status=open]:duration-370 backdrop:duration-450 not-data-[status=open]:backdrop:duration-370",
   ],
   variants: {
     side: {
       right:
-        "my-(--drawer-detach) mr-(--drawer-detach) ml-auto h-[calc(100dvh-2*var(--drawer-detach))] max-h-none max-w-lg not-data-[status=open]:translate-x-full has-data-[status=open]:mr-[calc(var(--drawer-detach)+var(--drawer-stack))]",
-      left: "my-(--drawer-detach) mr-auto ml-(--drawer-detach) h-[calc(100dvh-2*var(--drawer-detach))] max-h-none max-w-lg not-data-[status=open]:-translate-x-full has-data-[status=open]:ml-[calc(var(--drawer-detach)+var(--drawer-stack))]",
+        "my-(--drawer-detach) mr-(--drawer-detach) ml-auto h-[calc(100dvh-2*var(--drawer-detach))] max-h-none max-w-lg not-data-[status=open]:translate-x-[calc(100%+var(--drawer-detach))] has-data-[status=open]:mr-[calc(var(--drawer-detach)+var(--drawer-stack))]",
+      left: "my-(--drawer-detach) mr-auto ml-(--drawer-detach) h-[calc(100dvh-2*var(--drawer-detach))] max-h-none max-w-lg not-data-[status=open]:-translate-x-[calc(100%+var(--drawer-detach))] has-data-[status=open]:ml-[calc(var(--drawer-detach)+var(--drawer-stack))]",
       bottom:
-        "mx-(--drawer-detach) mt-auto mb-(--drawer-detach) max-h-[calc(100svh-(--spacing(16)))] min-h-[50svh] w-[calc(100%-2*var(--drawer-detach))] not-data-[status=open]:translate-y-full has-data-[status=open]:mb-[calc(var(--drawer-detach)+var(--drawer-stack))]",
+        "mx-(--drawer-detach) mt-auto mb-(--drawer-detach) max-h-[calc(100svh-(--spacing(16)))] min-h-[50svh] w-[calc(100%-2*var(--drawer-detach))] not-data-[status=open]:translate-y-[calc(100%+var(--drawer-detach))] has-data-[status=open]:mb-[calc(var(--drawer-detach)+var(--drawer-stack))]",
       "right-bottom": [
-        "md:my-(--drawer-detach) md:mr-(--drawer-detach) md:ml-auto md:h-[calc(100dvh-2*var(--drawer-detach))] md:max-h-none md:max-w-lg md:not-data-[status=open]:translate-x-full md:has-data-[status=open]:mr-[calc(var(--drawer-detach)+var(--drawer-stack))]",
-        "max-md:mx-(--drawer-detach) max-md:mt-auto max-md:mb-(--drawer-detach) max-md:max-h-[calc(100svh-(--spacing(16)))] max-md:min-h-[50svh] max-md:w-[calc(100%-2*var(--drawer-detach))] max-md:not-data-[status=open]:translate-y-full max-md:has-data-[status=open]:mb-[calc(var(--drawer-detach)+var(--drawer-stack))]",
+        "md:my-(--drawer-detach) md:mr-(--drawer-detach) md:ml-auto md:h-[calc(100dvh-2*var(--drawer-detach))] md:max-h-none md:max-w-lg md:not-data-[status=open]:translate-x-[calc(100%+var(--drawer-detach))] md:has-data-[status=open]:mr-[calc(var(--drawer-detach)+var(--drawer-stack))]",
+        "max-md:mx-(--drawer-detach) max-md:mt-auto max-md:mb-(--drawer-detach) max-md:max-h-[calc(100svh-(--spacing(16)))] max-md:min-h-[50svh] max-md:w-[calc(100%-2*var(--drawer-detach))] max-md:not-data-[status=open]:translate-y-[calc(100%+var(--drawer-detach))] max-md:has-data-[status=open]:mb-[calc(var(--drawer-detach)+var(--drawer-stack))]",
       ],
       "left-bottom": [
-        "md:my-(--drawer-detach) md:mr-auto md:ml-(--drawer-detach) md:h-[calc(100dvh-2*var(--drawer-detach))] md:max-h-none md:max-w-lg md:not-data-[status=open]:-translate-x-full md:has-data-[status=open]:ml-[calc(var(--drawer-detach)+var(--drawer-stack))]",
-        "max-md:mx-(--drawer-detach) max-md:mt-auto max-md:mb-(--drawer-detach) max-md:max-h-[calc(100svh-(--spacing(16)))] max-md:min-h-[50svh] max-md:w-[calc(100%-2*var(--drawer-detach))] max-md:not-data-[status=open]:translate-y-full max-md:has-data-[status=open]:mb-[calc(var(--drawer-detach)+var(--drawer-stack))]",
+        "md:my-(--drawer-detach) md:mr-auto md:ml-(--drawer-detach) md:h-[calc(100dvh-2*var(--drawer-detach))] md:max-h-none md:max-w-lg md:not-data-[status=open]:-translate-x-[calc(100%+var(--drawer-detach))] md:has-data-[status=open]:ml-[calc(var(--drawer-detach)+var(--drawer-stack))]",
+        "max-md:mx-(--drawer-detach) max-md:mt-auto max-md:mb-(--drawer-detach) max-md:max-h-[calc(100svh-(--spacing(16)))] max-md:min-h-[50svh] max-md:w-[calc(100%-2*var(--drawer-detach))] max-md:not-data-[status=open]:translate-y-[calc(100%+var(--drawer-detach))] max-md:has-data-[status=open]:mb-[calc(var(--drawer-detach)+var(--drawer-stack))]",
       ],
     } satisfies Record<DrawerSide, string | string[]>,
   },

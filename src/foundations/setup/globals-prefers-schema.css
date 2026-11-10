@@ -56,9 +56,10 @@
   --shadow-lg: 0 2px 4px oklch(0 0 0 / 0.02), 0 4px 8px oklch(0 0 0 / 0.02), 0 8px 16px oklch(0 0 0 / 0.02);
 
   /* easings */
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* enter / exit */
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* on-screen movement */
-  /* motion's { type: "spring", bounce: 0.2 }; duration sets the speed */
+  /* small surfaces near their trigger (popover, menu, tooltip, dialog), in and out when they can come back */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* moving while staying on screen (switch) */
+  /* motion's { type: "spring", bounce: 0.2 }; indicators sliding between positions, toast enter */
   --ease-spring: linear(
     0,
     0.095,
@@ -80,6 +81,32 @@
     1.001,
     1
   );
+  /* surfaces travelling across the screen (drawers, sheets, side panels), both ways: they move as if they had mass,
+     so they neither reach full speed on the first frame nor stop dead. Critically damped spring (stiffness 580,
+     damping 60, mass 1.35) from rest */
+  --ease-out-heavy: linear(
+    0,
+    0.006 0.9%,
+    0.021 1.9%,
+    0.074 3.9%,
+    0.145 6%,
+    0.346 11.2%,
+    0.448 14%,
+    0.544 16.9%,
+    0.626 19.9%,
+    0.704 23.3%,
+    0.766 26.6%,
+    0.819 30.2%,
+    0.864 34.1%,
+    0.902 38.5%,
+    0.931 43.4%,
+    0.955 49%,
+    0.972 55.5%,
+    0.992 71.5%,
+    1
+  );
+  /* leaving for good, e.g. a toast timing out; starts slowly by design, keep it short */
+  --ease-in: cubic-bezier(0.3, 0, 0.8, 0.15);
   --default-transition-timing-function: ease; /* hover / color */
 
   /* Spinner variants */

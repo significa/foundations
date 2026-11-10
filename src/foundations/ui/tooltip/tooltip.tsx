@@ -231,7 +231,10 @@ const TooltipContent = ({
 }: React.ComponentPropsWithRef<"div">) => {
   const { context, refs, arrowRef, getFloatingProps, isInstantPhase } = useTooltipContext();
 
-  const { isMounted, status } = useTransitionStatus(context, { duration: 0 });
+  const { isMounted, status } = useTransitionStatus(context, {
+    // keeps it mounted for the exit; instant in a group, or it lingers next to the incoming one
+    duration: isInstantPhase ? 0 : { close: 100 },
+  });
 
   const topLayerRef = useTopLayer<HTMLDivElement>(isMounted, "hint");
   const ref = useMergeRefs([refs.setFloating, refProp, topLayerRef]);
@@ -249,7 +252,7 @@ const TooltipContent = ({
         ref={ref}
         className={cn(
           "z-50 max-w-80 overflow-visible rounded-lg bg-foreground px-3 py-1.5 text-xs wrap-break-word whitespace-normal text-background drop-shadow-md",
-          "transition duration-300 ease-out motion-reduce:transition-none",
+          "transition duration-150 ease-out data-[state=closed]:duration-100 motion-reduce:transition-none",
           "data-[state=closed]:data-[side=bottom]:-translate-y-2 data-[state=closed]:data-[side=left]:translate-x-2 data-[state=closed]:data-[side=right]:-translate-x-2 data-[state=closed]:data-[side=top]:translate-y-2",
           "data-[state=closed]:scale-95 data-[state=closed]:opacity-0",
           "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0 data-[state=open]:scale-100",
