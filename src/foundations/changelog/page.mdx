@@ -25,6 +25,8 @@ Apply these to your copy:
 - It's `aria-hidden` by default. Pass `label` when the spinner is the only sign of the wait: it
   renders as visually hidden text inside a `role="status"` (assistive tech may not announce it when
   it first appears).
+- `Popover.SearchInput` (and so `Listbox.SearchInput` / `Menu.SearchInput`) sets
+  `aria-busy={isLoading || undefined}` on its input, since its spinner is now hidden.
 - Under reduced motion it pulses instead of rotating.
 
 The `variant` prop, `SPINNER_FRAMES`, and the `--animate-spinner-dot` / `--animate-spinner-bar`
