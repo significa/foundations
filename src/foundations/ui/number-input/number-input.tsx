@@ -281,10 +281,10 @@ const NumberInputField = ({
 
 // xs/sm groups have no `py`, so the stepper can't inset vertically — it runs
 // flush and side-rounds (`rounded-l-lg` / `rounded-r-lg`) to trace the group's
-// outer curve at the edge. md/lg groups have `py-1`, so the stepper insets
+// outer curve at the edge. md/lg groups have `py-(--inset)`, so the stepper insets
 // horizontally with `mx-(--inset)` and rounds with the next-smaller token —
-// `rounded-{lg,xl}`. The radius scale is calibrated so each step equals
-// `--inset` (`--radius * 2`), keeping corners concentric across the dial.
+// `rounded-{lg,xl}`, `--radius * 2` smaller than the group's. `--inset` is
+// `--radius * 1.5`, so corners stay near-concentric across the dial.
 const stepperStyle = cva({
   base: "inline-flex aspect-square h-full shrink-0 cursor-pointer items-center justify-center self-stretch text-foreground-secondary ring-ring transition-colors outline-none hover:bg-foreground/5 hover:text-foreground focus-visible:ring-(length:--ring-width) disabled:pointer-events-none disabled:opacity-40",
   variants: {

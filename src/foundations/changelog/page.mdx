@@ -12,6 +12,96 @@ meta:
 
 ## November 2026
 
+### Fixed: `OTPInput` ignored `defaultValue`, overflowed narrow containers, and `masked` woke password managers
+
+Four fixes to apply to your copy of `otp-input.tsx`:
+
+- `defaultValue` never showed: it was split into cells in `useState`'s initialiser, before any cell had registered. The value is now derived at render until the first edit.
+- Cells had fixed widths and overflowed containers narrower than the code. They now shrink and stay square, and the root is `w-fit max-w-full`: as wide as its cells, not the container. Cells keep their size at normal widths, but anything you put on the root (`justify-center`, a background, a border) no longer spans the container; pass `w-full` to get the old box back.
+- `masked` used `type="password"` with `autocomplete="one-time-code"`, so password managers offered to save a PIN as a password. Cells stay `type="text"` and draw discs with `-webkit-text-security` (all current browsers), and a new `autoComplete` prop (default `"one-time-code"`) lets a PIN pass `"off"`. The masking is visual only: screen readers read the digits and announce a text field.
+- Cells now set `aria-invalid` with `invalid`, like `Input`.
+
+```diff tsx
+- const [internalValues, setInternalValues] = useState<string[]>(() =>
+-   splitIntoSlots(defaultValue, cellCount),
+- );
+- const values = valueProp !== undefined ? splitIntoSlots(valueProp, cellCount) : internalValues;
++ const [initialValue] = useState(defaultValue);
++ const [internalValues, setInternalValues] = useState<string[] | null>(null);
++ const values =
++   valueProp !== undefined
++     ? splitIntoSlots(valueProp, cellCount)
++     : (internalValues ?? splitIntoSlots(initialValue, cellCount));
+
+- className={cn("flex items-center gap-2", className)}
++ className={cn("flex w-fit max-w-full items-center justify-between gap-2", className)}
+
+- base: "shrink-0 px-0 text-center",
++ base: "aspect-square h-auto min-w-0 shrink px-0 py-0 text-center",
+  variants: {
+    size: { xs: "w-6", sm: "w-8", md: "w-10", lg: "w-12" },
++   masked: { true: "[-webkit-text-security:disc]" },
+  },
+
+- type={masked ? "password" : "text"}
+- autoComplete="one-time-code"
++ type="text"
++ autoComplete={autoComplete}
++ aria-invalid={invalid || undefined}
+- className={cn(otpCellStyle({ size }), className)}
++ className={cn(otpCellStyle({ size, masked }), className)}
+```
+
+Thread `autoComplete` from the root props through the context to the cell.
+
+### Fixed: `Select` chevron ignored the text colour
+
+The chevron was a black or white data-URL SVG, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now two diagonal strokes drawn with `currentColor` gradients on the `<select>` itself: it follows the text colour, the theme and the disabled opacity, mirrors under `rtl:`, is sized per `size`, and is left out for `multiple`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`. Inside `Select.Group` the chevron takes the group's size, read with a new `useInputGroupContext` export from `input.tsx`. Under forced colours, which drop gradient images, the select falls back to its native indicator. In `input.tsx`, the group frame now dims for a disabled select as it does for a disabled input.
+
+```diff tsx
++ const selectChevronStyle = cva({
++   base: [
++     "bg-no-repeat",
++     "bg-[image:linear-gradient(45deg,transparent_calc(50%-0.75px),currentColor_calc(50%-0.75px),currentColor_calc(50%+0.75px),transparent_calc(50%+0.75px)),linear-gradient(135deg,transparent_calc(50%-0.75px),currentColor_calc(50%-0.75px),currentColor_calc(50%+0.75px),transparent_calc(50%+0.75px))]",
++   ],
++   variants: {
++     size: {
++       xs: "bg-size-[4px_4px] bg-position-[calc(100%-12px)_center,calc(100%-8px)_center] pe-6 rtl:bg-position-[8px_center,12px_center]",
++       sm: "bg-size-[4px_4px] bg-position-[calc(100%-16px)_center,calc(100%-12px)_center] pe-8 rtl:bg-position-[12px_center,16px_center]",
++       md: "bg-size-[5px_5px] bg-position-[calc(100%-21px)_center,calc(100%-16px)_center] pe-10 rtl:bg-position-[16px_center,21px_center]",
++       lg: "bg-size-[6px_6px] bg-position-[calc(100%-26px)_center,calc(100%-20px)_center] pe-12 rtl:bg-position-[20px_center,26px_center]",
++     },
++   },
++   defaultVariants: { size: "md" },
++ });
+
++ const chevronSize = useInputGroupContext()?.size ?? size;
+
+  <select
+    data-invalid={invalid || undefined}
++   aria-invalid={invalid || undefined}
+    className={cn(
+      useInputStyle({ variant, size }),
+-     "appearance-none bg-size-[1em] bg-position-[right_--spacing(2)_center] bg-no-repeat pr-10",
+-     'bg-[url("data:image/svg+xml;base64,…")]',
+-     'dark:bg-[url("data:image/svg+xml;base64,…")]',
++     "appearance-none forced-colors:appearance-auto",
++     !props.multiple && selectChevronStyle({ size: chevronSize }),
+      className,
+    )}
+```
+
+```diff tsx
+  // input.tsx
++ const useInputGroupContext = () => use(InputGroupContext);
+- export { CompoundInput as Input, inputStyle, useInputStyle };
++ export { CompoundInput as Input, inputStyle, useInputGroupContext, useInputStyle };
+
+  // input.tsx, inputFrameBase
+- "[:disabled,:has(input:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled)]:opacity-50",
++ "[:disabled,:has(input:disabled,select:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled,select:disabled)]:opacity-50",
+```
+
 ### Changed: `Spinner` ships one style, accessible and motion-safe
 
 `Spinner` used to hard-code `role="progressbar"` and an English `aria-label="loading"`, so a

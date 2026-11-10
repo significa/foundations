@@ -17,6 +17,7 @@ interface OTPInputContextValue {
   inputMode: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   placeholder?: string;
   masked?: boolean;
+  autoComplete: string;
   disabled?: boolean;
   invalid?: boolean;
   rootId?: string;
@@ -45,6 +46,7 @@ interface OTPInputProps extends Omit<React.ComponentPropsWithRef<"div">, "onChan
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   placeholder?: string;
   masked?: boolean;
+  autoComplete?: string;
   disabled?: boolean;
   invalid?: boolean;
 }
@@ -60,6 +62,7 @@ const OTPInput = ({
   inputMode = "numeric",
   placeholder,
   masked,
+  autoComplete = "one-time-code",
   disabled,
   invalid,
   children,
@@ -69,11 +72,14 @@ const OTPInput = ({
   const cellRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [cellCount, setCellCount] = useState(0);
 
-  const [internalValues, setInternalValues] = useState<string[]>(() =>
-    splitIntoSlots(defaultValue, cellCount),
-  );
+  // null until the first edit: cells register after mount, so the initial defaultValue is split at render.
+  const [initialValue] = useState(defaultValue);
+  const [internalValues, setInternalValues] = useState<string[] | null>(null);
 
-  const values = valueProp !== undefined ? splitIntoSlots(valueProp, cellCount) : internalValues;
+  const values =
+    valueProp !== undefined
+      ? splitIntoSlots(valueProp, cellCount)
+      : (internalValues ?? splitIntoSlots(initialValue, cellCount));
 
   // Ref kept in sync with the latest committed values so that focus handlers
   // — which fire synchronously before React re-renders — always see fresh data.
@@ -207,6 +213,7 @@ const OTPInput = ({
       inputMode,
       placeholder,
       masked,
+      autoComplete,
       disabled,
       invalid,
       rootId: id,
@@ -223,6 +230,7 @@ const OTPInput = ({
       inputMode,
       placeholder,
       masked,
+      autoComplete,
       disabled,
       invalid,
       id,
@@ -241,7 +249,7 @@ const OTPInput = ({
         ref={ref}
         data-invalid={invalid || undefined}
         data-disabled={disabled || undefined}
-        className={cn("flex items-center gap-2", className)}
+        className={cn("flex w-fit max-w-full items-center justify-between gap-2", className)}
         {...props}
       >
         <InstanceCounterProvider onChange={setCellCount}>{children}</InstanceCounterProvider>
@@ -253,9 +261,12 @@ const OTPInput = ({
 const otpCellStyle = compose(
   inputStyle,
   cva({
-    base: "shrink-0 px-0 text-center",
+    // Square cells that shrink to fit a narrow container.
+    base: "aspect-square h-auto min-w-0 shrink px-0 py-0 text-center",
     variants: {
       size: { xs: "w-6", sm: "w-8", md: "w-10", lg: "w-12" },
+      // A text input, not type="password": password managers stay off a PIN.
+      masked: { true: "[-webkit-text-security:disc]" },
     },
   }),
 );
@@ -285,6 +296,7 @@ const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
     inputMode,
     placeholder,
     masked,
+    autoComplete,
     disabled,
     invalid,
     rootId,
@@ -305,9 +317,9 @@ const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
     <input
       ref={composedRef}
       id={index === 0 ? rootId : undefined}
-      type={masked ? "password" : "text"}
+      type="text"
       inputMode={inputMode}
-      autoComplete="one-time-code"
+      autoComplete={autoComplete}
       placeholder={placeholder}
       // maxLength={2} instead of 1: allows the browser to hold the previous
       // character alongside the newly typed one so onCellChange can read both
@@ -316,9 +328,10 @@ const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
       value={values[index] ?? ""}
       disabled={disabled}
       data-invalid={invalid || undefined}
+      aria-invalid={invalid || undefined}
       aria-label={`Digit ${index + 1}`}
       {...props}
-      className={cn(otpCellStyle({ size }), className)}
+      className={cn(otpCellStyle({ size, masked }), className)}
       onChange={(e) => onCellChange(index, e.target.value)}
       onKeyDown={(e) => onCellKeyDown(index, e)}
       onFocus={() => onCellFocus(index)}
