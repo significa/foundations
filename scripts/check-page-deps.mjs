@@ -109,10 +109,11 @@ const getItemSourceFiles = async (itemDir, files) => {
 /** Problems with one import of an item's source file, if any. */
 const checkImport = ({ file, specifier, itemDir, itemDirs, declared }) => {
   const target = resolveImport(file, specifier);
-  if (!target || isInside(SETUP_PROVIDED_DIR, target)) return null;
+  if (!target) return null;
 
   const where = `${relative(ROOT, file)} imports "${specifier}"`;
   if (!existsSync(target)) return `${where}, which doesn't exist`;
+  if (isInside(SETUP_PROVIDED_DIR, target)) return null;
   if (!isInside(FOUNDATIONS_DIR, target)) return `${where}, which is outside src/foundations`;
 
   const targetItem = findOwningItem(target, itemDirs);
@@ -153,9 +154,7 @@ const main = async () => {
   const errors = (await Promise.all(pages.map((page) => checkItem(page, itemDirs)))).flat();
   if (errors.length === 0) return;
 
-  process.stderr.write(
-    `Undeclared page dependencies:\n${errors.map((e) => `  ${e}`).join("\n")}\n`,
-  );
+  process.stderr.write(`Page dependency problems:\n${errors.map((e) => `  ${e}`).join("\n")}\n`);
   process.exit(1);
 };
 

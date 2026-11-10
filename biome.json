@@ -20,7 +20,7 @@
           "options": {
             "patterns": [
               {
-                "group": ["../**"],
+                "group": ["..", "../**", "./../**"],
                 "message": "Use the #/ alias for cross-directory imports (e.g. #/foundations/ui/button/button.tsx)."
               }
             ]
