@@ -292,7 +292,8 @@ const ToasterRow = ({ toast, zIndex }: { toast: ToastEntry; zIndex: number }) =>
         "group/toast pointer-events-auto box-border grid *:my-1.5",
         // minmax(0, …) so the row can collapse past the toast's padding and margins
         "grid-rows-[minmax(0,1fr)] starting:grid-rows-[minmax(0,0fr)] data-[status=closed]:grid-rows-[minmax(0,0fr)]",
-        "transition-[grid-template-rows] duration-500 ease-spring",
+        // same timing as the card: this row's transition end is what unmounts it
+        "transition-[grid-template-rows] duration-400 ease-spring data-[status=closed]:duration-200 data-[status=closed]:ease-in",
       )}
     >
       <ToasterItem toast={toast} onDismiss={() => toastStore.remove(toast.id)} />
@@ -331,7 +332,8 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
       className={cn(
         // `box-content`: the measured size is the content's, the border sits outside it
         "relative box-content max-w-88 self-start overflow-hidden rounded-lg border shadow-lg",
-        "transition-[opacity,scale,translate,background-color,border-color,color] duration-500 ease-spring",
+        "transition-[opacity,scale,translate,background-color,border-color,color] duration-400 ease-spring",
+        "group-data-[status=closed]/toast:duration-200 group-data-[status=closed]/toast:ease-in",
         "motion-safe:transition-[opacity,scale,translate,background-color,border-color,color,width,height]",
         "starting:opacity-0 group-data-[status=closed]/toast:opacity-0",
         "motion-safe:starting:scale-95 motion-safe:group-data-[status=closed]/toast:-translate-y-full motion-safe:group-data-[status=closed]/toast:scale-95",
