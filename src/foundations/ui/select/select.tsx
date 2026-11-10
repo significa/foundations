@@ -1,3 +1,4 @@
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 import type { VariantProps } from "cva";
 
 import { Input, type inputStyle, useInputStyle } from "#/foundations/ui/input/input.tsx";
@@ -9,19 +10,21 @@ interface SelectProps extends Omit<React.ComponentPropsWithRef<"select">, "size"
   size?: VariantProps<typeof inputStyle>["size"];
 }
 
+// className sizes the wrapper, so the chevron moves with the select.
 const Select = ({ className, invalid, variant, size, ...props }: SelectProps) => {
   return (
-    <select
-      data-invalid={invalid || undefined}
-      className={cn(
-        useInputStyle({ variant, size }),
-        "appearance-none bg-size-[1em] bg-position-[right_--spacing(2)_center] bg-no-repeat pr-10",
-        'bg-[url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBmaWxsPSJibGFjayIgZD0iTTMuNyA1LjNsNC4zIDQuMyA0LjMtNC4zLjcuNy01IDUtNS01eiIvPjwvc3ZnPg==")]',
-        'dark:bg-[url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTMuNyA1LjNsNC4zIDQuMyA0LjMtNC4zLjcuNy01IDUtNS01eiIvPjwvc3ZnPg==")]',
-        className,
-      )}
-      {...props}
-    />
+    <span className={cn("relative flex w-full min-w-0 items-center self-stretch", className)}>
+      <select
+        data-invalid={invalid || undefined}
+        aria-invalid={invalid || undefined}
+        className={cn(useInputStyle({ variant, size }), "peer appearance-none pr-10")}
+        {...props}
+      />
+      <CaretDownIcon
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 peer-disabled:opacity-50"
+      />
+    </span>
   );
 };
 

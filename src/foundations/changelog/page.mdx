@@ -12,6 +12,81 @@ meta:
 
 ## November 2026
 
+### Fixed: `OTPInput` ignored `defaultValue`, overflowed narrow containers, and `masked` woke password managers
+
+Four fixes to apply to your copy of `otp-input.tsx`:
+
+- `defaultValue` never showed: it was split into cells in `useState`'s initialiser, before any cell had registered. The value is now derived at render until the first edit.
+- Cells had fixed widths and overflowed containers narrower than the code. They now shrink and stay square; at normal widths nothing changes.
+- `masked` used `type="password"` with `autocomplete="one-time-code"`, so password managers offered to save a PIN as a password. Cells stay `type="text"` and draw discs with `-webkit-text-security` (all current browsers), and a new `autoComplete` prop (default `"one-time-code"`) lets a PIN pass `"off"`.
+- Cells now set `aria-invalid` with `invalid`, like `Input`.
+
+```diff tsx
+- const [internalValues, setInternalValues] = useState<string[]>(() =>
+-   splitIntoSlots(defaultValue, cellCount),
+- );
+- const values = valueProp !== undefined ? splitIntoSlots(valueProp, cellCount) : internalValues;
++ const [internalValues, setInternalValues] = useState<string[] | null>(null);
++ const values =
++   valueProp !== undefined
++     ? splitIntoSlots(valueProp, cellCount)
++     : (internalValues ?? splitIntoSlots(defaultValue, cellCount));
+
+- className={cn("flex items-center gap-2", className)}
++ className={cn("flex w-fit max-w-full items-center justify-between gap-2", className)}
+
+- base: "shrink-0 px-0 text-center",
++ base: "aspect-square h-auto min-w-0 shrink px-0 py-0 text-center",
+  variants: {
+    size: { xs: "w-6", sm: "w-8", md: "w-10", lg: "w-12" },
++   masked: { true: "[-webkit-text-security:disc]" },
+  },
+
+- type={masked ? "password" : "text"}
+- autoComplete="one-time-code"
++ type="text"
++ autoComplete={autoComplete}
++ aria-invalid={invalid || undefined}
+- className={cn(otpCellStyle({ size }), className)}
++ className={cn(otpCellStyle({ size, masked }), className)}
+```
+
+Thread `autoComplete` from the root props through the context to the cell.
+
+### Fixed: `Select` chevron ignored the text colour
+
+The chevron was a black or white SVG in a background image, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now a Phosphor `CaretDownIcon` laid over the select, in `currentColor`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`.
+
+The `<select>` now sits in a `span`, and `className` goes on that `span`, so a width or margin moves the chevron with it. Classes that styled the `<select>` itself (padding, radius) need moving to `variant`/`size`, or onto the `select` in your copy. In `input.tsx`, the in-group left padding after an addon also matches an element wrapped one level down, so `Select.Group` keeps its spacing.
+
+```diff tsx
++ import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
+
+- <select
+-   data-invalid={invalid || undefined}
+-   className={cn(useInputStyle({ variant, size }), "appearance-none bg-size-[1em] … pr-10", 'bg-[url(…)]', 'dark:bg-[url(…)]', className)}
+-   {...props}
+- />
++ <span className={cn("relative flex w-full min-w-0 items-center self-stretch", className)}>
++   <select
++     data-invalid={invalid || undefined}
++     aria-invalid={invalid || undefined}
++     className={cn(useInputStyle({ variant, size }), "peer appearance-none pr-10")}
++     {...props}
++   />
++   <CaretDownIcon
++     aria-hidden="true"
++     className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 peer-disabled:opacity-50"
++   />
++ </span>
+```
+
+```diff tsx
+  // input.tsx, inputInGroupStyle (same change for every size)
+- md: "px-4 [&:has(+[data-input-addon])]:pr-3 [[data-input-addon]+&]:pl-3",
++ md: "px-4 [&:has(+[data-input-addon])]:pr-3 [[data-input-addon]+&,[data-input-addon]+*>&]:pl-3",
+```
+
 ### Changed: data table recipe targets `@tanstack/react-table` 9
 
 The [data table recipe](/ui/table#data-table-with-tanstack-table) now uses TanStack Table 9. If you

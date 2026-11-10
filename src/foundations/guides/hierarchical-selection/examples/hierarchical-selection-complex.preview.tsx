@@ -55,6 +55,8 @@ const sampleData: HierarchicalItem[] = [
   },
 ];
 
+export const meta = { layout: "padded" } as const;
+
 export default function ComplexHierarchicalSelection() {
   const [searchQuery, setSearchQuery] = useState("");
 

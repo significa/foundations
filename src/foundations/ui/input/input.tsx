@@ -77,10 +77,10 @@ const inputInGroupStyle = cva({
   base: ["h-full w-full min-w-8 cursor-[inherit] outline-none", ...inputElementStyles],
   variants: {
     size: {
-      xs: "px-2 [&:has(+[data-input-addon])]:pr-1 [[data-input-addon]+&]:pl-1",
-      sm: "px-3 [&:has(+[data-input-addon])]:pr-2 [[data-input-addon]+&]:pl-2",
-      md: "px-4 [&:has(+[data-input-addon])]:pr-3 [[data-input-addon]+&]:pl-3",
-      lg: "px-5 [&:has(+[data-input-addon])]:pr-4 [[data-input-addon]+&]:pl-4",
+      xs: "px-2 [&:has(+[data-input-addon])]:pr-1 [[data-input-addon]+&,[data-input-addon]+*>&]:pl-1",
+      sm: "px-3 [&:has(+[data-input-addon])]:pr-2 [[data-input-addon]+&,[data-input-addon]+*>&]:pl-2",
+      md: "px-4 [&:has(+[data-input-addon])]:pr-3 [[data-input-addon]+&,[data-input-addon]+*>&]:pl-3",
+      lg: "px-5 [&:has(+[data-input-addon])]:pr-4 [[data-input-addon]+&,[data-input-addon]+*>&]:pl-4",
     },
   },
   defaultVariants: {
