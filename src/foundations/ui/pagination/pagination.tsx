@@ -1,8 +1,8 @@
 import { CaretLeftIcon, CaretRightIcon, DotsThreeIcon } from "@phosphor-icons/react/dist/ssr";
 import { useMemo } from "react";
 
-import { Slot, Slottable } from "@/foundations/components/slot/slot";
-import { cn, cva } from "@/lib/utils/classnames";
+import { Slot, Slottable } from "#/foundations/components/slot/slot.tsx";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const paginationLinkStyle = cva({
   base: [

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cva } from "@/lib/utils/classnames";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
+import { cva } from "#/lib/utils/classnames.ts";
 
 interface CheckboxProps extends Omit<React.ComponentPropsWithRef<"input">, "type"> {
   indeterminate?: boolean;

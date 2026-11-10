@@ -10,10 +10,10 @@ import {
   useRef,
   useState,
 } from "react";
-import { Slot } from "@/foundations/components/slot/slot";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn } from "@/lib/utils/classnames";
-import { buttonStyle } from "../button/button";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { buttonStyle } from "#/foundations/ui/button/button.tsx";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 type ToggleStyleProps = Pick<VariantProps<typeof buttonStyle>, "size" | "square">;
 

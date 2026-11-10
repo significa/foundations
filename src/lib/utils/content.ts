@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import { getGitCreateTime, getGitLastCommitShortSha, getGitLastModifiedTime } from "./git";
+import { getGitCreateTime, getGitLastCommitShortSha, getGitLastModifiedTime } from "./git.ts";
 
 const getPageCreateTime = async (page: CollectionEntry<"pages">) => {
   const pageFile = page.filePath;

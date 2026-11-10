@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
-import { Table } from "@/foundations/ui/table/table";
+import { Checkbox } from "#/foundations/ui/checkbox/checkbox.tsx";
+import { Table } from "#/foundations/ui/table/table.tsx";
 
 export const meta = { layout: "padded" } as const;
 

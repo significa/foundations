@@ -1,4 +1,4 @@
-import { Spinner } from "@/foundations/ui/spinner/spinner";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
 
 const variants = ["ring", "dots", "bars", "frames"] as const;
 

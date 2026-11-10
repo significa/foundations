@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/foundations/ui/button/button";
-import { Field } from "@/foundations/ui/field/field";
-import { Input } from "@/foundations/ui/input/input";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Field } from "#/foundations/ui/field/field.tsx";
+import { Input } from "#/foundations/ui/input/input.tsx";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email address."),

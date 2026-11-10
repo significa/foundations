@@ -1,4 +1,4 @@
-import { Slider } from "@/foundations/ui/slider/slider";
+import { Slider } from "#/foundations/ui/slider/slider.tsx";
 
 export default function SliderPreview() {
   return (

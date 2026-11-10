@@ -21,9 +21,9 @@ import {
 } from "@floating-ui/react";
 import { createContext, use, useCallback, useMemo, useRef, useState } from "react";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { useTopLayer } from "#/foundations/hooks/use-top-layer/use-top-layer.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 // `popover="hint"` is the right type for tooltips: hints stack above any
 // `popover="manual"` already open (so a Tooltip inside a Popover floats above

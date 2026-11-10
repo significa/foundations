@@ -1,4 +1,4 @@
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import { Tooltip } from "#/foundations/ui/tooltip/tooltip.tsx";
 
 export default function TooltipScrollPreview() {
   return (

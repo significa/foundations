@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { Egg } from "@/components/icons/egg";
-import { Marquee } from "@/foundations/components/marquee/marquee";
+import { Egg } from "#/components/icons/egg.tsx";
+import { Marquee } from "#/foundations/components/marquee/marquee.tsx";
 
 const MarqueeDurationExample = () => {
   const [duration, setDuration] = useState(1000);

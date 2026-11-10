@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 import { useState } from "react";
 
-import { DatePicker } from "@/foundations/ui/date-picker/date-picker";
-import { Menu } from "@/foundations/ui/menu/menu";
+import { DatePicker } from "#/foundations/ui/date-picker/date-picker.tsx";
+import { Menu } from "#/foundations/ui/menu/menu.tsx";
 
 export default function DatePickerShortcutsPreview() {
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);

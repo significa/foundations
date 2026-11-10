@@ -1,4 +1,4 @@
-import type { FontCategory } from "./storage";
+import type { FontCategory } from "./storage.ts";
 
 export type FontMeta = { family: string; category: FontCategory };
 

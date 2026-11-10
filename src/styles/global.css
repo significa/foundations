@@ -1,6 +1,6 @@
 @import "tailwindcss" source("../");
 
-@import "../foundations/setup/globals-data-attr.css";
+@import "#/foundations/setup/globals-data-attr.css";
 
 @import "./markdown.css";
 

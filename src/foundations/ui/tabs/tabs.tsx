@@ -9,8 +9,8 @@ import {
   useState,
 } from "react";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 type TabsVariant = "pill" | "underline";
 

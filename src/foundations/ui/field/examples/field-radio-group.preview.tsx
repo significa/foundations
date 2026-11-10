@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Field } from "@/foundations/ui/field/field";
-import { Radio } from "@/foundations/ui/radio/radio";
+import { Field } from "#/foundations/ui/field/field.tsx";
+import { Radio } from "#/foundations/ui/radio/radio.tsx";
 
 const plans = [
   { value: "free", label: "Free", description: "For personal projects." },

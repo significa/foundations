@@ -1,8 +1,6 @@
 import { useState } from "react";
-
-import { Button } from "@/foundations/ui/button/button";
-
-import { useElementSize } from "../use-element-size";
+import { useElementSize } from "#/foundations/hooks/use-element-size/use-element-size.ts";
+import { Button } from "#/foundations/ui/button/button.tsx";
 
 const SHORT = "Saved.";
 const LONG =

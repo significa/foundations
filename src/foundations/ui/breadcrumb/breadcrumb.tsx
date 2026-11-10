@@ -1,7 +1,7 @@
 import { CaretRightIcon, DotsThreeIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const Breadcrumb = ({ ref, className, ...props }: React.ComponentPropsWithRef<"nav">) => {
   return <nav ref={ref} aria-label="breadcrumb" className={cn("text-sm", className)} {...props} />;

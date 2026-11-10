@@ -1,10 +1,10 @@
 import { CalendarIcon, CaretUpDownIcon } from "@phosphor-icons/react/dist/ssr";
 import type { VariantProps } from "cva";
 
-import { Calendar } from "@/foundations/ui/calendar/calendar";
-import { inputStyle } from "@/foundations/ui/input/input";
-import { Menu, useMenuPopoverContext } from "@/foundations/ui/menu/menu";
-import { cn } from "@/lib/utils/classnames";
+import { Calendar } from "#/foundations/ui/calendar/calendar.tsx";
+import { inputStyle } from "#/foundations/ui/input/input.tsx";
+import { Menu, useMenuPopoverContext } from "#/foundations/ui/menu/menu.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const DatePicker = ({ children, ...props }: React.ComponentProps<typeof Menu>) => {
   return <Menu {...props}>{children}</Menu>;

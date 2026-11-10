@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ColorPicker, type HSVA } from "@/foundations/ui/color-picker/color-picker";
+import { ColorPicker, type HSVA } from "#/foundations/ui/color-picker/color-picker.tsx";
 
 export default function ColorPickerAllControls() {
   const [color, setColor] = useState<HSVA>([280, 0.6, 0.9, 0.8]);

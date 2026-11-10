@@ -5,7 +5,7 @@ import {
   FileUpload,
   formatBytes,
   type RejectedFileEntry,
-} from "@/foundations/ui/file-upload/file-upload";
+} from "#/foundations/ui/file-upload/file-upload.tsx";
 
 const ERROR_LABEL: Record<string, string> = {
   "invalid-type": "Wrong file type",

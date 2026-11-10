@@ -1,11 +1,11 @@
 ---
 import { getCollection } from "astro:content";
 import type { HTMLAttributes } from "astro/types";
-import Footer from "@/components/footer.astro";
-import Header from "@/components/header.astro";
-import { Menu } from "@/components/menu";
-import { cn } from "@/lib/utils/classnames";
-import { getNavigationItems } from "@/lib/utils/navigation";
+import Footer from "#/components/footer.astro";
+import Header from "#/components/header.astro";
+import { Menu } from "#/components/menu.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
+import { getNavigationItems } from "#/lib/utils/navigation.ts";
 
 type Props = HTMLAttributes<"div">;
 

@@ -1,5 +1,5 @@
-import { useMousePan } from "@/foundations/hooks/use-mouse-pan/use-mouse-pan";
-import { cn } from "@/lib/utils/classnames";
+import { useMousePan } from "#/foundations/hooks/use-mouse-pan/use-mouse-pan.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const UseMousePanClickables = () => {
   const { ref } = useMousePan<HTMLDivElement>();

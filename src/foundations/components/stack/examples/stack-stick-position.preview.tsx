@@ -1,7 +1,7 @@
 import { MouseScrollIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Stack } from "@/foundations/components/stack/stack";
-import { Divider } from "@/foundations/ui/divider/divider";
+import { Stack } from "#/foundations/components/stack/stack.tsx";
+import { Divider } from "#/foundations/ui/divider/divider.tsx";
 
 const StackStickPositionPreview = () => {
   return (

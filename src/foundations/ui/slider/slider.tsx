@@ -1,8 +1,8 @@
 import { createContext, use, useCallback, useMemo, useRef, useState } from "react";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn, cva } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 interface SliderContextValue {
   value: number;

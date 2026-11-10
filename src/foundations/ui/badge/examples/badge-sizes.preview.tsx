@@ -1,4 +1,4 @@
-import { Badge } from "@/foundations/ui/badge/badge";
+import { Badge } from "#/foundations/ui/badge/badge.tsx";
 
 export default function BadgeSizesPreview() {
   return (

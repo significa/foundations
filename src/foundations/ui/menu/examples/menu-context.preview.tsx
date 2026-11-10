@@ -5,7 +5,7 @@ import {
   TrashIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
-import { Menu } from "@/foundations/ui/menu/menu";
+import { Menu } from "#/foundations/ui/menu/menu.tsx";
 
 export const meta = { layout: "centered" } as const;
 

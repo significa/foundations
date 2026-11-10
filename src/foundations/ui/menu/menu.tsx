@@ -31,17 +31,17 @@ import {
   useState,
 } from "react";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { useStableCallback } from "@/foundations/hooks/use-stable-callback/use-stable-callback";
-import { Divider } from "@/foundations/ui/divider/divider";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { useStableCallback } from "#/foundations/hooks/use-stable-callback/use-stable-callback.ts";
+import { Divider } from "#/foundations/ui/divider/divider.tsx";
 import {
   Popover,
   PopoverContext,
   type PopoverOrigin,
   usePopoverContext,
   usePopoverFloating,
-} from "@/foundations/ui/popover/popover";
-import { cn, cva } from "@/lib/utils/classnames";
+} from "#/foundations/ui/popover/popover.tsx";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const HOVER_OPEN_DELAY = 75;
 const HOVER_CLOSE_DELAY = 150;

@@ -1,6 +1,6 @@
 import { CaretDownIcon, CaretUpDownIcon, CaretUpIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { cn, cva } from "@/lib/utils/classnames";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const tableStyle = cva({
   base: [

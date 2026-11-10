@@ -1,4 +1,4 @@
-import { Spinner } from "@/foundations/ui/spinner/spinner";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
 
 export default function SpinnerSizesExample() {
   return (

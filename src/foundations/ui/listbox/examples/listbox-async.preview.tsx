@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Listbox } from "@/foundations/ui/listbox/listbox";
+import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
 
 const FRUITS = [
   "Apple",

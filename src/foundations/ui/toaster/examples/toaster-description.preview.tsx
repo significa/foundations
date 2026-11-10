@@ -1,5 +1,5 @@
-import { Button } from "@/foundations/ui/button/button";
-import { toast } from "@/foundations/ui/toaster/toaster";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { toast } from "#/foundations/ui/toaster/toaster.tsx";
 
 const ToasterDescriptionPreview = () => {
   return (

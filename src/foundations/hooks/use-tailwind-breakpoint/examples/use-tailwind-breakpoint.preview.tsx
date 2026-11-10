@@ -1,6 +1,5 @@
-import { cn } from "@/lib/utils/classnames";
-
-import { useTailwindBreakpoint } from "../use-tailwind-breakpoint";
+import { useTailwindBreakpoint } from "#/foundations/hooks/use-tailwind-breakpoint/use-tailwind-breakpoint.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 export default function UseTailwindBreakpointPreview() {
   const sm = useTailwindBreakpoint("sm");

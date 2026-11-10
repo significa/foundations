@@ -1,4 +1,4 @@
-import { useElementSize } from "../use-element-size";
+import { useElementSize } from "#/foundations/hooks/use-element-size/use-element-size.ts";
 
 const PEOPLE = ["AM", "BK", "CL", "DS", "EN", "FO", "GP", "HR", "IT", "JV", "KW", "LZ"];
 const AVATAR = 32;

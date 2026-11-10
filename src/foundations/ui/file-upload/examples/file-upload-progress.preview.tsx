@@ -5,7 +5,7 @@ import {
   type FileEntry,
   FileUpload,
   type FileUploadStatus,
-} from "@/foundations/ui/file-upload/file-upload";
+} from "#/foundations/ui/file-upload/file-upload.tsx";
 
 interface UploadState {
   status: FileUploadStatus;

@@ -1,7 +1,7 @@
 import { defineCollection, reference } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
-import { previewLoader, previewMetaSchema } from "@/lib/preview";
+import { previewLoader, previewMetaSchema } from "#/lib/preview.ts";
 
 const previews = defineCollection({
   loader: previewLoader({

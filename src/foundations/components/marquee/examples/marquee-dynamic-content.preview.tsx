@@ -1,8 +1,8 @@
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
 
-import { Marquee } from "@/foundations/components/marquee/marquee";
-import { Button } from "@/foundations/ui/button/button";
+import { Marquee } from "#/foundations/components/marquee/marquee.tsx";
+import { Button } from "#/foundations/ui/button/button.tsx";
 
 const MarqueeDynamicContentExample = () => {
   const [items, setItems] = useState(["0"]);

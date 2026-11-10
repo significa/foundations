@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 
-import { nextFrame } from "@/foundations/utils/dom/next-frame";
+import { nextFrame } from "#/foundations/utils/dom/next-frame.ts";
 
 type Status = "unmounted" | "initial" | "open" | "closed";
 

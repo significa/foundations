@@ -6,8 +6,8 @@ import {
   TextItalicIcon,
   TextUnderlineIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { ToggleGroup } from "@/foundations/ui/toggle/toggle";
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import { ToggleGroup } from "#/foundations/ui/toggle/toggle.tsx";
+import { Tooltip } from "#/foundations/ui/tooltip/tooltip.tsx";
 
 export default function ToggleToolbarPreview() {
   return (

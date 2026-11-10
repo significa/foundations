@@ -1,7 +1,7 @@
 import type { VariantProps } from "cva";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { cn, cva } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const kbdStyle = cva({
   base: [

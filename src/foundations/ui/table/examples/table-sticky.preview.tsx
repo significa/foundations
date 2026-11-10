@@ -1,4 +1,4 @@
-import { Table } from "@/foundations/ui/table/table";
+import { Table } from "#/foundations/ui/table/table.tsx";
 
 export const meta = { layout: "padded" } as const;
 

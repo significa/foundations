@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 
-import { useDelayedLoading } from "@/foundations/hooks/use-delayed-loading/use-delayed-loading";
-import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
-import { Button } from "@/foundations/ui/button/button";
-import { Progress } from "@/foundations/ui/progress/progress";
-import { Spinner } from "@/foundations/ui/spinner/spinner";
-import type { PreviewMeta } from "@/lib/preview";
+import { useDelayedLoading } from "#/foundations/hooks/use-delayed-loading/use-delayed-loading.ts";
+import { useTicker } from "#/foundations/hooks/use-ticker/use-ticker.ts";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Progress } from "#/foundations/ui/progress/progress.tsx";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
+import type { PreviewMeta } from "#/lib/preview.ts";
 
 type Indicator = "none" | "spinner" | "progress";
 

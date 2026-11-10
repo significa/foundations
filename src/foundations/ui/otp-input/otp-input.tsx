@@ -3,10 +3,10 @@ import { createContext, use, useCallback, useMemo, useRef, useState } from "reac
 import {
   InstanceCounterProvider,
   useInstanceCounter,
-} from "@/foundations/components/instance-counter/instance-counter";
-import { inputStyle } from "@/foundations/ui/input/input";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn, compose, cva } from "@/lib/utils/classnames";
+} from "#/foundations/components/instance-counter/instance-counter.tsx";
+import { inputStyle } from "#/foundations/ui/input/input.tsx";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
+import { cn, compose, cva } from "#/lib/utils/classnames.ts";
 
 const splitIntoSlots = (value: string, length: number): string[] =>
   Array.from({ length }, (_, i) => value[i] ?? "");

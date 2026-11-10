@@ -1,4 +1,4 @@
-import { Select } from "@/foundations/ui/select/select";
+import { Select } from "#/foundations/ui/select/select.tsx";
 
 export default function SelectSizes() {
   return (

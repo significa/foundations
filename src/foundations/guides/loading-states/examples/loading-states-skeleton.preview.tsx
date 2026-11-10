@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 
-import { useDelayedLoading } from "@/foundations/hooks/use-delayed-loading/use-delayed-loading";
-import { Avatar } from "@/foundations/ui/avatar/avatar";
-import { Button } from "@/foundations/ui/button/button";
-import { Skeleton } from "@/foundations/ui/skeleton/skeleton";
-import type { PreviewMeta } from "@/lib/preview";
+import { useDelayedLoading } from "#/foundations/hooks/use-delayed-loading/use-delayed-loading.ts";
+import { Avatar } from "#/foundations/ui/avatar/avatar.tsx";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Skeleton } from "#/foundations/ui/skeleton/skeleton.tsx";
+import type { PreviewMeta } from "#/lib/preview.ts";
 
 function LoadingStatesSkeletonPreview() {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,6 +1,6 @@
 import { CreditCardIcon, GearIcon, UsersIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Tabs } from "@/foundations/ui/tabs/tabs";
+import { Tabs } from "#/foundations/ui/tabs/tabs.tsx";
 
 export default function TabsPreview() {
   return (

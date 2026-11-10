@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { Avatar } from "@/foundations/ui/avatar/avatar";
-import { Listbox } from "@/foundations/ui/listbox/listbox";
+import { Avatar } from "#/foundations/ui/avatar/avatar.tsx";
+import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },

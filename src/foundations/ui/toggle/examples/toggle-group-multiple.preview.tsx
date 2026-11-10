@@ -5,7 +5,7 @@ import {
   TextUnderlineIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
-import { ToggleGroup } from "@/foundations/ui/toggle/toggle";
+import { ToggleGroup } from "#/foundations/ui/toggle/toggle.tsx";
 
 export default function ToggleGroupMultiplePreview() {
   return (

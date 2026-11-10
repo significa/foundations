@@ -1,6 +1,6 @@
 import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
-import { SITE_ORIGIN } from "@/lib/constants";
+import { SITE_ORIGIN } from "#/lib/constants.ts";
 
 export const GET: APIRoute = async ({ site }) => {
   const pages = await getCollection("pages");

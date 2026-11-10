@@ -1,5 +1,5 @@
-import { Modal } from "@/foundations/ui/modal/modal";
-import { cn, cva } from "@/lib/utils/classnames";
+import { Modal } from "#/foundations/ui/modal/modal.tsx";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 type DrawerProps = React.ComponentProps<typeof Modal>;
 

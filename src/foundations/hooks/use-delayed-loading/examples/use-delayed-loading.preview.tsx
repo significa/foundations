@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 
-import { useDelayedLoading } from "@/foundations/hooks/use-delayed-loading/use-delayed-loading";
-import { Button } from "@/foundations/ui/button/button";
-import { Spinner } from "@/foundations/ui/spinner/spinner";
-import type { PreviewMeta } from "@/lib/preview";
+import { useDelayedLoading } from "#/foundations/hooks/use-delayed-loading/use-delayed-loading.ts";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
+import type { PreviewMeta } from "#/lib/preview.ts";
 
 const cases = [
   {

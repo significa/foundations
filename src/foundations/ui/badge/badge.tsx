@@ -1,7 +1,7 @@
 import type { VariantProps } from "cva";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { cn, cva } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const badgeStyle = cva({
   base: "inline-flex items-center gap-1 rounded-full leading-none font-semibold ring-1 ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",

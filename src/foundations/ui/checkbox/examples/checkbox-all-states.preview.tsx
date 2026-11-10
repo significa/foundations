@@ -1,4 +1,4 @@
-import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
+import { Checkbox } from "#/foundations/ui/checkbox/checkbox.tsx";
 
 const labelClass = "font-medium text-base text-foreground";
 

@@ -1,9 +1,7 @@
 import { useState } from "react";
-
-import { Button } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils/classnames";
-
-import { useElementTransition } from "../use-element-transition";
+import { useElementTransition } from "#/foundations/hooks/use-element-transition/use-element-transition.ts";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 function UseElementTransitionDefaultPreview() {
   const [toggled, setToggled] = useState(false);

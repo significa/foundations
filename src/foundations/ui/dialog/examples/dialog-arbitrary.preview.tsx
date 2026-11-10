@@ -1,7 +1,7 @@
 import { XIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Button, IconButton } from "@/foundations/ui/button/button";
-import { Dialog } from "@/foundations/ui/dialog/dialog";
+import { Button, IconButton } from "#/foundations/ui/button/button.tsx";
+import { Dialog } from "#/foundations/ui/dialog/dialog.tsx";
 
 export default function DialogArbitraryPreview() {
   return (

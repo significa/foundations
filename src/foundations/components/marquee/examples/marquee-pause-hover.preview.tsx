@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { Egg } from "@/components/icons/egg";
-import { Marquee } from "@/foundations/components/marquee/marquee";
+import { Egg } from "#/components/icons/egg.tsx";
+import { Marquee } from "#/foundations/components/marquee/marquee.tsx";
 
 const MarqueePauseHoverExample = () => {
   const [isPaused, setIsPaused] = useState(false);

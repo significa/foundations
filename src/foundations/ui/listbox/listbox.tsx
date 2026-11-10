@@ -33,10 +33,10 @@ import {
   useState,
 } from "react";
 
-import { Divider } from "@/foundations/ui/divider/divider";
-import { inputStyle } from "@/foundations/ui/input/input";
-import { Popover } from "@/foundations/ui/popover/popover";
-import { cn } from "@/lib/utils/classnames";
+import { Divider } from "#/foundations/ui/divider/divider.tsx";
+import { inputStyle } from "#/foundations/ui/input/input.tsx";
+import { Popover } from "#/foundations/ui/popover/popover.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 // Utils
 

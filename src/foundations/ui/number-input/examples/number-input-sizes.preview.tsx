@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NumberInput } from "@/foundations/ui/number-input/number-input";
+import { NumberInput } from "#/foundations/ui/number-input/number-input.tsx";
 
 const sizes = ["xs", "sm", "md", "lg"] as const;
 

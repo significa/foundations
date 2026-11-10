@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 
-import { Listbox } from "@/foundations/ui/listbox/listbox";
+import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },

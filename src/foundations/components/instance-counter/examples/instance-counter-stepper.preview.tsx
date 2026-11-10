@@ -3,8 +3,8 @@ import { createContext, type ReactNode, use, useState } from "react";
 import {
   InstanceCounterProvider,
   useInstanceCounter,
-} from "@/foundations/components/instance-counter/instance-counter";
-import { Button } from "@/foundations/ui/button/button";
+} from "#/foundations/components/instance-counter/instance-counter.tsx";
+import { Button } from "#/foundations/ui/button/button.tsx";
 
 const ITEMS = ["🥚", "🐣", "🐥", "🐓"];
 

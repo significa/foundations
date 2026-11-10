@@ -8,9 +8,9 @@ import {
   PencilSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useMemo, useState } from "react";
-import { Button } from "@/foundations/ui/button/button";
-import { Dialog } from "@/foundations/ui/dialog/dialog";
-import { Menu } from "@/foundations/ui/menu/menu";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Dialog } from "#/foundations/ui/dialog/dialog.tsx";
+import { Menu } from "#/foundations/ui/menu/menu.tsx";
 
 const ACTIONS: {
   group: string;

@@ -1,6 +1,6 @@
 import { UploadSimpleIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { FileUpload } from "@/foundations/ui/file-upload/file-upload";
+import { FileUpload } from "#/foundations/ui/file-upload/file-upload.tsx";
 
 export default function FileUploadPreview() {
   return (

@@ -1,6 +1,6 @@
-import { Button } from "@/foundations/ui/button/button";
-import { Drawer } from "@/foundations/ui/drawer/drawer";
-import { toast } from "@/foundations/ui/toaster/toaster";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Drawer } from "#/foundations/ui/drawer/drawer.tsx";
+import { toast } from "#/foundations/ui/toaster/toaster.tsx";
 
 const ToasterDrawerPreview = () => {
   return (

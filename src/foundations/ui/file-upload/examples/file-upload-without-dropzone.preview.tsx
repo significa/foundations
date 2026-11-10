@@ -1,9 +1,9 @@
 import { CameraIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useMemo, useState } from "react";
 
-import { Avatar } from "@/foundations/ui/avatar/avatar";
-import { Button } from "@/foundations/ui/button/button";
-import { FileUpload } from "@/foundations/ui/file-upload/file-upload";
+import { Avatar } from "#/foundations/ui/avatar/avatar.tsx";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { FileUpload } from "#/foundations/ui/file-upload/file-upload.tsx";
 
 export default function FileUploadWithoutDropzonePreview() {
   const [file, setFile] = useState<File | null>(null);

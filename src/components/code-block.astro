@@ -1,9 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { CopyButton } from "@/components/copy-button";
-import { Button } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils/classnames";
-import { uid } from "@/lib/utils/uid";
+import { CopyButton } from "./copy-button.tsx";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
+import { uid } from "#/lib/utils/uid.ts";
 
 type Props = Omit<HTMLAttributes<"div">, "id"> & {
   collapsible?: boolean;

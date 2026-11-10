@@ -1,14 +1,15 @@
 import { useState } from "react";
-
-import { Button } from "@/foundations/ui/button/button";
-import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
-import { Disclosure } from "@/foundations/ui/disclosure/disclosure";
-import { Divider } from "@/foundations/ui/divider/divider";
-import { Input } from "@/foundations/ui/input/input";
-import { cn } from "@/lib/utils/classnames";
-
-import { filterHierarchicalData, type HierarchicalItem } from "../hierarchical-data";
-import { useHierarchicalSelection } from "../use-hierarchical-selection";
+import {
+  filterHierarchicalData,
+  type HierarchicalItem,
+} from "#/foundations/guides/hierarchical-selection/hierarchical-data.ts";
+import { useHierarchicalSelection } from "#/foundations/guides/hierarchical-selection/use-hierarchical-selection.tsx";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Checkbox } from "#/foundations/ui/checkbox/checkbox.tsx";
+import { Disclosure } from "#/foundations/ui/disclosure/disclosure.tsx";
+import { Divider } from "#/foundations/ui/divider/divider.tsx";
+import { Input } from "#/foundations/ui/input/input.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const sampleData: HierarchicalItem[] = [
   {

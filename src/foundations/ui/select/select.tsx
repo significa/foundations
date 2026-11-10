@@ -1,7 +1,7 @@
 import type { VariantProps } from "cva";
 
-import { Input, type inputStyle, useInputStyle } from "@/foundations/ui/input/input";
-import { cn } from "@/lib/utils/classnames";
+import { Input, type inputStyle, useInputStyle } from "#/foundations/ui/input/input.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 interface SelectProps extends Omit<React.ComponentPropsWithRef<"select">, "size"> {
   invalid?: boolean;

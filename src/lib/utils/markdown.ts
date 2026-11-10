@@ -3,7 +3,7 @@ import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse";
 import { unified } from "unified";
 import type z from "zod";
-import { SITE_ORIGIN } from "@/lib/constants";
+import { SITE_ORIGIN } from "#/lib/constants.ts";
 
 const markdown = (...lines: string[]) => {
   return lines.join("\n");

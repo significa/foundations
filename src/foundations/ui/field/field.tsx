@@ -1,6 +1,6 @@
 import { createContext, use, useCallback, useEffect, useId, useMemo, useState } from "react";
-import { Slot } from "@/foundations/components/slot/slot";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 interface FieldContextValue {
   controlId: string;

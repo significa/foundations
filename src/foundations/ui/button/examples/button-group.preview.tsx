@@ -5,7 +5,7 @@ import {
   TextUnderlineIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
-import { Button, IconButton } from "@/foundations/ui/button/button";
+import { Button, IconButton } from "#/foundations/ui/button/button.tsx";
 
 export default function ButtonGroupPreview() {
   return (

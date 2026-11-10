@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/classnames";
+import { cn } from "#/lib/utils/classnames.ts";
 
 interface DividerProps extends React.ComponentPropsWithRef<"div"> {
   orientation?: "horizontal" | "vertical";

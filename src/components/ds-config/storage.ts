@@ -1,4 +1,4 @@
-import { type ColorToken, DEFAULT_SCHEME_ID, type TokenValues } from "./schemes";
+import { type ColorToken, DEFAULT_SCHEME_ID, type TokenValues } from "./schemes.ts";
 
 export const STORAGE_KEY = "foundations-ds-config";
 

@@ -1,7 +1,6 @@
-import { cn } from "@/lib/utils/classnames";
-
-import { Sequence } from "../sequence";
-import { eras as CONTENT } from "./content";
+import { Sequence } from "#/foundations/components/sequence/sequence.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
+import { eras as CONTENT } from "./content.ts";
 
 const SequencePreview = () => {
   return (

@@ -1,10 +1,10 @@
 import { MagnifyingGlassIcon, WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { useCallback, useEffect, useState } from "react";
-import { useKeyboardShortcut } from "@/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut";
-import { IconButton } from "@/foundations/ui/button/button";
-import { Dialog } from "@/foundations/ui/dialog/dialog";
-import { Menu } from "@/foundations/ui/menu/menu";
-import type { Pagefind } from "@/lib/types/pagefind";
+import { useKeyboardShortcut } from "#/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut.ts";
+import { IconButton } from "#/foundations/ui/button/button.tsx";
+import { Dialog } from "#/foundations/ui/dialog/dialog.tsx";
+import { Menu } from "#/foundations/ui/menu/menu.tsx";
+import type { Pagefind } from "#/lib/types/pagefind.ts";
 
 const MAX_ITEMS_PER_GROUP = 7;
 

@@ -1,5 +1,5 @@
-import { Field } from "@/foundations/ui/field/field";
-import { Input } from "@/foundations/ui/input/input";
+import { Field } from "#/foundations/ui/field/field.tsx";
+import { Input } from "#/foundations/ui/input/input.tsx";
 
 export default function FieldPreview() {
   return (

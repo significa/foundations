@@ -3,8 +3,8 @@
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { add, isSameDay, isSameMonth } from "date-fns";
 import { useMemo, useState } from "react";
-import { IconButton } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils/classnames";
+import { IconButton } from "#/foundations/ui/button/button.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 /**
  * Generate a matrix of dates for a given month
