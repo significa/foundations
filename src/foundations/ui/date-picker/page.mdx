@@ -56,7 +56,37 @@ Extends the [`Menu.Trigger`](/ui/menu) component.
 
 ### DatePicker.Panel
 
-Extends the [`Calendar`](/ui/calendar) component.
+Extends the [`Menu.Items`](/ui/menu) component: `className`, `style`, `ref` and other element props land on the panel. It renders a [`Calendar`](/ui/calendar) followed by any `children`, and closes when a date is picked.
+
+<PropsTable
+  definition={{
+    mode: {
+      type: ['"single"', '"range"'],
+      default: '"single"',
+      description: "Pick one date or a range.",
+    },
+    value: {
+      type: "Date | [Date, Date] | null",
+      description: "The selected date, or range in range mode.",
+    },
+    onDateChange: {
+      type: "(value: Date | [Date, Date]) => void",
+      description: "Called with the picked date (or range); the panel closes after.",
+    },
+    getIsDisabled: {
+      type: "(date: Date) => boolean",
+      description: "Passed to the Calendar.",
+    },
+    startWeekOn: {
+      type: "0 | 1 | 2 | 3 | 4 | 5 | 6",
+      description: "Passed to the Calendar.",
+    },
+    locale: {
+      type: "Intl.LocalesArgument",
+      description: "Passed to the Calendar.",
+    },
+  }}
+/>
 
 ## Examples
 

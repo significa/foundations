@@ -9,8 +9,6 @@ dependencies:
     href: /components/slot
   - name: useTopLayer
     href: /hooks/use-top-layer
-  - name: Spinner
-    href: /ui/spinner
   - name: "@floating-ui/react"
     href: https://floating-ui.com/docs/react
 
@@ -21,7 +19,6 @@ folder: UI
 
 - **Smart Positioning**: Automatically adjusts position to stay in view
 - **Focus Management**: Optional modal mode with focus trapping
-- **Search Support**: Built-in search input component
 - **Empty States**: Dedicated component for empty state messages
 - **Flexible Triggers**: Support for custom trigger elements
 
@@ -32,7 +29,6 @@ folder: UI
   <Popover.Trigger />
   <Popover.Content>
     <Popover.Close />
-    <Popover.SearchInput />
     <Popover.Empty />
   </Popover.Content>
 </Popover>
@@ -108,22 +104,6 @@ Extends the `button` element.
   }}
 />
 
-### Popover.SearchInput
-
-Extends the `input` element.
-
-A styled input with a search icon, useful for filtering content inside the popover.
-
-<PropsTable
-  definition={{
-    isLoading: {
-      type: "boolean",
-      description: "When true, replaces the leading magnifying-glass icon with a spinner. Useful for async-filtered content.",
-      default: "false",
-    },
-  }}
-/>
-
 ### Popover.Empty
 
 Extends the `div` element.
@@ -164,7 +144,7 @@ Example showing how to customize the popover width.
 
 ### Search Input
 
-Using the built-in search input for filtering content.
+Compose a search field from [`Input.Group`](/ui/input) and [`Input.Addon`](/ui/input). For a list the keyboard moves through while focus stays in the field, use [`Menu.SearchInput`](/ui/menu#menusearchinput) or [`Listbox.SearchInput`](/ui/listbox#listboxsearchinput) instead.
 
 <Preview slug="popover-search" />
 

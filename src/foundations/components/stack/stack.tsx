@@ -1,17 +1,19 @@
-import { type HTMLAttributes, type ReactElement, type ReactNode, useEffect, useRef } from "react";
+import { type ReactElement, type ReactNode, useEffect, useMemo, useRef } from "react";
 
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { debounce } from "#/foundations/utils/debounce/debounce.ts";
 import { sum } from "#/foundations/utils/math/sum.ts";
 
 const px = (value: number) => (Number.isNaN(value) ? undefined : `${value}px`);
 
-interface StackProps extends HTMLAttributes<HTMLDivElement> {
+interface StackProps extends React.ComponentPropsWithRef<"div"> {
   stick: "top" | "bottom";
   children: ReactElement<typeof StackItem> | ReactElement<typeof StackItem>[];
 }
 
-const Stack = ({ stick = "top", children, ...rest }: StackProps) => {
+const Stack = ({ stick = "top", children, ref, ...rest }: StackProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(rootRef, ref), [ref]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -118,13 +120,13 @@ const Stack = ({ stick = "top", children, ...rest }: StackProps) => {
   }, [stick]);
 
   return (
-    <div {...rest} ref={rootRef} data-stack="root">
+    <div {...rest} ref={composedRef} data-stack="root">
       {children}
     </div>
   );
 };
 
-interface StackItemProps extends HTMLAttributes<HTMLDivElement> {
+interface StackItemProps extends React.ComponentPropsWithRef<"div"> {
   children: [ReactElement<typeof StackHeader>, ...ReactNode[]];
 }
 
@@ -136,7 +138,7 @@ const StackItem = ({ children, ...rest }: StackItemProps) => {
   );
 };
 
-const StackHeader = ({ children, ...rest }: HTMLAttributes<HTMLDivElement>) => {
+const StackHeader = ({ children, ...rest }: React.ComponentPropsWithRef<"div">) => {
   return (
     <div {...rest} data-stack="header">
       {children}

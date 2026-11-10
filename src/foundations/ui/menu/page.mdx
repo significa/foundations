@@ -9,6 +9,8 @@ dependencies:
     href: /ui/popover
   - name: Divider
     href: /ui/divider
+  - name: Input
+    href: /ui/input
   - name: Slot
     href: /components/slot
   - name: useStableCallback
@@ -24,7 +26,7 @@ folder: UI
 - **Smart Positioning**: Automatically adjusts position to stay in view
 - **Nested Submenus**: Linear-style hierarchical menus with hover-to-open
 - **Keyboard Navigation**: Arrow keys, type-ahead, right/left to expand and collapse submenus
-- **Search**: Built-in search input for filtering items
+- **Search**: A search input that keeps keyboard navigation while filtering items
 - **Mouse Anchoring**: Open at the cursor position via the inherited `origin` prop, useful for right-click context menus
 - **Focus Management**: Traps focus within the menu when opened
 
@@ -34,7 +36,9 @@ folder: UI
 <Menu>
   <Menu.Trigger />
   <Menu.Items>
-    <Menu.SearchInput />
+    <Input.Group>
+      <Menu.SearchInput />
+    </Input.Group>
     <Menu.Section>
       <Menu.Heading />
       <Menu.Item />
@@ -155,9 +159,18 @@ A horizontal line to separate groups of items.
 
 ### Menu.SearchInput
 
-Extends the [`PopoverSearchInput`](/ui/popover#popoversearchinput) component.
+Extends the [`Input`](/ui/input) component.
 
-A styled input with a search icon, useful for filtering items. Works alongside arrow-key navigation; pressing Enter selects the highlighted item.
+An input for filtering items. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted item. It renders the bare input: wrap it in `Input.Group` with an `Input.Addon` for an icon, or a `Spinner` while results load (set `aria-busy` on the input then).
+
+```tsx
+<Input.Group size="sm" className="mx-(--inset) mt-(--inset) w-auto">
+  <Input.Addon>
+    <MagnifyingGlassIcon />
+  </Input.Addon>
+  <Menu.SearchInput aria-label="Search" />
+</Input.Group>
+```
 
 ### Menu.Empty
 
@@ -193,7 +206,7 @@ Use the `destructive` variant for actions that require attention.
 
 ### Search
 
-Filter menu items with the built-in search input. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
+Filter menu items with `Menu.SearchInput`, framed by `Input.Group`. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
 
 <Preview slug="menu-search" />
 

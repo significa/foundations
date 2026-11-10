@@ -341,18 +341,14 @@ const OTPInputCell = ({ ref, className, ...props }: OTPInputCellProps) => {
 };
 
 interface OTPInputHiddenProps
-  extends Omit<React.ComponentPropsWithoutRef<"input">, "type" | "value"> {}
+  extends Omit<React.ComponentPropsWithRef<"input">, "type" | "value"> {}
 
 const OTPInputHidden = ({ name, ...props }: OTPInputHiddenProps) => {
   const { values } = useOTPInputContext();
   return <input type="hidden" name={name} value={values.join("")} {...props} />;
 };
 
-const OTPInputDivider = ({
-  className,
-  children,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) => {
+const OTPInputDivider = ({ className, children, ...props }: React.ComponentPropsWithRef<"div">) => {
   return (
     <div aria-hidden="true" className={cn("text-foreground-secondary", className)} {...props}>
       {children ?? "—"}

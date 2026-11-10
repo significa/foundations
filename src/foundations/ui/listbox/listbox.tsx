@@ -34,7 +34,7 @@ import {
 } from "react";
 
 import { Divider } from "#/foundations/ui/divider/divider.tsx";
-import { inputStyle } from "#/foundations/ui/input/input.tsx";
+import { Input, inputStyle } from "#/foundations/ui/input/input.tsx";
 import { Popover } from "#/foundations/ui/popover/popover.tsx";
 import { cn } from "#/lib/utils/classnames.ts";
 
@@ -380,7 +380,7 @@ const ListboxOptions = <T,>({
   className,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
-  const { setOptions, setIsSearchable, refs, elementsRef, labelsRef, context, getFloatingProps } =
+  const { setOptions, refs, elementsRef, labelsRef, context, getFloatingProps } =
     useListboxContext();
 
   useEffect(() => {
@@ -404,16 +404,6 @@ const ListboxOptions = <T,>({
 
     setOptions(extractOptions(children));
   }, [children, setOptions]);
-
-  useEffect(() => {
-    const hasSearchInput = Children.toArray(children).some(
-      (child) => isValidElement(child) && child.type === ListboxSearchInput,
-    );
-
-    if (hasSearchInput) {
-      setIsSearchable(true);
-    }
-  }, [children, setIsSearchable]);
 
   const ref = useMergeRefs([refs.setFloating, refProp]);
 
@@ -518,18 +508,17 @@ const ListboxDivider = ({
  *
  * If this component is used, the `selection` placement will be ignored.
  */
-interface ListboxSearchInputProps extends React.ComponentPropsWithRef<"input"> {
-  isLoading?: boolean;
-}
-
 const ListboxSearchInput = ({
-  ref,
   onKeyDown,
   onChange,
-  isLoading,
   ...props
-}: ListboxSearchInputProps) => {
-  const { highlightedIndex, setHighlightedIndex, handleSelect } = useListboxContext();
+}: React.ComponentProps<typeof Input>) => {
+  const { highlightedIndex, setHighlightedIndex, handleSelect, setIsSearchable } =
+    useListboxContext();
+
+  useEffect(() => {
+    setIsSearchable(true);
+  }, [setIsSearchable]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
@@ -546,15 +535,7 @@ const ListboxSearchInput = ({
     onKeyDown?.(event);
   };
 
-  return (
-    <Popover.SearchInput
-      ref={ref}
-      onKeyDown={handleKeyDown}
-      onChange={handleChange}
-      isLoading={isLoading}
-      {...props}
-    />
-  );
+  return <Input onKeyDown={handleKeyDown} onChange={handleChange} {...props} />;
 };
 
 const ListboxEmpty = Popover.Empty;

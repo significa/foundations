@@ -12,6 +12,136 @@ meta:
 
 ## November 2026
 
+### Breaking: `Table.SortableHead` is now `Table.SortButton`
+
+`SortableHead` rendered a `<th>` with a button inside: your `className` went to the cell (forced
+to `p-0`) while padding, hover and focus lived on a button you couldn't reach. `Table.SortButton`
+is just the button and caret; put it in a `Table.Head`, and set `aria-sort` on that head yourself,
+since a button can't set its cell's. It takes `sort` and a plain `onClick`.
+
+```diff tsx
+- <Table.SortableHead sort={sort} onSort={toggle}>
+-   Name
+- </Table.SortableHead>
++ <Table.Head aria-sort={sort === "asc" ? "ascending" : sort === "desc" ? "descending" : "none"}>
++   <Table.SortButton sort={sort} onClick={toggle}>
++     Name
++   </Table.SortButton>
++ </Table.Head>
+```
+
+### Breaking: `SearchInput` renders just the input
+
+`Popover.SearchInput` wrapped the input in a `div` that carried the border, icon and spinner, while
+your `className` landed on the input inside. `Menu.SearchInput` and `Listbox.SearchInput` now
+render an `Input` (keyboard navigation and `Enter` to select unchanged); compose the frame with
+`Input.Group` and `Input.Addon`. `isLoading` is gone: the spinner is yours to render, so pass
+`aria-busy` to the input when it shows. `Popover.SearchInput` is removed, since without the frame
+it was a plain `Input`. `Listbox` now detects its search input wherever it sits, not only as a
+direct child of `Listbox.Options`.
+
+```diff tsx
+- <Menu.SearchInput isLoading={isLoading} value={query} onChange={…} />
++ <Input.Group size="sm" className="mx-(--inset) mt-(--inset) w-auto">
++   <Input.Addon>{isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon />}</Input.Addon>
++   <Menu.SearchInput aria-busy={isLoading || undefined} value={query} onChange={…} />
++ </Input.Group>
+
+- <Popover.SearchInput placeholder="Search" />
++ <Input.Group>…<Input placeholder="Search" /></Input.Group>
+```
+
+### Changed: `Disclosure.Content` is one element
+
+It was two `div`s for the `grid-template-rows` trick: `id` and `data-state` on the outer one,
+`className` and `ref` on the inner one, and padding you added still showed when closed. It's one
+`div` now, animating `height` from `0` to `auto` with `interpolate-size`; padding collapses with it
+and closed content stays invisible, so nothing inside is focusable. Browsers without
+`interpolate-size` open and close it without the animation. Selectors that reached the inner `div`
+(`[data-state] > div`) now match your content's first child instead.
+
+```diff tsx
+- <div id={…} data-state={…} className="grid grid-rows-[0fr] … data-[state=open]:grid-rows-[1fr]">
+-   <div data-state={…} className={cn("min-h-0 overflow-hidden", className)} {...props}>
+-     {children}
+-   </div>
+- </div>
++ <div
++   id={…}
++   data-state={…}
++   className={cn(
++     "overflow-hidden [interpolate-size:allow-keywords] data-[state=closed]:invisible data-[state=closed]:h-0 data-[state=closed]:py-0",
++     "supports-[interpolate-size:allow-keywords]:transition-[height,padding-block,visibility] …",
++     className,
++   )}
++   {...props}
++ />
+```
+
+### Changed: `DatePicker.Panel` props go to the panel
+
+`className` went to the panel but `style`, `ref` and other props went to the `Calendar` inside it.
+Element props now all land on the panel (`Menu.Items`); the Calendar options it forwards are
+`mode`, `value`, `onDateChange`, `getIsDisabled`, `startWeekOn` and `locale`.
+
+```diff tsx
+- <Menu.Items className={cn(className)}>
+-   <Calendar {...props} mode={mode} … />
++ <Menu.Items {...props}>
++   <Calendar getIsDisabled={getIsDisabled} startWeekOn={startWeekOn} locale={locale} mode={mode} … />
+```
+
+### Fixed: dropped `style` and `ref` props
+
+Several parts dropped what you passed them:
+
+- `Tooltip.Content`: your `style` replaced the floating position. Both apply now; position wins.
+- `ColorPicker.Area`, `.Hue`, `.Saturation`, `.Lightness`, `.Alpha`: your `style` replaced the
+  gradient. They merge now.
+- `Sequence` and `Sequence.Items` overwrote your `ref` with their own; they compose now.
+- `Stack`, `Stack.Item` and `Stack.Header` didn't accept a `ref` (and `Stack` would have overwritten
+  it); `Marquee`, `OTPInput.Divider` and `OTPInput.Hidden` were typed without one.
+- `Avatar.Group` wrapped each avatar after the first in a clipping `div` with its own `<svg>`. It
+  renders one hidden `<svg>` with every `<clipPath>` and puts `clip-path` on the avatars
+  themselves, merged with their `style`.
+- `Menu.Item asChild` passed `disabled` to its child, rendering `disabled=""` on an `<a>`; like
+  `Button`, it now leaves it off under `asChild` (`aria-disabled` still applies).
+
+```diff tsx
+  // Tooltip.Content
+- style={{ position, top, left, ...props.style }}
+- {...getFloatingProps(props)}
++ {...getFloatingProps(props)}
++ style={{ ...style, position, top, left }}
+
+  // ColorPicker.Hue (and the other tracks)
+- style={{ background: "linear-gradient(…)" }}
++ style={{ background: "linear-gradient(…)", ...style }}
+
+  // Sequence (and Sequence.Items, Stack, Marquee)
++ const composedRef = useMemo(() => composeRefs(ref, refProp), [refProp]);
+- <Comp {...rest} ref={ref}>
++ <Comp {...rest} ref={composedRef}>
+
+  // Menu.Item
+- disabled={disabled || undefined}
++ disabled={asChild ? undefined : disabled || undefined}
+```
+
+### Fixed: `Pagination.Ellipsis` hid its own label
+
+`aria-hidden` sat on the outer `span`, so its screen-reader text ("More pages") was hidden too. It
+now sits on the icon.
+
+```diff tsx
+- <span aria-hidden="true" className={…} {...props}>
+-   <DotsThreeIcon className="size-4" />
++ <span className={…} {...props}>
++   <DotsThreeIcon aria-hidden="true" className="size-4" />
+    <span className="sr-only">More pages</span>
+  </span>
+```
+
 ### Fixed: a disabled `Menu.Item asChild` link still activated
 
 An `<a>` ignores `disabled`, so Enter or a click on a disabled `Menu.Item asChild` ran the link's

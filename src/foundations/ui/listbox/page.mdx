@@ -9,7 +9,7 @@ dependencies:
     href: /ui/popover
   - name: Divider
     href: /ui/divider
-  - name: inputStyle
+  - name: Input
     href: /ui/input
   - name: "@floating-ui/react"
     href: https://floating-ui.com/docs/react
@@ -23,7 +23,9 @@ folder: UI
 <Listbox value={value} onChange={onChange}>
   <Listbox.Trigger />
   <Listbox.Options>
-    <Listbox.SearchInput />
+    <Input.Group>
+      <Listbox.SearchInput />
+    </Input.Group>
     <Listbox.Option />
     <Listbox.Divider />
     <Listbox.Option />
@@ -35,7 +37,7 @@ folder: UI
 ## Features
 
 - **Keyboard Navigation**: Use arrow keys to navigate between options, Enter to select, and Escape to close
-- **Search Functionality**: Built-in search input for filtering options
+- **Search Functionality**: A search input that keeps keyboard navigation while filtering options
 - **Multiple Selection**: Support for selecting multiple options with checkboxes
 - **Custom Rendering**: Flexible API for custom option rendering
 - **Form Integration**: Works seamlessly with form libraries
@@ -139,19 +141,18 @@ A horizontal line to separate groups of options.
 
 ### Listbox.SearchInput
 
-Extends the `input` element.
+Extends the [`Input`](/ui/input) component.
 
-A styled input with a search icon, useful for filtering options.
+An input for filtering options. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted option. It renders the bare input: wrap it in `Input.Group` with an `Input.Addon` for an icon, or a `Spinner` while results load (set `aria-busy` on the input then).
 
-<PropsTable
-  definition={{
-    isLoading: {
-      type: "boolean",
-      description: "When true, replaces the leading magnifying-glass icon with a spinner. Useful for async-filtered lists.",
-      default: "false",
-    },
-  }}
-/>
+```tsx
+<Input.Group size="sm" className="mx-(--inset) mt-(--inset) w-auto shrink-0">
+  <Input.Addon>
+    <MagnifyingGlassIcon />
+  </Input.Addon>
+  <Listbox.SearchInput aria-label="Search" />
+</Input.Group>
+```
 
 ### Listbox.Empty
 
@@ -198,7 +199,7 @@ Filtering options with a search input.
 
 ### Async Search
 
-Debounced search against an async data source. The `isLoading` prop on `Listbox.SearchInput` swaps the magnifying-glass icon for a spinner while results are in flight.
+Debounced search against an async data source. The addon swaps the magnifying-glass icon for a `Spinner` while results are in flight, and the input sets `aria-busy`.
 
 <Preview slug="listbox-async" />
 

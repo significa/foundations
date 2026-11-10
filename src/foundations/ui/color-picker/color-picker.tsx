@@ -226,7 +226,12 @@ const ColorPickerHandle = ({ color, left, top = 0.5 }: ColorPickerHandleProps) =
   );
 };
 
-const ColorPickerArea = ({ className, ref, ...props }: React.ComponentPropsWithRef<"div">) => {
+const ColorPickerArea = ({
+  className,
+  style,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
   const {
     color: [h, s, v, a],
     onChange,
@@ -274,6 +279,7 @@ const ColorPickerArea = ({ className, ref, ...props }: React.ComponentPropsWithR
         backgroundColor: chroma(h, 1, 1, "hsv").css(),
         backgroundImage: `linear-gradient(transparent, black),
         linear-gradient(to right, white, transparent)`,
+        ...style,
       }}
       {...props}
     >
@@ -282,7 +288,12 @@ const ColorPickerArea = ({ className, ref, ...props }: React.ComponentPropsWithR
   );
 };
 
-const ColorPickerHue = ({ className, ref, ...props }: React.ComponentPropsWithRef<"div">) => {
+const ColorPickerHue = ({
+  className,
+  style,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
   const {
     color: [h, s, v, a],
     onChange,
@@ -329,6 +340,7 @@ const ColorPickerHue = ({ className, ref, ...props }: React.ComponentPropsWithRe
       style={{
         background:
           "linear-gradient(90deg, hsl(0, 100%, 50%), hsl(30, 100%, 50%), hsl(60, 100%, 50%), hsl(90, 100%, 50%), hsl(120, 100%, 50%), hsl(150, 100%, 50%), hsl(180, 100%, 50%), hsl(210, 100%, 50%), hsl(240, 100%, 50%), hsl(270, 100%, 50%),hsl(300, 100%, 50%), hsl(330, 100%, 50%), hsl(360, 100%, 50%))",
+        ...style,
       }}
       {...props}
     >
@@ -339,6 +351,7 @@ const ColorPickerHue = ({ className, ref, ...props }: React.ComponentPropsWithRe
 
 const ColorPickerSaturation = ({
   className,
+  style,
   ref,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
@@ -386,6 +399,7 @@ const ColorPickerSaturation = ({
       className={cn("h-5 w-full", className)}
       style={{
         background: `linear-gradient(90deg, ${chroma.hsv(h, 0, v).css()}, ${chroma.hsv(h, 1, v).css()})`,
+        ...style,
       }}
       {...props}
     >
@@ -394,7 +408,12 @@ const ColorPickerSaturation = ({
   );
 };
 
-const ColorPickerLightness = ({ className, ref, ...props }: React.ComponentPropsWithRef<"div">) => {
+const ColorPickerLightness = ({
+  className,
+  style,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
   const {
     color: [h, s, v, a],
     onChange,
@@ -439,6 +458,7 @@ const ColorPickerLightness = ({ className, ref, ...props }: React.ComponentProps
       className={cn("h-5 w-full", className)}
       style={{
         background: `linear-gradient(90deg, ${chroma.hsv(h, s, 0).css()}, ${chroma.hsv(h, s, 1).css()})`,
+        ...style,
       }}
       {...props}
     >
@@ -447,7 +467,12 @@ const ColorPickerLightness = ({ className, ref, ...props }: React.ComponentProps
   );
 };
 
-const ColorPickerAlpha = ({ className, ref, ...props }: React.ComponentPropsWithRef<"div">) => {
+const ColorPickerAlpha = ({
+  className,
+  style,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<"div">) => {
   const {
     color: [h, s, v, a],
     onChange,
@@ -501,6 +526,7 @@ const ColorPickerAlpha = ({ className, ref, ...props }: React.ComponentPropsWith
         `,
         backgroundSize: "8px 8px, 8px 8px, 8px 8px, 8px 8px, 100% 100%",
         backgroundPosition: "0 0, 0 4px, 4px -4px, -4px 0px, 0 0",
+        ...style,
       }}
       {...props}
     >

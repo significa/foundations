@@ -46,40 +46,43 @@ const DatePickerTrigger = ({
   );
 };
 
-interface DatePickerContentCommonProps
-  extends Omit<React.ComponentPropsWithRef<typeof Calendar>, "mode" | "value" | "onDateChange"> {
-  className?: string;
-  children?: React.ReactNode;
-}
+// Element props (className, style, ref, …) go to the panel; these configure its Calendar.
+interface DatePickerPanelCommonProps
+  extends React.ComponentProps<typeof Menu.Items>,
+    Pick<React.ComponentProps<typeof Calendar>, "getIsDisabled" | "startWeekOn" | "locale"> {}
 
-interface DatePickerContentSingleProps extends DatePickerContentCommonProps {
+interface DatePickerPanelSingleProps extends DatePickerPanelCommonProps {
   mode?: "single";
   value: Date | null;
   onDateChange: (date: Date) => void;
 }
 
-interface DatePickerContentRangeProps extends DatePickerContentCommonProps {
+interface DatePickerPanelRangeProps extends DatePickerPanelCommonProps {
   mode: "range";
   value: [Date, Date] | null;
   onDateChange: (dates: [Date, Date]) => void;
 }
 
-type DatePickerContentProps = DatePickerContentSingleProps | DatePickerContentRangeProps;
+type DatePickerPanelProps = DatePickerPanelSingleProps | DatePickerPanelRangeProps;
 
 const DatePickerPanel = ({
-  className,
   children,
   mode,
   value,
   onDateChange,
+  getIsDisabled,
+  startWeekOn,
+  locale,
   ...props
-}: DatePickerContentProps) => {
+}: DatePickerPanelProps) => {
   const { setOpen } = useMenuPopoverContext();
 
   return (
-    <Menu.Items className={cn(className)}>
+    <Menu.Items {...props}>
       <Calendar
-        {...props}
+        getIsDisabled={getIsDisabled}
+        startWeekOn={startWeekOn}
+        locale={locale}
         mode={mode}
         // biome-ignore lint/suspicious/noExplicitAny: expected
         value={value as any}

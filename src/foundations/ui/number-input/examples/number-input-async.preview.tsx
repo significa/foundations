@@ -33,7 +33,11 @@ export default function NumberInputAsyncExample() {
   return (
     <div className="flex items-center gap-3">
       <div className="w-48">
-        <NumberInput value={quantity} onValueChange={setQuantity} min={1} max={99} />
+        <NumberInput value={quantity} onValueChange={setQuantity} min={1} max={99}>
+          <NumberInput.Decrement />
+          <NumberInput.Field />
+          <NumberInput.Increment />
+        </NumberInput>
       </div>
       <Spinner
         size="sm"

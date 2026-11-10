@@ -25,13 +25,11 @@ export default function NumberInputLocaleExample() {
 
   return (
     <div className="w-64">
-      <NumberInput
-        value={value}
-        onValueChange={setValue}
-        step={0.01}
-        format={format}
-        parse={parse}
-      />
+      <NumberInput value={value} onValueChange={setValue} step={0.01} format={format} parse={parse}>
+        <NumberInput.Decrement />
+        <NumberInput.Field />
+        <NumberInput.Increment />
+      </NumberInput>
     </div>
   );
 }

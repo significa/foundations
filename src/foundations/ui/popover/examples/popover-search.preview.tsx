@@ -1,4 +1,6 @@
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "#/foundations/ui/button/button.tsx";
+import { Input } from "#/foundations/ui/input/input.tsx";
 import { Popover } from "#/foundations/ui/popover/popover.tsx";
 
 export default function PopoverSearchPreview() {
@@ -8,8 +10,13 @@ export default function PopoverSearchPreview() {
         <Button variant="outline">Search</Button>
       </Popover.Trigger>
       <Popover.Content className="p-0">
-        <Popover.SearchInput placeholder="Search items..." />
-        <div className="p-1">Items would go here</div>
+        <Input.Group size="sm" className="m-2 w-auto">
+          <Input.Addon>
+            <MagnifyingGlassIcon />
+          </Input.Addon>
+          <Input placeholder="Search items..." aria-label="Search items" />
+        </Input.Group>
+        <div className="p-2 pt-0">Items would go here</div>
       </Popover.Content>
     </Popover>
   );

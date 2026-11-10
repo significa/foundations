@@ -152,51 +152,36 @@ const TableCaption = ({ ref, className, ...props }: React.ComponentPropsWithRef<
   );
 };
 
-interface TableSortableHeadProps extends Omit<TableHeadProps, "onClick"> {
+interface TableSortButtonProps extends React.ComponentPropsWithRef<"button"> {
   sort: "asc" | "desc" | false;
-  onSort: (event?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const TableSortableHead = ({
-  className,
-  children,
-  sort,
-  onSort,
-  ...props
-}: TableSortableHeadProps) => {
-  const ariaSort = sort === "asc" ? "ascending" : sort === "desc" ? "descending" : "none";
-
+// A button can't set its <th>'s `aria-sort`: the consumer sets it on `Table.Head`.
+const TableSortButton = ({ className, children, sort, ...props }: TableSortButtonProps) => {
   const Icon = sort === "asc" ? CaretUpIcon : sort === "desc" ? CaretDownIcon : CaretUpDownIcon;
 
   return (
-    <TableHead
-      aria-sort={ariaSort}
+    <button
+      type="button"
       data-sort={sort || undefined}
-      className={cn("p-0", className)}
+      className={cn(
+        "group/sort -mx-1 inline-flex items-center gap-1.5 rounded-sm px-1",
+        "cursor-pointer font-medium text-foreground-secondary",
+        "transition-colors hover:text-foreground",
+        "ring-ring outline-none focus-visible:ring-(length:--ring-width)",
+        className,
+      )}
       {...props}
     >
-      <button
-        type="button"
-        onClick={onSort}
+      {children}
+      <Icon
+        aria-hidden="true"
         className={cn(
-          "group/sort flex h-10 w-full items-center gap-1.5 px-(--table-cell-px) py-0",
-          "cursor-pointer text-start font-medium text-foreground-secondary",
-          "transition-colors hover:text-foreground",
-          "ring-ring outline-none focus-visible:ring-(length:--ring-width)",
-          "data-[align=center]:justify-center data-[align=end]:justify-end",
+          "size-3.5 shrink-0 transition-opacity",
+          sort ? "opacity-100" : "opacity-40 group-hover/sort:opacity-70",
         )}
-        data-align={props.align}
-      >
-        {children}
-        <Icon
-          aria-hidden="true"
-          className={cn(
-            "size-3.5 shrink-0 transition-opacity",
-            sort ? "opacity-100" : "opacity-40 group-hover/sort:opacity-70",
-          )}
-        />
-      </button>
-    </TableHead>
+      />
+    </button>
   );
 };
 
@@ -209,7 +194,7 @@ const CompoundTable = Object.assign(Table, {
   Head: TableHead,
   Cell: TableCell,
   Caption: TableCaption,
-  SortableHead: TableSortableHead,
+  SortButton: TableSortButton,
 });
 
 export { CompoundTable as Table };

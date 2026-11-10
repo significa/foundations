@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useKeyboardShortcut } from "#/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut.ts";
 import { IconButton } from "#/foundations/ui/button/button.tsx";
 import { Dialog } from "#/foundations/ui/dialog/dialog.tsx";
+import { Input } from "#/foundations/ui/input/input.tsx";
 import { Menu } from "#/foundations/ui/menu/menu.tsx";
 import type { Pagefind } from "#/lib/types/pagefind.ts";
 
@@ -138,12 +139,18 @@ const Search = () => {
         <Menu open={isOpen} onOpenChange={handleOpenChange} modal={false}>
           <Menu.Trigger className="hidden" />
           <Menu.Items inline className="flex h-full flex-col overflow-hidden">
-            <Menu.SearchInput
-              autoFocus
-              placeholder="Search..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+            <Input.Group className="mx-(--inset) mt-(--inset) w-auto shrink-0">
+              <Input.Addon>
+                <MagnifyingGlassIcon />
+              </Input.Addon>
+              <Menu.SearchInput
+                autoFocus
+                placeholder="Search..."
+                aria-label="Search the docs"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </Input.Group>
             <div className="flex-1 scroll-py-(--inset) overflow-y-auto py-(--inset)">
               {isPagefindError ? (
                 <PagefindError />

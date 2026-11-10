@@ -1,5 +1,7 @@
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { useMemo, useState } from "react";
 import { Button } from "#/foundations/ui/button/button.tsx";
+import { Input } from "#/foundations/ui/input/input.tsx";
 import { Menu } from "#/foundations/ui/menu/menu.tsx";
 
 const FRUITS = [
@@ -31,11 +33,17 @@ export default function MenuSearchPreview() {
         <Button variant="outline">Pick a fruit</Button>
       </Menu.Trigger>
       <Menu.Items>
-        <Menu.SearchInput
-          placeholder="Search fruits..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <Input.Group size="sm" className="mx-(--inset) mt-(--inset) w-auto">
+          <Input.Addon>
+            <MagnifyingGlassIcon />
+          </Input.Addon>
+          <Menu.SearchInput
+            placeholder="Search fruits..."
+            aria-label="Search fruits"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </Input.Group>
         {filtered.map((fruit) => (
           <Menu.Item key={fruit}>{fruit}</Menu.Item>
         ))}

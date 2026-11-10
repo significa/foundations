@@ -18,6 +18,7 @@ import {
 import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { useIntersectionObserver } from "#/foundations/hooks/use-intersection-observer/use-intersection-observer.ts";
 import { useTicker } from "#/foundations/hooks/use-ticker/use-ticker.ts";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { clamp } from "#/foundations/utils/math/clamp.ts";
 
 // @types
@@ -64,10 +65,12 @@ const Sequence = ({
   paused = false,
   currentIndex: currentIndexProp,
   duration,
+  ref: refProp,
   ...rest
 }: SequenceProps) => {
   const id = useId();
   const ref = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(ref, refProp), [refProp]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [numItems, setNumItems] = useState(0);
@@ -174,7 +177,7 @@ const Sequence = ({
       <InstanceCounterProvider onChange={setNumItems}>
         <Comp
           {...rest}
-          ref={ref}
+          ref={composedRef}
           style={{ "--progress": 0, "--index": currentIndex, ...rest.style }}
         >
           {children}
@@ -189,13 +192,20 @@ interface SequenceItemsProps extends ComponentPropsWithRef<"div"> {
   asChild?: boolean;
 }
 
-const SequenceItems = ({ children, asChild, ...rest }: SequenceItemsProps) => {
+const SequenceItems = ({ children, asChild, ref: refProp, ...rest }: SequenceItemsProps) => {
   const { orientation, setIsIntersecting } = useSequenceContext();
   const [ref] = useIntersectionObserver<HTMLDivElement>({}, setIsIntersecting);
+  const composedRef = useMemo(() => composeRefs(ref, refProp), [ref, refProp]);
 
   const Comp = asChild ? Slot : "div";
   return (
-    <Comp {...rest} ref={ref} role="tablist" aria-orientation={orientation} aria-live="polite">
+    <Comp
+      {...rest}
+      ref={composedRef}
+      role="tablist"
+      aria-orientation={orientation}
+      aria-live="polite"
+    >
       {children}
     </Comp>
   );

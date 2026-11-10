@@ -34,6 +34,7 @@ import {
 import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { useStableCallback } from "#/foundations/hooks/use-stable-callback/use-stable-callback.ts";
 import { Divider } from "#/foundations/ui/divider/divider.tsx";
+import { Input } from "#/foundations/ui/input/input.tsx";
 import {
   Popover,
   PopoverContext,
@@ -524,7 +525,8 @@ const MenuItem = ({
       data-item-id={itemId}
       data-highlighted={isHighlighted || undefined}
       tabIndex={isHighlighted ? 0 : -1}
-      disabled={disabled || undefined}
+      // A link has no `disabled`; it would render as `disabled=""` on the <a>.
+      disabled={asChild ? undefined : disabled || undefined}
       // Also makes Floating UI's list navigation skip the item.
       aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
@@ -604,17 +606,12 @@ const MenuDivider = ({ className, ...props }: React.ComponentPropsWithRef<"div">
   return <Divider className={cn("my-(--inset)", className)} {...props} />;
 };
 
-interface MenuSearchInputProps extends React.ComponentPropsWithRef<"input"> {
-  isLoading?: boolean;
-}
-
 const MenuSearchInput = ({
   ref: refProp,
   onChange,
   onKeyDown,
-  isLoading,
   ...props
-}: MenuSearchInputProps) => {
+}: React.ComponentProps<typeof Input>) => {
   const internalRef = useRef<HTMLInputElement | null>(null);
   const { highlightedIndex, setHighlightedIndex, items, setSearchInputEl, elementsRef } =
     useMenuContext();
@@ -654,15 +651,7 @@ const MenuSearchInput = ({
     onKeyDown?.(e);
   };
 
-  return (
-    <Popover.SearchInput
-      ref={ref}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      isLoading={isLoading}
-      {...props}
-    />
-  );
+  return <Input ref={ref} onChange={handleChange} onKeyDown={handleKeyDown} {...props} />;
 };
 
 const MenuEmpty = Popover.Empty;

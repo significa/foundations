@@ -6,7 +6,11 @@ export default function NumberInputBoundedExample() {
 
   return (
     <div className="flex w-56 flex-col gap-2">
-      <NumberInput value={value} onValueChange={setValue} min={0} max={100} step={5} />
+      <NumberInput value={value} onValueChange={setValue} min={0} max={100} step={5}>
+        <NumberInput.Decrement />
+        <NumberInput.Field />
+        <NumberInput.Increment />
+      </NumberInput>
       <p className="text-xs text-foreground-secondary">
         0–100, step 5. Steppers disable at the bounds.
       </p>

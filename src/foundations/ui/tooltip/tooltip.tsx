@@ -226,6 +226,7 @@ const TooltipTrigger = ({
 const TooltipContent = ({
   ref: refProp,
   className,
+  style,
   children,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
@@ -262,13 +263,13 @@ const TooltipContent = ({
         )}
         data-state={status === "open" ? "open" : "closed"}
         data-side={context.placement.split("-")[0]}
+        {...getFloatingProps(props)}
         style={{
+          ...style,
           position: context.strategy,
           top: context.y ?? 0,
           left: context.x ?? 0,
-          ...props.style,
         }}
-        {...getFloatingProps(props)}
       >
         <FloatingArrow
           ref={arrowRef}

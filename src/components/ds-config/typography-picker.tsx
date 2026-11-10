@@ -1,6 +1,9 @@
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useMemo, useState } from "react";
 
+import { Input } from "#/foundations/ui/input/input.tsx";
 import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
 import type { FontCategory, StoredFont } from "./storage.ts";
 import { type FontMeta, fetchCatalog, loadGoogleFont } from "./use-fonts-catalog.ts";
 
@@ -114,12 +117,16 @@ const TypographyPicker = ({
     >
       <Listbox.Trigger placeholder={placeholder}>{value?.family}</Listbox.Trigger>
       <Listbox.Options>
-        <Listbox.SearchInput
-          placeholder="Search fonts"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          isLoading={isLoading}
-        />
+        <Input.Group size="sm" className="mx-(--inset) mt-(--inset) w-auto shrink-0">
+          <Input.Addon>{isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon />}</Input.Addon>
+          <Listbox.SearchInput
+            placeholder="Search fonts"
+            aria-label="Search fonts"
+            aria-busy={isLoading || undefined}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Input.Group>
         {!search && (
           <>
             <Listbox.Option value={null}>{nullLabel}</Listbox.Option>

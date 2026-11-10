@@ -109,14 +109,13 @@ const PaginationNext = ({ asChild, children, ...props }: PaginationStepProps) =>
 const PaginationEllipsis = ({ className, ...props }: React.ComponentPropsWithRef<"span">) => {
   return (
     <span
-      aria-hidden="true"
       className={cn(
         "flex h-9 w-9 items-center justify-center text-foreground-secondary",
         className,
       )}
       {...props}
     >
-      <DotsThreeIcon className="size-4" />
+      <DotsThreeIcon aria-hidden="true" className="size-4" />
       <span className="sr-only">More pages</span>
     </span>
   );

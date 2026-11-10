@@ -5,11 +5,13 @@ import {
   EnvelopeIcon,
   GearIcon,
   HouseIcon,
+  MagnifyingGlassIcon,
   PencilSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useMemo, useState } from "react";
 import { Button } from "#/foundations/ui/button/button.tsx";
 import { Dialog } from "#/foundations/ui/dialog/dialog.tsx";
+import { Input } from "#/foundations/ui/input/input.tsx";
 import { Menu } from "#/foundations/ui/menu/menu.tsx";
 
 const ACTIONS: {
@@ -76,12 +78,18 @@ export default function MenuCmdkPreview() {
         <Menu open={open} onOpenChange={setOpen} modal={false}>
           <Menu.Trigger className="hidden" />
           <Menu.Items inline className="flex h-full flex-col overflow-hidden">
-            <Menu.SearchInput
-              autoFocus
-              placeholder="Type a command or search..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+            <Input.Group className="mx-(--inset) mt-(--inset) w-auto shrink-0">
+              <Input.Addon>
+                <MagnifyingGlassIcon />
+              </Input.Addon>
+              <Menu.SearchInput
+                autoFocus
+                placeholder="Type a command or search..."
+                aria-label="Search commands"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </Input.Group>
             <div className="flex-1 scroll-py-(--inset) overflow-y-auto py-(--inset)">
               {filtered.map((group) => (
                 <Menu.Section key={group.group}>
