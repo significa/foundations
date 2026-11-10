@@ -120,7 +120,8 @@ const checkImport = ({ file, specifier, itemDir, itemDirs, declared }) => {
   if (!targetItem) return `${where}, which no page documents`;
   if (targetItem === itemDir) return null;
 
-  const targetPath = relative(FOUNDATIONS_DIR, targetItem);
+  // Hrefs use "/"; relative() uses the OS separator
+  const targetPath = relative(FOUNDATIONS_DIR, targetItem).split(sep).join("/");
   if (declared.has(targetPath)) return null;
   return `${where}: add /${targetPath} to frontmatter dependencies`;
 };
