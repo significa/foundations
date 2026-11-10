@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { Button } from "@/foundations/ui/button/button";
-import { Drawer } from "@/foundations/ui/drawer/drawer";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Drawer } from "#/foundations/ui/drawer/drawer.tsx";
 
 const DrawerControlled = () => {
   const [open, setOpen] = useState(false);

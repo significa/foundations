@@ -1,6 +1,6 @@
 import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Select } from "@/foundations/ui/select/select";
+import { Select } from "#/foundations/ui/select/select.tsx";
 
 export default function SelectAddonPreview() {
   return (

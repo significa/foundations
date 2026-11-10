@@ -14,11 +14,11 @@ import {
 import {
   InstanceCounterProvider,
   useInstanceCounter,
-} from "@/foundations/components/instance-counter/instance-counter";
-import { Slot } from "@/foundations/components/slot/slot";
-import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
-import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
-import { clamp } from "@/foundations/utils/math/clamp";
+} from "#/foundations/components/instance-counter/instance-counter.tsx";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { useIntersectionObserver } from "#/foundations/hooks/use-intersection-observer/use-intersection-observer.ts";
+import { useTicker } from "#/foundations/hooks/use-ticker/use-ticker.ts";
+import { clamp } from "#/foundations/utils/math/clamp.ts";
 
 // @types
 type ItemState = "upcoming" | "current" | "past";

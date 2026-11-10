@@ -15,9 +15,9 @@ import {
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
-import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
-import { Pagination, usePagination } from "@/foundations/ui/pagination/pagination";
-import { Table } from "@/foundations/ui/table/table";
+import { Checkbox } from "#/foundations/ui/checkbox/checkbox.tsx";
+import { Pagination, usePagination } from "#/foundations/ui/pagination/pagination.tsx";
+import { Table } from "#/foundations/ui/table/table.tsx";
 
 export const meta = { layout: "padded" } as const;
 

@@ -5,13 +5,13 @@ import {
   SlidersHorizontalIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CopyButton } from "@/components/copy-button";
-import { IconButton } from "@/foundations/ui/button/button";
-import { Popover } from "@/foundations/ui/popover/popover";
-import { Slider } from "@/foundations/ui/slider/slider";
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
-import { DEFAULT_PAIRING, findPairing, PAIRINGS, type Pairing } from "./pairings";
-import { SchemeEditor } from "./scheme-editor";
+import { CopyButton } from "#/components/copy-button.tsx";
+import { IconButton } from "#/foundations/ui/button/button.tsx";
+import { Popover } from "#/foundations/ui/popover/popover.tsx";
+import { Slider } from "#/foundations/ui/slider/slider.tsx";
+import { Tooltip } from "#/foundations/ui/tooltip/tooltip.tsx";
+import { DEFAULT_PAIRING, findPairing, PAIRINGS, type Pairing } from "./pairings.ts";
+import { SchemeEditor } from "./scheme-editor.tsx";
 import {
   COLOR_TOKENS,
   type ColorToken,
@@ -21,7 +21,7 @@ import {
   SCHEMES,
   type Scheme,
   type TokenValues,
-} from "./schemes";
+} from "./schemes.ts";
 import {
   EMPTY_FONTS,
   FONT_SLOTS,
@@ -34,9 +34,9 @@ import {
   type StoredFont,
   type StoredFonts,
   writeStored,
-} from "./storage";
-import { TypographyEditor } from "./typography-editor";
-import { fallbackFor, loadGoogleFont } from "./use-fonts-catalog";
+} from "./storage.ts";
+import { TypographyEditor } from "./typography-editor.tsx";
+import { fallbackFor, loadGoogleFont } from "./use-fonts-catalog.ts";
 
 const RADIUS_MAX = 4;
 const RING_MIN = 2;

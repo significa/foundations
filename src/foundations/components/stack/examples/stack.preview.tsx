@@ -1,7 +1,7 @@
 import { BookOpenIcon, LightbulbIcon, WrenchIcon } from "@phosphor-icons/react/dist/ssr";
-import { Stack } from "@/foundations/components/stack/stack";
-import { Divider } from "@/foundations/ui/divider/divider";
-import type { PreviewMeta } from "@/lib/preview";
+import { Stack } from "#/foundations/components/stack/stack.tsx";
+import { Divider } from "#/foundations/ui/divider/divider.tsx";
+import type { PreviewMeta } from "#/lib/preview.ts";
 
 const items = [
   {

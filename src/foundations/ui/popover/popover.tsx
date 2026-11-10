@@ -21,10 +21,10 @@ import {
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
-import { Spinner } from "@/foundations/ui/spinner/spinner";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { useTopLayer } from "#/foundations/hooks/use-top-layer/use-top-layer.ts";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 type PopoverOrigin = "trigger" | "pointer" | [number, number];
 

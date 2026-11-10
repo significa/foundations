@@ -1,10 +1,8 @@
 import { useRef } from "react";
-
-import { scrollIntoViewIfNeeded } from "@/foundations/utils/dom/scroll-into-view-if-needed";
-import { cn } from "@/lib/utils/classnames";
-
-import { Sequence } from "../sequence";
-import { erasExtended as CONTENT } from "./content";
+import { Sequence } from "#/foundations/components/sequence/sequence.tsx";
+import { scrollIntoViewIfNeeded } from "#/foundations/utils/dom/scroll-into-view-if-needed.ts";
+import { cn } from "#/lib/utils/classnames.ts";
+import { erasExtended as CONTENT } from "./content.ts";
 
 const SequenceScrollIntoView = () => {
   const itemsScrollContainerRef = useRef<HTMLDivElement>(null);

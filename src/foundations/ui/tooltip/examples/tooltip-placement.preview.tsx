@@ -1,5 +1,5 @@
-import { Button } from "@/foundations/ui/button/button";
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Tooltip } from "#/foundations/ui/tooltip/tooltip.tsx";
 
 export default function TooltipPlacementPreview() {
   return (

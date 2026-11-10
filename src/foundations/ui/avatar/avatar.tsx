@@ -1,7 +1,7 @@
 import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 import type { VariantProps } from "cva";
 import { Children, cloneElement, isValidElement, useId } from "react";
-import { cn, cva } from "@/lib/utils/classnames";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const getInitials = (name: string | undefined) => {
   if (!name) return "";

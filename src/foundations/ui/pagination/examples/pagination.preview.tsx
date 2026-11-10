@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Pagination, usePagination } from "@/foundations/ui/pagination/pagination";
+import { Pagination, usePagination } from "#/foundations/ui/pagination/pagination.tsx";
 
 export default function PaginationPreview() {
   const [page, setPage] = useState(1);

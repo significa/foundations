@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { Button } from "@/foundations/ui/button/button";
-import { Menu } from "@/foundations/ui/menu/menu";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Menu } from "#/foundations/ui/menu/menu.tsx";
 
 const FRUITS = [
   "Apple",

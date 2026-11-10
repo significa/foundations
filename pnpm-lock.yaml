@@ -94,8 +94,8 @@ importers:
         specifier: 2.6.6
         version: 2.6.6
       '@significa/ts-standards':
-        specifier: 0.2.2
-        version: 0.2.2(@biomejs/biome@2.6.6)(typescript@6.0.3)
+        specifier: 0.2.3
+        version: 0.2.3(@biomejs/biome@2.6.6)(typescript@6.0.3)
       knip:
         specifier: ^6.44.2
         version: 6.44.2
@@ -1253,8 +1253,8 @@ packages:
   '@shikijs/vscode-textmate@10.1.0':
     resolution: {integrity: sha512-cVBuhDQjBZaNMTwBquYfPydrUP+E3hE6oYGasx8h6ZrODIM7/r+gxLDXdd66oszbrggZHEntdE6j+5gYIVyMWQ==}
 
-  '@significa/ts-standards@0.2.2':
-    resolution: {integrity: sha512-FQZKh4b82awBbwLWh+EKajlyDk0804pz7OK3GJVq4tKxw+wG13fTtZBTjMa1+WKaUUH2gNbAZ/JqppTM9kN7Kg==}
+  '@significa/ts-standards@0.2.3':
+    resolution: {integrity: sha512-o4jCNPkvoXYOybmOK0jzCWfo/U7IMwi9K193WuDUbcDRLtNL9zCS2hMCOB/rAkFXgO957OZh4dmvvuyJS4K9fQ==}
     peerDependencies:
       '@biomejs/biome': '>=2.6.0 <2.7.0'
       typescript: ^6.0.0 || ^7.0.0
@@ -3560,7 +3560,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.1.0': {}
 
-  '@significa/ts-standards@0.2.2(@biomejs/biome@2.6.6)(typescript@6.0.3)':
+  '@significa/ts-standards@0.2.3(@biomejs/biome@2.6.6)(typescript@6.0.3)':
     optionalDependencies:
       '@biomejs/biome': 2.6.6
       typescript: 6.0.3

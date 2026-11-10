@@ -1,9 +1,7 @@
 import { useState } from "react";
-
-import { Button } from "@/foundations/ui/button/button";
-
-import { Sequence } from "../sequence";
-import { eras as CONTENT } from "./content";
+import { Sequence } from "#/foundations/components/sequence/sequence.tsx";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { eras as CONTENT } from "./content.ts";
 
 const SequencePreview = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);

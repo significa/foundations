@@ -1,4 +1,4 @@
-import { Progress } from "@/foundations/ui/progress/progress";
+import { Progress } from "#/foundations/ui/progress/progress.tsx";
 
 const sizes = ["xs", "sm", "md", "lg"] as const;
 

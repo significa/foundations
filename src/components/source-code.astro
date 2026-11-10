@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { CodeLanguage } from "astro";
 import type { HTMLAttributes } from "astro/types";
-import { themes } from "@/lib/shiki";
+import { themes } from "#/lib/shiki.ts";
 import CodeBlock from "./code-block.astro";
 
 type Props = HTMLAttributes<"div"> & {
@@ -20,11 +20,11 @@ const extension = path.extname(file).slice(1);
 function rewriteImports(code: string) {
   return (
     code
-      // Replace @/foundations/ui and @/foundations/components with @/components
-      .replace(/@\/foundations(\/ui|\/components)/g, "@/components")
-      // Replace @/foundations/utils with @/lib
-      .replace(/@\/foundations\/utils/g, "@/lib")
-      // Remove duplicate folder names (e.g. @/components/button/button to @/components/button)
+      // Replace #/foundations/ui and #/foundations/components with #/components
+      .replace(/#\/foundations(\/ui|\/components)/g, "#/components")
+      // Replace #/foundations/utils with #/lib
+      .replace(/#\/foundations\/utils/g, "#/lib")
+      // Remove duplicate folder names (e.g. #/components/button/button.tsx to #/components/button.tsx)
       .replace(/\/([^/]+)\/\1/g, "/$1")
   );
 }

@@ -1,5 +1,5 @@
-import { Modal } from "@/foundations/ui/modal/modal";
-import { cn } from "@/lib/utils/classnames";
+import { Modal } from "#/foundations/ui/modal/modal.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 type DialogProps = React.ComponentProps<typeof Modal>;
 

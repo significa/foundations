@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { NumberInput } from "@/foundations/ui/number-input/number-input";
-import { Spinner } from "@/foundations/ui/spinner/spinner";
-import { debounce } from "@/foundations/utils/debounce/debounce";
-import { cn } from "@/lib/utils/classnames";
+import { NumberInput } from "#/foundations/ui/number-input/number-input.tsx";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
+import { debounce } from "#/foundations/utils/debounce/debounce.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 // Cart-style quantity selector: optimistic local update on every commit,
 // debounced server sync in the background. The field stays interactive while

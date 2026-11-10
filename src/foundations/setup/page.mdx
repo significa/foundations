@@ -5,7 +5,7 @@ description: How to setup your project to use Foundations.
 folder: "introduction"
 ---
 
-import SetupCssTabs from "@/components/setup-css-tabs.astro";
+import SetupCssTabs from "#/components/setup-css-tabs.astro";
 
 ## Prerequisites
 
@@ -32,6 +32,29 @@ npm install cva@beta tailwind-merge
 
 > We are using CVA 1.0.0 (beta). Check what's new in [their docs](https://beta.cva.style/getting-started/whats-new).
 
+## Imports Setup
+
+Foundations imports with a `#/` alias and real file extensions (`#/foundations/ui/button/button.tsx`). Map the alias in `package.json`:
+
+```json
+{
+  "imports": {
+    "#/*": "./src/*"
+  }
+}
+```
+
+This assumes a bundler compiles your TypeScript: a project emitting with `tsc` can't use `#/` imports, since `rewriteRelativeImportExtensions` only rewrites relative specifiers. TypeScript 6.0 or later resolves `#/` imports with `moduleResolution` set to `bundler` or `nodenext`, and needs `allowImportingTsExtensions` (which requires `noEmit`) to accept `.ts`/`.tsx` extensions. [@significa/ts-standards](https://github.com/significa/ts-standards) 0.2.3 or later already sets both; otherwise add them to `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}
+```
+
 ## CSS Setup
 
 Pick the strategy that matches your project: respect the user's OS preference automatically, or expose a manual theme switcher backed by a `data-theme` attribute on `<html>`.
@@ -40,7 +63,7 @@ Pick the strategy that matches your project: respect the user's OS preference au
 
 ## Utilities Setup
 
-Create a `lib/utils/classnames.ts` file with our utility functions:
+Create a `src/lib/utils/classnames.ts` file with our utility functions. Components import it as `#/lib/utils/classnames.ts`:
 
 <SourceCode file="src/lib/utils/classnames.ts" />
 

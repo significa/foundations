@@ -1,4 +1,4 @@
-import type { StoredFont, StoredFonts } from "./storage";
+import type { StoredFont, StoredFonts } from "./storage.ts";
 
 export type Pairing = {
   id: string;

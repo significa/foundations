@@ -1,6 +1,6 @@
 import { Children, cloneElement, isValidElement } from "react";
 
-import { cn } from "@/lib/utils/classnames";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const isValidSlottableElement = (
   value: unknown,

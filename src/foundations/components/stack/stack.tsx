@@ -1,7 +1,7 @@
 import { type HTMLAttributes, type ReactElement, type ReactNode, useEffect, useRef } from "react";
 
-import { debounce } from "@/foundations/utils/debounce/debounce";
-import { sum } from "@/foundations/utils/math/sum";
+import { debounce } from "#/foundations/utils/debounce/debounce.ts";
+import { sum } from "#/foundations/utils/math/sum.ts";
 
 const px = (value: number) => (Number.isNaN(value) ? undefined : `${value}px`);
 

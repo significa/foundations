@@ -1,4 +1,4 @@
-import { useElementSize } from "../use-element-size";
+import { useElementSize } from "#/foundations/hooks/use-element-size/use-element-size.ts";
 
 function UseElementSizeBasicPreview() {
   const [ref, size] = useElementSize<HTMLDivElement>();

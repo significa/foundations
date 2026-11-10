@@ -1,4 +1,4 @@
-import { Button } from "@/foundations/ui/button/button";
+import { Button } from "#/foundations/ui/button/button.tsx";
 
 export default function ButtonSizesPreview() {
   return (

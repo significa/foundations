@@ -1,4 +1,4 @@
-import { Radio } from "@/foundations/ui/radio/radio";
+import { Radio } from "#/foundations/ui/radio/radio.tsx";
 
 const labelClass = "font-medium text-base text-foreground";
 

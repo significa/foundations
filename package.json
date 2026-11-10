@@ -6,6 +6,9 @@
     "node": ">=24"
   },
   "packageManager": "pnpm@10.34.9",
+  "imports": {
+    "#/*": "./src/*"
+  },
   "scripts": {
     "dev": "astro dev",
     "dev:pagefind": "pnpm build && node ./scripts/pagefind.mjs --dev && pnpm dev",
@@ -51,7 +54,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.6",
-    "@significa/ts-standards": "0.2.2",
+    "@significa/ts-standards": "0.2.3",
     "knip": "^6.44.2",
     "prettier": "^3.9.10",
     "prettier-plugin-astro": "^1.1.2",

@@ -9,10 +9,10 @@ import {
   useState,
 } from "react";
 
-import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
-import { useMatchMedia } from "@/foundations/hooks/use-match-media/use-match-media";
-import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
-import { cn } from "@/lib/utils/classnames";
+import { useIntersectionObserver } from "#/foundations/hooks/use-intersection-observer/use-intersection-observer.ts";
+import { useMatchMedia } from "#/foundations/hooks/use-match-media/use-match-media.ts";
+import { useTicker } from "#/foundations/hooks/use-ticker/use-ticker.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 type DurationProp = number | ((contentLength: number) => number);
 

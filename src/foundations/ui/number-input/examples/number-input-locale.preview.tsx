@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { NumberInput } from "@/foundations/ui/number-input/number-input";
+import { NumberInput } from "#/foundations/ui/number-input/number-input.tsx";
 
 // German locale formatting: `1.234,56` instead of `1,234.56`. The same pattern
 // works for any locale via `Intl.NumberFormat`.

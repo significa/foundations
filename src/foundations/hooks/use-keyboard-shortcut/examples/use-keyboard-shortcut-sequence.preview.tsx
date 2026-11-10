@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useKeyboardShortcut } from "@/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut";
-import { Kbd } from "@/foundations/ui/kbd/kbd";
+import { useKeyboardShortcut } from "#/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut.ts";
+import { Kbd } from "#/foundations/ui/kbd/kbd.tsx";
 
 export default function UseKeyboardShortcutSequencePreview() {
   const [where, setWhere] = useState<string | null>(null);

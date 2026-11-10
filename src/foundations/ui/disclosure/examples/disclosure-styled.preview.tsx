@@ -1,5 +1,5 @@
-import { Disclosure } from "@/foundations/ui/disclosure/disclosure";
-import { cn } from "@/lib/utils/classnames";
+import { Disclosure } from "#/foundations/ui/disclosure/disclosure.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const AccordionGroup = ({ children, className }: React.ComponentProps<"div">) => {
   return (

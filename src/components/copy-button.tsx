@@ -1,7 +1,7 @@
 import { CheckIcon, ClipboardIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useRef, useState } from "react";
-import { IconButton } from "@/foundations/ui/button/button";
-import { cn } from "@/lib/utils/classnames";
+import { IconButton } from "#/foundations/ui/button/button.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 type CopyButtonProps = {
   className?: string;

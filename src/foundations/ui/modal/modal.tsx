@@ -10,10 +10,10 @@ import {
   useState,
 } from "react";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { useElementTransition } from "@/foundations/hooks/use-element-transition/use-element-transition";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { useElementTransition } from "#/foundations/hooks/use-element-transition/use-element-transition.ts";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 // Hook to manage native <dialog> element behavior
 const useDialogElement = (open: boolean, setOpen: (isOpen: boolean) => void) => {

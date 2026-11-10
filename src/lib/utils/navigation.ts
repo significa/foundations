@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import { getPageCreateTime, getPageLastModifiedTime } from "./content";
+import { getPageCreateTime, getPageLastModifiedTime } from "./content.ts";
 
 type NavigationItem = {
   title: string;

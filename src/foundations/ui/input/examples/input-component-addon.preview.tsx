@@ -1,8 +1,8 @@
 import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
 
-import { Input } from "@/foundations/ui/input/input";
-import { Menu } from "@/foundations/ui/menu/menu";
+import { Input } from "#/foundations/ui/input/input.tsx";
+import { Menu } from "#/foundations/ui/menu/menu.tsx";
 
 const countries = [
   { code: "PT", name: "Portugal", dial: "+351", flag: "🇵🇹" },

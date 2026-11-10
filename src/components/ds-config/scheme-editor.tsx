@@ -5,7 +5,7 @@ import {
   SEMANTIC_TOKENS,
   TOKEN_LABELS,
   type TokenValues,
-} from "./schemes";
+} from "./schemes.ts";
 
 const isValidColor = (value: string): boolean => {
   if (!value.trim()) return false;

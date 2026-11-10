@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { Button } from "@/foundations/ui/button/button";
-import { OTPInput } from "@/foundations/ui/otp-input/otp-input";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { OTPInput } from "#/foundations/ui/otp-input/otp-input.tsx";
 
 const LENGTH = 6;
 

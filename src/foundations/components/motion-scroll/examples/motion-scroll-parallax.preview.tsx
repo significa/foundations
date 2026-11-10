@@ -1,5 +1,5 @@
-import type { PreviewMeta } from "@/lib/preview";
-import { MotionScroll } from "../motion-scroll";
+import { MotionScroll } from "#/foundations/components/motion-scroll/motion-scroll.tsx";
+import type { PreviewMeta } from "#/lib/preview.ts";
 
 const sections = [
   { label: "Design", bg: "bg-accent/10" },

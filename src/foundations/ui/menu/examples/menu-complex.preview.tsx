@@ -11,8 +11,8 @@ import {
   TrashIcon,
   UserIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { Button } from "@/foundations/ui/button/button";
-import { Menu } from "@/foundations/ui/menu/menu";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Menu } from "#/foundations/ui/menu/menu.tsx";
 
 export default function MenuComplexPreview() {
   return (

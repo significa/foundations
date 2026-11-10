@@ -1,4 +1,4 @@
-import { cn, cva } from "@/lib/utils/classnames";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 type ProgressSize = "xs" | "sm" | "md" | "lg";
 type ProgressVariant = "linear" | "circular";

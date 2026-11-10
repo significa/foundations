@@ -3,7 +3,7 @@ import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField } from "astro/config";
-import { themes } from "./src/lib/shiki";
+import { themes } from "#/lib/shiki.ts";
 
 export default defineConfig({
   site: "https://foundations.significa.co",

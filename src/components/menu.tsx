@@ -1,9 +1,9 @@
 import { differenceInDays } from "date-fns";
 import { useEffect, useRef, useState } from "react";
-import { Badge } from "@/foundations/ui/badge/badge";
-import { Disclosure } from "@/foundations/ui/disclosure/disclosure";
-import { cn } from "@/lib/utils/classnames";
-import type { NavigationItem } from "@/lib/utils/navigation";
+import { Badge } from "#/foundations/ui/badge/badge.tsx";
+import { Disclosure } from "#/foundations/ui/disclosure/disclosure.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
+import type { NavigationItem } from "#/lib/utils/navigation.ts";
 
 type MenuProps = {
   currentPath?: string;

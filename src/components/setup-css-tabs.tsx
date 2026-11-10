@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Tabs } from "@/foundations/ui/tabs/tabs";
+import { Tabs } from "#/foundations/ui/tabs/tabs.tsx";
 
 interface Props {
   autoSlot: ReactNode;

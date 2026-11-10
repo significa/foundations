@@ -1,6 +1,6 @@
-import { useMousePan } from "@/foundations/hooks/use-mouse-pan/use-mouse-pan";
-import type { PreviewMeta } from "@/lib/preview";
-import { MotionScroll } from "../motion-scroll";
+import { MotionScroll } from "#/foundations/components/motion-scroll/motion-scroll.tsx";
+import { useMousePan } from "#/foundations/hooks/use-mouse-pan/use-mouse-pan.ts";
+import type { PreviewMeta } from "#/lib/preview.ts";
 
 const items = [
   { index: "01", label: "Design" },

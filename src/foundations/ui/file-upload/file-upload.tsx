@@ -9,9 +9,9 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { Progress } from "@/foundations/ui/progress/progress";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { Progress } from "#/foundations/ui/progress/progress.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 type FileUploadStatus = "idle" | "uploading" | "success" | "error";
 

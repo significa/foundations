@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-import { useElementSize } from "../use-element-size";
+import { useElementSize } from "#/foundations/hooks/use-element-size/use-element-size.ts";
 
 function UseElementSizeCallbackPreview() {
   const rootRef = useRef<HTMLDivElement>(null);

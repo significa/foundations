@@ -1,6 +1,6 @@
 import { WarningIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Input } from "@/foundations/ui/input/input";
+import { Input } from "#/foundations/ui/input/input.tsx";
 
 export default function InputGroupInvalid() {
   return (

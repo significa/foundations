@@ -28,7 +28,7 @@ folder: UI
 Render the `Toaster` component at the root of your application.
 
 ```tsx
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "#/components/ui/toaster.tsx";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -45,7 +45,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 Then, you can use the `toast` function to display messages.
 
 ```tsx
-import { toast } from "@/components/ui/toaster";
+import { toast } from "#/components/ui/toaster.tsx";
 
 toast({ title: "This is a toast message!" });
 ```

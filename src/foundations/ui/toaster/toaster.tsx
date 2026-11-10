@@ -1,12 +1,12 @@
 import { CheckCircleIcon, XCircleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
 import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useRef, useSyncExternalStore } from "react";
-import { useElementSize } from "@/foundations/hooks/use-element-size/use-element-size";
-import { useElementTransition } from "@/foundations/hooks/use-element-transition/use-element-transition";
-import { useTopLayer } from "@/foundations/hooks/use-top-layer/use-top-layer";
-import { Spinner } from "@/foundations/ui/spinner/spinner";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn } from "@/lib/utils/classnames";
+import { useElementSize } from "#/foundations/hooks/use-element-size/use-element-size.ts";
+import { useElementTransition } from "#/foundations/hooks/use-element-transition/use-element-transition.ts";
+import { useTopLayer } from "#/foundations/hooks/use-top-layer/use-top-layer.ts";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const DEFAULT_TOAST_DURATION_MS = 7000;
 

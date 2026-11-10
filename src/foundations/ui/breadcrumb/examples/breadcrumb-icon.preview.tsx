@@ -1,6 +1,6 @@
 import { HouseIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Breadcrumb } from "@/foundations/ui/breadcrumb/breadcrumb";
+import { Breadcrumb } from "#/foundations/ui/breadcrumb/breadcrumb.tsx";
 
 export default function BreadcrumbIconPreview() {
   return (

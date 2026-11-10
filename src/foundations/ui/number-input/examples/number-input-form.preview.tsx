@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Field } from "@/foundations/ui/field/field";
-import { NumberInput } from "@/foundations/ui/number-input/number-input";
+import { Field } from "#/foundations/ui/field/field.tsx";
+import { NumberInput } from "#/foundations/ui/number-input/number-input.tsx";
 
 export default function NumberInputFormExample() {
   const [quantity, setQuantity] = useState(1);

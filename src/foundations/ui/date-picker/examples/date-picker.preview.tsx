@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { useState } from "react";
 
-import { DatePicker } from "@/foundations/ui/date-picker/date-picker";
+import { DatePicker } from "#/foundations/ui/date-picker/date-picker.tsx";
 
 export default function DatePickerPreview() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);

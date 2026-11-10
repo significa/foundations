@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useStableCallback } from "@/foundations/hooks/use-stable-callback/use-stable-callback";
+import { useStableCallback } from "#/foundations/hooks/use-stable-callback/use-stable-callback.ts";
 
 export interface SingleKeyboardShortcut {
   key: string;

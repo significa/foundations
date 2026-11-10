@@ -5,8 +5,8 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { APIRoute } from "astro";
 import z from "zod";
-import { getPageVersion } from "@/lib/utils/content";
-import type { MdxTree } from "@/lib/utils/markdown";
+import { getPageVersion } from "#/lib/utils/content.ts";
+import type { MdxTree } from "#/lib/utils/markdown.ts";
 import {
   code,
   createComponentResolver,
@@ -15,7 +15,7 @@ import {
   link,
   markdown,
   parseMdx,
-} from "@/lib/utils/markdown";
+} from "#/lib/utils/markdown.ts";
 
 type Page = CollectionEntry<"pages">;
 
@@ -105,16 +105,24 @@ const resolveComponents = createComponentResolver([
   }),
 ]);
 
+const stringProp = (props: Record<string, unknown>, key: string) => {
+  const value = props[key];
+  return typeof value === "string" ? [value] : [];
+};
+
+/** Repo-relative sources of the page's `<Preview>` examples. */
+const getPreviewFiles = async (tree: MdxTree) => {
+  const previewSlugs = findComponentProps(tree, "Preview").flatMap((p) => stringProp(p, "slug"));
+  const previews = await Promise.all(previewSlugs.map((slug) => getEntry("previews", slug)));
+  // Preview paths are stored with a leading slash
+  return previews.flatMap((preview) => (preview ? [preview.data.file.replace(/^\/+/, "")] : []));
+};
+
 /**
  * Every source file a page emits as code (repo-relative): `files`, `<SourceCode>`,
  * `<SetupCssTabs>` and `<Preview>` sources.
  */
-const getEmittedSourceFiles = async (page: Page, tree: MdxTree) => {
-  const stringProp = (props: Record<string, unknown>, key: string) => {
-    const value = props[key];
-    return typeof value === "string" ? [value] : [];
-  };
-
+const getEmittedSourceFiles = (page: Page, tree: MdxTree, previewFiles: string[]) => {
   const sourceCodeFiles = findComponentProps(tree, "SourceCode").flatMap((p) =>
     stringProp(p, "file"),
   );
@@ -122,13 +130,6 @@ const getEmittedSourceFiles = async (page: Page, tree: MdxTree) => {
     findComponentProps(tree, "SetupCssTabs").length > 0
       ? [SETUP_CSS_FILES.prefersScheme, SETUP_CSS_FILES.dataAttr]
       : [];
-
-  const previewSlugs = findComponentProps(tree, "Preview").flatMap((p) => stringProp(p, "slug"));
-  const previews = await Promise.all(previewSlugs.map((slug) => getEntry("previews", slug)));
-  // Preview paths are stored with a leading slash
-  const previewFiles = previews.flatMap((preview) =>
-    preview ? [preview.data.file.replace(/^\/+/, "")] : [],
-  );
 
   return [...(page.data.files ?? []), ...sourceCodeFiles, ...setupCssFiles, ...previewFiles];
 };
@@ -211,21 +212,23 @@ const formatDependency = (entry: DependencyEntry) => {
   return `${link(entry.label, entry.href)}${names}${kind}${transitive}`;
 };
 
-const getDependencySection = async (page: Page, pages: Page[], emittedFiles: string[]) => {
-  const closure = getDependencyClosure(page, pages);
-
+const getDependencySection = async (
+  pages: Page[],
+  closure: DependencyEntry[],
+  emittedFiles: string[],
+) => {
   // Closure files count too: copying a dependency drags in what it imports
   const sourceFiles = [
     ...emittedFiles,
     ...closure.flatMap((e) => pages.find((p) => p.id === e.pageId)?.data.files ?? []),
   ];
-  const needsSetup = await someFileMatches(sourceFiles, /from ["']@\/lib\//);
+  const needsSetup = await someFileMatches(sourceFiles, /from ["']#\/lib\//);
   const needsReactTypes = await someFileMatches(sourceFiles, /style=\{\{[^}]*["']--/);
 
   const items = [
     ...(needsSetup
       ? [
-          `${link("Setup", "/setup/llms.txt")}: global CSS tokens and \`cn\`/\`cva\` from \`@/lib/utils/classnames\``,
+          `${link("Setup", "/setup/llms.txt")}: global CSS tokens and \`cn\`/\`cva\` from \`#/lib/utils/classnames.ts\``,
         ]
       : []),
     ...(needsReactTypes
@@ -248,6 +251,35 @@ const getDependencySection = async (page: Page, pages: Page[], emittedFiles: str
   ];
 };
 
+const FOUNDATIONS_IMPORT = /from\s+["']#\/foundations\/([^"']+)["']/g;
+
+/** Items the examples import that the page's own dependency closure doesn't bring in. */
+const getExamplesAlsoUse = async (
+  page: Page,
+  pages: Page[],
+  closure: DependencyEntry[],
+  previewFiles: string[],
+) => {
+  const covered = new Set([page.id, ...closure.map((e) => e.pageId)]);
+  const contents = await Promise.all(previewFiles.map((file) => readFile(file, "utf-8")));
+  const used = new Map<string, Page>();
+
+  for (const content of contents) {
+    for (const [, target = ""] of content.matchAll(FOUNDATIONS_IMPORT)) {
+      // Longest matching id wins, so a nested page isn't attributed to its parent
+      const owner = pages
+        .filter((p) => target.startsWith(`${p.id}/`))
+        .sort((a, b) => b.id.length - a.id.length)[0];
+      if (owner && !covered.has(owner.id)) used.set(owner.id, owner);
+    }
+  }
+
+  if (used.size === 0) return "";
+
+  const links = [...used.values()].map((p) => link(p.data.title, `/${p.id}/llms.txt`));
+  return `Examples also use: ${links.join(", ")} (not needed to use ${page.data.title} itself).`;
+};
+
 export const GET = (async ({ params }) => {
   const page = await getEntry("pages", params.path || "");
 
@@ -263,7 +295,9 @@ export const GET = (async ({ params }) => {
   // One parse feeds the source-file list, the unresolved-tag check and the resolver
   const body = page.body || "";
   const tree = parseMdx(body);
-  const emittedFiles = await getEmittedSourceFiles(page, tree);
+  const previewFiles = await getPreviewFiles(tree);
+  const emittedFiles = getEmittedSourceFiles(page, tree, previewFiles);
+  const closure = getDependencyClosure(page, pages);
   const version = await getPageVersion(page, emittedFiles);
   const sha = version.sha ?? "unknown";
   const versionLine = [sha, version.date?.slice(0, 10)].filter(Boolean).join(" · ");
@@ -276,9 +310,10 @@ export const GET = (async ({ params }) => {
     page.data.description,
     `Version: ${versionLine}`,
     hasSource
-      ? `When copying, keep a header comment \`// Adapted from Foundations /${page.id}@${sha}\` (\`/* … */\` in CSS) so the copy can be diffed against upstream later.`
+      ? `When copying, keep a header comment \`// Adapted from Foundations /${page.id}@${sha}\` (\`/* … */\` in CSS) so the copy can be diffed against upstream later. Imports use the \`#/\` alias with file extensions (\`#/foundations/<category>/<name>/<name>.tsx\`); rewrite them to your project's layout, keeping the extensions.`
       : "",
-    ...(await getDependencySection(page, pages, emittedFiles)),
+    ...(await getDependencySection(pages, closure, emittedFiles)),
+    await getExamplesAlsoUse(page, pages, closure, previewFiles),
     files.length > 0 ? markdown("## Source Code", "", files.join("\n\n")) : "",
     await resolveComponents(tree, body, page.id),
   ];

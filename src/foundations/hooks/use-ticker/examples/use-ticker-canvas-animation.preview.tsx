@@ -1,8 +1,8 @@
 import { ArrowCounterClockwiseIcon, PlayIcon, SquareIcon } from "@phosphor-icons/react/dist/ssr";
 import { useCallback, useEffect, useRef } from "react";
 
-import { useTicker } from "@/foundations/hooks/use-ticker/use-ticker";
-import { Button } from "@/foundations/ui/button/button";
+import { useTicker } from "#/foundations/hooks/use-ticker/use-ticker.ts";
+import { Button } from "#/foundations/ui/button/button.tsx";
 
 const UseTickerCanvasAnimation = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

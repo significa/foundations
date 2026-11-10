@@ -3,7 +3,7 @@ import type { KnipConfig } from "knip";
 // `page.mdx` docs reference real component/util source two ways that knip can't
 // see: a `files:` list in the YAML frontmatter and `<SourceCode file=… />`
 // elements. This compiler surfaces both as imports (rewriting `src/` to the
-// `@/` alias) so knip resolves the doc-driven usage instead of reporting the
+// `#/` alias) so knip resolves the doc-driven usage instead of reporting the
 // whole library as dead. Body `import` statements are intentionally NOT parsed:
 // the guides embed illustrative imports inside code fences (@playwright/test,
 // next, …) that would register as false dependencies.
@@ -22,7 +22,7 @@ const mdxCompiler = (text: string): string => {
     if (path) paths.push(path);
   }
 
-  return paths.map((path) => `import "${path.replace(/^src\//, "@/")}";`).join("\n");
+  return paths.map((path) => `import "${path.replace(/^src\//, "#/")}";`).join("\n");
 };
 
 const config: KnipConfig = {

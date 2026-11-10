@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/classnames";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const Switch = ({ className, ...props }: Omit<React.ComponentPropsWithRef<"input">, "type">) => {
   return (

@@ -1,4 +1,4 @@
-import { Disclosure } from "@/foundations/ui/disclosure/disclosure";
+import { Disclosure } from "#/foundations/ui/disclosure/disclosure.tsx";
 
 export default function DisclosureChevronPreview() {
   return (

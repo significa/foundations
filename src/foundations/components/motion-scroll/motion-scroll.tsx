@@ -7,9 +7,9 @@ import {
   useReducedMotion,
 } from "motion/react";
 import { type ComponentPropsWithRef, useEffect, useRef } from "react";
-import { Slot } from "@/foundations/components/slot/slot";
-import { useMatchMedia } from "@/foundations/hooks/use-match-media/use-match-media";
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { useMatchMedia } from "#/foundations/hooks/use-match-media/use-match-media.ts";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 
 type MotionScrollProps = ComponentPropsWithRef<"div"> & {
   keyframes: DOMKeyframesDefinition;

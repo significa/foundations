@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Calendar } from "@/foundations/ui/calendar/calendar";
+import { Calendar } from "#/foundations/ui/calendar/calendar.tsx";
 
 export default function CalendarRangePreview() {
   const [dateRange, setDateRange] = useState<[Date, Date]>([

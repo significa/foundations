@@ -1,8 +1,8 @@
 import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 import { createContext, use, useId, useState } from "react";
 
-import { Slot } from "@/foundations/components/slot/slot";
-import { cn } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 interface DisclosureGroupContext {
   open: string | null;

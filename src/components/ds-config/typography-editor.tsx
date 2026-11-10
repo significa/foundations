@@ -1,5 +1,5 @@
-import type { FontCategory, FontSlot, StoredFont, StoredFonts } from "./storage";
-import { TypographyPicker } from "./typography-picker";
+import type { FontCategory, FontSlot, StoredFont, StoredFonts } from "./storage.ts";
+import { TypographyPicker } from "./typography-picker.tsx";
 
 type SlotConfig = {
   slot: FontSlot;

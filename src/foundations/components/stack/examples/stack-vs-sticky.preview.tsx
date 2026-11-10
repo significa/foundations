@@ -1,8 +1,8 @@
 import { FireIcon, LeafIcon, PizzaIcon } from "@phosphor-icons/react/dist/ssr";
 
-import { Stack } from "@/foundations/components/stack/stack";
-import { Divider } from "@/foundations/ui/divider/divider";
-import { cn } from "@/lib/utils/classnames";
+import { Stack } from "#/foundations/components/stack/stack.tsx";
+import { Divider } from "#/foundations/ui/divider/divider.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const items = [
   {

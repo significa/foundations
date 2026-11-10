@@ -1,10 +1,10 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 
-import { Sequence } from "@/foundations/components/sequence/sequence";
-import { cn } from "@/lib/utils/classnames";
+import { Sequence } from "#/foundations/components/sequence/sequence.tsx";
+import { cn } from "#/lib/utils/classnames.ts";
 
-import { eras as CONTENT } from "./content";
+import { eras as CONTENT } from "./content.ts";
 
 const SequenceMotion = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);

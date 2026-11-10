@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { useScrollLock } from "@/foundations/hooks/use-scroll-lock/use-scroll-lock";
-import { Button } from "@/foundations/ui/button/button";
+import { useScrollLock } from "#/foundations/hooks/use-scroll-lock/use-scroll-lock.ts";
+import { Button } from "#/foundations/ui/button/button.tsx";
 
 const UseScrollLockPreview = () => {
   const [isLocked, setIsLocked] = useState(false);

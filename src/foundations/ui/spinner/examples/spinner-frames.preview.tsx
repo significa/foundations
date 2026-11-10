@@ -1,4 +1,4 @@
-import { SPINNER_FRAMES, Spinner } from "@/foundations/ui/spinner/spinner";
+import { SPINNER_FRAMES, Spinner } from "#/foundations/ui/spinner/spinner.tsx";
 
 const presets: Array<{
   name: keyof typeof SPINNER_FRAMES;

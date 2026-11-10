@@ -2,16 +2,16 @@
 import { getCollection, render } from "astro:content";
 import { ArrowSquareOutIcon, PackageIcon, PencilIcon, CalendarIcon } from "@phosphor-icons/react";
 import { format } from "date-fns";
-import CodeBlock from "@/components/code-block.astro";
-import Preview from "@/components/preview.astro";
-import PropsTable from "@/components/props-table.astro";
-import SourceCode from "@/components/source-code.astro";
-import { TableOfContents } from "@/components/table-of-contents";
-import { Badge } from "@/foundations/ui/badge/badge";
-import PageLayout from "@/layouts/page.astro";
-import Shell from "@/layouts/shell.astro";
-import { GITHUB_REPO_URL } from "@/lib/constants";
-import { getPageLastModifiedTime } from "@/lib/utils/content";
+import CodeBlock from "#/components/code-block.astro";
+import Preview from "#/components/preview.astro";
+import PropsTable from "#/components/props-table.astro";
+import SourceCode from "#/components/source-code.astro";
+import { TableOfContents } from "#/components/table-of-contents.tsx";
+import { Badge } from "#/foundations/ui/badge/badge.tsx";
+import PageLayout from "#/layouts/page.astro";
+import Shell from "#/layouts/shell.astro";
+import { GITHUB_REPO_URL } from "#/lib/constants.ts";
+import { getPageLastModifiedTime } from "#/lib/utils/content.ts";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");

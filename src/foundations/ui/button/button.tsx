@@ -1,9 +1,9 @@
 import type { VariantProps } from "cva";
 import { Children, Fragment, isValidElement, useEffect } from "react";
-import { Slot, Slottable } from "@/foundations/components/slot/slot";
-import { Spinner } from "@/foundations/ui/spinner/spinner";
-import { cn, cva } from "@/lib/utils/classnames";
-import { Divider } from "../divider/divider";
+import { Slot, Slottable } from "#/foundations/components/slot/slot.tsx";
+import { Divider } from "#/foundations/ui/divider/divider.tsx";
+import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const buttonStyle = cva({
   base: [

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Listbox } from "@/foundations/ui/listbox/listbox";
-import type { FontCategory, StoredFont } from "./storage";
-import { type FontMeta, fetchCatalog, loadGoogleFont } from "./use-fonts-catalog";
+import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
+import type { FontCategory, StoredFont } from "./storage.ts";
+import { type FontMeta, fetchCatalog, loadGoogleFont } from "./use-fonts-catalog.ts";
 
 const FEATURED_BY_CATEGORY: Record<FontCategory, FontMeta[]> = {
   "sans-serif": [

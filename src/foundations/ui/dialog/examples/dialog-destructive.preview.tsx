@@ -1,5 +1,5 @@
-import { Button } from "@/foundations/ui/button/button";
-import { Dialog } from "@/foundations/ui/dialog/dialog";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Dialog } from "#/foundations/ui/dialog/dialog.tsx";
 
 export default function DialogDestructivePreview() {
   return (

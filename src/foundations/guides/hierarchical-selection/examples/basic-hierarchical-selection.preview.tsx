@@ -1,8 +1,7 @@
-import { Checkbox } from "@/foundations/ui/checkbox/checkbox";
-import { Disclosure } from "@/foundations/ui/disclosure/disclosure";
-
-import type { HierarchicalItem } from "../hierarchical-data";
-import { useHierarchicalSelection } from "../use-hierarchical-selection";
+import type { HierarchicalItem } from "#/foundations/guides/hierarchical-selection/hierarchical-data.ts";
+import { useHierarchicalSelection } from "#/foundations/guides/hierarchical-selection/use-hierarchical-selection.tsx";
+import { Checkbox } from "#/foundations/ui/checkbox/checkbox.tsx";
+import { Disclosure } from "#/foundations/ui/disclosure/disclosure.tsx";
 
 const sampleData: HierarchicalItem[] = [
   {

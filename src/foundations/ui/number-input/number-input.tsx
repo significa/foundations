@@ -1,8 +1,8 @@
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Slot } from "@/foundations/components/slot/slot";
-import { Input, type InputSize, type InputVariant } from "@/foundations/ui/input/input";
-import { cn, cva } from "@/lib/utils/classnames";
+import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { Input, type InputSize, type InputVariant } from "#/foundations/ui/input/input.tsx";
+import { cn, cva } from "#/lib/utils/classnames.ts";
 
 interface NumberInputContextValue {
   value: number;

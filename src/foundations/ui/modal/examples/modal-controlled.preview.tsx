@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { Button } from "@/foundations/ui/button/button";
-import { Modal } from "@/foundations/ui/modal/modal";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { Modal } from "#/foundations/ui/modal/modal.tsx";
 
 const ModalControlledPreview = () => {
   const [open, setOpen] = useState(false);

@@ -1,8 +1,8 @@
 import chroma from "chroma-js";
 import { createContext, use, useMemo, useRef } from "react";
 
-import { composeRefs } from "@/foundations/utils/compose-refs/compose-refs";
-import { cn } from "@/lib/utils/classnames";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 type HSVA = [number, number, number, number];
 

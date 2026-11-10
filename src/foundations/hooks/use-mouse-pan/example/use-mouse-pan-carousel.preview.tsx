@@ -3,12 +3,12 @@ import { Children, createContext, type ReactNode, useContext, useMemo, useState 
 import {
   InstanceCounterProvider,
   useInstanceCounter,
-} from "@/foundations/components/instance-counter/instance-counter";
-import { useIntersectionObserver } from "@/foundations/hooks/use-intersection-observer/use-intersection-observer";
-import { useMousePan } from "@/foundations/hooks/use-mouse-pan/use-mouse-pan";
-import { Button } from "@/foundations/ui/button/button";
-import { clamp } from "@/foundations/utils/math/clamp";
-import { cn } from "@/lib/utils/classnames";
+} from "#/foundations/components/instance-counter/instance-counter.tsx";
+import { useIntersectionObserver } from "#/foundations/hooks/use-intersection-observer/use-intersection-observer.ts";
+import { useMousePan } from "#/foundations/hooks/use-mouse-pan/use-mouse-pan.ts";
+import { Button } from "#/foundations/ui/button/button.tsx";
+import { clamp } from "#/foundations/utils/math/clamp.ts";
+import { cn } from "#/lib/utils/classnames.ts";
 
 const ITEMS = [
   {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useKeyboardShortcut } from "@/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut";
-import { Kbd } from "@/foundations/ui/kbd/kbd";
+import { useKeyboardShortcut } from "#/foundations/hooks/use-keyboard-shortcut/use-keyboard-shortcut.ts";
+import { Kbd } from "#/foundations/ui/kbd/kbd.tsx";
 
 // Detect Mac on the client only — `navigator` doesn't exist during SSR, so
 // the first render assumes non-Mac and updates after hydration.

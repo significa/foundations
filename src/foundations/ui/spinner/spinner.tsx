@@ -1,7 +1,7 @@
 import type { VariantProps } from "cva";
 import { useEffect, useState } from "react";
 
-import { cva } from "@/lib/utils/classnames";
+import { cva } from "#/lib/utils/classnames.ts";
 
 type SpinnerSize = "xs" | "sm" | "md" | "lg";
 type SpinnerVariant = "ring" | "dots" | "bars" | "frames";

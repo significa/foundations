@@ -8,7 +8,7 @@ import {
   type HierarchicalItem,
   type HierarchicalSelectionState,
   type SelectionStatus,
-} from "./hierarchical-data";
+} from "./hierarchical-data.ts";
 
 export interface UseHierarchicalSelectionOptions {
   /** Initial selected item IDs */

@@ -1,7 +1,7 @@
 import { ClipboardIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useState } from "react";
-import { IconButton } from "@/foundations/ui/button/button";
-import { Tooltip } from "@/foundations/ui/tooltip/tooltip";
+import { IconButton } from "#/foundations/ui/button/button.tsx";
+import { Tooltip } from "#/foundations/ui/tooltip/tooltip.tsx";
 
 export default function TooltipPersistClickPreview() {
   const [copied, setCopied] = useState(false);

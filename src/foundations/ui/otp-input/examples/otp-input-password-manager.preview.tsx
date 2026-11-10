@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { OTPInput } from "@/foundations/ui/otp-input/otp-input";
+import { OTPInput } from "#/foundations/ui/otp-input/otp-input.tsx";
 
 export default function OTPInputPasswordManagerExample() {
   const [value, setValue] = useState("");
