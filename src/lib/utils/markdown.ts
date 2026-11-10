@@ -42,9 +42,36 @@ const defineComponent = <T extends z.ZodType>(definition: {
   return definition as ComponentDefinition<T>;
 };
 
+type AstNode = { type: string; name?: string | null; children?: AstNode[] };
+
 const createComponentResolver = (components: ComponentDefinition<z.ZodType>[]) => {
-  return async (mdxContent: string) => {
+  return async (mdxContent: string, label: string) => {
     const tree = unified().use(remarkParse).use(remarkMdx).parse(mdxContent);
+
+    // Only top-level elements get replaced, so a known component nested elsewhere is unresolved too
+    const unresolved = new Set<string>();
+    const findUnresolved = (node: AstNode, isTopLevel: boolean) => {
+      const isJsx = node.type === "mdxJsxFlowElement" || node.type === "mdxJsxTextElement";
+
+      if (isJsx && node.name && /^[A-Z]/.test(node.name)) {
+        const isResolved =
+          isTopLevel &&
+          node.type === "mdxJsxFlowElement" &&
+          components.some((c) => c.name === node.name);
+        if (!isResolved) unresolved.add(node.name);
+      }
+
+      for (const child of node.children ?? []) findUnresolved(child, false);
+    };
+
+    for (const node of tree.children) findUnresolved(node, true);
+
+    if (unresolved.size > 0) {
+      const names = [...unresolved].map((name) => `<${name}>`).join(", ");
+      throw new Error(
+        `[llms.txt] ${label}: unresolved MDX component(s) ${names}. Add a resolver in src/pages/[...path]/llms.txt.ts.`,
+      );
+    }
 
     const replacements: { start: number; end: number; value: string }[] = [];
 
@@ -112,34 +139,4 @@ const createComponentResolver = (components: ComponentDefinition<z.ZodType>[]) =
   };
 };
 
-/** JSX component names (`<Foo`) left in markdown, ignoring fenced and inline code. */
-const findUnresolvedComponents = (content: string) => {
-  const found = new Set<string>();
-  let openFence: string | null = null;
-
-  for (const line of content.split("\n")) {
-    const marker = line.match(/^\s*(`{3,}|~{3,})/)?.[1];
-
-    if (openFence) {
-      if (marker && marker[0] === openFence[0] && marker.length >= openFence.length) {
-        openFence = null;
-      }
-      continue;
-    }
-
-    if (marker) {
-      openFence = marker;
-      continue;
-    }
-
-    const withoutInlineCode = line.replace(/(`+)[\s\S]*?\1/g, "");
-
-    for (const match of withoutInlineCode.matchAll(/<([A-Z][\w.]*)/g)) {
-      if (match[1]) found.add(match[1]);
-    }
-  }
-
-  return [...found];
-};
-
-export { code, createComponentResolver, defineComponent, findUnresolvedComponents, link, markdown };
+export { code, createComponentResolver, defineComponent, link, markdown };

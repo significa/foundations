@@ -9,7 +9,6 @@ import {
   code,
   createComponentResolver,
   defineComponent,
-  findUnresolvedComponents,
   link,
   markdown,
 } from "@/lib/utils/markdown";
@@ -114,6 +113,18 @@ const getInlineSourceFiles = (page: Page) => {
   return files;
 };
 
+/** Source files of the `<Preview>` examples a page inlines. */
+const getInlinePreviewFiles = async (page: Page) => {
+  const slugs = [...(page.body || "").matchAll(/<Preview\s[^>]*slug="([^"]+)"/g)].flatMap(
+    (m) => m[1] ?? [],
+  );
+  const previews = await Promise.all(slugs.map((slug) => getEntry("previews", slug)));
+
+  return previews.flatMap((preview) =>
+    preview ? [path.join(process.cwd(), preview.data.file)] : [],
+  );
+};
+
 type DependencyEntry = {
   href: string;
   label: string;
@@ -201,7 +212,12 @@ const getDependencySection = async (page: Page, pages: Page[]) => {
     (p) => p?.data.files ?? [],
   );
   const needsSetup = hasFiles && (await someFileMatches(sourceFiles, /from ["']@\/lib\//));
-  const needsReactTypes = hasFiles && (await someFileMatches(sourceFiles, /style=\{\{[^}]*["']--/));
+  // Inlined examples get copied too
+  const previewFiles = await getInlinePreviewFiles(page);
+  const needsReactTypes = await someFileMatches(
+    [...(hasFiles ? sourceFiles : []), ...previewFiles],
+    /style=\{\{[^}]*["']--/,
+  );
 
   const items = [
     ...(needsSetup
@@ -258,18 +274,10 @@ export const GET = (async ({ params }) => {
       : "",
     ...(await getDependencySection(page, pages)),
     files.length > 0 ? markdown("## Source Code", "", files.join("\n\n")) : "",
-    await resolveComponents(page.body || ""),
+    await resolveComponents(page.body || "", page.id),
   ];
 
   const content = `${sections.filter(Boolean).join("\n\n")}\n`;
-
-  const unresolved = findUnresolvedComponents(content);
-
-  if (unresolved.length > 0) {
-    throw new Error(
-      `[llms.txt] ${page.id}: unresolved MDX component(s) ${unresolved.map((n) => `<${n}>`).join(", ")}. Add a resolver in src/pages/[...path]/llms.txt.ts.`,
-    );
-  }
 
   return new Response(content);
 }) satisfies APIRoute;
