@@ -46,7 +46,12 @@ const Tabs = ({
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [values, setValues] = useState<string[]>([]);
 
-  const selectedValue = valueProp ?? internalValue;
+  const currentValue = valueProp ?? internalValue;
+  // A value with no tab selects nothing. Before tabs register (SSR, first render), trust it.
+  const selectedValue =
+    currentValue !== undefined && (values.length === 0 || values.includes(currentValue))
+      ? currentValue
+      : undefined;
 
   // Uncontrolled: with no default, or once the selected tab is gone, select the first tab.
   // Not a user action, so onValueChange doesn't fire.
@@ -142,12 +147,9 @@ const sortByDomOrder = (tabsId: string, values: string[]) =>
 // Named anchor() (not position-anchor) so the insets' computed value changes and transitions.
 // Firefox doesn't animate anchor() yet: https://bugzil.la/1924226
 const TabsIndicator = () => {
-  const { id, selectedValue, values, variant, orientation } = useTabsContext();
+  const { id, selectedValue, variant, orientation } = useTabsContext();
 
-  // A controlled value with no matching tab has nothing to anchor to.
-  if (selectedValue === undefined || (values.length > 0 && !values.includes(selectedValue))) {
-    return null;
-  }
+  if (selectedValue === undefined) return null;
 
   return (
     <span
@@ -209,14 +211,21 @@ const TabsItem = ({
   }, [value, registerTab]);
 
   const isSelected = selectedValue === value;
-  // Roving tabindex: when no tab is selected (a controlled value with no tab), the first one
-  // stays reachable.
-  const isTabbable =
-    isSelected ||
-    (values[0] === value && (selectedValue === undefined || !values.includes(selectedValue)));
+  // Roving tabindex: with no tab selected, the first one stays reachable.
+  const isTabbable = isSelected || (selectedValue === undefined && values[0] === value);
 
-  // Enter and Space activate through the native click.
   const handleKeyboardNavigation = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    // Buttons click on Enter and Space, links on Enter; anything else (asChild) gets a click.
+    const element = e.currentTarget;
+    const clicksNatively =
+      element.tagName === "BUTTON" ||
+      (element.tagName === "A" && element.hasAttribute("href") && e.key === "Enter");
+    if ((e.key === "Enter" || e.key === " ") && !clicksNatively) {
+      e.preventDefault();
+      element.click();
+      return;
+    }
+
     const index = values.indexOf(value);
     let target: string | undefined;
 
