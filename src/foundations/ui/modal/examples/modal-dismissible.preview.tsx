@@ -4,12 +4,12 @@ import { Button } from "#/foundations/ui/button/button.tsx";
 import { Modal } from "#/foundations/ui/modal/modal.tsx";
 import { Textarea } from "#/foundations/ui/textarea/textarea.tsx";
 
-const ModalKeepOpenPreview = () => {
+const ModalDismissiblePreview = () => {
   const [note, setNote] = useState("");
   const isDirty = note.length > 0;
 
   return (
-    <Modal keepOpen={isDirty}>
+    <Modal dismissible={!isDirty}>
       <Modal.Trigger asChild>
         <Button variant="outline">Add note</Button>
       </Modal.Trigger>
@@ -38,4 +38,4 @@ const ModalKeepOpenPreview = () => {
   );
 };
 
-export default ModalKeepOpenPreview;
+export default ModalDismissiblePreview;

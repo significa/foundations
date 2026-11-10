@@ -62,11 +62,11 @@ body:has(dialog[open]) {
       type: "(open: boolean) => void",
       description: "Callback fired when the open state changes",
     },
-    keepOpen: {
+    dismissible: {
       type: "boolean",
-      default: "false",
+      default: "true",
       description:
-        "Blocks light dismiss (Esc and backdrop click), e.g. while a form inside has unsaved changes. Modal.Close and setting `open` still close it.",
+        "When false, Esc and backdrop click no longer close it, e.g. while a form inside has unsaved changes. Modal.Close and setting `open` still close it.",
     },
     children: {
       type: "ReactNode",
@@ -156,13 +156,13 @@ Extends the `p` element.
 
 <Preview slug="modal-controlled" />
 
-### Keep Open
+### Dismissible
 
-Set `keepOpen` while closing would lose work, such as a dirty form. Esc and backdrop clicks are
+Set `dismissible={false}` while closing would lose work, such as a dirty form. Esc and backdrop clicks are
 ignored; `Modal.Close` and your own state still close it. A close the browser won't let us cancel
-(repeated back gestures without user activation) still closes, and state follows.
+(repeated back gestures without user activation) still closes, and state follows. In Chrome this includes a second Esc without other user activation. `onOpenChange(false)` from such a close can't be refused, so a controlled consumer should accept it.
 
-<Preview slug="modal-keep-open" />
+<Preview slug="modal-dismissible" />
 
 ## Best Practices
 

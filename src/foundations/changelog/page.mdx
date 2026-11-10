@@ -29,14 +29,14 @@ Apply these to your copies of `modal.tsx`, `dialog.tsx` and `drawer.tsx`.
   and the alignment and size of wherever it was rendered (a centred, coloured or small-text
   container). Both now set `text-start text-base text-foreground`.
 
-New: `keepOpen` on `Modal` (and so `Dialog` and `Drawer`) blocks Esc and backdrop dismiss, for
+New: `dismissible` on `Modal` (and so `Dialog` and `Drawer`) blocks Esc and backdrop dismiss when set to `false`, for
 example while a form has unsaved changes. `Modal.Close` and your own state still close it.
 
 ```diff tsx
   const useDialogElement = (
     open: boolean,
     setOpen: (isOpen: boolean) => void,
-+   keepOpen: boolean,
++   dismissible: boolean,
 +   isMounted: boolean,
   ) => {
     const ref = useRef<HTMLDialogElement>(null);
@@ -52,7 +52,7 @@ example while a form has unsaved changes. `Modal.Close` and your own state still
 +       if (!event.cancelable) return;
         event.preventDefault();
 -       setOpen(false);
-+       if (!keepOpen) setOpen(false);
++       if (dismissible) setOpen(false);
       }, { signal });
 
 +     element.addEventListener("close", () => {
@@ -65,15 +65,15 @@ example while a form has unsaved changes. `Modal.Close` and your own state still
           event.preventDefault();
           event.stopPropagation();
 -         setOpen(false);
-+         if (!keepOpen) setOpen(false);
++         if (dismissible) setOpen(false);
         }
       }, { signal });
 -   }, [open, setOpen]);
-+   }, [open, setOpen, keepOpen]);
++   }, [open, setOpen, dismissible]);
 
     useEffect(() => {
 -     if (!element || !open) return;
-+     if (!element || !open || keepOpen) return;
++     if (!element || !open || !dismissible) return;
 -     const handleDialogClick = (event: MouseEvent) => {
 -       if ((event.target as HTMLElement).nodeName === "DIALOG") { … }
 -     };
@@ -104,7 +104,7 @@ example while a form has unsaved changes. `Modal.Close` and your own state still
 +       element.removeEventListener("click", handleClick);
 +     };
 -   }, [setOpen, open]);
-+   }, [setOpen, open, keepOpen]);
++   }, [setOpen, open, dismissible]);
 
 +   useEffect(() => {
 +     if (!isMounted) return;
@@ -117,37 +117,37 @@ example while a form has unsaved changes. `Modal.Close` and your own state still
 
   const ModalContext = createContext<{
     open: boolean;
-+   keepOpen: boolean;
++   dismissible: boolean;
     …
   } | null>(null);
 
   interface ModalProps {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
-+   keepOpen?: boolean;
++   dismissible?: boolean;
     children: React.ReactNode;
   }
 
 - const Modal = ({ open: propsOpen, onOpenChange, children }: ModalProps) => {
-+ const Modal = ({ open: propsOpen, onOpenChange, keepOpen = false, children }: ModalProps) => {
++ const Modal = ({ open: propsOpen, onOpenChange, dismissible = true, children }: ModalProps) => {
     const ctx = useMemo(
       () => ({
         open,
         setOpen,
-+       keepOpen,
++       dismissible,
         …
       }),
 -     [descriptionId, labelId, open, setOpen],
-+     [descriptionId, labelId, open, setOpen, keepOpen],
++     [descriptionId, labelId, open, setOpen, dismissible],
     );
 
   const ModalContent = (…) => {
 -   const { open, labelId, descriptionId, setOpen } = useModalContext();
 -   const dialogRef = useDialogElement(open, setOpen);
 -   const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
-+   const { open, keepOpen, labelId, descriptionId, setOpen } = useModalContext();
++   const { open, dismissible, labelId, descriptionId, setOpen } = useModalContext();
 +   const { ref: transitionRef, isMounted, status } = useElementTransition<HTMLDialogElement>(open);
-+   const dialogRef = useDialogElement(open, setOpen, keepOpen, isMounted);
++   const dialogRef = useDialogElement(open, setOpen, dismissible, isMounted);
 ```
 
 ```diff tsx
