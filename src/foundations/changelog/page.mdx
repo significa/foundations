@@ -115,8 +115,31 @@ example while a form has unsaved changes. `Modal.Close` and your own state still
 +   }, [isMounted]);
   };
 
+  const ModalContext = createContext<{
+    open: boolean;
++   keepOpen: boolean;
+    …
+  } | null>(null);
+
+  interface ModalProps {
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
++   keepOpen?: boolean;
+    children: React.ReactNode;
+  }
+
 - const Modal = ({ open: propsOpen, onOpenChange, children }: ModalProps) => {
 + const Modal = ({ open: propsOpen, onOpenChange, keepOpen = false, children }: ModalProps) => {
+    const ctx = useMemo(
+      () => ({
+        open,
+        setOpen,
++       keepOpen,
+        …
+      }),
+-     [descriptionId, labelId, open, setOpen],
++     [descriptionId, labelId, open, setOpen, keepOpen],
+    );
 
   const ModalContent = (…) => {
 -   const { open, labelId, descriptionId, setOpen } = useModalContext();
