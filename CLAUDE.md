@@ -224,6 +224,10 @@ Internal hrefs are paths under `src/foundations/` (e.g., `/ui/popover` → `src/
 
 Imports from `@/lib/...` (utilities provided by the setup guide) are skipped automatically.
 
+### llms.txt output
+
+`/<path>/llms.txt` (`src/pages/[...path]/llms.txt.ts`) resolves every MDX component to markdown (`Preview`, `SourceCode`, `SetupCssTabs`, `PropsTable`) and strips MDX imports. The build **fails** if a `<Capitalized` tag survives outside code, so a new MDX component used in a `page.mdx` needs a resolver there. Each page opens with a version stamp (short sha of the last commit touching the page or its source, plus date; `unknown` without history) and lists its full dependency closure in copy order, leaves first.
+
 ---
 
 ## Styling
@@ -238,20 +242,12 @@ Imports from `@/lib/...` (utilities provided by the setup guide) are skipped aut
 
 ## Changelog discipline
 
-Foundations is consumed by copy-paste. After every change, evaluate critically whether it warrants a `src/foundations/changelog/page.mdx` entry. The bar: **a consumer reading the entry should know whether their copy needs updating, how to update it, and why.**
-
-Add an entry when the change affects consumer code:
+Foundations is consumed by copy-paste, and every page's `llms.txt` carries a version stamp (short sha + date) that copies keep in a header comment. Anything a consumer only needs to _know about_ is discoverable by diffing their copy against upstream from that sha, so `src/foundations/changelog/page.mdx` is reserved for changes a consumer **must apply or would be hurt by missing**:
 
 - A bug fix in a primitive that consumers should apply to their copies.
-- A renamed/moved/removed export, prop, or attribute they may target.
-- A new token, hook, or pattern that supersedes the old way (with the new way clearly the recommended path).
-- A behavior change visible at the call site or in rendered output.
+- A breaking rename or removal of an export, prop, attribute, or token they may target.
+- A behaviour change visible at the call site.
 
-Skip the entry when the change is invisible to consumers:
+Everything else (new components, optional improvements, refactors, docs-site infrastructure) gets no entry.
 
-- Internal renames of unexported symbols.
-- Refactors that don't change the public API or rendered output.
-- Docs-site infrastructure (the docs app itself, not the library).
-- New components — those are documented on their own page; mention in the changelog only if they replace something existing.
-
-Format entries like the "Compound Components" entry (March 2026) — short prose explaining what and why, plus a `diff tsx` block showing the before/after. Lead with bug fixes and required updates; group optional improvements below.
+Format entries like the "Compound Components" entry (March 2026) — short prose explaining what and why, plus a `diff tsx` block showing the before/after. The bar: a consumer reading the entry should know whether their copy needs updating, how, and why.
