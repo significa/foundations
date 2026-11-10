@@ -4,7 +4,7 @@ import { Tabs } from "#/foundations/ui/tabs/tabs.tsx";
 
 export default function TabsVerticalPreview() {
   return (
-    <Tabs orientation="vertical" className="flex gap-4">
+    <Tabs defaultValue="users" orientation="vertical" className="flex gap-4">
       <Tabs.Items className="w-60">
         <Tabs.Item value="users" className="w-full justify-start">
           <UsersIcon />

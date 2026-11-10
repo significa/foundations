@@ -4,7 +4,7 @@ import { Tabs } from "#/foundations/ui/tabs/tabs.tsx";
 
 export default function TabsPreview() {
   return (
-    <Tabs>
+    <Tabs defaultValue="users">
       <Tabs.Items>
         <Tabs.Item value="users">
           <UsersIcon />

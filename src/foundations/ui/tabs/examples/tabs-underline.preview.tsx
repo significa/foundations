@@ -4,7 +4,7 @@ import { Tabs } from "#/foundations/ui/tabs/tabs.tsx";
 
 export default function TabsUnderlinePreview() {
   return (
-    <Tabs variant="underline">
+    <Tabs defaultValue="users" variant="underline">
       <Tabs.Items>
         <Tabs.Item value="users">
           <UsersIcon />

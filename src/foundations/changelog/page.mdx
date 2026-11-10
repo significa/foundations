@@ -18,12 +18,11 @@ Tabs used to pair `Tabs.Item` and `Tabs.Panel` by index. With conditional tabs t
 an earlier tab shifted the indices, which remounted the selected panel for a render (losing its
 local state), and a controlled index could point past the end, leaving no tab selected or
 reachable. Every `Tabs.Item` and `Tabs.Panel` now takes a required `value`, and the root takes
-`value` / `defaultValue` / `onValueChange` instead of `selectedIndex` / `defaultIndex` /
-`onChange`. There is no positional fallback. Without `defaultValue` the first tab is selected; if
-the selected tab goes away, an uncontrolled `Tabs` selects the first remaining one (without calling
-`onValueChange`), and a controlled one selects nothing until you update `value`, with the first
-tab still reachable by keyboard. Arrow keys now also take Home and End, `onValueChange` fires only
-when the tab changes, and string children are no longer wrapped in a `<span>`.
+either `defaultValue` or `value` + `onValueChange` (required, no positional fallback) instead of
+`defaultIndex` / `selectedIndex` / `onChange`. If the selected tab goes away, no tab is selected
+until one is picked, and the first tab stays reachable by keyboard. Arrow keys now also take Home
+and End, `onValueChange` fires only when the tab changes, and string children are no longer
+wrapped in a `<span>`. `Tabs.Item asChild` expects a button or a link.
 
 ```diff tsx
 - const [index, setIndex] = useState(0);
@@ -47,6 +46,16 @@ when the tab changes, and string children are no longer wrapped in a `<span>`.
 
 - <Tabs defaultIndex={1}>
 + <Tabs defaultValue="billing">
+```
+
+### Breaking: `SegmentedControl` `onChange` is now `onValueChange`
+
+The root's `onChange(value: string)` replaced the native `<div>` `onChange` with a different
+signature. It's renamed to match `Tabs`; the native `onChange` is a plain div event again.
+
+```diff tsx
+- <SegmentedControl value={view} onChange={setView}>
++ <SegmentedControl value={view} onValueChange={setView}>
 ```
 
 ### Fixed: a disabled `Menu.Item asChild` link still activated

@@ -42,17 +42,20 @@ conditionally (`{canBill && <Tabs.Item value="billing">}`) without shifting the 
 
 The root container component that manages the state and behavior of the tabs.
 
+If the selected tab is no longer rendered, no tab is selected (in both modes) until one is
+picked, and the first tab stays reachable by keyboard.
+
 <PropsTable
   definition={{
     defaultValue: {
       type: "string",
       description:
-        "The value of the tab that should be active by default. Defaults to the first tab, chosen once the tabs mount; pass it when server rendering so the first paint has a panel. If the selected tab is removed, the first remaining tab is selected (without calling `onValueChange`).",
+        "The value of the tab that is active at first (uncontrolled). Pass either `defaultValue` or `value`.",
     },
     value: {
       type: "string",
       description:
-        "The controlled value of the active tab. A value with no matching tab selects nothing, and the first tab stays reachable by keyboard.",
+        "The value of the active tab (controlled, together with `onValueChange`). Pass either `defaultValue` or `value`.",
     },
     onValueChange: {
       type: "(value: string) => void",
@@ -87,7 +90,8 @@ The container for tab buttons. Provides proper ARIA attributes and keyboard navi
 
 ### Tabs.Item
 
-The individual tab button component.
+The individual tab button component. With `asChild`, render a `button` or a link: they activate
+on Enter (and a button on Space) natively.
 
 <PropsTable
   definition={{
