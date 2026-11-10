@@ -13,14 +13,18 @@ export const GET: APIRoute = async () => {
       "",
       "> Foundations is an opinionated collection of components, patterns, and guidelines for building modern digital products.",
       "",
-      "Foundations is a React 19 component library built with TypeScript and Tailwind CSS v4. It provides production-ready UI primitives, reusable hooks, utility functions, and higher-level components — designed to be copied into your project and adapted to your needs.",
+      "Foundations is a React 19 + TypeScript + Tailwind CSS v4 library of UI primitives, hooks and utilities. Components are copied into your project and adapted to it, not installed as a package.",
       "",
-      "Each page listed includes full documentation and source code.",
+      "How to use these docs:",
+      "",
+      `1. Fetch ${link("/setup/llms.txt", "/setup/llms.txt")} first: global CSS and the \`cn\`/\`cva\` helpers every component needs.`,
+      "2. Each page lists its dependencies, including transitive ones, in the order to copy them (leaves first).",
+      "3. Each page has a version stamp. Keep the provenance comment it asks for (`// Adapted from Foundations <path>@<sha>`) at the top of every copied file.",
       "",
       markdown(
         ...items.map((item) => {
           return markdown(
-            `## ${item.title}`,
+            `## ${item.title.charAt(0).toUpperCase()}${item.title.slice(1)}`,
             "",
             markdown(
               ...item.children.map((child) => {
