@@ -1,11 +1,17 @@
+import type { ColumnDef, RowSelectionState, SortingState } from "@tanstack/react-table";
 import {
-  type ColumnDef,
+  columnSizingFeature,
+  createPaginatedRowModel,
+  createSortedRowModel,
   flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  type SortingState,
-  useReactTable,
+  metaHelper,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  sortFn_alphanumeric,
+  sortFn_text,
+  tableFeatures,
+  useTable,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
@@ -110,6 +116,17 @@ const orders: Order[] = [
   },
 ];
 
+const features = tableFeatures({
+  rowSortingFeature,
+  rowSelectionFeature,
+  rowPaginationFeature,
+  columnSizingFeature,
+  sortedRowModel: createSortedRowModel(),
+  paginatedRowModel: createPaginatedRowModel(),
+  sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
+  columnMeta: metaHelper<{ align?: "start" | "center" | "end" }>(),
+});
+
 const formatAmount = (value: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -118,9 +135,9 @@ const formatAmount = (value: number) =>
 
 export default function TableDataTablePreview() {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
-  const columns = useMemo<ColumnDef<Order>[]>(
+  const columns = useMemo<ColumnDef<typeof features, Order>[]>(
     () => [
       {
         id: "select",
@@ -129,7 +146,7 @@ export default function TableDataTablePreview() {
           <Checkbox
             aria-label="Select all rows"
             checked={table.getIsAllPageRowsSelected()}
-            indeterminate={table.getIsSomePageRowsSelected()}
+            indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
             onChange={(e) => table.toggleAllPageRowsSelected(!!e.currentTarget.checked)}
           />
         ),
@@ -157,26 +174,24 @@ export default function TableDataTablePreview() {
         accessorKey: "total",
         header: "Total",
         cell: (info) => formatAmount(info.getValue<number>()),
-        meta: { align: "end" as const },
+        meta: { align: "end" },
       },
     ],
     [],
   );
 
-  const table = useReactTable({
+  const table = useTable({
+    features,
     data: orders,
     columns,
     state: { sorting, rowSelection },
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    initialState: { pagination: { pageSize: 5 } },
+    initialState: { pagination: { pageIndex: 0, pageSize: 5 } },
   });
 
   const pageCount = table.getPageCount();
-  const pageIndex = table.getState().pagination.pageIndex;
+  const pageIndex = table.state.pagination.pageIndex;
   const items = usePagination({ page: pageIndex + 1, count: pageCount });
 
   const selectedCount = table.getSelectedRowModel().rows.length;
@@ -189,11 +204,7 @@ export default function TableDataTablePreview() {
             {table.getHeaderGroups().map((headerGroup) => (
               <Table.Row key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  const align = (
-                    header.column.columnDef.meta as
-                      | { align?: "start" | "center" | "end" }
-                      | undefined
-                  )?.align;
+                  const align = header.column.columnDef.meta?.align;
                   const canSort = header.column.getCanSort();
                   const sort = header.column.getIsSorted();
 
@@ -238,12 +249,8 @@ export default function TableDataTablePreview() {
             ) : (
               table.getRowModel().rows.map((row) => (
                 <Table.Row key={row.id} data-selected={row.getIsSelected() || undefined}>
-                  {row.getVisibleCells().map((cell) => {
-                    const align = (
-                      cell.column.columnDef.meta as
-                        | { align?: "start" | "center" | "end" }
-                        | undefined
-                    )?.align;
+                  {row.getAllCells().map((cell) => {
+                    const align = cell.column.columnDef.meta?.align;
                     return (
                       <Table.Cell key={cell.id} align={align}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -259,7 +266,7 @@ export default function TableDataTablePreview() {
 
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm text-foreground-secondary">
-          {selectedCount} of {table.getFilteredRowModel().rows.length} selected
+          {selectedCount} of {table.getCoreRowModel().rows.length} selected
         </p>
 
         <Pagination className="w-auto">
