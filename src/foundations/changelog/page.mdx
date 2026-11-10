@@ -17,8 +17,8 @@ meta:
 Four fixes to apply to your copy of `otp-input.tsx`:
 
 - `defaultValue` never showed: it was split into cells in `useState`'s initialiser, before any cell had registered. The value is now derived at render until the first edit.
-- Cells had fixed widths and overflowed containers narrower than the code. They now shrink and stay square; at normal widths nothing changes.
-- `masked` used `type="password"` with `autocomplete="one-time-code"`, so password managers offered to save a PIN as a password. Cells stay `type="text"` and draw discs with `-webkit-text-security` (all current browsers), and a new `autoComplete` prop (default `"one-time-code"`) lets a PIN pass `"off"`.
+- Cells had fixed widths and overflowed containers narrower than the code. They now shrink and stay square, and the root is `w-fit max-w-full`: as wide as its cells, not the container. Cells keep their size at normal widths, but anything you put on the root (`justify-center`, a background, a border) no longer spans the container; pass `w-full` to get the old box back.
+- `masked` used `type="password"` with `autocomplete="one-time-code"`, so password managers offered to save a PIN as a password. Cells stay `type="text"` and draw discs with `-webkit-text-security` (all current browsers), and a new `autoComplete` prop (default `"one-time-code"`) lets a PIN pass `"off"`. The masking is visual only: screen readers read the digits and announce a text field.
 - Cells now set `aria-invalid` with `invalid`, like `Input`.
 
 ```diff tsx
@@ -57,7 +57,9 @@ Thread `autoComplete` from the root props through the context to the cell.
 
 The chevron was a black or white SVG in a background image, switched by the `dark:` variant, so it ignored the text colour and any theme that didn't match. It is now a Phosphor `CaretDownIcon` laid over the select, in `currentColor`. `Select` also sets `aria-invalid` with `invalid`, like `Input` and `Textarea`.
 
-The `<select>` now sits in a `span`, and `className` goes on that `span`, so a width or margin moves the chevron with it. Classes that styled the `<select>` itself (padding, radius) need moving to `variant`/`size`, or onto the `select` in your copy. In `input.tsx`, the in-group left padding after an addon also matches an element wrapped one level down, so `Select.Group` keeps its spacing.
+The `<select>` now sits in a `span`, and `className` goes on that `span`, so a width or margin moves the chevron with it. Classes that styled the `<select>` itself no longer reach it: padding, radius, font size or weight, height, `truncate`, cursor. Grep for `<Select className=` and check each; move those to `variant`/`size`, or onto the `select` in your copy. The select also gets `min-w-0`, so it shrinks below its widest option, and renders no chevron when `multiple`.
+
+In `input.tsx`, the in-group left padding after an addon also matches an element wrapped one level down, so `Select.Group` keeps its spacing, and the group frame dims for a disabled select as it does for a disabled input.
 
 ```diff tsx
 + import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
@@ -67,17 +69,25 @@ The `<select>` now sits in a `span`, and `className` goes on that `span`, so a w
 -   className={cn(useInputStyle({ variant, size }), "appearance-none bg-size-[1em] … pr-10", 'bg-[url(…)]', 'dark:bg-[url(…)]', className)}
 -   {...props}
 - />
-+ <span className={cn("relative flex w-full min-w-0 items-center self-stretch", className)}>
++ <span
++   className={cn(
++     "relative flex w-full min-w-0 items-center self-stretch",
++     size && (size === "xs" || size === "sm" ? "text-sm" : "text-base"),
++     className,
++   )}
++ >
 +   <select
 +     data-invalid={invalid || undefined}
 +     aria-invalid={invalid || undefined}
-+     className={cn(useInputStyle({ variant, size }), "peer appearance-none pr-10")}
++     className={cn(useInputStyle({ variant, size }), "peer min-w-0 appearance-none", !props.multiple && "pe-10")}
 +     {...props}
 +   />
-+   <CaretDownIcon
-+     aria-hidden="true"
-+     className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 peer-disabled:opacity-50"
-+   />
++   {!props.multiple && (
++     <CaretDownIcon
++       aria-hidden="true"
++       className="pointer-events-none absolute end-2 top-1/2 -translate-y-1/2 not-in-data-ui-input-group:peer-disabled:opacity-50"
++     />
++   )}
 + </span>
 ```
 
@@ -85,6 +95,10 @@ The `<select>` now sits in a `span`, and `className` goes on that `span`, so a w
   // input.tsx, inputInGroupStyle (same change for every size)
 - md: "px-4 [&:has(+[data-input-addon])]:pr-3 [[data-input-addon]+&]:pl-3",
 + md: "px-4 [&:has(+[data-input-addon])]:pr-3 [[data-input-addon]+&,[data-input-addon]+*>&]:pl-3",
+
+  // input.tsx, inputFrameBase
+- "[:disabled,:has(input:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled)]:opacity-50",
++ "[:disabled,:has(input:disabled,select:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled,select:disabled)]:opacity-50",
 ```
 
 ### Changed: data table recipe targets `@tanstack/react-table` 9

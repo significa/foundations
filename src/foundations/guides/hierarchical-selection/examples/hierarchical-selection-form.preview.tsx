@@ -145,8 +145,6 @@ function HierarchicalSelectionField({
   );
 }
 
-export const meta = { layout: "padded" } as const;
-
 export default function HierarchicalSelectionForm() {
   const {
     register,

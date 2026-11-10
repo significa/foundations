@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import ComponentPreview from "#/components/component-preview.astro";
 import Shell from "#/layouts/shell.astro";
+import { previewLayoutClass } from "#/lib/preview.ts";
 
 export async function getStaticPaths() {
   const previews = await getCollection("previews");
@@ -18,4 +19,12 @@ const { layout } = preview.data.meta || {};
 
 <Shell meta={{ title: `${preview.id} | Preview` }}>
   <ComponentPreview file={preview.data.file} layout={layout} />
+  <!-- A layout set on a docs page's <Preview> tag arrives as ?layout=. -->
+  <script is:inline define:vars={{ previewLayoutClass }}>
+    const layout = new URLSearchParams(location.search).get("layout");
+    const root = document.querySelector("[data-preview-root]");
+    if (root && layout && Object.hasOwn(previewLayoutClass, layout)) {
+      root.className = previewLayoutClass[layout];
+    }
+  </script>
 </Shell>

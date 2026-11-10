@@ -13,17 +13,31 @@ interface SelectProps extends Omit<React.ComponentPropsWithRef<"select">, "size"
 // className sizes the wrapper, so the chevron moves with the select.
 const Select = ({ className, invalid, variant, size, ...props }: SelectProps) => {
   return (
-    <span className={cn("relative flex w-full min-w-0 items-center self-stretch", className)}>
+    <span
+      className={cn(
+        "relative flex w-full min-w-0 items-center self-stretch",
+        // The chevron is sized in em; in a group it inherits the group's text size.
+        size && (size === "xs" || size === "sm" ? "text-sm" : "text-base"),
+        className,
+      )}
+    >
       <select
         data-invalid={invalid || undefined}
         aria-invalid={invalid || undefined}
-        className={cn(useInputStyle({ variant, size }), "peer appearance-none pr-10")}
+        className={cn(
+          useInputStyle({ variant, size }),
+          "peer min-w-0 appearance-none",
+          !props.multiple && "pe-10",
+        )}
         {...props}
       />
-      <CaretDownIcon
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 peer-disabled:opacity-50"
-      />
+      {!props.multiple && (
+        <CaretDownIcon
+          aria-hidden="true"
+          // In a group the frame already dims a disabled select.
+          className="pointer-events-none absolute end-2 top-1/2 -translate-y-1/2 not-in-data-ui-input-group:peer-disabled:opacity-50"
+        />
+      )}
     </span>
   );
 };

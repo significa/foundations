@@ -2,11 +2,14 @@
 import { getEntry } from "astro:content";
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";
 import { Button, buttonStyle } from "#/foundations/ui/button/button.tsx";
+import type { PreviewLayout, PreviewMode } from "#/lib/preview.ts";
 import ComponentPreview from "./component-preview.astro";
 import SourceCode from "./source-code.astro";
 
 type Props = {
   slug: string;
+  layout?: PreviewLayout;
+  mode?: PreviewMode;
 };
 
 const { slug } = Astro.props;
@@ -17,9 +20,13 @@ if (!entry) {
   throw new Error(`No preview found for slug: ${slug}`);
 }
 
-const previewPath = `/preview/${entry.id}`;
-
-const { layout, mode } = entry.data.meta || {};
+const layout = Astro.props.layout ?? entry.data.meta?.layout;
+const mode = Astro.props.mode ?? entry.data.meta?.mode;
+// The iframe page is static: a layout set on the tag rides along in the query.
+const previewPath =
+  layout === entry.data.meta?.layout
+    ? `/preview/${entry.id}`
+    : `/preview/${entry.id}?layout=${layout}`;
 ---
 
 <div

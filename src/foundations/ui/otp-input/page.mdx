@@ -127,7 +127,7 @@ A single character shown in empty cells via the native `placeholder` attribute.
 
 ### Masked
 
-Hides the entered characters behind discs with `-webkit-text-security`, on a `type="text"` input. A `type="password"` field would make password managers offer to save the PIN as a password. Pair it with `autoComplete="off"` for a PIN, so the browser doesn't offer one-time codes either.
+Hides the entered characters behind discs with `-webkit-text-security`, on a `type="text"` input. A `type="password"` field would make password managers offer to save the PIN as a password. Pair it with `autoComplete="off"` for a PIN, so the browser doesn't offer one-time codes either. The masking is visual only: screen readers still read the digits and announce a text field, where `type="password"` would announce a password field and hide them.
 
 <Preview slug="otp-input-masked" />
 
