@@ -26,12 +26,12 @@ Foundations is an opinionated collection of components, patterns, and guidelines
    cd foundations
    ```
 
-2. **Enable pnpm via Corepack:**
+2. **Install Node and pnpm:**
 
-   This project uses pnpm (version pinned in `package.json` via `packageManager`). Node version is specified in `.nvmrc`.
+   Node and pnpm are pinned in `mise.toml` (the exact pnpm version is in `package.json` via `packageManager`).
 
    ```bash
-   corepack enable pnpm
+   mise install
    ```
 
 3. **Install dependencies:**
