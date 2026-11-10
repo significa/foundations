@@ -59,14 +59,13 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 ## Code Style
 
-Biome config extends the shared `@significa/ts-standards/biome` preset (`biome.json`).
+Biome config extends the shared `@significa/ts-standards/biome/astro` preset (`biome.json`).
 Biome and `@significa/ts-standards` are pinned together; bump them as a pair. The
-project file only adds what's Foundations-specific: full `.astro` support
-(`html.experimentalFullSupportEnabled` plus the HTML formatter, so Biome lints and
-formats templates, not just frontmatter), CSS line width is 128, and Tailwind class
-sorting is on. Biome is the only linter and formatter; there is no Prettier. The preset defines the TS/TSX formatting below
-and the strict rules (no `any`, no `!`, no `console.log`, no floating
-promises, kebab-case filenames).
+preset covers full `.astro` support and the TS/TSX formatting below, plus the strict rules
+(no `any`, no `!`, no `console.log`, no floating promises, no barrel files, kebab-case
+filenames). The project file only adds what's Foundations-specific: CSS line width 128,
+the `../` import ban, and Tailwind class sorting. Biome is the only linter and formatter;
+there is no Prettier.
 
 Lint suppressions live in the component file as a per-line `biome-ignore` with a
 specific reason, never in `biome.json` — consumers copy the file and run the same
