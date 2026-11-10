@@ -15,6 +15,7 @@
   "linter": {
     "rules": {
       "a11y": {
+        // Temporary: nested <label><Checkbox /></label> is valid; drop once ts-standards settles noLabelWithoutControl.
         "noLabelWithoutControl": {
           "level": "error",
           "options": { "inputComponents": ["Checkbox"] }
@@ -22,7 +23,7 @@
       },
       "nursery": {
         "useTailwindSortedClasses": {
-          "level": "warn",
+          "level": "error",
           "fix": "safe"
         }
       }

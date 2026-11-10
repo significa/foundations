@@ -25,7 +25,7 @@ All commands use **pnpm** (v10.32.1). Node and pnpm are pinned via `mise.toml`
 
 `pnpm check` runs five things in sequence:
 
-1. `biome ci` — lints and checks formatting for all non-Astro files
+1. `biome ci` — lints and checks formatting for all non-Astro files, Markdown included (the preset formats `.md`, so run `pnpm format` after editing docs like this one)
 2. `prettier --check "**/*.astro"` — checks formatting for Astro files
 3. `pnpm types:check` — full TypeScript type check
 4. `pnpm check:deps` — verifies every component's `page.mdx` declares the cross-Foundations imports it uses (see "Page dependency discipline" below)
@@ -60,22 +60,23 @@ There is no Jest, Vitest, or Playwright setup. There is no test command.
 
 ## Code Style
 
-Biome config extends the shared `@significa/ts-standards/biome` preset (`biome.json`).
+Biome config extends the shared `@significa/ts-standards/biome` preset (`biome.jsonc`).
 Biome and `@significa/ts-standards` are pinned together; bump them as a pair. The
 project file only adds what's Foundations-specific: `.astro` files are excluded
-(Prettier formats them), CSS line width is 128, `Checkbox` counts as a label
-control, and Tailwind class sorting is on. The preset defines the TS/TSX formatting
+(Prettier owns their formatting; running both would fight), CSS line width is 128,
+`Checkbox` counts as a label control (temporary, see the comment in the file), and
+Tailwind class sorting is on. The preset defines the TS/TSX formatting
 below and the strict rules (no `any`, no `!`, no `console.log`, no floating
 promises, kebab-case filenames).
 
 Lint suppressions live in the component file as a per-line `biome-ignore` with a
-specific reason, never in `biome.json` — consumers copy the file and run the same
+specific reason, never in `biome.jsonc` — consumers copy the file and run the same
 preset, so the suppression has to travel with it.
 
-Tailwind classes are sorted by `nursery/useTailwindSortedClasses` (warning, safe
+Tailwind classes are sorted by `nursery/useTailwindSortedClasses` (error, safe
 fix) in `className`, `cn`, `cva`, `clsx` and `tv`. `tailwind.stylesheet` points at
 `src/styles/global.css` so custom theme values sort correctly; `pnpm lint` applies
-the fixes.
+the fixes, and CI fails on unsorted classes.
 
 ### Formatting rules
 
