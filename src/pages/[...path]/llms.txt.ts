@@ -101,28 +101,29 @@ const resolveComponents = createComponentResolver([
   }),
 ]);
 
-/** Files a page renders inline through `<SourceCode>` / `<SetupCssTabs>`. */
-const getInlineSourceFiles = (page: Page) => {
+/**
+ * Every source file a page emits as code (repo-relative): `files`, `<SourceCode>`,
+ * `<SetupCssTabs>` and `<Preview>` sources.
+ */
+const getEmittedSourceFiles = async (page: Page) => {
   const body = page.body || "";
-  const files = [...body.matchAll(/<SourceCode\s[^>]*file="([^"]+)"/g)].flatMap((m) => m[1] ?? []);
-
-  if (body.includes("<SetupCssTabs")) {
-    files.push(SETUP_CSS_FILES.prefersScheme, SETUP_CSS_FILES.dataAttr);
-  }
-
-  return files;
-};
-
-/** Source files of the `<Preview>` examples a page inlines. */
-const getInlinePreviewFiles = async (page: Page) => {
-  const slugs = [...(page.body || "").matchAll(/<Preview\s[^>]*slug="([^"]+)"/g)].flatMap(
+  const sourceCodeFiles = [...body.matchAll(/<SourceCode\s[^>]*file="([^"]+)"/g)].flatMap(
     (m) => m[1] ?? [],
   );
-  const previews = await Promise.all(slugs.map((slug) => getEntry("previews", slug)));
+  const setupCssFiles = body.includes("<SetupCssTabs")
+    ? [SETUP_CSS_FILES.prefersScheme, SETUP_CSS_FILES.dataAttr]
+    : [];
 
-  return previews.flatMap((preview) =>
-    preview ? [path.join(process.cwd(), preview.data.file)] : [],
+  const previewSlugs = [...body.matchAll(/<Preview\s[^>]*slug="([^"]+)"/g)].flatMap(
+    (m) => m[1] ?? [],
   );
+  const previews = await Promise.all(previewSlugs.map((slug) => getEntry("previews", slug)));
+  // Preview paths are stored with a leading slash
+  const previewFiles = previews.flatMap((preview) =>
+    preview ? [preview.data.file.replace(/^\/+/, "")] : [],
+  );
+
+  return [...(page.data.files ?? []), ...sourceCodeFiles, ...setupCssFiles, ...previewFiles];
 };
 
 type DependencyEntry = {
@@ -203,21 +204,16 @@ const formatDependency = (entry: DependencyEntry) => {
   return `${link(entry.label, entry.href)}${names}${kind}${transitive}`;
 };
 
-const getDependencySection = async (page: Page, pages: Page[]) => {
+const getDependencySection = async (page: Page, pages: Page[], emittedFiles: string[]) => {
   const closure = getDependencyClosure(page, pages);
-  const hasFiles = (page.data.files?.length ?? 0) > 0;
 
   // Closure files count too: copying a dependency drags in what it imports
-  const sourceFiles = [page, ...closure.map((e) => pages.find((p) => p.id === e.pageId))].flatMap(
-    (p) => p?.data.files ?? [],
-  );
-  const needsSetup = hasFiles && (await someFileMatches(sourceFiles, /from ["']@\/lib\//));
-  // Inlined examples get copied too
-  const previewFiles = await getInlinePreviewFiles(page);
-  const needsReactTypes = await someFileMatches(
-    [...(hasFiles ? sourceFiles : []), ...previewFiles],
-    /style=\{\{[^}]*["']--/,
-  );
+  const sourceFiles = [
+    ...emittedFiles,
+    ...closure.flatMap((e) => pages.find((p) => p.id === e.pageId)?.data.files ?? []),
+  ];
+  const needsSetup = await someFileMatches(sourceFiles, /from ["']@\/lib\//);
+  const needsReactTypes = await someFileMatches(sourceFiles, /style=\{\{[^}]*["']--/);
 
   const items = [
     ...(needsSetup
@@ -257,13 +253,13 @@ export const GET = (async ({ params }) => {
   }
 
   const pages = await getCollection("pages");
-  const inlineSourceFiles = getInlineSourceFiles(page);
-  const version = await getPageVersion(page, inlineSourceFiles);
+  const emittedFiles = await getEmittedSourceFiles(page);
+  const version = await getPageVersion(page, emittedFiles);
   const sha = version.sha ?? "unknown";
   const versionLine = [sha, version.date?.slice(0, 10)].filter(Boolean).join(" · ");
 
   const files = page.data.files ? await Promise.all(page.data.files.map(code)) : [];
-  const hasSource = files.length > 0 || inlineSourceFiles.length > 0;
+  const hasSource = emittedFiles.length > 0;
 
   const sections = [
     `# ${page.data.title}`,
@@ -272,7 +268,7 @@ export const GET = (async ({ params }) => {
     hasSource
       ? `When copying, keep a header comment \`// Adapted from Foundations /${page.id}@${sha}\` (\`/* … */\` in CSS) so the copy can be diffed against upstream later.`
       : "",
-    ...(await getDependencySection(page, pages)),
+    ...(await getDependencySection(page, pages, emittedFiles)),
     files.length > 0 ? markdown("## Source Code", "", files.join("\n\n")) : "",
     await resolveComponents(page.body || "", page.id),
   ];
