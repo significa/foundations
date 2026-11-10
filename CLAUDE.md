@@ -226,7 +226,7 @@ Imports from `@/lib/...` (utilities provided by the setup guide) are skipped aut
 
 ### llms.txt output
 
-`/<path>/llms.txt` (`src/pages/[...path]/llms.txt.ts`) resolves every MDX component to markdown (`Preview`, `SourceCode`, `SetupCssTabs`, `PropsTable`) and strips MDX imports. The build **fails** if a `<Capitalized` tag survives outside code, so a new MDX component used in a `page.mdx` needs a resolver there. Each page opens with a version stamp (short sha of the last commit touching the page or its source, plus date; `unknown` without history) and lists its full dependency closure in copy order, leaves first.
+`/<path>/llms.txt` (`src/pages/[...path]/llms.txt.ts`) resolves every MDX component to markdown (`Preview`, `SourceCode`, `SetupCssTabs`, `PropsTable`) and strips MDX imports. The build **fails** if a `<Capitalized` tag survives outside code, so a new MDX component used in a `page.mdx` needs a resolver there. Each page opens with a version stamp (short sha of the last commit touching the page or its source, plus `YYYY-MM-DD`; a shallow clone yields the clone's commit, `unknown` only when git fails entirely) and lists its full dependency closure in copy order, leaves first.
 
 ---
 
@@ -246,7 +246,7 @@ Foundations is consumed by copy-paste, and every page's `llms.txt` carries a ver
 
 - A bug fix in a primitive that consumers should apply to their copies.
 - A breaking rename or removal of an export, prop, attribute, or token they may target.
-- A behaviour change visible at the call site.
+- A behaviour change visible at the call site or in rendered output.
 
 Everything else (new components, optional improvements, refactors, docs-site infrastructure) gets no entry.
 

@@ -178,9 +178,9 @@ const getDependencyClosure = (page: Page, pages: Page[]) => {
   return [...entries.values()];
 };
 
-const usesCssVariablesInStyle = async (files: string[]) => {
+const someFileMatches = async (files: string[], pattern: RegExp) => {
   const contents = await Promise.all(files.map((file) => readFile(file, "utf-8")));
-  return contents.some((content) => /style=\{\{[^}]*["']--/.test(content));
+  return contents.some((content) => pattern.test(content));
 };
 
 const formatDependency = (entry: DependencyEntry) => {
@@ -194,15 +194,17 @@ const formatDependency = (entry: DependencyEntry) => {
 
 const getDependencySection = async (page: Page, pages: Page[]) => {
   const closure = getDependencyClosure(page, pages);
-  const hasSource = (page.data.files?.length ?? 0) > 0 && page.id !== "setup";
+  const hasFiles = (page.data.files?.length ?? 0) > 0;
 
+  // Closure files count too: copying a dependency drags in what it imports
   const sourceFiles = [page, ...closure.map((e) => pages.find((p) => p.id === e.pageId))].flatMap(
     (p) => p?.data.files ?? [],
   );
-  const needsReactTypes = hasSource && (await usesCssVariablesInStyle(sourceFiles));
+  const needsSetup = hasFiles && (await someFileMatches(sourceFiles, /from ["']@\/lib\//));
+  const needsReactTypes = hasFiles && (await someFileMatches(sourceFiles, /style=\{\{[^}]*["']--/));
 
   const items = [
-    ...(hasSource
+    ...(needsSetup
       ? [
           `${link("Setup", "/setup/llms.txt")}: global CSS tokens and \`cn\`/\`cva\` from \`@/lib/utils/classnames\``,
         ]
@@ -216,13 +218,14 @@ const getDependencySection = async (page: Page, pages: Page[]) => {
   if (items.length === 0) return [];
 
   return [
-    "",
-    "## Dependencies",
-    "",
-    "Copy these first, in this order (leaves first):",
-    "",
-    ...items.map((item, index) => `${index + 1}. ${item}`),
-    ...(needsReactTypes ? ["", await code(path.join(process.cwd(), REACT_TYPES_FILE))] : []),
+    markdown(
+      "## Dependencies",
+      "",
+      "Copy these first, in this order (leaves first):",
+      "",
+      ...items.map((item, index) => `${index + 1}. ${item}`),
+      ...(needsReactTypes ? ["", await code(path.join(process.cwd(), REACT_TYPES_FILE))] : []),
+    ),
   ];
 };
 
@@ -238,27 +241,27 @@ export const GET = (async ({ params }) => {
   }
 
   const pages = await getCollection("pages");
-  const version = await getPageVersion(page, getInlineSourceFiles(page));
+  const inlineSourceFiles = getInlineSourceFiles(page);
+  const version = await getPageVersion(page, inlineSourceFiles);
   const sha = version.sha ?? "unknown";
-  const versionLine = [sha, version.date].filter(Boolean).join(" · ");
+  const versionLine = [sha, version.date?.slice(0, 10)].filter(Boolean).join(" · ");
 
-  const files = page.data.files ? await Promise.all(page.data.files.map(code)) : undefined;
+  const files = page.data.files ? await Promise.all(page.data.files.map(code)) : [];
+  const hasSource = files.length > 0 || inlineSourceFiles.length > 0;
 
-  const content = markdown(
+  const sections = [
     `# ${page.data.title}`,
-    "",
     page.data.description,
-    "",
     `Version: ${versionLine}`,
-    "",
-    `When copying, keep a header comment \`// Adapted from Foundations /${page.id}@${sha}\` (\`/* … */\` in CSS) so the copy can be diffed against upstream later.`,
+    hasSource
+      ? `When copying, keep a header comment \`// Adapted from Foundations /${page.id}@${sha}\` (\`/* … */\` in CSS) so the copy can be diffed against upstream later.`
+      : "",
     ...(await getDependencySection(page, pages)),
-    ...(files ? ["", "## Source Code", "", ...files] : []),
-    "",
-    "",
+    files.length > 0 ? markdown("## Source Code", "", files.join("\n\n")) : "",
     await resolveComponents(page.body || ""),
-    "",
-  );
+  ];
+
+  const content = `${sections.filter(Boolean).join("\n\n")}\n`;
 
   const unresolved = findUnresolvedComponents(content);
 
