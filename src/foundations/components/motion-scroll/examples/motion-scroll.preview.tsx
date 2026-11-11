@@ -18,7 +18,9 @@ const cards = [
 
 const MotionScrollPreview = () => {
   return (
-    <div className="flex flex-col items-center gap-32 px-8 pt-[50vh] pb-[50vh]">
+    <div className="flex flex-col items-center gap-32 px-8 pb-[50vh]">
+      {/* Starts the cards out of range so nothing jumps when the preview hydrates. */}
+      <p className="flex h-screen items-center text-sm text-foreground-secondary">Scroll down</p>
       {cards.map((card, index) => (
         <MotionScroll
           key={index}

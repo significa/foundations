@@ -18,8 +18,15 @@ const MotionScrollHorizontal = () => {
     <div className="flex h-screen items-center">
       <ul
         ref={ref}
-        className="flex h-full w-full cursor-grab snap-x snap-mandatory items-center gap-12 overflow-x-auto px-[40vw] py-12 select-none active:cursor-grabbing"
+        className="flex h-full w-full cursor-grab snap-x snap-mandatory items-center gap-12 overflow-x-auto py-12 pr-[40vw] select-none active:cursor-grabbing"
       >
+        {/* Starts the cards out of range so nothing jumps when the preview hydrates. */}
+        <li
+          aria-hidden
+          className="flex w-[calc(100vw-3rem)] shrink-0 snap-start items-center justify-center text-sm text-foreground-secondary"
+        >
+          Drag or scroll sideways
+        </li>
         {items.map((item) => (
           <MotionScroll
             key={item.index}
