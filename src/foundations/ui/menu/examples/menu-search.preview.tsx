@@ -32,7 +32,7 @@ export default function MenuSearchPreview() {
         <Button variant="outline">Pick a fruit</Button>
       </Menu.Trigger>
       <Menu.Items>
-        <Menu.Search>
+        <Menu.Header>
           <MagnifyingGlassIcon weight="bold" />
           <Menu.SearchInput
             placeholder="Search fruits..."
@@ -40,7 +40,7 @@ export default function MenuSearchPreview() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-        </Menu.Search>
+        </Menu.Header>
         {filtered.map((fruit) => (
           <Menu.Item key={fruit}>{fruit}</Menu.Item>
         ))}

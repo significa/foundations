@@ -655,7 +655,7 @@ const MenuSearchInput = ({
   );
 };
 
-const MenuSearch = Popover.Search;
+const MenuHeader = Popover.Header;
 
 const MenuEmpty = Popover.Empty;
 
@@ -667,7 +667,7 @@ const CompoundMenu = Object.assign(Menu, {
   Section: MenuSection,
   Heading: MenuHeading,
   Divider: MenuDivider,
-  Search: MenuSearch,
+  Header: MenuHeader,
   SearchInput: MenuSearchInput,
   Empty: MenuEmpty,
 });

@@ -23,10 +23,10 @@ folder: UI
 <Listbox value={value} onChange={onChange}>
   <Listbox.Trigger />
   <Listbox.Options>
-    <Listbox.Search>
+    <Listbox.Header>
       <MagnifyingGlassIcon />
       <Listbox.SearchInput />
-    </Listbox.Search>
+    </Listbox.Header>
     <Listbox.Option />
     <Listbox.Divider />
     <Listbox.Option />
@@ -140,23 +140,23 @@ Extends the `button` element.
 
 A horizontal line to separate groups of options.
 
-### Listbox.Search
+### Listbox.Header
 
-Extends the [`Popover.Search`](/ui/popover#popoversearch) component.
+Extends the [`Popover.Header`](/ui/popover#popoverheader) component.
 
-The search header: a bottom divider around an icon and `Listbox.SearchInput`.
+A header row with a bottom divider at the top of the list, for example an icon and `Listbox.SearchInput`.
 
 ### Listbox.SearchInput
 
 Extends the [`Popover.SearchInput`](/ui/popover#popoversearchinput) component.
 
-An input for filtering options. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted option. Put it in a `Listbox.Search` with an icon; swap the icon for a `Spinner` while results load, and set `aria-busy` on the input then.
+An input for filtering options. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted option. Put it in a `Listbox.Header` with an icon; swap the icon for a `Spinner` while results load, and set `aria-busy` on the input then.
 
 ```tsx
-<Listbox.Search>
+<Listbox.Header>
   {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
   <Listbox.SearchInput aria-label="Search" aria-busy={isLoading || undefined} />
-</Listbox.Search>
+</Listbox.Header>
 ```
 
 ### Listbox.Empty
@@ -204,7 +204,7 @@ Filtering options with a search input.
 
 ### Async Search
 
-Debounced search against an async data source. `Listbox.Search` swaps the magnifying-glass icon for a `Spinner` while results are in flight, and the input sets `aria-busy`.
+Debounced search against an async data source. The header swaps the magnifying-glass icon for a `Spinner` while results are in flight, and the input sets `aria-busy`.
 
 <Preview slug="listbox-async" />
 

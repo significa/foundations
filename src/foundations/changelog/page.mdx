@@ -30,22 +30,22 @@ since a button can't set its cell's. It takes `sort` and a plain `onClick`.
 + </Table.Head>
 ```
 
-### Breaking: `Popover.Search` holds the search header; `SearchInput` is just the input
+### Breaking: `Popover.Header` holds the frame; `SearchInput` is just the input
 
 `Popover.SearchInput` wrapped the input in a `div` that carried the border, icon and spinner, while
-your `className` landed on the input inside. The header is now its own part, `Popover.Search`
-(re-exported as `Menu.Search` and `Listbox.Search`): one `div` with the bottom divider, where you
-put the icon. `Popover.SearchInput`, `Menu.SearchInput` and `Listbox.SearchInput` render just the
+your `className` landed on the input inside. The frame is now its own part, `Popover.Header`
+(re-exported as `Menu.Header` and `Listbox.Header`): one `div` with the bottom divider, where you
+put the icon. It is a generic header row, so it also fits a title with a back button. `Popover.SearchInput`, `Menu.SearchInput` and `Listbox.SearchInput` render just the
 `<input>`, with keyboard navigation and `Enter` to select unchanged. `isLoading` is gone: render a
 `Spinner` in place of the icon and pass `aria-busy` to the input. `Listbox` now detects its search
 input wherever it sits, not only as a direct child of `Listbox.Options`.
 
 ```diff tsx
 - <Menu.SearchInput isLoading={isLoading} value={query} onChange={…} />
-+ <Menu.Search>
++ <Menu.Header>
 +   {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
 +   <Menu.SearchInput aria-busy={isLoading || undefined} value={query} onChange={…} />
-+ </Menu.Search>
++ </Menu.Header>
 ```
 
 ### Changed: `Disclosure.Content` is one element

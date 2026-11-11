@@ -24,7 +24,7 @@ export default function ListboxSearchPreview() {
       <Listbox value={selectedPerson} onChange={setSelectedPerson}>
         <Listbox.Trigger>{selectedPerson?.name}</Listbox.Trigger>
         <Listbox.Options>
-          <Listbox.Search>
+          <Listbox.Header>
             <MagnifyingGlassIcon weight="bold" />
             <Listbox.SearchInput
               placeholder="Search people"
@@ -32,7 +32,7 @@ export default function ListboxSearchPreview() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-          </Listbox.Search>
+          </Listbox.Header>
           {filteredPeople.map((person) => (
             <Listbox.Option key={person.id} value={person}>
               {person.name}

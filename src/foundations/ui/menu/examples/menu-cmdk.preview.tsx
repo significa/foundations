@@ -77,7 +77,7 @@ export default function MenuCmdkPreview() {
         <Menu open={open} onOpenChange={setOpen} modal={false}>
           <Menu.Trigger className="hidden" />
           <Menu.Items inline className="flex h-full flex-col overflow-hidden">
-            <Menu.Search>
+            <Menu.Header>
               <MagnifyingGlassIcon weight="bold" />
               <Menu.SearchInput
                 autoFocus
@@ -86,7 +86,7 @@ export default function MenuCmdkPreview() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
-            </Menu.Search>
+            </Menu.Header>
             <div className="flex-1 scroll-py-(--inset) overflow-y-auto py-(--inset)">
               {filtered.map((group) => (
                 <Menu.Section key={group.group}>

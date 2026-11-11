@@ -9,10 +9,10 @@ export default function PopoverSearchPreview() {
         <Button variant="outline">Search</Button>
       </Popover.Trigger>
       <Popover.Content className="p-0">
-        <Popover.Search>
+        <Popover.Header>
           <MagnifyingGlassIcon weight="bold" />
           <Popover.SearchInput placeholder="Search items..." aria-label="Search items" />
-        </Popover.Search>
+        </Popover.Header>
         <div className="p-1">Items would go here</div>
       </Popover.Content>
     </Popover>

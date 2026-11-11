@@ -539,7 +539,7 @@ const ListboxSearchInput = ({
   return <Popover.SearchInput onKeyDown={handleKeyDown} onChange={handleChange} {...props} />;
 };
 
-const ListboxSearch = Popover.Search;
+const ListboxHeader = Popover.Header;
 
 const ListboxEmpty = Popover.Empty;
 
@@ -549,7 +549,7 @@ const CompoundListbox = Object.assign(Listbox, {
   Options: ListboxOptions,
   Option: ListboxOption,
   Divider: ListboxDivider,
-  Search: ListboxSearch,
+  Header: ListboxHeader,
   SearchInput: ListboxSearchInput,
   Empty: ListboxEmpty,
 });

@@ -116,7 +116,7 @@ const TypographyPicker = ({
     >
       <Listbox.Trigger placeholder={placeholder}>{value?.family}</Listbox.Trigger>
       <Listbox.Options>
-        <Listbox.Search>
+        <Listbox.Header>
           {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
           <Listbox.SearchInput
             placeholder="Search fonts"
@@ -125,7 +125,7 @@ const TypographyPicker = ({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-        </Listbox.Search>
+        </Listbox.Header>
         {!search && (
           <>
             <Listbox.Option value={null}>{nullLabel}</Listbox.Option>

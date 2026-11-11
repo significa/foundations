@@ -34,10 +34,10 @@ folder: UI
 <Menu>
   <Menu.Trigger />
   <Menu.Items>
-    <Menu.Search>
+    <Menu.Header>
       <MagnifyingGlassIcon />
       <Menu.SearchInput />
-    </Menu.Search>
+    </Menu.Header>
     <Menu.Section>
       <Menu.Heading />
       <Menu.Item />
@@ -156,23 +156,23 @@ A heading for a section of items.
 
 A horizontal line to separate groups of items.
 
-### Menu.Search
+### Menu.Header
 
-Extends the [`Popover.Search`](/ui/popover#popoversearch) component.
+Extends the [`Popover.Header`](/ui/popover#popoverheader) component.
 
-The search header: a bottom divider around an icon and `Menu.SearchInput`.
+A header row with a bottom divider at the top of the list, for example an icon and `Menu.SearchInput`.
 
 ### Menu.SearchInput
 
 Extends the [`Popover.SearchInput`](/ui/popover#popoversearchinput) component.
 
-An input for filtering items. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted item. Put it in a `Menu.Search` with an icon; swap the icon for a `Spinner` while results load, and set `aria-busy` on the input then.
+An input for filtering items. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted item. Put it in a `Menu.Header` with an icon; swap the icon for a `Spinner` while results load, and set `aria-busy` on the input then.
 
 ```tsx
-<Menu.Search>
+<Menu.Header>
   {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
   <Menu.SearchInput aria-label="Search" aria-busy={isLoading || undefined} />
-</Menu.Search>
+</Menu.Header>
 ```
 
 ### Menu.Empty
@@ -209,7 +209,7 @@ Use the `destructive` variant for actions that require attention.
 
 ### Search
 
-Filter menu items with `Menu.SearchInput` inside a `Menu.Search` header. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
+Filter menu items with `Menu.SearchInput` inside a `Menu.Header`. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
 
 <Preview slug="menu-search" />
 

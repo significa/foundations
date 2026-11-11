@@ -71,7 +71,7 @@ export default function ListboxAsyncPreview() {
       <Listbox value={selected} onChange={setSelected}>
         <Listbox.Trigger placeholder="Pick a fruit">{selected}</Listbox.Trigger>
         <Listbox.Options>
-          <Listbox.Search>
+          <Listbox.Header>
             {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
             <Listbox.SearchInput
               placeholder="Search fruits"
@@ -80,7 +80,7 @@ export default function ListboxAsyncPreview() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-          </Listbox.Search>
+          </Listbox.Header>
           {results.map((fruit) => (
             <Listbox.Option key={fruit} value={fruit}>
               {fruit}
