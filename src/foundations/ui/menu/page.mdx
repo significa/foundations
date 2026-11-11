@@ -36,7 +36,7 @@ folder: UI
 <Menu>
   <Menu.Trigger />
   <Menu.Items>
-    <Input.Group variant="flush">
+    <Input.Group>
       <Menu.SearchInput />
     </Input.Group>
     <Menu.Section>
@@ -161,10 +161,10 @@ A horizontal line to separate groups of items.
 
 Extends the [`Input`](/ui/input) component.
 
-An input for filtering items. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted item. It renders the bare input: wrap it in `Input.Group variant="flush"` (a borderless header with a bottom divider and no focus ring, since the open panel already shows focus) with an `Input.Addon` for an icon, or a `Spinner` while results load (set `aria-busy` on the input then).
+An input for filtering items. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted item. It renders the bare input: wrap it in `Input.Group` with an `Input.Addon` for an icon, or a `Spinner` while results load (set `aria-busy` on the input then).
 
 ```tsx
-<Input.Group variant="flush">
+<Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
   <Input.Addon>
     <MagnifyingGlassIcon weight="bold" />
   </Input.Addon>

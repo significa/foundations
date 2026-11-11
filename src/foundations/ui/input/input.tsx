@@ -10,20 +10,16 @@ const inputFrameBase = [
   "border outline-none",
   "transition",
   "flex items-center",
+  "[:focus-visible,:has(:focus-visible)]:ring-(length:--ring-width) ring-ring [:focus-visible,:has(:focus-visible)]:border-accent [:focus-visible,:has(:focus-visible)]:text-foreground",
   "[:disabled,:has(input:disabled,select:disabled)]:cursor-not-allowed [:disabled,:has(input:disabled,select:disabled)]:opacity-50",
   "[[data-invalid],:has([data-invalid])]:border-error! [[data-invalid],:has([data-invalid])]:ring-error/20 [[data-invalid],:has([data-invalid])]:hover:border-error",
 ];
 
-const inputFocusRing =
-  "[:focus-visible,:has(:focus-visible)]:ring-(length:--ring-width) ring-ring [:focus-visible,:has(:focus-visible)]:border-accent [:focus-visible,:has(:focus-visible)]:text-foreground";
-
 const inputFrameVariants = {
   default: [
-    inputFocusRing,
     "border-border shadow-xs hover:border-[color-mix(in_oklab,var(--color-border),var(--color-foreground)_8%)]",
   ],
   minimal: [
-    inputFocusRing,
     "border-transparent bg-transparent hover:bg-background-secondary [:focus-visible,:has(:focus-visible)]:bg-background",
   ],
 };
@@ -68,14 +64,9 @@ const inputStyle = cva({
 const inputGroupStyle = cva({
   base: inputFrameBase,
   variants: {
-    variant: {
-      ...inputFrameVariants,
-      // Group only: no focus ring, for a field inside a surface that already shows focus (a menu's search).
-      flush: "border-x-0 border-t-0 border-border bg-transparent",
-    },
+    variant: inputFrameVariants,
     size: inputFrameSize,
   },
-  compoundVariants: [{ variant: "flush", class: "rounded-none" }],
   defaultVariants: {
     variant: "default",
     size: "md",
@@ -117,7 +108,7 @@ export type InputVariant = "default" | "minimal";
 
 interface InputGroupContextValue {
   size: InputSize;
-  variant: NonNullable<VariantProps<typeof inputGroupStyle>["variant"]>;
+  variant: InputVariant;
 }
 
 const InputGroupContext = createContext<InputGroupContextValue | null>(null);

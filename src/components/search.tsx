@@ -139,7 +139,7 @@ const Search = () => {
         <Menu open={isOpen} onOpenChange={handleOpenChange} modal={false}>
           <Menu.Trigger className="hidden" />
           <Menu.Items inline className="flex h-full flex-col overflow-hidden">
-            <Input.Group variant="flush">
+            <Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
               <Input.Addon>
                 <MagnifyingGlassIcon weight="bold" />
               </Input.Addon>

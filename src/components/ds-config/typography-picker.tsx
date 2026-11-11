@@ -117,7 +117,7 @@ const TypographyPicker = ({
     >
       <Listbox.Trigger placeholder={placeholder}>{value?.family}</Listbox.Trigger>
       <Listbox.Options>
-        <Input.Group variant="flush">
+        <Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
           <Input.Addon>
             {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
           </Input.Addon>

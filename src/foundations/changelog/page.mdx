@@ -35,22 +35,21 @@ since a button can't set its cell's. It takes `sort` and a plain `onClick`.
 `Popover.SearchInput` wrapped the input in a `div` that carried the border, icon and spinner, while
 your `className` landed on the input inside. `Menu.SearchInput` and `Listbox.SearchInput` now
 render an `Input` (keyboard navigation and `Enter` to select unchanged); compose the frame with
-`Input.Group` and `Input.Addon`. The new `variant="flush"` on `Input.Group` gives the old look: a
-borderless header with a bottom divider and no focus ring. If you copy `input.tsx`, the focus ring
-moved from the frame base into the `default` and `minimal` variants. `isLoading` is gone: the spinner is yours to render, so pass
+`Input.Group` and `Input.Addon`; the classes below keep the old look, a header with a bottom
+divider and no focus ring. `isLoading` is gone: the spinner is yours to render, so pass
 `aria-busy` to the input when it shows. `Popover.SearchInput` is removed, since without the frame
 it was a plain `Input`. `Listbox` now detects its search input wherever it sits, not only as a
 direct child of `Listbox.Options`.
 
 ```diff tsx
 - <Menu.SearchInput isLoading={isLoading} value={query} onChange={…} />
-+ <Input.Group variant="flush">
++ <Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
 +   <Input.Addon>{isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}</Input.Addon>
 +   <Menu.SearchInput aria-busy={isLoading || undefined} value={query} onChange={…} />
 + </Input.Group>
 
 - <Popover.SearchInput placeholder="Search" />
-+ <Input.Group variant="flush">…<Input placeholder="Search" /></Input.Group>
++ <Input.Group className="…">…<Input placeholder="Search" /></Input.Group>
 ```
 
 ### Changed: `Disclosure.Content` is one element

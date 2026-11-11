@@ -33,7 +33,7 @@ export default function MenuSearchPreview() {
         <Button variant="outline">Pick a fruit</Button>
       </Menu.Trigger>
       <Menu.Items>
-        <Input.Group variant="flush">
+        <Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
           <Input.Addon>
             <MagnifyingGlassIcon weight="bold" />
           </Input.Addon>
