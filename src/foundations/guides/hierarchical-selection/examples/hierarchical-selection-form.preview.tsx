@@ -1,6 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { revalidateLogic, useForm, useSelector } from "@tanstack/react-form";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import {
   filterHierarchicalData,
@@ -19,8 +18,6 @@ const schema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
   countries: z.array(z.string()).min(1, "Please select at least one country"),
 });
-
-type FormData = z.infer<typeof schema>;
 
 const sampleData: HierarchicalItem[] = [
   {
@@ -56,6 +53,7 @@ const sampleData: HierarchicalItem[] = [
 interface HierarchicalSelectionFieldProps {
   value: string[];
   onChange: (value: string[]) => void;
+  onBlur?: () => void;
   data: HierarchicalItem[];
   error?: string;
 }
@@ -63,6 +61,7 @@ interface HierarchicalSelectionFieldProps {
 function HierarchicalSelectionField({
   value,
   onChange,
+  onBlur,
   data,
   error,
 }: HierarchicalSelectionFieldProps) {
@@ -78,7 +77,14 @@ function HierarchicalSelectionField({
   const filteredData = filterHierarchicalData(data, searchQuery);
 
   return (
-    <div className="space-y-3">
+    <fieldset
+      aria-label="Countries"
+      className="min-w-0 space-y-3"
+      // Blurred once focus leaves the whole control, not when it moves between its checkboxes.
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.();
+      }}
+    >
       <Input
         placeholder="Search countries..."
         value={searchQuery}
@@ -141,58 +147,91 @@ function HierarchicalSelectionField({
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
-    </div>
+    </fieldset>
   );
 }
 
 export default function HierarchicalSelectionForm() {
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
+  const form = useForm({
     defaultValues: {
       name: "",
       email: "",
       countries: ["spain"],
     },
+    validationLogic: revalidateLogic({ mode: "blur", modeAfterSubmission: "change" }),
+    validators: { onDynamic: schema },
+    onSubmit: async ({ value }) => {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      alert(
+        `Form submitted!\n\nName: ${value.name}\nEmail: ${value.email}\nCountries: ${value.countries.join(", ")}`,
+      );
+    },
   });
-
-  const watchedCountries = watch("countries");
-
-  const onSubmit = async (data: FormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    alert(
-      `Form submitted!\n\nName: ${data.name}\nEmail: ${data.email}\nCountries: ${data.countries.join(", ")}`,
-    );
-  };
+  // Form-level errors land on every field; show them once it was left or the form submitted.
+  const isSubmitted = useSelector(form.store, (state) => state.submissionAttempts > 0);
 
   return (
     <div className="mx-auto w-full p-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+        className="space-y-6"
+      >
         <h2 className="text-xl font-semibold">Registration Form</h2>
 
         <div className="grid grid-cols-2 gap-4">
-          <Field invalid={!!errors.name}>
-            <Field.Label>Name *</Field.Label>
-            <Field.Control>
-              <Input {...register("name")} placeholder="Enter your name" />
-            </Field.Control>
-            <Field.Error>{errors.name?.message}</Field.Error>
-          </Field>
+          <form.Field name="name">
+            {(field) => {
+              const error =
+                field.state.meta.isBlurred || isSubmitted
+                  ? field.state.meta.errors[0]?.message
+                  : undefined;
+              return (
+                <Field invalid={!!error}>
+                  <Field.Label>Name *</Field.Label>
+                  <Field.Control>
+                    <Input
+                      name={field.name}
+                      value={field.state.value}
+                      onChange={(event) => field.handleChange(event.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="Enter your name"
+                    />
+                  </Field.Control>
+                  <Field.Error>{error}</Field.Error>
+                </Field>
+              );
+            }}
+          </form.Field>
 
-          <Field invalid={!!errors.email}>
-            <Field.Label>Email *</Field.Label>
-            <Field.Control>
-              <Input type="email" {...register("email")} placeholder="Enter your email" />
-            </Field.Control>
-            <Field.Error>{errors.email?.message}</Field.Error>
-          </Field>
+          <form.Field name="email">
+            {(field) => {
+              const error =
+                field.state.meta.isBlurred || isSubmitted
+                  ? field.state.meta.errors[0]?.message
+                  : undefined;
+              return (
+                <Field invalid={!!error}>
+                  <Field.Label>Email *</Field.Label>
+                  <Field.Control>
+                    <Input
+                      type="email"
+                      name={field.name}
+                      value={field.state.value}
+                      onChange={(event) => field.handleChange(event.target.value)}
+                      onBlur={field.handleBlur}
+                      placeholder="Enter your email"
+                    />
+                  </Field.Control>
+                  <Field.Error>{error}</Field.Error>
+                </Field>
+              );
+            }}
+          </form.Field>
         </div>
 
         <Field>
@@ -201,33 +240,42 @@ export default function HierarchicalSelectionForm() {
             Select the countries you are interested in for our services
           </Field.Description>
 
-          <Controller
-            name="countries"
-            control={control}
-            render={({ field }) => (
+          <form.Field name="countries">
+            {(field) => (
               <HierarchicalSelectionField
-                value={field.value}
-                onChange={field.onChange}
+                value={field.state.value}
+                onChange={field.handleChange}
+                onBlur={field.handleBlur}
                 data={sampleData}
-                error={errors.countries?.message}
+                error={
+                  field.state.meta.isBlurred || isSubmitted
+                    ? field.state.meta.errors[0]?.message
+                    : undefined
+                }
               />
             )}
-          />
+          </form.Field>
         </Field>
 
-        <div className="rounded bg-background-secondary p-3">
-          <p className="mb-1 text-sm font-medium">
-            Selected countries ({watchedCountries.length}):
-          </p>
-          <p className="text-sm text-foreground-secondary">
-            {watchedCountries.length > 0 ? watchedCountries.join(", ") : "None"}
-          </p>
-        </div>
+        <form.Subscribe selector={(state) => state.values.countries}>
+          {(countries) => (
+            <div className="rounded bg-background-secondary p-3">
+              <p className="mb-1 text-sm font-medium">Selected countries ({countries.length}):</p>
+              <p className="text-sm text-foreground-secondary">
+                {countries.length > 0 ? countries.join(", ") : "None"}
+              </p>
+            </div>
+          )}
+        </form.Subscribe>
 
         <div className="flex gap-3">
-          <Button type="submit" disabled={isSubmitting} className="min-w-30">
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </Button>
+          <form.Subscribe selector={(state) => state.isSubmitting}>
+            {(isSubmitting) => (
+              <Button type="submit" disabled={isSubmitting} className="min-w-30">
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
+            )}
+          </form.Subscribe>
 
           <Button type="button" variant="ghost" onClick={() => window.location.reload()}>
             Reset Form
