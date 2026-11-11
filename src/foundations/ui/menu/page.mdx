@@ -219,6 +219,12 @@ Render a `<Menu>` inside `<Menu.Items>` and use `<Menu.ItemTrigger>` as the inne
 
 <Preview slug="menu-nested" />
 
+### Switching views
+
+To swap the menu's content in place, keep the current view in state and render its items. Items that change the view call `e.preventDefault()` in `onSelect` so the menu stays open, and `onOpenChange` resets the view so the menu always opens on the root. Focus moves to the panel when the focused item unmounts, so the arrow keys keep working.
+
+<Preview slug="menu-views" />
+
 ### Complex menu
 
 Multiple submenus, sections, icons, and a destructive action — a sample of how the primitive scales to deeply nested action menus.
