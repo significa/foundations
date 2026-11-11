@@ -30,26 +30,22 @@ since a button can't set its cell's. It takes `sort` and a plain `onClick`.
 + </Table.Head>
 ```
 
-### Breaking: `SearchInput` renders just the input
+### Breaking: `Popover.Search` holds the search header; `SearchInput` is just the input
 
 `Popover.SearchInput` wrapped the input in a `div` that carried the border, icon and spinner, while
-your `className` landed on the input inside. `Menu.SearchInput` and `Listbox.SearchInput` now
-render an `Input` (keyboard navigation and `Enter` to select unchanged); compose the frame with
-`Input.Group` and `Input.Addon`; the classes below keep the old look, a header with a bottom
-divider and no focus ring. `isLoading` is gone: the spinner is yours to render, so pass
-`aria-busy` to the input when it shows. `Popover.SearchInput` is removed, since without the frame
-it was a plain `Input`. `Listbox` now detects its search input wherever it sits, not only as a
-direct child of `Listbox.Options`.
+your `className` landed on the input inside. The header is now its own part, `Popover.Search`
+(re-exported as `Menu.Search` and `Listbox.Search`): one `div` with the bottom divider, where you
+put the icon. `Popover.SearchInput`, `Menu.SearchInput` and `Listbox.SearchInput` render just the
+`<input>`, with keyboard navigation and `Enter` to select unchanged. `isLoading` is gone: render a
+`Spinner` in place of the icon and pass `aria-busy` to the input. `Listbox` now detects its search
+input wherever it sits, not only as a direct child of `Listbox.Options`.
 
 ```diff tsx
 - <Menu.SearchInput isLoading={isLoading} value={query} onChange={…} />
-+ <Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
-+   <Input.Addon>{isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}</Input.Addon>
++ <Menu.Search>
++   {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
 +   <Menu.SearchInput aria-busy={isLoading || undefined} value={query} onChange={…} />
-+ </Input.Group>
-
-- <Popover.SearchInput placeholder="Search" />
-+ <Input.Group className="…">…<Input placeholder="Search" /></Input.Group>
++ </Menu.Search>
 ```
 
 ### Changed: `Disclosure.Content` is one element
@@ -58,7 +54,8 @@ It was two `div`s for the `grid-template-rows` trick: `id` and `data-state` on t
 `className` and `ref` on the inner one, and padding you added still showed when closed. It's one
 `div` now, animating `height` from `0` to `auto` with `interpolate-size`; padding collapses with it
 and closed content stays invisible, so nothing inside is focusable. Browsers without
-`interpolate-size` open and close it without the animation. Selectors that reached the inner `div`
+`interpolate-size` open and close it without the animation; for now that's Safari and Firefox, as
+it ships only in Chromium. Selectors that reached the inner `div`
 (`[data-state] > div`) now match your content's first child instead.
 
 ```diff tsx

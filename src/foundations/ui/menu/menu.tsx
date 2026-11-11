@@ -34,7 +34,6 @@ import {
 import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { useStableCallback } from "#/foundations/hooks/use-stable-callback/use-stable-callback.ts";
 import { Divider } from "#/foundations/ui/divider/divider.tsx";
-import { Input } from "#/foundations/ui/input/input.tsx";
 import {
   Popover,
   PopoverContext,
@@ -611,7 +610,7 @@ const MenuSearchInput = ({
   onChange,
   onKeyDown,
   ...props
-}: React.ComponentProps<typeof Input>) => {
+}: React.ComponentProps<typeof Popover.SearchInput>) => {
   const internalRef = useRef<HTMLInputElement | null>(null);
   const { highlightedIndex, setHighlightedIndex, items, setSearchInputEl, elementsRef } =
     useMenuContext();
@@ -651,8 +650,12 @@ const MenuSearchInput = ({
     onKeyDown?.(e);
   };
 
-  return <Input ref={ref} onChange={handleChange} onKeyDown={handleKeyDown} {...props} />;
+  return (
+    <Popover.SearchInput ref={ref} onChange={handleChange} onKeyDown={handleKeyDown} {...props} />
+  );
 };
+
+const MenuSearch = Popover.Search;
 
 const MenuEmpty = Popover.Empty;
 
@@ -664,6 +667,7 @@ const CompoundMenu = Object.assign(Menu, {
   Section: MenuSection,
   Heading: MenuHeading,
   Divider: MenuDivider,
+  Search: MenuSearch,
   SearchInput: MenuSearchInput,
   Empty: MenuEmpty,
 });

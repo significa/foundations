@@ -9,7 +9,7 @@ dependencies:
     href: /ui/popover
   - name: Divider
     href: /ui/divider
-  - name: Input
+  - name: inputStyle
     href: /ui/input
   - name: "@floating-ui/react"
     href: https://floating-ui.com/docs/react
@@ -23,9 +23,10 @@ folder: UI
 <Listbox value={value} onChange={onChange}>
   <Listbox.Trigger />
   <Listbox.Options>
-    <Input.Group>
+    <Listbox.Search>
+      <MagnifyingGlassIcon />
       <Listbox.SearchInput />
-    </Input.Group>
+    </Listbox.Search>
     <Listbox.Option />
     <Listbox.Divider />
     <Listbox.Option />
@@ -139,19 +140,23 @@ Extends the `button` element.
 
 A horizontal line to separate groups of options.
 
+### Listbox.Search
+
+Extends the [`Popover.Search`](/ui/popover#popoversearch) component.
+
+The search header: a bottom divider around an icon and `Listbox.SearchInput`.
+
 ### Listbox.SearchInput
 
-Extends the [`Input`](/ui/input) component.
+Extends the [`Popover.SearchInput`](/ui/popover#popoversearchinput) component.
 
-An input for filtering options. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted option. It renders the bare input: wrap it in `Input.Group` with an `Input.Addon` for an icon, or a `Spinner` while results load (set `aria-busy` on the input then).
+An input for filtering options. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted option. Put it in a `Listbox.Search` with an icon; swap the icon for a `Spinner` while results load, and set `aria-busy` on the input then.
 
 ```tsx
-<Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
-  <Input.Addon>
-    <MagnifyingGlassIcon weight="bold" />
-  </Input.Addon>
-  <Listbox.SearchInput aria-label="Search" />
-</Input.Group>
+<Listbox.Search>
+  {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
+  <Listbox.SearchInput aria-label="Search" aria-busy={isLoading || undefined} />
+</Listbox.Search>
 ```
 
 ### Listbox.Empty
@@ -199,7 +204,7 @@ Filtering options with a search input.
 
 ### Async Search
 
-Debounced search against an async data source. The addon swaps the magnifying-glass icon for a `Spinner` while results are in flight, and the input sets `aria-busy`.
+Debounced search against an async data source. `Listbox.Search` swaps the magnifying-glass icon for a `Spinner` while results are in flight, and the input sets `aria-busy`.
 
 <Preview slug="listbox-async" />
 

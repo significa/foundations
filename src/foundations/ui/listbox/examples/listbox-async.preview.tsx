@@ -1,7 +1,6 @@
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useState } from "react";
 
-import { Input } from "#/foundations/ui/input/input.tsx";
 import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
 import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
 
@@ -72,10 +71,8 @@ export default function ListboxAsyncPreview() {
       <Listbox value={selected} onChange={setSelected}>
         <Listbox.Trigger placeholder="Pick a fruit">{selected}</Listbox.Trigger>
         <Listbox.Options>
-          <Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
-            <Input.Addon>
-              {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
-            </Input.Addon>
+          <Listbox.Search>
+            {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
             <Listbox.SearchInput
               placeholder="Search fruits"
               aria-label="Search fruits"
@@ -83,7 +80,7 @@ export default function ListboxAsyncPreview() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-          </Input.Group>
+          </Listbox.Search>
           {results.map((fruit) => (
             <Listbox.Option key={fruit} value={fruit}>
               {fruit}

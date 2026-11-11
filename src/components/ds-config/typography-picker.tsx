@@ -1,7 +1,6 @@
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useMemo, useState } from "react";
 
-import { Input } from "#/foundations/ui/input/input.tsx";
 import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
 import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
 import type { FontCategory, StoredFont } from "./storage.ts";
@@ -117,10 +116,8 @@ const TypographyPicker = ({
     >
       <Listbox.Trigger placeholder={placeholder}>{value?.family}</Listbox.Trigger>
       <Listbox.Options>
-        <Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
-          <Input.Addon>
-            {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
-          </Input.Addon>
+        <Listbox.Search>
+          {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
           <Listbox.SearchInput
             placeholder="Search fonts"
             aria-label="Search fonts"
@@ -128,7 +125,7 @@ const TypographyPicker = ({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-        </Input.Group>
+        </Listbox.Search>
         {!search && (
           <>
             <Listbox.Option value={null}>{nullLabel}</Listbox.Option>

@@ -34,7 +34,7 @@ import {
 } from "react";
 
 import { Divider } from "#/foundations/ui/divider/divider.tsx";
-import { Input, inputStyle } from "#/foundations/ui/input/input.tsx";
+import { inputStyle } from "#/foundations/ui/input/input.tsx";
 import { Popover } from "#/foundations/ui/popover/popover.tsx";
 import { cn } from "#/lib/utils/classnames.ts";
 
@@ -512,12 +512,13 @@ const ListboxSearchInput = ({
   onKeyDown,
   onChange,
   ...props
-}: React.ComponentProps<typeof Input>) => {
+}: React.ComponentProps<typeof Popover.SearchInput>) => {
   const { highlightedIndex, setHighlightedIndex, handleSelect, setIsSearchable } =
     useListboxContext();
 
   useEffect(() => {
     setIsSearchable(true);
+    return () => setIsSearchable(false);
   }, [setIsSearchable]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -535,8 +536,10 @@ const ListboxSearchInput = ({
     onKeyDown?.(event);
   };
 
-  return <Input onKeyDown={handleKeyDown} onChange={handleChange} {...props} />;
+  return <Popover.SearchInput onKeyDown={handleKeyDown} onChange={handleChange} {...props} />;
 };
+
+const ListboxSearch = Popover.Search;
 
 const ListboxEmpty = Popover.Empty;
 
@@ -546,6 +549,7 @@ const CompoundListbox = Object.assign(Listbox, {
   Options: ListboxOptions,
   Option: ListboxOption,
   Divider: ListboxDivider,
+  Search: ListboxSearch,
   SearchInput: ListboxSearchInput,
   Empty: ListboxEmpty,
 });

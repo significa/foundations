@@ -9,8 +9,6 @@ dependencies:
     href: /ui/popover
   - name: Divider
     href: /ui/divider
-  - name: Input
-    href: /ui/input
   - name: Slot
     href: /components/slot
   - name: useStableCallback
@@ -36,9 +34,10 @@ folder: UI
 <Menu>
   <Menu.Trigger />
   <Menu.Items>
-    <Input.Group>
+    <Menu.Search>
+      <MagnifyingGlassIcon />
       <Menu.SearchInput />
-    </Input.Group>
+    </Menu.Search>
     <Menu.Section>
       <Menu.Heading />
       <Menu.Item />
@@ -157,19 +156,23 @@ A heading for a section of items.
 
 A horizontal line to separate groups of items.
 
+### Menu.Search
+
+Extends the [`Popover.Search`](/ui/popover#popoversearch) component.
+
+The search header: a bottom divider around an icon and `Menu.SearchInput`.
+
 ### Menu.SearchInput
 
-Extends the [`Input`](/ui/input) component.
+Extends the [`Popover.SearchInput`](/ui/popover#popoversearchinput) component.
 
-An input for filtering items. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted item. It renders the bare input: wrap it in `Input.Group` with an `Input.Addon` for an icon, or a `Spinner` while results load (set `aria-busy` on the input then).
+An input for filtering items. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted item. Put it in a `Menu.Search` with an icon; swap the icon for a `Spinner` while results load, and set `aria-busy` on the input then.
 
 ```tsx
-<Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
-  <Input.Addon>
-    <MagnifyingGlassIcon weight="bold" />
-  </Input.Addon>
-  <Menu.SearchInput aria-label="Search" />
-</Input.Group>
+<Menu.Search>
+  {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
+  <Menu.SearchInput aria-label="Search" aria-busy={isLoading || undefined} />
+</Menu.Search>
 ```
 
 ### Menu.Empty
@@ -206,7 +209,7 @@ Use the `destructive` variant for actions that require attention.
 
 ### Search
 
-Filter menu items with `Menu.SearchInput`, framed by `Input.Group`. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
+Filter menu items with `Menu.SearchInput` inside a `Menu.Search` header. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
 
 <Preview slug="menu-search" />
 

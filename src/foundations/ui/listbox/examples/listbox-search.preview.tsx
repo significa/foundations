@@ -1,7 +1,6 @@
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { useMemo, useState } from "react";
 
-import { Input } from "#/foundations/ui/input/input.tsx";
 import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
 
 const people = [
@@ -25,17 +24,15 @@ export default function ListboxSearchPreview() {
       <Listbox value={selectedPerson} onChange={setSelectedPerson}>
         <Listbox.Trigger>{selectedPerson?.name}</Listbox.Trigger>
         <Listbox.Options>
-          <Input.Group className="rounded-none border-x-0 border-t-0 shadow-none hover:border-border [:focus-visible,:has(:focus-visible)]:border-border [:focus-visible,:has(:focus-visible)]:ring-0">
-            <Input.Addon>
-              <MagnifyingGlassIcon weight="bold" />
-            </Input.Addon>
+          <Listbox.Search>
+            <MagnifyingGlassIcon weight="bold" />
             <Listbox.SearchInput
               placeholder="Search people"
               aria-label="Search people"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-          </Input.Group>
+          </Listbox.Search>
           {filteredPeople.map((person) => (
             <Listbox.Option key={person.id} value={person}>
               {person.name}

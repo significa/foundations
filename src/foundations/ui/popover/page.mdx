@@ -28,6 +28,10 @@ folder: UI
 <Popover>
   <Popover.Trigger />
   <Popover.Content>
+    <Popover.Search>
+      <MagnifyingGlassIcon />
+      <Popover.SearchInput />
+    </Popover.Search>
     <Popover.Close />
     <Popover.Empty />
   </Popover.Content>
@@ -104,6 +108,25 @@ Extends the `button` element.
   }}
 />
 
+### Popover.Search
+
+Extends the `div` element.
+
+A search header for the top of the content: a bottom divider, with an icon and a `Popover.SearchInput` side by side. An `svg` child is sized to match the input. While results load, swap the icon for a `Spinner` and set `aria-busy` on the input.
+
+```tsx
+<Popover.Search>
+  {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
+  <Popover.SearchInput aria-label="Search" aria-busy={isLoading || undefined} />
+</Popover.Search>
+```
+
+### Popover.SearchInput
+
+Extends the `input` element.
+
+A bare, borderless input for `Popover.Search`. Inside a Menu or Listbox, use `Menu.SearchInput` or `Listbox.SearchInput`, which add keyboard navigation.
+
 ### Popover.Empty
 
 Extends the `div` element.
@@ -144,7 +167,7 @@ Example showing how to customize the popover width.
 
 ### Search Input
 
-Compose a search field from [`Input.Group`](/ui/input) and [`Input.Addon`](/ui/input). For a list the keyboard moves through while focus stays in the field, use [`Menu.SearchInput`](/ui/menu#menusearchinput) or [`Listbox.SearchInput`](/ui/listbox#listboxsearchinput) instead.
+A search header from `Popover.Search` and `Popover.SearchInput`. For a list the keyboard moves through while focus stays in the field, use [`Menu.SearchInput`](/ui/menu#menusearchinput) or [`Listbox.SearchInput`](/ui/listbox#listboxsearchinput) instead.
 
 <Preview slug="popover-search" />
 

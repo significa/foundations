@@ -485,12 +485,42 @@ const PopoverEmpty = ({ children, className, ...props }: React.ComponentPropsWit
   );
 };
 
+/**
+ * A search header for the top of a popover: one frame with a bottom divider.
+ * Compose an icon (or a `Spinner` while loading) and a `Popover.SearchInput` inside it.
+ */
+const PopoverSearch = ({ className, ...props }: React.ComponentPropsWithRef<"div">) => {
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-2 border-b border-border bg-transparent px-4 text-foreground [&>svg]:size-4 [&>svg]:shrink-0",
+        className,
+      )}
+      {...props}
+    />
+  );
+};
+
+const PopoverSearchInput = ({ className, ...props }: React.ComponentPropsWithRef<"input">) => {
+  return (
+    <input
+      className={cn(
+        "h-10 min-w-0 flex-1 border-0 bg-transparent p-0 text-base font-medium outline-none placeholder:text-foreground-secondary",
+        className,
+      )}
+      {...props}
+    />
+  );
+};
+
 const CompoundPopover = Object.assign(Popover, {
   Trigger: PopoverTrigger,
   Content: PopoverContent,
   Close: PopoverClose,
   Empty: PopoverEmpty,
   Panel: PopoverPanel,
+  Search: PopoverSearch,
+  SearchInput: PopoverSearchInput,
 });
 
 export type { PopoverOrigin };
