@@ -32,10 +32,10 @@ const useSegmentedControlContext = () => {
   return context;
 };
 
-interface SegmentedControlProps extends Omit<React.ComponentPropsWithRef<"div">, "onChange"> {
+interface SegmentedControlProps extends React.ComponentPropsWithRef<"div"> {
   defaultValue?: string;
   value?: string;
-  onChange?: (value: string) => void;
+  onValueChange?: (value: string) => void;
   className?: string;
   children: React.ReactNode;
 }
@@ -43,7 +43,7 @@ interface SegmentedControlProps extends Omit<React.ComponentPropsWithRef<"div">,
 const SegmentedControl = ({
   defaultValue,
   value: selectedValueProp,
-  onChange: onChangeProp,
+  onValueChange,
   className,
   children,
   ...props
@@ -82,11 +82,11 @@ const SegmentedControl = ({
   const setSelectedSegment = useCallback(
     (value: string) => {
       setInternalSelectedValue(value);
-      onChangeProp?.(value);
+      onValueChange?.(value);
 
       document.getElementById(getItemId(id, value))?.focus({ preventScroll: true });
     },
-    [id, onChangeProp],
+    [id, onValueChange],
   );
 
   const next = useCallback(() => {

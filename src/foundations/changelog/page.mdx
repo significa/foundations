@@ -140,6 +140,53 @@ now sits on the icon.
   </span>
 ```
 
+### Breaking: `Tabs` pairs tabs and panels by `value`, not position
+
+Tabs used to pair `Tabs.Item` and `Tabs.Panel` by index. With conditional tabs that broke: hiding
+an earlier tab shifted the indices, which remounted the selected panel for a render (losing its
+local state), and a controlled index could point past the end, leaving no tab selected or
+reachable. Every `Tabs.Item` and `Tabs.Panel` now takes a required `value`, and the root takes
+either `defaultValue` or `value` + `onValueChange` (required, no positional fallback) instead of
+`defaultIndex` / `selectedIndex` / `onChange`. If the selected tab goes away, uncontrolled tabs
+select the first rendered tab (without calling `onValueChange`); controlled tabs select nothing,
+and that value's panel still renders, so keep `value` pointing at a rendered tab. Arrow keys now also take Home
+and End, `onValueChange` fires only when the tab changes, and string children are no longer
+wrapped in a `<span>`. `Tabs.Item asChild` expects a button or a link.
+
+```diff tsx
+- const [index, setIndex] = useState(0);
++ const [tab, setTab] = useState("account");
+
+- <Tabs selectedIndex={index} onChange={setIndex}>
++ <Tabs value={tab} onValueChange={setTab}>
+    <Tabs.Items>
+-     <Tabs.Item>Account</Tabs.Item>
+-     {canBill && <Tabs.Item>Billing</Tabs.Item>}
++     <Tabs.Item value="account">Account</Tabs.Item>
++     {canBill && <Tabs.Item value="billing">Billing</Tabs.Item>}
+    </Tabs.Items>
+    <Tabs.Panels>
+-     <Tabs.Panel>…</Tabs.Panel>
+-     {canBill && <Tabs.Panel>…</Tabs.Panel>}
++     <Tabs.Panel value="account">…</Tabs.Panel>
++     {canBill && <Tabs.Panel value="billing">…</Tabs.Panel>}
+    </Tabs.Panels>
+  </Tabs>
+
+- <Tabs defaultIndex={1}>
++ <Tabs defaultValue="billing">
+```
+
+### Breaking: `SegmentedControl` `onChange` is now `onValueChange`
+
+The root's `onChange(value: string)` replaced the native `<div>` `onChange` with a different
+signature. It's renamed to match `Tabs`; the native `onChange` is a plain div event again.
+
+```diff tsx
+- <SegmentedControl value={view} onChange={setView}>
++ <SegmentedControl value={view} onValueChange={setView}>
+```
+
 ### Fixed: a disabled `Menu.Item asChild` link still activated
 
 An `<a>` ignores `disabled`, so Enter or a click on a disabled `Menu.Item asChild` ran the link's

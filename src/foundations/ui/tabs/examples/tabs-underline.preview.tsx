@@ -4,25 +4,25 @@ import { Tabs } from "#/foundations/ui/tabs/tabs.tsx";
 
 export default function TabsUnderlinePreview() {
   return (
-    <Tabs variant="underline">
+    <Tabs defaultValue="users" variant="underline">
       <Tabs.Items>
-        <Tabs.Item>
+        <Tabs.Item value="users">
           <UsersIcon />
           <span>Users</span>
         </Tabs.Item>
-        <Tabs.Item>
+        <Tabs.Item value="billing">
           <CreditCardIcon />
           <span>Billing</span>
         </Tabs.Item>
-        <Tabs.Item>
+        <Tabs.Item value="settings">
           <GearIcon />
           <span>Settings</span>
         </Tabs.Item>
       </Tabs.Items>
       <Tabs.Panels>
-        <Tabs.Panel>Panel 1</Tabs.Panel>
-        <Tabs.Panel>Panel 2</Tabs.Panel>
-        <Tabs.Panel>Panel 3</Tabs.Panel>
+        <Tabs.Panel value="users">Users panel</Tabs.Panel>
+        <Tabs.Panel value="billing">Billing panel</Tabs.Panel>
+        <Tabs.Panel value="settings">Settings panel</Tabs.Panel>
       </Tabs.Panels>
     </Tabs>
   );

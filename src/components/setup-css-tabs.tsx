@@ -8,14 +8,14 @@ interface Props {
 
 const SetupCssTabs = ({ autoSlot, switcherSlot }: Props) => {
   return (
-    <Tabs className="mt-6">
+    <Tabs defaultValue="auto" className="mt-6">
       <Tabs.Items className="pb-0">
-        <Tabs.Item>Automatic color scheme</Tabs.Item>
-        <Tabs.Item>With theme switcher</Tabs.Item>
+        <Tabs.Item value="auto">Automatic color scheme</Tabs.Item>
+        <Tabs.Item value="switcher">With theme switcher</Tabs.Item>
       </Tabs.Items>
       <Tabs.Panels>
-        <Tabs.Panel>{autoSlot}</Tabs.Panel>
-        <Tabs.Panel>{switcherSlot}</Tabs.Panel>
+        <Tabs.Panel value="auto">{autoSlot}</Tabs.Panel>
+        <Tabs.Panel value="switcher">{switcherSlot}</Tabs.Panel>
       </Tabs.Panels>
     </Tabs>
   );
