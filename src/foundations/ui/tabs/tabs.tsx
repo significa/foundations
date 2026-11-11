@@ -196,8 +196,11 @@ const TabsItem = ({
     if (e.key === "End") target = tabs.at(-1);
     if (!target) return;
 
+    const targetValue = target.dataset.value;
+    if (targetValue === undefined) return;
+
     e.preventDefault();
-    select(getValueFromTabId(tabsId, target.id));
+    select(targetValue);
   };
 
   return (
@@ -214,6 +217,7 @@ const TabsItem = ({
       aria-controls={getPanelId(tabsId, value)}
       aria-selected={isSelected}
       data-selected={isSelected || undefined}
+      data-value={value}
       tabIndex={isSelected || value === fallbackTab ? 0 : -1}
       style={{ anchorName: getAnchorName(tabsId, value), ...style }}
       onClick={(e) => {
@@ -236,9 +240,6 @@ const TabsItem = ({
     </Comp>
   );
 };
-
-const getValueFromTabId = (tabsId: string, tabId: string) =>
-  decodeURIComponent(tabId.slice(getTabId(tabsId, "").length));
 
 interface TabsPanelsProps extends Omit<React.ComponentPropsWithRef<"div">, "role"> {
   children: React.ReactNode;
