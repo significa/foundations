@@ -39,8 +39,6 @@ const config: KnipConfig = {
   compilers: {
     mdx: mdxCompiler,
   },
-  // Generated at build time by Pagefind; not present in the source tree.
-  ignoreUnresolved: ["/pagefind/pagefind.js"],
   // Foundations is a copy-paste library: exported components, prop types, and
   // context hooks are the public surface, so unused-export/type reports are
   // noise here. Keep the high-signal checks (unused files, dependencies).

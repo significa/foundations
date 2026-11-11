@@ -197,6 +197,8 @@ const PagefindError = () => (
   </div>
 );
 
+const PAGEFIND_URL = "/pagefind/pagefind.js";
+
 const usePagefind = () => {
   const [instance, setInstance] = useState<Pagefind | null>(null);
   const [isError, setIsError] = useState(false);
@@ -204,8 +206,8 @@ const usePagefind = () => {
   useEffect(() => {
     const loadPagefind = async () => {
       try {
-        // @ts-expect-error - dynamic import not typed
-        const pagefind = await import("/pagefind/pagefind.js");
+        // Built after the site, so Vite mustn't resolve it; without an index the hint below shows.
+        const pagefind: Pagefind = await import(/* @vite-ignore */ PAGEFIND_URL);
         setInstance(pagefind);
       } catch (_e) {
         setIsError(true);
