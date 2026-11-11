@@ -524,7 +524,8 @@ const MenuItem = ({
       data-item-id={itemId}
       data-highlighted={isHighlighted || undefined}
       tabIndex={isHighlighted ? 0 : -1}
-      disabled={disabled || undefined}
+      // A link has no `disabled`; it would render as `disabled=""` on the <a>.
+      disabled={asChild ? undefined : disabled || undefined}
       // Also makes Floating UI's list navigation skip the item.
       aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
@@ -604,17 +605,12 @@ const MenuDivider = ({ className, ...props }: React.ComponentPropsWithRef<"div">
   return <Divider className={cn("my-(--inset)", className)} {...props} />;
 };
 
-interface MenuSearchInputProps extends React.ComponentPropsWithRef<"input"> {
-  isLoading?: boolean;
-}
-
 const MenuSearchInput = ({
   ref: refProp,
   onChange,
   onKeyDown,
-  isLoading,
   ...props
-}: MenuSearchInputProps) => {
+}: React.ComponentProps<typeof Popover.SearchInput>) => {
   const internalRef = useRef<HTMLInputElement | null>(null);
   const { highlightedIndex, setHighlightedIndex, items, setSearchInputEl, elementsRef } =
     useMenuContext();
@@ -655,15 +651,11 @@ const MenuSearchInput = ({
   };
 
   return (
-    <Popover.SearchInput
-      ref={ref}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      isLoading={isLoading}
-      {...props}
-    />
+    <Popover.SearchInput ref={ref} onChange={handleChange} onKeyDown={handleKeyDown} {...props} />
   );
 };
+
+const MenuHeader = Popover.Header;
 
 const MenuEmpty = Popover.Empty;
 
@@ -675,6 +667,7 @@ const CompoundMenu = Object.assign(Menu, {
   Section: MenuSection,
   Heading: MenuHeading,
   Divider: MenuDivider,
+  Header: MenuHeader,
   SearchInput: MenuSearchInput,
   Empty: MenuEmpty,
 });

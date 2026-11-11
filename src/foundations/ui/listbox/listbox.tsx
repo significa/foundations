@@ -380,7 +380,7 @@ const ListboxOptions = <T,>({
   className,
   ...props
 }: React.ComponentPropsWithRef<"div">) => {
-  const { setOptions, setIsSearchable, refs, elementsRef, labelsRef, context, getFloatingProps } =
+  const { setOptions, refs, elementsRef, labelsRef, context, getFloatingProps } =
     useListboxContext();
 
   useEffect(() => {
@@ -404,16 +404,6 @@ const ListboxOptions = <T,>({
 
     setOptions(extractOptions(children));
   }, [children, setOptions]);
-
-  useEffect(() => {
-    const hasSearchInput = Children.toArray(children).some(
-      (child) => isValidElement(child) && child.type === ListboxSearchInput,
-    );
-
-    if (hasSearchInput) {
-      setIsSearchable(true);
-    }
-  }, [children, setIsSearchable]);
 
   const ref = useMergeRefs([refs.setFloating, refProp]);
 
@@ -518,18 +508,18 @@ const ListboxDivider = ({
  *
  * If this component is used, the `selection` placement will be ignored.
  */
-interface ListboxSearchInputProps extends React.ComponentPropsWithRef<"input"> {
-  isLoading?: boolean;
-}
-
 const ListboxSearchInput = ({
-  ref,
   onKeyDown,
   onChange,
-  isLoading,
   ...props
-}: ListboxSearchInputProps) => {
-  const { highlightedIndex, setHighlightedIndex, handleSelect } = useListboxContext();
+}: React.ComponentProps<typeof Popover.SearchInput>) => {
+  const { highlightedIndex, setHighlightedIndex, handleSelect, setIsSearchable } =
+    useListboxContext();
+
+  useEffect(() => {
+    setIsSearchable(true);
+    return () => setIsSearchable(false);
+  }, [setIsSearchable]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
@@ -546,16 +536,10 @@ const ListboxSearchInput = ({
     onKeyDown?.(event);
   };
 
-  return (
-    <Popover.SearchInput
-      ref={ref}
-      onKeyDown={handleKeyDown}
-      onChange={handleChange}
-      isLoading={isLoading}
-      {...props}
-    />
-  );
+  return <Popover.SearchInput onKeyDown={handleKeyDown} onChange={handleChange} {...props} />;
 };
+
+const ListboxHeader = Popover.Header;
 
 const ListboxEmpty = Popover.Empty;
 
@@ -565,6 +549,7 @@ const CompoundListbox = Object.assign(Listbox, {
   Options: ListboxOptions,
   Option: ListboxOption,
   Divider: ListboxDivider,
+  Header: ListboxHeader,
   SearchInput: ListboxSearchInput,
   Empty: ListboxEmpty,
 });

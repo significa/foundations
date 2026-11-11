@@ -119,9 +119,8 @@ const DisclosureTrigger = ({
 
 const getContentId = (id: string) => `${id}-Disclosure-content`;
 
-// When interpolate-size / calc-size are Baseline, we can simply animate height: 0 to auto
+// Without interpolate-size (not Baseline yet) it opens and closes without the height animation.
 const DisclosureContent = ({
-  children,
   className,
   ...props
 }: Omit<React.ComponentPropsWithRef<"div">, "id">) => {
@@ -132,18 +131,12 @@ const DisclosureContent = ({
       id={getContentId(id)}
       data-state={open ? "open" : "closed"}
       className={cn(
-        "grid grid-rows-[0fr] transition-[grid-template-rows,visibility] duration-200 ease-out motion-reduce:transition-none",
-        "data-[state=closed]:invisible data-[state=open]:grid-rows-[1fr]",
+        "overflow-hidden [interpolate-size:allow-keywords] data-[state=closed]:invisible data-[state=closed]:h-0 data-[state=closed]:py-0",
+        "supports-[interpolate-size:allow-keywords]:transition-[height,padding-block,visibility] supports-[interpolate-size:allow-keywords]:duration-200 supports-[interpolate-size:allow-keywords]:ease-out motion-reduce:transition-none",
+        className,
       )}
-    >
-      <div
-        data-state={open ? "open" : "closed"}
-        className={cn("min-h-0 overflow-hidden", className)}
-        {...props}
-      >
-        {children}
-      </div>
-    </div>
+      {...props}
+    />
   );
 };
 

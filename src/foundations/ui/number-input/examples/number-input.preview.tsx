@@ -6,7 +6,11 @@ export default function NumberInputExample() {
 
   return (
     <div className="w-48">
-      <NumberInput value={value} onValueChange={setValue} />
+      <NumberInput value={value} onValueChange={setValue}>
+        <NumberInput.Decrement />
+        <NumberInput.Field />
+        <NumberInput.Increment />
+      </NumberInput>
     </div>
   );
 }

@@ -73,7 +73,7 @@ Extends the `button` element.
 
 Extends the `div` element.
 
-The content that will be shown or hidden. Stays mounted while closed.
+The content that will be shown or hidden. Stays mounted while closed, but invisible, so nothing inside is focusable. It animates its height (and vertical padding) between `0` and `auto` where the browser supports `interpolate-size`; elsewhere it opens and closes without the animation.
 
 ### Disclosure.Chevron
 

@@ -24,7 +24,7 @@ folder: UI
 - **Smart Positioning**: Automatically adjusts position to stay in view
 - **Nested Submenus**: Linear-style hierarchical menus with hover-to-open
 - **Keyboard Navigation**: Arrow keys, type-ahead, right/left to expand and collapse submenus
-- **Search**: Built-in search input for filtering items
+- **Search**: A search input that keeps keyboard navigation while filtering items
 - **Mouse Anchoring**: Open at the cursor position via the inherited `origin` prop, useful for right-click context menus
 - **Focus Management**: Traps focus within the menu when opened
 
@@ -34,7 +34,10 @@ folder: UI
 <Menu>
   <Menu.Trigger />
   <Menu.Items>
-    <Menu.SearchInput />
+    <Menu.Header>
+      <MagnifyingGlassIcon />
+      <Menu.SearchInput />
+    </Menu.Header>
     <Menu.Section>
       <Menu.Heading />
       <Menu.Item />
@@ -153,11 +156,24 @@ A heading for a section of items.
 
 A horizontal line to separate groups of items.
 
+### Menu.Header
+
+Extends the [`Popover.Header`](/ui/popover#popoverheader) component.
+
+A header row with a bottom divider at the top of the list, for example an icon and `Menu.SearchInput`.
+
 ### Menu.SearchInput
 
-Extends the [`PopoverSearchInput`](/ui/popover#popoversearchinput) component.
+Extends the [`Popover.SearchInput`](/ui/popover#popoversearchinput) component.
 
-A styled input with a search icon, useful for filtering items. Works alongside arrow-key navigation; pressing Enter selects the highlighted item.
+An input for filtering items. Focus stays in it while the arrow keys move the highlight; pressing Enter selects the highlighted item. Put it in a `Menu.Header` with an icon; swap the icon for a `Spinner` while results load, and set `aria-busy` on the input then.
+
+```tsx
+<Menu.Header>
+  {isLoading ? <Spinner size="sm" className="mx-0.5" /> : <MagnifyingGlassIcon weight="bold" />}
+  <Menu.SearchInput aria-label="Search" aria-busy={isLoading || undefined} />
+</Menu.Header>
+```
 
 ### Menu.Empty
 
@@ -193,7 +209,7 @@ Use the `destructive` variant for actions that require attention.
 
 ### Search
 
-Filter menu items with the built-in search input. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
+Filter menu items with `Menu.SearchInput` inside a `Menu.Header`. The host owns the filtering — pass filtered children to `Menu.Items` based on the input value.
 
 <Preview slug="menu-search" />
 

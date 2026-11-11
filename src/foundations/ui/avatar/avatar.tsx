@@ -224,16 +224,11 @@ const createAvatarCutoutPath = ({
   return `M 0 0 H 1 V 1 H 0 Z ${cutout}`;
 };
 
-const cloneAvatarForGroup = (child: React.ReactElement<AvatarProps>) => {
-  return cloneElement(child, {
-    className: cn(child.props.className, "backdrop-blur-none"),
-  });
-};
-
 type AvatarGroupProps = React.ComponentPropsWithRef<"div">;
 
 const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
   const id = useId();
+  const getClipPathId = (index: number) => `${id}-${index}`;
   const items = Children.toArray(children).filter(
     (child): child is React.ReactElement<AvatarProps> =>
       isValidElement(child) && child.type === Avatar,
@@ -247,46 +242,43 @@ const AvatarGroup = ({ children, className, ...props }: AvatarGroupProps) => {
       )}
       {...props}
     >
+      <svg
+        width="0"
+        height="0"
+        className="absolute size-0 overflow-hidden"
+        aria-hidden="true"
+        focusable="false"
+      >
+        {items.map((child, i) => {
+          const previous = items[i - 1];
+          if (!previous) return null;
+
+          return (
+            <clipPath key={child.key ?? i} id={getClipPathId(i)} clipPathUnits="objectBoundingBox">
+              <path
+                clipRule="evenodd"
+                fillRule="evenodd"
+                d={createAvatarCutoutPath({
+                  currentSize: child.props.size ?? "md",
+                  previousSize: previous.props.size ?? "md",
+                  previousVariant: previous.props.variant ?? "circle",
+                })}
+              />
+            </clipPath>
+          );
+        })}
+      </svg>
+
       {items.map((child, i) => {
-        const key = child.key ?? i;
-        const previous = items[i - 1];
+        const clipPath = `url(#${getClipPathId(i)})`;
 
-        if (!previous) return cloneAvatarForGroup(child);
-
-        const clipPathId = `${id}-${i}`;
-        const previousVariant = previous.props.variant ?? "circle";
-        const previousSize = previous.props.size ?? "md";
-        const currentSize = child.props.size ?? "md";
-        const cutoutPath = createAvatarCutoutPath({
-          currentSize,
-          previousSize,
-          previousVariant,
+        return cloneElement(child, {
+          className: cn(child.props.className, "backdrop-blur-none"),
+          style:
+            i > 0
+              ? { ...child.props.style, clipPath, WebkitClipPath: clipPath }
+              : child.props.style,
         });
-
-        return (
-          <div
-            key={key}
-            className="relative"
-            style={{
-              clipPath: `url(#${clipPathId})`,
-              WebkitClipPath: `url(#${clipPathId})`,
-            }}
-          >
-            <svg
-              width="0"
-              height="0"
-              className="absolute size-0 overflow-hidden"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <clipPath id={clipPathId} clipPathUnits="objectBoundingBox">
-                <path clipRule="evenodd" fillRule="evenodd" d={cutoutPath} />
-              </clipPath>
-            </svg>
-
-            {cloneAvatarForGroup(child)}
-          </div>
-        );
       })}
     </div>
   );

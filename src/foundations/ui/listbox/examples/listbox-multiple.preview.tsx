@@ -1,3 +1,4 @@
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { useMemo, useState } from "react";
 
 import { Listbox } from "#/foundations/ui/listbox/listbox.tsx";
@@ -27,11 +28,15 @@ export default function ListboxMultiplePreview() {
             : selectedPeople[0]?.name}
         </Listbox.Trigger>
         <Listbox.Options>
-          <Listbox.SearchInput
-            placeholder="Search people"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <Listbox.Header>
+            <MagnifyingGlassIcon weight="bold" />
+            <Listbox.SearchInput
+              placeholder="Search people"
+              aria-label="Search people"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Listbox.Header>
           {filteredPeople.map((person) => (
             <Listbox.Option key={person.id} value={person}>
               {person.name}

@@ -138,12 +138,16 @@ const Search = () => {
         <Menu open={isOpen} onOpenChange={handleOpenChange} modal={false}>
           <Menu.Trigger className="hidden" />
           <Menu.Items inline className="flex h-full flex-col overflow-hidden">
-            <Menu.SearchInput
-              autoFocus
-              placeholder="Search..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+            <Menu.Header>
+              <MagnifyingGlassIcon weight="bold" />
+              <Menu.SearchInput
+                autoFocus
+                placeholder="Search..."
+                aria-label="Search the docs"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </Menu.Header>
             <div className="flex-1 scroll-py-(--inset) overflow-y-auto py-(--inset)">
               {isPagefindError ? (
                 <PagefindError />

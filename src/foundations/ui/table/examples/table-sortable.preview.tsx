@@ -15,6 +15,15 @@ const team = [
   { name: "Elisa Faria", role: "Designer", joined: "2024-09-22" },
 ];
 
+const columns: { key: SortKey; label: string }[] = [
+  { key: "name", label: "Name" },
+  { key: "role", label: "Role" },
+  { key: "joined", label: "Joined" },
+];
+
+const toAriaSort = (sort: SortDir | false) =>
+  sort === "asc" ? "ascending" : sort === "desc" ? "descending" : "none";
+
 export default function TableSortablePreview() {
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
@@ -41,15 +50,13 @@ export default function TableSortablePreview() {
     <Table>
       <Table.Header>
         <Table.Row>
-          <Table.SortableHead sort={sortFor("name")} onSort={handleSort("name")}>
-            Name
-          </Table.SortableHead>
-          <Table.SortableHead sort={sortFor("role")} onSort={handleSort("role")}>
-            Role
-          </Table.SortableHead>
-          <Table.SortableHead sort={sortFor("joined")} onSort={handleSort("joined")}>
-            Joined
-          </Table.SortableHead>
+          {columns.map((column) => (
+            <Table.Head key={column.key} aria-sort={toAriaSort(sortFor(column.key))}>
+              <Table.SortButton sort={sortFor(column.key)} onClick={handleSort(column.key)}>
+                {column.label}
+              </Table.SortButton>
+            </Table.Head>
+          ))}
         </Table.Row>
       </Table.Header>
       <Table.Body>

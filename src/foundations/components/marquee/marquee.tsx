@@ -1,6 +1,6 @@
 import {
   Children,
-  type ComponentPropsWithoutRef,
+  type ComponentPropsWithRef,
   cloneElement,
   type ReactElement,
   useEffect,
@@ -12,11 +12,12 @@ import {
 import { useIntersectionObserver } from "#/foundations/hooks/use-intersection-observer/use-intersection-observer.ts";
 import { useMatchMedia } from "#/foundations/hooks/use-match-media/use-match-media.ts";
 import { useTicker } from "#/foundations/hooks/use-ticker/use-ticker.ts";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cn } from "#/lib/utils/classnames.ts";
 
 type DurationProp = number | ((contentLength: number) => number);
 
-interface MarqueeProps extends ComponentPropsWithoutRef<"div"> {
+interface MarqueeProps extends ComponentPropsWithRef<"div"> {
   direction?: "left" | "right" | "up" | "down";
   paused?: boolean;
   duration?: DurationProp;
@@ -29,10 +30,12 @@ export const Marquee = ({
   duration,
   style,
   className,
+  ref,
   ...props
 }: MarqueeProps) => {
   const [numClones, setNumClones] = useState<number>(1);
   const [rootRef, { isIntersecting }] = useIntersectionObserver<HTMLDivElement>();
+  const composedRef = useMemo(() => composeRefs(rootRef, ref), [rootRef, ref]);
   const prefersReducedMotion = useMatchMedia("(prefers-reduced-motion: reduce)");
 
   const progress = useRef(0);
@@ -138,7 +141,7 @@ export const Marquee = ({
 
   return (
     <div
-      ref={rootRef}
+      ref={composedRef}
       role="marquee"
       aria-live="off"
       aria-atomic="false"

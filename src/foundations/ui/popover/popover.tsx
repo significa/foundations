@@ -18,12 +18,10 @@ import {
   useRole,
   useTransitionStatus,
 } from "@floating-ui/react";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
 
 import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { useTopLayer } from "#/foundations/hooks/use-top-layer/use-top-layer.ts";
-import { Spinner } from "#/foundations/ui/spinner/spinner.tsx";
 import { cn } from "#/lib/utils/classnames.ts";
 
 type PopoverOrigin = "trigger" | "pointer" | [number, number];
@@ -476,34 +474,6 @@ const PopoverClose = ({ asChild = false, children, ...props }: PopoverCloseProps
   );
 };
 
-interface PopoverSearchInputProps extends React.ComponentPropsWithRef<"input"> {
-  isLoading?: boolean;
-}
-
-const PopoverSearchInput = ({ className, isLoading, ...props }: PopoverSearchInputProps) => {
-  return (
-    <div className="relative flex items-center rounded-t-lg border-b border-border bg-transparent">
-      {isLoading ? (
-        <Spinner size="sm" className="absolute left-4 text-foreground" />
-      ) : (
-        <MagnifyingGlassIcon
-          weight="bold"
-          className="absolute left-4 size-4 shrink-0 text-foreground"
-        />
-      )}
-      <input
-        // The spinner is aria-hidden; the focused input carries the busy state
-        aria-busy={isLoading || undefined}
-        className={cn(
-          "h-10 w-full border-0 bg-transparent p-4 pl-10 text-base font-medium transition-colors outline-none placeholder:text-foreground-secondary focus:ring-0",
-          className,
-        )}
-        {...props}
-      />
-    </div>
-  );
-};
-
 const PopoverEmpty = ({ children, className, ...props }: React.ComponentPropsWithRef<"div">) => {
   return (
     <div
@@ -515,13 +485,42 @@ const PopoverEmpty = ({ children, className, ...props }: React.ComponentPropsWit
   );
 };
 
+/**
+ * A header row for the top of a popover: bottom divider, padding, gap, sized icons.
+ * Holds a search (icon + `Popover.SearchInput`) or a title with a back button.
+ */
+const PopoverHeader = ({ className, ...props }: React.ComponentPropsWithRef<"div">) => {
+  return (
+    <div
+      className={cn(
+        "box-content flex min-h-10 items-center gap-2 border-b border-border bg-transparent px-4 text-foreground [&>svg]:size-4 [&>svg]:shrink-0",
+        className,
+      )}
+      {...props}
+    />
+  );
+};
+
+const PopoverSearchInput = ({ className, ...props }: React.ComponentPropsWithRef<"input">) => {
+  return (
+    <input
+      className={cn(
+        "h-10 min-w-0 flex-1 border-0 bg-transparent p-0 text-base font-medium outline-none placeholder:text-foreground-secondary",
+        className,
+      )}
+      {...props}
+    />
+  );
+};
+
 const CompoundPopover = Object.assign(Popover, {
   Trigger: PopoverTrigger,
   Content: PopoverContent,
   Close: PopoverClose,
-  SearchInput: PopoverSearchInput,
   Empty: PopoverEmpty,
   Panel: PopoverPanel,
+  Header: PopoverHeader,
+  SearchInput: PopoverSearchInput,
 });
 
 export type { PopoverOrigin };

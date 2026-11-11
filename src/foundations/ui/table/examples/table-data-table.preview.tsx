@@ -127,6 +127,9 @@ const features = tableFeatures({
   columnMeta: metaHelper<{ align?: "start" | "center" | "end" }>(),
 });
 
+const toAriaSort = (sort: "asc" | "desc" | false) =>
+  sort === "asc" ? "ascending" : sort === "desc" ? "descending" : "none";
+
 const formatAmount = (value: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -204,31 +207,27 @@ export default function TableDataTablePreview() {
             {table.getHeaderGroups().map((headerGroup) => (
               <Table.Row key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  const align = header.column.columnDef.meta?.align;
+                  const content = flexRender(header.column.columnDef.header, header.getContext());
                   const canSort = header.column.getCanSort();
                   const sort = header.column.getIsSorted();
-
-                  if (canSort) {
-                    return (
-                      <Table.SortableHead
-                        key={header.id}
-                        align={align}
-                        sort={sort === false ? false : sort}
-                        onSort={header.column.getToggleSortingHandler() ?? (() => {})}
-                        style={header.getSize() !== 150 ? { width: header.getSize() } : undefined}
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                      </Table.SortableHead>
-                    );
-                  }
 
                   return (
                     <Table.Head
                       key={header.id}
-                      align={align}
+                      align={header.column.columnDef.meta?.align}
+                      aria-sort={canSort ? toAriaSort(sort) : undefined}
                       style={header.getSize() !== 150 ? { width: header.getSize() } : undefined}
                     >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {canSort ? (
+                        <Table.SortButton
+                          sort={sort}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {content}
+                        </Table.SortButton>
+                      ) : (
+                        content
+                      )}
                     </Table.Head>
                   );
                 })}

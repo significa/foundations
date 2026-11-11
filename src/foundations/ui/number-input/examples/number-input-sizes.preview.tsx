@@ -16,7 +16,11 @@ export default function NumberInputSizesExample() {
           onValueChange={setValue}
           min={0}
           max={100}
-        />
+        >
+          <NumberInput.Decrement />
+          <NumberInput.Field />
+          <NumberInput.Increment />
+        </NumberInput>
       ))}
     </div>
   );
