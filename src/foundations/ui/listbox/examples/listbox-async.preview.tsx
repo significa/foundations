@@ -72,7 +72,11 @@ export default function ListboxAsyncPreview() {
         <Listbox.Trigger placeholder="Pick a fruit">{selected}</Listbox.Trigger>
         <Listbox.Options>
           <Listbox.Header>
-            {isLoading ? <Spinner size="sm" className="mx-0.5" /> : <MagnifyingGlassIcon weight="bold" />}
+            {isLoading ? (
+              <Spinner size="sm" className="mx-0.5" />
+            ) : (
+              <MagnifyingGlassIcon weight="bold" />
+            )}
             <Listbox.SearchInput
               placeholder="Search fruits"
               aria-label="Search fruits"

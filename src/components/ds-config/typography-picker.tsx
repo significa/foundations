@@ -117,7 +117,11 @@ const TypographyPicker = ({
       <Listbox.Trigger placeholder={placeholder}>{value?.family}</Listbox.Trigger>
       <Listbox.Options>
         <Listbox.Header>
-          {isLoading ? <Spinner size="sm" className="mx-0.5" /> : <MagnifyingGlassIcon weight="bold" />}
+          {isLoading ? (
+            <Spinner size="sm" className="mx-0.5" />
+          ) : (
+            <MagnifyingGlassIcon weight="bold" />
+          )}
           <Listbox.SearchInput
             placeholder="Search fonts"
             aria-label="Search fonts"
