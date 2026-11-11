@@ -216,6 +216,16 @@ const MenuRoot = ({ children, modal = true, placement: propPlacement, ...props }
 
   const interactions = useInteractions([hover, click, role, dismiss, listNavigation, typeahead]);
 
+  // A focused item that unmounts drops focus to <body>, where arrow keys are dead; refocus the panel.
+  // Not a focusout listener: WebKit fires none when a focused element is removed.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-run when items mount or unmount
+  useLayoutEffect(() => {
+    if (!floating.open) return;
+    if (document.activeElement !== document.body) return;
+    setHighlightedIndex(null);
+    floating.elements.floating?.focus({ preventScroll: true });
+  }, [items, floating.open, floating.elements.floating]);
+
   // Tree-wide coordination:
   // - 'click' closes every menu in the tree when any item is selected.
   // - 'menuopen' lets siblings (same parent, different node) close themselves

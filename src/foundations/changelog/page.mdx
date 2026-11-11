@@ -12,6 +12,26 @@ meta:
 
 ## November 2026
 
+### Fixed: `Menu` loses focus when the focused item unmounts
+
+When the focused item unmounted while the menu stayed open (an item that removes itself with
+`e.preventDefault()` in `onSelect`, a live list dropping that row, or a menu switching views),
+focus fell to `<body>`. The arrow keys stopped working and the menu stayed open. The menu now moves
+focus to its panel and clears the highlight, so the arrows pick up from the first item. Add this to
+`MenuRoot` in your copy, after `useInteractions`:
+
+```diff tsx
+  const interactions = useInteractions([hover, click, role, dismiss, listNavigation, typeahead]);
++
++ // biome-ignore lint/correctness/useExhaustiveDependencies: re-run when items mount or unmount
++ useLayoutEffect(() => {
++   if (!floating.open) return;
++   if (document.activeElement !== document.body) return;
++   setHighlightedIndex(null);
++   floating.elements.floating?.focus({ preventScroll: true });
++ }, [items, floating.open, floating.elements.floating]);
+```
+
 ### Breaking: `Table.SortableHead` is now `Table.SortButton`
 
 `SortableHead` rendered a `<th>` with a button inside: your `className` went to the cell (forced
