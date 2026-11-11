@@ -53,6 +53,7 @@ const sampleData: HierarchicalItem[] = [
 interface HierarchicalSelectionFieldProps {
   value: string[];
   onChange: (value: string[]) => void;
+  onBlur?: () => void;
   data: HierarchicalItem[];
   error?: string;
 }
@@ -60,6 +61,7 @@ interface HierarchicalSelectionFieldProps {
 function HierarchicalSelectionField({
   value,
   onChange,
+  onBlur,
   data,
   error,
 }: HierarchicalSelectionFieldProps) {
@@ -75,7 +77,14 @@ function HierarchicalSelectionField({
   const filteredData = filterHierarchicalData(data, searchQuery);
 
   return (
-    <div className="space-y-3">
+    <fieldset
+      aria-label="Countries"
+      className="min-w-0 space-y-3"
+      // Blurred once focus leaves the whole control, not when it moves between its checkboxes.
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.();
+      }}
+    >
       <Input
         placeholder="Search countries..."
         value={searchQuery}
@@ -138,7 +147,7 @@ function HierarchicalSelectionField({
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
-    </div>
+    </fieldset>
   );
 }
 
@@ -236,6 +245,7 @@ export default function HierarchicalSelectionForm() {
               <HierarchicalSelectionField
                 value={field.state.value}
                 onChange={field.handleChange}
+                onBlur={field.handleBlur}
                 data={sampleData}
                 error={
                   field.state.meta.isBlurred || isSubmitted
