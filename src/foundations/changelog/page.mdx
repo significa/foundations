@@ -19,8 +19,9 @@ an earlier tab shifted the indices, which remounted the selected panel for a ren
 local state), and a controlled index could point past the end, leaving no tab selected or
 reachable. Every `Tabs.Item` and `Tabs.Panel` now takes a required `value`, and the root takes
 either `defaultValue` or `value` + `onValueChange` (required, no positional fallback) instead of
-`defaultIndex` / `selectedIndex` / `onChange`. If the selected tab goes away, no tab is selected
-until one is picked, and the first tab stays reachable by keyboard. Arrow keys now also take Home
+`defaultIndex` / `selectedIndex` / `onChange`. If the selected tab goes away, uncontrolled tabs
+select the first rendered tab (without calling `onValueChange`); controlled tabs select nothing,
+and that value's panel still renders, so keep `value` pointing at a rendered tab. Arrow keys now also take Home
 and End, `onValueChange` fires only when the tab changes, and string children are no longer
 wrapped in a `<span>`. `Tabs.Item asChild` expects a button or a link.
 

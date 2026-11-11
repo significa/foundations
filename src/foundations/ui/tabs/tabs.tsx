@@ -1,15 +1,16 @@
 import {
-  Children,
   createContext,
-  isValidElement,
   use,
   useCallback,
   useId,
+  useLayoutEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
 import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cn } from "#/lib/utils/classnames.ts";
 
 type TabsVariant = "pill" | "underline";
@@ -18,6 +19,8 @@ interface TabsContextValue {
   id: string;
   selectedValue: string;
   select: (value: string) => void;
+  isControlled: boolean;
+  setInternalValue: (value: string) => void;
   orientation: "horizontal" | "vertical";
   variant: TabsVariant;
 }
@@ -52,21 +55,22 @@ const Tabs = ({
   const id = useId().replace(/[^\w-]/g, "");
   const [internalValue, setInternalValue] = useState(defaultValue ?? "");
 
+  const isControlled = value !== undefined;
   const selectedValue = value ?? internalValue;
 
   const select = useCallback(
     (next: string) => {
       document.getElementById(getTabId(id, next))?.focus();
       if (next === selectedValue) return;
-      setInternalValue(next);
+      if (!isControlled) setInternalValue(next);
       onValueChange?.(next);
     },
-    [id, selectedValue, onValueChange],
+    [id, selectedValue, isControlled, onValueChange],
   );
 
   const ctx = useMemo(
-    () => ({ id, selectedValue, select, orientation, variant }),
-    [id, selectedValue, select, orientation, variant],
+    () => ({ id, selectedValue, select, isControlled, setInternalValue, orientation, variant }),
+    [id, selectedValue, select, isControlled, orientation, variant],
   );
 
   return (
@@ -80,21 +84,25 @@ interface TabsItemsProps extends Omit<React.ComponentPropsWithRef<"div">, "role"
   children: React.ReactNode;
 }
 
-// When the selected tab isn't rendered, the first tab stays tabbable so the list is reachable.
-const FallbackTabContext = createContext<string | undefined>(undefined);
+const TabsItems = ({ children, className, ref, ...props }: TabsItemsProps) => {
+  const { isControlled, setInternalValue, orientation, variant } = useTabsContext();
+  const tablistRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(ref, tablistRef), [ref]);
 
-const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
-  const { selectedValue, orientation, variant } = useTabsContext();
+  // Uncontrolled and the selected tab isn't rendered: fall back to the first one, before paint.
+  // Read from the DOM so tabs inside fragments or wrapper components count.
+  useLayoutEffect(() => {
+    const tablist = tablistRef.current;
+    if (isControlled || !tablist) return;
+    if (tablist.querySelector('[role="tab"][data-selected]')) return;
 
-  const values = Children.toArray(children).flatMap((child) =>
-    isValidElement<{ value?: unknown }>(child) && typeof child.props.value === "string"
-      ? [child.props.value]
-      : [],
-  );
-  const fallbackTab = values.includes(selectedValue) ? undefined : values[0];
+    const first = tablist.querySelector<HTMLElement>('[role="tab"]')?.dataset.value;
+    if (first !== undefined) setInternalValue(first);
+  });
 
   return (
     <div
+      ref={composedRef}
       role="tablist"
       aria-orientation={orientation}
       className={cn(
@@ -111,9 +119,9 @@ const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
       )}
       {...props}
     >
-      <FallbackTabContext value={fallbackTab}>{children}</FallbackTabContext>
+      {children}
       {/* after the tabs, or it can't anchor to them */}
-      {fallbackTab === undefined && <TabsIndicator />}
+      <TabsIndicator />
     </div>
   );
 };
@@ -176,7 +184,6 @@ const TabsItem = ({
   ...props
 }: TabsItemProps) => {
   const { id: tabsId, selectedValue, select, orientation, variant } = useTabsContext();
-  const fallbackTab = use(FallbackTabContext);
 
   const Comp = asChild ? Slot : "button";
 
@@ -218,7 +225,7 @@ const TabsItem = ({
       aria-selected={isSelected}
       data-selected={isSelected || undefined}
       data-value={value}
-      tabIndex={isSelected || value === fallbackTab ? 0 : -1}
+      tabIndex={isSelected ? 0 : -1}
       style={{ anchorName: getAnchorName(tabsId, value), ...style }}
       onClick={(e) => {
         onClick?.(e);

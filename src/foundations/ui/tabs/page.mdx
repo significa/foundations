@@ -7,6 +7,8 @@ files:
 dependencies:
   - name: Slot
     href: /components/slot
+  - name: composeRefs
+    href: /utils/compose-refs
 
 folder: UI
 ---
@@ -23,12 +25,12 @@ folder: UI
 ## Anatomy
 
 ```tsx
-<Tabs>
+<Tabs defaultValue="account">
   <Tabs.Items>
-    <Tabs.Item value="..." />
+    <Tabs.Item value="account">Account</Tabs.Item>
   </Tabs.Items>
   <Tabs.Panels>
-    <Tabs.Panel value="..." />
+    <Tabs.Panel value="account">…</Tabs.Panel>
   </Tabs.Panels>
 </Tabs>
 ```
@@ -42,8 +44,9 @@ conditionally (`{canBill && <Tabs.Item value="billing">}`) without shifting the 
 
 The root container component that manages the state and behavior of the tabs.
 
-If the selected tab is no longer rendered, no tab is selected (in both modes) until one is
-picked, and the first tab stays reachable by keyboard.
+Render a tab and its panel under the same condition. In controlled mode keep `value` pointing at a
+rendered tab; otherwise nothing is selected and that value's panel still renders. Uncontrolled, if
+the selected tab is no longer rendered, the first rendered tab is selected.
 
 <PropsTable
   definition={{
@@ -77,10 +80,7 @@ picked, and the first tab stays reachable by keyboard.
 
 ### Tabs.Items
 
-The container for tab buttons. Provides proper ARIA attributes and keyboard navigation. Render
-each `Tabs.Item` as a direct child (conditionals and `.map()` are fine). `Tabs.Items` reads their
-values to keep a tab reachable when the selected one isn't rendered, and it doesn't look inside
-fragments.
+The container for tab buttons. Provides proper ARIA attributes and keyboard navigation.
 
 <PropsTable
   definition={{
