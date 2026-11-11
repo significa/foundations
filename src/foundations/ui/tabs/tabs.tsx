@@ -1,7 +1,5 @@
 import {
-  Children,
   createContext,
-  isValidElement,
   use,
   useCallback,
   useId,
@@ -12,21 +10,19 @@ import {
 } from "react";
 
 import { Slot } from "#/foundations/components/slot/slot.tsx";
+import { composeRefs } from "#/foundations/utils/compose-refs/compose-refs.ts";
 import { cn } from "#/lib/utils/classnames.ts";
 
 type TabsVariant = "pill" | "underline";
 
 interface TabsContextValue {
   id: string;
-  tabs: string[];
-  selectedIndex: number;
-  selectedTab: string | undefined;
-  setSelectedTab: (id: string) => void;
-  next: () => void;
-  previous: () => void;
+  selectedValue: string;
+  select: (value: string) => void;
+  isControlled: boolean;
+  setInternalValue: (value: string) => void;
   orientation: "horizontal" | "vertical";
   variant: TabsVariant;
-  registerTab: (id: string) => () => void;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -37,19 +33,19 @@ const useTabsContext = () => {
   return context;
 };
 
-interface TabsProps extends Omit<React.ComponentPropsWithRef<"div">, "onChange"> {
-  defaultIndex?: number;
-  selectedIndex?: number;
-  onChange?: (index: number) => void;
+type TabsProps = Omit<React.ComponentPropsWithRef<"div">, "defaultValue"> & {
   orientation?: TabsContextValue["orientation"];
   variant?: TabsVariant;
   children: React.ReactNode;
-}
+} & (
+    | { value: string; onValueChange: (value: string) => void; defaultValue?: never }
+    | { defaultValue: string; onValueChange?: (value: string) => void; value?: never }
+  );
 
 const Tabs = ({
-  defaultIndex,
-  selectedIndex: selectedIndexProp,
-  onChange: onChangeProp,
+  defaultValue,
+  value,
+  onValueChange,
   orientation = "horizontal",
   variant = "pill",
   children,
@@ -57,91 +53,24 @@ const Tabs = ({
 }: TabsProps) => {
   // must be a valid CSS <dashed-ident>
   const id = useId().replace(/[^\w-]/g, "");
-  const [internalSelectedIndex, setInternalSelectedIndex] = useState(defaultIndex ?? 0);
-  const [tabs, setTabs] = useState<string[]>([]);
+  const [internalValue, setInternalValue] = useState(defaultValue ?? "");
 
-  const selectedIndex = selectedIndexProp ?? internalSelectedIndex;
+  const isControlled = value !== undefined;
+  const selectedValue = value ?? internalValue;
 
-  const setSelectedIndex = useCallback(
-    (index: number) => {
-      setInternalSelectedIndex(index);
-      onChangeProp?.(index);
-
-      // focus on the selected tab when changing index
-      const itemId = getItemId(tabs[index]);
-      if (itemId) {
-        const selectedTab = document.getElementById(itemId);
-        selectedTab?.focus();
-      }
+  const select = useCallback(
+    (next: string) => {
+      document.getElementById(getTabId(id, next))?.focus();
+      if (next === selectedValue) return;
+      if (!isControlled) setInternalValue(next);
+      onValueChange?.(next);
     },
-    [onChangeProp, tabs],
-  );
-
-  const next = useCallback(() => {
-    setSelectedIndex((selectedIndex + 1) % tabs.length);
-  }, [tabs.length, selectedIndex, setSelectedIndex]);
-
-  const previous = useCallback(() => {
-    setSelectedIndex(selectedIndex <= 0 ? tabs.length - 1 : selectedIndex - 1);
-  }, [tabs.length, selectedIndex, setSelectedIndex]);
-
-  const registerTab = useCallback((id: string) => {
-    // A tab shown again registers last; keep the list in DOM order so indices match.
-    setTabs((prev) => sortByDomOrder([...prev, id]));
-
-    return () => {
-      setTabs((prev) => prev.filter((prevId) => prevId !== id));
-    };
-  }, []);
-
-  const selectedTab = useMemo(() => tabs[selectedIndex], [tabs, selectedIndex]);
-
-  // When tabs come or go, keep the same tab selected, or the last one if it went (uncontrolled
-  // only). Runs before the ref below updates, so it still holds the previously selected tab.
-  const selectedTabRef = useRef<string | undefined>(undefined);
-  useLayoutEffect(() => {
-    if (selectedIndexProp !== undefined || tabs.length === 0) return;
-    const index = selectedTabRef.current ? tabs.indexOf(selectedTabRef.current) : -1;
-    setInternalSelectedIndex((current) =>
-      index === -1 ? Math.min(current, tabs.length - 1) : index,
-    );
-  }, [tabs, selectedIndexProp]);
-  useLayoutEffect(() => {
-    selectedTabRef.current = selectedTab;
-  }, [selectedTab]);
-
-  const setSelectedTab = useCallback(
-    (id: string) => {
-      setSelectedIndex(tabs.indexOf(id));
-    },
-    [tabs, setSelectedIndex],
+    [id, selectedValue, isControlled, onValueChange],
   );
 
   const ctx = useMemo(
-    () => ({
-      id,
-      tabs,
-      selectedIndex,
-      selectedTab,
-      setSelectedTab,
-      next,
-      previous,
-      orientation,
-      variant,
-      registerTab,
-    }),
-    [
-      id,
-      tabs,
-      selectedIndex,
-      selectedTab,
-      setSelectedTab,
-      next,
-      previous,
-      orientation,
-      variant,
-      registerTab,
-    ],
+    () => ({ id, selectedValue, select, isControlled, setInternalValue, orientation, variant }),
+    [id, selectedValue, select, isControlled, orientation, variant],
   );
 
   return (
@@ -155,13 +84,25 @@ interface TabsItemsProps extends Omit<React.ComponentPropsWithRef<"div">, "role"
   children: React.ReactNode;
 }
 
-const ItemIndexContext = createContext<number>(0);
+const TabsItems = ({ children, className, ref, ...props }: TabsItemsProps) => {
+  const { isControlled, setInternalValue, orientation, variant } = useTabsContext();
+  const tablistRef = useRef<HTMLDivElement>(null);
+  const composedRef = useMemo(() => composeRefs(ref, tablistRef), [ref]);
 
-const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
-  const { orientation, variant } = useTabsContext();
+  // Uncontrolled and the selected tab isn't rendered: fall back to the first one, before paint.
+  // Read from the DOM so tabs inside fragments or wrapper components count.
+  useLayoutEffect(() => {
+    const tablist = tablistRef.current;
+    if (isControlled || !tablist) return;
+    if (tablist.querySelector('[role="tab"][data-selected]')) return;
+
+    const first = tablist.querySelector<HTMLElement>('[role="tab"]')?.dataset.value;
+    if (first !== undefined) setInternalValue(first);
+  });
 
   return (
     <div
+      ref={composedRef}
       role="tablist"
       aria-orientation={orientation}
       className={cn(
@@ -178,33 +119,32 @@ const TabsItems = ({ children, className, ...props }: TabsItemsProps) => {
       )}
       {...props}
     >
-      {mapElements(children, (child, index) => (
-        <ItemIndexContext value={index}>{child}</ItemIndexContext>
-      ))}
+      {children}
       {/* after the tabs, or it can't anchor to them */}
       <TabsIndicator />
     </div>
   );
 };
 
-interface TabsItemProps
-  extends Omit<React.ComponentPropsWithRef<"button">, "id" | "type" | "disabled"> {
-  children: React.ReactNode;
-  asChild?: boolean;
-}
+// ids can't hold whitespace (aria-controls is a space-separated list)
+const getTabId = (tabsId: string, value: string) => `${tabsId}-tab-${encodeURIComponent(value)}`;
+const getPanelId = (tabsId: string, value: string) =>
+  `${tabsId}-panel-${encodeURIComponent(value)}`;
 
-const getAnchorName = (tabsId: string, index: number) => `--tabs-${tabsId}-${index}`;
+// values are arbitrary strings, so escape them into a valid ident
+const getAnchorName = (tabsId: string, value: string) =>
+  `--tabs-${tabsId}-${value.replace(/[^\w-]/gu, (char) => `\\${char.codePointAt(0)?.toString(16)} `)}`;
 
 // Named anchor() (not position-anchor) so the insets' computed value changes and transitions.
 // Firefox doesn't animate anchor() yet: https://bugzil.la/1924226
 const TabsIndicator = () => {
-  const { id, selectedIndex, variant, orientation } = useTabsContext();
+  const { id, selectedValue, variant, orientation } = useTabsContext();
 
   return (
     <span
       data-tab-indicator=""
       aria-hidden="true"
-      style={{ "--tab-anchor": getAnchorName(id, selectedIndex) }}
+      style={{ "--tab-anchor": getAnchorName(id, selectedValue) }}
       className={cn(
         "pointer-events-none absolute z-0",
         "transition-[top,right,bottom,left] duration-300 ease-spring motion-reduce:transition-none",
@@ -221,28 +161,20 @@ const TabsIndicator = () => {
   );
 };
 
-const getItemId = (id: string | undefined) => (id ? `tab${id}` : undefined);
+interface TabsItemProps
+  extends Omit<React.ComponentPropsWithRef<"button">, "id" | "type" | "disabled" | "value"> {
+  value: string;
+  children: React.ReactNode;
+  asChild?: boolean;
+}
 
-const sortByDomOrder = (ids: string[]) =>
-  ids.toSorted((a, b) => {
-    const elementA = document.getElementById(getItemId(a) ?? "");
-    const elementB = document.getElementById(getItemId(b) ?? "");
-    if (!elementA || !elementB) return 0;
-    return elementA.compareDocumentPosition(elementB) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
-  });
-
-// Children.map counts `{show && <Tab />}` holes; skip them so indices match the registered tabs.
-const mapElements = (
-  children: React.ReactNode,
-  render: (child: React.ReactElement, index: number) => React.ReactNode,
-) => {
-  let index = 0;
-  return Children.map(children, (child) =>
-    isValidElement(child) ? render(child, index++) : child,
-  );
+const KEYS = {
+  horizontal: { next: "ArrowRight", previous: "ArrowLeft" },
+  vertical: { next: "ArrowDown", previous: "ArrowUp" },
 };
 
 const TabsItem = ({
+  value,
   children,
   asChild,
   onClick,
@@ -251,59 +183,36 @@ const TabsItem = ({
   style,
   ...props
 }: TabsItemProps) => {
-  const id = useId();
-  const index = use(ItemIndexContext);
-  const {
-    id: tabsId,
-    selectedTab,
-    selectedIndex,
-    setSelectedTab,
-    registerTab,
-    orientation,
-    variant,
-    next,
-    previous,
-  } = useTabsContext();
+  const { id: tabsId, selectedValue, select, orientation, variant } = useTabsContext();
 
   const Comp = asChild ? Slot : "button";
 
-  useLayoutEffect(() => {
-    return registerTab(id);
-  }, [id, registerTab]);
-
-  // Match by id once registered; fall back to index for SSR / initial render.
-  const isSelected = selectedTab !== undefined ? selectedTab === id : index === selectedIndex;
+  const isSelected = selectedValue === value;
 
   const handleKeyboardNavigation = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
-      setSelectedTab(id);
-    }
+    const tablist = e.currentTarget.closest('[role="tablist"]');
+    const tabs = [...(tablist?.querySelectorAll<HTMLElement>('[role="tab"]') ?? [])].filter(
+      (tab) => tab.closest('[role="tablist"]') === tablist,
+    );
+    const index = tabs.indexOf(e.currentTarget);
+    let target: HTMLElement | undefined;
 
-    const keyOrientationMap = {
-      horizontal: {
-        next: "ArrowRight",
-        prev: "ArrowLeft",
-      },
-      vertical: {
-        next: "ArrowDown",
-        prev: "ArrowUp",
-      },
-    };
+    if (e.key === KEYS[orientation].next) target = tabs[(index + 1) % tabs.length];
+    if (e.key === KEYS[orientation].previous) target = tabs.at(index <= 0 ? -1 : index - 1);
+    if (e.key === "Home") target = tabs[0];
+    if (e.key === "End") target = tabs.at(-1);
+    if (!target) return;
 
-    if (keyOrientationMap[orientation].next === e.key) {
-      e.preventDefault();
-      next();
-    }
+    const targetValue = target.dataset.value;
+    if (targetValue === undefined) return;
 
-    if (keyOrientationMap[orientation].prev === e.key) {
-      e.preventDefault();
-      previous();
-    }
+    e.preventDefault();
+    select(targetValue);
   };
 
   return (
     <Comp
-      id={getItemId(id)}
+      id={getTabId(tabsId, value)}
       type={asChild ? undefined : "button"}
       className={cn(
         "relative z-10 flex cursor-pointer items-center justify-center gap-1.5 px-4 py-2 text-foreground/50 ring-ring transition outline-none hover:text-foreground focus-visible:ring-(length:--ring-width) data-selected:text-foreground",
@@ -312,16 +221,17 @@ const TabsItem = ({
         className,
       )}
       role="tab"
-      aria-controls={getPanelId(id)}
+      aria-controls={getPanelId(tabsId, value)}
       aria-selected={isSelected}
       data-selected={isSelected || undefined}
+      data-value={value}
       tabIndex={isSelected ? 0 : -1}
-      style={{ anchorName: getAnchorName(tabsId, index), ...style }}
+      style={{ anchorName: getAnchorName(tabsId, value), ...style }}
       onClick={(e) => {
         onClick?.(e);
 
         if (!e.defaultPrevented) {
-          setSelectedTab(id);
+          select(value);
         }
       }}
       onKeyDown={(e) => {
@@ -333,7 +243,7 @@ const TabsItem = ({
       }}
       {...props}
     >
-      {typeof children === "string" ? <span>{children}</span> : children}
+      {children}
     </Comp>
   );
 };
@@ -342,49 +252,33 @@ interface TabsPanelsProps extends Omit<React.ComponentPropsWithRef<"div">, "role
   children: React.ReactNode;
 }
 
-const TabsPanels = ({ children, className, ...props }: TabsPanelsProps) => {
-  const { tabs } = useTabsContext();
-
+const TabsPanels = ({ className, ...props }: TabsPanelsProps) => {
   return (
     <div
       className={cn("ring-ring transition has-focus-visible:ring-(length:--ring-width)", className)}
       {...props}
-    >
-      {mapElements(children, (child, index) => (
-        <PanelIndexContext value={index}>
-          <PanelIdContext value={tabs[index]}>{child}</PanelIdContext>
-        </PanelIndexContext>
-      ))}
-    </div>
+    />
   );
 };
 
 interface TabsPanelProps extends Omit<React.ComponentPropsWithRef<"div">, "id"> {
+  value: string;
   children: React.ReactNode;
   asChild?: boolean;
 }
 
-const PanelIdContext = createContext<string | undefined>(undefined);
-const PanelIndexContext = createContext<number>(0);
-
-const getPanelId = (id: string | undefined) => (id ? `tab-panel${id}` : undefined);
-
-const TabsPanel = ({ children, asChild, className, ...props }: TabsPanelProps) => {
-  const id = use(PanelIdContext);
-  const index = use(PanelIndexContext);
-  const { selectedTab, selectedIndex } = useTabsContext();
+const TabsPanel = ({ value, children, asChild, className, ...props }: TabsPanelProps) => {
+  const { id: tabsId, selectedValue } = useTabsContext();
   const Comp = asChild ? Slot : "div";
 
-  // Match by id once tabs have registered themselves; fall back to index for the
-  // initial render before useLayoutEffect runs (SSR + first client render).
-  const isSelected = id !== undefined ? selectedTab === id : index === selectedIndex;
+  const isSelected = selectedValue === value;
 
   return (
     <Comp
-      id={getPanelId(id)}
+      id={getPanelId(tabsId, value)}
       role="tabpanel"
       className={cn("outline-none", className)}
-      aria-labelledby={getItemId(id)}
+      aria-labelledby={getTabId(tabsId, value)}
       aria-hidden={!isSelected}
       data-selected={isSelected || undefined}
       tabIndex={isSelected ? 0 : -1}

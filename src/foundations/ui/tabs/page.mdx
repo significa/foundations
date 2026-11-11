@@ -7,6 +7,8 @@ files:
 dependencies:
   - name: Slot
     href: /components/slot
+  - name: composeRefs
+    href: /utils/compose-refs
 
 folder: UI
 ---
@@ -23,15 +25,18 @@ folder: UI
 ## Anatomy
 
 ```tsx
-<Tabs>
+<Tabs defaultValue="account">
   <Tabs.Items>
-    <Tabs.Item />
+    <Tabs.Item value="account">Account</Tabs.Item>
   </Tabs.Items>
   <Tabs.Panels>
-    <Tabs.Panel />
+    <Tabs.Panel value="account">…</Tabs.Panel>
   </Tabs.Panels>
 </Tabs>
 ```
+
+Each `Tabs.Item` pairs with the `Tabs.Panel` of the same `value`, so tabs can be rendered
+conditionally (`{canBill && <Tabs.Item value="billing">}`) without shifting the others.
 
 ## API Reference
 
@@ -39,19 +44,25 @@ folder: UI
 
 The root container component that manages the state and behavior of the tabs.
 
+Render a tab and its panel under the same condition. In controlled mode keep `value` pointing at a
+rendered tab; otherwise nothing is selected and that value's panel still renders. Uncontrolled, if
+the selected tab is no longer rendered, the first rendered tab is selected.
+
 <PropsTable
   definition={{
-    defaultIndex: {
-      type: "number",
-      description: "The index of the tab that should be active by default.",
+    defaultValue: {
+      type: "string",
+      description:
+        "The value of the tab that is active at first (uncontrolled). Pass either `defaultValue` or `value`.",
     },
-    selectedIndex: {
-      type: "number",
-      description: "The controlled index of the active tab.",
+    value: {
+      type: "string",
+      description:
+        "The value of the active tab (controlled, together with `onValueChange`). Pass either `defaultValue` or `value`.",
     },
-    onChange: {
-      type: "(index: number) => void",
-      description: "Callback fired when the active tab changes.",
+    onValueChange: {
+      type: "(value: string) => void",
+      description: "Called when the user selects a different tab.",
     },
     orientation: {
       type: '"horizontal" | "vertical"',
@@ -82,18 +93,20 @@ The container for tab buttons. Provides proper ARIA attributes and keyboard navi
 
 ### Tabs.Item
 
-The individual tab button component.
+The individual tab button component. With `asChild`, render a `button` or a link: they activate
+on Enter (and a button on Space) natively. Don't give the child its own `id`; the tab's generated
+id links it to its panel.
 
 <PropsTable
   definition={{
+    value: {
+      type: "string",
+      required: true,
+      description: "Identifies the tab and pairs it with the `Tabs.Panel` of the same value.",
+    },
     asChild: {
       type: "boolean",
       description: "Whether to merge props onto the child element.",
-    },
-    disabled: {
-      type: "boolean",
-      description: "Whether the tab is disabled.",
-      default: "false",
     },
   }}
 />
@@ -113,10 +126,15 @@ The container for tab panels. Manages the visibility of panels based on the sele
 
 ### Tabs.Panel
 
-The individual tab panel component.
+The individual tab panel component. Its content renders only while its tab is selected.
 
 <PropsTable
   definition={{
+    value: {
+      type: "string",
+      required: true,
+      description: "The value of the `Tabs.Item` this panel belongs to.",
+    },
     asChild: {
       type: "boolean",
       description: "Whether to merge props onto the child element.",
@@ -150,7 +168,7 @@ Tabs can be oriented vertically using the `orientation` prop.
 
 ### Controlled Tabs
 
-Example of controlled tabs with external state management.
+Example of controlled tabs with external state management. Values are plain strings, so they can come straight from the URL (`?tab=billing`).
 
 <Preview slug="tabs-controlled" />
 
