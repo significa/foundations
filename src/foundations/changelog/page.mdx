@@ -43,7 +43,7 @@ input wherever it sits, not only as a direct child of `Listbox.Options`.
 ```diff tsx
 - <Menu.SearchInput isLoading={isLoading} value={query} onChange={…} />
 + <Menu.Header>
-+   {isLoading ? <Spinner /> : <MagnifyingGlassIcon weight="bold" />}
++   {isLoading ? <Spinner size="sm" className="mx-0.5" /> : <MagnifyingGlassIcon weight="bold" />}
 +   <Menu.SearchInput aria-busy={isLoading || undefined} value={query} onChange={…} />
 + </Menu.Header>
 ```
