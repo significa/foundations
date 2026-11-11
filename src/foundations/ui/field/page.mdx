@@ -98,11 +98,11 @@ Native `<fieldset>` and `<legend>` group the radios; one `Field` per option carr
 
 <Preview slug="field-radio-group" />
 
-### With React Hook Form
+### With TanStack Form
 
-Pass `!!errors.x` to `invalid` and `errors.x?.message` as `Field.Error` children. That's the entire integration. The same pattern works with TanStack Form, Formik, or your own `useState`-driven validation.
+Pass whether the field has a visible error to `invalid` and the message as `Field.Error` children. That's the entire integration. The same works with any form library or plain state.
 
-<Preview slug="field-with-rhf" />
+<Preview slug="field-with-tanstack-form" />
 
 ## Caveats
 

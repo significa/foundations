@@ -79,7 +79,7 @@ A full-featured implementation with disabled items, search, select-all, and acti
 
 ### Form Integration
 
-Integration with `react-hook-form` showing how to use hierarchical selection in forms:
+Integration with TanStack Form showing how to use hierarchical selection in forms:
 
 <Preview slug="hierarchical-selection-form" layout="padded" />
 
@@ -238,18 +238,16 @@ function HierarchicalField({ value, onChange, data, error }) {
 }
 
 // In your form
-<Controller
-  name="selectedItems"
-  control={control}
-  render={({ field }) => (
+<form.Field name="selectedItems">
+  {(field) => (
     <HierarchicalField
-      value={field.value}
-      onChange={field.onChange}
+      value={field.state.value}
+      onChange={field.handleChange}
       data={hierarchicalData}
-      error={errors.selectedItems?.message}
+      error={field.state.meta.errors[0]?.message}
     />
   )}
-/>
+</form.Field>
 ```
 
 ## Best Practices
