@@ -9,17 +9,23 @@ const sections = [
 
 const MotionScrollParallax = () => {
   return (
-    <div className="flex justify-around px-12 pt-[30vh] pb-[30vh]">
-      {sections.map((_, index) => (
-        <MotionScroll
-          key={index}
-          keyframes={{ y: [60 * index, -60 * index] }}
-          offset={["start end", "end start"]}
-          className="my-[50vh] flex size-40 items-center justify-center rounded-lg border border-border bg-background-secondary text-sm text-foreground-secondary"
-        >
-          {index + 1}x
-        </MotionScroll>
-      ))}
+    <div>
+      {/* Starts the boxes out of range so nothing jumps when the preview hydrates. */}
+      <p className="flex h-screen items-center justify-center text-sm text-foreground-secondary">
+        Scroll down
+      </p>
+      <div className="flex justify-around px-12 pb-[100vh]">
+        {sections.map((_, index) => (
+          <MotionScroll
+            key={index}
+            keyframes={{ y: [60 * index, -60 * index] }}
+            offset={["start end", "end start"]}
+            className="flex size-40 items-center justify-center rounded-lg border border-border bg-background-secondary text-sm text-foreground-secondary"
+          >
+            {index + 1}x
+          </MotionScroll>
+        ))}
+      </div>
     </div>
   );
 };

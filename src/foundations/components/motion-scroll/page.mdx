@@ -82,6 +82,33 @@ folder: components
 
 By default, animations are skipped on touch devices to avoid conflicts with native scroll momentum. Set `touchscreen` to opt in when the animation is explicitly designed for touch contexts.
 
+## Before hydration
+
+MotionScroll is JS-driven: the animation attaches after the component hydrates. Until then, anything in view at first paint shows its plain CSS state, then jumps to the frame for the current scroll position. Keep that plain state equal to the in-view state, with reveals that end at rest and small parallax ranges, so the jump is invisible.
+
+For an effect that must be right from first paint above the fold, use a CSS scroll-driven animation instead. This one skips the same cases MotionScroll does, reduced motion and coarse pointers:
+
+```css
+@media (prefers-reduced-motion: no-preference) and (not (pointer: coarse)) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 2rem;
+  }
+}
+```
+
+`animation-timeline: view()` works in Chrome 115+, Safari 26+ and Firefox 159+; other browsers render the element statically.
+
 ## Examples
 
 ### Fade In
