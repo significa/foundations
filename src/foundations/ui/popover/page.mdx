@@ -116,7 +116,7 @@ A header row for the top of the content: a bottom divider, padding and a gap bet
 
 ```tsx
 <Popover.Header>
-  {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
+  {isLoading ? <Spinner /> : <MagnifyingGlassIcon weight="bold" />}
   <Popover.SearchInput aria-label="Search" aria-busy={isLoading || undefined} />
 </Popover.Header>
 ```

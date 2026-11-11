@@ -154,7 +154,7 @@ An input for filtering options. Focus stays in it while the arrow keys move the 
 
 ```tsx
 <Listbox.Header>
-  {isLoading ? <Spinner size="sm" /> : <MagnifyingGlassIcon weight="bold" />}
+  {isLoading ? <Spinner /> : <MagnifyingGlassIcon weight="bold" />}
   <Listbox.SearchInput aria-label="Search" aria-busy={isLoading || undefined} />
 </Listbox.Header>
 ```
