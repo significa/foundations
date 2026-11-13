@@ -1,0 +1,122 @@
+---
+title: "Theming"
+description: "The roles behind Foundations' colour and shadow tokens: canvas, surface, control and edge. Re-theme by changing values, never by inventing names for parts of the screen."
+dependencies:
+  - name: Button
+    href: /ui/button
+  - name: Input
+    href: /ui/input
+  - name: Badge
+    href: /ui/badge
+  - name: Checkbox
+    href: /ui/checkbox
+  - name: SegmentedControl
+    href: /ui/segmented-control
+
+folder: Guides
+---
+
+## Overview
+
+A polished interface is layered: an app frame, a canvas, cards and popovers over it, controls on those, and edges that tell you which is which. Foundations names each layer by its **role**, so a theme is a set of values, and the same components can look flat, outlined, raised or embossed without changing their source.
+
+<Preview slug="theming-layers" />
+
+## Surfaces
+
+| Token                          | Role                                                                                    |
+| ------------------------------ | --------------------------------------------------------------------------------------- |
+| `--color-background`           | The canvas the app sits on.                                                             |
+| `--color-surface`              | Anything raised over it: cards, panels, popovers, menus, dialogs, drawers, toasts.      |
+| `--color-background-secondary` | A quiet fill that sets an area apart: wells, tracks, sidebars, hover.                   |
+| `--color-control`              | The face of inputs, outline buttons, checkboxes and segmented controls.                 |
+| `--color-border`               | Edges of controls and surfaces. Translucent, so the step is the same on every surface.  |
+| `--color-border-subtle`        | Hairlines inside a surface: row separators, dividers.                                   |
+
+Two rules keep them composable:
+
+- **Name tokens by role, never by region.** `--color-sidebar` or `--color-toolbar` only fit one layout; when a sidebar needs a fill, use `background-secondary` or `surface`, and when it needs a new shade, change the value of the role.
+- **Steps are relative.** In dark mode shadows don't read, so `surface` is a step lighter than the canvas and `control` is a translucent veil that's always a step lighter than whatever it sits on. Borders are translucent for the same reason. Prefer translucent values when you add your own steps.
+
+## Depth comes from edges
+
+Many designs separate layers with edges, not fills: a card the same colour as the page with a white inner rim and a grey outer one, or a button with a highlight on top and a darker bottom edge. Look at edges up close before reaching for another background colour.
+
+Controls take their edge from two tokens, and the press from two more:
+
+| Token                      | Role                                                                     |
+| -------------------------- | ------------------------------------------------------------------------ |
+| `--shadow-control`         | The resting edge of buttons, inputs, checkboxes, radios and slider thumbs. |
+| `--shadow-control-pressed` | What the edge collapses to while a button is pressed.                    |
+| `--press-scale`            | How much a button shrinks when pressed (`0.98` by default).              |
+| `--press-offset`           | How far a button sinks when pressed (`0px` by default).                  |
+
+`--shadow-sm` to `--shadow-lg` stay for things that float: popovers, menus, dialogs, toasts.
+
+### Recipes
+
+Each recipe replaces values in your `@theme`; components don't change.
+
+Flat, edges from borders only:
+
+```css
+@theme {
+  --shadow-control: 0 0 #0000;
+  --press-scale: 1;
+}
+```
+
+Raised: a highlight on top, a darker bottom edge and a soft contact shadow. Pressing sinks the control instead of shrinking it.
+
+```css
+@theme {
+  --shadow-control:
+    inset 0 1px 0 light-dark(oklch(100% 0 0 / 0.9), oklch(100% 0 0 / 0.06)),
+    0 1px 0 light-dark(oklch(0% 0 0 / 0.08), oklch(0% 0 0 / 0.4)),
+    0 2px 3px oklch(0% 0 0 / 0.07);
+  --shadow-control-pressed: inset 0 1px 1px oklch(0% 0 0 / 0.06);
+  --press-scale: 1;
+  --press-offset: 1px;
+}
+```
+
+Embossed: controls keep the colour of what they sit on; a white inner rim and the border do the work.
+
+```css
+@theme {
+  --color-control: transparent;
+  --shadow-control: inset 0 0 0 1px oklch(100% 0 0 / 0.9), 0 1px 0 oklch(0% 0 0 / 0.07);
+  --shadow-control-pressed: inset 0 1px 2px oklch(0% 0 0 / 0.08);
+  --press-scale: 1;
+  --press-offset: 1px;
+}
+```
+
+## Badge colours
+
+Every [Badge](/ui/badge) variant is one colour: fill, ring and text derive from `--badge-color`. Status variants map to `--color-success`, `--color-error` and the rest; any other colour is a class away, with no new variant:
+
+```tsx
+<Badge className="[--badge-color:var(--color-violet-600)]">Story video</Badge>
+```
+
+Tune the strength of every badge at once in the base of `badgeStyle`.
+
+## Custom tokens and `cn`
+
+`cn` merges conflicting classes with tailwind-merge, which only knows Tailwind's own theme names. A custom shadow such as `shadow-raised` isn't recognised as a shadow, so it sits beside a component's `shadow-control` instead of replacing it, and whichever comes later in the stylesheet wins. Register custom names in `src/lib/utils/classnames.ts`:
+
+```ts
+const twMerge = extendTailwindMerge({
+  extend: { theme: { shadow: ["control", "control-pressed", "raised"] } },
+});
+```
+
+Colour names need no registration; shadows, text sizes and radii do.
+
+## Gotchas
+
+- **Tailwind inlines shadow values.** `shadow-control` compiles to the value in `@theme`, not to `var(--shadow-control)`, so overriding `--shadow-control` on an element does nothing. Change shadows in `@theme`. Colours (`bg-control`) are variables and can be overridden anywhere.
+- **`light-dark()` only takes colours.** Gradients, percentages and lengths that differ between themes need a `[data-theme="dark"]` (or `prefers-color-scheme`) rule instead.
+- **Children paint over inset edges.** An `inset` shadow on a panel is covered by the backgrounds of its children; draw it on an `after:` overlay (`after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-…`) when children are filled.
+- **Corners.** Squircles come from one `@supports` block at the end of the setup CSS, together with the radius bump that compensates them. Delete the block for plain round corners.

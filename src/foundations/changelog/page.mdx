@@ -12,6 +12,51 @@ meta:
 
 ## November 2026
 
+### Changed: theme roles for surfaces, controls and edges
+
+Components now name the layer they paint instead of reusing `background` for everything, so a theme
+can make them flat, raised or embossed by changing values (see the [Theming](/guides/theming) guide).
+Popovers, menus, listboxes, dialogs, drawers and toasts use `bg-surface`; inputs, outline buttons,
+checkboxes, radios and the segmented-control indicator use `bg-control`; their edge comes from
+`shadow-control`, and a pressed button from `--press-scale`, `--press-offset` and
+`shadow-control-pressed`. Light mode looks the same; in dark mode surfaces and controls are now a
+step lighter than the canvas. Borders are translucent, so they hold the same contrast on every
+surface. Add the new tokens to your setup CSS before copying any updated component:
+
+```diff css
+@theme {
++ --font-body: ui-sans-serif, system-ui, sans-serif;
++ --font-ui: var(--font-body);
++ --font-heading: var(--font-body);
++ --font-mono: ui-monospace, monospace;
+  --color-background: light-dark(oklch(100% 0 0), oklch(12% 0 0));
++ --color-surface: light-dark(oklch(100% 0 0), oklch(17% 0 0));
+  --color-background-secondary: light-dark(oklch(96% 0 0), oklch(22% 0 0));
++ --color-control: light-dark(oklch(100% 0 0), oklch(100% 0 0 / 0.05));
+- --color-border: light-dark(oklch(94% 0 0), oklch(26% 0 0));
++ --color-border: light-dark(oklch(0% 0 0 / 0.08), oklch(100% 0 0 / 0.12));
++ --color-border-subtle: light-dark(oklch(0% 0 0 / 0.05), oklch(100% 0 0 / 0.07));
+- --corner-shape: squircle;
++ --shadow-control: 0 1px 2px oklch(0 0 0 / 0.03);
++ --shadow-control-pressed: 0 0 #0000;
++ --press-scale: 0.98;
++ --press-offset: 0px;
+}
+```
+
+Also in this change:
+
+- **Fonts.** The setup CSS read `--font-ui` but never defined it; the four font roles are back.
+- **Corners.** `--corner-shape` is gone. Squircles and the radius bump that compensates them now
+  live in one `@supports` block at the end of the setup CSS; delete it for round corners. Setting
+  `--corner-shape: round` used to leave every radius 1.6× too large in Chromium.
+- **Badge.** Fill, ring and text derive from `--badge-color`; set it in a class for any other
+  colour. The neutral badge is now a faint grey tint instead of white.
+- **`cn`.** `classnames.ts` registers `shadow-control` with tailwind-merge (`extendTailwindMerge`),
+  so `className="shadow-none"` replaces it. Register your own custom shadows, text sizes and radii
+  there too.
+- **Input** height reads `--input-height`, like Button's `--button-height`.
+
 ### Fixed: `Menu` loses focus when the focused item unmounts
 
 When the focused item unmounted while the menu stayed open (an item that removes itself with

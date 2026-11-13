@@ -7,11 +7,12 @@ import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const buttonStyle = cva({
   base: [
-    "relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 font-medium whitespace-nowrap text-(--button-text-color) shadow-xs [--button-text-color:var(--color-foreground)]",
+    "relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 font-medium whitespace-nowrap text-(--button-text-color) [--button-text-color:var(--color-foreground)]",
     // `not-disabled:`, not `enabled:`, which never matches an `asChild` <a>. A disabled link has
     // only aria-disabled, so it dims too; a loading button (aria-busy) doesn't.
     "transition not-disabled:not-aria-disabled:cursor-pointer disabled:opacity-40 aria-disabled:not-aria-busy:opacity-40",
-    "not-aria-disabled:active:not-in-data-ui-button-group:scale-98",
+    // --press-scale/--press-offset and the control-edge shadows come from the theme: shrink, sink, or neither
+    "not-aria-disabled:active:not-in-data-ui-button-group:translate-y-(--press-offset) not-aria-disabled:active:not-in-data-ui-button-group:scale-(--press-scale)",
     "ring-ring focus-visible:ring-(length:--ring-width) focus-visible:outline-none",
     // inside button group — horizontal merge (default; ToggleGroup may set
     // data-orientation="vertical" on its container to flip the axis)
@@ -32,13 +33,13 @@ const buttonStyle = cva({
   variants: {
     variant: {
       primary:
-        "bg-accent [--button-text-color:var(--color-accent-foreground)] not-disabled:not-aria-disabled:hover:bg-accent/90 in-data-ui-button-group:not-aria-disabled:active:bg-accent/80",
+        "bg-accent shadow-control [--button-text-color:var(--color-accent-foreground)] not-disabled:not-aria-disabled:hover:bg-accent/90 not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed in-data-ui-button-group:not-aria-disabled:active:bg-accent/80",
       outline:
-        "border border-border bg-background not-disabled:not-aria-disabled:hover:bg-foreground/2 not-in-data-ui-button-group:focus-visible:border-accent in-data-ui-button-group:not-aria-disabled:active:bg-foreground/4",
+        "border border-border bg-control shadow-control not-disabled:not-aria-disabled:hover:bg-mix-control/3 not-in-data-ui-button-group:focus-visible:border-accent not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed in-data-ui-button-group:not-aria-disabled:active:bg-foreground/4",
       ghost:
         "border-none bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:not-aria-disabled:active:bg-foreground/10",
       destructive:
-        "bg-error ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-error/90",
+        "bg-error shadow-control ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-error/90 not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed",
     },
     size: {
       xs: "rounded-lg px-2 text-sm [--button-height:--spacing(6)]",

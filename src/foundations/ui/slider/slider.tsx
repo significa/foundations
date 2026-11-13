@@ -215,11 +215,11 @@ const sliderThumbStyle = cva({
     // Thumb styles
     "[&::-webkit-slider-thumb]:transition",
     "[&::-webkit-slider-thumb]:h-(--thumb-size) [&::-webkit-slider-thumb]:w-(--thumb-size)",
-    "[&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-border [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:shadow-xs",
+    "[&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-border [&::-webkit-slider-thumb]:bg-surface [&::-webkit-slider-thumb]:shadow-control",
     "[&::-webkit-slider-thumb]:z-10 [&::-webkit-slider-thumb]:rounded-full",
     "[&::-moz-range-thumb]:transition",
     "[&::-moz-range-thumb]:h-(--thumb-size) [&::-moz-range-thumb]:w-(--thumb-size)",
-    "[&::-moz-range-thumb]:border [&::-moz-range-thumb]:border-border [&::-moz-range-thumb]:bg-background [&::-moz-range-thumb]:shadow-xs",
+    "[&::-moz-range-thumb]:border [&::-moz-range-thumb]:border-border [&::-moz-range-thumb]:bg-surface [&::-moz-range-thumb]:shadow-control",
     "[&::-moz-range-thumb]:rounded-full",
 
     // Hover states

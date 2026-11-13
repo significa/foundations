@@ -315,7 +315,7 @@ const PopoverContent = ({
       isPositioned={isPositioned}
       ref={ref}
       className={cn(
-        "z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-background p-3 font-medium text-foreground shadow-lg outline-none",
+        "z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-surface p-3 font-medium text-foreground shadow-lg outline-none",
         className,
       )}
       {...getFloatingProps(props)}

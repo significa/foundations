@@ -1,12 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  /* Typography */
+  /* Typography: --font-ui is the chrome (applied from body), --font-body prose, --font-heading h1–h6 */
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-ui: var(--font-body);
+  --font-heading: var(--font-body);
+  --font-mono: ui-monospace, monospace;
   --text-2xs: 0.625rem;
 
   /* Colors */
+  /* Surfaces, by role (see the Theming guide) */
+  /* the canvas the app sits on */
   --color-background: light-dark(oklch(100% 0 0), oklch(12% 0 0));
+  /* anything raised over it: cards, panels, popovers, dialogs, toasts; a step lighter in dark, where shadows don't read */
+  --color-surface: light-dark(oklch(100% 0 0), oklch(17% 0 0));
+  /* a quiet fill that sets an area apart: wells, tracks, sidebars, hover */
   --color-background-secondary: light-dark(oklch(96% 0 0), oklch(22% 0 0));
+  /* the face of inputs, outline buttons and checkboxes; translucent in dark, so a step lighter than what it sits on */
+  --color-control: light-dark(oklch(100% 0 0), oklch(100% 0 0 / 0.05));
 
   --color-foreground: light-dark(oklch(0% 0 0), oklch(95% 0 0));
   --color-foreground-secondary: light-dark(oklch(65% 0 0), oklch(53% 0 0));
@@ -15,7 +26,9 @@
   /* Foreground at the end means it is used on top of the accent color */
   --color-accent-foreground: var(--color-background);
 
-  --color-border: light-dark(oklch(94% 0 0), oklch(26% 0 0));
+  /* Translucent so the same contrast step holds on every surface. border-subtle: hairlines inside a surface */
+  --color-border: light-dark(oklch(0% 0 0 / 0.08), oklch(100% 0 0 / 0.12));
+  --color-border-subtle: light-dark(oklch(0% 0 0 / 0.05), oklch(100% 0 0 / 0.07));
 
   --color-ring: light-dark(
     color-mix(in oklab, var(--color-accent) 30%, transparent),
@@ -45,15 +58,20 @@
   /* Focus ring */
   --ring-width: 4px;
 
-  /* Corner shape (round | squircle) */
-  --corner-shape: squircle;
-
   /* Shadows */
   --shadow-*: initial;
   --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.02), 0 2px 4px oklch(0 0 0 / 0.02);
   --shadow-md: 0 2px 3px oklch(0 0 0 / 0.02), 0 3px 6px oklch(0 0 0 / 0.02);
   --shadow-lg: 0 2px 4px oklch(0 0 0 / 0.02), 0 4px 8px oklch(0 0 0 / 0.02), 0 8px 16px oklch(0 0 0 / 0.02);
+  /* Control edge, what makes a control read as flat, outlined or raised; the pressed twin is what it collapses to.
+     Flat: 0 0 #0000. Raised: inset top highlight, 1px ring, darker bottom edge, soft contact shadow */
+  --shadow-control: 0 1px 2px oklch(0 0 0 / 0.03);
+  --shadow-control-pressed: 0 0 #0000;
+
+  /* Press: controls shrink slightly; a raised theme sinks instead (--press-scale: 1; --press-offset: 1px) */
+  --press-scale: 0.98;
+  --press-offset: 0px;
 
   /* easings */
   /* small surfaces near their trigger (popover, menu, tooltip, dialog), in and out when they can come back */
@@ -139,16 +157,17 @@
   );
 }
 
-/* Squircles where supported, with a carve-out for full circles and a radius bump to match perceived roundness */
-* {
-  corner-shape: var(--corner-shape);
-}
-.rounded-full {
-  corner-shape: round;
-}
+/* Squircle corners where supported. A squircle reads less round than a circle at the same radius, so the radius steps grow
+   by --radius-bump to match. Delete this block for plain round corners */
 @supports (corner-shape: squircle) {
   :root {
     --radius-bump: 1.6;
+  }
+  * {
+    corner-shape: squircle;
+  }
+  .rounded-full {
+    corner-shape: round;
   }
 }
 
