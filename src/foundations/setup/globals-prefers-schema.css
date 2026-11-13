@@ -20,8 +20,8 @@
   --color-control: light-dark(oklch(100% 0 0), oklch(100% 0 0 / 0.05));
 
   --color-foreground: light-dark(oklch(0% 0 0), oklch(95% 0 0));
-  /* the lightest text that still passes WCAG AA (4.5:1) on every layer, background-secondary and controls included */
-  --color-foreground-secondary: light-dark(oklch(54% 0 0), oklch(60% 0 0));
+  /* the lightest text that passes WCAG AA (4.5:1) on the canvas, panels, background-secondary and controls */
+  --color-foreground-secondary: light-dark(oklch(54% 0 0), oklch(62% 0 0));
 
   --color-accent: var(--color-foreground);
   /* Foreground at the end means it is used on top of the accent color */
@@ -58,7 +58,7 @@
   --inset: calc(var(--radius) * 1.5 * var(--radius-bump));
 
   /* Control heights: Button, Input, Select, Toggle and Pagination share them so controls line up side by side.
-     Retune here; --button-height / --input-height override a single control */
+     Retune here; a height class still overrides a single control */
   --control-height-xs: 1.5rem;
   --control-height-sm: 2rem;
   --control-height-md: 2.5rem;

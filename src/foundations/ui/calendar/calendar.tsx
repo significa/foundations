@@ -156,7 +156,7 @@ const Calendar = ({
   };
 
   return (
-    <div className={cn("bg-background", className)} {...props}>
+    <div className={className} {...props}>
       {view === "years" && (
         <CalendarHeader
           onPrevious={() => setViewDate((prev) => add(prev, { years: -12 }))}
@@ -201,9 +201,9 @@ const Calendar = ({
         </CalendarHeader>
       )}
 
-      <div className="relative bg-inherit">
+      <div className="relative">
         {(view === "years" || view === "months") && (
-          <div className="absolute inset-0 z-10 bg-inherit p-1">
+          <div className="absolute inset-0 z-10 p-1">
             {view === "years" && (
               <div
                 role="grid"
@@ -272,7 +272,7 @@ const Calendar = ({
             month: "long",
             year: "numeric",
           })}
-          className="pb-0.5"
+          className={cn("pb-0.5", view !== "days" && "invisible")}
         >
           <div role="row" className="grid grid-cols-7">
             {Array.from({ length: 7 }, (_, i) => {

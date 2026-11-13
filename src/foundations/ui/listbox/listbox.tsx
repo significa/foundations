@@ -412,7 +412,7 @@ const ListboxOptions = <T,>({
       context={context}
       ref={ref}
       className={cn(
-        "z-50 flex flex-col items-stretch rounded-xl border border-border bg-panel p-0 text-foreground shadow-xl focus:outline-none",
+        "z-50 flex flex-col items-stretch rounded-xl border border-border bg-panel p-0 text-foreground shadow-lg focus:outline-none",
         "overflow-y-auto overscroll-contain",
         "max-h-(--max-height) w-(--width)",
         className,

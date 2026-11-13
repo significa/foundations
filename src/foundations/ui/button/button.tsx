@@ -28,7 +28,7 @@ const buttonStyle = cva({
     // pressed state — set via data-pressed by Toggle / ToggleGroup.Item. A faint tint by default;
     // set --button-pressed-bg/--button-pressed-text for a solid chip. Hover moves the fill toward the text.
     "[--button-pressed-bg:color-mix(in_oklab,var(--color-foreground)_10%,transparent)] [--button-pressed-text:var(--button-text-color)]",
-    "data-pressed:bg-(--button-pressed-bg) data-pressed:text-(--button-pressed-text) data-pressed:not-disabled:not-aria-disabled:hover:bg-[color-mix(in_oklab,var(--button-pressed-bg),currentColor_10%)]",
+    "data-pressed:bg-(--button-pressed-bg) data-pressed:not-aria-busy:text-(--button-pressed-text) data-pressed:not-disabled:not-aria-disabled:hover:bg-[color-mix(in_oklab,var(--button-pressed-bg),currentColor_10%)]",
   ],
   variants: {
     variant: {

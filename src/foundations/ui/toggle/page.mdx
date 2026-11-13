@@ -129,6 +129,16 @@ A set of related toggles. `type="single"` enforces at most one pressed item; `ty
   }}
 />
 
+### Pressed style
+
+A pressed toggle is a faint tint by default. Set `--button-pressed-bg` and `--button-pressed-text` for a solid one:
+
+```tsx
+<Toggle className="[--button-pressed-bg:var(--color-foreground)] [--button-pressed-text:var(--color-background)]">
+  Bold
+</Toggle>
+```
+
 ## Accessibility
 
 Toggles render as `<button>` with `aria-pressed`, following the [WAI-ARIA Button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/). Icon-only toggles must include an `aria-label`.
