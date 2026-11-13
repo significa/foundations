@@ -43,20 +43,19 @@
   --color-success: light-dark(oklch(46% 0.17 162.48), oklch(69.6% 0.17 162.48));
   --color-info: light-dark(oklch(48% 0.214 259.815), oklch(62.3% 0.214 259.815));
 
-  /* Border radius — --radius is the dial; --radius-bump grows it for squircles (the @supports block at the end) */
+  /* Border radius — --radius is the dial */
   --radius: 0.125rem;
-  --radius-bump: 1;
-  --radius-xs: calc(var(--radius) * 1 * var(--radius-bump));
-  --radius-sm: calc(var(--radius) * 2 * var(--radius-bump));
-  --radius-md: calc(var(--radius) * 3 * var(--radius-bump));
-  --radius-lg: calc(var(--radius) * 4 * var(--radius-bump));
-  --radius-xl: calc(var(--radius) * 6 * var(--radius-bump));
-  --radius-2xl: calc(var(--radius) * 8 * var(--radius-bump));
-  --radius-3xl: calc(var(--radius) * 12 * var(--radius-bump));
-  --radius-4xl: calc(var(--radius) * 16 * var(--radius-bump));
+  --radius-xs: calc(var(--radius) * 1);
+  --radius-sm: calc(var(--radius) * 2);
+  --radius-md: calc(var(--radius) * 3);
+  --radius-lg: calc(var(--radius) * 4);
+  --radius-xl: calc(var(--radius) * 6);
+  --radius-2xl: calc(var(--radius) * 8);
+  --radius-3xl: calc(var(--radius) * 12);
+  --radius-4xl: calc(var(--radius) * 16);
 
   /* Panel-item inset, derived from radius (collapses to flush items at --radius: 0) */
-  --inset: calc(var(--radius) * 1.5 * var(--radius-bump));
+  --inset: calc(var(--radius) * 1.5);
 
   /* Control heights: Button, Input, Select, Toggle and Pagination share them so controls line up side by side.
      Retune here; a height class still overrides a single control */
@@ -167,20 +166,6 @@
     --value(--color-*, [*]),
     var(--color-mix-with, var(--color-foreground)) calc(--modifier(integer) * 1%)
   );
-}
-
-/* Squircle corners where supported. A squircle reads less round than a circle at the same radius, so the radius steps grow
-   by --radius-bump to match. Delete this block for plain round corners */
-@supports (corner-shape: squircle) {
-  :root {
-    --radius-bump: 1.6;
-  }
-  * {
-    corner-shape: squircle;
-  }
-  .rounded-full {
-    corner-shape: round;
-  }
 }
 
 body {
