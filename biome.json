@@ -7,7 +7,7 @@
     "useIgnoreFile": true
   },
   "tailwind": {
-    "stylesheet": "./src/styles/global.css"
+    "stylesheet": "./src/foundations/setup/globals-data-attr.css"
   },
   "linter": {
     "rules": {

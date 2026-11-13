@@ -11,6 +11,7 @@ import { Popover } from "#/foundations/ui/popover/popover.tsx";
 import { Slider } from "#/foundations/ui/slider/slider.tsx";
 import { Tooltip } from "#/foundations/ui/tooltip/tooltip.tsx";
 import { DEFAULT_PAIRING, findPairing, PAIRINGS, type Pairing } from "./pairings.ts";
+import { fontFamilyValue, lightDark, MANAGED_VARS, resolveVars, tokenVar } from "./resolve-vars.ts";
 import { SchemeEditor } from "./scheme-editor.tsx";
 import {
   COLOR_TOKENS,
@@ -19,7 +20,6 @@ import {
   DEFAULT_SCHEME,
   DEFAULT_SCHEME_ID,
   SCHEMES,
-  type Scheme,
   type TokenValues,
 } from "./schemes.ts";
 import {
@@ -27,16 +27,25 @@ import {
   FONT_SLOTS,
   FONT_VARS,
   type FontSlot,
-  RADIUS_DEFAULT,
-  RADIUS_STEP_REM,
   RING_DEFAULT,
   readStored,
   type StoredFont,
   type StoredFonts,
   writeStored,
 } from "./storage.ts";
+import {
+  DEFAULT_STYLE_ID,
+  findStyle,
+  RADIUS_DEFAULT,
+  radiusValue,
+  STYLES,
+  type Style,
+  styleColor,
+  styleDeclarations,
+  styleValue,
+} from "./styles.ts";
 import { TypographyEditor } from "./typography-editor.tsx";
-import { fallbackFor, loadGoogleFont } from "./use-fonts-catalog.ts";
+import { loadGoogleFont } from "./use-fonts-catalog.ts";
 
 const RADIUS_MAX = 4;
 const RING_MIN = 2;
@@ -49,25 +58,14 @@ const setRoot = (prop: string, value: string) =>
 
 const removeRoot = (prop: string) => document.documentElement.style.removeProperty(prop);
 
-const tokenVar = (token: ColorToken) => `--color-${token}`;
-
-const lightDark = ({ light, dark }: TokenValues) => `light-dark(${light}, ${dark})`;
-
 const valuesEqual = (a: TokenValues, b: TokenValues) => a.light === b.light && a.dark === b.dark;
-
-const resolveToken = (
-  scheme: Scheme,
-  overrides: Partial<Record<ColorToken, TokenValues>>,
-  token: ColorToken,
-): TokenValues => overrides[token] ?? colorFor(scheme, token);
-
-const fontFamilyValue = (font: StoredFont) => `'${font.family}', ${fallbackFor(font.category)}`;
 
 const DSConfig = () => {
   const stored = readStored();
   const initialScheme = SCHEMES.find((s) => s.id === stored.schemeId) ?? DEFAULT_SCHEME;
 
   const [schemeId, setSchemeId] = useState(initialScheme.id);
+  const [styleId, setStyleId] = useState(findStyle(stored.styleId).id);
   const [overrides, setOverrides] = useState<Partial<Record<ColorToken, TokenValues>>>(
     stored.overrides,
   );
@@ -81,38 +79,25 @@ const DSConfig = () => {
     [schemeId],
   );
 
+  const style = useMemo(() => findStyle(styleId), [styleId]);
+
   const activePairing = useMemo(() => findPairing(fonts), [fonts]);
 
+  const vars = useMemo(
+    () => resolveVars({ scheme, style, overrides, radiusStep, ringWidth, fonts }),
+    [scheme, style, overrides, radiusStep, ringWidth, fonts],
+  );
+
   const apply = useCallback(() => {
-    for (const token of COLOR_TOKENS) {
-      const onDefaultScheme = scheme.id === DEFAULT_SCHEME_ID;
-      const overridden = overrides[token];
-      if (onDefaultScheme && !overridden) {
-        removeRoot(tokenVar(token));
+    for (const name of MANAGED_VARS) {
+      const value = vars[name];
+      if (value === undefined) {
+        removeRoot(name);
       } else {
-        const values = resolveToken(scheme, overrides, token);
-        setRoot(tokenVar(token), lightDark(values));
+        setRoot(name, value);
       }
     }
-    if (radiusStep !== RADIUS_DEFAULT) {
-      setRoot("--radius", `${radiusStep * RADIUS_STEP_REM}rem`);
-    } else {
-      removeRoot("--radius");
-    }
-    if (ringWidth !== RING_DEFAULT) {
-      setRoot("--ring-width", `${ringWidth}px`);
-    } else {
-      removeRoot("--ring-width");
-    }
-    for (const slot of FONT_SLOTS) {
-      const font = fonts[slot];
-      if (font) {
-        setRoot(FONT_VARS[slot], fontFamilyValue(font));
-      } else {
-        removeRoot(FONT_VARS[slot]);
-      }
-    }
-  }, [scheme, overrides, radiusStep, ringWidth, fonts]);
+  }, [vars]);
 
   useEffect(() => {
     const ensureFontsLoaded = () => {
@@ -133,8 +118,8 @@ const DSConfig = () => {
   }, [apply]);
 
   useEffect(() => {
-    writeStored({ schemeId, overrides, radiusStep, ringWidth, fonts });
-  }, [schemeId, overrides, radiusStep, ringWidth, fonts]);
+    writeStored({ schemeId, styleId, overrides, radiusStep, ringWidth, fonts, vars });
+  }, [schemeId, styleId, overrides, radiusStep, ringWidth, fonts, vars]);
 
   const handleTokenChange = (token: ColorToken, side: "light" | "dark", value: string) => {
     setOverrides((prev) => {
@@ -162,12 +147,18 @@ const DSConfig = () => {
     setFonts(pairing.fonts);
   };
 
+  const handleStyleSelect = (next: Style) => {
+    setStyleId(next.id);
+    setRadiusStep(next.radiusStep ?? RADIUS_DEFAULT);
+  };
+
   const handleResetOverrides = () => setOverrides({});
 
   const handleResetFonts = () => setFonts(EMPTY_FONTS);
 
   const handleReset = () => {
     setSchemeId(DEFAULT_SCHEME_ID);
+    setStyleId(DEFAULT_STYLE_ID);
     setOverrides({});
     setRadiusStep(RADIUS_DEFAULT);
     setRingWidth(RING_DEFAULT);
@@ -177,12 +168,14 @@ const DSConfig = () => {
   const generateCSSOverrides = () => {
     const tokenLines: string[] = [];
     for (const token of COLOR_TOKENS) {
-      const current = resolveToken(scheme, overrides, token);
+      if (styleColor(style, token) !== undefined) continue;
+      const current = overrides[token] ?? colorFor(scheme, token);
       if (valuesEqual(current, colorFor(DEFAULT_SCHEME, token))) continue;
       tokenLines.push(`  ${tokenVar(token)}: ${lightDark(current)};`);
     }
+    tokenLines.push(...styleDeclarations(style));
     if (radiusStep !== RADIUS_DEFAULT) {
-      tokenLines.push(`  --radius: ${radiusStep * RADIUS_STEP_REM}rem;`);
+      tokenLines.push(`  --radius: ${radiusValue(radiusStep)};`);
     }
     if (ringWidth !== RING_DEFAULT) {
       tokenLines.push(`  --ring-width: ${ringWidth}px;`);
@@ -194,7 +187,8 @@ const DSConfig = () => {
     }
 
     if (tokenLines.length === 0) return "/* No customizations */";
-    return `:root {\n${tokenLines.join("\n")}\n}`;
+    // @theme, not :root: consumers' shadows are baked at build time
+    return `@theme {\n${tokenLines.join("\n")}\n}`;
   };
 
   const headerLabel: Record<View, string> = {
@@ -249,7 +243,12 @@ const DSConfig = () => {
         </div>
 
         {view === "edit-colors" && (
-          <SchemeEditor scheme={scheme} overrides={overrides} onTokenChange={handleTokenChange} />
+          <SchemeEditor
+            scheme={scheme}
+            style={style}
+            overrides={overrides}
+            onTokenChange={handleTokenChange}
+          />
         )}
 
         {view === "edit-fonts" && (
@@ -292,6 +291,20 @@ const DSConfig = () => {
             </div>
 
             <div className="flex flex-col gap-2 p-3">
+              <span className="text-xs font-medium">Style</span>
+              <div className="grid grid-cols-3 gap-1.5">
+                {STYLES.map((s) => (
+                  <StyleTile
+                    key={s.id}
+                    style={s}
+                    isActive={style.id === s.id}
+                    onSelect={handleStyleSelect}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 p-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium">Typography</span>
                 <IconButton
@@ -324,7 +337,7 @@ const DSConfig = () => {
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium">Radius</span>
                 <span className="text-xs text-foreground-secondary tabular-nums">
-                  {radiusStep * RADIUS_STEP_REM}rem
+                  {radiusValue(radiusStep)}
                 </span>
               </div>
               <Slider
@@ -370,6 +383,34 @@ const DSConfig = () => {
         )}
       </Popover.Content>
     </Popover>
+  );
+};
+
+type StyleTileProps = {
+  style: Style;
+  isActive: boolean;
+  onSelect: (style: Style) => void;
+};
+
+// Each tile wears its own style, scoped inline; this works because global.css reads the role shadows at runtime
+const StyleTile = ({ style, isActive, onSelect }: StyleTileProps) => {
+  const scoped: Record<string, string> = {};
+  for (const [name, value] of Object.entries(style.tokens)) {
+    if (value !== undefined) scoped[name] = styleValue(value);
+  }
+  if (style.radiusStep !== undefined) scoped["--radius"] = radiusValue(style.radiusStep);
+
+  return (
+    <button
+      type="button"
+      aria-label={`${style.label} style`}
+      aria-pressed={isActive}
+      onClick={() => onSelect(style)}
+      className="h-8 cursor-pointer rounded-[calc(var(--radius)*3)] border border-border bg-control text-xs font-medium shadow-control ring-ring outline-offset-2 transition outline-none focus-visible:ring-(length:--ring-width) active:translate-y-(--press-offset) active:scale-(--press-scale) active:shadow-control-pressed aria-pressed:outline-2 aria-pressed:outline-foreground aria-pressed:outline-solid"
+      style={scoped}
+    >
+      {style.label}
+    </button>
   );
 };
 

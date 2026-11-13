@@ -7,6 +7,8 @@ meta:
   order: 1
 ---
 
+import StyleRecipes from "#/components/style-recipes.astro";
+
 Foundations ships as a neutral base theme. Colours, edges, control sizes, roundness and type roles are tokens, so you restyle them by changing values in `@theme` without touching components. Spacing, the type scale, hover fills and component structure stay in your code.
 
 <Preview slug="theming-layers" />
@@ -81,46 +83,13 @@ const twMerge = extendTailwindMerge({
 });
 ```
 
-### Change the depth
+### Change the style
 
-How raised a control looks comes from four tokens: its edge at rest (`--shadow-control`), its edge while pressed (`--shadow-control-pressed`), and how much a pressed button shrinks or moves down (`--press-scale`, `--press-offset`). Changing them restyles every button, input and checkbox at once. Three examples:
+How raised a control looks comes from four tokens: its edge at rest (`--shadow-control`), its edge while pressed (`--shadow-control-pressed`), and how much a pressed button shrinks or moves down (`--press-scale`, `--press-offset`). Together with `--shadow-panel`, the control heights, `--radius` and the control face, they make a style. Changing them restyles every button, input and checkbox at once.
 
-**Flat:** no shadow, only the border. Buttons don't shrink when pressed. Use `0 0 transparent` rather than `none`: Tailwind combines this value with the focus ring into one `box-shadow`, and `none` would make the browser drop both.
+Each block below is what you'd add to your `@theme`. The Style picker in this site's design-system panel (the sliders icon in the header) applies the same values, so you can try them on every page first.
 
-```css
-@theme {
-  --shadow-control: 0 0 transparent;
-  --press-scale: 1;
-}
-```
-
-**Raised:** a light line along the top, a darker bottom edge and a soft shadow, so controls look like they stand off the page. Pressed buttons move down 1px instead of shrinking. Primary and destructive buttons share the same edge, so the top line shows on them too; keep it faint if that's too bright on your accent.
-
-```css
-@theme {
-  --shadow-control:
-    inset 0 1px 0 light-dark(oklch(100% 0 0 / 0.9), oklch(100% 0 0 / 0.06)),
-    0 1px 0 light-dark(oklch(0% 0 0 / 0.08), oklch(0% 0 0 / 0.4)),
-    0 2px 3px oklch(0% 0 0 / 0.07);
-  --shadow-control-pressed: inset 0 1px 1px oklch(0% 0 0 / 0.06);
-  --press-scale: 1;
-  --press-offset: 1px;
-}
-```
-
-**Embossed:** controls have no fill of their own, so they take the colour of whatever is behind them. A thin white outline inside the border makes them look pressed into the page.
-
-```css
-@theme {
-  --color-control: transparent;
-  --shadow-control:
-    inset 0 0 0 1px light-dark(oklch(100% 0 0 / 0.9), oklch(100% 0 0 / 0.08)),
-    0 1px 0 oklch(0% 0 0 / 0.07);
-  --shadow-control-pressed: inset 0 1px 2px oklch(0% 0 0 / 0.08);
-  --press-scale: 1;
-  --press-offset: 1px;
-}
-```
+<StyleRecipes />
 
 ## Patterns
 
