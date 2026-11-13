@@ -349,8 +349,8 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
         "group-data-[status=closed]/toast:opacity-0 starting:opacity-0",
         "motion-safe:group-data-[status=closed]/toast:-translate-y-full motion-safe:group-data-[status=closed]/toast:scale-95 motion-safe:starting:scale-95",
         (variant === "default" || variant === "loading") && "border-border bg-panel",
-        variant === "positive" && "border-success/20 bg-success/10 text-success",
-        variant === "negative" && "border-error/20 bg-error/10 text-error",
+        variant === "positive" && "border-success/20 bg-mix-panel/10 text-success mix-with-success",
+        variant === "negative" && "border-error/20 bg-mix-panel/10 text-error mix-with-error",
       )}
       role="status"
       aria-live="polite"
@@ -373,7 +373,17 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
           className={cn("pr-6 text-sm", swapIn, "motion-safe:starting:scale-100")}
         >
           <p className="font-medium">{title}</p>
-          {description && <p className="mt-0.5 text-xs text-pretty opacity-70">{description}</p>}
+          {description && (
+            <p
+              className={cn(
+                "mt-0.5 text-xs text-pretty",
+                // status text is barely AA at full strength, so any fade fails
+                (variant === "default" || variant === "loading") && "opacity-70",
+              )}
+            >
+              {description}
+            </p>
+          )}
         </div>
         <ToastCloseButton onClick={onDismiss} />
       </div>

@@ -127,7 +127,7 @@ const Button = ({
                 data-button-spinner
                 className={cn(
                   "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2",
-                  "text-(--button-text-color)",
+                  "text-(--button-text-color) in-data-pressed:text-(--button-pressed-text)",
                 )}
               >
                 <Spinner size={size} />

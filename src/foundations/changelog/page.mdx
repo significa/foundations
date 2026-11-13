@@ -12,6 +12,49 @@ meta:
 
 ## November 2026
 
+### Fixed: status toasts were see-through
+
+Positive and negative toasts painted only a 10% tint, so whatever sat behind them showed through.
+The same tint now sits over `--color-panel`, so they're opaque like the default toast:
+
+```diff tsx
+- variant === "positive" && "border-success/20 bg-success/10 text-success",
+- variant === "negative" && "border-error/20 bg-error/10 text-error",
++ variant === "positive" && "border-success/20 bg-mix-panel/10 text-success mix-with-success",
++ variant === "negative" && "border-error/20 bg-mix-panel/10 text-error mix-with-error",
+```
+
+Their description also loses `opacity-70`; faded, it fell below WCAG AA (as low as 2.9:1):
+
+```diff tsx
+- <p className="mt-0.5 text-xs text-pretty opacity-70">{description}</p>
++ <p
++   className={cn(
++     "mt-0.5 text-xs text-pretty",
++     (variant === "default" || variant === "loading") && "opacity-70",
++   )}
++ >
++   {description}
++ </p>
+```
+
+### Fixed: a loading pressed `Button` lost its spinner
+
+The spinner always took `--button-text-color`, ignoring `--button-pressed-text`. With the solid
+pressed recipe (`--button-pressed-bg` set to the text colour), a pressed, loading button, such as
+`<Toggle asChild pressed><Button isLoading /></Toggle>`, drew its spinner in the fill's own colour:
+
+```diff tsx
+  <span
+    data-button-spinner
+    className={cn(
+      "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2",
+-     "text-(--button-text-color)",
++     "text-(--button-text-color) in-data-pressed:text-(--button-pressed-text)",
+    )}
+  >
+```
+
 ### Changed: round corners, no squircles
 
 Squircles only rendered in Chromium, and the 1.6× radius bump that compensated them made the
