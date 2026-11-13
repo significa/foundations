@@ -1,11 +1,14 @@
 export const SCHEME_TOKENS = [
   "background",
+  "panel",
   "background-secondary",
+  "control",
   "foreground",
   "foreground-secondary",
   "accent",
   "accent-foreground",
   "border",
+  "border-subtle",
 ] as const;
 
 export const SEMANTIC_TOKENS = ["error", "warning", "success", "info"] as const;
@@ -24,48 +27,37 @@ export type Scheme = {
 
 export const TOKEN_LABELS: Record<ColorToken, string> = {
   background: "Background",
+  panel: "Panel",
   "background-secondary": "Background secondary",
+  control: "Control",
   foreground: "Foreground",
   "foreground-secondary": "Foreground secondary",
   accent: "Accent",
   "accent-foreground": "Accent foreground",
   border: "Border",
+  "border-subtle": "Border subtle",
   error: "Error",
   warning: "Warning",
   success: "Success",
   info: "Info",
 };
 
-// Semantic defaults match globals-data-attr.css:31-34. Single value, so light = dark.
-const SEMANTIC_DEFAULTS: Record<(typeof SEMANTIC_TOKENS)[number], TokenValues> = {
-  error: {
-    light: "oklch(63.7% 0.237 25.331)",
-    dark: "oklch(63.7% 0.237 25.331)",
-  },
-  warning: {
-    light: "oklch(79.5% 0.184 86.047)",
-    dark: "oklch(79.5% 0.184 86.047)",
-  },
-  success: {
-    light: "oklch(69.6% 0.17 162.48)",
-    dark: "oklch(69.6% 0.17 162.48)",
-  },
-  info: {
-    light: "oklch(62.3% 0.214 259.815)",
-    dark: "oklch(62.3% 0.214 259.815)",
-  },
-};
-
 // Mirrors the values declared in src/foundations/setup/globals-data-attr.css.
 const DEFAULT_COLORS: Record<ColorToken, TokenValues> = {
   background: { light: "oklch(100% 0 0)", dark: "oklch(12% 0 0)" },
-  "background-secondary": { light: "oklch(96% 0 0)", dark: "oklch(22% 0 0)" },
+  panel: { light: "oklch(100% 0 0)", dark: "oklch(15% 0 0)" },
+  "background-secondary": { light: "oklch(96% 0 0)", dark: "oklch(16% 0 0)" },
+  control: { light: "oklch(100% 0 0)", dark: "oklch(100% 0 0 / 0.05)" },
   foreground: { light: "oklch(0% 0 0)", dark: "oklch(95% 0 0)" },
-  "foreground-secondary": { light: "oklch(65% 0 0)", dark: "oklch(53% 0 0)" },
+  "foreground-secondary": { light: "oklch(54% 0 0)", dark: "oklch(62% 0 0)" },
   accent: { light: "oklch(0% 0 0)", dark: "oklch(95% 0 0)" },
   "accent-foreground": { light: "oklch(100% 0 0)", dark: "oklch(12% 0 0)" },
-  border: { light: "oklch(94% 0 0)", dark: "oklch(26% 0 0)" },
-  ...SEMANTIC_DEFAULTS,
+  border: { light: "oklch(0% 0 0 / 0.08)", dark: "oklch(100% 0 0 / 0.12)" },
+  "border-subtle": { light: "oklch(0% 0 0 / 0.05)", dark: "oklch(100% 0 0 / 0.07)" },
+  error: { light: "oklch(48% 0.237 25.331)", dark: "oklch(63.7% 0.237 25.331)" },
+  warning: { light: "oklch(48% 0.184 75)", dark: "oklch(79.5% 0.184 86.047)" },
+  success: { light: "oklch(46% 0.17 162.48)", dark: "oklch(69.6% 0.17 162.48)" },
+  info: { light: "oklch(48% 0.214 259.815)", dark: "oklch(62.3% 0.214 259.815)" },
 };
 
 const buildScheme = (
@@ -93,6 +85,8 @@ export const SCHEMES: Scheme[] = [
   // Warm cream + brown with burnt orange accent.
   buildScheme("gruvbox", "Gruvbox", {
     background: { light: "oklch(96% 0.025 85)", dark: "oklch(25% 0.015 70)" },
+    panel: { light: "oklch(96% 0.025 85)", dark: "oklch(28% 0.015 70" },
+    control: { light: "oklch(96% 0.025 85)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.03 85)",
       dark: "oklch(31% 0.02 70)",
@@ -117,6 +111,8 @@ export const SCHEMES: Scheme[] = [
   // Deep forest green palette.
   buildScheme("forest", "Forest", {
     background: { light: "oklch(96% 0.015 145)", dark: "oklch(22% 0.02 150)" },
+    panel: { light: "oklch(96% 0.015 145)", dark: "oklch(25% 0.02 150" },
+    control: { light: "oklch(96% 0.015 145)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.02 145)",
       dark: "oklch(28% 0.025 150)",
@@ -141,6 +137,8 @@ export const SCHEMES: Scheme[] = [
   // Frosty cool blue/gray (Nord-inspired).
   buildScheme("nord", "Nord", {
     background: { light: "oklch(97% 0.005 240)", dark: "oklch(28% 0.015 245)" },
+    panel: { light: "oklch(97% 0.005 240)", dark: "oklch(31% 0.015 245" },
+    control: { light: "oklch(97% 0.005 240)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(93% 0.01 240)",
       dark: "oklch(34% 0.02 245)",
@@ -165,6 +163,8 @@ export const SCHEMES: Scheme[] = [
   // Cream/teal (Solarized-inspired). Blue accent in light, yellow in dark.
   buildScheme("solarized", "Solarized", {
     background: { light: "oklch(96% 0.025 90)", dark: "oklch(28% 0.04 230)" },
+    panel: { light: "oklch(96% 0.025 90)", dark: "oklch(31% 0.04 230" },
+    control: { light: "oklch(96% 0.025 90)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.03 90)",
       dark: "oklch(34% 0.04 230)",
@@ -189,6 +189,8 @@ export const SCHEMES: Scheme[] = [
   // Soft rose / dusk purple (Rose Pine-inspired).
   buildScheme("rose", "Rose", {
     background: { light: "oklch(96% 0.015 30)", dark: "oklch(25% 0.02 290)" },
+    panel: { light: "oklch(96% 0.015 30)", dark: "oklch(28% 0.02 290" },
+    control: { light: "oklch(96% 0.015 30)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.02 30)",
       dark: "oklch(31% 0.025 290)",
@@ -213,6 +215,8 @@ export const SCHEMES: Scheme[] = [
   // Vibrant purple/magenta (Dracula-inspired).
   buildScheme("dracula", "Dracula", {
     background: { light: "oklch(96% 0.01 290)", dark: "oklch(25% 0.03 285)" },
+    panel: { light: "oklch(96% 0.01 290)", dark: "oklch(28% 0.03 285" },
+    control: { light: "oklch(96% 0.01 290)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.02 290)",
       dark: "oklch(31% 0.03 285)",
