@@ -15,7 +15,7 @@ meta:
 ### Changed: theme roles for surfaces, controls and edges
 
 Components now name the layer they paint instead of reusing `background` for everything, so a theme
-can make them flat, raised or embossed by changing values (see the [Theming](/guides/theming) guide).
+can make them flat, raised or embossed by changing values (see the [Theming](/theming) guide).
 Popovers, menus, listboxes, dialogs, drawers and toasts use `bg-panel`; inputs, outline buttons,
 checkboxes, radios and the segmented-control indicator use `bg-control`; their edge comes from
 `shadow-control`, and a pressed button from `--press-scale`, `--press-offset` and
@@ -46,7 +46,7 @@ layer (table rows, menu sections, Divider, the tabs track, the popover header) u
 + --color-border-subtle: light-dark(oklch(0% 0 0 / 0.05), oklch(100% 0 0 / 0.07));
 - --corner-shape: squircle;
 + --shadow-control: 0 1px 2px oklch(0 0 0 / 0.03);
-+ --shadow-control-pressed: 0 0 #0000;
++ --shadow-control-pressed: 0 0 transparent;
 + --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.03);
 + --press-scale: 0.98;
 + --press-offset: 0px;

@@ -83,12 +83,12 @@ export default function ThemingLayersPreview() {
             </div>
           ))}
         </section>
-        <div className="flex items-center gap-3 rounded-xl bg-[oklch(25%_0.06_270)] p-3 text-foreground scheme-dark">
+        <div className="flex items-center gap-3 rounded-xl bg-background p-3 text-foreground scheme-dark dark:scheme-light">
           <span>2 selected</span>
           <Button variant="outline" size="sm" className="ml-auto">
             Compare
           </Button>
-          <Input size="sm" placeholder="Note" className="w-32" />
+          <Button size="sm">Archive</Button>
         </div>
       </main>
     </div>

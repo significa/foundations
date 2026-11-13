@@ -79,5 +79,10 @@
     &:is(code) {
       @apply text-[0.95em] font-mono bg-foreground/4 text-foreground/80 rounded-sm border px-1 py-0.5 font-[0.95em];
     }
+
+    /* token names in tables break between names, never inside one */
+    &:is(td code) {
+      @apply whitespace-nowrap;
+    }
   }
 }

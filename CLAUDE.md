@@ -254,7 +254,7 @@ Imports from `#/lib/...` (utilities provided by the setup guide) are skipped aut
 - Tailwind CSS v4 via `@tailwindcss/vite` — **no `tailwind.config.js`**.
 - Theme tokens are defined as CSS custom properties in `src/foundations/setup/globals-data-attr.css` using `@theme` blocks.
 - All colors use OKLCH: `--color-background`, `--color-foreground`, `--color-accent`, `--color-border`, `--color-ring`.
-- Components paint by role: `bg-panel` for anything raised over the canvas (popovers, menus, dialogs, drawers, toasts), `bg-control` and `shadow-control` for control faces and edges, `bg-background` only for the canvas itself. Never add tokens named after a screen region (`--color-sidebar`); see the Theming guide (`src/foundations/guides/theming/page.mdx`).
+- Components paint by role: `bg-panel` for anything raised over the canvas (popovers, menus, dialogs, drawers, toasts), `bg-control` and `shadow-control` for control faces and edges, `bg-background` only for the canvas itself. Never add tokens named after a screen region (`--color-sidebar`); see the Theming guide (`src/foundations/theming/page.mdx`).
 - Custom shadow, text or radius names must be registered with tailwind-merge in `src/lib/utils/classnames.ts`, or `cn` keeps both conflicting classes.
 - Dark mode is toggled via `[data-theme="dark"]` on the `<html>` element — not via a CSS class or `prefers-color-scheme`.
 - Global styles live in `src/styles/global.css`; markdown-specific styles in `src/styles/markdown.css`.
