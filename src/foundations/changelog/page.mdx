@@ -89,6 +89,22 @@ Also in this change:
   +   }
   + }
   ```
+- **Status colours.** In light mode `--color-success`, `--color-error`, `--color-warning` and
+  `--color-info` are now dark enough to pass WCAG AA as text (field errors, toasts, destructive menu
+  items) and to carry white text as a fill. Warning moves from yellow to amber, since a yellow that
+  dark reads as olive. Dark mode is unchanged.
+
+  ```diff css
+  - --color-error: oklch(63.7% 0.237 25.331);
+  - --color-warning: oklch(79.5% 0.184 86.047);
+  - --color-success: oklch(69.6% 0.17 162.48);
+  - --color-info: oklch(62.3% 0.214 259.815);
+  + --color-error: light-dark(oklch(48% 0.237 25.331), oklch(63.7% 0.237 25.331));
+  + --color-warning: light-dark(oklch(48% 0.184 75), oklch(79.5% 0.184 86.047));
+  + --color-success: light-dark(oklch(48% 0.17 162.48), oklch(69.6% 0.17 162.48));
+  + --color-info: light-dark(oklch(48% 0.214 259.815), oklch(62.3% 0.214 259.815));
+  ```
+
 - **Contrast.** `--color-foreground-secondary` and badge text now pass WCAG AA (4.5:1). Secondary text
   was 2.9–3.8:1 and status badges as low as 1.8:1 (warning); the secondary value is now
   `light-dark(oklch(54% 0 0), oklch(62% 0 0))` and badge text keeps its colour's hue and chroma with lightness capped at 0.48 in light (0.62 minimum in dark).
