@@ -80,6 +80,7 @@ const DatePickerPanel = ({
   return (
     <Menu.Items {...props}>
       <Calendar
+        className="bg-surface"
         getIsDisabled={getIsDisabled}
         startWeekOn={startWeekOn}
         locale={locale}

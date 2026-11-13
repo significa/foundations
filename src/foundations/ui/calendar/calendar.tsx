@@ -201,9 +201,9 @@ const Calendar = ({
         </CalendarHeader>
       )}
 
-      <div className="relative">
+      <div className="relative bg-inherit">
         {(view === "years" || view === "months") && (
-          <div className="absolute inset-0 z-10 bg-background p-1">
+          <div className="absolute inset-0 z-10 bg-inherit p-1">
             {view === "years" && (
               <div
                 role="grid"
