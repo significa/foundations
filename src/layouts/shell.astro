@@ -1,14 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import { COLOR_TOKENS, DEFAULT_SCHEME_ID, SCHEMES } from "#/components/ds-config/schemes.ts";
-import {
-  STORAGE_KEY as DS_CONFIG_STORAGE_KEY,
-  FONT_VARS,
-  RADIUS_DEFAULT,
-  RADIUS_STEP_REM,
-  RING_DEFAULT,
-} from "#/components/ds-config/storage.ts";
-import { FONT_FALLBACKS } from "#/components/ds-config/use-fonts-catalog.ts";
+import { STORAGE_KEY as DS_CONFIG_STORAGE_KEY } from "#/components/ds-config/storage.ts";
 import Posthog from "#/components/posthog.astro";
 import { Toaster } from "#/foundations/ui/toaster/toaster.tsx";
 import { THEME_STORAGE_KEY } from "#/lib/theme.ts";
@@ -50,54 +42,34 @@ const description =
       })();
     </script>
 
-    {/* Apply stored DSConfig (scheme/radius/ring/fonts) synchronously to avoid a flash of default tokens before React hydrates. Mirrors apply() in ds-config.tsx. */}
-    <script
-      is:inline
-      define:vars={{
-        storageKey: DS_CONFIG_STORAGE_KEY,
-        schemes: SCHEMES,
-        colorTokens: COLOR_TOKENS,
-        defaultSchemeId: DEFAULT_SCHEME_ID,
-        radiusDefault: RADIUS_DEFAULT,
-        radiusStepRem: RADIUS_STEP_REM,
-        ringDefault: RING_DEFAULT,
-        fontVars: FONT_VARS,
-        fontFallbacks: FONT_FALLBACKS,
-      }}
-    >
+    {/* Apply the stored DSConfig variables before paint, so there's no flash of default tokens before React hydrates. Iframe previews also follow the page's changes live. */}
+    <script is:inline define:vars={{ storageKey: DS_CONFIG_STORAGE_KEY }}>
       (() => {
-        try {
-          const raw = localStorage.getItem(storageKey);
-          if (!raw) return;
-          const cfg = JSON.parse(raw);
-          if (!cfg || typeof cfg !== "object" || !cfg.schemeId) return;
-          const scheme = schemes.find((s) => s.id === cfg.schemeId);
-          if (!scheme) return;
-          const root = document.documentElement;
-          const overrides = cfg.overrides || {};
-          const onDefault = scheme.id === defaultSchemeId;
-          for (const t of colorTokens) {
-            const o = overrides[t];
-            if (onDefault && !o) continue;
-            const v = o || scheme.colors[t];
-            if (!v) continue;
-            root.style.setProperty(`--color-${t}`, `light-dark(${v.light}, ${v.dark})`);
-          }
-          if (typeof cfg.radiusStep === "number" && cfg.radiusStep !== radiusDefault) {
-            root.style.setProperty("--radius", `${cfg.radiusStep * radiusStepRem}rem`);
-          }
-          if (typeof cfg.ringWidth === "number" && cfg.ringWidth !== ringDefault) {
-            root.style.setProperty("--ring-width", `${cfg.ringWidth}px`);
+        const root = document.documentElement;
+        let applied = [];
+        const apply = (raw) => {
+          for (const name of applied) root.style.removeProperty(name);
+          applied = [];
+          const cfg = (() => {
+            try {
+              return JSON.parse(raw || "null");
+            } catch {
+              return null;
+            }
+          })();
+          if (!cfg || typeof cfg !== "object") return;
+          const vars = cfg.vars || {};
+          for (const name in vars) {
+            root.style.setProperty(name, vars[name]);
+            applied.push(name);
           }
           const fonts = cfg.fonts || {};
-          for (const slot in fontVars) {
-            const f = fonts[slot];
-            if (!f?.family) continue;
-            const fallback = fontFallbacks[f.category] || fontFallbacks["sans-serif"];
-            root.style.setProperty(fontVars[slot], `'${f.family}', ${fallback}`);
+          for (const slot in fonts) {
+            const family = fonts[slot]?.family;
+            if (!family) continue;
             const href =
               "https://fonts.googleapis.com/css2?family=" +
-              encodeURIComponent(f.family).replace(/%20/g, "+") +
+              encodeURIComponent(family).replace(/%20/g, "+") +
               ":wght@400;500;600;700&display=swap";
             if (!document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
               const l = document.createElement("link");
@@ -106,7 +78,16 @@ const description =
               document.head.appendChild(l);
             }
           }
+        };
+        try {
+          apply(localStorage.getItem(storageKey));
         } catch {}
+        // Only iframes: a top-level tab's React state would fight a config written by another tab
+        if (window.self !== window.top) {
+          window.addEventListener("storage", (event) => {
+            if (event.key === storageKey) apply(event.newValue);
+          });
+        }
       })();
     </script>
 

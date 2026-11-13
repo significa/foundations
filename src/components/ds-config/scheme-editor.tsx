@@ -6,6 +6,7 @@ import {
   TOKEN_LABELS,
   type TokenValues,
 } from "./schemes.ts";
+import { type Style, styleColor } from "./styles.ts";
 
 const isValidColor = (value: string): boolean => {
   if (!value.trim()) return false;
@@ -18,9 +19,10 @@ type TokenInputProps = {
   onChange: (value: string) => void;
   side: "light" | "dark";
   label: string;
+  disabled?: boolean;
 };
 
-const TokenInput = ({ value, onChange, side, label }: TokenInputProps) => {
+const TokenInput = ({ value, onChange, side, label, disabled }: TokenInputProps) => {
   const valid = isValidColor(value);
   return (
     <div className="relative flex-1">
@@ -28,12 +30,13 @@ const TokenInput = ({ value, onChange, side, label }: TokenInputProps) => {
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        disabled={disabled}
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"
         aria-label={`${label} (${side})`}
         aria-invalid={!valid || undefined}
-        className="h-7 w-full rounded-md border border-border bg-background py-0 pr-7 pl-2 font-mono text-2xs ring-ring outline-none focus-visible:ring-(length:--ring-width) aria-invalid:border-error"
+        className="h-7 w-full rounded-md border border-border bg-background py-0 pr-7 pl-2 font-mono text-2xs ring-ring outline-none focus-visible:ring-(length:--ring-width) disabled:opacity-50 aria-invalid:border-error"
       />
       <span
         aria-hidden="true"
@@ -46,6 +49,7 @@ const TokenInput = ({ value, onChange, side, label }: TokenInputProps) => {
 
 type SchemeEditorProps = {
   scheme: Scheme;
+  style: Style;
   overrides: Partial<Record<ColorToken, TokenValues>>;
   onTokenChange: (token: ColorToken, side: "light" | "dark", value: string) => void;
 };
@@ -53,27 +57,38 @@ type SchemeEditorProps = {
 type TokenRowProps = {
   token: ColorToken;
   scheme: Scheme;
+  style: Style;
   overrides: Partial<Record<ColorToken, TokenValues>>;
   onTokenChange: SchemeEditorProps["onTokenChange"];
 };
 
-const TokenRow = ({ token, scheme, overrides, onTokenChange }: TokenRowProps) => {
-  const values = overrides[token] ?? scheme.colors[token];
+const TokenRow = ({ token, scheme, style, overrides, onTokenChange }: TokenRowProps) => {
   const label = TOKEN_LABELS[token];
+  const owned = styleColor(style, token);
+  const locked = owned !== undefined;
+  const values =
+    owned !== undefined
+      ? { light: owned, dark: owned }
+      : (overrides[token] ?? scheme.colors[token]);
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-2xs font-medium text-foreground-secondary">{label}</span>
+      <span className="text-2xs font-medium text-foreground-secondary">
+        {label}
+        {locked && ` · set by the ${style.label} style`}
+      </span>
       <div className="flex gap-1.5">
         <TokenInput
           label={label}
           side="light"
           value={values.light}
+          disabled={locked}
           onChange={(v) => onTokenChange(token, "light", v)}
         />
         <TokenInput
           label={label}
           side="dark"
           value={values.dark}
+          disabled={locked}
           onChange={(v) => onTokenChange(token, "dark", v)}
         />
       </div>
@@ -81,7 +96,7 @@ const TokenRow = ({ token, scheme, overrides, onTokenChange }: TokenRowProps) =>
   );
 };
 
-const SchemeEditor = ({ scheme, overrides, onTokenChange }: SchemeEditorProps) => {
+const SchemeEditor = ({ scheme, style, overrides, onTokenChange }: SchemeEditorProps) => {
   return (
     <div className="flex flex-col gap-2.5 p-3">
       {SCHEME_TOKENS.map((token) => (
@@ -89,6 +104,7 @@ const SchemeEditor = ({ scheme, overrides, onTokenChange }: SchemeEditorProps) =
           key={token}
           token={token}
           scheme={scheme}
+          style={style}
           overrides={overrides}
           onTokenChange={onTokenChange}
         />
@@ -103,6 +119,7 @@ const SchemeEditor = ({ scheme, overrides, onTokenChange }: SchemeEditorProps) =
           key={token}
           token={token}
           scheme={scheme}
+          style={style}
           overrides={overrides}
           onTokenChange={onTokenChange}
         />

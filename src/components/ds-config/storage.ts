@@ -1,9 +1,8 @@
 import { type ColorToken, DEFAULT_SCHEME_ID, type TokenValues } from "./schemes.ts";
+import { DEFAULT_STYLE_ID, RADIUS_DEFAULT } from "./styles.ts";
 
 export const STORAGE_KEY = "foundations-ds-config";
 
-export const RADIUS_DEFAULT = 2;
-export const RADIUS_STEP_REM = 0.0625;
 export const RING_DEFAULT = 4;
 
 export type FontCategory = "sans-serif" | "serif" | "monospace" | "display" | "handwriting";
@@ -32,18 +31,23 @@ export const EMPTY_FONTS: StoredFonts = {
 
 export type StoredConfig = {
   schemeId: string;
+  styleId: string;
   overrides: Partial<Record<ColorToken, TokenValues>>;
   radiusStep: number;
   ringWidth: number;
   fonts: StoredFonts;
+  // Resolved CSS variables, so the inline script in shell.astro can apply them without the presets
+  vars: Record<string, string>;
 };
 
 export const DEFAULT_STORED_CONFIG: StoredConfig = {
   schemeId: DEFAULT_SCHEME_ID,
+  styleId: DEFAULT_STYLE_ID,
   overrides: {},
   radiusStep: RADIUS_DEFAULT,
   ringWidth: RING_DEFAULT,
   fonts: EMPTY_FONTS,
+  vars: {},
 };
 
 // Pre-schemes shape: { accent: 'Blue', radiusStep, ringWidth }.
@@ -91,15 +95,15 @@ export const readStored = (): StoredConfig => {
     const parsed: unknown = JSON.parse(raw);
     if (isLegacy(parsed)) {
       return {
+        ...DEFAULT_STORED_CONFIG,
         schemeId: LEGACY_LABEL_TO_SCHEME_ID[parsed.accent] ?? DEFAULT_SCHEME_ID,
-        overrides: {},
         radiusStep: parsed.radiusStep ?? RADIUS_DEFAULT,
         ringWidth: parsed.ringWidth ?? RING_DEFAULT,
-        fonts: EMPTY_FONTS,
       };
     }
     if (isSingleFont(parsed)) {
       return {
+        ...DEFAULT_STORED_CONFIG,
         schemeId: parsed.schemeId,
         overrides: parsed.overrides,
         radiusStep: parsed.radiusStep,
