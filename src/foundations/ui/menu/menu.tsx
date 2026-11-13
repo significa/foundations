@@ -573,7 +573,10 @@ const MenuSection = ({ children, className, ...props }: React.ComponentPropsWith
       <div
         role="group"
         aria-labelledby={titleId}
-        className={cn("flex flex-col items-stretch border-border not-first:border-t", className)}
+        className={cn(
+          "flex flex-col items-stretch border-border-subtle not-first:border-t",
+          className,
+        )}
         {...props}
       >
         {children}

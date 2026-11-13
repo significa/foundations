@@ -66,7 +66,10 @@ const TableBody = ({ ref, className, ...props }: React.ComponentPropsWithRef<"tb
   return (
     <tbody
       ref={ref}
-      className={cn("[&_tr]:border-b [&_tr]:border-border [&_tr:last-child]:border-0", className)}
+      className={cn(
+        "[&_tr]:border-b [&_tr]:border-border-subtle [&_tr:last-child]:border-0",
+        className,
+      )}
       {...props}
     />
   );

@@ -24,7 +24,9 @@ Light mode looks the same; in dark mode panels and controls are now a
 step lighter than the canvas, and `background-secondary` steps as gently as it does in light.
 Highlights, hover fills and tracks (Menu, Tabs, SegmentedControl, Kbd, Calendar ranges, the minimal
 Input) use `bg-foreground/5` instead of `bg-background-secondary`, so they show on any layer.
-Borders are translucent, so they hold the same contrast on every surface. Add the new tokens to your setup CSS before copying any updated component:
+Borders are translucent, so they hold the same contrast on every layer, and separators inside a
+layer (table rows, menu sections, Divider, the tabs track, the popover header) use the fainter
+`border-subtle`. Add the new tokens to your setup CSS before copying any updated component:
 
 ```diff css
 @theme {
@@ -41,6 +43,7 @@ Borders are translucent, so they hold the same contrast on every surface. Add th
 + --color-foreground-secondary: light-dark(oklch(54% 0 0), oklch(60% 0 0));
 - --color-border: light-dark(oklch(94% 0 0), oklch(26% 0 0));
 + --color-border: light-dark(oklch(0% 0 0 / 0.08), oklch(100% 0 0 / 0.12));
++ --color-border-subtle: light-dark(oklch(0% 0 0 / 0.05), oklch(100% 0 0 / 0.07));
 - --corner-shape: squircle;
 + --shadow-control: 0 1px 2px oklch(0 0 0 / 0.03);
 + --shadow-control-pressed: 0 0 #0000;

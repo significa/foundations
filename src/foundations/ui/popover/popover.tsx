@@ -493,7 +493,7 @@ const PopoverHeader = ({ className, ...props }: React.ComponentPropsWithRef<"div
   return (
     <div
       className={cn(
-        "box-content flex min-h-10 items-center gap-2 border-b border-border bg-transparent px-4 text-foreground [&>svg]:size-4 [&>svg]:shrink-0",
+        "box-content flex min-h-10 items-center gap-2 border-b border-border-subtle bg-transparent px-4 text-foreground [&>svg]:size-4 [&>svg]:shrink-0",
         className,
       )}
       {...props}

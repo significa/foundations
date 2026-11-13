@@ -32,7 +32,8 @@ A polished interface is layered: an app frame, a canvas, cards and popovers over
 | `--color-panel`              | Anything raised over it: cards, panels, popovers, menus, dialogs, drawers, toasts.      |
 | `--color-background-secondary` | A region set apart from the canvas: sidebars, wells, app frames.                        |
 | `--color-control`              | The face of inputs, outline buttons, checkboxes and segmented controls.                 |
-| `--color-border`               | Edges of controls and surfaces. Translucent, so the step is the same on every surface.  |
+| `--color-border-subtle`        | Separators inside a layer: table rows, menu sections, dividers, the tabs track.         |
+| `--color-border`               | Edges of controls and panels. Translucent, so the step is the same on every layer.      |
 
 Two rules keep them composable:
 
@@ -46,7 +47,7 @@ Two rules keep them composable:
 - **Seams.** Where two bordered elements touch, drop one side (`border-r-0`, `divide-*`) instead of overlapping them with a negative margin; overlapped translucent lines darken.
 - **Lines as fills.** A track, skeleton or gridline drawn with the border colour as a background stacks with whatever is under it. Use `bg-foreground/5` or a solid colour for fills, and keep `--color-border` for lines.
 
-For a fainter hairline inside a layer, use `border-border/60`.
+Two strengths, by role: `border-border` outlines controls and panels, `border-border-subtle` separates content inside a layer. Use the token rather than an opacity (`border-border/60`), so a theme can retune every separator at once.
 
 ### Cards
 

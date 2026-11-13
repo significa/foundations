@@ -111,10 +111,10 @@ const TabsItems = ({ children, className, ref, ...props }: TabsItemsProps) => {
         orientation === "horizontal"
           ? variant === "pill"
             ? "items-center pb-4"
-            : "mb-4 items-center border-b border-border"
+            : "mb-4 items-center border-b border-border-subtle"
           : variant === "pill"
             ? "flex-col items-start pr-4"
-            : "mr-4 flex-col items-start border-r border-border",
+            : "mr-4 flex-col items-start border-r border-border-subtle",
         className,
       )}
       {...props}
