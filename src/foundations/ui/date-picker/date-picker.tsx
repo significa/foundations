@@ -36,7 +36,9 @@ const DatePickerTrigger = ({
         )}
       >
         <CalendarIcon className="shrink-0 text-foreground-secondary" />
-        {children ?? <span className="text-foreground-secondary">{placeholder}</span>}
+        <span className="min-w-0 flex-1 truncate text-start">
+          {children ?? <span className="text-foreground-secondary">{placeholder}</span>}
+        </span>
         <CaretUpDownIcon
           weight="bold"
           className="absolute top-1/2 right-3 -translate-y-1/2 text-base text-foreground/80"
