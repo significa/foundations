@@ -12,6 +12,51 @@ meta:
 
 ## November 2026
 
+### Changed: round corners, no squircles
+
+Squircles only rendered in Chromium, and the 1.6× radius bump that compensated them made the
+radius scale differ between browsers; on short panels like a dialog the large squircle read as a
+blob. Corners are now round everywhere, at the radii Safari and Firefox already showed. Chromium
+corners get smaller. In your setup CSS, drop `--radius-bump` and the `@supports` block at the end:
+
+```diff css
+- --radius-bump: 1;
+- --radius-xs: calc(var(--radius) * 1 * var(--radius-bump));
++ --radius-xs: calc(var(--radius) * 1);
+  /* …the same for every radius step and --inset… */
+
+- @supports (corner-shape: squircle) {
+-   :root {
+-     --radius-bump: 1.6;
+-   }
+-   * {
+-     corner-shape: squircle;
+-   }
+-   .rounded-full {
+-     corner-shape: round;
+-   }
+- }
+```
+
+Drawer read `--radius-bump` for its detached gap; without the token it computes to nothing:
+
+```diff tsx
+- "[--drawer-detach:calc(var(--radius)*3*var(--radius-bump))] …"
++ "[--drawer-detach:calc(var(--radius)*3)] …"
+```
+
+### Fixed: `DatePicker` trigger wraps a long date
+
+A date wider than the trigger wrapped onto a second line, centred. The value now stays on one line
+and truncates, like Listbox:
+
+```diff tsx
+- {children ?? <span className="text-foreground-secondary">{placeholder}</span>}
++ <span className="min-w-0 flex-1 truncate text-start">
++   {children ?? <span className="text-foreground-secondary">{placeholder}</span>}
++ </span>
+```
+
 ### Changed: theme roles for surfaces, controls and edges
 
 Components now name the layer they paint instead of reusing `background` for everything, so a theme
