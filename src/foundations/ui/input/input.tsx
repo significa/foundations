@@ -25,10 +25,10 @@ const inputFrameVariants = {
 };
 
 const inputFrameSize = {
-  xs: "h-(--input-height) rounded-lg text-sm [--input-height:--spacing(6)]",
-  sm: "h-(--input-height) rounded-lg text-sm [--input-height:--spacing(8)]",
-  md: "h-(--input-height) py-(--inset) rounded-xl text-base [--input-height:--spacing(10)]",
-  lg: "h-(--input-height) py-(--inset) rounded-2xl text-base [--input-height:--spacing(12)]",
+  xs: "h-(--input-height) rounded-lg text-sm [--input-height:var(--control-height-xs)]",
+  sm: "h-(--input-height) rounded-lg text-sm [--input-height:var(--control-height-sm)]",
+  md: "h-(--input-height) py-(--inset) rounded-xl text-base [--input-height:var(--control-height-md)]",
+  lg: "h-(--input-height) py-(--inset) rounded-2xl text-base [--input-height:var(--control-height-lg)]",
 };
 
 const inputElementStyles = [

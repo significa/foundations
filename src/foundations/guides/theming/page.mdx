@@ -29,23 +29,31 @@ A polished interface is layered: an app frame, a canvas, cards and popovers over
 | Token                          | Role                                                                                    |
 | ------------------------------ | --------------------------------------------------------------------------------------- |
 | `--color-background`           | The canvas the app sits on.                                                             |
-| `--color-surface`              | Anything raised over it: cards, panels, popovers, menus, dialogs, drawers, toasts.      |
+| `--color-panel`              | Anything raised over it: cards, panels, popovers, menus, dialogs, drawers, toasts.      |
 | `--color-background-secondary` | A region set apart from the canvas: sidebars, wells, app frames.                        |
 | `--color-control`              | The face of inputs, outline buttons, checkboxes and segmented controls.                 |
 | `--color-border`               | Edges of controls and surfaces. Translucent, so the step is the same on every surface.  |
-| `--color-border-subtle`        | Hairlines inside a surface: row separators, dividers.                                   |
 
 Two rules keep them composable:
 
 - **Name tokens by role, never by region.** `--color-sidebar` or `--color-toolbar` only fit one layout; when a sidebar needs a fill, use `background-secondary` or `surface`, and when it needs a new shade, change the value of the role.
-- **Steps are relative.** In dark mode shadows don't read, so `surface` is a step lighter than the canvas and `control` is a translucent veil that's always a step lighter than whatever it sits on. Borders are translucent for the same reason, and so are the fills components draw inside a layer (hover, highlighted items, tracks: `bg-foreground/5`). Keep the steps between layers small; a few points of lightness is enough. Prefer translucent values when you add your own steps.
+- **Steps are relative.** In dark mode shadows don't read, so `panel` is a step lighter than the canvas and `control` is a translucent veil that's always a step lighter than whatever it sits on. Borders are translucent for the same reason, and so are the fills components draw inside a layer (hover, highlighted items, tracks: `bg-foreground/5`). Keep the steps between layers small; a few points of lightness is enough. Prefer translucent values when you add your own steps.
+
+### Borders
+
+`--color-border` is translucent, so the same line works on every layer. That holds as long as each line is drawn once over a filled layer. Two cases need care:
+
+- **Seams.** Where two bordered elements touch, drop one side (`border-r-0`, `divide-*`) instead of overlapping them with a negative margin; overlapped translucent lines darken.
+- **Lines as fills.** A track, skeleton or gridline drawn with the border colour as a background stacks with whatever is under it. Use `bg-foreground/5` or a solid colour for fills, and keep `--color-border` for lines.
+
+For a fainter hairline inside a layer, use `border-border/60`.
 
 ### Cards
 
 There's no Card component: a card is a surface with a resting edge.
 
 ```tsx
-<section className="rounded-xl border border-border bg-surface shadow-surface">…</section>
+<section className="rounded-xl border border-border bg-panel shadow-panel">…</section>
 ```
 
 ### Dark regions
@@ -68,11 +76,11 @@ Controls and resting surfaces take their edge from tokens, and the press from tw
 | -------------------------- | ------------------------------------------------------------------------ |
 | `--shadow-control`         | The resting edge of buttons, inputs, checkboxes, radios and slider thumbs. |
 | `--shadow-control-pressed` | What the edge collapses to while a button is pressed.                    |
-| `--shadow-surface`         | The resting edge of a surface: cards, bordered tables, file rows.        |
+| `--shadow-panel`         | The resting edge of a surface: cards, bordered tables, file rows.        |
 | `--press-scale`            | How much a button shrinks when pressed (`0.98` by default).              |
 | `--press-offset`           | How far a button sinks when pressed (`0px` by default).                  |
 
-`--shadow-sm` to `--shadow-lg` stay for things that float: popovers, menus, dialogs, toasts. Keep resting edges weaker than floating ones, so a card never reads as a popover.
+`--shadow-panel` is for a panel in the flow; `--shadow-sm` to `--shadow-lg` stay for things that float: popovers, menus, dialogs, toasts. Keep resting edges weaker than floating ones, so a card never reads as a popover.
 
 ### Recipes
 
@@ -112,6 +120,19 @@ Embossed: controls keep the colour of what they sit on; a white inner rim and th
   --press-offset: 1px;
 }
 ```
+
+## Control heights
+
+Buttons, inputs, selects, toggles and pagination share one height scale, so a button and an input of the same size line up side by side:
+
+| Token                 | Default |
+| --------------------- | ------- |
+| `--control-height-xs` | 24px    |
+| `--control-height-sm` | 32px    |
+| `--control-height-md` | 40px    |
+| `--control-height-lg` | 48px    |
+
+Retune them in `@theme` to change every control at once. `--button-height` and `--input-height` still override a single control. Roundness stays on `--radius`: the radius steps derive from it, and each step can be overridden in `@theme` on its own.
 
 ## Badge colours
 

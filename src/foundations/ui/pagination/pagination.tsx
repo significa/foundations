@@ -15,8 +15,8 @@ const paginationLinkStyle = cva({
   ],
   variants: {
     size: {
-      sm: "[--pagination-height:--spacing(8)]",
-      md: "[--pagination-height:--spacing(10)]",
+      sm: "[--pagination-height:var(--control-height-sm)]",
+      md: "[--pagination-height:var(--control-height-md)]",
     },
   },
   defaultVariants: {

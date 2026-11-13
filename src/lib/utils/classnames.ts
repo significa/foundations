@@ -5,7 +5,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 // `shadow-none` instead of being replaced by it. Register custom names here (theme keys: shadow,
 // text, radius, …); colour names need no registration.
 const twMerge = extendTailwindMerge({
-  extend: { theme: { shadow: ["control", "control-pressed", "surface"] } },
+  extend: { theme: { shadow: ["control", "control-pressed", "panel"] } },
 });
 
 export const {

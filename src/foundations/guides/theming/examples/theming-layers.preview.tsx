@@ -69,11 +69,11 @@ export default function ThemingLayersPreview() {
             </SegmentedControl.Item>
           </SegmentedControl>
         </div>
-        <section className="rounded-xl border border-border bg-surface shadow-surface">
+        <section className="rounded-xl border border-border bg-panel shadow-panel">
           {orders.map(({ reference, status, variant }) => (
             <div
               key={reference}
-              className="flex h-12 items-center gap-3 border-b border-border-subtle px-4 last:border-0"
+              className="flex h-12 items-center gap-3 border-b border-border/60 px-4 last:border-0"
             >
               <Checkbox aria-label={`Select ${reference}`} />
               <span className="font-mono text-foreground-secondary">{reference}</span>

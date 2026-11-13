@@ -13,7 +13,7 @@
   /* the canvas the app sits on */
   --color-background: light-dark(oklch(100% 0 0), oklch(12% 0 0));
   /* anything raised over it: cards, panels, popovers, dialogs, toasts; a step lighter in dark, where shadows don't read */
-  --color-surface: light-dark(oklch(100% 0 0), oklch(15% 0 0));
+  --color-panel: light-dark(oklch(100% 0 0), oklch(15% 0 0));
   /* a region set apart from the canvas: sidebars, wells, app frames. Components use relative fills (foreground/5) instead */
   --color-background-secondary: light-dark(oklch(96% 0 0), oklch(16% 0 0));
   /* the face of inputs, outline buttons and checkboxes; translucent in dark, so a step lighter than what it sits on */
@@ -27,9 +27,8 @@
   /* Foreground at the end means it is used on top of the accent color */
   --color-accent-foreground: var(--color-background);
 
-  /* Translucent so the same contrast step holds on every surface. border-subtle: hairlines inside a surface */
+  /* Translucent so the same contrast step holds on every layer; for a fainter hairline use border-border/60 */
   --color-border: light-dark(oklch(0% 0 0 / 0.08), oklch(100% 0 0 / 0.12));
-  --color-border-subtle: light-dark(oklch(0% 0 0 / 0.05), oklch(100% 0 0 / 0.07));
 
   --color-ring: light-dark(
     color-mix(in oklab, var(--color-accent) 30%, transparent),
@@ -56,6 +55,13 @@
   /* Panel-item inset, derived from radius (collapses to flush items at --radius: 0) */
   --inset: calc(var(--radius) * 1.5 * var(--radius-bump));
 
+  /* Control heights: Button, Input, Select, Toggle and Pagination share them so controls line up side by side.
+     Retune here; --button-height / --input-height override a single control */
+  --control-height-xs: 1.5rem;
+  --control-height-sm: 2rem;
+  --control-height-md: 2.5rem;
+  --control-height-lg: 3rem;
+
   /* Focus ring */
   --ring-width: 4px;
 
@@ -70,7 +76,7 @@
   --shadow-control: 0 1px 2px oklch(0 0 0 / 0.03);
   --shadow-control-pressed: 0 0 #0000;
   /* Resting edge of a surface (cards, bordered tables); shadow-sm…lg are for things that float */
-  --shadow-surface: 0 1px 2px oklch(0 0 0 / 0.03);
+  --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.03);
 
   /* Press: controls shrink slightly; a raised theme sinks instead (--press-scale: 1; --press-offset: 1px) */
   --press-scale: 0.98;

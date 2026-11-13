@@ -418,7 +418,7 @@ const MenuItems = ({ ref: refProp, children, className, inline, ...props }: Menu
         returnFocus={!isNested}
         animate={!isNested}
         className={cn(
-          "z-50 max-h-(--max-height) w-56 scroll-py-(--inset) overflow-auto rounded-xl border border-border bg-surface font-medium text-foreground shadow-lg outline-none",
+          "z-50 max-h-(--max-height) w-56 scroll-py-(--inset) overflow-auto rounded-xl border border-border bg-panel font-medium text-foreground shadow-lg outline-none",
           className,
         )}
         {...popover.getFloatingProps(props)}

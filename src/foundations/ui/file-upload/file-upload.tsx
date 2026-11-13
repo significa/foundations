@@ -471,7 +471,7 @@ const FileUploadItem = ({
         data-status={status}
         data-error={error ? true : undefined}
         className={cn(
-          "flex items-center gap-3 rounded-xl border border-border bg-surface p-2 shadow-surface",
+          "flex items-center gap-3 rounded-xl border border-border bg-panel p-2 shadow-panel",
           "data-error:border-error/50",
           className,
         )}

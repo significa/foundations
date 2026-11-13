@@ -42,10 +42,10 @@ const buttonStyle = cva({
         "bg-error shadow-control ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-error/90 not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed",
     },
     size: {
-      xs: "rounded-lg px-2 text-sm [--button-height:--spacing(6)]",
-      sm: "rounded-lg px-3 text-sm [--button-height:--spacing(8)]",
-      md: "rounded-xl px-4 text-base [--button-height:--spacing(10)]",
-      lg: "rounded-2xl px-5 text-base [--button-height:--spacing(12)]",
+      xs: "rounded-lg px-2 text-sm [--button-height:var(--control-height-xs)]",
+      sm: "rounded-lg px-3 text-sm [--button-height:var(--control-height-sm)]",
+      md: "rounded-xl px-4 text-base [--button-height:var(--control-height-md)]",
+      lg: "rounded-2xl px-5 text-base [--button-height:var(--control-height-lg)]",
     },
     square: {
       true: "w-(--button-height) px-0",
