@@ -85,7 +85,7 @@ export const SCHEMES: Scheme[] = [
   // Warm cream + brown with burnt orange accent.
   buildScheme("gruvbox", "Gruvbox", {
     background: { light: "oklch(96% 0.025 85)", dark: "oklch(25% 0.015 70)" },
-    panel: { light: "oklch(96% 0.025 85)", dark: "oklch(28% 0.015 70" },
+    panel: { light: "oklch(96% 0.025 85)", dark: "oklch(28% 0.015 70)" },
     control: { light: "oklch(96% 0.025 85)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.03 85)",
@@ -111,7 +111,7 @@ export const SCHEMES: Scheme[] = [
   // Deep forest green palette.
   buildScheme("forest", "Forest", {
     background: { light: "oklch(96% 0.015 145)", dark: "oklch(22% 0.02 150)" },
-    panel: { light: "oklch(96% 0.015 145)", dark: "oklch(25% 0.02 150" },
+    panel: { light: "oklch(96% 0.015 145)", dark: "oklch(25% 0.02 150)" },
     control: { light: "oklch(96% 0.015 145)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.02 145)",
@@ -137,7 +137,7 @@ export const SCHEMES: Scheme[] = [
   // Frosty cool blue/gray (Nord-inspired).
   buildScheme("nord", "Nord", {
     background: { light: "oklch(97% 0.005 240)", dark: "oklch(28% 0.015 245)" },
-    panel: { light: "oklch(97% 0.005 240)", dark: "oklch(31% 0.015 245" },
+    panel: { light: "oklch(97% 0.005 240)", dark: "oklch(31% 0.015 245)" },
     control: { light: "oklch(97% 0.005 240)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(93% 0.01 240)",
@@ -163,7 +163,7 @@ export const SCHEMES: Scheme[] = [
   // Cream/teal (Solarized-inspired). Blue accent in light, yellow in dark.
   buildScheme("solarized", "Solarized", {
     background: { light: "oklch(96% 0.025 90)", dark: "oklch(28% 0.04 230)" },
-    panel: { light: "oklch(96% 0.025 90)", dark: "oklch(31% 0.04 230" },
+    panel: { light: "oklch(96% 0.025 90)", dark: "oklch(31% 0.04 230)" },
     control: { light: "oklch(96% 0.025 90)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.03 90)",
@@ -189,7 +189,7 @@ export const SCHEMES: Scheme[] = [
   // Soft rose / dusk purple (Rose Pine-inspired).
   buildScheme("rose", "Rose", {
     background: { light: "oklch(96% 0.015 30)", dark: "oklch(25% 0.02 290)" },
-    panel: { light: "oklch(96% 0.015 30)", dark: "oklch(28% 0.02 290" },
+    panel: { light: "oklch(96% 0.015 30)", dark: "oklch(28% 0.02 290)" },
     control: { light: "oklch(96% 0.015 30)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.02 30)",
@@ -215,7 +215,7 @@ export const SCHEMES: Scheme[] = [
   // Vibrant purple/magenta (Dracula-inspired).
   buildScheme("dracula", "Dracula", {
     background: { light: "oklch(96% 0.01 290)", dark: "oklch(25% 0.03 285)" },
-    panel: { light: "oklch(96% 0.01 290)", dark: "oklch(28% 0.03 285" },
+    panel: { light: "oklch(96% 0.01 290)", dark: "oklch(28% 0.03 285)" },
     control: { light: "oklch(96% 0.01 290)", dark: "oklch(100% 0 0 / 0.05)" },
     "background-secondary": {
       light: "oklch(92% 0.02 290)",
