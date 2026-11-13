@@ -215,6 +215,7 @@ const sliderThumbStyle = cva({
     // Thumb styles
     "[&::-webkit-slider-thumb]:transition",
     "[&::-webkit-slider-thumb]:h-(--thumb-size) [&::-webkit-slider-thumb]:w-(--thumb-size)",
+    // thumbs are opaque surfaces, not translucent controls: the filled track runs under them
     "[&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-border [&::-webkit-slider-thumb]:bg-surface [&::-webkit-slider-thumb]:shadow-control",
     "[&::-webkit-slider-thumb]:z-10 [&::-webkit-slider-thumb]:rounded-full",
     "[&::-moz-range-thumb]:transition",

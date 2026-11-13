@@ -12,6 +12,8 @@ dependencies:
     href: /ui/checkbox
   - name: SegmentedControl
     href: /ui/segmented-control
+  - name: Toggle
+    href: /ui/toggle
 
 folder: Guides
 ---
@@ -38,20 +40,39 @@ Two rules keep them composable:
 - **Name tokens by role, never by region.** `--color-sidebar` or `--color-toolbar` only fit one layout; when a sidebar needs a fill, use `background-secondary` or `surface`, and when it needs a new shade, change the value of the role.
 - **Steps are relative.** In dark mode shadows don't read, so `surface` is a step lighter than the canvas and `control` is a translucent veil that's always a step lighter than whatever it sits on. Borders are translucent for the same reason. Prefer translucent values when you add your own steps.
 
+### Cards
+
+There's no Card component: a card is a surface with a resting edge.
+
+```tsx
+<section className="rounded-xl border border-border bg-surface shadow-surface">…</section>
+```
+
+### Dark regions
+
+A dark bar inside a light page (a selection toolbar, a promo strip) needs no extra tokens. Put `scheme-dark` on the container and give it a fill: every token inside resolves to its dark value, so text, controls and borders adapt.
+
+```tsx
+<div className="bg-[oklch(25%_0.06_270)] text-foreground scheme-dark">…</div>
+```
+
+Shadows are the exception: they're baked in at build time (see Gotchas), so a raised theme keeps its light-mode edge inside the region.
+
 ## Depth comes from edges
 
 Many designs separate layers with edges, not fills: a card the same colour as the page with a white inner rim and a grey outer one, or a button with a highlight on top and a darker bottom edge. Look at edges up close before reaching for another background colour.
 
-Controls take their edge from two tokens, and the press from two more:
+Controls and resting surfaces take their edge from tokens, and the press from two more:
 
 | Token                      | Role                                                                     |
 | -------------------------- | ------------------------------------------------------------------------ |
 | `--shadow-control`         | The resting edge of buttons, inputs, checkboxes, radios and slider thumbs. |
 | `--shadow-control-pressed` | What the edge collapses to while a button is pressed.                    |
+| `--shadow-surface`         | The resting edge of a surface: cards, bordered tables, file rows.        |
 | `--press-scale`            | How much a button shrinks when pressed (`0.98` by default).              |
 | `--press-offset`           | How far a button sinks when pressed (`0px` by default).                  |
 
-`--shadow-sm` to `--shadow-lg` stay for things that float: popovers, menus, dialogs, toasts.
+`--shadow-sm` to `--shadow-lg` stay for things that float: popovers, menus, dialogs, toasts. Keep resting edges weaker than floating ones, so a card never reads as a popover.
 
 ### Recipes
 
@@ -100,7 +121,23 @@ Every [Badge](/ui/badge) variant is one colour: fill, ring and text derive from 
 <Badge className="[--badge-color:var(--color-violet-600)]">Story video</Badge>
 ```
 
-`--badge-fill` and `--badge-ring` set the strength of the tint (10% and 20%; the neutral variant uses 5% and 10%). Set them in a class, or in the base of `badgeStyle` to change every badge.
+`--badge-fill` and `--badge-ring` set the strength of the tint (10% and 20%; the neutral variant uses 5% and 10%), and `--badge-text` the text colour. A solid badge is a fill at full strength:
+
+```tsx
+<Badge variant="success" className="[--badge-fill:100%] [--badge-text:var(--color-background)]">New</Badge>
+```
+
+Set them in a class, or in the base of `badgeStyle` when a design's badges are all solid.
+
+## Selected toggles
+
+A pressed [Toggle](/ui/toggle) is a faint tint by default. For a solid chip, set the pressed fill and text; hover moves the fill toward the text colour either way:
+
+```tsx
+<Toggle className="[--button-pressed-bg:var(--color-foreground)] [--button-pressed-text:var(--color-background)]">
+  Selected
+</Toggle>
+```
 
 ## Custom tokens and `cn`
 

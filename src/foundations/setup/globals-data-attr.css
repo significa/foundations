@@ -74,6 +74,8 @@
      Flat: 0 0 #0000. Raised: inset top highlight, 1px ring, darker bottom edge, soft contact shadow */
   --shadow-control: 0 1px 2px oklch(0 0 0 / 0.03);
   --shadow-control-pressed: 0 0 #0000;
+  /* Resting edge of a surface (cards, bordered tables); shadow-sm…lg are for things that float */
+  --shadow-surface: 0 1px 2px oklch(0 0 0 / 0.03);
 
   /* Press: controls shrink slightly; a raised theme sinks instead (--press-scale: 1; --press-offset: 1px) */
   --press-scale: 0.98;

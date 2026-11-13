@@ -28,7 +28,7 @@ const TableContainer = ({ ref, className, bordered = true, ...props }: TableCont
       ref={ref}
       className={cn(
         "relative w-full overflow-x-auto",
-        bordered && "rounded-lg border border-border shadow-xs",
+        bordered && "rounded-lg border border-border shadow-surface",
         className,
       )}
       {...props}

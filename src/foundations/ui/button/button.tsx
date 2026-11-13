@@ -25,10 +25,10 @@ const buttonStyle = cva({
     "in-data-ui-button-group:in-data-[orientation=vertical]:not-last:border-b-0",
     "in-data-ui-button-group:in-data-[orientation=vertical]:not-first:rounded-t-none",
     "in-data-ui-button-group:in-data-[orientation=vertical]:not-first:border-t-0",
-    // pressed state — set via data-pressed by Toggle / ToggleGroup.Item.
-    // Subtle filled tint that layers over `ghost` and `outline` without flipping
-    // the text color; the higher selector specificity beats the variant background.
-    "data-pressed:bg-foreground/10 data-pressed:not-disabled:not-aria-disabled:hover:bg-foreground/15",
+    // pressed state — set via data-pressed by Toggle / ToggleGroup.Item. A faint tint by default;
+    // set --button-pressed-bg/--button-pressed-text for a solid chip. Hover moves the fill toward the text.
+    "[--button-pressed-bg:color-mix(in_oklab,var(--color-foreground)_10%,transparent)] [--button-pressed-text:var(--button-text-color)]",
+    "data-pressed:bg-(--button-pressed-bg) data-pressed:text-(--button-pressed-text) data-pressed:not-disabled:not-aria-disabled:hover:bg-[color-mix(in_oklab,var(--button-pressed-bg),currentColor_10%)]",
   ],
   variants: {
     variant: {
@@ -37,7 +37,7 @@ const buttonStyle = cva({
       outline:
         "border border-border bg-control shadow-control not-disabled:not-aria-disabled:hover:bg-mix-control/3 not-in-data-ui-button-group:focus-visible:border-accent not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed in-data-ui-button-group:not-aria-disabled:active:bg-foreground/4",
       ghost:
-        "border-none bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:not-aria-disabled:active:bg-foreground/10",
+        "bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:not-aria-disabled:active:bg-foreground/10",
       destructive:
         "bg-error shadow-control ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-error/90 not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed",
     },

@@ -39,6 +39,7 @@ surface. Add the new tokens to your setup CSS before copying any updated compone
 - --corner-shape: squircle;
 + --shadow-control: 0 1px 2px oklch(0 0 0 / 0.03);
 + --shadow-control-pressed: 0 0 #0000;
++ --shadow-surface: 0 1px 2px oklch(0 0 0 / 0.03);
 + --press-scale: 0.98;
 + --press-offset: 0px;
 }
@@ -53,10 +54,19 @@ Also in this change:
 - **Badge.** Fill, ring and text derive from `--badge-color` at `--badge-fill` and `--badge-ring`
   strength; set them in a class for any other colour. The neutral badge is now a faint grey tint
   instead of white, with full-strength text.
-- **`cn`.** `classnames.ts` registers `shadow-control` with tailwind-merge (`extendTailwindMerge`),
-  so `className="shadow-none"` replaces it. Register your own custom shadows, text sizes and radii
-  there too.
-- **Input** height reads `--input-height`, like Button's `--button-height`.
+- **`cn`.** Update `classnames.ts`: it registers the new shadows with tailwind-merge, without which
+  `className="shadow-none"` sits beside `shadow-control` instead of replacing it.
+
+### Fixed: ghost `Button` hides a border you pass
+
+The ghost variant set `border-none`, so `className="border-l"` added a width but no visible border.
+Remove it from your copy:
+
+```diff tsx
+  ghost:
+-   "border-none bg-transparent shadow-none ring-0 …",
++   "bg-transparent shadow-none ring-0 …",
+```
 
 ### Fixed: `Menu` loses focus when the focused item unmounts
 

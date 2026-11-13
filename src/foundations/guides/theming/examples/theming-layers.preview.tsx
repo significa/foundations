@@ -69,7 +69,7 @@ export default function ThemingLayersPreview() {
             </SegmentedControl.Item>
           </SegmentedControl>
         </div>
-        <section className="rounded-xl border border-border bg-surface shadow-sm">
+        <section className="rounded-xl border border-border bg-surface shadow-surface">
           {orders.map(({ reference, status, variant }) => (
             <div
               key={reference}
@@ -83,6 +83,13 @@ export default function ThemingLayersPreview() {
             </div>
           ))}
         </section>
+        <div className="flex items-center gap-3 rounded-xl bg-[oklch(25%_0.06_270)] p-3 text-foreground scheme-dark">
+          <span>2 selected</span>
+          <Button variant="outline" size="sm" className="ml-auto">
+            Compare
+          </Button>
+          <Input size="sm" placeholder="Note" className="w-32" />
+        </div>
       </main>
     </div>
   );
