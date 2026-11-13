@@ -74,8 +74,10 @@ is the vendored PostHog loader (docs-site only), whose inline script ships verba
 
 Tailwind classes are sorted by `nursery/useTailwindSortedClasses` (error, safe
 fix) in `class`, `className`, `class:list`, `cn`, `cva`, `clsx` and `tv`. `tailwind.stylesheet` points at
-`src/styles/global.css` so custom theme values sort correctly; `pnpm lint` applies
-the fixes, and CI fails on unsorted classes.
+the setup CSS (`src/foundations/setup/globals-data-attr.css`) so custom theme values sort
+correctly and component classes sort as they will in a consumer's copy; the docs site's own
+`@utility` overrides in `src/styles/global.css` would otherwise reorder them. `pnpm lint`
+applies the fixes, and CI fails on unsorted classes.
 
 ### Formatting rules
 

@@ -4,6 +4,20 @@
 
 @import "./markdown.css";
 
+/* Docs-site only: read the role shadows at runtime so the Style switcher can swap them */
+@utility shadow-control {
+  /* biome-ignore lint/complexity/noImportantStyles: must beat the value Tailwind bakes into the core rule */
+  --tw-shadow: var(--shadow-control) !important;
+}
+@utility shadow-control-pressed {
+  /* biome-ignore lint/complexity/noImportantStyles: must beat the value Tailwind bakes into the core rule */
+  --tw-shadow: var(--shadow-control-pressed) !important;
+}
+@utility shadow-panel {
+  /* biome-ignore lint/complexity/noImportantStyles: must beat the value Tailwind bakes into the core rule */
+  --tw-shadow: var(--shadow-panel) !important;
+}
+
 @font-face {
   font-family: "Inter";
   src: url("/fonts/InterVariable.woff2") format("woff2");
