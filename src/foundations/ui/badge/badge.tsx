@@ -4,9 +4,9 @@ import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { cn, cva } from "#/lib/utils/classnames.ts";
 
 // Every variant is one colour: fill, ring and text derive from --badge-color, at --badge-fill and --badge-ring
-// strength; --badge-text overrides the text (solid: [--badge-fill:100%] [--badge-text:var(--color-background)]). Any other colour is a class away: <Badge className="[--badge-color:var(--color-violet-600)]">
+// strength. Text is the colour mixed toward the foreground so it passes AA; --badge-text overrides it (solid: [--badge-fill:100%] [--badge-text:var(--color-background)]). Any other colour is a class away: <Badge className="[--badge-color:var(--color-violet-600)]">
 const badgeStyle = cva({
-  base: "inline-flex shrink-0 items-center gap-1 rounded-full bg-(--badge-color)/(--badge-fill) leading-none font-semibold whitespace-nowrap text-(--badge-text) ring-1 ring-(--badge-color)/(--badge-ring) [--badge-color:var(--color-foreground)] [--badge-fill:10%] [--badge-ring:20%] [--badge-text:var(--badge-color)] ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",
+  base: "inline-flex shrink-0 items-center gap-1 rounded-full bg-(--badge-color)/(--badge-fill) leading-none font-semibold whitespace-nowrap text-(--badge-text) ring-1 ring-(--badge-color)/(--badge-ring) [--badge-color:var(--color-foreground)] [--badge-fill:10%] [--badge-ring:20%] [--badge-text:color-mix(in_oklab,var(--badge-color),var(--color-foreground)_35%)] ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",
   variants: {
     variant: {
       neutral: "[--badge-fill:5%] [--badge-ring:10%]",

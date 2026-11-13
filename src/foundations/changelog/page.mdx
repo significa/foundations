@@ -36,6 +36,8 @@ Borders are translucent, so they hold the same contrast on every surface. Add th
 - --color-background-secondary: light-dark(oklch(96% 0 0), oklch(22% 0 0));
 + --color-background-secondary: light-dark(oklch(96% 0 0), oklch(16% 0 0));
 + --color-control: light-dark(oklch(100% 0 0), oklch(100% 0 0 / 0.05));
+- --color-foreground-secondary: light-dark(oklch(65% 0 0), oklch(53% 0 0));
++ --color-foreground-secondary: light-dark(oklch(54% 0 0), oklch(60% 0 0));
 - --color-border: light-dark(oklch(94% 0 0), oklch(26% 0 0));
 + --color-border: light-dark(oklch(0% 0 0 / 0.08), oklch(100% 0 0 / 0.12));
 + --color-border-subtle: light-dark(oklch(0% 0 0 / 0.05), oklch(100% 0 0 / 0.07));
@@ -54,6 +56,9 @@ Also in this change:
 - **Corners.** `--corner-shape` is gone. Squircles and the radius bump that compensates them now
   live in one `@supports` block at the end of the setup CSS; delete it for round corners. Setting
   `--corner-shape: round` used to leave every radius 1.6× too large in Chromium.
+- **Contrast.** `--color-foreground-secondary` and badge text now pass WCAG AA (4.5:1). Secondary text
+  was 2.9–3.8:1 and status badges as low as 1.8:1 (warning); the secondary value is now
+  `light-dark(oklch(54% 0 0), oklch(60% 0 0))` and badge text mixes its colour 35% toward the foreground.
 - **Badge.** Fill, ring and text derive from `--badge-color` at `--badge-fill` and `--badge-ring`
   strength; set them in a class for any other colour. The neutral badge is now a faint grey tint
   instead of white, with full-strength text.
