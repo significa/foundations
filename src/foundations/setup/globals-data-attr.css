@@ -46,7 +46,7 @@
   --color-success: oklch(69.6% 0.17 162.48);
   --color-info: oklch(62.3% 0.214 259.815);
 
-  /* Border radius — --radius is the dial; --radius-bump compensates squircles in supporting browsers (see @supports below) */
+  /* Border radius — --radius is the dial; --radius-bump grows it for squircles (the @supports block at the end) */
   --radius: 0.125rem;
   --radius-bump: 1;
   --radius-xs: calc(var(--radius) * 1 * var(--radius-bump));

@@ -50,8 +50,9 @@ Also in this change:
 - **Corners.** `--corner-shape` is gone. Squircles and the radius bump that compensates them now
   live in one `@supports` block at the end of the setup CSS; delete it for round corners. Setting
   `--corner-shape: round` used to leave every radius 1.6× too large in Chromium.
-- **Badge.** Fill, ring and text derive from `--badge-color`; set it in a class for any other
-  colour. The neutral badge is now a faint grey tint instead of white.
+- **Badge.** Fill, ring and text derive from `--badge-color` at `--badge-fill` and `--badge-ring`
+  strength; set them in a class for any other colour. The neutral badge is now a faint grey tint
+  instead of white, with full-strength text.
 - **`cn`.** `classnames.ts` registers `shadow-control` with tailwind-merge (`extendTailwindMerge`),
   so `className="shadow-none"` replaces it. Register your own custom shadows, text sizes and radii
   there too.
