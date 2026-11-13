@@ -32,6 +32,8 @@ const config: KnipConfig = {
     "src/**/page.mdx",
     // Imported in the setup page's MDX body; pulls in its .tsx island too.
     "src/components/setup-css-tabs.astro",
+    // Imported in the theming page's MDX body.
+    "src/components/style-recipes.astro",
     "astro.config.*",
     "scripts/*.mjs",
   ],

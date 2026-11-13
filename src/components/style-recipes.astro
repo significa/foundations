@@ -1,0 +1,24 @@
+---
+import { Code } from "astro:components";
+import { STYLES, styleCss } from "#/components/ds-config/styles.ts";
+import { themes } from "#/lib/shiki.ts";
+import CodeBlock from "./code-block.astro";
+
+const recipes = STYLES.filter((style) => Object.keys(style.tokens).length > 0);
+
+// Descriptions mark code with backticks, as in the llms.txt output
+const segments = (text: string) =>
+  text.split("`").map((part, index) => ({ part, isCode: index % 2 === 1 }));
+---
+
+{recipes.map((style) => (
+  <>
+    <p>
+      <strong>{style.label}:</strong>{" "}
+      {segments(style.description).map(({ part, isCode }) => (isCode ? <code>{part}</code> : part))}
+    </p>
+    <CodeBlock>
+      <Code slot="pre" code={styleCss(style)} lang="css" themes={themes} />
+    </CodeBlock>
+  </>
+))}

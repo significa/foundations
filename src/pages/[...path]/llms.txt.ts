@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { APIRoute } from "astro";
 import z from "zod";
+import { STYLES, styleCss } from "#/components/ds-config/styles.ts";
 import { getPageVersion } from "#/lib/utils/content.ts";
 import type { MdxTree } from "#/lib/utils/markdown.ts";
 import {
@@ -25,6 +26,8 @@ const SETUP_CSS_FILES = {
 };
 
 const REACT_TYPES_FILE = "src/react.d.ts";
+
+const STYLES_FILE = "src/components/ds-config/styles.ts";
 
 // Code spans keep generics like `RefObject<HTMLElement>` from reading as tags; pipes are escaped for GFM tables
 const inlineCode = (value: string) => `\`${value.replaceAll("|", "\\|")}\``;
@@ -68,6 +71,19 @@ const resolveComponents = createComponentResolver([
         'Set `data-theme="light"` or `data-theme="dark"` on `<html>` to switch themes.',
         "",
         await code(path.join(process.cwd(), SETUP_CSS_FILES.dataAttr)),
+      ),
+  }),
+  defineComponent({
+    name: "StyleRecipes",
+    props: z.object({}),
+    parser: () =>
+      markdown(
+        ...STYLES.filter((style) => Object.keys(style.tokens).length > 0).flatMap((style) => [
+          `**${style.label}:** ${style.description}`,
+          "",
+          `\`\`\`css\n${styleCss(style)}\n\`\`\``,
+          "",
+        ]),
       ),
   }),
   defineComponent({
@@ -120,7 +136,7 @@ const getPreviewFiles = async (tree: MdxTree) => {
 
 /**
  * Every source file a page emits as code (repo-relative): `files`, `<SourceCode>`,
- * `<SetupCssTabs>` and `<Preview>` sources.
+ * `<SetupCssTabs>`, `<StyleRecipes>` and `<Preview>` sources.
  */
 const getEmittedSourceFiles = (page: Page, tree: MdxTree, previewFiles: string[]) => {
   const sourceCodeFiles = findComponentProps(tree, "SourceCode").flatMap((p) =>
@@ -131,7 +147,15 @@ const getEmittedSourceFiles = (page: Page, tree: MdxTree, previewFiles: string[]
       ? [SETUP_CSS_FILES.prefersScheme, SETUP_CSS_FILES.dataAttr]
       : [];
 
-  return [...(page.data.files ?? []), ...sourceCodeFiles, ...setupCssFiles, ...previewFiles];
+  const styleFiles = findComponentProps(tree, "StyleRecipes").length > 0 ? [STYLES_FILE] : [];
+
+  return [
+    ...(page.data.files ?? []),
+    ...sourceCodeFiles,
+    ...setupCssFiles,
+    ...styleFiles,
+    ...previewFiles,
+  ];
 };
 
 type DependencyEntry = {
