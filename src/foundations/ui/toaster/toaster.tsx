@@ -373,7 +373,17 @@ const ToasterItem = ({ toast, onDismiss }: ToasterItemProps) => {
           className={cn("pr-6 text-sm", swapIn, "motion-safe:starting:scale-100")}
         >
           <p className="font-medium">{title}</p>
-          {description && <p className="mt-0.5 text-xs text-pretty opacity-70">{description}</p>}
+          {description && (
+            <p
+              className={cn(
+                "mt-0.5 text-xs text-pretty",
+                // status text is barely AA at full strength, so any fade fails
+                (variant === "default" || variant === "loading") && "opacity-70",
+              )}
+            >
+              {description}
+            </p>
+          )}
         </div>
         <ToastCloseButton onClick={onDismiss} />
       </div>

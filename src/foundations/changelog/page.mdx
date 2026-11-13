@@ -24,6 +24,20 @@ The same tint now sits over `--color-panel`, so they're opaque like the default 
 + variant === "negative" && "border-error/20 bg-mix-panel/10 text-error mix-with-error",
 ```
 
+Their description also loses `opacity-70`; faded, it fell below WCAG AA (as low as 2.9:1):
+
+```diff tsx
+- <p className="mt-0.5 text-xs text-pretty opacity-70">{description}</p>
++ <p
++   className={cn(
++     "mt-0.5 text-xs text-pretty",
++     (variant === "default" || variant === "loading") && "opacity-70",
++   )}
++ >
++   {description}
++ </p>
+```
+
 ### Fixed: a loading pressed `Button` lost its spinner
 
 The spinner always took `--button-text-color`, ignoring `--button-pressed-text`. With the solid
