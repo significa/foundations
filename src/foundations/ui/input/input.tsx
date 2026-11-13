@@ -20,7 +20,7 @@ const inputFrameVariants = {
     "border-border bg-control shadow-control hover:border-[color-mix(in_oklab,var(--color-border),var(--color-foreground)_8%)]",
   ],
   minimal: [
-    "border-transparent bg-transparent hover:bg-background-secondary [:focus-visible,:has(:focus-visible)]:bg-control",
+    "border-transparent bg-transparent hover:bg-foreground/5 [:focus-visible,:has(:focus-visible)]:bg-control",
   ],
 };
 

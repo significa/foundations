@@ -149,7 +149,7 @@ const TabsIndicator = () => {
         "pointer-events-none absolute z-0",
         "transition-[top,right,bottom,left] duration-300 ease-spring motion-reduce:transition-none",
         variant === "pill" && [
-          "rounded-xl bg-background-secondary",
+          "rounded-xl bg-foreground/5",
           "top-[anchor(var(--tab-anchor)_top)] right-[anchor(var(--tab-anchor)_right)] bottom-[anchor(var(--tab-anchor)_bottom)] left-[anchor(var(--tab-anchor)_left)]",
         ],
         variant === "underline" &&

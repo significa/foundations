@@ -362,7 +362,7 @@ const Calendar = ({
                     <div
                       aria-hidden
                       className={cn(
-                        "invisible absolute inset-x-0 inset-y-0.5 z-0 bg-background-secondary",
+                        "invisible absolute inset-x-0 inset-y-0.5 z-0 bg-foreground/5",
                         "group-data-in-range:visible",
                         "group-data-start-date:visible group-data-start-date:left-1/2",
                         "group-data-end-date:visible group-data-end-date:right-1/2",

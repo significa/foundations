@@ -6,7 +6,7 @@ import { cn, cva } from "#/lib/utils/classnames.ts";
 const kbdStyle = cva({
   base: [
     "inline-flex h-(--kbd-height) min-w-(--kbd-height) shrink-0 items-center justify-center",
-    "rounded-md border border-border bg-background-secondary",
+    "rounded-md border border-border bg-foreground/5",
     "font-mono leading-none text-foreground",
     // 2px hard shadow visually weighs the bottom; lift 1px to optically center
     // against surrounding text.

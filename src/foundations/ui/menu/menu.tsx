@@ -349,7 +349,7 @@ const itemTriggerStyle = cva({
     "text-base font-medium text-foreground/80 outline-none",
     "first-of-type:mt-(--inset) last-of-type:mb-(--inset)",
     "data-disabled:pointer-events-none data-disabled:opacity-50",
-    "active:bg-background-secondary data-highlighted:bg-background-secondary data-[state=open]:bg-background-secondary",
+    "active:bg-foreground/5 data-highlighted:bg-foreground/5 data-[state=open]:bg-foreground/5",
   ],
 });
 
@@ -438,8 +438,7 @@ const itemStyle = cva({
   ],
   variants: {
     variant: {
-      default:
-        "text-foreground/80 active:bg-background-secondary data-highlighted:bg-background-secondary",
+      default: "text-foreground/80 active:bg-foreground/5 data-highlighted:bg-foreground/5",
       destructive: "text-error active:bg-error/10 data-highlighted:bg-error/10",
     },
   },

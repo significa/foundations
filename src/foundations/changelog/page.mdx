@@ -20,8 +20,10 @@ Popovers, menus, listboxes, dialogs, drawers and toasts use `bg-surface`; inputs
 checkboxes, radios and the segmented-control indicator use `bg-control`; their edge comes from
 `shadow-control`, and a pressed button from `--press-scale`, `--press-offset` and
 `shadow-control-pressed`. Light mode looks the same; in dark mode surfaces and controls are now a
-step lighter than the canvas. Borders are translucent, so they hold the same contrast on every
-surface. Add the new tokens to your setup CSS before copying any updated component:
+step lighter than the canvas, and `background-secondary` steps as gently as it does in light.
+Highlights, hover fills and tracks (Menu, Tabs, SegmentedControl, Kbd, Calendar ranges, the minimal
+Input) use `bg-foreground/5` instead of `bg-background-secondary`, so they show on any layer.
+Borders are translucent, so they hold the same contrast on every surface. Add the new tokens to your setup CSS before copying any updated component:
 
 ```diff css
 @theme {
@@ -30,8 +32,9 @@ surface. Add the new tokens to your setup CSS before copying any updated compone
 + --font-heading: var(--font-body);
 + --font-mono: ui-monospace, monospace;
   --color-background: light-dark(oklch(100% 0 0), oklch(12% 0 0));
-+ --color-surface: light-dark(oklch(100% 0 0), oklch(17% 0 0));
-  --color-background-secondary: light-dark(oklch(96% 0 0), oklch(22% 0 0));
++ --color-surface: light-dark(oklch(100% 0 0), oklch(15% 0 0));
+- --color-background-secondary: light-dark(oklch(96% 0 0), oklch(22% 0 0));
++ --color-background-secondary: light-dark(oklch(96% 0 0), oklch(16% 0 0));
 + --color-control: light-dark(oklch(100% 0 0), oklch(100% 0 0 / 0.05));
 - --color-border: light-dark(oklch(94% 0 0), oklch(26% 0 0));
 + --color-border: light-dark(oklch(0% 0 0 / 0.08), oklch(100% 0 0 / 0.12));

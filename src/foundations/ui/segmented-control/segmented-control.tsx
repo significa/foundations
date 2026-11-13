@@ -126,7 +126,7 @@ const SegmentedControl = ({
     <SegmentedControlContext value={ctx}>
       <div
         role="radiogroup"
-        className={cn("relative isolate flex rounded-2xl bg-background-secondary p-1", className)}
+        className={cn("relative isolate flex rounded-2xl bg-foreground/5 p-1", className)}
         {...props}
       >
         {children}

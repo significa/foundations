@@ -13,9 +13,9 @@
   /* the canvas the app sits on */
   --color-background: light-dark(oklch(100% 0 0), oklch(12% 0 0));
   /* anything raised over it: cards, panels, popovers, dialogs, toasts; a step lighter in dark, where shadows don't read */
-  --color-surface: light-dark(oklch(100% 0 0), oklch(17% 0 0));
-  /* a quiet fill that sets an area apart: wells, tracks, sidebars, hover */
-  --color-background-secondary: light-dark(oklch(96% 0 0), oklch(22% 0 0));
+  --color-surface: light-dark(oklch(100% 0 0), oklch(15% 0 0));
+  /* a region set apart from the canvas: sidebars, wells, app frames. Components use relative fills (foreground/5) instead */
+  --color-background-secondary: light-dark(oklch(96% 0 0), oklch(16% 0 0));
   /* the face of inputs, outline buttons and checkboxes; translucent in dark, so a step lighter than what it sits on */
   --color-control: light-dark(oklch(100% 0 0), oklch(100% 0 0 / 0.05));
 

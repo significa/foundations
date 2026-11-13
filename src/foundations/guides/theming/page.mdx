@@ -30,7 +30,7 @@ A polished interface is layered: an app frame, a canvas, cards and popovers over
 | ------------------------------ | --------------------------------------------------------------------------------------- |
 | `--color-background`           | The canvas the app sits on.                                                             |
 | `--color-surface`              | Anything raised over it: cards, panels, popovers, menus, dialogs, drawers, toasts.      |
-| `--color-background-secondary` | A quiet fill that sets an area apart: wells, tracks, sidebars, hover.                   |
+| `--color-background-secondary` | A region set apart from the canvas: sidebars, wells, app frames.                        |
 | `--color-control`              | The face of inputs, outline buttons, checkboxes and segmented controls.                 |
 | `--color-border`               | Edges of controls and surfaces. Translucent, so the step is the same on every surface.  |
 | `--color-border-subtle`        | Hairlines inside a surface: row separators, dividers.                                   |
@@ -38,7 +38,7 @@ A polished interface is layered: an app frame, a canvas, cards and popovers over
 Two rules keep them composable:
 
 - **Name tokens by role, never by region.** `--color-sidebar` or `--color-toolbar` only fit one layout; when a sidebar needs a fill, use `background-secondary` or `surface`, and when it needs a new shade, change the value of the role.
-- **Steps are relative.** In dark mode shadows don't read, so `surface` is a step lighter than the canvas and `control` is a translucent veil that's always a step lighter than whatever it sits on. Borders are translucent for the same reason. Prefer translucent values when you add your own steps.
+- **Steps are relative.** In dark mode shadows don't read, so `surface` is a step lighter than the canvas and `control` is a translucent veil that's always a step lighter than whatever it sits on. Borders are translucent for the same reason, and so are the fills components draw inside a layer (hover, highlighted items, tracks: `bg-foreground/5`). Keep the steps between layers small; a few points of lightness is enough. Prefer translucent values when you add your own steps.
 
 ### Cards
 
