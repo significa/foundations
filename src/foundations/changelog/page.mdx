@@ -12,6 +12,18 @@ meta:
 
 ## November 2026
 
+### Fixed: status toasts were see-through
+
+Positive and negative toasts painted only a 10% tint, so whatever sat behind them showed through.
+The same tint now sits over `--color-panel`, so they're opaque like the default toast:
+
+```diff tsx
+- variant === "positive" && "border-success/20 bg-success/10 text-success",
+- variant === "negative" && "border-error/20 bg-error/10 text-error",
++ variant === "positive" && "border-success/20 bg-mix-panel/10 text-success mix-with-success",
++ variant === "negative" && "border-error/20 bg-mix-panel/10 text-error mix-with-error",
+```
+
 ### Fixed: a loading pressed `Button` lost its spinner
 
 The spinner always took `--button-text-color`, ignoring `--button-pressed-text`. With the solid
