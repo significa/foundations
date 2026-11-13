@@ -3,15 +3,17 @@ import type { VariantProps } from "cva";
 import { Slot } from "#/foundations/components/slot/slot.tsx";
 import { cn, cva } from "#/lib/utils/classnames.ts";
 
+// Every variant is one colour: fill, ring and text derive from --badge-color, at --badge-fill and --badge-ring
+// strength. Text keeps the colour's hue and chroma, with lightness capped so it passes AA (≤ 0.48 in light, ≥ 0.66 in dark); --badge-text overrides it (solid: [--badge-fill:100%] [--badge-text:var(--color-background)]). Any other colour is a class away: <Badge className="[--badge-color:var(--color-violet-600)]">
 const badgeStyle = cva({
-  base: "inline-flex shrink-0 items-center gap-1 rounded-full leading-none font-semibold whitespace-nowrap ring-1 ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",
+  base: "inline-flex shrink-0 items-center gap-1 rounded-full bg-(--badge-color)/(--badge-fill) leading-none font-semibold whitespace-nowrap text-(--badge-text) ring-1 ring-(--badge-color)/(--badge-ring) [--badge-color:var(--color-foreground)] [--badge-fill:10%] [--badge-ring:20%] [--badge-text:light-dark(oklch(from_var(--badge-color)_min(l,0.48)_c_h),oklch(from_var(--badge-color)_max(l,0.66)_c_h))] ring-inset [&>[data-badge-icon]:first-child]:-ml-0.5 [&>[data-badge-icon]:last-child]:-mr-0.5",
   variants: {
     variant: {
-      neutral: "bg-background text-foreground/80 ring-foreground/10",
-      success: "bg-success/10 text-success ring-success/20",
-      error: "bg-error/10 text-error ring-error/20",
-      warning: "bg-warning/10 text-warning ring-warning/20",
-      info: "bg-info/10 text-info ring-info/20",
+      neutral: "[--badge-fill:5%] [--badge-ring:10%]",
+      success: "[--badge-color:var(--color-success)]",
+      error: "[--badge-color:var(--color-error)]",
+      warning: "[--badge-color:var(--color-warning)]",
+      info: "[--badge-color:var(--color-info)]",
     },
     size: {
       md: "h-6 px-2.5 text-sm",

@@ -12,6 +12,129 @@ meta:
 
 ## November 2026
 
+### Changed: theme roles for surfaces, controls and edges
+
+Components now name the layer they paint instead of reusing `background` for everything, so a theme
+can make them flat, raised or embossed by changing values (see the [Theming](/theming) guide).
+Popovers, menus, listboxes, dialogs, drawers, toasts, bordered tables and file rows use `bg-panel`; inputs, outline buttons,
+checkboxes, radios and the segmented-control indicator use `bg-control`; their edge comes from
+`shadow-control`, and a pressed button from `--press-scale`, `--press-offset` and
+`shadow-control-pressed`. Button, Input and Pagination heights come from `--control-height-*`.
+Light-mode layers are unchanged; in dark mode panels and controls are now a
+step lighter than the canvas, and `background-secondary` steps as gently as it does in light.
+Highlights, hover fills and tracks (Menu, Tabs, SegmentedControl, Kbd, Calendar ranges, the minimal
+Input) use `bg-foreground/5` instead of `bg-background-secondary`, so they show on any layer.
+Borders are translucent, so they hold the same contrast on every layer, and separators inside a
+layer (table rows, menu sections, Divider, the tabs track, the popover header) use the fainter
+`border-subtle`. Add the new tokens to your setup CSS before copying any updated component:
+
+```diff css
+@theme {
++ --font-body: ui-sans-serif, system-ui, sans-serif;
++ --font-ui: var(--font-body);
++ --font-heading: var(--font-body);
++ --font-mono: ui-monospace, monospace;
+  --color-background: light-dark(oklch(100% 0 0), oklch(12% 0 0));
++ --color-panel: light-dark(oklch(100% 0 0), oklch(15% 0 0));
+- --color-background-secondary: light-dark(oklch(96% 0 0), oklch(22% 0 0));
++ --color-background-secondary: light-dark(oklch(96% 0 0), oklch(16% 0 0));
++ --color-control: light-dark(oklch(100% 0 0), oklch(100% 0 0 / 0.05));
+- --color-foreground-secondary: light-dark(oklch(65% 0 0), oklch(53% 0 0));
++ --color-foreground-secondary: light-dark(oklch(54% 0 0), oklch(62% 0 0));
+- --color-border: light-dark(oklch(94% 0 0), oklch(26% 0 0));
++ --color-border: light-dark(oklch(0% 0 0 / 0.08), oklch(100% 0 0 / 0.12));
++ --color-border-subtle: light-dark(oklch(0% 0 0 / 0.05), oklch(100% 0 0 / 0.07));
+- --corner-shape: squircle;
++ --shadow-control: 0 1px 2px oklch(0 0 0 / 0.03);
++ --shadow-control-pressed: 0 0 transparent;
++ --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.03);
++ --press-scale: 0.98;
++ --press-offset: 0px;
++ --control-height-xs: 1.5rem;
++ --control-height-sm: 2rem;
++ --control-height-md: 2.5rem;
++ --control-height-lg: 3rem;
+}
+```
+
+Also in this change:
+
+- **Fonts.** The setup CSS read `--font-ui` but never defined it; the four font roles are back.
+- **Corners.** `--corner-shape` is gone. Squircles and the radius bump that compensates them now
+  live in one `@supports` block at the end of the setup CSS; delete it for round corners. Setting
+  `--corner-shape: round` used to leave every radius 1.6× too large in Chromium. Replace the
+  old rules at the end of the file:
+
+  ```diff css
+  - * {
+  -   corner-shape: var(--corner-shape);
+  - }
+  - .rounded-full {
+  -   corner-shape: round;
+  - }
+  - @supports (corner-shape: squircle) {
+  -   :root {
+  -     --radius-bump: 1.6;
+  -   }
+  - }
+  + @supports (corner-shape: squircle) {
+  +   :root {
+  +     --radius-bump: 1.6;
+  +   }
+  +   * {
+  +     corner-shape: squircle;
+  +   }
+  +   .rounded-full {
+  +     corner-shape: round;
+  +   }
+  + }
+  ```
+- **Status colours.** In light mode `--color-success`, `--color-error`, `--color-warning` and
+  `--color-info` are now dark enough to pass WCAG AA as text (field errors, toasts, destructive menu
+  items) and to carry white text as a fill. Warning moves from yellow to amber, since a yellow that
+  dark reads as olive. Dark mode is unchanged.
+
+  ```diff css
+  - --color-error: oklch(63.7% 0.237 25.331);
+  - --color-warning: oklch(79.5% 0.184 86.047);
+  - --color-success: oklch(69.6% 0.17 162.48);
+  - --color-info: oklch(62.3% 0.214 259.815);
+  + --color-error: light-dark(oklch(48% 0.237 25.331), oklch(63.7% 0.237 25.331));
+  + --color-warning: light-dark(oklch(48% 0.184 75), oklch(79.5% 0.184 86.047));
+  + --color-success: light-dark(oklch(46% 0.17 162.48), oklch(69.6% 0.17 162.48));
+  + --color-info: light-dark(oklch(48% 0.214 259.815), oklch(62.3% 0.214 259.815));
+  ```
+
+- **Contrast.** `--color-foreground-secondary` and badge text now pass WCAG AA (4.5:1). Secondary text
+  was 2.9–3.8:1 and status badges as low as 1.8:1 (warning); the secondary value is now
+  `light-dark(oklch(54% 0 0), oklch(62% 0 0))` and badge text keeps its colour's hue and chroma with lightness capped at 0.48 in light (0.66 minimum in dark, so it holds on a control inside a panel).
+- **Badge.** Fill, ring and text derive from `--badge-color` at `--badge-fill` and `--badge-ring`
+  strength; set them in a class for any other colour. The neutral badge is now a faint grey tint
+  instead of white, with full-strength text.
+- **`cn`.** Update `classnames.ts`: it registers the new shadows with tailwind-merge, without which
+  `className="shadow-none"` sits beside `shadow-control` instead of replacing it.
+
+### Fixed: `Listbox` had no shadow
+
+It used `shadow-xl`, which the setup CSS doesn't define, so it rendered flat. Use `shadow-lg` like
+Menu and Popover:
+
+```diff tsx
+- "… bg-panel p-0 text-foreground shadow-xl …"
++ "… bg-panel p-0 text-foreground shadow-lg …"
+```
+
+### Fixed: ghost `Button` hides a border you pass
+
+The ghost variant set `border-none`, so `className="border-l"` added a width but no visible border.
+Remove it from your copy:
+
+```diff tsx
+  ghost:
+-   "border-none bg-transparent shadow-none ring-0 …",
++   "bg-transparent shadow-none ring-0 …",
+```
+
 ### Fixed: `Menu` loses focus when the focused item unmounts
 
 When the focused item unmounted while the menu stayed open (an item that removes itself with

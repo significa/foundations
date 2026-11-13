@@ -1,0 +1,166 @@
+---
+title: Theming
+description: What each token is for, how to change them, and how to build your own design system on top of Foundations.
+folder: introduction
+
+meta:
+  order: 1
+---
+
+Foundations ships as a neutral base theme. Colours, edges, control sizes, roundness and type roles are tokens, so you restyle them by changing values in `@theme` without touching components. Spacing, the type scale, hover fills and component structure stay in your code.
+
+<Preview slug="theming-layers" />
+
+## Tokens
+
+| Token                                   | What it is                                    | Used by                                   |
+| --------------------------------------- | --------------------------------------------- | ----------------------------------------- |
+| **Layers**                              |                                               |                                           |
+| `background`                            | The canvas                                    | The page                                  |
+| `panel`                                 | Anything raised over the canvas               | Popover, Menu, Listbox, Dialog, Drawer, Toast, DatePicker, bordered Table, file rows |
+| `background-secondary`                  | A region set apart from the canvas            | Your sidebars, wells, app frames          |
+| `control`                               | The face of a control                         | Input, outline Button, Checkbox, Radio, SegmentedControl indicator |
+| **Text**                                |                                               |                                           |
+| `foreground`                            | Text and icons                                | Everything                                |
+| `foreground-secondary`                  | Quieter text that still passes WCAG AA        | Descriptions, placeholders, metadata      |
+| `accent` / `accent-foreground`          | The primary action, and text on it (not a hover fill, as in shadcn) | Primary Button, selected states, focus    |
+| **Lines**                               |                                               |                                           |
+| `border`                                | Edges of controls and panels. Translucent, so it looks the same on any layer | Inputs, outline Buttons, panels           |
+| `border-subtle`                         | Separators inside a layer                     | Table rows, Divider, Menu sections, Tabs  |
+| `ring`                                  | The focus ring                                | Every focusable control                   |
+| **Status**                              |                                               |                                           |
+| `success` `warning` `error` `info`      | Status hues                                   | Badge, Toast, invalid fields              |
+| **Edges and press**                     |                                               |                                           |
+| `shadow-control` / `-pressed`           | A control's edge, at rest and pressed         | Button, Input, Checkbox, Radio, Slider    |
+| `shadow-panel`                          | The resting edge of a panel in the flow       | Bordered Table, file rows, your cards     |
+| `shadow-sm` … `lg`                      | Things that float                             | Popover, Menu, Dialog, Toast              |
+| `--press-scale` / `--press-offset`      | How a pressed button shrinks or sinks         | Button, Toggle                            |
+| **Size and shape**                      |                                               |                                           |
+| `--control-height-xs` … `lg`            | Control heights, shared so controls line up   | Button, Input, Select, Toggle, Pagination |
+| `--radius`                              | Roundness of the whole UI; the steps derive from it | Everything rounded                  |
+| `--inset`                               | Gap between a panel's edge and its items      | Menu, Listbox                             |
+| **Type and motion**                     |                                               |                                           |
+| `--font-*` | Typeface roles; setup applies `--font-ui` to the body, the rest you apply | UI chrome, prose, headings, code |
+| `--ease-*`                              | House easing curves                           | Every transition                          |
+
+To keep the theme composable:
+
+- **Name by role, never by region.** `--color-sidebar` fits one layout. A sidebar is `background-secondary` when it's a flat area beside the content, or `panel` when it floats over it.
+- **Keep steps small and relative.** A few points of lightness between layers is enough.
+
+## Customise it
+
+### Change the values
+
+```css
+@theme {
+  --color-accent: oklch(55% 0.2 265);
+  --color-accent-foreground: oklch(100% 0 0);
+  --radius: 0.25rem;
+  --control-height-md: 2.75rem;
+}
+```
+
+You can make a big difference by only retuning what we already have.
+
+### Add a token
+
+Name it by role and give it both themes with `light-dark()`:
+
+```css
+@theme {
+  --color-brand: light-dark(oklch(62% 0.19 40), oklch(70% 0.17 40));
+}
+```
+
+Colours work right away (`bg-brand`). A custom shadow, text size or radius, such as `--shadow-card`, also needs registering with tailwind-merge in `src/lib/utils/classnames.ts`, or `cn` keeps both conflicting classes:
+
+```ts
+const twMerge = extendTailwindMerge({
+  extend: { theme: { shadow: ["control", "control-pressed", "panel", "card"] } },
+});
+```
+
+### Change the depth
+
+How raised a control looks comes from four tokens: its edge at rest (`--shadow-control`), its edge while pressed (`--shadow-control-pressed`), and how much a pressed button shrinks or moves down (`--press-scale`, `--press-offset`). Changing them restyles every button, input and checkbox at once. Three examples:
+
+**Flat:** no shadow, only the border. Buttons don't shrink when pressed. Use `0 0 transparent` rather than `none`: Tailwind combines this value with the focus ring into one `box-shadow`, and `none` would make the browser drop both.
+
+```css
+@theme {
+  --shadow-control: 0 0 transparent;
+  --press-scale: 1;
+}
+```
+
+**Raised:** a light line along the top, a darker bottom edge and a soft shadow, so controls look like they stand off the page. Pressed buttons move down 1px instead of shrinking. Primary and destructive buttons share the same edge, so the top line shows on them too; keep it faint if that's too bright on your accent.
+
+```css
+@theme {
+  --shadow-control:
+    inset 0 1px 0 light-dark(oklch(100% 0 0 / 0.9), oklch(100% 0 0 / 0.06)),
+    0 1px 0 light-dark(oklch(0% 0 0 / 0.08), oklch(0% 0 0 / 0.4)),
+    0 2px 3px oklch(0% 0 0 / 0.07);
+  --shadow-control-pressed: inset 0 1px 1px oklch(0% 0 0 / 0.06);
+  --press-scale: 1;
+  --press-offset: 1px;
+}
+```
+
+**Embossed:** controls have no fill of their own, so they take the colour of whatever is behind them. A thin white outline inside the border makes them look pressed into the page.
+
+```css
+@theme {
+  --color-control: transparent;
+  --shadow-control:
+    inset 0 0 0 1px light-dark(oklch(100% 0 0 / 0.9), oklch(100% 0 0 / 0.08)),
+    0 1px 0 oklch(0% 0 0 / 0.07);
+  --shadow-control-pressed: inset 0 1px 2px oklch(0% 0 0 / 0.08);
+  --press-scale: 1;
+  --press-offset: 1px;
+}
+```
+
+## Patterns
+
+**Card.** A panel with a resting edge; there's no Card component.
+
+```tsx
+<section className="rounded-xl border border-border bg-panel shadow-panel">…</section>
+```
+
+**Inverted region.** For a bar or chip that uses the opposite theme (dark in light mode, light in dark mode), flip the colour scheme on its container. Every token inside switches with it, including buttons and borders, so you don't need any extra colours.
+
+```tsx
+<div className="bg-background text-foreground scheme-dark dark:scheme-light">…</div>
+```
+
+For one that stays dark in both themes, drop `dark:scheme-light` and give it a fill of its own. Only tokens defined with `light-dark()` flip, so a custom accent with a single value stays as it is, and tooltips or popovers opened from the region render outside it.
+
+**Solid badge.** A [Badge](/ui/badge) uses one colour for its fill, ring and text. To make it solid, fill it at full strength and set the text to the background colour.
+
+```tsx
+<Badge className="[--badge-fill:100%] [--badge-text:var(--color-background)]">New</Badge>
+```
+
+The status hues are dark enough in light mode to carry white text, so a solid `success` or `error` badge passes WCAG AA too.
+
+**Selected toggle.** A pressed [Toggle](/ui/toggle) gets a light tint by default. To make it solid, set the pressed fill and text colours.
+
+```tsx
+<Toggle className="[--button-pressed-bg:var(--color-foreground)] [--button-pressed-text:var(--color-background)]">
+  Selected
+</Toggle>
+```
+
+**Hover and selected fills.** Inside your own components, use `bg-foreground/5` for hover and highlighted backgrounds rather than a colour token. It's translucent like the borders, so it shows on any layer.
+
+**Seams.** Where two bordered elements meet, drop one side (`border-r-0`, `divide-*`). Overlapping translucent lines draw darker.
+
+## Gotchas
+
+- **Shadows are baked at build time.** Tailwind writes shadow values into the CSS, so change them in `@theme`. Overriding `--shadow-control` on an element does nothing; colours can be overridden anywhere.
+- **`light-dark()` only takes colours.** Gradients, lengths and percentages that differ per theme need a `[data-theme="dark"]` rule.
+- **Children paint over inset edges.** An `inset` shadow is drawn under the element's children, so a filled header or row inside a panel hides the panel's inner rim. Draw the rim on an overlay instead, with `relative` on the panel: `after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_white]`.
+- **Corners.** Squircles and the radius bump that compensates them are one `@supports` block at the end of the setup CSS. Delete it for round corners.

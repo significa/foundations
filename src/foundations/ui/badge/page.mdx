@@ -64,6 +64,14 @@ Extends the `div` element.
 
 <Preview slug="badge" />
 
+## Colours
+
+Every variant is one colour: fill, ring and text derive from `--badge-color`. Set it in a class for any other colour, and use `--badge-fill`, `--badge-ring` and `--badge-text` to change the strength or make it solid. See [Theming](/theming#patterns).
+
+```tsx
+<Badge className="[--badge-color:var(--color-violet-600)]">Story video</Badge>
+```
+
 ## Best Practices
 
 1. **Usage**:

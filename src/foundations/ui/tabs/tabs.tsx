@@ -111,10 +111,10 @@ const TabsItems = ({ children, className, ref, ...props }: TabsItemsProps) => {
         orientation === "horizontal"
           ? variant === "pill"
             ? "items-center pb-4"
-            : "mb-4 items-center border-b border-border"
+            : "mb-4 items-center border-b border-border-subtle"
           : variant === "pill"
             ? "flex-col items-start pr-4"
-            : "mr-4 flex-col items-start border-r border-border",
+            : "mr-4 flex-col items-start border-r border-border-subtle",
         className,
       )}
       {...props}
@@ -149,7 +149,7 @@ const TabsIndicator = () => {
         "pointer-events-none absolute z-0",
         "transition-[top,right,bottom,left] duration-300 ease-spring motion-reduce:transition-none",
         variant === "pill" && [
-          "rounded-xl bg-background-secondary",
+          "rounded-xl bg-foreground/5",
           "top-[anchor(var(--tab-anchor)_top)] right-[anchor(var(--tab-anchor)_right)] bottom-[anchor(var(--tab-anchor)_bottom)] left-[anchor(var(--tab-anchor)_left)]",
         ],
         variant === "underline" &&

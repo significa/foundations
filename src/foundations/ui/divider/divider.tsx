@@ -16,7 +16,7 @@ const Divider = ({ className, orientation = "horizontal", decorative, ...props }
   return (
     <div
       className={cn(
-        "shrink-0 bg-border",
+        "shrink-0 bg-border-subtle",
         orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
         className,
       )}

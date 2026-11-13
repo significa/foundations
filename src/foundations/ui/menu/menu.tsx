@@ -349,7 +349,7 @@ const itemTriggerStyle = cva({
     "text-base font-medium text-foreground/80 outline-none",
     "first-of-type:mt-(--inset) last-of-type:mb-(--inset)",
     "data-disabled:pointer-events-none data-disabled:opacity-50",
-    "active:bg-background-secondary data-highlighted:bg-background-secondary data-[state=open]:bg-background-secondary",
+    "active:bg-foreground/5 data-highlighted:bg-foreground/5 data-[state=open]:bg-foreground/5",
   ],
 });
 
@@ -418,7 +418,7 @@ const MenuItems = ({ ref: refProp, children, className, inline, ...props }: Menu
         returnFocus={!isNested}
         animate={!isNested}
         className={cn(
-          "z-50 max-h-(--max-height) w-56 scroll-py-(--inset) overflow-auto rounded-xl border border-border bg-background font-medium text-foreground shadow-lg outline-none",
+          "z-50 max-h-(--max-height) w-56 scroll-py-(--inset) overflow-auto rounded-xl border border-border bg-panel font-medium text-foreground shadow-lg outline-none",
           className,
         )}
         {...popover.getFloatingProps(props)}
@@ -438,8 +438,7 @@ const itemStyle = cva({
   ],
   variants: {
     variant: {
-      default:
-        "text-foreground/80 active:bg-background-secondary data-highlighted:bg-background-secondary",
+      default: "text-foreground/80 active:bg-foreground/5 data-highlighted:bg-foreground/5",
       destructive: "text-error active:bg-error/10 data-highlighted:bg-error/10",
     },
   },
@@ -574,7 +573,10 @@ const MenuSection = ({ children, className, ...props }: React.ComponentPropsWith
       <div
         role="group"
         aria-labelledby={titleId}
-        className={cn("flex flex-col items-stretch border-border not-first:border-t", className)}
+        className={cn(
+          "flex flex-col items-stretch border-border-subtle not-first:border-t",
+          className,
+        )}
         {...props}
       >
         {children}

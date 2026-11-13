@@ -156,7 +156,7 @@ const Calendar = ({
   };
 
   return (
-    <div className={cn("bg-background", className)} {...props}>
+    <div className={className} {...props}>
       {view === "years" && (
         <CalendarHeader
           onPrevious={() => setViewDate((prev) => add(prev, { years: -12 }))}
@@ -203,7 +203,7 @@ const Calendar = ({
 
       <div className="relative">
         {(view === "years" || view === "months") && (
-          <div className="absolute inset-0 z-10 bg-background p-1">
+          <div className="absolute inset-0 z-10 p-1">
             {view === "years" && (
               <div
                 role="grid"
@@ -272,7 +272,7 @@ const Calendar = ({
             month: "long",
             year: "numeric",
           })}
-          className="pb-0.5"
+          className={cn("pb-0.5", view !== "days" && "invisible")}
         >
           <div role="row" className="grid grid-cols-7">
             {Array.from({ length: 7 }, (_, i) => {
@@ -362,10 +362,11 @@ const Calendar = ({
                     <div
                       aria-hidden
                       className={cn(
-                        "invisible absolute inset-x-0 inset-y-0.5 z-0 bg-background-secondary",
-                        "group-data-in-range:visible",
-                        "group-data-start-date:visible group-data-start-date:left-1/2",
-                        "group-data-end-date:visible group-data-end-date:right-1/2",
+                        // display, not visibility: a visible child would show through the hidden grid under the month picker
+                        "absolute inset-x-0 inset-y-0.5 z-0 hidden bg-foreground/5",
+                        "group-data-in-range:block",
+                        "group-data-start-date:left-1/2 group-data-start-date:block",
+                        "group-data-end-date:right-1/2 group-data-end-date:block",
                       )}
                     />
                   </button>

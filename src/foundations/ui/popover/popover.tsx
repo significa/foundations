@@ -315,7 +315,7 @@ const PopoverContent = ({
       isPositioned={isPositioned}
       ref={ref}
       className={cn(
-        "z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-background p-3 font-medium text-foreground shadow-lg outline-none",
+        "z-50 max-h-(--max-height) w-72 overflow-auto rounded-xl border border-border bg-panel p-3 font-medium text-foreground shadow-lg outline-none",
         className,
       )}
       {...getFloatingProps(props)}
@@ -493,7 +493,7 @@ const PopoverHeader = ({ className, ...props }: React.ComponentPropsWithRef<"div
   return (
     <div
       className={cn(
-        "box-content flex min-h-10 items-center gap-2 border-b border-border bg-transparent px-4 text-foreground [&>svg]:size-4 [&>svg]:shrink-0",
+        "box-content flex min-h-10 items-center gap-2 border-b border-border-subtle bg-transparent px-4 text-foreground [&>svg]:size-4 [&>svg]:shrink-0",
         className,
       )}
       {...props}

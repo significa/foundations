@@ -17,18 +17,18 @@ const inputFrameBase = [
 
 const inputFrameVariants = {
   default: [
-    "border-border shadow-xs hover:border-[color-mix(in_oklab,var(--color-border),var(--color-foreground)_8%)]",
+    "border-border bg-control shadow-control hover:border-[color-mix(in_oklab,var(--color-border),var(--color-foreground)_8%)]",
   ],
   minimal: [
-    "border-transparent bg-transparent hover:bg-background-secondary [:focus-visible,:has(:focus-visible)]:bg-background",
+    "border-transparent bg-transparent hover:bg-foreground/5 [:focus-visible,:has(:focus-visible)]:bg-control",
   ],
 };
 
 const inputFrameSize = {
-  xs: "h-6 rounded-lg text-sm",
-  sm: "h-8 rounded-lg text-sm",
-  md: "h-10 py-(--inset) rounded-xl text-base",
-  lg: "h-12 py-(--inset) rounded-2xl text-base",
+  xs: "h-(--control-height-xs) rounded-lg text-sm",
+  sm: "h-(--control-height-sm) rounded-lg text-sm",
+  md: "h-(--control-height-md) py-(--inset) rounded-xl text-base",
+  lg: "h-(--control-height-lg) py-(--inset) rounded-2xl text-base",
 };
 
 const inputElementStyles = [

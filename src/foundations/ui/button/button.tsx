@@ -7,11 +7,12 @@ import { cn, cva } from "#/lib/utils/classnames.ts";
 
 const buttonStyle = cva({
   base: [
-    "relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 font-medium whitespace-nowrap text-(--button-text-color) shadow-xs [--button-text-color:var(--color-foreground)]",
+    "relative inline-flex h-(--button-height) shrink-0 items-center justify-center gap-1.5 font-medium whitespace-nowrap text-(--button-text-color) [--button-text-color:var(--color-foreground)]",
     // `not-disabled:`, not `enabled:`, which never matches an `asChild` <a>. A disabled link has
     // only aria-disabled, so it dims too; a loading button (aria-busy) doesn't.
     "transition not-disabled:not-aria-disabled:cursor-pointer disabled:opacity-40 aria-disabled:not-aria-busy:opacity-40",
-    "not-aria-disabled:active:not-in-data-ui-button-group:scale-98",
+    // --press-scale/--press-offset and the control-edge shadows come from the theme: shrink, sink, or neither
+    "not-aria-disabled:active:not-in-data-ui-button-group:translate-y-(--press-offset) not-aria-disabled:active:not-in-data-ui-button-group:scale-(--press-scale)",
     "ring-ring focus-visible:ring-(length:--ring-width) focus-visible:outline-none",
     // inside button group — horizontal merge (default; ToggleGroup may set
     // data-orientation="vertical" on its container to flip the axis)
@@ -24,27 +25,27 @@ const buttonStyle = cva({
     "in-data-ui-button-group:in-data-[orientation=vertical]:not-last:border-b-0",
     "in-data-ui-button-group:in-data-[orientation=vertical]:not-first:rounded-t-none",
     "in-data-ui-button-group:in-data-[orientation=vertical]:not-first:border-t-0",
-    // pressed state — set via data-pressed by Toggle / ToggleGroup.Item.
-    // Subtle filled tint that layers over `ghost` and `outline` without flipping
-    // the text color; the higher selector specificity beats the variant background.
-    "data-pressed:bg-foreground/10 data-pressed:not-disabled:not-aria-disabled:hover:bg-foreground/15",
+    // pressed state — set via data-pressed by Toggle / ToggleGroup.Item. A faint tint by default;
+    // set --button-pressed-bg/--button-pressed-text for a solid chip. Hover moves the fill toward the text.
+    "[--button-pressed-bg:color-mix(in_oklab,var(--color-foreground)_10%,transparent)] [--button-pressed-text:var(--button-text-color)]",
+    "data-pressed:bg-(--button-pressed-bg) data-pressed:not-aria-busy:text-(--button-pressed-text) data-pressed:not-disabled:not-aria-disabled:hover:bg-[color-mix(in_oklab,var(--button-pressed-bg),currentColor_10%)]",
   ],
   variants: {
     variant: {
       primary:
-        "bg-accent [--button-text-color:var(--color-accent-foreground)] not-disabled:not-aria-disabled:hover:bg-accent/90 in-data-ui-button-group:not-aria-disabled:active:bg-accent/80",
+        "bg-accent shadow-control [--button-text-color:var(--color-accent-foreground)] not-disabled:not-aria-disabled:hover:bg-accent/90 not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed in-data-ui-button-group:not-aria-disabled:active:bg-accent/80",
       outline:
-        "border border-border bg-background not-disabled:not-aria-disabled:hover:bg-foreground/2 not-in-data-ui-button-group:focus-visible:border-accent in-data-ui-button-group:not-aria-disabled:active:bg-foreground/4",
+        "border border-border bg-control shadow-control not-disabled:not-aria-disabled:hover:bg-mix-control/3 not-in-data-ui-button-group:focus-visible:border-accent not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed in-data-ui-button-group:not-aria-disabled:active:bg-foreground/4",
       ghost:
-        "border-none bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:not-aria-disabled:active:bg-foreground/10",
+        "bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:not-aria-disabled:active:bg-foreground/10",
       destructive:
-        "bg-error ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-error/90",
+        "bg-[oklch(from_var(--color-error)_min(l,0.57)_c_h)] shadow-control ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-[oklch(from_var(--color-error)_min(l,0.57)_c_h_/_0.9)] not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed",
     },
     size: {
-      xs: "rounded-lg px-2 text-sm [--button-height:--spacing(6)]",
-      sm: "rounded-lg px-3 text-sm [--button-height:--spacing(8)]",
-      md: "rounded-xl px-4 text-base [--button-height:--spacing(10)]",
-      lg: "rounded-2xl px-5 text-base [--button-height:--spacing(12)]",
+      xs: "rounded-lg px-2 text-sm [--button-height:var(--control-height-xs)]",
+      sm: "rounded-lg px-3 text-sm [--button-height:var(--control-height-sm)]",
+      md: "rounded-xl px-4 text-base [--button-height:var(--control-height-md)]",
+      lg: "rounded-2xl px-5 text-base [--button-height:var(--control-height-lg)]",
     },
     square: {
       true: "w-(--button-height) px-0",

@@ -12,7 +12,7 @@ type DrawerSide = "left" | "right" | "bottom" | "left-bottom" | "right-bottom";
 const drawerContentStyle = cva({
   base: [
     "[--drawer-detach:calc(var(--radius)*3*var(--radius-bump))] [--drawer-p:--spacing(4)] [--drawer-stack:--spacing(4)]",
-    "flex w-full max-w-screen flex-col overflow-x-hidden! overflow-y-auto border border-border bg-background p-(--drawer-p) text-start text-base text-foreground *:shrink-0",
+    "flex w-full max-w-screen flex-col overflow-x-hidden! overflow-y-auto border border-border bg-panel p-(--drawer-p) text-start text-base text-foreground *:shrink-0",
     "has-[[data-drawer-actions]:last-child]:pb-0 has-[[data-modal-focus-catcher]:first-child+[data-drawer-header],[data-drawer-header]:first-child]:pt-0",
     "rounded-2xl",
     "has-data-[status=open]:opacity-80 [&>:not(dialog)]:transition-opacity has-data-[status=open]:[&>:not(dialog)]:opacity-0",
@@ -101,7 +101,7 @@ const DrawerHeader = ({ className, children, ...props }: React.ComponentPropsWit
   return (
     <DrawerBleed
       className={cn(
-        "sticky top-0 z-10 mb-(--drawer-p) border-b border-border bg-background p-(--drawer-p)",
+        "sticky top-0 z-10 mb-(--drawer-p) border-b border-border bg-panel p-(--drawer-p)",
         className,
       )}
       {...props}
@@ -116,7 +116,7 @@ const DrawerActions = ({ className, children, ...props }: React.ComponentPropsWi
   return (
     <DrawerBleed
       className={cn(
-        "sticky bottom-0 mt-auto flex gap-(--drawer-p) border-t border-border bg-background p-(--drawer-p)",
+        "sticky bottom-0 mt-auto flex gap-(--drawer-p) border-t border-border bg-panel p-(--drawer-p)",
         className,
       )}
       {...props}

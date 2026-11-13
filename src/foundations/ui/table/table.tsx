@@ -28,7 +28,8 @@ const TableContainer = ({ ref, className, bordered = true, ...props }: TableCont
       ref={ref}
       className={cn(
         "relative w-full overflow-x-auto",
-        bordered && "rounded-lg border border-border shadow-xs",
+        bordered &&
+          "rounded-lg border border-border bg-panel shadow-panel [--table-bg:var(--color-panel)]",
         className,
       )}
       {...props}
@@ -54,7 +55,7 @@ const TableHeader = ({ ref, className, sticky, ...props }: TableHeaderProps) => 
       ref={ref}
       className={cn(
         "[&_tr]:border-b [&_tr]:border-border",
-        sticky && "sticky top-0 z-10 bg-background",
+        sticky && "sticky top-0 z-10 bg-(--table-bg,var(--color-background))",
         className,
       )}
       {...props}
@@ -66,7 +67,10 @@ const TableBody = ({ ref, className, ...props }: React.ComponentPropsWithRef<"tb
   return (
     <tbody
       ref={ref}
-      className={cn("[&_tr]:border-b [&_tr]:border-border [&_tr:last-child]:border-0", className)}
+      className={cn(
+        "[&_tr]:border-b [&_tr]:border-border-subtle [&_tr:last-child]:border-0",
+        className,
+      )}
       {...props}
     />
   );
