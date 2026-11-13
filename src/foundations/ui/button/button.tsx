@@ -39,7 +39,7 @@ const buttonStyle = cva({
       ghost:
         "bg-transparent shadow-none ring-0 not-disabled:not-aria-disabled:hover:bg-foreground/5 in-data-ui-button-group:not-aria-disabled:active:bg-foreground/10",
       destructive:
-        "bg-error shadow-control ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-error/90 not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed",
+        "bg-[oklch(from_var(--color-error)_min(l,0.57)_c_h)] shadow-control ring-error/50 [--button-text-color:var(--color-white)] not-disabled:not-aria-disabled:hover:bg-[oklch(from_var(--color-error)_min(l,0.57)_c_h_/_0.9)] not-aria-disabled:active:not-in-data-ui-button-group:shadow-control-pressed",
     },
     size: {
       xs: "rounded-lg px-2 text-sm [--button-height:var(--control-height-xs)]",

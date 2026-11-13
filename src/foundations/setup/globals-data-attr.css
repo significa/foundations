@@ -7,7 +7,7 @@
 }
 
 @theme {
-  /* Typography: --font-ui is the chrome (applied from body), --font-body prose, --font-heading h1–h6 */
+  /* Typography: --font-ui is applied to body; apply font-body to prose and font-heading to headings yourself */
   --font-body: ui-sans-serif, system-ui, sans-serif;
   --font-ui: var(--font-body);
   --font-heading: var(--font-body);
@@ -33,7 +33,7 @@
   /* Foreground at the end means it is used on top of the accent color */
   --color-accent-foreground: var(--color-background);
 
-  /* Translucent so the same contrast step holds on every layer. border: edges of controls and panels.
+  /* Translucent, so a line reads as a similar step on each layer. border: edges of controls and panels.
      border-subtle: separators inside a layer (table rows, menu sections, dividers) */
   --color-border: light-dark(oklch(0% 0 0 / 0.08), oklch(100% 0 0 / 0.12));
   --color-border-subtle: light-dark(oklch(0% 0 0 / 0.05), oklch(100% 0 0 / 0.07));
@@ -46,7 +46,7 @@
   /* Status hues. Light values are dark enough to pass WCAG AA as text and to carry white text as a fill */
   --color-error: light-dark(oklch(48% 0.237 25.331), oklch(63.7% 0.237 25.331));
   --color-warning: light-dark(oklch(48% 0.184 75), oklch(79.5% 0.184 86.047));
-  --color-success: light-dark(oklch(48% 0.17 162.48), oklch(69.6% 0.17 162.48));
+  --color-success: light-dark(oklch(46% 0.17 162.48), oklch(69.6% 0.17 162.48));
   --color-info: light-dark(oklch(48% 0.214 259.815), oklch(62.3% 0.214 259.815));
 
   /* Border radius — --radius is the dial; --radius-bump grows it for squircles (the @supports block at the end) */

@@ -28,7 +28,8 @@ const TableContainer = ({ ref, className, bordered = true, ...props }: TableCont
       ref={ref}
       className={cn(
         "relative w-full overflow-x-auto",
-        bordered && "rounded-lg border border-border bg-panel shadow-panel",
+        bordered &&
+          "rounded-lg border border-border bg-panel shadow-panel [--table-bg:var(--color-panel)]",
         className,
       )}
       {...props}
@@ -54,7 +55,7 @@ const TableHeader = ({ ref, className, sticky, ...props }: TableHeaderProps) => 
       ref={ref}
       className={cn(
         "[&_tr]:border-b [&_tr]:border-border",
-        sticky && "sticky top-0 z-10 bg-background in-[.bg-panel]:bg-panel",
+        sticky && "sticky top-0 z-10 bg-(--table-bg,var(--color-background))",
         className,
       )}
       {...props}

@@ -163,7 +163,7 @@ const SegmentedControlIndicator = () => {
       aria-hidden="true"
       style={{ "--segment-anchor": getAnchorName(id, selectedSegment) }}
       className={cn(
-        "pointer-events-none absolute z-0 rounded-xl bg-control",
+        "pointer-events-none absolute z-0 rounded-xl bg-control shadow-control",
         "top-[anchor(var(--segment-anchor)_top)] right-[anchor(var(--segment-anchor)_right)] bottom-[anchor(var(--segment-anchor)_bottom)] left-[anchor(var(--segment-anchor)_left)]",
         "transition-[top,right,bottom,left] duration-300 ease-spring motion-reduce:transition-none",
       )}

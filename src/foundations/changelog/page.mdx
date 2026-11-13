@@ -16,7 +16,7 @@ meta:
 
 Components now name the layer they paint instead of reusing `background` for everything, so a theme
 can make them flat, raised or embossed by changing values (see the [Theming](/theming) guide).
-Popovers, menus, listboxes, dialogs, drawers and toasts use `bg-panel`; inputs, outline buttons,
+Popovers, menus, listboxes, dialogs, drawers, toasts, bordered tables and file rows use `bg-panel`; inputs, outline buttons,
 checkboxes, radios and the segmented-control indicator use `bg-control`; their edge comes from
 `shadow-control`, and a pressed button from `--press-scale`, `--press-offset` and
 `shadow-control-pressed`. Button, Input and Pagination heights come from `--control-height-*`.
@@ -101,7 +101,7 @@ Also in this change:
   - --color-info: oklch(62.3% 0.214 259.815);
   + --color-error: light-dark(oklch(48% 0.237 25.331), oklch(63.7% 0.237 25.331));
   + --color-warning: light-dark(oklch(48% 0.184 75), oklch(79.5% 0.184 86.047));
-  + --color-success: light-dark(oklch(48% 0.17 162.48), oklch(69.6% 0.17 162.48));
+  + --color-success: light-dark(oklch(46% 0.17 162.48), oklch(69.6% 0.17 162.48));
   + --color-info: light-dark(oklch(48% 0.214 259.815), oklch(62.3% 0.214 259.815));
   ```
 
@@ -113,6 +113,16 @@ Also in this change:
   instead of white, with full-strength text.
 - **`cn`.** Update `classnames.ts`: it registers the new shadows with tailwind-merge, without which
   `className="shadow-none"` sits beside `shadow-control` instead of replacing it.
+
+### Fixed: `Listbox` had no shadow
+
+It used `shadow-xl`, which the setup CSS doesn't define, so it rendered flat. Use `shadow-lg` like
+Menu and Popover:
+
+```diff tsx
+- "… bg-panel p-0 text-foreground shadow-xl …"
++ "… bg-panel p-0 text-foreground shadow-lg …"
+```
 
 ### Fixed: ghost `Button` hides a border you pass
 
