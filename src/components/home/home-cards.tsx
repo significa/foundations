@@ -10,7 +10,7 @@ import {
   TrendUpIcon,
   UploadSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Avatar } from "#/foundations/ui/avatar/avatar.tsx";
 import { Badge } from "#/foundations/ui/badge/badge.tsx";
 import { Button, IconButton } from "#/foundations/ui/button/button.tsx";
@@ -403,6 +403,10 @@ const SLOTS = ["09:00", "10:30", "12:00", "14:00", "15:30", "17:00"];
 const BookingCard = () => {
   const [date, setDate] = useState<Date | null>(null);
   const [slot, setSlot] = useState("10:30");
+  // The page is built ahead of time but the calendar shows today's month and marks today, so it
+  // renders after mount; otherwise any later visit mismatches the static HTML and React re-renders the island
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
 
   return (
     <Card title="Studio session" description="90 minutes, up to four people.">
@@ -410,7 +414,9 @@ const BookingCard = () => {
         <Badge size="sm">Natural light</Badge>
         <Badge size="sm">Backdrops</Badge>
       </div>
-      <Calendar value={date} onDateChange={setDate} className="w-full" />
+      <div className="min-h-76.5">
+        {isMounted && <Calendar value={date} onDateChange={setDate} className="w-full" />}
+      </div>
       <div className="grid grid-cols-3 gap-2">
         {SLOTS.map((time) => (
           <Button
