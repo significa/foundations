@@ -9,8 +9,6 @@ meta:
 
 Foundations ships as a neutral base theme. Colours, edges, control sizes, roundness and type roles are tokens, so you restyle them by changing values in `@theme` without touching components. Spacing, the type scale, hover fills and component structure stay in your code.
 
-<Preview slug="theming-layers" />
-
 ## Tokens
 
 | Token                                   | What it is                                    | Used by                                   |
@@ -31,7 +29,8 @@ Foundations ships as a neutral base theme. Colours, edges, control sizes, roundn
 | **Status**                              |                                               |                                           |
 | `success` `warning` `error` `info`      | Status hues                                   | Badge, Toast, invalid fields              |
 | **Edges and press**                     |                                               |                                           |
-| `shadow-control` / `-pressed`           | A control's edge, at rest and pressed         | Button, Input, Checkbox, Radio, Slider    |
+| `shadow-control` / `-pressed`           | A control's edge, at rest and pressed         | Input, Checkbox, Radio, Slider, SegmentedControl |
+| `shadow-button` / `-pressed`            | A button's edge; follows `shadow-control` unless set | Button, Toggle                     |
 | `shadow-panel`                          | The resting edge of a panel in the flow       | Bordered Table, file rows, your cards     |
 | `shadow-sm` … `lg`                      | Things that float                             | Popover, Menu, Dialog, Toast              |
 | `--press-scale` / `--press-offset`      | How a pressed button shrinks or sinks         | Button, Toggle                            |
@@ -77,13 +76,17 @@ Colours work right away (`bg-brand`). A custom shadow, text size or radius, such
 
 ```ts
 const twMerge = extendTailwindMerge({
-  extend: { theme: { shadow: ["control", "control-pressed", "panel", "card"] } },
+  extend: {
+    theme: { shadow: ["control", "control-pressed", "button", "button-pressed", "panel", "card"] },
+  },
 });
 ```
 
 ### Change the depth
 
-How raised a control looks comes from four tokens: its edge at rest (`--shadow-control`), its edge while pressed (`--shadow-control-pressed`), and how much a pressed button shrinks or moves down (`--press-scale`, `--press-offset`). Changing them restyles every button, input and checkbox at once. Three examples:
+How raised a control looks comes from four tokens: its edge at rest (`--shadow-control`), its edge while pressed (`--shadow-control-pressed`), and how much a pressed button shrinks or moves down (`--press-scale`, `--press-offset`). Changing them restyles every button, input and checkbox at once. Buttons follow the control edge until you set `--shadow-button` and `--shadow-button-pressed`, for depth only things you press should have, like a ledge a button sinks onto: set `--press-offset` to the ledge's height so the press lands on it.
+
+Drop shadows don't read on near-black, so give dark mode its own depth by writing each layer's colour with `light-dark()`: a layer that is `transparent` in one theme disappears there. Three examples:
 
 **Flat:** no shadow, only the border. Buttons don't shrink when pressed. Use `0 0 transparent` rather than `none`: Tailwind combines this value with the focus ring into one `box-shadow`, and `none` would make the browser drop both.
 

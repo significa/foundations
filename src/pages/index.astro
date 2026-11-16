@@ -1,4 +1,28 @@
 ---
-return Astro.redirect("/about");
+import Header from "#/components/header.astro";
+import { HomeCards } from "#/components/home/home-cards.tsx";
+import { buttonStyle } from "#/foundations/ui/button/button.tsx";
+import Shell from "#/layouts/shell.astro";
 ---
 
+<Shell>
+  <Header transition:persist />
+  <main class="mx-auto flex max-w-(--breakpoint-xl) flex-col gap-16 px-4 py-12 md:px-8 md:py-20">
+    <header class="flex max-w-2xl flex-col items-start gap-6">
+      <div class="flex flex-col gap-4">
+        <h1 class="font-heading text-4xl font-semibold tracking-tight text-balance md:text-5xl">
+          The foundations for your design system
+        </h1>
+        <p class="text-lg text-foreground-secondary">
+          An opinionated collection of UI primitives, hooks, utilities and guides for building
+          modern web products.
+        </p>
+      </div>
+      <a href="/about" class={buttonStyle({ size: "lg", className: "no-underline" })}>
+        Read the docs
+      </a>
+    </header>
+
+    <HomeCards client:visible />
+  </main>
+</Shell>

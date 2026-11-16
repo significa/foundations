@@ -12,6 +12,24 @@ meta:
 
 ## November 2026
 
+### Added: a button edge, separate from the control edge
+
+Buttons now draw their edge from `--shadow-button` and `--shadow-button-pressed`, so a theme can give
+only pressable controls depth (a ledge, a bezel) while inputs, checkboxes and the segmented control keep
+`--shadow-control`. By default they point at the control edge, so nothing looks different. Copy the
+new Button together with the two lines in your setup CSS: without them its edge is empty.
+
+```diff css
+  --shadow-control-pressed: 0 0 transparent;
++ --shadow-button: var(--shadow-control);
++ --shadow-button-pressed: var(--shadow-control-pressed);
+```
+
+```diff ts
+- extend: { theme: { shadow: ["control", "control-pressed", "panel"] } },
++ extend: { theme: { shadow: ["control", "control-pressed", "button", "button-pressed", "panel"] } },
+```
+
 ### Fixed: status toasts were see-through
 
 Positive and negative toasts painted only a 10% tint, so whatever sat behind them showed through.
