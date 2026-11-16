@@ -45,7 +45,7 @@ interface CardProps {
 const Card = ({ title, description, action, className, children }: CardProps) => (
   <section
     className={cn(
-      "flex flex-col gap-5 rounded-xl border border-border bg-panel p-6 shadow-panel",
+      "flex min-w-0 flex-col gap-5 rounded-xl border border-border bg-panel p-6 shadow-panel",
       className,
     )}
   >
@@ -108,7 +108,7 @@ const STATUS_VARIANT = {
 
 const InvoicesCard = () => {
   const [page, setPage] = useState(1);
-  const pages = usePagination({ page, count: 8 });
+  const pages = usePagination({ page, count: 8, siblingCount: 0 });
 
   return (
     <Card
@@ -128,36 +128,38 @@ const InvoicesCard = () => {
         </Input.Addon>
         <Input placeholder="Search invoices" />
       </Input.Group>
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.Head>Invoice</Table.Head>
-            <Table.Head>Client</Table.Head>
-            <Table.Head>Status</Table.Head>
-            <Table.Head align="end">Amount</Table.Head>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {INVOICES.map((invoice) => (
-            <Table.Row key={invoice.id}>
-              <Table.Cell className="font-mono text-sm">{invoice.id}</Table.Cell>
-              <Table.Cell>{invoice.client}</Table.Cell>
-              <Table.Cell>
-                <Badge size="sm" variant={STATUS_VARIANT[invoice.status]}>
-                  {invoice.status}
-                </Badge>
-              </Table.Cell>
-              <Table.Cell align="end" className="tabular-nums">
-                {formatEuros(invoice.amount)}
-              </Table.Cell>
+      <Table.Container bordered={false}>
+        <Table className="whitespace-nowrap">
+          <Table.Header>
+            <Table.Row>
+              <Table.Head>Invoice</Table.Head>
+              <Table.Head>Client</Table.Head>
+              <Table.Head>Status</Table.Head>
+              <Table.Head align="end">Amount</Table.Head>
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+          </Table.Header>
+          <Table.Body>
+            {INVOICES.map((invoice) => (
+              <Table.Row key={invoice.id}>
+                <Table.Cell className="font-mono text-sm">{invoice.id}</Table.Cell>
+                <Table.Cell>{invoice.client}</Table.Cell>
+                <Table.Cell>
+                  <Badge size="sm" variant={STATUS_VARIANT[invoice.status]}>
+                    {invoice.status}
+                  </Badge>
+                </Table.Cell>
+                <Table.Cell align="end" className="tabular-nums">
+                  {formatEuros(invoice.amount)}
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </Table.Container>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-foreground-secondary">Showing 5 of 38</p>
         <Pagination>
-          <Pagination.List>
+          <Pagination.List className="flex-wrap">
             <Pagination.Item>
               <Pagination.Previous
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -475,7 +477,7 @@ const PlanCard = () => {
           <span className="font-medium">Storage</span>
           <span className="text-foreground-secondary tabular-nums">62 of 100 GB</span>
         </div>
-        <Progress value={62} />
+        <Progress value={62} aria-label="Storage used" />
       </div>
     </Card>
   );
@@ -579,15 +581,15 @@ const ReportCard = () => (
 // them; the third runs the full height. Cards are placed by measured height so the columns end close
 const HomeCards = () => (
   <div className="grid items-start gap-6 lg:grid-cols-3">
-    <div className="flex flex-col gap-6 lg:col-span-2">
+    <div className="flex min-w-0 flex-col gap-6 lg:col-span-2">
       <InvoicesCard />
-      <div className="grid items-start gap-6 md:grid-cols-2">
-        <div className="flex flex-col gap-6">
+      <div className="grid min-w-0 items-start gap-6 md:grid-cols-2">
+        <div className="flex min-w-0 flex-col gap-6">
           <BookingCard />
           <SignUpCard />
           <TeamCard />
         </div>
-        <div className="flex flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-6">
           <PlanCard />
           <ShareCard />
           <PaymentCard />
@@ -595,7 +597,7 @@ const HomeCards = () => (
         </div>
       </div>
     </div>
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-6">
       <RevenueCard />
       <VerifyCard />
       <IssueCard />
