@@ -55,6 +55,6 @@
     "@biomejs/biome": "2.6.6",
     "@significa/ts-standards": "0.2.4",
     "knip": "^6.44.2",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   }
 }
