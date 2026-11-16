@@ -1,6 +1,5 @@
 {
   "framework": "astro",
   "cleanUrls": true,
-  "outputDirectory": "dist",
-  "redirects": [{ "source": "/", "destination": "/about" }]
+  "outputDirectory": "dist"
 }
